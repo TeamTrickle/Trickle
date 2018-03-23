@@ -11,7 +11,7 @@ void Sample::Initialize()
 TaskFlag Sample::UpDate()
 {
 	TaskFlag nowtask = Task_Sample;
-	if (Key::KeyInputUp(GLFW_KEY_SPACE))
+	if (Input::KeyInputUp(Input::SPACE))
 	{
 		nowtask = Task_Sample2;
 	}
@@ -45,27 +45,27 @@ void ObjectSample::Initialize()
 
 void ObjectSample::UpDate()
 {
-	if (Key::KeyInputOn(GLFW_KEY_UP))
+	if (Input::KeyInputOn(Input::UP))
 	{
 		this->position.y += 1.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_DOWN))
+	if (Input::KeyInputOn(Input::DOWN))
 	{
 		this->position.y -= 1.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_RIGHT))
+	if (Input::KeyInputOn(Input::RIGHT))
 	{
 		this->position.x += 1.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_LEFT))
+	if (Input::KeyInputOn(Input::LEFT))
 	{
 		this->position.x -= 1.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_Q))
+	if (Input::KeyInputOn(Input::Q))
 	{
 		this->angle -= 1.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_E))
+	if (Input::KeyInputOn(Input::E))
 	{
 		this->angle += 1.0f;
 	}

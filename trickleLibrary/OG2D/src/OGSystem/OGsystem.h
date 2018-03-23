@@ -135,17 +135,8 @@ private:
 	void _Rotate(float radian, GLfloat *mate);
 };
 
-namespace Key {
-	static GLFWwindow *nowWindow;
-	extern void Initialize(GLFWwindow *w);
-	extern bool KeyInputUp(int key);
-	extern bool KeyInputDown(int key);
-	extern bool KeyInputOn(int key);
-	extern void Finalize();
-	static int KeyInputOnTime[256];
-	static int KeyInputDownTime[256];
-	static int KeyInputUpTime[256];
-	/*static enum 
+namespace Input {
+	enum GamePad
 	{
 		GPAD_BUTTON_A,
 		GPAD_BUTTON_B,
@@ -159,8 +150,57 @@ namespace Key {
 		GPAD_BUTTON_R1,
 		GPAD_BUTTON_L2,
 		GPAD_BUTTON_R2,
+		GPAD_BUTTON_L3,
+		GPAD_BUTTON_R3,
 
 		GPAD_STIC_R,
 		GPAD_STIC_L,
-	};*/
+	};
+	enum Key
+	{
+		A,
+		S,
+		D,
+		W,
+		Q,
+		E,
+		Z,
+		X,
+		C,
+		R,
+		F,
+		V,
+		T,
+		G,
+		B,
+		Y,
+		H,
+		N,
+		U,
+		J,
+		M,
+		I,
+		K,
+		O,
+		L,
+		P,
+		SPACE,
+		ENTER,
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+		ESCAPE,
+	};
+	static GLFWwindow *nowWindow;
+	static int KeyInputOnTime[256];
+	static int KeyInputDownTime[256];
+	static int KeyInputUpTime[256];
+	static int KeyData[256];
+	extern void Initialize(GLFWwindow *w);
+	extern bool KeyInputUp(Key key);
+	extern bool KeyInputDown(Key key);
+	extern bool KeyInputOn(Key key);
+	extern void Finalize();
+	
 }

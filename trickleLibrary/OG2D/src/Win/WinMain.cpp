@@ -35,14 +35,14 @@ void TaskFinalize()
 //------------------
 void Initialize() {
 	fps.Initialize();
-	Key::Initialize(OGTK._window.window);
+	Input::Initialize(OGTK._window.window);
 	//Key::Initialize(Win::_window);
 }
 //------------------
 //更新
 //------------------
 void Update() {
-	if (Key::KeyInputDown(GLFW_KEY_ESCAPE))
+	if (Input::KeyInputDown(Input::ESCAPE))
 	{
 		TaskFinalize();
 		//ウィンドウの破棄
@@ -60,7 +60,7 @@ void Update() {
 //------------------
 void Finalize() 
 {
-	Key::Finalize();
+	Input::Finalize();
 }
 //------------------
 //メイン

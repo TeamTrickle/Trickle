@@ -192,54 +192,87 @@ bool KeyInput::KeyInputUp(GLFWwindow *w, int key) {
 	return false;
 }
 
-void Key::Initialize(GLFWwindow *w)
+void Input::Initialize(GLFWwindow *w)
 {
 	for (int i = 0; i < 256; ++i) {
-		Key::KeyInputDownTime[i] = 0;
-		Key::KeyInputOnTime[i] = 0;
-		Key::KeyInputUpTime[i] = 0;
+		Input::KeyInputDownTime[i] = 0;
+		Input::KeyInputOnTime[i] = 0;
+		Input::KeyInputUpTime[i] = 0;
 	}
-	Key::nowWindow = w;
+	Input::nowWindow = w;
+	Input::KeyData[Input::A] = GLFW_KEY_A;
+	Input::KeyData[Input::B] = GLFW_KEY_B;
+	Input::KeyData[Input::C] = GLFW_KEY_C;
+	Input::KeyData[Input::D] = GLFW_KEY_D;
+	Input::KeyData[Input::E] = GLFW_KEY_E;
+	Input::KeyData[Input::F] = GLFW_KEY_F;
+	Input::KeyData[Input::G] = GLFW_KEY_G;
+	Input::KeyData[Input::H] = GLFW_KEY_H;
+	Input::KeyData[Input::I] = GLFW_KEY_I;
+	Input::KeyData[Input::J] = GLFW_KEY_J;
+	Input::KeyData[Input::K] = GLFW_KEY_K;
+	Input::KeyData[Input::L] = GLFW_KEY_L;
+	Input::KeyData[Input::N] = GLFW_KEY_N;
+	Input::KeyData[Input::M] = GLFW_KEY_M;
+	Input::KeyData[Input::O] = GLFW_KEY_O;
+	Input::KeyData[Input::P] = GLFW_KEY_P;
+	Input::KeyData[Input::Q] = GLFW_KEY_Q;
+	Input::KeyData[Input::R] = GLFW_KEY_R;
+	Input::KeyData[Input::S] = GLFW_KEY_S;
+	Input::KeyData[Input::T] = GLFW_KEY_T;
+	Input::KeyData[Input::U] = GLFW_KEY_U;
+	Input::KeyData[Input::V] = GLFW_KEY_V;
+	Input::KeyData[Input::W] = GLFW_KEY_W;
+	Input::KeyData[Input::X] = GLFW_KEY_X;
+	Input::KeyData[Input::Y] = GLFW_KEY_Y;
+	Input::KeyData[Input::Z] = GLFW_KEY_Z;
+	Input::KeyData[Input::SPACE] = GLFW_KEY_SPACE;
+	Input::KeyData[Input::ENTER] = GLFW_KEY_ENTER;
+	Input::KeyData[Input::UP] = GLFW_KEY_UP;
+	Input::KeyData[Input::DOWN] = GLFW_KEY_DOWN;
+	Input::KeyData[Input::RIGHT] = GLFW_KEY_RIGHT;
+	Input::KeyData[Input::LEFT] = GLFW_KEY_LEFT;
+	Input::KeyData[Input::ESCAPE] = GLFW_KEY_ESCAPE;
 }
-bool Key::KeyInputDown(int key) {
-	if (glfwGetKey(Key::nowWindow, key)) {
-		Key::KeyInputDownTime[key]++;
+bool Input::KeyInputDown(Key key) {
+	if (glfwGetKey(Input::nowWindow, Input::KeyData[key])) {
+		Input::KeyInputDownTime[key]++;
 	}
-	else if (Key::KeyInputDownTime[key] != 0) {
-		Key::KeyInputDownTime[key] = 0;
+	else if (Input::KeyInputDownTime[key] != 0) {
+		Input::KeyInputDownTime[key] = 0;
 	}
-	if (Key::KeyInputDownTime[key] == 1) {
+	if (Input::KeyInputDownTime[key] == 1) {
 		return true;
 	}
 	return false;
 }
-bool Key::KeyInputOn(int key) {
-	if (glfwGetKey(Key::nowWindow, key)) {
-		Key::KeyInputOnTime[key]++;
+bool Input::KeyInputOn(Key key) {
+	if (glfwGetKey(Input::nowWindow, Input::KeyData[key])) {
+		Input::KeyInputOnTime[key]++;
 		return true;
 	}
-	else if (Key::KeyInputOnTime[key] != 0) {
-		Key::KeyInputOnTime[key] = 0;
+	else if (Input::KeyInputOnTime[key] != 0) {
+		Input::KeyInputOnTime[key] = 0;
 	}
-	if (Key::KeyInputOnTime[key] == 1) {
+	if (Input::KeyInputOnTime[key] == 1) {
 	}
 	return false;
 }
-bool Key::KeyInputUp(int key) {
-	if (glfwGetKey(Key::nowWindow, key)) {
-		Key::KeyInputUpTime[key]++;
+bool Input::KeyInputUp(Key key) {
+	if (glfwGetKey(Input::nowWindow, Input::KeyData[key])) {
+		Input::KeyInputUpTime[key]++;
 	}
-	else if (Key::KeyInputUpTime[key] != 0) {
-		Key::KeyInputUpTime[key] = 0;
+	else if (Input::KeyInputUpTime[key] != 0) {
+		Input::KeyInputUpTime[key] = 0;
 		return true;
 	}
-	if (Key::KeyInputUpTime[key] == 1) {
+	if (Input::KeyInputUpTime[key] == 1) {
 	}
 	return false;
 }
-void Key::Finalize()
+void Input::Finalize()
 {
-	glfwDestroyWindow(Key::nowWindow);
+	glfwDestroyWindow(Input::nowWindow);
 }
 
 void Texture::TextureCreate(std::string path)

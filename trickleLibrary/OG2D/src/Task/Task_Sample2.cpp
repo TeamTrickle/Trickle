@@ -8,7 +8,7 @@ void Sample2::Initialize()
 TaskFlag Sample2::UpDate()
 {
 	TaskFlag nowtask = Task_Sample2;
-	if (Key::KeyInputUp(GLFW_KEY_SPACE))
+	if (Input::KeyInputUp(Input::SPACE))
 	{
 		nowtask = Task_Sample;
 	}
