@@ -1,19 +1,18 @@
-#include "Task_Sample.h"
+#include "Task_Title.h"
 
-void Sample::Initialize()
+void Title::Initialize()
 {
-	std::cout << "Sample‰Šú‰»" << std::endl;
+	std::cout << "Title‰Šú‰»" << std::endl;
 	objsmp.Initialize();
 	objsmp2.Initialize();
-	map.LoadMap("test.txt");
 }
 
-TaskFlag Sample::UpDate()
+TaskFlag Title::UpDate()
 {
-	TaskFlag nowtask = Task_Sample;
+	TaskFlag nowtask = Task_Title;
 	if (Key::KeyInputUp(GLFW_KEY_SPACE))
 	{
-		nowtask = Task_Sample2;
+		nowtask = Task_Game;
 	}
 	objsmp.UpDate();
 	objsmp2.UpDate();
@@ -21,19 +20,17 @@ TaskFlag Sample::UpDate()
 	return nowtask;
 }
 
-void Sample::Render2D()
+void Title::Render2D()
 {
 	objsmp.Render();
 	objsmp2.Render();
-	map.MapRender();
 }
 
-void Sample::Finalize()
+void Title::Finalize()
 {
-	std::cout << "Sample‰ð•ú" << std::endl;
+	std::cout << "Title‰ð•ú" << std::endl;
 	objsmp.Finalize();
 	objsmp2.Finalize();
-	map.Finalize();
 }
 
 void ObjectSample::Initialize()

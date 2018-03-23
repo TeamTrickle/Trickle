@@ -1,4 +1,18 @@
 #include "_OGsystem.h"
+
+void Vec2::Normalize() {
+	float len = this->GetLength();
+	if (len == 0) { return; }
+	x /= len;
+	y /= len;
+}
+float Vec2::GetLength() {
+	return powf(x*x + y*y, 0.5f);
+}
+
+
+
+
 namespace OG {
 	float ToRadian(const  float  degree_)
 	{

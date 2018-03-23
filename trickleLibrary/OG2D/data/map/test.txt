@@ -1,0 +1,15 @@
+Y 9
+X 15
+C 3
+N maptest.png
+CX 128
+CY 128 
+MapChip 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+MapChip 0 0 1 0 0 0 1 0 0 1 0 0 0 0 0 
+MapChip 0 0 1 0 0 0 1 0 0 1 0 0 0 0 0 
+MapChip 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+MapChip 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+MapChip 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+MapChip 2 2 1 2 2 1 2 2 2 1 2 2 2 2 2 
+MapChip 2 2 1 2 2 1 2 2 2 1 2 2 2 2 2 
+MapChip 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 

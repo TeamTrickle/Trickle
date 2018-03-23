@@ -2,7 +2,8 @@
 void _OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
-	_window.createWindow(640, 480, "trickle", false);
+	_window.createWindow(1920, 1080, "trickle", false);
+	//Win::createWindow(1920, 1080, "trickle", false);
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
 	nowTask = NON;
 	nextTask = Task_Sample;

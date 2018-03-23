@@ -27,6 +27,9 @@
     <Filter Include="ソースファイル\OGSystem\System">
       <UniqueIdentifier>{ce522aeb-86e0-425e-856c-b067ec14c6da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Map">
+      <UniqueIdentifier>{6cf23927-6acf-41cc-89de-8aff11756b46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -41,14 +44,17 @@
     <ClCompile Include="src\Object\Object.cpp">
       <Filter>ソースファイル\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\OGSystem\OGTask.cpp">
-      <Filter>ソースファイル\OGSystem</Filter>
-    </ClCompile>
     <ClCompile Include="src\OGSystem\_OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
     <ClCompile Include="src\OGSystem\OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Map.cpp">
+      <Filter>ソースファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGTask.cpp">
+      <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +78,9 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\_OGsystem.h">
       <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Map.h">
+      <Filter>ソースファイル\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

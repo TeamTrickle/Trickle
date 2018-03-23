@@ -110,6 +110,11 @@ public:
 		:x((float)ex), y((float)ey)
 	{
 	}
+	void Normalize();
+	float GetLength();
+
+	void Vec2::operator+=(Vec2 v) { x += v.x; y += v.y; }
+	void Vec2::operator*=(float n) { x *= n; y *= n; }
 };
 class Mat4 {
 public:

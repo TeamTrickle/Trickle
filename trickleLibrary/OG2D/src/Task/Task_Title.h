@@ -1,12 +1,11 @@
 #pragma once
 //______________________________//
-//|サンプルタスク               |//
+//|タイトルタスク               |//
 //|履歴：2018/03/20金子翔       |//
 //|____________________________|//
 #include "Win\WinMain.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Map\Map.h"
 class ObjectSample :public Object{
 public:
 	//Object object;
@@ -29,7 +28,7 @@ public:
 	void Render();
 	void Finalize();
 };
-class Sample
+class Title
 {
 public:
 	void Initialize();
@@ -41,5 +40,4 @@ public:
 	//☆☆☆☆//
 	ObjectSample objsmp;
 	ObjectSample2 objsmp2;
-	Map map;
 };
