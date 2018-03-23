@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソースファイル">
+      <UniqueIdentifier>{2cd0f29a-299c-496b-b66d-6d942a8fedd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem">
+      <UniqueIdentifier>{c0ccdf70-62d9-405e-b786-203a2c01e0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Object">
+      <UniqueIdentifier>{b4d7e6a7-3b66-41dd-8ed1-9e6e86d05c2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task">
+      <UniqueIdentifier>{ed08a23c-71f3-4d2f-8c22-2ef6fd05f24b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task\Sample">
+      <UniqueIdentifier>{75017560-edb5-45b0-b27d-2d3ec253cc29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System">
+      <UniqueIdentifier>{ce522aeb-86e0-425e-856c-b067ec14c6da}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Win\WinMain.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Sample.cpp">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Sample2.cpp">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Object.cpp">
+      <Filter>ソースファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGTask.cpp">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\_OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Win\WinMain.h">
+      <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Sample.h">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Sample2.h">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Object.h">
+      <Filter>ソースファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGTask.h">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\_OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
