@@ -30,13 +30,16 @@ public:
 	void Render();
 	void Finalize();
 
+	/**
+	 * @brief	状態転移します。
+	 * @see	外で使うとこにはWater::State::Liquid こんな形に
+	 */
 	void SetState(const State&);
 	State GetState() const;
 	
 private:
 	Texture tex;
-	std::map<State, Box2D> draw;
-	std::map<State, Box2D> src;
+	std::map<State, Box2D> drawRange;
 	State currentState;
 
 };

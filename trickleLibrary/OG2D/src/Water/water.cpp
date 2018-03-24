@@ -20,8 +20,10 @@ void Water::Update() {
 }
 
 void Water::Render() {
-	tex.Draw(draw[currentState],
-		src[currentState]);
+	Box2D src = drawRange[currentState];
+	Box2D draw(0.f, 0.f, src.w, src.h);
+	draw.Offset(Object::position.x, Object::position.y);
+	tex.Draw(draw, src);
 }
 
 void Water::Finalize() {
