@@ -42,6 +42,9 @@
     <Filter Include="ソースファイル\Back">
       <UniqueIdentifier>{b2f9d793-2158-4aac-a61b-5e4346de2548}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Water">
+      <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -80,6 +83,9 @@
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
+    <ClCompile Include="src\Water\water.cpp">
+      <Filter>ソースファイル\Water</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -117,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="src\Back\Back.h">
       <Filter>ソースファイル\Back</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Water\water.h">
+      <Filter>ソースファイル\Water</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
