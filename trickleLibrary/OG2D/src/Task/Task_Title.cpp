@@ -5,25 +5,28 @@ void Title::Initialize()
 	std::cout << "Title‰Šú‰»" << std::endl;
 	objsmp.Initialize();
 	objsmp2.Initialize();
+	map.LoadMap("test.txt");
 }
 
 TaskFlag Title::UpDate()
 {
 	TaskFlag nowtask = Task_Title;
-	if (Key::KeyInputUp(GLFW_KEY_SPACE))
+	if (Input::KeyInputUp(Input::SPACE))
 	{
 		nowtask = Task_Game;
 	}
 	objsmp.UpDate();
 	objsmp2.UpDate();
-	objsmp.hitcheck = objsmp.hit(objsmp2);
+	objsmp.hitcheck = map.MapHitCheck(objsmp);
 	return nowtask;
 }
 
 void Title::Render2D()
 {
+	
 	objsmp.Render();
 	objsmp2.Render();
+	map.MapRender();
 }
 
 void Title::Finalize()
@@ -31,6 +34,7 @@ void Title::Finalize()
 	std::cout << "Title‰ð•ú" << std::endl;
 	objsmp.Finalize();
 	objsmp2.Finalize();
+	map.Finalize();
 }
 
 void ObjectSample::Initialize()
@@ -42,27 +46,27 @@ void ObjectSample::Initialize()
 
 void ObjectSample::UpDate()
 {
-	if (Key::KeyInputOn(GLFW_KEY_UP))
+	if (Input::KeyInputOn(Input::UP))
 	{
-		this->position.y += 1.0f;
+		this->position.y -= 5.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_DOWN))
+	if (Input::KeyInputOn(Input::DOWN))
 	{
-		this->position.y -= 1.0f;
+		this->position.y += 5.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_RIGHT))
+	if (Input::KeyInputOn(Input::RIGHT))
 	{
-		this->position.x += 1.0f;
+		this->position.x += 5.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_LEFT))
+	if (Input::KeyInputOn(Input::LEFT))
 	{
-		this->position.x -= 1.0f;
+		this->position.x -= 5.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_Q))
+	if (Input::KeyInputOn(Input::Q))
 	{
 		this->angle -= 1.0f;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_E))
+	if (Input::KeyInputOn(Input::E))
 	{
 		this->angle += 1.0f;
 	}

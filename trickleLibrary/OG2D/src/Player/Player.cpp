@@ -18,16 +18,16 @@ void Player::Initialize()
 void Player::UpDate()
 {
 	Vec2 est;
-	if (Key::KeyInputOn(GLFW_KEY_LEFT)) {
+	if (Input::KeyInputOn(Input::LEFT)) {
 		est.x -= 1;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_RIGHT)) {
+	if (Input::KeyInputOn(Input::RIGHT)) {
 		est.x += 1;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_UP)) {
+	if (Input::KeyInputOn(Input::UP)) {
 		est.y += 1;
 	}
-	if (Key::KeyInputOn(GLFW_KEY_DOWN)) {
+	if (Input::KeyInputOn(Input::DOWN)) {
 		est.y -= 1;
 	}
 	est.Normalize();

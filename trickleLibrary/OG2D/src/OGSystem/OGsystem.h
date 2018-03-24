@@ -58,6 +58,10 @@ public:
 		:x(b_.x), y(b_.y), w(b_.w), h(b_.h)
 	{
 	}
+	Box2D(const Vec2 p, const Vec2 s)
+		:x(p.x), y(p.y), w(s.x), h(s.y)
+	{
+	}
 	bool Hit(const  Box2D& b_) const
 	{
 		if (x < b_.w	&&

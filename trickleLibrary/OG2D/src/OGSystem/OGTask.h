@@ -10,6 +10,8 @@
 //☆☆☆☆☆☆☆☆☆//
 #include "Task\Task_Sample.h"
 #include "Task\Task_Sample2.h"
+#include "Task\Task_Game.h"
+#include "Task\Task_Title.h"
 
 class _OGTK
 {
@@ -21,6 +23,8 @@ public:
 	//cppにも同様に記述
 	Sample s;
 	Sample2 s2;
+	Game game;
+	Title title;
 
 	////////////////////////////
 	//ここから下は変更しないこと//

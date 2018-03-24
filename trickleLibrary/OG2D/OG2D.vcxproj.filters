@@ -30,6 +30,18 @@
     <Filter Include="ソースファイル\Map">
       <UniqueIdentifier>{6cf23927-6acf-41cc-89de-8aff11756b46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Player">
+      <UniqueIdentifier>{4ea31ccc-6e54-4ead-a513-1797ac966399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task\Game">
+      <UniqueIdentifier>{afd73d1e-8853-4042-84f7-fa4b38c1f097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task\Title">
+      <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Back">
+      <UniqueIdentifier>{b2f9d793-2158-4aac-a61b-5e4346de2548}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -56,6 +68,18 @@
     <ClCompile Include="src\OGSystem\OGTask.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
+    <ClCompile Include="src\Player\Player.cpp">
+      <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Game.cpp">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Title.cpp">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Back\Back.cpp">
+      <Filter>ソースファイル\Back</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -81,6 +105,18 @@
     </ClInclude>
     <ClInclude Include="src\Map\Map.h">
       <Filter>ソースファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\Player.h">
+      <Filter>ソースファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Game.h">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Title.h">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Back\Back.h">
+      <Filter>ソースファイル\Back</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

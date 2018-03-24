@@ -7,28 +7,17 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Map\Map.h"
-class ObjectSample :public Object{
-public:
-	//Object object;
-	Texture sampleimg;
-	std::string fileName = "Collision.png";
-	bool hitcheck;
-	void Initialize();
-	void UpDate();
-	void Render();
-	void Finalize();
-};
-class ObjectSample2 :public Object {
-public:
-	//Object object;
-	Texture sampleimg;
-	std::string fileName = "Collision.png";
-	bool hitcheck;
-	void Initialize();
-	void UpDate();
-	void Render();
-	void Finalize();
-};
+//class ObjectSample :public Object{
+//public:
+//	//Object object;
+//	Texture sampleimg;
+//	std::string fileName = "Collision.png";
+//	bool hitcheck;
+//	void Initialize();
+//	void UpDate();
+//	void Render();
+//	void Finalize();
+//};
 class Sample
 {
 public:
@@ -39,7 +28,6 @@ public:
 	//™™™™//
 	//’Ç‰Á•Ï”//
 	//™™™™//
-	ObjectSample objsmp;
-	ObjectSample2 objsmp2;
+//	ObjectSample objsmp;
 	Map map;
 };

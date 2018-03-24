@@ -7,6 +7,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Player\Player.h"
 #include "Back\Back.h"
+#include "Map\Map.h"
 
 class Game
 {
@@ -20,4 +21,5 @@ public:
 	//™™™™//
 	Player player;
 	Back back;
+	Map map;
 };

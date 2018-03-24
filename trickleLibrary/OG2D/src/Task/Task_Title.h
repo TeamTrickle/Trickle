@@ -6,6 +6,7 @@
 #include "Win\WinMain.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Map\Map.h"
 class ObjectSample :public Object{
 public:
 	//Object object;
@@ -40,4 +41,5 @@ public:
 	//™™™™//
 	ObjectSample objsmp;
 	ObjectSample2 objsmp2;
+	Map map;
 };

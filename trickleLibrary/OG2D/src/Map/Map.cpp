@@ -1,8 +1,7 @@
 #include "Map.h"
 Map::Map()
 {
-	this->mapX = 0;
-	this->mapY = 0;
+	
 }
 
 bool Map::LoadMap(std::string _path)
@@ -15,17 +14,18 @@ bool Map::LoadMap(std::string _path)
 	}
 	std::string _s;
 	int _csize = 0;
+	//各値をテキストから格納
 	while (std::getline(ifs, _s))
 	{
 		if (_s.substr(0, 2) == "X ")
 		{
 			std::istringstream _is(_s.substr(2));
-			_is >> this->mapX;
+			_is >> this->mapSize.x;
 		}
 		if (_s.substr(0, 2) == "Y ")
 		{
 			std::istringstream _is(_s.substr(2));
-			_is >> this->mapY;
+			_is >> this->mapSize.y;
 		}
 		if (_s.substr(0, 2) == "C ")
 		{
@@ -47,16 +47,29 @@ bool Map::LoadMap(std::string _path)
 			std::istringstream _is(_s.substr(3));
 			_is >> this->chipsize.y;
 		}
+		if (_s.substr(0, 3) == "XS ")
+		{
+			std::istringstream _is(_s.substr(3));
+			_is >> this->DrawSize.x;
+		}
+		if (_s.substr(0, 3) == "YS ")
+		{
+			std::istringstream _is(_s.substr(3));
+			_is >> this->DrawSize.y;
+		}
 	}
+	//使用するマップチップの数
 	this->chip.resize(_csize);
-	this->_arr.resize(this->mapY);
-	this->hitBase.resize(this->mapY);
-	for (int i = 0; i < this->mapY; ++i)
+	//マップ配列の生成
+	this->_arr.resize(this->mapSize.y);
+	this->hitBase.resize(this->mapSize.y);
+	for (int i = 0; i < this->mapSize.y; ++i)
 	{
-		this->_arr[i].resize(this->mapX);
-		this->hitBase[i].resize(this->mapX);
+		this->_arr[i].resize(this->mapSize.x);
+		this->hitBase[i].resize(this->mapSize.x);
 	}
 	ifs.close();
+	//画像読み込み
 	mapimg.TextureCreate(chipimgname);
 	int j = 0;
 	std::ifstream ifs2(this->_FilePath + _path, std::ios::in | std::ios::binary);
@@ -70,34 +83,28 @@ bool Map::LoadMap(std::string _path)
 		if (_s.substr(0, 8) == "MapChip ")
 		{
 			std::istringstream _is(_s.substr(8));
-			for (int i = 0; i < this->mapX; ++i)
+			for (int i = 0; i < this->mapSize.x; ++i)
 			{
-				_is >> this->_arr[(mapY - 1) - j][i];
+				//マップ番号を格納
+				_is >> this->_arr[j][i];
 			}
 			++j;
 		}
 	}
 	for (int i = 0; i < _csize; ++i)
 	{
+		//元画像チップの描画範囲の指定
 		int x = (i % 10);
 		int y = (i / 10);
 		this->chip[i] = Box2D(x*32.f, y * 32.f, 32.f, 32.f);
 		this->chip[i].OffsetSize();
 	}
-	for (int y = 0; y < this->mapY; ++y)
+	for (int y = 0; y < this->mapSize.y; ++y)
 	{
-		for (int x = 0; x < this->mapX; ++x)
+		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-			/*this->hitBase[y][x].position = { this->chipsize.x * x,(._height - chipsize.y) - this->chipsize.y * y };
-			this->hitBase[y][x].collisionCube.hitBase = { this->hitBase[y][x].position.x,this->hitBase[y][x].position.y,this->chipsize.x,this->chipsize.y };
-			this->hitBase[y][x].collisionCube.hitBase.OffsetSize();
-			this->hitBase[y][x].collisionCube.angle = 0.f;*/
-			/*this->hitBase[y][x].position = { this->chipsize.x * x,this->chipsize.y * y };
-			this->hitBase[y][x].collisionCube.hitBase = { this->hitBase[y][x].position.x,this->hitBase[y][x].position.y,this->chipsize.x,this->chipsize.y };
-			this->hitBase[y][x].collisionCube.hitBase.OffsetSize();
-			this->hitBase[y][x].collisionCube.angle = 0.f;*/
-			this->hitBase[y][x] = { x*this->chipsize.x,(this->mapY * this->chipsize.y - this->chipsize.y) - y*this->chipsize.y ,chipsize.x,chipsize.y };
-			this->hitBase[y][x].OffsetSize();
+			//オブジェクトの生成
+			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
 		}
 
 	}
@@ -107,12 +114,13 @@ bool Map::LoadMap(std::string _path)
 
 void Map::MapRender()
 {
-	for (int y = 0; y < this->mapY; ++y)
+	for (int y = 0; y < this->mapSize.y; ++y)
 	{
-		for (int x = 0; x < this->mapX; ++x)
+		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-			//mapimg.Draw(this->hitBase[y][x].collisionCube.hitBase, this->chip[this->_arr[(mapY - 1) - y][x]]);
-			mapimg.Draw(this->hitBase[y][x], this->chip[this->_arr[(this->mapY - 1) - y][x]]);
+			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
+			draw.OffsetSize();
+			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
 		}
 	}
 }
@@ -122,17 +130,18 @@ void Map::Finalize()
 	mapimg.Finalize();
 }
 
-bool Map::MapHitCheck(CollisionBox &p)
+bool Map::MapHitCheck(Object &p)
 {
-	for (int y = 0; y < this->mapY; ++y)
+	for (int y = 0; y < this->mapSize.y; ++y)
 	{
-		for (int x = 0; x < this->mapX; ++x)
+		for (int x = 0; x < this->mapSize.x; ++x)
 		{
+			//マップ番号０以外に当たったらTRUEを返す
 			if (this->_arr[y][x] != 0) {
-				/*if (this->hitBase[y][x].collisionCube.hitBox(p))
+				if (this->hitBase[y][x].hit(p))
 				{
 					return true;
-				}*/
+				}
 			}
 		}
 	}

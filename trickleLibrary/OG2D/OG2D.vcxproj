@@ -151,23 +151,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Back\Back.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
     <ClCompile Include="src\Object\Object.cpp" />
     <ClCompile Include="src\OGSystem\OGsystem.cpp" />
     <ClCompile Include="src\OGSystem\OGTask.cpp" />
     <ClCompile Include="src\OGSystem\_OGsystem.cpp" />
+    <ClCompile Include="src\Player\Player.cpp" />
+    <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Sample.cpp" />
     <ClCompile Include="src\Task\Task_Sample2.cpp" />
+    <ClCompile Include="src\Task\Task_Title.cpp" />
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Back\Back.h" />
     <ClInclude Include="src\Map\Map.h" />
     <ClInclude Include="src\Object\Object.h" />
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
+    <ClInclude Include="src\Player\Player.h" />
+    <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Sample.h" />
     <ClInclude Include="src\Task\Task_Sample2.h" />
+    <ClInclude Include="src\Task\Task_Title.h" />
     <ClInclude Include="src\Win\WinMain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

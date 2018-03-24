@@ -2,11 +2,11 @@
 void _OGTK::_myGameInitialize()
 {
 	//ê∂ê¨Ç∑ÇÈWindowèÓïÒ
-	_window.createWindow(960, 540, "trickle", false);
-	//Win::createWindow(1920, 1080, "trickle", false);
+	//_window.createWindow(960, 540, "trickle", false);
+	_window.createWindow(1920, 1080, "trickle", true);
 	//É^ÉXÉNÇÃèâä˙âª
 	nowTask = NON;
-	nextTask = Task_Sample;
+	nextTask = Task_Title;
 }
 
 void _OGTK::_myGameUpDate()
@@ -21,6 +21,12 @@ void _OGTK::_myGameUpDate()
 		case Task_Sample2:
 			s2.Finalize();
 			break;
+		case Task_Title:
+			title.Finalize();
+			break;
+		case Task_Game:
+			game.Finalize();
+			break;
 		}
 		nowTask = nextTask;
 		switch (nowTask)
@@ -31,6 +37,12 @@ void _OGTK::_myGameUpDate()
 		case Task_Sample2:
 			s2.Initialize();
 			break;
+		case Task_Title:
+			title.Initialize();
+			break;
+		case Task_Game:
+			game.Initialize();
+			break;
 		}
 	}
 	switch (nowTask)
@@ -40,6 +52,12 @@ void _OGTK::_myGameUpDate()
 		break;
 	case Task_Sample2:
 		nextTask = s2.UpDate();
+		break;
+	case Task_Title:
+		nextTask = title.UpDate();
+		break;
+	case Task_Game:
+		nextTask = game.UpDate();
 		break;
 	}
 }
@@ -53,6 +71,12 @@ void _OGTK::_myGameRender2D()
 		break;
 	case Task_Sample2:
 		s2.Render2D();
+		break;
+	case Task_Title:
+		title.Render2D();
+		break;
+	case Task_Game:
+		game.Render2D();
 		break;
 	}
 }
@@ -71,6 +95,12 @@ void _OGTK::_myGameFinalize()
 		break;
 	case Task_Sample2:
 		s2.Finalize();
+		break;
+	case Task_Title:
+		title.Finalize();
+		break;
+	case Task_Game:
+		game.Finalize();
 		break;
 	}
 }
