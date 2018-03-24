@@ -115,6 +115,7 @@ public:
 
 	void Vec2::operator+=(Vec2 v) { x += v.x; y += v.y; }
 	void Vec2::operator*=(float n) { x *= n; y *= n; }
+	void Vec2::operator-=(Vec2 v) { x -= v.x; y -= v.y; }
 };
 class Mat4 {
 public:

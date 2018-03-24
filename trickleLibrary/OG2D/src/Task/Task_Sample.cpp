@@ -39,7 +39,7 @@ void Sample::Finalize()
 void ObjectSample::Initialize()
 {
 	this->sampleimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(10.0f, 100.0f), Vec2(128.0f, 128.0f), 0.0f);
+	CreateObject(Cube, Vec2(0.0f, 0.0f), Vec2(128.0f, 128.0f), 0.0f);
 	this->hitcheck = false;
 }
 

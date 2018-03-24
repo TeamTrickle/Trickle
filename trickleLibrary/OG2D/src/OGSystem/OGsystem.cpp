@@ -317,11 +317,17 @@ Texture::Texture()
 }
 void Texture::Draw(Box2D draw, Box2D src) {
 	//ç¿ïW
-	GLfloat vtx[] = {
+	/*GLfloat vtx[] = {
 		draw.x,draw.y,
 		draw.w,draw.y,
 		draw.w,draw.h,
 		draw.x,draw.h,
+	};*/
+	GLfloat vtx[] = {
+		draw.x,draw.h,
+		draw.w,draw.h,
+		draw.w,draw.y,
+		draw.x,draw.y,
 	};
 	_Rotate(angle, &vtx[0]);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);

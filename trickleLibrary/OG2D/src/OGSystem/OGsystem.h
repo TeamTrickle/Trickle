@@ -2,6 +2,7 @@
 //______________________________//
 //|システムクラス２              |//
 //|履歴：2018/03/20金子翔       |//
+//|履歴：2018/03/23金子翔		   |//
 //|____________________________|//
 #include "OGSystem\_OGsystem.h"
 #include "stb_image.h"
@@ -82,6 +83,8 @@ public:
 		this->w = this->w + this->x;
 		this->h = this->h + this->y;
 	}
+	Box2D operator+=(Box2D b) { x += b.x; y += b.y; w += b.w; h += b.h; }
+	Box2D operator-=(Box2D b) { x -= b.x; y -= b.y; w -= b.w; h -= b.h; }
 };
 class CollisionBox
 {

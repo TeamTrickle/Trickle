@@ -1,6 +1,7 @@
 //______________________________//
 //|メインシステム               |//
 //|履歴：2018/03/20金子翔       |//
+//|履歴：2018/03/24金子翔		   |//
 //|____________________________|//
 #define _USE_MATH_DEFINES
 //小数点誤差修正
@@ -91,8 +92,8 @@ int main() {
 	glViewport(0, 0, OGTK._window._widht, OGTK._window._height);
 	//glViewport(0, 0, Win::_widht, Win::_height);
 	glLoadIdentity();
-	glOrtho(0.f, OGTK._window._widht, 0.f, OGTK._window._height, -1.f, 1.f);
-	//glOrtho(0.f, OGTK._window._widht,OGTK._window._height, 0.f, 0.f, 1.f);
+	//glOrtho(0.f, OGTK._window._widht, 0.f, OGTK._window._height, -1.f, 1.f);
+	glOrtho(0.f, OGTK._window._widht,OGTK._window._height, 0.f, 0.f, 1.f);
 	//glOrtho(0.f, Win::_widht, Win::_height, 0.f, 0.f, 1.f);
 	// 操作対象の行列をモデリングビュー行列に切り替えておく
 	glMatrixMode(GL_MODELVIEW);
