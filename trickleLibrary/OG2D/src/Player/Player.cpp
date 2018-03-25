@@ -1,22 +1,26 @@
 #include "Player.h"
 
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::Initialize()
 {
 	std::cout << "Player初期化" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(10.0f, 300.0f), Vec2(128.0f, 128.0f), 0.0f);
+	CreateObject(Cube, Vec2(10.0f, 700.0f), Vec2(128.0f, 128.0f), 0.0f);
 	this->hitcheck = false;
 
 	//ジャンプ状態
 	jumpFlag = false;
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::UpDate()
 {
+	//キャラクターの移動処理
 	est.x = 0;
 	if (Input::KeyInputOn(Input::LEFT)) {
 		est.x = -Player::MOVE_SPEED;
+		//キャラクターの向き変換
+		playerimg.Draw.x = -playerimg.Draw.x;
+		playerimg.Draw.w = -playerimg.Draw.w;
 	}
 	if (Input::KeyInputOn(Input::RIGHT)) {
 		est.x = Player::MOVE_SPEED;
@@ -29,7 +33,7 @@ void Player::UpDate()
 	JumpMove();
 	position += est;
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::Render()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
@@ -37,13 +41,16 @@ void Player::Render()
 	Box2D src(0, 0, 128, 128);
 	this->playerimg.Draw(draw, src);
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::Finalize()
 {
 	std::cout << "Player解放" << std::endl;
 	this->playerimg.Finalize();
 
 }
+//☆☆☆☆//-----------------------------------------------------------------------------
+//関数
+//☆☆☆☆//-----------------------------------------------------------------------------
 //ジャンプの処理
 void Player::JumpMove()
 {
@@ -63,4 +70,10 @@ void Player::JumpMove()
 			jumpFlag = false;
 		}
 	}
+}
+//☆☆☆☆//-----------------------------------------------------------------------------
+//足元接触判定
+void CheckFoot()
+{
+
 }
