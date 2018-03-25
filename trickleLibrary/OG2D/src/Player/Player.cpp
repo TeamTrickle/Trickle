@@ -5,23 +5,21 @@ void Player::Initialize()
 {
 	std::cout << "Player初期化" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(10.0f, 600.0f), Vec2(128.0f, 128.0f), 0.0f);
+	CreateObject(Cube, Vec2(10.0f, 300.0f), Vec2(128.0f, 128.0f), 0.0f);
 	this->hitcheck = false;
 
 	//ジャンプ状態
 	jumpFlag = false;
-	//移動スピード
-	speed = 0.15f;
 }
 
 void Player::UpDate()
 {
 	est.x = 0;
 	if (Input::KeyInputOn(Input::LEFT)) {
-		est.x = -speed;
+		est.x = -Player::MOVE_SPEED;
 	}
 	if (Input::KeyInputOn(Input::RIGHT)) {
-		est.x = speed;
+		est.x = Player::MOVE_SPEED;
 	}
 
 	//y方向の速度に加速度を加える
@@ -29,10 +27,6 @@ void Player::UpDate()
 
 	//ジャンプの処理
 	JumpMove();
-
-	//移動量適用
-	est.Normalize();
-	//est *= speed;
 	position += est;
 }
 
@@ -55,6 +49,7 @@ void Player::JumpMove()
 {
 	//trueの時はジャンプ状態、じゃなければ通常状態
 	if (!jumpFlag) {
+		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
 			jumpFlag = true;
@@ -64,7 +59,7 @@ void Player::JumpMove()
 	//ジャンプ状態の処理
 	else {
 		//着地判定(未完成、MAPの当たり判定を実行したら)
-		if (position.y >= 1080) {
+		if (position.y >= 700) {
 			jumpFlag = false;
 		}
 	}
