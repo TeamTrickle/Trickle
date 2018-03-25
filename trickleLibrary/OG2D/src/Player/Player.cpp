@@ -7,7 +7,8 @@ void Player::Initialize()
 	this->playerimg.TextureCreate(this->fileName);
 	CreateObject(Cube, Vec2(10.0f, 700.0f), Vec2(128.0f, 128.0f), 0.0f);
 	this->hitcheck = false;
-
+	//初期状態の向きを入れておく
+	direction = Direction::RIGHT;
 	//ジャンプ状態
 	jumpFlag = false;
 }
@@ -19,11 +20,15 @@ void Player::UpDate()
 	if (Input::KeyInputOn(Input::LEFT)) {
 		est.x = -Player::MOVE_SPEED;
 		//キャラクターの向き変換
-		playerimg.Draw.x = -playerimg.Draw.x;
-		playerimg.Draw.w = -playerimg.Draw.w;
+		/*playerimg.Draw.x = -playerimg.Draw.x;
+		playerimg.Draw.w = -playerimg.Draw.w;*/
+		//向きをLEFTに
+		direction = Direction::LEFT;
 	}
 	if (Input::KeyInputOn(Input::RIGHT)) {
 		est.x = Player::MOVE_SPEED;
+		//向きをRIGHTに
+		direction = Direction::RIGHT;
 	}
 
 	//y方向の速度に加速度を加える
@@ -39,6 +44,12 @@ void Player::Render()
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
 	Box2D src(0, 0, 128, 128);
+	//LEFT向きなら画像を反転させる
+	if (direction == Direction::LEFT) {
+		int k = src.w;
+		src.w = src.x;
+		src.x = k;
+	}
 	this->playerimg.Draw(draw, src);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
