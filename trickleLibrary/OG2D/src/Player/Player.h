@@ -23,16 +23,10 @@ public:
 
 	//X方向の移動スピード
 	float speed;
-	//ジャンプの初速度
-	float jump_speed;
-	//ジャンプの加速度
-	float jump_accel;
-	//ジャンプ状態
-	bool jumpFlag;
-	//着地の判定を使う
-	float MAX_Y;
-	//地面にいるときのY座標
-	float ground_y = MAX_Y - 2;
+
+	bool jumpFlag = false;
+	const float JUMP_POWER = 10.f;
+	const float GRAVITY = 9.8f;
 
 	//☆☆☆☆//-----------------------------------------------------------------------------
 	//クラスのメンバ関数

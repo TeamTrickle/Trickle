@@ -12,10 +12,6 @@ void Player::Initialize()
 	jumpFlag = false;
 	//移動スピード
 	speed = 0.15f;
-	//ジャンプの初速度
-	jump_speed = -0.5f;
-	//ジャンプの加速度
-	jump_accel = 0.02f;
 }
 
 void Player::UpDate()
@@ -62,31 +58,32 @@ void Player::Finalize()
 //ジャンプの処理
 void Player::JumpMove(Vec2& e_)
 {
+	e_.x = 0;
+	if (Input::KeyInputOn(Input::LEFT)) {
+		e_.x = -speed;
+	}
+	if (Input::KeyInputOn(Input::RIGHT)) {
+		e_.x = speed;
+	}
+
 	//trueの時はジャンプ状態、じゃなければ通常状態
 	if (!jumpFlag) {
-		e_.x = 0;
-		if (Input::KeyInputOn(Input::LEFT)) {
-			e_.x = -speed;
-		}
-		if (Input::KeyInputOn(Input::RIGHT)) {
-			e_.x = speed;
-		}
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
 			jumpFlag = true;
-			e_.y = jump_speed;
+			e_.y = Player::JUMP_POWER;
 		}
 	}
 	//ジャンプ状態の処理
 	else {
 		//y方向の速度に加速度を加える
-		e_.y += jump_accel;
+		e_.y += Player::GRAVITY;
 		//y座標の更新
 		position.y += e_.y;
 		//着地判定(未完成、MAPの当たり判定を実行したら)
 		if (e_.y>0 /*&& position.y >= ground_y*/) {
 			jumpFlag = false;
-			position.y = ground_y;
+			e_.y = 0.f;
 		}
 	}
 }
