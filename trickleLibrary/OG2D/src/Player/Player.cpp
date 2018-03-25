@@ -25,10 +25,10 @@ void Player::UpDate()
 		est.x += 1;
 	}
 	if (Input::KeyInputOn(Input::UP)) {
-		est.y += 1;
+		est.y -= 1;
 	}
 	if (Input::KeyInputOn(Input::DOWN)) {
-		est.y -= 1;
+		est.y += 1;
 	}
 	est.Normalize();
 	est *= speed;

@@ -3,7 +3,7 @@ void _OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
 	//_window.createWindow(960, 540, "trickle", false);
-	_window.createWindow(1920, 1080, "trickle", true);
+	_window.createWindow(1920, 1080, "trickle", false/*true*/);
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
 	nowTask = NON;
 	nextTask = Task_Title;

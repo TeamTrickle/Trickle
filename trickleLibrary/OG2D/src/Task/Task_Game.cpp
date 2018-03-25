@@ -4,7 +4,7 @@ void Game::Initialize()
 	std::cout << "Game‰Šú‰»" << std::endl;
 	player.Initialize();
 	back.Initialize();
-	map.LoadMap("test.txt");
+	map.LoadMap("prototype.txt");
 }
 
 TaskFlag Game::UpDate()

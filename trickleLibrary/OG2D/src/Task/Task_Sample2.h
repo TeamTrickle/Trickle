@@ -5,6 +5,7 @@
 //|____________________________|//
 #include "Win\WinMain.h"
 #include "OGSystem\OGsystem.h"
+#include "Player\Player.h"
 
 class Sample2
 {
@@ -16,4 +17,5 @@ public:
 	//™™™™//
 	//’Ç‰Á•Ï”//
 	//™™™™//
+	Player player;
 };
