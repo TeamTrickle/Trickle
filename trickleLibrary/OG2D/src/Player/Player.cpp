@@ -16,26 +16,21 @@ void Player::Initialize()
 
 void Player::UpDate()
 {
-	Vec2 est;
-	//if (Input::KeyInputOn(Input::LEFT)) {
-	//	est.x -= 1;
-	//}
-	//if (Input::KeyInputOn(Input::RIGHT)) {
-	//	est.x += 1;
-	//}
-	//if (Input::KeyInputOn(Input::UP)) {
-	//	est.y -= 1;
-	//}
-	//if (Input::KeyInputOn(Input::DOWN)) {
-	//	est.y += 1;
-	//}
-	position.y += 1;
+	est.x = 0;
+	if (Input::KeyInputOn(Input::LEFT)) {
+		est.x = -speed;
+	}
+	if (Input::KeyInputOn(Input::RIGHT)) {
+		est.x = speed;
+	}
+
+	//y方向の速度に加速度を加える
+	est.y += Player::GRAVITY;
 
 	//ジャンプの処理
-	JumpMove(est);
+	JumpMove();
 
-
-
+	//移動量適用
 	est.Normalize();
 	//est *= speed;
 	position += est;
@@ -56,34 +51,22 @@ void Player::Finalize()
 
 }
 //ジャンプの処理
-void Player::JumpMove(Vec2& e_)
+void Player::JumpMove()
 {
-	e_.x = 0;
-	if (Input::KeyInputOn(Input::LEFT)) {
-		e_.x = -speed;
-	}
-	if (Input::KeyInputOn(Input::RIGHT)) {
-		e_.x = speed;
-	}
-
 	//trueの時はジャンプ状態、じゃなければ通常状態
 	if (!jumpFlag) {
+		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
 			jumpFlag = true;
-			e_.y = Player::JUMP_POWER;
+			est.y = Player::JUMP_POWER;
 		}
 	}
 	//ジャンプ状態の処理
 	else {
-		//y方向の速度に加速度を加える
-		e_.y += Player::GRAVITY;
-		//y座標の更新
-		position.y += e_.y;
 		//着地判定(未完成、MAPの当たり判定を実行したら)
-		if (e_.y>0 /*&& position.y >= ground_y*/) {
+		if (position.y >= 1080) {
 			jumpFlag = false;
-			e_.y = 0.f;
 		}
 	}
 }

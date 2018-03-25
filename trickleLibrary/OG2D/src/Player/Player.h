@@ -25,14 +25,15 @@ public:
 	float speed;
 
 	bool jumpFlag = false;
-	const float JUMP_POWER = 10.f;
+	Vec2 est;
+	const float JUMP_POWER = -30.f;
 	const float GRAVITY = 9.8f;
 
 	//☆☆☆☆//-----------------------------------------------------------------------------
 	//クラスのメンバ関数
 	//☆☆☆☆//-----------------------------------------------------------------------------
 	//ジャンプのプロトタイプ宣言
-	void JumpMove(Vec2& e_);
+	void JumpMove();
 };
 
 
