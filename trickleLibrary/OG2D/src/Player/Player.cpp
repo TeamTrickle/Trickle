@@ -55,7 +55,6 @@ void Player::JumpMove()
 {
 	//trueの時はジャンプ状態、じゃなければ通常状態
 	if (!jumpFlag) {
-		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
 			jumpFlag = true;
