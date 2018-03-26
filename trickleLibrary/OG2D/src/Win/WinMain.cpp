@@ -37,31 +37,27 @@ void TaskFinalize()
 void Initialize() {
 	fps.Initialize();
 	Input::Initialize(OGTK._window.window);
-	//Key::Initialize(Win::_window);
+}
+//------------------
+//解放
+//------------------
+void Finalize()
+{
+	Input::Finalize();
 }
 //------------------
 //更新
 //------------------
-void Update() {
+bool Update() {
 	if (Input::KeyInputDown(Input::ESCAPE))
 	{
 		TaskFinalize();
 		//ウィンドウの破棄
 		glfwDestroyWindow(OGTK._window.window);
-		//glfwDestroyWindow(Win::_window);
-		//GLFWのライブラリを終了する
-		glfwTerminate();
-		//アプリケーションを終了する
-		exit(0);
+		return true;
 	}
 	fps.Update();
-}
-//------------------
-//解放
-//------------------
-void Finalize() 
-{
-	Input::Finalize();
+	return false;
 }
 //------------------
 //メイン
@@ -77,7 +73,6 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//使用するウィンドウを設定する
 	glfwMakeContextCurrent(OGTK._window.window);
-	//glfwMakeContextCurrent(Win::_window);
 	//同期(ダブルバッファの入れ替えタイミングの指定)
 	glfwSwapInterval(1);
 #if defined(_MSC_VER)
@@ -90,11 +85,9 @@ int main() {
 	// 透視変換行列を設定
 	glMatrixMode(GL_PROJECTION);
 	glViewport(0, 0, OGTK._window._widht, OGTK._window._height);
-	//glViewport(0, 0, Win::_widht, Win::_height);
 	glLoadIdentity();
-	//glOrtho(0.f, OGTK._window._widht, 0.f, OGTK._window._height, -1.f, 1.f);
-	glOrtho(0.f, OGTK._window._widht,OGTK._window._height, 0.f, 0.f, 1.f);
-	//glOrtho(0.f, Win::_widht, Win::_height, 0.f, 0.f, 1.f);
+	gameEngine = new EngineSystem();
+	gameEngine->Initialize();
 	// 操作対象の行列をモデリングビュー行列に切り替えておく
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -109,7 +102,8 @@ int main() {
 	//初期化処理
 	Initialize();
 	while (!glfwWindowShouldClose(OGTK._window.window)) {
-	//while(!glfwWindowShouldClose(Win::_window)){
+		gameEngine->UpDate();
+		glMatrixMode(GL_MODELVIEW);
 		//バッファをクリアして値を設定する
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//有効になっている場合、計算されたフラグメントカラー値をカラーバッファの値とブレンドします。
@@ -117,18 +111,19 @@ int main() {
 		//ピクセル演算を指定する
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//更新処理
-		Update();
+		if (Update()) { break; }
 		TaskSystem();
 		//描画処理
 		TaskRender();
 		//指定したウィンドウのダブルバッファを行う
-		//glfwSwapBuffers(Win::_window);
 		glfwSwapBuffers(OGTK._window.window);
 		//ウィンドウ、マウス、キーボードの入力の状態をアップデートする
 		glfwPollEvents();
 	}
 	//解放
 	Finalize();
+	//ゲームエンジンの内容を解放
+	delete gameEngine;
 	//GLFWのライブラリを終了する
 	glfwTerminate();
 }

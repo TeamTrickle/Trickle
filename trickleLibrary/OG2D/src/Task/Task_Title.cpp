@@ -15,6 +15,22 @@ TaskFlag Title::UpDate()
 	{
 		nowtask = Task_Game;
 	}
+	if (Input::KeyInputOn(Input::A))
+	{
+		gameEngine->camera->Move(Vec2(-1.0f, 0.0f));
+	}
+	if (Input::KeyInputOn(Input::D))
+	{
+		gameEngine->camera->Move(Vec2(+1.0f, 0.0f));
+	}
+	if (Input::KeyInputOn(Input::W))
+	{
+		gameEngine->camera->Move(Vec2(0.0f, -1.0f));
+	}
+	if (Input::KeyInputOn(Input::S))
+	{
+		gameEngine->camera->Move(Vec2(0.0f, 1.0f));
+	}
 	objsmp.UpDate();
 	objsmp2.UpDate();
 	objsmp.hitcheck = map.MapHitCheck(objsmp);
