@@ -7,10 +7,19 @@ void Player::Initialize()
 	this->playerimg.TextureCreate(this->fileName);
 	CreateObject(Cube, Vec2(10.0f, 700.0f), Vec2(128.0f, 128.0f), 0.0f);
 	this->hitcheck = false;
+	this->objectTag = "Player";
 	//‰Šúó‘Ô‚ÌŒü‚«‚ğ“ü‚ê‚Ä‚¨‚­
 	direction = Direction::RIGHT;
 	//ƒWƒƒƒ“ƒvó‘Ô
 	jumpFlag = false;
+
+	//“–‚½‚è”»’è
+	Object::CollisionProcess = [&](const Object& o_) {
+		if (o_.objectTag == "Floor") {
+			std::cout << "°‚Æ“–‚½‚è”»’è’†I" << std::endl;
+			jumpFlag = false;
+		}
+	};
 }
 //™™™™//-----------------------------------------------------------------------------
 void Player::UpDate()

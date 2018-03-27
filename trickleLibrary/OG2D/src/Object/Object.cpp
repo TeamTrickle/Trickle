@@ -3,6 +3,7 @@ Object::Object() {
 	this->Gravity = false;
 	this->angle = 0.f;
 	this->objform = Objform::Non;
+	this->CollisionProcess = nullptr;
 }
 Object::Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 {
@@ -98,8 +99,4 @@ bool Object::hit(Object o)
 		break;
 	}
 	return false;
-}
-
-void Object::Collide(const Object& o_) {
-
 }

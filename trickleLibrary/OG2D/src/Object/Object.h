@@ -4,6 +4,7 @@
 //|履歴：2018/03/20金子翔       |//
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
+#include <functional>
 enum Objform
 {
 	Non,
@@ -31,7 +32,7 @@ public:
 	 * @brief オーバーライドして当たり判定処理を書いてください
 	 * @param Object このオブジェクトに当たった他のオブジェクト
 	 */
-	void Collide(const Object&);
+	std::function<void(const Object&)> CollisionProcess;
 
 private:
 };

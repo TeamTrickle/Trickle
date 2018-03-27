@@ -5,13 +5,20 @@ void Game::Initialize()
 	player.Initialize();
 	back.Initialize();
 	map.LoadMap("test.txt");
+
+
+	// “–‚½‚è”»’èƒeƒXƒg
+	for (auto& i : map.hitBase)
+		for (auto& j : i)
+			if (j.objectTag.length() > 0)
+				cm.AddChild(&j);
 	cm.AddChild(&player);
 }
 
 TaskFlag Game::UpDate()
 {
-	cm.Run();
 	player.UpDate();
+	cm.Run();
 	TaskFlag nowtask = Task_Game;
 	if (Input::KeyInputUp(Input::SPACE))
 	{

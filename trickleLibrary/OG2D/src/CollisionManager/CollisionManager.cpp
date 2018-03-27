@@ -15,8 +15,8 @@ void CollisionManager::AddChild(Object* obj) {
 void CollisionManager::Run() {
 	for (auto& i : objs) 
 		for (auto& j : objs) {
-			if (i == j) continue;
+			if (i == j || i->CollisionProcess == nullptr) continue;
 			if (i->hit(*j))
-				i->Collide(*j);
+				i->CollisionProcess(*j);
 		}
 }
