@@ -5,10 +5,12 @@ void Game::Initialize()
 	player.Initialize();
 	back.Initialize();
 	map.LoadMap("test.txt");
+	cm.AddChild(&player);
 }
 
 TaskFlag Game::UpDate()
 {
+	cm.Run();
 	player.UpDate();
 	TaskFlag nowtask = Task_Game;
 	if (Input::KeyInputUp(Input::SPACE))

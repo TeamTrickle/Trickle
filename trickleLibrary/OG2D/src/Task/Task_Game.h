@@ -4,6 +4,7 @@
 //|—š—ğF2018/03/20‹àqãÄ       |//
 //|____________________________|//
 #include "Win\WinMain.h"
+#include "CollisionManager\CollisionManager.h"
 #include "OGSystem\OGsystem.h"
 #include "Player\Player.h"
 #include "Back\Back.h"
@@ -22,4 +23,5 @@ public:
 	Player player;
 	Back back;
 	Map map;
+	CollisionManager cm;
 };
