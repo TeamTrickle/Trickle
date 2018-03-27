@@ -45,6 +45,9 @@
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Object\gimmck">
+      <UniqueIdentifier>{6ad99194-3287-4484-922c-d5acaa43d4c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -86,6 +89,21 @@
     <ClCompile Include="src\Water\water.cpp">
       <Filter>ソースファイル\Water</Filter>
     </ClCompile>
+    <ClCompile Include="src\Object\Kanetuki.cpp">
+      <Filter>ソースファイル\Object\gimmck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Senpuki.cpp">
+      <Filter>ソースファイル\Object\gimmck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Switch.cpp">
+      <Filter>ソースファイル\Object\gimmck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp">
+      <Filter>ソースファイル\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\EnemyHitTest.cpp">
+      <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -126,6 +144,21 @@
     </ClInclude>
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Kanetuki.h">
+      <Filter>ソースファイル\Object\gimmck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Senpuki.h">
+      <Filter>ソースファイル\Object\gimmck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Switch.h">
+      <Filter>ソースファイル\Object\gimmck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_GIMMICK_Control.h">
+      <Filter>ソースファイル\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\EnemyHitTest.h">
+      <Filter>ソースファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

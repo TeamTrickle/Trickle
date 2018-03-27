@@ -1,6 +1,6 @@
 //______________________________//
 //|動くギミック  扇風機        |//
-//|履歴：2018/03/26 横尾	   |//
+//|履歴：2018/03/27 横尾	   |//
 //|　                          |//
 //|____________________________|//
 #pragma once
@@ -20,7 +20,7 @@ public:
 	void UpDate();
 	void Finalize();
 	void Render();
-	Senpuki(EnemyHitTest* e_pointa);
+	Senpuki(/*EnemyHitTest* e_pointa*/);
 	//Senpuki(Player* p_pointa);
 	~Senpuki();
 private:
@@ -32,8 +32,7 @@ private:
 	Texture collbox;					//画像イメージ
 	std::string _filePath;				//ファイルパス
 	std::string _hitbox;				//ファイルパス
-	CollisionBox range;					//視野範囲
-
+	CollisionBox range;				    //視野範囲
 public:
 	void CheckHit(Object* objhit , int value);
 };
