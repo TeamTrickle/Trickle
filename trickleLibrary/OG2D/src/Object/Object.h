@@ -25,6 +25,7 @@ public:
 	Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
 	~Object();
 	void CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
+	std::string objectTag;
 
 protected:
 	/**

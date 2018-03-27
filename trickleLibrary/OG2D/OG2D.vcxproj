@@ -166,6 +166,7 @@
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="src\Back\Back.h" />
     <ClInclude Include="src\Map\Map.h" />
     <ClInclude Include="src\Object\Object.h" />

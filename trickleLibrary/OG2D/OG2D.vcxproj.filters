@@ -45,6 +45,9 @@
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\CollisionManager">
+      <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -126,6 +129,9 @@
     </ClInclude>
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ソースファイル\CollisionManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
