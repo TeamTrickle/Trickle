@@ -8,6 +8,7 @@
  * @author Heewon Kim
  */
 
+#include <array>
 #include <vector>
 #include "Object\Object.h"
 

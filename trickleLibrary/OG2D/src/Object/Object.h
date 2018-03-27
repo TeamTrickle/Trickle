@@ -27,7 +27,6 @@ public:
 	void CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
 	std::string objectTag;
 
-protected:
 	/**
 	 * @brief オーバーライドして当たり判定処理を書いてください
 	 * @param Object このオブジェクトに当たった他のオブジェクト

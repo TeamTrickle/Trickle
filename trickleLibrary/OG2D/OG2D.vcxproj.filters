@@ -89,6 +89,9 @@
     <ClCompile Include="src\Water\water.cpp">
       <Filter>ソースファイル\Water</Filter>
     </ClCompile>
+    <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
+      <Filter>ソースファイル\CollisionManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -130,7 +133,7 @@
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
+    <ClInclude Include="src\CollisionManager\CollisionManager.h">
       <Filter>ソースファイル\CollisionManager</Filter>
     </ClInclude>
   </ItemGroup>
