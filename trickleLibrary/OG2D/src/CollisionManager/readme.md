@@ -7,7 +7,30 @@
 
 現在クラスの中にいるすべてのメンバー関数・変巣はそのまま使えます。
 
+当たり判定を行いたいオブジェクトはCollisionManagerに登録してください。
+
+Task_Gameでcm.AddChild()関数で登録できます。
+
 ## 例題
+
+Task_Game.cpp
+
+    #include "Task_Game.h"
+    void Game::Initialize()
+    {
+        std::cout << "Game初期化" << std::endl;
+        player.Initialize();
+        
+
+
+        ...(省略)
+
+        
+
+        cm.AddChild(&player);
+    }
+
+Enemy.cpp
 
     bool Enemy::Initialize() {
         /* タグを設定します。このタグは他のオブジェクトから当たり判定をするとき使われます */
