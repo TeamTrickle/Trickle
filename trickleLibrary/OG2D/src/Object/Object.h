@@ -25,5 +25,13 @@ public:
 	Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
 	~Object();
 	void CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
+
+protected:
+	/**
+	 * @brief オーバーライドして当たり判定処理を書いてください
+	 * @param Object このオブジェクトに当たった他のオブジェクト
+	 */
+	void Collide(const Object&);
+
 private:
 };

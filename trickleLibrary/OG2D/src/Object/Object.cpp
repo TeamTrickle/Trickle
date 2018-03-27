@@ -99,3 +99,7 @@ bool Object::hit(Object o)
 	}
 	return false;
 }
+
+void Object::Collide(const Object& o_) {
+
+}
