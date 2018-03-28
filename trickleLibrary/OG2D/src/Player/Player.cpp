@@ -7,20 +7,6 @@ void Player::Initialize()
 	this->playerimg.TextureCreate(this->fileName);
 	CreateObject(Cube, Vec2(10.0f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 	
-	
-	//足判定用
-	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
-	footBase.objectTag = "PlayerFoot";
-	footBase.CollisionProcess = [&](const Object& o_) {
-		std::cout << o_.objectTag << std::endl;
-		if (o_.objectTag == "Floor") {
-			std::cout << "足元判定中" << std::endl;		//表せない？？？
-			footBase.isCollided = true;
-			/*jumpFlag = false;*/
-		}
-	};
-
-
 	this->hitcheck = false;
 	this->objectTag = "Player";
 	//当たり判定初期化
@@ -61,7 +47,9 @@ void Player::UpDate()
 	//ジャンプの処理
 	JumpMove();
 	//足元接触判定
-	//CheckFoot();
+	CheckFoot();
+	//頭接触判定
+	CheckHead();
 
 	position += est;
 }
@@ -93,12 +81,17 @@ void Player::Finalize()
 void Player::JumpMove()
 {
 	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
-	//trueの時はジャンプ状態、じゃなければ通常状態
+	headBase.position = Vec2(this->position.x+Scale.x, this->position.y);
+	//足判定trueの時は通常状態
 	if (footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
 			est.y = Player::JUMP_POWER;
+		}
+		//上昇中
+		if (headBase.isCollided){
+			est.y = 0.0f;	//上昇力を無効にする
 		}
 	}
 }
@@ -109,7 +102,26 @@ void Player::CheckFoot()
 	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
 	footBase.objectTag = "PlayerFoot";
 	footBase.CollisionProcess = [&](const Object& o_) {
-		std::cout << "足元判定中" << std::endl;
-		this->isCollided = true;
+		//std::cout << o_.objectTag << std::endl;
+		//当たり判定に通るか判断する
+		if (o_.objectTag == "Floor") {
+			//std::cout << "足元判定中" << std::endl;
+			footBase.isCollided = true;
+		}
+	};
+}
+//☆☆☆☆//-----------------------------------------------------------------------------
+//頭接触判定
+void Player::CheckHead()
+{
+	headBase.CreateObject(Cube, Vec2(this->position.x+this->Scale.x, this->position.y), Vec2(this->Scale.y, 1.0f), 0.0f);
+	headBase.objectTag = "PlayerHead";
+	headBase.CollisionProcess = [&](const Object& o_) {
+		std::cout << o_.objectTag << std::endl;
+		//当たり判定に通るか判断する
+		if (o_.objectTag == "Floor") {
+			std::cout << "頭判定中" << std::endl;
+			headBase.isCollided = true;
+		}
 	};
 }

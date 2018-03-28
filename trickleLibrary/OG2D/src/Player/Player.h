@@ -3,6 +3,7 @@
 //|プレイヤ                    |//
 //|履歴：2018/03/23横田	       |//
 //|履歴：2018/03/26劉韋君　    |//
+//|履歴：2018/03/29劉韋君　    |//
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
@@ -40,6 +41,8 @@ public:
 	Direction direction;
 	//足元判定用
 	Object footBase;
+	//頭判定判定用
+	Object headBase;
 
 	//☆☆☆☆//-----------------------------------------------------------------------------
 	//クラスのメンバ関数
@@ -48,6 +51,8 @@ public:
 	void JumpMove();
 	//足元接触判定のプロトタイプ宣言
 	void CheckFoot();
+	//頭接触判定のプロトタイプ宣言
+	void CheckHead();
 };
 
 
