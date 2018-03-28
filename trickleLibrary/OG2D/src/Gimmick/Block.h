@@ -3,26 +3,56 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Win\WinMain.h"
+#include "Map\Map.h"
 
-//ボックス本体のクラス--------------------------------------------------------------------------------
-class GimmickB :public Object
+class Block1 :public Object
 {
 public:
 	Texture BlockImg;
 	std::string fileName = "Collision.png";
-	Box2D HitR;
-	Box2D HitL;
-	bool hitRight;     //右側当たり判定用
-	bool hitLeft;      //左側当たり判定用
-	bool hitbottom;    //地面当たり判定用
-	float speed;       //押したときの移動速度
 
-	//bool MapHit(Box2D map, Box2D block);
+	float speed;        //移動速度
+	bool hitCheck;
 
+	bool hitR_;
+	bool hitL_;
+	Box2D hitR;
+	Box2D hitL;
+
+	void HitCheckR(Box2D p_);
+	void HitCheckL(Box2D p_);
+
+	void Initialize();
+	void UpDate();
+	void Render();
+	void Finalize();
+};
+
+class Player1 :public Object
+{
+public:
+	Texture PlImg;
+	std::string fileName = "Collision.png";
+	bool hitCheck;
+
+	void Initialize();
+	void UpDate();
+	void Finalize();
+	void Render();
+};
+
+class Block_ :public Object
+{
+public:
 	void Initialize();
 	TaskFlag UpDate();
 	void Render();
 	void Finalize();
+
+	Player1 pl_;
+	Block1 block_;
+	Map map;
 };
+
 
 
