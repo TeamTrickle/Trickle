@@ -38,3 +38,7 @@ bool CollisionManager::operator-(const Object* o_) {
 		}
 	return false;
 }
+
+void CollisionManager::operator+=(Object* o_) {
+	this->AddChild(o_);
+}

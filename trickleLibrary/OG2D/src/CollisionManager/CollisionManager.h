@@ -34,6 +34,8 @@ public:
 
 	bool operator-(const Object*);
 
+	void operator+=(Object*);
+
 private:
 	std::vector<Object*> objs;
 };
