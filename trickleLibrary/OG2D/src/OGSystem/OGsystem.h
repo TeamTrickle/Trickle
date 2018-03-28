@@ -233,6 +233,8 @@ public:
 	Vec2 position;
 	typedef std::shared_ptr<Camera2D> SP;
 	static SP Create(Box2D pos);
+	int width;
+	int height;
 private:
 	Box2D cameraPos;
 };

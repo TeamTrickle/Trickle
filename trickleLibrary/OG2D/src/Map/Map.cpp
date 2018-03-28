@@ -94,8 +94,8 @@ bool Map::LoadMap(std::string _path)
 	for (int i = 0; i < _csize; ++i)
 	{
 		//元画像チップの描画範囲の指定
-		int x = (i % 10);
-		int y = (i / 10);
+		int x = (i % 20);
+		int y = (i / 20);
 		this->chip[i] = Box2D(x*32.f, y * 32.f, 32.f, 32.f);
 		this->chip[i].OffsetSize();
 	}
@@ -129,6 +129,8 @@ void Map::MapRender()
 
 void Map::Finalize()
 {
+	while (!this->_arr.empty())
+		this->_arr.pop_back();
 	mapimg.Finalize();
 }
 

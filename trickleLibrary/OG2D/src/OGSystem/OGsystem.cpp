@@ -425,6 +425,8 @@ Camera2D::Camera2D(Box2D pos)
 {
 	this->cameraPos = pos;
 	this->position = { 0,0 };
+	this->width = 0;
+	this->height = 0;
 }
 Camera2D::~Camera2D()
 {
@@ -434,6 +436,8 @@ void Camera2D::Initialize(Box2D pos)
 {
 	this->cameraPos = pos;
 	this->position = { 0,0 };
+	this->width = 0;
+	this->height = 0;
 }
 void Camera2D::CameraUpDate()
 {
@@ -443,7 +447,7 @@ void Camera2D::CameraUpDate()
 	_camera.x += this->position.x;
 	_camera.y += this->position.y;
 	_camera.OffsetSize();
-	glOrtho(_camera.x, _camera.w, _camera.h, _camera.y, -1.0f, 1.0f);
+	glOrtho(_camera.x, _camera.w, _camera.h + this->width, _camera.y + this->height, -1.0f, 1.0f);
 }
 void Camera2D::Move(Vec2 est)
 {

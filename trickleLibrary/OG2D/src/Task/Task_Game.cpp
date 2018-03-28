@@ -4,7 +4,7 @@ void Game::Initialize()
 	std::cout << "Game‰Šú‰»" << std::endl;
 	player.Initialize();
 	back.Initialize();
-	map.LoadMap("test.txt");
+	map.LoadMap("prototype.txt");
 	if (water.Initialize())
 	{
 		cm.AddChild(&water);
@@ -66,4 +66,6 @@ void Game::Finalize()
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();
+	water.Finalize();
+	cm.Destroy();
 }

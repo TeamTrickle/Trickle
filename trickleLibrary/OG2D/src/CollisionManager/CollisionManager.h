@@ -30,6 +30,8 @@ public:
 	 */
 	void Run();
 
+	void Destroy();
+
 private:
 	std::vector<Object*> objs;
 };

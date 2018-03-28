@@ -24,3 +24,8 @@ void CollisionManager::Run() {
 		}
 	}
 }
+
+void CollisionManager::Destroy() {
+	while (!objs.empty())
+		objs.pop_back();
+}

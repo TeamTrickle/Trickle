@@ -2,8 +2,8 @@
 X 34 
 Y 16 
 C 15 
-XS 128 
-YS 128 
+XS 64 
+YS 64 
 N prototype.png 
 CX 32 
 CY 32 
