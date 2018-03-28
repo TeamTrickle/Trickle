@@ -6,6 +6,21 @@ void Player::Initialize()
 	std::cout << "Player初期化" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
 	CreateObject(Cube, Vec2(10.0f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
+	
+	
+	//足判定用
+	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
+	footBase.objectTag = "PlayerFoot";
+	footBase.CollisionProcess = [&](const Object& o_) {
+		std::cout << o_.objectTag << std::endl;
+		if (footBase.objectTag == "PlayerFoot") {
+			std::cout << "足元判定中" << std::endl;		//表せない？？？
+			footBase.isCollided = true;
+			/*jumpFlag = false;*/
+		}
+	};
+
+
 	this->hitcheck = false;
 	this->objectTag = "Player";
 	//当たり判定初期化
@@ -18,7 +33,7 @@ void Player::Initialize()
 	//当たり判定
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Floor") {
-			//std::cout << "床と当たり判定中！" << std::endl;
+			/*std::cout << "床と当たり判定中！" << std::endl;*/
 			this->isCollided = true;
 			jumpFlag = false;
 		}
@@ -45,6 +60,9 @@ void Player::UpDate()
 
 	//ジャンプの処理
 	JumpMove();
+	//足元接触判定
+	//CheckFoot();
+
 	position += est;
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
@@ -75,7 +93,7 @@ void Player::Finalize()
 void Player::JumpMove()
 {
 	//trueの時はジャンプ状態、じゃなければ通常状態
-	if (!jumpFlag&&this->isCollided) {
+	if (!jumpFlag&&footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
@@ -85,15 +103,20 @@ void Player::JumpMove()
 	}
 	//ジャンプ状態の処理
 	else {
-		//着地判定(未完成、MAPの当たり判定を実行したら)
-		if (this->isCollided) {
+		//着地判定
+		if (footBase.isCollided) {
 			jumpFlag = false;
 		}
 	}
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 //足元接触判定
-void CheckFoot()
+void Player::CheckFoot()
 {
-
+	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
+	footBase.objectTag = "PlayerFoot";
+	footBase.CollisionProcess = [&](const Object& o_) {
+		std::cout << "足元判定中" << std::endl;
+		this->isCollided = true;
+	};
 }
