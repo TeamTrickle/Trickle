@@ -5,9 +5,11 @@ void Player::Initialize()
 {
 	std::cout << "Player初期化" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(10.0f, 700.0f), Vec2(128.0f, 128.0f), 0.0f);
+	CreateObject(Cube, Vec2(10.0f, 200.0f), Vec2(128.0f, 128.0f), 0.0f);
 	this->hitcheck = false;
 	this->objectTag = "Player";
+	//当たり判定初期化
+	this->isCollided = false;
 	//初期状態の向きを入れておく
 	direction = Direction::RIGHT;
 	//ジャンプ状態
@@ -17,6 +19,7 @@ void Player::Initialize()
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Floor") {
 			//std::cout << "床と当たり判定中！" << std::endl;
+			this->isCollided = true;
 			jumpFlag = false;
 		}
 	};
@@ -29,9 +32,6 @@ void Player::UpDate()
 	if (Input::KeyInputOn(Input::LEFT)) {
 		est.x = -Player::MOVE_SPEED;
 		//キャラクターの向き変換
-		/*playerimg.Draw.x = -playerimg.Draw.x;
-		playerimg.Draw.w = -playerimg.Draw.w;*/
-		//向きをLEFTに
 		direction = Direction::LEFT;
 	}
 	if (Input::KeyInputOn(Input::RIGHT)) {
@@ -75,7 +75,7 @@ void Player::Finalize()
 void Player::JumpMove()
 {
 	//trueの時はジャンプ状態、じゃなければ通常状態
-	if (!jumpFlag) {
+	if (!jumpFlag&&this->isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
@@ -86,7 +86,7 @@ void Player::JumpMove()
 	//ジャンプ状態の処理
 	else {
 		//着地判定(未完成、MAPの当たり判定を実行したら)
-		if (position.y >= 700) {
+		if (this->isCollided) {
 			jumpFlag = false;
 		}
 	}

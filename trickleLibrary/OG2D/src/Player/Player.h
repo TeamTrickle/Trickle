@@ -27,7 +27,7 @@ public:
 	//移動スピード
 	const float MOVE_SPEED = 10.f;
 	//ジャンプパワー
-	const float JUMP_POWER = -30.f;
+	const float JUMP_POWER = -20.f;
 	//重力加速度
 	const float GRAVITY = 0.98f;
 	//プレイヤーの向きを表す名前空間
