@@ -40,6 +40,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <memory>
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -162,6 +163,8 @@ public:
 	char* _Name;
 	bool _Screen;
 	GLFWwindow *window;
+	typedef std::shared_ptr<Window> SP;
+	static SP Create(int wi, int he, char* name, bool screen);
 public:
 	Window();
 	Window(int wi, int he, char* name, bool screen);
@@ -177,21 +180,3 @@ private:
 	int count;
 	GLfloat fps;
 };
-namespace OG {
-	float ToRadian(const  float  degree_);
-	void MulitMatrixf(GLfloat*src1, GLfloat*src2, GLfloat*dst);
-	void Normalize(GLfloat *v);
-	void Cross(float* src1, float* src2, float* dst);
-	float inner(Vec2 _v1, Vec2 _v2);
-	float inner(float _x1, float _y1, float _x2, float _y2);
-	float inner(int _x1, int _y1, int _x2, int _y2);
-	float cross(Vec2 _v1, Vec2 _v2);
-	float cross(float _x1, float _y1, float _x2, float _y2);
-	float cross(int _x1, int _y1, int _x2, int _y2);
-	float doubleinner(Vec2 _v);
-	float doubleinner(float _x, float _y);
-	float doubleinner(int _x, int _y);
-	float get_distance(float x, float y, float x1, float y1, float x2, float y2);
-	void _Rotate(float _angle, Vec2 _b[4]);
-	void LineHitDraw(Vec2 _b[4]);
-}

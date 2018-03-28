@@ -2,8 +2,8 @@
 void _OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
-	//_window.createWindow(960, 540, "trickle", false);
-	_window.createWindow(1920, 1080, "trickle", false/*true*/);
+	_window.createWindow(960, 540, "trickle", false);
+	//_window.createWindow(1920, 1080, "trickle", true);
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
 	nowTask = NON;
 	nextTask = Task_Title;
@@ -29,6 +29,7 @@ void _OGTK::_myGameUpDate()
 			break;
 		}
 		nowTask = nextTask;
+		gameEngine->camera->position = { 0,0 };
 		switch (nowTask)
 		{
 		case Task_Sample:

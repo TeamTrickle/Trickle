@@ -105,6 +105,8 @@ bool Map::LoadMap(std::string _path)
 		{
 			//オブジェクトの生成
 			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
+			if (this->_arr[y][x] != 0)
+				this->hitBase[y][x].objectTag = "Floor";
 		}
 
 	}

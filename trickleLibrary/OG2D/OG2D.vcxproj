@@ -152,13 +152,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Back\Back.cpp" />
+    <ClCompile Include="src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
+    <ClCompile Include="src\Object\Kanetuki.cpp" />
     <ClCompile Include="src\Object\Object.cpp" />
+    <ClCompile Include="src\Object\Senpuki.cpp" />
+    <ClCompile Include="src\Object\Switch.cpp" />
     <ClCompile Include="src\OGSystem\OGsystem.cpp" />
     <ClCompile Include="src\OGSystem\OGTask.cpp" />
     <ClCompile Include="src\OGSystem\_OGsystem.cpp" />
     <ClCompile Include="src\Player\Player.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
+    <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp" />
     <ClCompile Include="src\Task\Task_Sample.cpp" />
     <ClCompile Include="src\Task\Task_Sample2.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
@@ -167,13 +172,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Back\Back.h" />
+    <ClInclude Include="src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="src\Map\Map.h" />
+    <ClInclude Include="src\Object\Kanetuki.h" />
     <ClInclude Include="src\Object\Object.h" />
+    <ClInclude Include="src\Object\Senpuki.h" />
+    <ClInclude Include="src\Object\Switch.h" />
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
     <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
+    <ClInclude Include="src\Task\Task_GIMMICK_Control.h" />
     <ClInclude Include="src\Task\Task_Sample.h" />
     <ClInclude Include="src\Task\Task_Sample2.h" />
     <ClInclude Include="src\Task\Task_Title.h" />

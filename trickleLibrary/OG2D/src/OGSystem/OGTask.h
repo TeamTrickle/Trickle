@@ -3,7 +3,7 @@
 //|タスクシステム               |//
 //|履歴：2018/03/20金子翔       |//
 //|____________________________|//
-#include "OGSystem\_OGsystem.h"
+#include "OGSystem\OGsystem.h"
 #include "Win\WinMain.h"
 //☆☆☆☆☆☆☆☆☆//
 //追加タスク       //
