@@ -3,11 +3,20 @@
 
 
 Water::Water() {
-
+	this->objectTag = "Water";
+	Object::CollisionProcess = [&](const Object& o_) {
+		if (o_.objectTag == "Floor") {
+			this->isCollided = true;
+		}
+	};
+	CreateObject(Objform::Cube, Vec2(100, 100), Vec2(64, 64), 0.f);
+	tex.TextureCreate("watertest.png");
+	this->isCollided = false;
 }
 
 Water::~Water() {
-
+	tex.Finalize();
+	delete this;
 }
 
 
@@ -18,17 +27,13 @@ bool Water::Initialize() {
 			this->isCollided = true;
 		}
 	};
-	CreateObject(Objform::Cube, Vec2(0, 0), Vec2(128, 128), 0.f);
+	CreateObject(Objform::Cube, Vec2(100, 100), Vec2(64, 64), 0.f);
 	this->isCollided = false;
 	return true;
 }
 
 void Water::Update() {
-	if (this->isCollided)
-	{
-		this->position.y = this->position.y;
-	}
-	else
+	if (!this->isCollided)
 	{
 		this->position.y += 5.0f;
 	}
@@ -46,6 +51,7 @@ void Water::Render() {
 
 void Water::Finalize() {
 	tex.Finalize();
+	//delete this;
 }
 
 void Water::SetState(const State& s_) {

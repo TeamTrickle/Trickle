@@ -5,7 +5,7 @@ void Player::Initialize()
 {
 	std::cout << "Player‰Šú‰»" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(10.0f, 200.0f), Vec2(128.0f, 128.0f), 0.0f);
+	CreateObject(Cube, Vec2(10.0f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 	this->hitcheck = false;
 	this->objectTag = "Player";
 	//“–‚½‚è”»’è‰Šú‰»

@@ -55,8 +55,10 @@ void Title::Finalize()
 
 void ObjectSample::Initialize()
 {
+	// イヤヤヤヤー！きゃーーーねこだー！！！
 	this->sampleimg.TextureCreate(this->fileName);
 	CreateObject(Cube, Vec2(10.0f, 100.0f), Vec2(128.0f, 128.0f), 0.0f);
+	footHit.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.f), 0.f);
 	this->hitcheck = false;
 }
 

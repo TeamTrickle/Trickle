@@ -24,6 +24,7 @@ public:
 	Player player;
 	Back back;
 	Map map;
-	Water water;
+	std::vector<Water*> water;
 	CollisionManager cm;
+	int timecnt;
 };

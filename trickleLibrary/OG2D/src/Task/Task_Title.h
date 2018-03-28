@@ -12,6 +12,8 @@ public:
 	//Object object;
 	Texture sampleimg;
 	std::string fileName = "Collision.png";
+	Object footHit;
+	Object toolHit;
 	bool hitcheck;
 	void Initialize();
 	void UpDate();

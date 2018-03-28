@@ -32,6 +32,8 @@ public:
 
 	void Destroy();
 
+	bool operator-(const Object*);
+
 private:
 	std::vector<Object*> objs;
 };

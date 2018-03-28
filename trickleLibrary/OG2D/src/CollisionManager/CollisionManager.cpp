@@ -29,3 +29,12 @@ void CollisionManager::Destroy() {
 	while (!objs.empty())
 		objs.pop_back();
 }
+
+bool CollisionManager::operator-(const Object* o_) {
+	for (auto it = objs.begin(); it != objs.end(); it++)
+		if ((*it) == o_) {
+			objs.erase(it);
+			return true;
+		}
+	return false;
+}

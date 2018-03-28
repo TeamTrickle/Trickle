@@ -37,13 +37,11 @@ public:
 	void SetState(const State&);
 	State GetState() const;
 
+	bool active;
+
 private:
 	Texture tex;
 	std::map<State, Box2D> drawRange;
 	State currentState;
-
 };
-
-
-
 #endif

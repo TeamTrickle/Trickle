@@ -110,7 +110,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>D:\Trickle\trickleLibrary\OG2D\Windows\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>Windows\lib\Debug</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>

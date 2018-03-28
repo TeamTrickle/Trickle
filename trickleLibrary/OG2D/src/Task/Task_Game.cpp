@@ -5,29 +5,36 @@ void Game::Initialize()
 	player.Initialize();
 	back.Initialize();
 	map.LoadMap("prototype.txt");
-	if (water.Initialize())
-	{
-		cm.AddChild(&water);
-	}
-	else
-	{
-		std::cout << "WaterInitializeError" << std::endl;
-	}
-
+	
 	// ìñÇΩÇËîªíËÉeÉXÉg
 	for (auto& i : map.hitBase)
 		for (auto& j : i)
 			if (j.objectTag.length() > 0)
 				cm.AddChild(&j);
 	cm.AddChild(&player);
-	
+	auto w = new Water();
+	water.push_back(w);
+	cm.AddChild(water[water.size() - 1]);
+	this->timecnt = 0;
 }
 
 TaskFlag Game::UpDate()
 {
+	//timecnt++;
+	//if (timecnt >= 60)
+	//{
+	//	timecnt = 0;
+	//	//Waterê∂ê¨
+	//	auto w = new Water();
+	//	water.push_back(w);
+	//	cm.AddChild(water[water.size() - 1]);
+	//}
+	for (int i = 0; i < water.size(); ++i)
+	{
+		water[i]->Update();
+	}
 	player.UpDate();
 	cm.Run();
-	water.Update();
 	if (Input::KeyInputOn(Input::A))
 	{
 		gameEngine->camera->Move(Vec2(-3.0f, 0.0f));
@@ -54,7 +61,10 @@ TaskFlag Game::UpDate()
 
 void Game::Render2D()
 {
-	water.Render();
+	for (int i = 0; i < water.size(); ++i)
+	{
+		water[i]->Render();
+	}
 	player.Render();
 	map.MapRender();
 	back.Render();
@@ -66,6 +76,13 @@ void Game::Finalize()
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();
-	water.Finalize();
+	for (int i = 0; i < water.size(); ++i)
+	{
+		water[i]->Finalize();
+	}
+	while (!this->water.empty())
+	{
+		this->water.pop_back();
+	}
 	cm.Destroy();
 }
