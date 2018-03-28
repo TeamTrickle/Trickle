@@ -1,27 +1,28 @@
 //______________________________//
 //|動くギミック  スイッチ      |//
-//|履歴：2018/03/26 横尾	   |//
+//|履歴：2018/03/27 横尾	   |//
 //|　                          |//
 //|____________________________|//
 #pragma once
 #include "Object.h"
 //#include "Player\Player.h"
-#include "Player\EnemyHitTest.h"
+//#include "Player\EnemyHitTest.h"
 
-class EnemyHitTest;
+//class EnemyHitTest;
 //class Player;
 
 class Switch : public Object
 {
 public:
-	Switch(EnemyHitTest* e_pointa);
+	Switch(/*EnemyHitTest* e_pointa*/);
 	~Switch();
 	void Initlaize();
 	void UpDate();
 	void Finalize();
 	void Render();
-private:
+
 	void CheakHit(Object* objhit);
+private:
 	Texture image;
 	std::string _filePath;
 	//Player* player_pointa;

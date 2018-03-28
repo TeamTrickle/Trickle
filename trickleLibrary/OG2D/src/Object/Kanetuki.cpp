@@ -2,7 +2,7 @@
 using namespace std;
 
 const int POS_X = 600;
-const int POS_Y = 100;			//
+const int POS_Y = 100;			
 
 const int IMAGE_SIZE = 128;		//画像サイズ
 
@@ -10,7 +10,7 @@ const int HOTTIME = 1;			//水蒸気になるまでの時間
 const int HOT_TIME = 180;		//水蒸気に変化する時間
 
 //☆☆☆☆//-----------------------------------------------------------------------------
-Kanetuki::Kanetuki(EnemyHitTest* e_pointa)
+Kanetuki::Kanetuki(/*EnemyHitTest* e_pointa*/)
 {
 	//player_pointa = p_pointa;
 
@@ -22,6 +22,7 @@ Kanetuki::Kanetuki(EnemyHitTest* e_pointa)
 	flag = false;
 	Count = 0;
 }
+
 //☆☆☆☆//-----------------------------------------------------------------------------
 Kanetuki::~Kanetuki()
 {
@@ -31,36 +32,42 @@ Kanetuki::~Kanetuki()
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::Initialize()
 {
+	/*_filePath = "Kanetuki.jpg";
+	position = Vec2(POS_X, POS_Y);
+	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
+	flag = false;
+	Count = 0;*/
 	image.TextureCreate(_filePath);
+	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::UpDate()
 {
-	//当たり判定の座標がどこから出来ているか？分からないです。
-	collisionCube.hitBase = Box2D((int)position.x + 100, (int)position.y /2 + 128, IMAGE_SIZE, IMAGE_SIZE);
+	//collisionCube.hitBase = Box2D((int)position.x + 100, (int)position.y /2 + 128, IMAGE_SIZE, IMAGE_SIZE);
 
 	// ___________________________________________________ //
 	//| Playerに当たり一定の時間が立つと水蒸気に変化します|//
 	//|___________________________________________________|//
 
-	/*CheckHit(enemy_pointa);
-	if (flag)
+	//CheckHit(enemy_pointa);
+	if (flag)								//Playerと接してるとき
 	{
-		cout << "true" << endl;
-		if (enemy_pointa->state == State::Frieze)
+		//cout << "true" << endl;
+		if (/*Playerが氷の状態なら*/true)
 		{
-			Count += HOTTIME;
-			if (Count >= HOT_TIME)
+			Count += HOTTIME;				//加熱カウンタを増やす
+
+			if (Count >= HOT_TIME)			//加熱カウンタが上限に達したら
 			{
-				enemy_pointa->state = State::Hot;
+				//水蒸気の状態にする
 			}
 		}
 	}
 	else
 	{
 		//cout << "false" << endl;
-		Count = 0;
-	}*/
+		Count = 0;							//加熱カウンタを元に戻す
+	}
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::Render()
@@ -80,5 +87,5 @@ void Kanetuki::Finalize()
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::CheckHit(Object* objhit)
 {
-	flag = collisionCube.hitBox(objhit->collisionCube);
+	flag = hit(*objhit);
 }
