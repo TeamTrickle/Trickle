@@ -45,13 +45,17 @@
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="ソースファイル\CollisionManager">
       <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
-=======
-    <Filter Include="ソースファイル\Object\gimmck">
+    </Filter>
+    <Filter Include="ソースファイル\Object\GIMMCK">
       <UniqueIdentifier>{6ad99194-3287-4484-922c-d5acaa43d4c5}</UniqueIdentifier>
->>>>>>> feature/gimmic
+    </Filter>
+    <Filter Include="ソースファイル\Object\GIMMCK\MOVE_GMMCK">
+      <UniqueIdentifier>{84c5ea92-4e5e-4e4e-a978-c9ac657a86b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK">
+      <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,25 +98,20 @@
     <ClCompile Include="src\Water\water.cpp">
       <Filter>ソースファイル\Water</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
       <Filter>ソースファイル\CollisionManager</Filter>
-=======
-    <ClCompile Include="src\Object\Kanetuki.cpp">
-      <Filter>ソースファイル\Object\gimmck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Object\Senpuki.cpp">
-      <Filter>ソースファイル\Object\gimmck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Object\Switch.cpp">
-      <Filter>ソースファイル\Object\gimmck</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp">
-      <Filter>ソースファイル\Task</Filter>
+      <Filter>ソースファイル\Task\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Player\EnemyHitTest.cpp">
-      <Filter>ソースファイル\Player</Filter>
->>>>>>> feature/gimmic
+    <ClCompile Include="src\Object\Kanetuki.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Senpuki.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Switch.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,25 +154,20 @@
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="src\CollisionManager\CollisionManager.h">
       <Filter>ソースファイル\CollisionManager</Filter>
-=======
-    <ClInclude Include="src\Object\Kanetuki.h">
-      <Filter>ソースファイル\Object\gimmck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Senpuki.h">
-      <Filter>ソースファイル\Object\gimmck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Switch.h">
-      <Filter>ソースファイル\Object\gimmck</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_GIMMICK_Control.h">
-      <Filter>ソースファイル\Task</Filter>
+      <Filter>ソースファイル\Task\Game</Filter>
     </ClInclude>
-    <ClInclude Include="src\Player\EnemyHitTest.h">
-      <Filter>ソースファイル\Player</Filter>
->>>>>>> feature/gimmic
+    <ClInclude Include="src\Object\Kanetuki.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Senpuki.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Switch.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
