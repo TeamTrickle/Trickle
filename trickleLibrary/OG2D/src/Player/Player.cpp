@@ -5,7 +5,12 @@ void Player::Initialize()
 {
 	std::cout << "Player‰Šú‰»" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(10.0f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
+	CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
+
+	//‘«Œ³ÚG”»’è
+	CheckFoot();
+	//“ªÚG”»’è
+	CheckHead();
 	
 	this->hitcheck = false;
 	this->objectTag = "Player";
@@ -46,10 +51,6 @@ void Player::UpDate()
 
 	//ƒWƒƒƒ“ƒv‚Ìˆ—
 	JumpMove();
-	//‘«Œ³ÚG”»’è
-	CheckFoot();
-	//“ªÚG”»’è
-	CheckHead();
 
 	position += est;
 }
@@ -105,8 +106,14 @@ void Player::CheckFoot()
 		//std::cout << o_.objectTag << std::endl;
 		//“–‚½‚è”»’è‚É’Ê‚é‚©”»’f‚·‚é
 		if (o_.objectTag == "Floor") {
-			//std::cout << "‘«Œ³”»’è’†" << std::endl;
 			footBase.isCollided = true;
+
+			// ‚ß‚è‚Ü‚È‚¢ˆ—
+			float distance = footBase.position.y - o_.position.y;
+			if (distance > 0.f) {
+				this->position.y = o_.position.y - this->Scale.y;
+				this->est.y = 0.f;
+			}
 		}
 	};
 }
