@@ -16,9 +16,9 @@ class Water : public Object {
 
 public:
 	enum class State : int {
-		LIQUID = 0,
-		SOLID,
-		GAS
+		LIQUID = 0,			//　液体
+		SOLID,				//　個体
+		GAS					//　気体
 	};
 	 
 public:
@@ -36,7 +36,7 @@ public:
 	 */
 	void SetState(const State&);
 	State GetState() const;
-	
+
 private:
 	Texture tex;
 	std::map<State, Box2D> drawRange;

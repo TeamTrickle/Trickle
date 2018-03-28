@@ -1,4 +1,5 @@
 #include "OGsystem.h"
+//3D描画確認用
 int Box3D::IsOdd(int n, int a, int b) {
 	if (n % 2 == 0) {
 		return a;
@@ -36,7 +37,7 @@ void Box3D::LinesDraw(Box3D &b) {
 //長方形×長方形
 bool CollisionBox::hitBox(CollisionBox b)
 {
-
+	//頂点情報のセット
 	Vec2 _ver[4] = {
 		{ b.hitBase.x,b.hitBase.y },
 		{ b.hitBase.w - 1,b.hitBase.y },
@@ -49,8 +50,10 @@ bool CollisionBox::hitBox(CollisionBox b)
 		{ hitBase.w - 1,hitBase.h - 1 },
 		{ hitBase.x,hitBase.h - 1 }
 	};
+	//回転の適用
 	OG::_Rotate(angle, _v);
 	OG::_Rotate(b.angle, _ver);
+	//どちらかの範囲内に相手の頂点が存在する場合TRUEを返す
 	for (int i = 0; i < 4; ++i) {
 		if ((((_v[1].x - _v[0].x)*(_ver[i].y - _v[0].y)) - ((_ver[i].x - _v[0].x)*(_v[1].y - _v[0].y))) >= 0 &&
 			(((_v[2].x - _v[1].x)*(_ver[i].y - _v[1].y)) - ((_ver[i].x - _v[1].x)*(_v[2].y - _v[1].y))) >= 0 &&
@@ -74,6 +77,7 @@ bool CollisionBox::hitBox(CollisionBox b)
 //長方形×円
 bool CollisionBox::hitCircle(CollisionCircle b)
 {
+	//頂点情報のセット
 	Vec2 _ver[1] = {
 		{ b.hitBase.CenterX,b.hitBase.CenterY }
 	};
@@ -83,7 +87,9 @@ bool CollisionBox::hitCircle(CollisionCircle b)
 		{ hitBase.w - 1,hitBase.h - 1 },
 		{ hitBase.x,hitBase.h - 1 }
 	};
+	//Box型の回転の適用
 	OG::_Rotate(angle, _v);
+	//円の中に頂点が存在する場合TRUEを返す
 	if ((((_v[1].x - _v[0].x)*(_ver[0].y - _v[0].y)) - ((_ver[0].x - _v[0].x)*(_v[1].y - _v[0].y))) <= b.hitBase.r*b.hitBase.r &&
 		(((_v[2].x - _v[1].x)*(_ver[0].y - _v[1].y)) - ((_ver[0].x - _v[1].x)*(_v[2].y - _v[1].y))) <= b.hitBase.r*b.hitBase.r &&
 		(((_v[3].x - _v[2].x)*(_ver[0].y - _v[2].y)) - ((_ver[0].x - _v[2].x)*(_v[3].y - _v[2].y))) <= b.hitBase.r*b.hitBase.r &&
@@ -91,7 +97,7 @@ bool CollisionBox::hitCircle(CollisionCircle b)
 	{
 		return true;
 	}
-
+	//円の中に線分が存在する場合TRUEを返す
 	for (int i = 0; i<4; i++) {
 		if (OG::get_distance(_ver[0].x, _ver[0].y, _v[i].x, _v[i].y, _v[(i + 1) % 4].x, _v[(i + 1) % 4].y)<b.hitBase.r)
 			return true;
@@ -101,6 +107,7 @@ bool CollisionBox::hitCircle(CollisionCircle b)
 //円×長方形
 bool CollisionCircle::hitBox(CollisionBox b)
 {
+	//頂点情報のセット
 	Vec2 _ver[1] = {
 		{ hitBase.CenterX,hitBase.CenterY }
 	};
@@ -110,7 +117,9 @@ bool CollisionCircle::hitBox(CollisionBox b)
 		{ b.hitBase.w - 1,b.hitBase.h - 1 },
 		{ b.hitBase.x,b.hitBase.h - 1 }
 	};
+	//Box型の回転の適用
 	OG::_Rotate(b.angle, _v);
+	//円の中に頂点が存在する場合TRUEを返す
 	if ((((_v[1].x - _v[0].x)*(_ver[0].y - _v[0].y)) - ((_ver[0].x - _v[0].x)*(_v[1].y - _v[0].y))) <= hitBase.r*hitBase.r &&
 		(((_v[2].x - _v[1].x)*(_ver[0].y - _v[1].y)) - ((_ver[0].x - _v[1].x)*(_v[2].y - _v[1].y))) <= hitBase.r*hitBase.r &&
 		(((_v[3].x - _v[2].x)*(_ver[0].y - _v[2].y)) - ((_ver[0].x - _v[2].x)*(_v[3].y - _v[2].y))) <= hitBase.r*hitBase.r &&
@@ -118,7 +127,7 @@ bool CollisionCircle::hitBox(CollisionBox b)
 	{
 		return true;
 	}
-
+	//円の中に線分が存在する場合TRUEを返す
 	for (int i = 0; i<4; i++) {
 		if (OG::get_distance(_ver[0].x, _ver[0].y, _v[i].x, _v[i].y, _v[(i + 1) % 4].x, _v[(i + 1) % 4].y)<hitBase.r)
 			return true;
@@ -128,6 +137,7 @@ bool CollisionCircle::hitBox(CollisionBox b)
 //円×円
 bool CollisionCircle::hitCircle(CollisionCircle b)
 {
+	//円の範囲内に相手の円の範囲が存在する場合TRUEを返す
 	if (((b.hitBase.CenterX - this->hitBase.CenterX)*
 		(b.hitBase.CenterX - this->hitBase.CenterX)) +
 		((b.hitBase.CenterY - this->hitBase.CenterY)*
@@ -144,11 +154,13 @@ void CollisionBox::hitdraw() {
 }
 
 void CollisionBox::Rotate(float _angle) {
+	//回転の値を格納
 	this->angle = _angle;
 }
 
 KeyInput::KeyInput()
 {
+	//入力タイムの初期化
 	for (int i = 0; i < 256; ++i) {
 		this->KeyInputDownTime[i] = 0;
 		this->KeyInputOnTime[i] = 0;
@@ -194,11 +206,13 @@ bool KeyInput::KeyInputUp(GLFWwindow *w, int key) {
 
 void Input::Initialize(GLFWwindow *w)
 {
+	//入力タイムの初期化
 	for (int i = 0; i < 256; ++i) {
 		Input::KeyInputDownTime[i] = 0;
 		Input::KeyInputOnTime[i] = 0;
 		Input::KeyInputUpTime[i] = 0;
 	}
+	//仮想キーとの組み合わせ
 	Input::nowWindow = w;
 	Input::KeyData[Input::A] = GLFW_KEY_A;
 	Input::KeyData[Input::B] = GLFW_KEY_B;
@@ -441,9 +455,23 @@ Camera2D::SP Camera2D::Create(Box2D pos)
 	return Camera2D::SP(new Camera2D(pos));
 }
 
+EngineSystem::EngineSystem()
+{
+	
+}
+
+EngineSystem::EngineSystem(int widht, int height, char* name, bool screen)
+{
+	this->w_he = widht;
+	this->w_he = height;
+	this->w_na = name;
+	this->w_sc = screen;
+}
+
 void EngineSystem::Initialize()
 {
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
+	gameEngine->keyinput = KeyInput::Create();
 }
 
 void EngineSystem::UpDate()

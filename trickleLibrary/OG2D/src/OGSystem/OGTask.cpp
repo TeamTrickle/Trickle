@@ -29,7 +29,7 @@ void _OGTK::_myGameUpDate()
 			break;
 		}
 		nowTask = nextTask;
-		gameEngine->Initialize();
+		gameEngine->camera->position = { 0,0 };
 		switch (nowTask)
 		{
 		case Task_Sample:

@@ -17,6 +17,7 @@ class Camera2D;
 namespace Input {
 	enum GamePad
 	{
+		//仮装コントローラの入力設定
 		GPAD_BUTTON_A,
 		GPAD_BUTTON_B,
 		GPAD_BUTTON_X,
@@ -37,6 +38,7 @@ namespace Input {
 	};
 	enum Key
 	{
+		//キーボードの仮装キー設定
 		A,
 		S,
 		D,
@@ -71,6 +73,7 @@ namespace Input {
 		RIGHT,
 		ESCAPE,
 	};
+	//操作するウィンドウの情報
 	static GLFWwindow *nowWindow;
 	static int KeyInputOnTime[256];
 	static int KeyInputDownTime[256];
@@ -187,7 +190,9 @@ public:
 	bool KeyInputDown(GLFWwindow *w, int key);
 	bool KeyInputOn(GLFWwindow *w, int key);
 	typedef std::shared_ptr<KeyInput> SP;
-	static SP Create() {}
+	static SP Create() {
+		return KeyInput::SP(new KeyInput);
+	}
 private:
 	int KeyInputOnTime[256];
 	int KeyInputDownTime[256];
@@ -252,10 +257,17 @@ namespace OG {
 class EngineSystem
 {
 public:
+	EngineSystem();
+	EngineSystem(int widht, int height, char* name, bool screen);
 	Camera2D::SP camera;
 	KeyInput::SP keyinput;
-	Window::SP window;
+	//Window::SP window;
 	void Initialize();
 	void UpDate();
+private:
+	int w_wi;
+	int w_he;
+	char* w_na;
+	bool w_sc;
 };
 extern EngineSystem* gameEngine;
