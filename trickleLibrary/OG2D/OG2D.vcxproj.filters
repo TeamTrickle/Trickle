@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソースファイル">
+      <UniqueIdentifier>{2cd0f29a-299c-496b-b66d-6d942a8fedd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem">
+      <UniqueIdentifier>{c0ccdf70-62d9-405e-b786-203a2c01e0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Object">
+      <UniqueIdentifier>{b4d7e6a7-3b66-41dd-8ed1-9e6e86d05c2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task">
+      <UniqueIdentifier>{ed08a23c-71f3-4d2f-8c22-2ef6fd05f24b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task\Sample">
+      <UniqueIdentifier>{75017560-edb5-45b0-b27d-2d3ec253cc29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System">
+      <UniqueIdentifier>{ce522aeb-86e0-425e-856c-b067ec14c6da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Map">
+      <UniqueIdentifier>{6cf23927-6acf-41cc-89de-8aff11756b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Player">
+      <UniqueIdentifier>{4ea31ccc-6e54-4ead-a513-1797ac966399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task\Game">
+      <UniqueIdentifier>{afd73d1e-8853-4042-84f7-fa4b38c1f097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Task\Title">
+      <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Back">
+      <UniqueIdentifier>{b2f9d793-2158-4aac-a61b-5e4346de2548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water">
+      <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\CollisionManager">
+      <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Object\GIMMCK">
+      <UniqueIdentifier>{6ad99194-3287-4484-922c-d5acaa43d4c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Object\GIMMCK\MOVE_GMMCK">
+      <UniqueIdentifier>{84c5ea92-4e5e-4e4e-a978-c9ac657a86b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK">
+      <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Win\WinMain.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Sample.cpp">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Sample2.cpp">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Object.cpp">
+      <Filter>ソースファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\_OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Map.cpp">
+      <Filter>ソースファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGTask.cpp">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\Player.cpp">
+      <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Game.cpp">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Title.cpp">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Back\Back.cpp">
+      <Filter>ソースファイル\Back</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Water\water.cpp">
+      <Filter>ソースファイル\Water</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
+      <Filter>ソースファイル\CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Kanetuki.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Senpuki.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Switch.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Win\WinMain.h">
+      <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Sample.h">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Sample2.h">
+      <Filter>ソースファイル\Task\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Object.h">
+      <Filter>ソースファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGTask.h">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\_OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Map.h">
+      <Filter>ソースファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\Player.h">
+      <Filter>ソースファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Game.h">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Title.h">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Back\Back.h">
+      <Filter>ソースファイル\Back</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Water\water.h">
+      <Filter>ソースファイル\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollisionManager\CollisionManager.h">
+      <Filter>ソースファイル\CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_GIMMICK_Control.h">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Kanetuki.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Senpuki.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Switch.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
