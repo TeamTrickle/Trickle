@@ -9,6 +9,7 @@
 #include "Player\Player.h"
 #include "Back\Back.h"
 #include "Map\Map.h"
+#include "Water\water.h"
 
 class Game
 {
@@ -23,5 +24,6 @@ public:
 	Player player;
 	Back back;
 	Map map;
+	Water water;
 	CollisionManager cm;
 };

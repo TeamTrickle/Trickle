@@ -13,10 +13,14 @@ void CollisionManager::AddChild(Object* obj) {
 }
 
 void CollisionManager::Run() {
-	for (auto& i : objs) 
+	for (auto& i : objs) {
+		i->isCollided = false;
 		for (auto& j : objs) {
 			if (i == j || i->CollisionProcess == nullptr) continue;
-			if (i->hit(*j))
+			if (i->hit(*j)) {
 				i->CollisionProcess(*j);
+				
+			}
 		}
+	}
 }

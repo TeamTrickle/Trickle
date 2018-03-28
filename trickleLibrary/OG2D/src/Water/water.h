@@ -36,7 +36,7 @@ public:
 	 */
 	void SetState(const State&);
 	State GetState() const;
-	
+
 private:
 	Texture tex;
 	std::map<State, Box2D> drawRange;

@@ -16,7 +16,7 @@ void Player::Initialize()
 	//“–‚½‚è”»’è
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Floor") {
-			std::cout << "°‚Æ“–‚½‚è”»’è’†I" << std::endl;
+			//std::cout << "°‚Æ“–‚½‚è”»’è’†I" << std::endl;
 			jumpFlag = false;
 		}
 	};
