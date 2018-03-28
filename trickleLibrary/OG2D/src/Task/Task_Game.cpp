@@ -12,26 +12,29 @@ void Game::Initialize()
 			if (j.objectTag.length() > 0)
 				cm.AddChild(&j);
 	cm.AddChild(&player);
-	auto w = new Water();
-	water.push_back(w);
-	cm.AddChild(water[water.size() - 1]);
-	this->timecnt = 0;
+	cm.AddChild(&player.footBase);
 }
 
 TaskFlag Game::UpDate()
 {
-	//timecnt++;
-	//if (timecnt >= 60)
-	//{
-	//	timecnt = 0;
-	//	//Waterê∂ê¨
-	//	auto w = new Water();
-	//	water.push_back(w);
-	//	cm.AddChild(water[water.size() - 1]);
-	//}
+	timecnt++;
+	if (timecnt >= 120)
+	{
+		timecnt = 0;
+		//Waterê∂ê¨
+		auto w = new Water(Vec2(150, 100));
+		water.push_back(w);
+		cm.AddChild(water[water.size() - 1]);
+	}
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Update();
+		if (water[i]->GetSituation() == Water::Situation::CreaDelete)
+		{
+			cm - water[i];
+			water[i]->Finalize();
+			water.erase(water.begin() + i);
+		}
 	}
 	player.UpDate();
 	cm.Run();
@@ -50,6 +53,20 @@ TaskFlag Game::UpDate()
 	if (Input::KeyInputOn(Input::S))
 	{
 		gameEngine->camera->Move(Vec2(0.0f, 3.0f));
+	}
+	if (Input::KeyInputDown(Input::U))
+	{
+		for (int i = 0; i < water.size(); ++i)
+		{
+			if (water[i]->GetState() == Water::State::LIQUID)
+			{
+				water[i]->SetState(Water::State::GAS);
+			}
+			else
+			{
+				water[i]->SetState(Water::State::LIQUID);
+			}
+		}
 	}
 	TaskFlag nowtask = Task_Game;
 	if (Input::KeyInputUp(Input::SPACE))

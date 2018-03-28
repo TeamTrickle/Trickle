@@ -20,9 +20,17 @@ public:
 		SOLID,				//　個体
 		GAS					//　気体
 	};
-	 
+	
+	enum class Situation : int
+	{
+		Newfrom,			//出現中
+		Normal,				//通常
+		Deleteform,			//削除中
+		CreaDelete,			//削除
+	};
+
 public:
-	explicit Water();
+	explicit Water(Vec2 pos);
 	virtual ~Water();
 
 	bool Initialize();
@@ -37,11 +45,21 @@ public:
 	void SetState(const State&);
 	State GetState() const;
 
+	void SetSituation(const Situation&);
+	Situation GetSituation() const;
+
 	bool active;
 
 private:
 	Texture tex;
 	std::map<State, Box2D> drawRange;
 	State currentState;
+	Situation nowSituation;
+	Vec2 minSize;
+	Vec2 maxSize;
+	int setTime;
+	Situation UpNewform();
+	Situation UpDeleteform();
+	Situation UpNormal();
 };
 #endif
