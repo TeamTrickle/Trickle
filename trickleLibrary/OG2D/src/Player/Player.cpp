@@ -13,7 +13,7 @@ void Player::Initialize()
 	footBase.objectTag = "PlayerFoot";
 	footBase.CollisionProcess = [&](const Object& o_) {
 		std::cout << o_.objectTag << std::endl;
-		if (footBase.objectTag == "PlayerFoot") {
+		if (o_.objectTag == "Floor") {
 			std::cout << "足元判定中" << std::endl;		//表せない？？？
 			footBase.isCollided = true;
 			/*jumpFlag = false;*/
@@ -92,20 +92,13 @@ void Player::Finalize()
 //ジャンプの処理
 void Player::JumpMove()
 {
+	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
 	//trueの時はジャンプ状態、じゃなければ通常状態
-	if (!jumpFlag&&footBase.isCollided) {
+	if (footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
 		if (Input::KeyInputOn(Input::Z)) {
-			jumpFlag = true;
 			est.y = Player::JUMP_POWER;
-		}
-	}
-	//ジャンプ状態の処理
-	else {
-		//着地判定
-		if (footBase.isCollided) {
-			jumpFlag = false;
 		}
 	}
 }

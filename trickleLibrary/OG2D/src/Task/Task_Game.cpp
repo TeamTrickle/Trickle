@@ -12,6 +12,7 @@ void Game::Initialize()
 			if (j.objectTag.length() > 0)
 				cm.AddChild(&j);
 	cm.AddChild(&player);
+	cm.AddChild(&player.footBase);
 	auto w = new Water();
 	water.push_back(w);
 	cm.AddChild(water[water.size() - 1]);
