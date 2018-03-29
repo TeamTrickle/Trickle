@@ -10,6 +10,8 @@
 #include "Back\Back.h"
 #include "Map\Map.h"
 #include "Water\water.h"
+#include "Bucket\bucket.h"
+
 
 class Game
 {
@@ -22,6 +24,7 @@ public:
 	//’Ç‰Á•Ï”//
 	//™™™™//
 	Player player;
+	Bucket bucket;
 	Back back;
 	Map map;
 	std::vector<Water*> water;

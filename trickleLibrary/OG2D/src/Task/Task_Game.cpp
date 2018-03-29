@@ -3,17 +3,17 @@ void Game::Initialize()
 {
 	std::cout << "Game初期化" << std::endl;
 	player.Initialize();
+	bucket.Initialize();
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
 	// 当たり判定テスト
+	player.Register(&cm);
+	cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
 		for (auto& j : i)
 			if (j.objectTag.length() > 0)
 				cm.AddChild(&j);
-	cm.AddChild(&player);
-	cm.AddChild(&player.footBase);
-	cm.AddChild(&player.headBase);
 	gameEngine->DebugFunction = true;
 }
 
@@ -28,6 +28,15 @@ TaskFlag Game::UpDate()
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
 	}
+
+	// テスト用
+	// ------------------------------------------
+	if (Input::KeyInputDown(Input::Key::C)) {
+		Water* sizuku = bucket.Spill();
+		water.push_back(sizuku);
+		cm += sizuku;
+	}
+	// ------------------------------------------
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Update();
@@ -39,6 +48,7 @@ TaskFlag Game::UpDate()
 		}
 	}
 	player.UpDate();
+
 	cm.Run();
 	if (Input::KeyInputOn(Input::A))
 	{
@@ -85,6 +95,7 @@ void Game::Render2D()
 		water[i]->Render();
 	}
 	player.Render();
+	bucket.Render();
 	map.MapRender();
 	back.Render();
 }
@@ -95,6 +106,7 @@ void Game::Finalize()
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();
+	bucket.Finalize();
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Finalize();

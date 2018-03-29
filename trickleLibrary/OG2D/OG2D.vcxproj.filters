@@ -113,6 +113,9 @@
     <ClCompile Include="src\Object\Switch.cpp">
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
+    <ClCompile Include="src\Bucket\bucket.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -168,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="src\Object\Switch.h">
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Bucket\bucket.h">
+      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

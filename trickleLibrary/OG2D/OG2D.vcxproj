@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Back\Back.cpp" />
+    <ClCompile Include="src\Bucket\bucket.cpp" />
     <ClCompile Include="src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
     <ClCompile Include="src\Object\Kanetuki.cpp" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Back\Back.h" />
+    <ClInclude Include="src\Bucket\bucket.h" />
     <ClInclude Include="src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="src\Map\Map.h" />
     <ClInclude Include="src\Object\Kanetuki.h" />

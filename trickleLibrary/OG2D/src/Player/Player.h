@@ -4,61 +4,65 @@
 //|履歴：2018/03/23横田	       |//
 //|履歴：2018/03/26劉韋君　    |//
 //|履歴：2018/03/29劉韋君　    |//
+//|履歴：2018/03/30木務　    |//
 //|____________________________|//
+#include "CollisionManager\CollisionManager.h"
+#include "Bucket\bucket.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-class Player :public Object
-{
-public:
-	Texture playerimg;
-	std::string fileName = "player.png";
-	bool hitcheck;
-
-	void Initialize();
-	void UpDate();
-	void Render();
-	void Finalize();
-	//☆☆☆☆//-----------------------------------------------------------------------------
-	//追加変数//-----------------------------------------------------------------------------
-	//☆☆☆☆//-----------------------------------------------------------------------------
-	Vec2 est;
-	//ジャンプ状態判定
-	bool jumpFlag;
-	//移動スピード
-	const float MOVE_SPEED = 10.f;
-	//ジャンプパワー
-	const float JUMP_POWER = -20.f;
-	//重力加速度
-	const float GRAVITY = 0.98f;
-	//プレイヤーの向きを表す名前空間
-	enum Direction
-	{
-		LEFT,
-		RIGHT,
-	};
-	//向きを格納する変数
-	Direction direction;
-	//足元判定用
-	Object footBase;
-	//頭判定判定用
-	Object headBase;
+class Player :public Object {
 
 	struct Move {
 		Vec2 est;
 		float angle;
 	};
-	Move move;
 
-	//☆☆☆☆//-----------------------------------------------------------------------------
-	//クラスのメンバ関数
-	//☆☆☆☆//-----------------------------------------------------------------------------
-	//ジャンプのプロトタイプ宣言
+	enum Direction
+	{
+		LEFT,
+		RIGHT,
+	};
+
+	const std::array<std::string, 2> WALKABLE_CHIPS{
+		"Floor",
+		"Soil"
+	};
+
+private:
 	void JumpMove();
-	//足元接触判定のプロトタイプ宣言
 	void CheckFoot();
-	//頭接触判定のプロトタイプ宣言
 	void CheckHead();
+	void CheckLeft();
+	void CheckRight();
+	bool isWalkable(std::string);
+
+public:
+	void Initialize();
+	void UpDate();
+	void Render();
+	void Finalize();
+
+	/**
+	 * @brief	当たり判定に登録する
+	 * @param	当たり判定管理者のアドレス値
+	 */
+	void Register(CollisionManager*);
+
+private:
+	const std::string fileName = "player.png";
+	const float MOVE_SPEED = 10.f;					//移動スピード
+	const float JUMP_POWER = -20.f;					//ジャンプパワー
+	const float GRAVITY = 0.98f;					//重力加速度
+
+	Texture playerimg;
+	Move move;
+	Vec2 est;										//移動量
+	Direction direction;							//向きを格納する変数
+
+	// 判定に使ってる、深夜テンションなんでしんどい
+	Object footBase;
+	Object headBase;
+	Object leftBase;
+	Object rightBase;
 };
-
-

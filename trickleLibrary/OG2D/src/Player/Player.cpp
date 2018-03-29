@@ -3,32 +3,17 @@
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::Initialize()
 {
+	Object::CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
+
 	std::cout << "Player初期化" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
-	CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
-	//頭接触判定
+
 	CheckHead();
-
-	//足元接触判定
 	CheckFoot();
+	CheckLeft();
+	CheckRight();
 
-	this->hitcheck = false;
-	this->objectTag = "Player";
-	//当たり判定初期化
-	this->isCollided = false;
-	//初期状態の向きを入れておく
 	direction = Direction::RIGHT;
-	//ジャンプ状態
-	jumpFlag = false;
-
-	//当たり判定
-	Object::CollisionProcess = [&](const Object& o_) {
-		if (o_.objectTag == "Floor") {
-			/*std::cout << "床と当たり判定中！" << std::endl;*/
-			this->isCollided = true;
-			jumpFlag = false;
-		}
-	};
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::UpDate()
@@ -49,10 +34,17 @@ void Player::UpDate()
 	//y方向の速度に加速度を加える
 	est.y += Player::GRAVITY;
 
-	//ジャンプの処理
 	JumpMove();
 
-	position += est;
+	// Sync collider player
+	footBase.position = Vec2(this->position.x + 10.f, this->position.y + this->Scale.y + est.y);
+	headBase.position = Vec2(this->position.x, this->position.y - 1.f + est.y);
+	leftBase.position = Vec2(this->position.x + est.x - 1.f, this->position.y);
+	rightBase.position = Vec2(this->position.x + this->Scale.x + est.x, this->position.y);
+
+	if (!leftBase.isCollided && !rightBase.isCollided)
+		position.x += est.x;
+	position.y += est.y;
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::Render()
@@ -75,14 +67,20 @@ void Player::Finalize()
 	this->playerimg.Finalize();
 
 }
+
+void Player::Register(CollisionManager* cm) {
+	*cm += this;
+	*cm += &(this->footBase);
+	*cm += &(this->headBase);
+	*cm += &(this->leftBase);
+	*cm += &(this->rightBase);
+}
 //☆☆☆☆//-----------------------------------------------------------------------------
 //関数
 //☆☆☆☆//-----------------------------------------------------------------------------
 //ジャンプの処理
 void Player::JumpMove()
 {
-	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
-	headBase.position = Vec2(this->position.x, this->position.y );
 	//足判定trueの時は通常状態
 	if (footBase.isCollided) {
 		est.y = 0.f;
@@ -100,20 +98,15 @@ void Player::JumpMove()
 //足元接触判定
 void Player::CheckFoot()
 {
-	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 2.0f), 0.0f);
+	footBase.CreateObject(Cube, Vec2(this->position.x + 10.f, this->position.y + this->Scale.y), Vec2(this->Scale.x - 20.f, 1.0f), 0.0f);
 	footBase.objectTag = "PlayerFoot";
 	footBase.CollisionProcess = [&](const Object& o_) {
-		//std::cout << o_.objectTag << std::endl;
-		//当たり判定に通るか判断する
-		if (o_.objectTag == "Floor") {
-			footBase.isCollided = true;
-			// めり込まない処理
-			float distance = footBase.position.y - o_.position.y;
-			if (distance > 0.f) {
-				this->position.y = o_.position.y - this->Scale.y;
-				this->est.y = 0.f;
+		if (isWalkable(o_.objectTag)) {
+			float penetrated = (footBase.position.y + footBase.Scale.y) - o_.position.y;
+			if (penetrated > 0.f) {
+				this->position.y = o_.position.y - o_.Scale.y + 0.5f;
+				est.y = 0.f;
 			}
-			//std::cout << "足元判定中" << std::endl;
 			footBase.isCollided = true;
 		}
 	};
@@ -122,15 +115,45 @@ void Player::CheckFoot()
 //頭接触判定
 void Player::CheckHead()
 {
-	headBase.CreateObject(Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, -1.0f), 0.0f);
+	headBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + 1.f), Vec2(this->Scale.x, 1.f), 0.0f);
 	headBase.objectTag = "PlayerHead";
 	headBase.CollisionProcess = [&](const Object& o_) {
 		//std::cout << o_.objectTag << std::endl;
 		//当たり判定に通るか判断する
-		if (o_.objectTag == "Floor") {
+		if (isWalkable(o_.objectTag)) {
 			//std::cout << "頭判定中" << std::endl;
 			headBase.isCollided = true;
 			this->est.y = 0.f;
 		}
 	};
+}
+
+void Player::CheckLeft()
+{
+	leftBase.CreateObject(Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
+	leftBase.objectTag = "PlayerLeft";
+	leftBase.CollisionProcess = [&](const Object& o_) {
+		if (isWalkable(o_.objectTag)) {
+			est.x = 0.f;
+			leftBase.isCollided = true;
+		}
+	};
+}
+void Player::CheckRight()
+{
+	rightBase.CreateObject(Cube, Vec2(this->position.x, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
+	rightBase.objectTag = "PlayerRight";
+	rightBase.CollisionProcess = [&](const Object& o_) {
+		if (isWalkable(o_.objectTag)) {
+			est.x = 0.f;
+			rightBase.isCollided = true;
+		}
+	};
+}
+
+bool Player::isWalkable(std::string t) {
+	for (auto& s : WALKABLE_CHIPS)
+		if (t == s)
+			return true;
+	return false;
 }
