@@ -67,7 +67,6 @@ void Player::Render()
 		src.x = k;
 	}
 	this->playerimg.Draw(draw, src);
-	footBase.DebugDraw();
 }
 //™™™™//-----------------------------------------------------------------------------
 void Player::Finalize()
