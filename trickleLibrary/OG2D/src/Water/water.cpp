@@ -76,8 +76,9 @@ Water::Situation Water::UpNewform()
 {
 	Water::Situation now = this->nowSituation;
 	this->setTime++;
-	this->Scale.x++;
+	this->Scale.x += 2;
 	this->Scale.y += 2;
+	this->position.x--;
 	if (this->setTime >= this->maxSize.x / 2)
 	{
 		now = Water::Situation::Normal;
@@ -89,9 +90,10 @@ Water::Situation Water::UpDeleteform()
 {
 	Water::Situation now = this->nowSituation;
 	this->setTime++;
-	this->Scale.x--;
+	this->Scale.x -= 2;
 	this->Scale.y -= 2;
 	this->position.y += 2;
+	this->position.x++;
 	if (this->setTime >= this->maxSize.x)
 	{
 		now = Water::Situation::CreaDelete;
@@ -114,7 +116,7 @@ Water::Situation Water::UpNormal()
 }
 
 void Water::Render() {
-	Box2D draw(this->position.x - this->Scale.x, this->position.y, this->Scale.x * 2, this->Scale.y);
+	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
 	Box2D src = drawRange[currentState];
 	src.OffsetSize();

@@ -13,6 +13,7 @@ void Game::Initialize()
 				cm.AddChild(&j);
 	cm.AddChild(&player);
 	cm.AddChild(&player.footBase);
+	cm.AddChild(&player.headBase);
 }
 
 TaskFlag Game::UpDate()

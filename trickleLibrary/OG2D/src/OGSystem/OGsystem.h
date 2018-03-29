@@ -266,6 +266,7 @@ public:
 	//Window::SP window;
 	void Initialize();
 	void UpDate();
+	bool DebugFunction;
 private:
 	int w_wi;
 	int w_he;

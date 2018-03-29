@@ -53,6 +53,10 @@ bool CollisionBox::hitBox(CollisionBox b)
 	//‰ñ“]‚Ì“K—p
 	OG::_Rotate(angle, _v);
 	OG::_Rotate(b.angle, _ver);
+	if (gameEngine->DebugFunction) {
+		OG::LineHitDraw(_v);
+		OG::LineHitDraw(_ver);
+	}
 	//‚Ç‚¿‚ç‚©‚Ì”ÍˆÍ“à‚É‘Šè‚Ì’¸“_‚ª‘¶İ‚·‚éê‡TRUE‚ğ•Ô‚·
 	for (int i = 0; i < 4; ++i) {
 		if ((((_v[1].x - _v[0].x)*(_ver[i].y - _v[0].y)) - ((_ver[i].x - _v[0].x)*(_v[1].y - _v[0].y))) >= 0 &&
@@ -476,6 +480,7 @@ void EngineSystem::Initialize()
 {
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
 	gameEngine->keyinput = KeyInput::Create();
+	DebugFunction = false;
 }
 
 void EngineSystem::UpDate()
