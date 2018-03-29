@@ -100,3 +100,19 @@ bool Object::hit(Object o)
 	}
 	return false;
 }
+
+void Object::DebugDraw() {
+#if defined (_DEBUG)
+	if (isCollided) {
+		Vec2 _ver[4] = {
+			{ collisionCube.hitBase.x,		collisionCube.hitBase.y },
+			{ collisionCube.hitBase.w - 1,	collisionCube.hitBase.y },
+			{ collisionCube.hitBase.w - 1,	collisionCube.hitBase.h - 1 },
+			{ collisionCube.hitBase.x,		collisionCube.hitBase.h - 1 }
+		};
+
+		if (gameEngine->DebugFunction)
+			OG::LineHitDraw(_ver, Color(1.f, 0.f, 0.f, 1.f));
+	}
+#endif
+}

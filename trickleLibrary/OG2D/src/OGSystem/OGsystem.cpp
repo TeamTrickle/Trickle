@@ -482,7 +482,7 @@ void EngineSystem::Initialize()
 {
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
 	gameEngine->keyinput = KeyInput::Create();
-	DebugFunction = false;
+	DebugFunction = true;
 }
 
 void EngineSystem::UpDate()
@@ -544,8 +544,8 @@ namespace OG {
 	float doubleinner(int _x, int _y) {
 		return inner(_x, _y, _x, _y);
 	}
-	void LineHitDraw(Vec2 _b[4]) {
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	void LineHitDraw(Vec2 _b[4], Color _c) {
+		glColor4f(_c.r, _c.g, _c.b, _c.a);
 		glBegin(GL_LINES);
 		glVertex2f(_b[0].x, _b[0].y);
 		glVertex2f(_b[1].x, _b[1].y);

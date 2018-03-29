@@ -34,5 +34,7 @@ public:
 	 */
 	std::function<void(const Object&)> CollisionProcess;
 
+	void DebugDraw();
+
 private:
 };

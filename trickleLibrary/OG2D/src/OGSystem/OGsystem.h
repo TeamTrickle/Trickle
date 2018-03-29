@@ -7,6 +7,7 @@
 #include "OGSystem\_OGsystem.h"
 #include "stb_image.h"
 
+class Color;
 class Box3D;
 class Box2D;
 class CollisionCircle;
@@ -88,6 +89,13 @@ namespace Input {
 }
 
 
+class Color {
+public:
+	float r, g, b, a;
+	Color(float r_ = 0.f, float g_ = 0.f, float b_ = 0.f, float a_ = 0.f)
+		: r(r_), g(g_), b(b_), a(a_) {}
+	~Color() {}
+};
 class Box3D {
 public:
 	float x, y, z, w, h, d;
@@ -254,7 +262,7 @@ namespace OG {
 	float doubleinner(int _x, int _y);
 	float get_distance(float x, float y, float x1, float y1, float x2, float y2);
 	void _Rotate(float _angle, Vec2 _b[4]);
-	void LineHitDraw(Vec2 _b[4]);
+	void LineHitDraw(Vec2 _b[4], Color _c = Color(1.f, 1.f, 1.f, 1.f));
 }
 class EngineSystem
 {
