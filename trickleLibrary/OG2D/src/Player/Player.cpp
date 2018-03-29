@@ -67,6 +67,7 @@ void Player::Render()
 		src.x = k;
 	}
 	this->playerimg.Draw(draw, src);
+	footBase.DebugDraw();
 }
 //™™™™//-----------------------------------------------------------------------------
 void Player::Finalize()
@@ -100,7 +101,7 @@ void Player::JumpMove()
 //‘«Œ³ÚG”»’è
 void Player::CheckFoot()
 {
-	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
+	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 2.0f), 0.0f);
 	footBase.objectTag = "PlayerFoot";
 	footBase.CollisionProcess = [&](const Object& o_) {
 		//std::cout << o_.objectTag << std::endl;
