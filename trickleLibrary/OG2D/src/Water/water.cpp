@@ -16,6 +16,10 @@ Water::Water(Vec2 pos) {
 				this->SetSituation(Water::Situation::CreaDelete);
 			}
 		}
+		if (o_.objectTag == "Soil")
+		{
+			this->isCollided = true;
+		}
 	};
 	//•`‰æŒ³‰æ‘œÀ•W
 	this->drawRange[Water::State::LIQUID] = Box2D(0, 0, 128, 128);

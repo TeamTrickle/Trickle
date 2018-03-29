@@ -84,6 +84,14 @@ TaskFlag Game::UpDate()
 			}
 		}
 	}
+	if (Input::KeyInputOn(Input::H))
+	{
+		bucket.position.x -= 3.0f;
+	}
+	if (Input::KeyInputOn(Input::K))
+	{
+		bucket.position.x += 3.0f;
+	}
 	TaskFlag nowtask = Task_Game;
 	if (Input::KeyInputUp(Input::SPACE))
 	{
