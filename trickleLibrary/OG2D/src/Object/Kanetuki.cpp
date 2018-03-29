@@ -4,7 +4,8 @@ using namespace std;
 const int POS_X = 600;
 const int POS_Y = 100;			
 
-const int IMAGE_SIZE = 128;		//画像サイズ
+const int IMAGE_SIZE_X = 32;	//画像サイズX座標
+const int IMAGE_SIZE_Y = 32;	//画像サイズY座標
 
 const int HOTTIME = 1;			//水蒸気になるまでの時間
 const int HOT_TIME = 180;		//水蒸気に変化する時間
@@ -17,7 +18,7 @@ Kanetuki::Kanetuki(/*EnemyHitTest* e_pointa*/)
 	//EnemyHitTestクラスの情報を取得する
 	//enemy_pointa = e_pointa;     
 
-	_filePath = "Kanetuki.jpg";	
+	_filePath = "prototype.png";	
 	position = Vec2(POS_X, POS_Y);
 	flag = false;
 	Count = 0;
@@ -39,7 +40,7 @@ void Kanetuki::Initialize()
 	flag = false;
 	Count = 0;*/
 	image.TextureCreate(_filePath);
-	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
+	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::UpDate()
@@ -54,9 +55,9 @@ void Kanetuki::UpDate()
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::Render()
 {
-	Box2D draw((int)position.x, (int)position.y, IMAGE_SIZE, IMAGE_SIZE);
+	Box2D draw((int)position.x, (int)position.y, IMAGE_SIZE_X, IMAGE_SIZE_Y);
 	draw.OffsetSize();
-	Box2D src(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+	Box2D src(IMAGE_SIZE_X * 10, 0, IMAGE_SIZE_X, IMAGE_SIZE_Y);
 	image.Draw(draw, src);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------

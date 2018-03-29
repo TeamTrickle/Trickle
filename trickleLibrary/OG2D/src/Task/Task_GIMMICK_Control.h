@@ -12,6 +12,7 @@
 #include "Object\Switch.h"
 #include "Object\Kanetuki.h"
 #include "Object\Senpuki.h"
+#include "Object\Ladder.h"
 #include <array>
 
 //class Player;
@@ -19,6 +20,7 @@
 class Kanetuki;
 class Senpuki;
 class Switch;
+class Ladder;
 
 class GIMMICK_Control : public Object
 {
@@ -30,7 +32,7 @@ public:
 	void Finalize();
 	void Render2D();
 
-	std::array<Object*, 3> GetGimmicks() const;
+	std::array<Object*, 4> GetGimmicks() const;
 
 public:
 	//Player* _p_pointa;
@@ -38,4 +40,5 @@ public:
 	Kanetuki*     _ka_pointa;
 	Senpuki*      _sen_pointa;
 	Switch*		 _swi_pointa;
+	Ladder*      _lad_pointa;
 };

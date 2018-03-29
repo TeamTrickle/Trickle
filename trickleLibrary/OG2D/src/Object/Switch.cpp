@@ -4,13 +4,14 @@ using namespace std;
 const int POS_X = 500;
 const int POS_Y = 270;
 
-const int IMAGE_SIZE = 128;
+const int IMAGE_SIZE_X = 32;		//画像サイズ
+const int IMAGE_SIZE_Y = 32;		//画像サイズ
 //☆☆☆☆//-----------------------------------------------------------------------------
 Switch::Switch(/*EnemyHitTest* e_pointa*/)
 {
 	//player_pointa = p_pointa;
 	//enemy_pointa = e_pointa;
-	_filePath = "Switch.bmp";
+	_filePath = "prototype.png";
 	flag = false;
 	switchflag = false;
 }
@@ -29,7 +30,7 @@ void Switch::Initlaize()
 
 	image.TextureCreate(_filePath);
 	//collisionCube.hitBase = Box2D((int)position.x, (int)position.y, 32, 32);
-	CreateObject(Objform::Cube, Vec2(POS_X, POS_Y), Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
+	CreateObject(Objform::Cube, Vec2(POS_X, POS_Y), Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::UpDate()
@@ -44,9 +45,9 @@ void Switch::Finalize()
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::Render()
 {
-	Box2D draw((int)position.x, (int)position.y, IMAGE_SIZE, IMAGE_SIZE);
+	Box2D draw((int)position.x, (int)position.y, IMAGE_SIZE_X, IMAGE_SIZE_Y);
 	draw.OffsetSize();
-	Box2D src(0,0, IMAGE_SIZE,IMAGE_SIZE);
+	Box2D src(IMAGE_SIZE_X * 8,0, IMAGE_SIZE_X,IMAGE_SIZE_Y);
 	image.Draw(draw, src);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------

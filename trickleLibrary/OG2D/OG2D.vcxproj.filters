@@ -113,6 +113,9 @@
     <ClCompile Include="src\Object\Switch.cpp">
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
+    <ClCompile Include="src\Object\Ladder.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -167,6 +170,9 @@
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
     <ClInclude Include="src\Object\Switch.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Ladder.h">
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
   </ItemGroup>

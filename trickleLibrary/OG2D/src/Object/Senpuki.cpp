@@ -4,7 +4,8 @@ using namespace std;
 
 const int INITIALCOORDINATE_X = 400;	//初期座標
 const int INITIALCOORDINATE_Y = 200;	//初期座標
-const int IMAGE_SIZE = 128;			    //画像サイズ
+const int IMAGE_SIZE_X = 32;			//画像サイズ
+const int IMAGE_SIZE_Y = 32;			//画像サイズ
 const float WIND = 1.5f;				//風力（風の強さ）
 
 //☆☆☆☆//-----------------------------------------------------------------------------
@@ -15,7 +16,7 @@ Senpuki::Senpuki(/*EnemyHitTest* e_pointa*/)
 	
 	position.x = INITIALCOORDINATE_X;
 	position.y = INITIALCOORDINATE_Y;
-	_filePath = "Sen.png";
+	_filePath = "prototype.png";
 	_hitbox = "Collision.png";
 	flag = false;
 	objectTag = "Senpuki";
@@ -28,7 +29,7 @@ Senpuki::~Senpuki()
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Senpuki::Initialize()
 {
-	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
+	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);
 	/*position.x = INITIALCOORDINATE_X;
 	position.y = INITIALCOORDINATE_Y;
 	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
@@ -57,9 +58,9 @@ void Senpuki::Finalize()
 void Senpuki::Render()
 {
 	//扇風機
-	Box2D draw((int)position.x , (int)position.y,IMAGE_SIZE,IMAGE_SIZE);
+	Box2D draw((int)position.x , (int)position.y,IMAGE_SIZE_X,IMAGE_SIZE_Y);
 	draw.OffsetSize();
-	Box2D src(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+	Box2D src(IMAGE_SIZE_X * 11, 0, IMAGE_SIZE_X, IMAGE_SIZE_Y);
 	//当たり判定の描画（デバッグ時のみ適応）
 	/*
 	Box2D Colldraw(draw);

@@ -155,6 +155,7 @@
     <ClCompile Include="src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
     <ClCompile Include="src\Object\Kanetuki.cpp" />
+    <ClCompile Include="src\Object\Ladder.cpp" />
     <ClCompile Include="src\Object\Object.cpp" />
     <ClCompile Include="src\Object\Senpuki.cpp" />
     <ClCompile Include="src\Object\Switch.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="src\Map\Map.h" />
     <ClInclude Include="src\Object\Kanetuki.h" />
+    <ClInclude Include="src\Object\Ladder.h" />
     <ClInclude Include="src\Object\Object.h" />
     <ClInclude Include="src\Object\Senpuki.h" />
     <ClInclude Include="src\Object\Switch.h" />
