@@ -56,6 +56,8 @@ public:
 	bool active;
 	//…—Ê
 	float volume;
+	//–³“GŠÔ
+	int invi;
 private:
 	Texture tex;
 	std::map<State, Box2D> drawRange;

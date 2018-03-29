@@ -24,9 +24,10 @@ class Player :public Object {
 		RIGHT,
 	};
 
-	const std::array<std::string, 2> WALKABLE_CHIPS{
+	const std::array<std::string, 3> WALKABLE_CHIPS{
 		"Floor",
-		"Soil"
+		"Soil",
+		"Net"
 	};
 
 private:

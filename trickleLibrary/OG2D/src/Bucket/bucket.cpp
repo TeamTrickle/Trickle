@@ -14,10 +14,12 @@ bool Bucket::Initialize() {
 	Object::objectTag = "Bucket";
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Water") {
-			float waterdrop = ((Water&)o_).waterMove();
-			if (capacity < 1.f) {
-				capacity += waterdrop;
-				((Water&)o_).SetSituation(Water::Situation::Deleteform);
+			if (((Water&)o_).GetSituation() == Water::Situation::Normal && ((Water&)o_).GetState() == Water::State::LIQUID && ((Water&)o_).invi <= 0) {
+				float waterdrop = ((Water&)o_).waterMove();
+				if (capacity < 1.f) {
+					capacity += waterdrop;
+					((Water&)o_).SetSituation(Water::Situation::CreaDelete);
+				}
 			}
 		}
 	};
@@ -52,6 +54,7 @@ Water* Bucket::Spill() {
 	Water* ret = new Water(this->position);
 	ret->position = Vec2(this->position.x + this->Scale.x, this->position.y);
 	ret->volume = capacity;
+	ret->invi = 60;
 	capacity = 0.f;
 	return ret;
 }
