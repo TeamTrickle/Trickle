@@ -48,6 +48,7 @@ TaskFlag Game::UpDate()
 		}
 	}
 	player.UpDate();
+	player.TakeBucket(&bucket);
 
 	cm.Run();
 	if (Input::KeyInputOn(Input::A))

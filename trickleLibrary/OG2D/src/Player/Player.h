@@ -49,16 +49,25 @@ public:
 	 */
 	void Register(CollisionManager*);
 
+	/**
+	 * @brief	バケッツのためなスペシャルな処理
+	 * @note	当たり判定設計ミスですデへペロ
+	 */
+	void TakeBucket(Bucket*);
+
 private:
 	const std::string fileName = "player.png";
-	const float MOVE_SPEED = 10.f;					//移動スピード
-	const float JUMP_POWER = -20.f;					//ジャンプパワー
-	const float GRAVITY = 0.98f;					//重力加速度
+	const float MOVE_SPEED = 10.f;								//移動スピード
+	const float JUMP_POWER = -20.f;								//ジャンプパワー
+	const float GRAVITY = 0.98f;								//重力加速度
+	const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
+	const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
 
 	Texture playerimg;
 	Move move;
 	Vec2 est;										//移動量
 	Direction direction;							//向きを格納する変数
+	Bucket* bucket;
 
 	// 判定に使ってる、深夜テンションなんでしんどい
 	Object footBase;

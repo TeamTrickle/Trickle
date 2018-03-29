@@ -31,6 +31,16 @@ void Player::UpDate()
 		direction = Direction::RIGHT;
 	}
 
+	// バケッツ処理
+	if (bucket) {
+		switch (direction) {
+		case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
+		case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
+		}
+		if (Input::KeyInputDown(BUCKET_SPOIL_KEY))
+			bucket->Spill();
+	}
+
 	//y方向の速度に加速度を加える
 	est.y += Player::GRAVITY;
 
@@ -156,4 +166,13 @@ bool Player::isWalkable(std::string t) {
 		if (t == s)
 			return true;
 	return false;
+}
+
+void Player::TakeBucket(Bucket* b_) {
+	if (Input::KeyInputDown(BUCKET_TAKEDROP_KEY)) {
+		if (bucket)
+			bucket = nullptr;
+		else if (Box2D(this->position, this->Scale).Hit(b_->collisionCube.hitBase))
+			bucket = b_;
+	}
 }
