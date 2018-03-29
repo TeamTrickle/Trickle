@@ -14,6 +14,7 @@ void Game::Initialize()
 	cm.AddChild(&player);
 	cm.AddChild(&player.footBase);
 	cm.AddChild(&player.headBase);
+	gameEngine->DebugFunction = true;
 }
 
 TaskFlag Game::UpDate()

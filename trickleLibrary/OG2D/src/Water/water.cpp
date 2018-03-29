@@ -78,7 +78,7 @@ void Water::Update() {
 		break;
 	case Water::State::GAS:
 		//…ö‹Cˆ—
-		this->Scale = { this->maxSize.x / 2,this->maxSize.y };
+		this->Scale = { this->maxSize.x,this->maxSize.y };
 		if (!this->isCollided)
 		{
 			this->position.y -= 2.f;
@@ -166,8 +166,12 @@ Water::Situation Water::GetSituation() const
 
 float Water::waterMove()
 {
-	float _v = this->volume;
-	this->volume = 0.f;
+	float _v = 0;
+	if (Water::Situation::Normal == this->nowSituation && Water::State::LIQUID == this->currentState)
+	{
+		_v = this->volume;
+		this->volume = 0.f;
+	}
 	return _v;
 }
 
