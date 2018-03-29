@@ -15,9 +15,10 @@ Senpuki::Senpuki(/*EnemyHitTest* e_pointa*/)
 	
 	position.x = INITIALCOORDINATE_X;
 	position.y = INITIALCOORDINATE_Y;
-	_filePath = "test.png";
+	_filePath = "Sen.png";
 	_hitbox = "Collision.png";
 	flag = false;
+	objectTag = "Senpuki";
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 Senpuki::~Senpuki()
@@ -44,17 +45,7 @@ void Senpuki::Initialize()
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Senpuki::UpDate()
 {
-	//CheckHit(enemy_pointa,1);
-	if (flag)
-	{
 
-		if (true)//Playerが水蒸気の状態ならば・・・
-		{
-			//風を送りx座標に送ることで風が吹いているように見せる
-
-			//enemy_pointa->position.x -= WIND;
-		}
-	}
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Senpuki::Finalize()
@@ -80,17 +71,36 @@ void Senpuki::Render()
 //☆☆☆☆//-----------------------------------------------------------------------------
 //  関数  //-----------------------------------------------------------------------------
 //☆☆☆☆//-----------------------------------------------------------------------------
-void Senpuki::CheckHit(Object* objhit , int value = 0)
+void Senpuki::CheckHit(int value)
 {
+	//CheckHit(enemy_pointa,1);
 	//valueによって当たり判定を変える（デバッグ用）
-	switch (value)
+	Object::CollisionProcess = [&](const Object& o_)
 	{
-	case 0:
-		//flag = collisionCube.hitBox(objhit->collisionCube); //自機との当たり判定
-		flag = hit(*objhit);
-		break;
-	case 1:
-		flag = range.hitBox(objhit->collisionCube);         //視野範囲との当たり判定
-		break;
-	}
+		if (o_.objectTag == "Player")	//Playerの当たり判定
+		{
+			flag = true;				//Playerと接している
+			if (flag)
+			{
+				switch (value)
+				{
+				case 0:
+					//flag = collisionCube.hitBox(objhit->collisionCube); //自機との当たり判定
+					if (((Water&)o_).GetState() == Water::State::GAS)//Playerが水蒸気の状態ならば・・・
+					{
+						//風を送りx座標に送ることで風が吹いているように見せる
+						//o_.position.x -= WIND;
+					}
+					break;
+				case 1:
+					//flag = range.hitBox(objhit->collisionCube);         //視野範囲との当たり判定
+					break;
+				}
+			}
+		}
+		else
+		{
+			flag = false;
+		}
+	};
 }

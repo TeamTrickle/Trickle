@@ -21,6 +21,7 @@ Kanetuki::Kanetuki(/*EnemyHitTest* e_pointa*/)
 	position = Vec2(POS_X, POS_Y);
 	flag = false;
 	Count = 0;
+	objectTag = "Kanetuki";
 }
 
 //☆☆☆☆//-----------------------------------------------------------------------------
@@ -49,25 +50,6 @@ void Kanetuki::UpDate()
 	//| Playerに当たり一定の時間が立つと水蒸気に変化します|//
 	//|___________________________________________________|//
 
-	//CheckHit(enemy_pointa);
-	if (flag)								//Playerと接してるとき
-	{
-		//cout << "true" << endl;
-		if (/*Playerが氷の状態なら*/true)
-		{
-			Count += HOTTIME;				//加熱カウンタを増やす
-
-			if (Count >= HOT_TIME)			//加熱カウンタが上限に達したら
-			{
-				//水蒸気の状態にする
-			}
-		}
-	}
-	else
-	{
-		//cout << "false" << endl;
-		Count = 0;							//加熱カウンタを元に戻す
-	}
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::Render()
@@ -85,7 +67,35 @@ void Kanetuki::Finalize()
 //☆☆☆☆//-----------------------------------------------------------------------------
 //  関数  //-----------------------------------------------------------------------------
 //☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::CheckHit(Object* objhit)
+void Kanetuki::CheckHit()
 {
-	flag = hit(*objhit);
+	Object::CollisionProcess = [&](const Object& o_)
+	{
+		if (o_.objectTag == "Water")
+		{
+			flag = true;
+			if (flag)								//Playerと接してるとき
+			{
+				if (((Water&)o_).GetState() == Water::State::SOLID)
+				{
+					Count += HOTTIME;				//加熱カウンタを増やす
+
+					if (Count >= HOT_TIME)			//加熱カウンタが上限に達したら
+					{
+						//水蒸気の状態にする
+						((Water&)o_).SetState(Water::State::GAS);
+					}
+				}
+			}
+			else
+			{
+				//cout << "false" << endl;
+				Count = 0;							//加熱カウンタを元に戻す
+			}
+		}
+		else
+		{
+			flag = false;
+		}
+	};
 }

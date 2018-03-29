@@ -1,6 +1,6 @@
 //______________________________//
 //|動くギミック  扇風機        |//
-//|履歴：2018/03/27 横尾	   |//
+//|履歴：2018/03/29 横尾	   |//
 //|　                          |//
 //|____________________________|//
 #pragma once
@@ -34,5 +34,5 @@ private:
 	std::string _hitbox;				//ファイルパス
 	CollisionBox range;				    //視野範囲
 public:
-	void CheckHit(Object* objhit , int value);
+	void CheckHit(int);
 };

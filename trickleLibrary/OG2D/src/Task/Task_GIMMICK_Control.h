@@ -5,13 +5,14 @@
 //#include "Player\EnemyHitTest.h"
 //______________________________//
 //|動くギミック  制御クラス    |//
-//|履歴：2018/03/27 横尾	   |//
+//|履歴：2018/03/29 横尾	   |//
 //|　                          |//
 //|  クラスの宣言で使用可能____|//
 
 #include "Object\Switch.h"
 #include "Object\Kanetuki.h"
 #include "Object\Senpuki.h"
+#include <array>
 
 //class Player;
 //class EnemyHitTest;
@@ -19,7 +20,7 @@ class Kanetuki;
 class Senpuki;
 class Switch;
 
-class GIMMICK_Control
+class GIMMICK_Control : public Object
 {
 public:
 	GIMMICK_Control();
@@ -28,6 +29,9 @@ public:
 	TaskFlag UpDate();
 	void Finalize();
 	void Render2D();
+
+	std::array<Object*, 3> GetGimmicks() const;
+
 public:
 	//Player* _p_pointa;
 	//EnemyHitTest* _e_pointa;

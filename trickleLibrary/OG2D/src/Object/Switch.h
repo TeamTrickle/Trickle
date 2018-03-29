@@ -1,11 +1,11 @@
 //______________________________//
 //|動くギミック  スイッチ      |//
-//|履歴：2018/03/27 横尾	   |//
+//|履歴：2018/03/29 横尾	   |//
 //|　                          |//
 //|____________________________|//
 #pragma once
 #include "Object.h"
-//#include "Player\Player.h"
+#include "Player\Player.h"
 //#include "Player\EnemyHitTest.h"
 
 //class EnemyHitTest;
@@ -21,7 +21,7 @@ public:
 	void Finalize();
 	void Render();
 
-	void CheakHit(Object* objhit);
+	void CheakHit();
 private:
 	Texture image;
 	std::string _filePath;

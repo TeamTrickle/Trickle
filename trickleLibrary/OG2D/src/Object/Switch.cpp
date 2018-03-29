@@ -50,28 +50,38 @@ void Switch::Render()
 	image.Draw(draw, src);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
-void Switch::CheakHit(Object* objhit)
+void Switch::CheakHit()
 {
 	//flag = collisionCube.hitBox(objhit->collisionCube);
-	flag = hit(*objhit);
 
 	//スイッチが押せる場所にいるかどうか？
-	if (flag)
+	Object::CollisionProcess = [&](const Object& o_)
 	{
-		//cout << "true" << endl;
-		// Sキーを押してSwitchをON/OFFの切り替えをする
-		if (Input::KeyInputDown(Input::S))
+		if (o_.objectTag == "Player")
 		{
-			if (switchflag)
+			flag = true;
+		}
+		else
+		{
+			flag = false;
+		}
+		if (flag)
+		{
+			//cout << "true" << endl;
+			// Sキーを押してSwitchをON/OFFの切り替えをする
+			if (Input::KeyInputDown(Input::S))
 			{
-				switchflag = false;
-				cout << "スイッチoff" << endl;
-			}
-			else
-			{
-				switchflag = true;
-				cout << "スイッチon" << endl;
+				if (switchflag)
+				{
+					switchflag = false;
+					cout << "スイッチoff" << endl;
+				}
+				else
+				{
+					switchflag = true;
+					cout << "スイッチon" << endl;
+				}
 			}
 		}
-	}
+	};
 }

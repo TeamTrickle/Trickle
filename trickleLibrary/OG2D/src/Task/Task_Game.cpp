@@ -2,6 +2,7 @@
 void Game::Initialize()
 {
 	std::cout << "Game‰Šú‰»" << std::endl;
+	gimmck.Initialize();
 	player.Initialize();
 	back.Initialize();
 	map.LoadMap("prototype.txt");
@@ -12,7 +13,14 @@ void Game::Initialize()
 			if (j.objectTag.length() > 0)
 				cm.AddChild(&j);
 	cm.AddChild(&player);
-	cm.AddChild(&player.footBase);
+	//cm.AddChild(&player.footBase);
+	cm.AddChild(&gimmck);
+	
+	auto gimmicks = gimmck.GetGimmicks();
+	for (auto& g : gimmicks)
+	{
+		cm += g;
+	}
 }
 
 TaskFlag Game::UpDate()

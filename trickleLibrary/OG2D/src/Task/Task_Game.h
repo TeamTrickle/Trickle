@@ -10,6 +10,7 @@
 #include "Back\Back.h"
 #include "Map\Map.h"
 #include "Water\water.h"
+#include "Task_GIMMICK_Control.h"
 
 class Game
 {
@@ -24,6 +25,7 @@ public:
 	Player player;
 	Back back;
 	Map map;
+	GIMMICK_Control gimmck;
 	std::vector<Water*> water;
 	CollisionManager cm;
 	int timecnt;

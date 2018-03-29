@@ -62,3 +62,12 @@ void GIMMICK_Control::Render2D()
 	_ka_pointa->Render();
 	_swi_pointa->Render();
 }
+
+std::array<Object*, 3> GIMMICK_Control::GetGimmicks() const
+{
+	return {
+		_sen_pointa,
+		_ka_pointa,
+		_swi_pointa
+	};
+}
