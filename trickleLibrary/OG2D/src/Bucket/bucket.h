@@ -35,10 +35,9 @@ public:
 	 * @note	newg‚Á‚½‚Ì‚Å•K‚¸Á‚µ‚Ä‚­‚¾‚³‚¢
 	 */
 	Water* Spill();
-
+	float capacity;
 private:
 	Object * parent;
-	float capacity;
 	Texture tex;
 };
 

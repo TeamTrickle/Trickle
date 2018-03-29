@@ -12,9 +12,13 @@ Water::Water(Vec2 pos) {
 		}
 		if (o_.objectTag == "baketu")
 		{
-			if (this->GetState() == Water::State::LIQUID) {
+			if (this->GetState() == Water::State::LIQUID && this->GetSituation() == Water::Situation::Normal) {
 				this->SetSituation(Water::Situation::CreaDelete);
 			}
+		}
+		if (o_.objectTag == "Soil")
+		{
+			this->isCollided = true;
 		}
 	};
 	//•`‰æŒ³‰æ‘œÀ•W
@@ -37,6 +41,7 @@ Water::Water(Vec2 pos) {
 	this->currentState = Water::State::LIQUID;
 	//‰Šú•Û…—Ê
 	this->volume = 0.5;
+	this->invi = 0;
 }
 
 Water::~Water() {
@@ -58,6 +63,10 @@ bool Water::Initialize() {
 }
 
 void Water::Update() {
+	if (this->invi > 0)
+	{
+		this->invi--;
+	}
 	switch (this->currentState) {
 	case Water::State::LIQUID:
 		//…ˆ—

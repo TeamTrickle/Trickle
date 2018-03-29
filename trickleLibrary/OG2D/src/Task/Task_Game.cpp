@@ -19,8 +19,9 @@ void Game::Initialize()
 
 TaskFlag Game::UpDate()
 {
-	timecnt++;
-	if (timecnt >= 120)
+	//timecnt++;
+	//if (timecnt >= 120)
+	if(Input::KeyInputDown(Input::Key::L))
 	{
 		timecnt = 0;
 		//Water生成
@@ -32,9 +33,12 @@ TaskFlag Game::UpDate()
 	// テスト用
 	// ------------------------------------------
 	if (Input::KeyInputDown(Input::Key::C)) {
-		Water* sizuku = bucket.Spill();
-		water.push_back(sizuku);
-		cm += sizuku;
+		if (bucket.capacity > 0) {
+			Water* sizuku = bucket.Spill();
+			water.push_back(sizuku);
+			//cm += sizuku;
+			cm.AddChild(water[water.size() - 1]);
+		}
 	}
 	// ------------------------------------------
 	for (int i = 0; i < water.size(); ++i)
@@ -80,6 +84,14 @@ TaskFlag Game::UpDate()
 				water[i]->SetState(Water::State::LIQUID);
 			}
 		}
+	}
+	if (Input::KeyInputOn(Input::H))
+	{
+		bucket.position.x -= 3.0f;
+	}
+	if (Input::KeyInputOn(Input::K))
+	{
+		bucket.position.x += 3.0f;
 	}
 	TaskFlag nowtask = Task_Game;
 	if (Input::KeyInputUp(Input::SPACE))
