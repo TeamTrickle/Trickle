@@ -48,8 +48,14 @@ public:
 	void SetSituation(const Situation&);
 	Situation GetSituation() const;
 
-	bool active;
+	//水量の移動
+	float waterMove();
+	//水量のチェック
+	float GetWaterVolume() const;
 
+	bool active;
+	//水量
+	float volume;
 private:
 	Texture tex;
 	std::map<State, Box2D> drawRange;

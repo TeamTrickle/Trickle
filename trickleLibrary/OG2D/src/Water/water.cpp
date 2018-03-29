@@ -3,26 +3,44 @@
 
 
 Water::Water(Vec2 pos) {
+	//タグ設定
 	this->objectTag = "Water";
+	//衝突判定
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Floor") {
 			this->isCollided = true;
 		}
+		if (o_.objectTag == "baketu")
+		{
+			if (this->GetState() == Water::State::LIQUID) {
+				this->SetSituation(Water::Situation::CreaDelete);
+			}
+		}
 	};
+	//描画元画像座標
 	this->drawRange[Water::State::LIQUID] = Box2D(0, 0, 128, 128);
 	this->drawRange[Water::State::GAS] = Box2D(128, 0, 128, 128);
 	this->drawRange[Water::State::SOLID] = Box2D(256, 0, 128, 128);
+	//描画最大最小サイズ
 	this->minSize = { 0,0 };
 	this->maxSize = { 64,64 };
+	//経過時間初期化
 	this->setTime = 0;
+	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, this->minSize, 0.f);
+	//テクスチャの読み込み
 	tex.TextureCreate("watertest.png");
+	//衝突判定の初期化
 	this->isCollided = false;
+	//初期ステータスの設定
 	this->nowSituation = Water::Situation::Newfrom;
 	this->currentState = Water::State::LIQUID;
+	//初期保持水量
+	this->volume = 0.5;
 }
 
 Water::~Water() {
+	//テクスチャの解放
 	tex.Finalize();
 }
 
@@ -144,4 +162,16 @@ void Water::SetSituation(const Situation& s_)
 Water::Situation Water::GetSituation() const
 {
 	return this->nowSituation;
+}
+
+float Water::waterMove()
+{
+	float _v = this->volume;
+	this->volume = 0.f;
+	return _v;
+}
+
+float Water::GetWaterVolume() const
+{
+	return this->volume;
 }
