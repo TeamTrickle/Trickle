@@ -172,7 +172,7 @@ void Player::TakeBucket(Bucket* b_) {
 	if (Input::KeyInputDown(BUCKET_TAKEDROP_KEY)) {
 		if (bucket)
 			bucket = nullptr;
-		else if (Box2D(this->position, this->Scale).Hit(b_->collisionCube.hitBase))
+		else if (this->hit(*b_))
 			bucket = b_;
 	}
 }
