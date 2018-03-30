@@ -1,7 +1,8 @@
 #include "Bucket\bucket.h"
 
 
-Bucket::Bucket() {
+Bucket::Bucket(Vec2 pos) {
+	this->position = pos;
 }
 
 Bucket::~Bucket() {
@@ -10,7 +11,7 @@ Bucket::~Bucket() {
 
 bool Bucket::Initialize() {
 
-	Object::CreateObject(Objform::Cube, Vec2(100.f, 250.f), Vec2(64.f, 64.f), 0.f);
+	Object::CreateObject(Objform::Cube, this->position, Vec2(64.f, 64.f), 0.f);
 	Object::objectTag = "Bucket";
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Water") {

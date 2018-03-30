@@ -18,7 +18,7 @@ private:
 	Box2D GetSpriteCrop() const;
 
 public:
-	explicit Bucket();
+	explicit Bucket(Vec2 pos);
 	virtual ~Bucket();
 
 	bool Initialize();
