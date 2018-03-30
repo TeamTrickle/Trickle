@@ -1,0 +1,13 @@
+#pragma once
+//______________________________//
+//|タスク管理                   |//
+//|履歴：2018/03/20金子翔       |//
+//|____________________________|//
+enum TaskFlag
+{
+	NON,
+	Task_Sample,
+	Task_Sample2,
+	Task_Game,
+	Task_Title,
+};
