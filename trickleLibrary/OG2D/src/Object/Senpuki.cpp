@@ -2,27 +2,27 @@
 
 using namespace std;
 
-//11番配置座標
+//11番配置座標(今回のは上)
 
-const int IMAGE_SIZE_X = 64;			//画像サイズ
-const int IMAGE_SIZE_Y = 64;			//画像サイズ
+const int IMAGE_SIZE_X = 64;                                       //画像サイズ_X
+const int IMAGE_SIZE_Y = 64;                                       //画像サイズ_Y
 
-const int INITIALCOORDINATE_X = IMAGE_SIZE_X * 11;	//初期座標
-const int INITIALCOORDINATE_Y = IMAGE_SIZE_Y * 7;	//初期座標
+const int INITIALCOORDINATE_X = IMAGE_SIZE_X * 11;	               //初期座標_X
+const int INITIALCOORDINATE_Y = IMAGE_SIZE_Y * 7;	               //初期座標_Y
 
-const float WIND = 1.5f;				//風力（風の強さ）
+const float WIND = 1.5f;				                           //風力（風の強さ）
 
 //☆☆☆☆//-----------------------------------------------------------------------------
-Senpuki::Senpuki()
+Senpuki::Senpuki()                                                 //コンストラクタ（なし）
 {
-
+	
 }
-Senpuki::Senpuki(Vec2 pos)
+Senpuki::Senpuki(Vec2 pos)                                         //コンストラクタ（Vec2　初期座標）
 {
 	position = pos;
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
-Senpuki::~Senpuki()
+Senpuki::~Senpuki()                                                //デストラクタ　※現在は何もありません
 {
 
 }
@@ -31,7 +31,7 @@ Senpuki::~Senpuki()
 //初期化をするところ(Vec2 初期座標)
 bool Senpuki::Initialize(Vec2 pos)
 {
-	objectTag = "Senpuuki";
+	objectTag = "Senpuuki";                 //オブジェクトタグ名を生成する
 
 	//当たり判定の矩形を用意する
 	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);								//当たり判定矩形を生成する
@@ -59,23 +59,24 @@ void Senpuki::Render()
 //☆☆☆☆//-----------------------------------------------------------------------------
 //  関数  //-----------------------------------------------------------------------------
 //☆☆☆☆//-----------------------------------------------------------------------------
-void Senpuki::CheakHit()
+void Senpuki::CheakHit()                                             //当たり判定の処理
 {
-	Object::CollisionProcess = [&](const Object& o_)
+	Object::CollisionProcess = [&](const Object& o_)                 //全てのローカルでのクラスを参照する？
 	{
-		cout << "ラムダ式の処理中なう" << endl;
-		if (parent->hit(*this))			//Playerの当たり判定（本来は水で判定を取る）
+		cout << "ラムダ式の処理中なう" << endl;                      //出力
+		if (o_.objectTag == "Water")                                 //Playerの当たり判定（本来は水で判定を取る）
 		{
-			flag = true;				//Playerと接している
-			cout << "当たっています" << endl;
-			if (flag)
+			flag = true;                                             //flagをtrueにする
+			cout << "当たっています" << endl;                        //出力
+			if (flag)                                                //水と接触判定したら・・・
 			{
-				//flag = collisionCube.hitBox(objhit->collisionCube); //自機との当たり判定
-				if (((Water&)o_).GetState() == Water::State::GAS)//Playerが水蒸気の状態ならば・・・
+				if (((Water&)o_).GetState() == Water::State::GAS)    //水蒸気の状態ならば・・・
 				{
-					//風を送りx座標に送ることで風が吹いているように見せる
-					//o_.position.x -= WIND;
 					cout << "風が吹きます" << endl;
+				}
+				if (((Water&)o_).GetState() == Water::State::LIQUID) //液体の状態ならば・・・
+				{
+					cout << "液体の状態" << endl;
 				}
 			}
 		}
@@ -85,11 +86,11 @@ void Senpuki::CheakHit()
 		}
 	};
 }
-bool Senpuki::HasParent()const
+bool Senpuki::HasParent()const                                       //nullptrではないか確認する関数
 {
 	return parent != nullptr;
 }
-void Senpuki::SetParent(Object* obj) 
+void Senpuki::SetParent(Object* obj)                                 //当たり判定に必要なオブジェクトをObject* parent に代入する
 {
 	parent = obj;
 }

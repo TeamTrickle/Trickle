@@ -42,7 +42,7 @@ void Game::Initialize()
 	//ギミックの初期化
 	senpuki.Initialize(gimmickpos[2]);			//扇風機の初期化処理に移る（扇風機の座標）
 	//当たり判定の登録
-	senpuki.SetParent(&player);					//Playerのアドレスを参照する（Playerのアドレス値）
+	//senpuki.SetParent(&player);			    //Playerのアドレスを参照する（Playerのアドレス値)
 	cm.AddChild(&senpuki);						//扇風機のアドレスをvector objsにputh.back()する
 }
 
