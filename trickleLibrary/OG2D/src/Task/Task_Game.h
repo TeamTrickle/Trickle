@@ -24,7 +24,8 @@ public:
 	//’Ç‰Á•Ï”//
 	//™™™™//
 	Player player;
-	std::vector<Bucket*> bucket;
+	//std::vector<Bucket*> bucket;
+	Bucket bucket;
 	Back back;
 	Map map;
 	std::vector<Water*> water;

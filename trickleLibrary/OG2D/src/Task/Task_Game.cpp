@@ -7,7 +7,7 @@ void Game::Initialize()
 	};
 	std::cout << "Game初期化" << std::endl;
 	player.Initialize();
-	for (int i = 0; i < 2; ++i)
+	/*for (int i = 0; i < 2; ++i)
 	{
 		auto w = new Bucket(Vec2(bucketpos[i].x, bucketpos[i].y));
 		bucket.push_back(w);
@@ -16,7 +16,9 @@ void Game::Initialize()
 	{
 		bucket[i]->Initialize();
 		cm.AddChild(bucket[i]);
-	}
+	}*/
+	bucket.Initialize(bucketpos[0]);
+	cm.AddChild(&bucket);
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
@@ -46,13 +48,19 @@ TaskFlag Game::UpDate()
 	// テスト用
 	// ------------------------------------------
 	if (Input::KeyInputDown(Input::Key::C)) {
-		for (int i = 0; i < 2; ++i) {
-			if (bucket[i]->capacity > 0) {
-				Water* sizuku = bucket[i]->Spill();
+		//for (int i = 0; i < 2; ++i) {
+		//	if (bucket[i]->capacity > 0) {
+		//		Water* sizuku = bucket[i]->Spill();
+		//		water.push_back(sizuku);
+		//		//cm += sizuku;
+		//		cm.AddChild(water[water.size() - 1]);
+		//	}
+		//}
+		if (bucket.capacity > 0) {
+				Water* sizuku = bucket.Spill();
 				water.push_back(sizuku);
 				//cm += sizuku;
 				cm.AddChild(water[water.size() - 1]);
-			}
 		}
 	}
 	// ------------------------------------------
@@ -67,9 +75,10 @@ TaskFlag Game::UpDate()
 		}
 	}
 	player.UpDate();
-	for (int i = 0; i < 2; ++i) {
+	/*for (int i = 0; i < 2; ++i) {
 		player.TakeBucket(bucket[i]);
-	}
+	}*/
+	player.TakeBucket(&bucket);
 
 	cm.Run();
 	if (Input::KeyInputOn(Input::A))
@@ -104,11 +113,11 @@ TaskFlag Game::UpDate()
 	}
 	if (Input::KeyInputOn(Input::H))
 	{
-		bucket[0]->position.x -= 3.0f;
+		bucket.position.x -= 3.0f;
 	}
 	if (Input::KeyInputOn(Input::K))
 	{
-		bucket[0]->position.x += 3.0f;
+		bucket.position.x += 3.0f;
 	}
 	TaskFlag nowtask = Task_Game;
 	if (Input::KeyInputUp(Input::SPACE))
@@ -125,9 +134,10 @@ void Game::Render2D()
 		water[i]->Render();
 	}
 	player.Render();
-	for (int i = 0; i < 2; ++i) {
+	/*for (int i = 0; i < bucket.size(); ++i) {
 		bucket[i]->Render();
-	}
+	}*/
+	bucket.Render();
 	map.MapRender();
 	back.Render();
 }
@@ -138,9 +148,14 @@ void Game::Finalize()
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();
-	for (int i = 0; i < 2; ++i) {
-		bucket[i]->Finalize();
-	}
+	//for (int i = 0; i < bucket.size(); ++i) {
+	//	bucket[i]->Finalize();
+	//}
+	//for (int i = 0; i < bucket.size(); ++i)
+	//{
+	//	this->bucket.pop_back();
+	//}
+	bucket.Finalize();
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Finalize();
