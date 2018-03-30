@@ -10,7 +10,10 @@
 #include "Back\Back.h"
 #include "Map\Map.h"
 #include "Water\water.h"
-#include "Task_GIMMICK_Control.h"
+#include "Bucket\bucket.h"
+#include "Goal\Goal.h"
+
+#include "Object\Senpuki.h"
 
 class Game
 {
@@ -23,10 +26,13 @@ public:
 	//追加変数//
 	//☆☆☆☆//
 	Player player;
+	Senpuki senpuki;				//_OTKでの処理エラーの場合、コンストラクタのミスが高いです
+	//std::vector<Bucket*> bucket;
+	Bucket bucket;
 	Back back;
 	Map map;
-	GIMMICK_Control gimmck;
 	std::vector<Water*> water;
 	CollisionManager cm;
 	int timecnt;
+	Goal goal;
 };
