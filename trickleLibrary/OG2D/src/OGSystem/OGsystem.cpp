@@ -210,6 +210,224 @@ bool KeyInput::KeyInputUp(GLFWwindow *w, int key) {
 	return false;
 }
 
+
+	void Input::GamePad::Initialize()
+	{
+		for (int i = 0; i < 256; ++i)
+		{
+			this->inputTime_down[i] = 0;
+			this->inputTime_on[i] = 0;
+			this->inputTime_up[i] = 0;
+		}
+	}
+	bool Input::GamePad::isPresent() const
+	{
+		return (glfwJoystickPresent(this->id_) == GLFW_TRUE) ? true : false;
+	}
+	Input::GamePad::GamePad(const int id) :
+		id_(id),
+		axis_button(false),
+		axis_button_on(AXIS_BUTTON_NUM),
+		axis_button_down(AXIS_BUTTON_NUM),
+		axis_button_up(AXIS_BUTTON_NUM)
+	{
+		glfwGetJoystickButtons(id_, &button_num);
+		glfwGetJoystickAxes(id_, &axis_num);
+		std::cout << "GamePadID: " << id_ << " button:" << button_num << " axis:" << axis_num << std::endl;
+
+		button_on.resize(button_num);
+		std::fill(std::begin(button_on), std::end(button_on), 0);
+
+		button_down.resize(button_num);
+		std::fill(std::begin(button_down), std::end(button_down), 0);
+
+		button_up.resize(button_num);
+		std::fill(std::begin(button_up), std::end(button_up), 0);
+
+		axis_value.resize(axis_num);
+		std::fill(std::begin(axis_value), std::end(axis_value), 0.0f);
+	}
+	void Input::GamePad::Reset()
+	{
+		std::fill(std::begin(button_on), std::end(button_on), 0);
+		std::fill(std::begin(button_down), std::end(button_down), 0);
+		std::fill(std::begin(button_up), std::end(button_up), 0);
+		std::fill(std::begin(axis_value), std::end(axis_value), 0.0f);
+
+		std::fill(std::begin(axis_button_on), std::end(axis_button_on), 0);
+		std::fill(std::begin(axis_button_down), std::end(axis_button_down), 0);
+		std::fill(std::begin(axis_button_up), std::end(axis_button_up), 0);
+	}
+	std::vector<Input::GamePad> initGamePad()
+	{
+		std::vector<Input::GamePad> gamepad_;
+		for (int id = GLFW_JOYSTICK_1; id <= GLFW_JOYSTICK_LAST; ++id)
+		{
+			if (glfwJoystickPresent(id) == GLFW_TRUE)
+			{
+				gamepad_.emplace_back(id);
+			}
+		}
+
+		return gamepad_;
+	}
+	int Input::GamePad::buttons() const
+	{
+		return button_num;
+	}
+	int Input::GamePad::axes() const
+	{
+		return axis_num;
+	}
+	bool Input::GamePad::Button_On(const int index)
+	{
+		return button_on[index];
+	}
+	bool Input::GamePad::Button_Down(const int index)
+	{
+		return button_down[index];
+	}
+	bool Input::GamePad::Button_Up(const int index)
+	{
+		return button_up[index];
+	}
+
+	bool Input::GamePad::ButtonOn(const int index)
+	{
+		if (this->Button_On(index)) {
+			this->inputTime_on[index]++;
+			return true;
+		}
+		else if (this->inputTime_on[index] != 0) {
+			this->inputTime_on[index] = 0;
+		}
+		if (this->inputTime_on[index] == 1) {
+
+		}
+		return false;
+	}
+
+	bool Input::GamePad::ButtonDown(const int index)
+	{
+		if (this->Button_Down(index)) {
+			this->inputTime_down[index]++;
+		}
+		else if (this->inputTime_down[index] != 0) {
+			this->inputTime_down[index] = 0;
+		}
+		if (this->inputTime_down[index] == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	bool Input::GamePad::ButtonUp(const int index)
+	{
+		if (this->Button_Up(index)) {
+			this->inputTime_up[index]++;
+		}
+		else if (this->inputTime_up[index] != 0) {
+			this->inputTime_up[index] = 0;
+			return true;
+		}
+		if (this->inputTime_up[index] == 1) {
+
+		}
+		return false;
+	}
+
+	float Input::GamePad::axis(const int index)
+	{
+		return axis_value[index];
+	}
+
+	bool Input::GamePad::registAxisButton(const int x_index, const int y_index, const float axis_threshold_)
+	{
+		// 軸番号が範囲外の場合は設定しない
+		if ((x_index >= axis_num) || (y_index >= axis_num)) return false;
+
+		axis_button = true;
+		axis_threshold = axis_threshold_;
+
+		axis_x_index = x_index;
+		axis_y_index = y_index;
+
+		std::fill(std::begin(axis_button_on), std::end(axis_button_on), 0);
+		std::fill(std::begin(axis_button_down), std::end(axis_button_down), 0);
+		std::fill(std::begin(axis_button_up), std::end(axis_button_up), 0);
+
+		return true;
+	}
+
+	void Input::GamePad::upDate()
+	{
+		int button_num_;
+		const auto* buttons_ = glfwGetJoystickButtons(id_, &button_num_);
+		if (button_num_ > 0)
+		{
+			for (int i = 0; i < button_num_; ++i)
+			{
+				button_down[i] = !button_on[i] && buttons_[i];
+				button_up[i] = button_on[i] && !buttons_[i];
+
+				button_on[i] = buttons_[i];
+			}
+		}
+		int axis_num;
+		const auto* axes = glfwGetJoystickAxes(id_, &axis_num);
+		if (axis_num > 0) {
+			for (int i = 0; i < axis_num; ++i) {
+				axis_value[i] = axes[i];
+			}
+			if (axis_button) {
+				// 簡易ボタン向けの処理
+				u_char buttons[AXIS_BUTTON_NUM];
+				std::fill(std::begin(buttons), std::end(buttons), 0);
+
+				// 簡易ボタンのpress状態を作成
+				// それぞれ軸の値が閾値を超えたらPressとみなす
+				// TIPS:右側の比較式の結果(true / false)をそのまま利用
+				buttons[AXIS_RIGHT] = axis_value[axis_x_index] > axis_threshold;
+				buttons[AXIS_LEFT] = axis_value[axis_x_index] < -axis_threshold;
+				buttons[AXIS_DOWN] = axis_value[axis_y_index] > axis_threshold;
+				buttons[AXIS_UP] = axis_value[axis_y_index] < -axis_threshold;
+
+				for (int i = 0; i < AXIS_BUTTON_NUM; ++i) {
+					// ボタンの Press / Push / Pull 情報を生成
+					// Pushは押した瞬間、Pullは離した瞬間だけtrueになる
+					axis_button_down[i] = !axis_button_on[i] && buttons[i];
+					axis_button_up[i] = axis_button_on[i] && !buttons[i];
+
+					axis_button_on[i] = buttons[i];
+				}
+			}
+		}
+	}
+
+	bool ButtonOn(std::vector<Input::GamePad>& gamepad_,const int index)
+	{
+		for (auto& id : gamepad_)
+		{
+			if (id.isPresent())
+			{
+				id.Button_On(index);
+			}
+		}
+		return false;
+	}
+
+	void ResetGamePad(std::vector<Input::GamePad>& gamepad_)
+	{
+		for (auto& id : gamepad_)
+		{
+			if (id.isPresent())
+			{
+				id.Reset();
+			}
+		}
+	}
+
+
 void Input::Initialize(GLFWwindow *w)
 {
 	//入力タイムの初期化
@@ -482,12 +700,15 @@ void EngineSystem::Initialize()
 {
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
 	gameEngine->keyinput = KeyInput::Create();
+	//gameEngine->gamepad = initGamePad();
+	//gameEngine->gamepad[0].Initialize();
 	DebugFunction = false;
 }
 
 void EngineSystem::UpDate()
 {
 	gameEngine->camera->CameraUpDate();
+	//gameEngine->gamepad[0].upDate();
 }
 
 EngineSystem* gameEngine;

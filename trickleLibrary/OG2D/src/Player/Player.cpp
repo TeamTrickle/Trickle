@@ -20,12 +20,13 @@ void Player::UpDate()
 {
 	//キャラクターの移動処理
 	est.x = 0;
-	if (Input::KeyInputOn(Input::LEFT)) {
+
+	if (InputLeft()) {
 		est.x = -Player::MOVE_SPEED;
 		//キャラクターの向き変換
 		direction = Direction::LEFT;
 	}
-	if (Input::KeyInputOn(Input::RIGHT)) {
+	if (InputRight()) {
 		est.x = Player::MOVE_SPEED;
 		//向きをRIGHTに
 		direction = Direction::RIGHT;
@@ -77,7 +78,7 @@ void Player::Finalize()
 	this->playerimg.Finalize();
 
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::Register(CollisionManager* cm) {
 	*cm += this;
 	*cm += &(this->footBase);
@@ -95,7 +96,7 @@ void Player::JumpMove()
 	if (footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
-		if (Input::KeyInputOn(Input::Z)) {
+		if (Input::KeyInputOn(Input::Z) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_1)*/) {
 			est.y = Player::JUMP_POWER;
 		}
 		//上昇中
@@ -137,7 +138,7 @@ void Player::CheckHead()
 		}
 	};
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::CheckLeft()
 {
 	leftBase.CreateObject(Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
@@ -149,6 +150,7 @@ void Player::CheckLeft()
 		}
 	};
 }
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::CheckRight()
 {
 	rightBase.CreateObject(Cube, Vec2(this->position.x, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
@@ -160,19 +162,21 @@ void Player::CheckRight()
 		}
 	};
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 bool Player::isWalkable(std::string t) {
 	for (auto& s : WALKABLE_CHIPS)
 		if (t == s)
 			return true;
 	return false;
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
 void Player::TakeBucket(Bucket* b_) {
-	if (Input::KeyInputDown(BUCKET_TAKEDROP_KEY)) {
-		if (bucket)
+	if (Input::KeyInputDown(BUCKET_TAKEDROP_KEY)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_2)*/) {
+		if (bucket) {
 			bucket = nullptr;
-		else if (this->hit(*b_))
+		}
+		else if (this->hit(*b_)) {
 			bucket = b_;
+		}
 	}
 }

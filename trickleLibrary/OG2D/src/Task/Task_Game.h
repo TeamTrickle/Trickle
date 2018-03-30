@@ -11,6 +11,7 @@
 #include "Map\Map.h"
 #include "Water\water.h"
 #include "Bucket\bucket.h"
+#include "Goal\Goal.h"
 
 
 class Game
@@ -31,4 +32,5 @@ public:
 	std::vector<Water*> water;
 	CollisionManager cm;
 	int timecnt;
+	Goal goal;
 };

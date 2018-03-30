@@ -12,7 +12,7 @@ Bucket::~Bucket() {
 }
 
 bool Bucket::Initialize(Vec2 pos) {
-
+	this->position = pos;
 	Object::CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
 	Object::objectTag = "Bucket";
 	Object::CollisionProcess = [&](const Object& o_) {

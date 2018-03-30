@@ -57,6 +57,9 @@
     <Filter Include="ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK">
       <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Goal">
+      <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -116,6 +119,9 @@
     <ClCompile Include="src\Bucket\bucket.cpp">
       <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
     </ClCompile>
+    <ClCompile Include="src\Goal\Goal.cpp">
+      <Filter>ソースファイル\Goal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -174,6 +180,9 @@
     </ClInclude>
     <ClInclude Include="src\Bucket\bucket.h">
       <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Goal\Goal.h">
+      <Filter>ソースファイル\Goal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

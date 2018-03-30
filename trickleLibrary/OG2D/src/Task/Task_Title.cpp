@@ -11,7 +11,7 @@ void Title::Initialize()
 TaskFlag Title::UpDate()
 {
 	TaskFlag nowtask = Task_Title;
-	if (Input::KeyInputUp(Input::SPACE))
+	if (Input::KeyInputUp(Input::SPACE)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_8)*/)
 	{
 		nowtask = Task_Game;
 	}

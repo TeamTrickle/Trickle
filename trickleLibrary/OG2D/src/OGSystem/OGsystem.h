@@ -15,7 +15,7 @@ class KeyInput;
 class Texture;
 class Camera2D;
 namespace Input {
-	enum GamePad
+	enum Pad
 	{
 		//仮装コントローラの入力設定
 		GPAD_BUTTON_A,
@@ -35,6 +35,13 @@ namespace Input {
 
 		GPAD_STIC_R,
 		GPAD_STIC_L,
+	};
+	enum {
+		AXIS_UP,
+		AXIS_DOWN,
+		AXIS_LEFT,
+		AXIS_RIGHT,
+		AXIS_BUTTON_NUM,
 	};
 	enum Key
 	{
@@ -73,6 +80,48 @@ namespace Input {
 		RIGHT,
 		ESCAPE,
 	};
+	class GamePad
+	{
+	public:
+		int id_;
+		int button_num;
+		int axis_num;
+		std::vector<float> axis_value;
+		bool axis_button;
+		float axis_threshold;
+		int axis_x_index;
+		int axis_y_index;
+		std::vector<u_char> button_on;
+		std::vector<u_char> button_down;
+		std::vector<u_char> button_up;
+		std::vector<u_char> axis_button_on;
+		std::vector<u_char> axis_button_down;
+		std::vector<u_char> axis_button_up;
+		int inputTime_on[256];
+		int inputTime_down[256];
+		int inputTime_up[256];
+		explicit GamePad(const int id);
+		int buttons() const;
+		int axes() const;
+		typedef std::shared_ptr<GamePad> SP;
+		bool isPresent() const;
+		bool Button_On(const int index);
+		bool Button_Down(const int index);
+		bool Button_Up(const int index);
+		bool ButtonOn(const int index);
+		bool ButtonDown(const int index);
+		bool ButtonUp(const int index);
+		float axis(const int index);
+		void Reset();
+		void upDate();
+		void Initialize();
+		bool registAxisButton(const int x_index, const int y_index, const float axis_threshold_);
+		static SP Create(const int id)
+		{
+			return GamePad::SP(new GamePad(id));
+		}
+	};
+	bool ButtonOn(std::vector<Input::GamePad>& gamepad_,const int index);
 	//操作するウィンドウの情報
 	static GLFWwindow *nowWindow;
 	static int KeyInputOnTime[256];
@@ -264,6 +313,7 @@ public:
 	Camera2D::SP camera;
 	KeyInput::SP keyinput;
 	//Window::SP window;
+	//std::vector<Input::GamePad> gamepad;
 	void Initialize();
 	void UpDate();
 	bool DebugFunction;

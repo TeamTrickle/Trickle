@@ -70,9 +70,16 @@ private:
 	Direction direction;							//Œü‚«‚ðŠi”[‚·‚é•Ï”
 	Bucket* bucket;
 
-	// ”»’è‚ÉŽg‚Á‚Ä‚éA[–éƒeƒ“ƒVƒ‡ƒ“‚È‚ñ‚Å‚µ‚ñ‚Ç‚¢
+	// “–‚½‚è”»’è—p
 	Object footBase;
 	Object headBase;
 	Object leftBase;
 	Object rightBase;
+
+	bool InputLeft() {
+		return Input::KeyInputOn(Input::LEFT) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+	}
+	bool InputRight() {
+		return Input::KeyInputOn(Input::RIGHT) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+	}
 };

@@ -30,13 +30,15 @@ void Game::Initialize()
 			if (j.objectTag.length() > 0)
 				cm.AddChild(&j);
 	gameEngine->DebugFunction = true;
+	goal.Initialize();
+	cm.AddChild(&goal);
 }
 
 TaskFlag Game::UpDate()
 {
-	//timecnt++;
-	//if (timecnt >= 120)
-	if(Input::KeyInputDown(Input::Key::L))
+	timecnt++;
+	if (timecnt >= 120)
+	//if(Input::KeyInputDown(Input::Key::L))
 	{
 		timecnt = 0;
 		//Water生成
@@ -47,7 +49,7 @@ TaskFlag Game::UpDate()
 
 	// テスト用
 	// ------------------------------------------
-	if (Input::KeyInputDown(Input::Key::C)) {
+	if (Input::KeyInputDown(Input::Key::C)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
 		//	if (bucket[i]->capacity > 0) {
 		//		Water* sizuku = bucket[i]->Spill();
@@ -97,6 +99,11 @@ TaskFlag Game::UpDate()
 	{
 		gameEngine->camera->Move(Vec2(0.0f, 3.0f));
 	}
+	Vec2 cameraest = { 0,0 };
+	/*cameraest.x = gameEngine->gamepad[0].axis(Input::AXIS_LEFT) *10.f;
+	cameraest.y = gameEngine->gamepad[0].axis(Input::AXIS_RIGHT) * 10.f;
+	cameraest.y = -cameraest.y;
+	gameEngine->camera->position += cameraest;*/
 	if (Input::KeyInputDown(Input::U))
 	{
 		for (int i = 0; i < water.size(); ++i)
@@ -120,7 +127,7 @@ TaskFlag Game::UpDate()
 		bucket.position.x += 3.0f;
 	}
 	TaskFlag nowtask = Task_Game;
-	if (Input::KeyInputUp(Input::SPACE))
+	if (Input::KeyInputUp(Input::SPACE) /*|| gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_8)*/)
 	{
 		nowtask = Task_Title;
 	}
@@ -137,6 +144,7 @@ void Game::Render2D()
 	/*for (int i = 0; i < bucket.size(); ++i) {
 		bucket[i]->Render();
 	}*/
+	goal.Render();
 	bucket.Render();
 	map.MapRender();
 	back.Render();
@@ -148,6 +156,7 @@ void Game::Finalize()
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();
+	goal.Finalize();
 	//for (int i = 0; i < bucket.size(); ++i) {
 	//	bucket[i]->Finalize();
 	//}
