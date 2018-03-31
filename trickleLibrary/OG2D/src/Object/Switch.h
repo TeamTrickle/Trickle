@@ -2,6 +2,7 @@
 //|動くギミック  スイッチ      |//
 //|履歴：2018/03/29 横尾	   |//
 //|履歴：2018/03/31 横尾　     |//
+//|履歴：2018/04/01 横尾       |//
 //|____________________________|//
 #pragma once
 #include "Object.h"
@@ -13,17 +14,85 @@ class Player;
 class Switch : public Object
 {
 public:
-	explicit Switch();                           //コンストラクタ（引数なし）
-	explicit Switch(Vec2);                       //コンストラクタ（Vec2　初期座標値）
-	virtual ~Switch();                           //デストラクタ　現在は特になし
-	bool Initlaize(Vec2);                        //(引数1 初期座標)初期化処理　当たり判定・矩形の生成・フラグの初期化
-	void UpDate();                               //更新処理
-	void Finalize();                             //解放処理
-	void Render();                               //描画処理（今のところ意味がない）
+	/*
+	コンストラクタ　※現在は何も処理がありません
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	explicit Switch();
 
-	void CheakHit();                             //当たり判定の処理を書いたところ
-	bool HasParent() const;                      //nullptrでないか調べる関数
-	void SetParent(Player* obj);                 //メンバ変数 parentに引数のPlayer*を当てる（Player* 代入するObject*)
+
+	/*
+	コンストラクタ（Vec2　初期座標値）
+	■ 引数   : Vec2 スイッチの初期座標値設定
+	■ 戻り値 : なし
+	*/
+	explicit Switch(Vec2);
+
+
+	/*
+	デストラクタ　Player*をdeleteで削除します。
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	virtual ~Switch();
+	
+	
+	/*
+	(引数1 初期座標)初期化処理　当たり判定・矩形の生成・フラグの初期化
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	bool Initlaize(Vec2);
+	
+
+	/*
+	更新処理
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	void UpDate();
+	
+
+	/*
+	解放処理
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	void Finalize();
+
+
+	/*
+	描画処理（今のところ意味がない）
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	void Render();
+
+
+	/*
+	当たり判定の処理を書いたところ
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+
+	void CheakHit();
+
+
+	/*
+	nullptrでないか調べる関数
+	■ 引数   : なし
+	■ 戻り値 : bool
+	*/
+	bool HasParent() const;
+
+
+	/*
+	メンバ変数 parentに引数のPlayer*を当てる（Player* 代入するObject*)
+	■ 引数   : Player* Playerのクラスのアドレス値
+	■ 戻り値 : なし
+	*/
+	void SetParent(Player* obj);
 private:
 	bool Hitflag;                                //当たり判定
 	bool switch_ON_OFF;                          //スイッチがONかOFFかを示す ON(true) OFF(false)

@@ -79,20 +79,12 @@ void Switch::CheakHit()                                 //当たり判定の処理をまと
 	};
 }
 
-/*
-* Playerのアドレス値を格納する場所がnullptrではないかをbool型で返す関数
-* 引数　なし　戻り値　bool型
-*/
 bool Switch::HasParent()const
 {
-	return player_pointa != nullptr;
+	return player_pointa != nullptr;                    //Player*はnullptrになっていないか？ 
 }
-/*
-* Playerのアドレス値を取得して Switch->Player* 格納場所へ代入する関数
-* 引数　Switchクラスに送りたい[&Playerクラス] 戻り値　なし
-*/
+
 void Switch::SetParent(Player* player)
 {
-	player_pointa = player;
+	player_pointa = player;                             //引数からPlayer*に代入する
 }
-//コメントを追加すること、扇風機の下のところが今やるべきこと
