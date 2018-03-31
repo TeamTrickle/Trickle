@@ -23,7 +23,7 @@ Switch::~Switch()                               //デストラクタ　現在は特になし
 	
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
-bool Switch::Initlaize(Vec2 pos)           //初期化処理　当たり判定・矩形の生成・フラグの初期化
+bool Switch::Initlaize(Vec2 pos)
 {
 	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);                                    //当たり判定矩形を生成する
 	CheakHit();                            //当たり判定関数を呼び出す

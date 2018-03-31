@@ -21,8 +21,8 @@ class Senpuki : public Object
 public:
 	/*
 	初期座標によって当たり判定矩形の生成・フラグの初期化・ラムダ式の当たり判定を行います。
-	■ 引数   : なし
-	■ 戻り値 : なし
+	■ 引数   : Vec2 初期化座標値
+	■ 戻り値 : bool 初期化成功したかを返します。（現状trueしか入りません）
 	*/
 	bool Initialize(Vec2);
 
