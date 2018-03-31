@@ -5,11 +5,12 @@ void Game::Initialize()
 		{100,250},
 		{200,250}
 	};
-	Vec2 gimmickpos[3]
+	Vec2 gimmickpos[4]
 	{
 		{ 64 * 19,64 * 8 },		//スイッチ
 		{ 64 * 8,64 * 15 },		//加熱器
-		{ 64 * 11,64 * 7 }		//扇風機
+		{ 64 * 11,64 * 7 },		//扇風機 上
+		{64 * 19 ,64 * 10}		//扇風機 下
 	};
 	std::cout << "Game初期化" << std::endl;
 	player.Initialize();
@@ -40,10 +41,13 @@ void Game::Initialize()
 	cm.AddChild(&goal);
 
 	//ギミックの初期化
-	senpuki.Initialize(gimmickpos[2]);			//扇風機の初期化処理に移る（扇風機の座標）
+	senpuki.Initialize(gimmickpos[2]);			//扇風機の初期化処理に移る（Vec2 扇風機の座標）
+	switch_.Initlaize(gimmickpos[0]);           //Switchクラスの初期化処理をする(Vec2 初期座標)
 	//当たり判定の登録
-	//senpuki.SetParent(&player);			    //Playerのアドレスを参照する（Playerのアドレス値)
+	//senpuki.SetParent(&switch_);			    //Switchのアドレスを参照する（Switchのアドレス値)
+	switch_.SetParent(&player);                 //Playerのアドレス値を取得してSwitchクラスのPlayer*に代入する
 	cm.AddChild(&senpuki);						//扇風機のアドレスをvector objsにputh.back()する
+	cm.AddChild(&switch_);                      //Switchのアドレスをvector objsにputh.back()する
 }
 
 TaskFlag Game::UpDate()

@@ -19,7 +19,8 @@ Senpuki::Senpuki()                                                 //ƒRƒ“ƒXƒgƒ‰ƒ
 }
 Senpuki::Senpuki(Vec2 pos)                                         //ƒRƒ“ƒXƒgƒ‰ƒNƒ^iVec2@‰ŠúÀ•Wj
 {
-	position = pos;
+	position = pos;                                                //‘—‚ç‚ê‚½À•W’l‚ğî•—‹@‚ÌÀ•Wƒf[ƒ^‚É‘ã“ü‚³‚¹‚é
+	Pos.push_back(pos);                                            //‘—‚ç‚ê‚½À•W’l‚ğ•Û‘¶‚·‚éiƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦‚É•K—v‚¾‚©‚çj
 }
 //™™™™//-----------------------------------------------------------------------------
 Senpuki::~Senpuki()                                                //ƒfƒXƒgƒ‰ƒNƒ^@¦Œ»İ‚Í‰½‚à‚ ‚è‚Ü‚¹‚ñ
@@ -37,14 +38,18 @@ bool Senpuki::Initialize(Vec2 pos)
 	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);								//“–‚½‚è”»’è‹éŒ`‚ğ¶¬‚·‚é
 	cout << "”»’èÀ•W(" << position.x + IMAGE_SIZE_X << "," << position.y + IMAGE_SIZE_Y << endl;		//ƒfƒoƒbƒO‹@”\‚Å‚Ì“–‚½‚è”»’è‚Ì•\¦
 	//
-	flag = false;							//“–‚½‚è”»’è‰Šúƒtƒ‰ƒO‚Ìİ’è
+	Water_flag = false;						//“–‚½‚è”»’è‰Šúƒtƒ‰ƒO‚Ìİ’è
+	Switch_Hitflag = false;                 //Å‰‚Íã‚Ìî•—‹@‚ª“®‚¢‚Ä‚¢‚éó‘Ô
 	CheakHit();								//“–‚½‚è”»’è‚ğs‚¤
 	return true;
 }
 //™™™™//-----------------------------------------------------------------------------
 void Senpuki::UpDate()
 {
-	
+	if (Switch_Hitflag)                     //ƒXƒCƒbƒ`‚Æ‚Ì“–‚½‚è”»’è‚ª‚ ‚é‚Æ‚«EEE
+	{
+		cout << "ƒXƒCƒbƒ`‚ÆÚG’†" << endl;
+	}
 }
 //™™™™//-----------------------------------------------------------------------------
 void Senpuki::Finalize()
@@ -63,26 +68,40 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 {
 	Object::CollisionProcess = [&](const Object& o_)                 //‘S‚Ä‚Ìƒ[ƒJƒ‹‚Å‚ÌƒNƒ‰ƒX‚ğQÆ‚·‚éH
 	{
-		cout << "ƒ‰ƒ€ƒ_®‚Ìˆ—’†‚È‚¤" << endl;                      //o—Í
+		//cout << "ƒ‰ƒ€ƒ_®‚Ìˆ—’†‚È‚¤" << endl;                      //o—Í
 		if (o_.objectTag == "Water")                                 //Player‚Ì“–‚½‚è”»’èi–{—ˆ‚Í…‚Å”»’è‚ğæ‚éj
 		{
-			flag = true;                                             //flag‚ğtrue‚É‚·‚é
-			cout << "“–‚½‚Á‚Ä‚¢‚Ü‚·" << endl;                        //o—Í
-			if (flag)                                                //…‚ÆÚG”»’è‚µ‚½‚çEEE
+			this->Water_flag = true;                                 //flag‚ğtrue‚É‚·‚é
+			//cout << "“–‚½‚Á‚Ä‚¢‚Ü‚·" << endl;                        //o—Í
+			if (Water_flag)                                          //…‚ÆÚG”»’è‚µ‚½‚çEEE
 			{
 				if (((Water&)o_).GetState() == Water::State::GAS)    //…ö‹C‚Ìó‘Ô‚È‚ç‚ÎEEE
 				{
-					cout << "•—‚ª‚«‚Ü‚·" << endl;
+					//cout << "•—‚ª‚«‚Ü‚·" << endl;
 				}
 				if (((Water&)o_).GetState() == Water::State::LIQUID) //‰t‘Ì‚Ìó‘Ô‚È‚ç‚ÎEEE
 				{
-					cout << "‰t‘Ì‚Ìó‘Ô" << endl;
+					
 				}
 			}
 		}
 		else
 		{
-			flag = false;
+			this->Water_flag = false;
+		}
+
+		//_____________________________________________________________________________________________|//
+		//|                                                                                            |//
+		//|î•—‹@‚ÆSwitch‚Æ‚Ì“–‚½‚è”»’èˆ—“à—eƒIƒuƒWƒFƒNƒgƒ^ƒO‚ğg—p‚µ‚Ä‚Å‚Ì“–‚½‚è”»’è‚ğÌ—p‚µ‚Ü‚µ‚½B|//
+		//|¡Œãƒtƒ‰ƒO‚ª‘½‚­‚È‚éê‡‚ÍintŒ^‚Å‚Ìflag‚ğ—˜—p‚µ‚Äƒrƒbƒg‰‰Z‚Ås‚¤—\’è‚Å‚·B                 |//
+		//|____________________________________________________________________________________________|//
+		if (o_.objectTag == "Switch")              //objectTag‚ªSwitch‚¾‚Á‚½‚çEEE
+		{
+			this->Switch_Hitflag = true;           //true‚É‚µ‚Ä‰º‚Ìƒ{ƒ^ƒ“‚ÉØ‚è‘Ö‚¦‚é
+		}
+		else
+		{
+			this->Switch_Hitflag = false;          //ƒXƒCƒbƒ`‚Å‚Í‚È‚¢ê‡‚Ífalse‚ğ•Ô‚·
 		}
 	};
 }
@@ -94,3 +113,14 @@ void Senpuki::SetParent(Object* obj)                                 //“–‚½‚è”»’
 {
 	parent = obj;
 }
+Vec2 Senpuki::Switch_On_or_Off_pos(const Vec2 pos)                   //î•—‹@‚ğØ‚è‘Ö‚¦‚é‚Æ‚«‚ÉÀ•W’l‚àØ‚è‘Ö‚¦‚éŠÖ”‚ğ
+{
+	return position = pos;
+}
+
+
+//|__________________________________________________________________________________|//
+//|–¢À‘•@                                                                          |//
+//|EƒXƒCƒbƒ`‚Ìî•ñ‚ğó‚¯æ‚Á‚ÄƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ˆ—‚Æî•—‹@‚ªØ‚è‘Ö‚í‚éˆ—‚ğÀs’†|//
+//|                                                                                  |//
+//|__________________________________________________________________________________|//
