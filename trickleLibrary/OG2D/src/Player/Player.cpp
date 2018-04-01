@@ -8,6 +8,9 @@ void Player::Initialize()
 	std::cout << "Player初期化" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
 
+	CheckJump = true;
+	CheckGravity = true;
+
 	CheckHead();
 	CheckFoot();
 	CheckLeft();
@@ -32,6 +35,26 @@ void Player::UpDate()
 		direction = Direction::RIGHT;
 	}
 
+	//梯子処理
+	Object::CollisionProcess = [&](const Object& o_) {
+		if (o_.objectTag == "Ladder") {
+			CheckJump = false;
+			CheckGravity = false;
+			isCollided = true;
+			if (InputDown()) {
+				est.y = Player::MOVE_SPEED;
+			}
+			if (InputUp()) {
+				est.y = (-Player::MOVE_SPEED);
+			}
+		}
+		else {
+			CheckGravity = true;
+			CheckJump = true;
+		}
+	};
+
+
 	// バケッツ処理
 	if (bucket) {
 		switch (direction) {
@@ -43,9 +66,13 @@ void Player::UpDate()
 	}
 
 	//y方向の速度に加速度を加える
-	est.y += Player::GRAVITY;
+	if (CheckGravity == true) {
+		est.y += Player::GRAVITY;
+	}
 
-	JumpMove();
+	if (CheckJump == true) {
+		JumpMove();
+	}
 
 	// Sync collider player
 	footBase.position = Vec2(this->position.x + 10.f, this->position.y + this->Scale.y + est.y);

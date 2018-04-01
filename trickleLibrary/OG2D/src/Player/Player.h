@@ -61,6 +61,8 @@ private:
 	const float MOVE_SPEED = 10.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float GRAVITY = 0.98f;								//重力加速度
+	bool CheckJump;
+	bool CheckGravity;
 	//const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
 	//const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
 
@@ -81,5 +83,11 @@ private:
 	}
 	bool InputRight() {
 		return gameEngine->input.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+	}
+	bool InputDown() {
+		return gameEngine->input.on(Input::CD, 0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+	}
+	bool InputUp() {
+		return gameEngine->input.on(Input::CU, 0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
 	}
 };
