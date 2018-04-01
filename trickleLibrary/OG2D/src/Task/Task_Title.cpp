@@ -11,23 +11,23 @@ void Title::Initialize()
 TaskFlag Title::UpDate()
 {
 	TaskFlag nowtask = Task_Title;
-	if (Input::KeyInputUp(Input::SPACE)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_8)*/)
+	if (gameEngine->input.down(Input::in::D2, 0)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_8)*/)
 	{
 		nowtask = Task_Game;
 	}
-	if (Input::KeyInputOn(Input::A))
+	if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
 	{
 		gameEngine->camera->Move(Vec2(-1.0f, 0.0f));
 	}
-	if (Input::KeyInputOn(Input::D))
+	if (gameEngine->input.keyboard.on(Input::KeyBoard::D))
 	{
 		gameEngine->camera->Move(Vec2(+1.0f, 0.0f));
 	}
-	if (Input::KeyInputOn(Input::W))
+	if (gameEngine->input.keyboard.on(Input::KeyBoard::W))
 	{
 		gameEngine->camera->Move(Vec2(0.0f, -1.0f));
 	}
-	if (Input::KeyInputOn(Input::S))
+	if (gameEngine->input.keyboard.on(Input::KeyBoard::S))
 	{
 		gameEngine->camera->Move(Vec2(0.0f, 1.0f));
 	}
@@ -64,27 +64,27 @@ void ObjectSample::Initialize()
 
 void ObjectSample::UpDate()
 {
-	if (Input::KeyInputOn(Input::UP))
+	if (gameEngine->input.on(Input::in::CU, 0))
 	{
 		this->position.y -= 5.0f;
 	}
-	if (Input::KeyInputOn(Input::DOWN))
+	if (gameEngine->input.on(Input::in::CD, 0))
 	{
 		this->position.y += 5.0f;
 	}
-	if (Input::KeyInputOn(Input::RIGHT))
+	if (gameEngine->input.on(Input::in::CR,0))
 	{
 		this->position.x += 5.0f;
 	}
-	if (Input::KeyInputOn(Input::LEFT))
+	if (gameEngine->input.on(Input::in::CL,0))
 	{
 		this->position.x -= 5.0f;
 	}
-	if (Input::KeyInputOn(Input::Q))
+	if (gameEngine->input.on(Input::in::L1,0))
 	{
 		this->angle -= 1.0f;
 	}
-	if (Input::KeyInputOn(Input::E))
+	if (gameEngine->input.on(Input::in::R1,0))
 	{
 		this->angle += 1.0f;
 	}

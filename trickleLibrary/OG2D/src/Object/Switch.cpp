@@ -60,8 +60,8 @@ void Switch::CheakHit(Object* objhit)
 	{
 		//cout << "true" << endl;
 		// Sキーを押してSwitchをON/OFFの切り替えをする
-		if (Input::KeyInputDown(Input::S))
-		{
+		//if (Input::KeyInputDown(Input::S))
+		//{
 			if (switchflag)
 			{
 				switchflag = false;
@@ -72,6 +72,6 @@ void Switch::CheakHit(Object* objhit)
 				switchflag = true;
 				cout << "スイッチon" << endl;
 			}
-		}
+		//}
 	}
 }

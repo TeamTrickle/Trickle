@@ -11,81 +11,74 @@ class Box3D;
 class Box2D;
 class CollisionCircle;
 class CollisionBox;
-class KeyInput;
 class Texture;
 class Camera2D;
-namespace Input {
-	enum Pad
-	{
-		//仮装コントローラの入力設定
-		GPAD_BUTTON_A,
-		GPAD_BUTTON_B,
-		GPAD_BUTTON_X,
-		GPAD_BUTTON_Y,
-		GPAD_BUTTON_L,
-		GPAD_BUTTON_R,
-		GPAD_BUTTON_U,
-		GPAD_BUTTON_D,
-		GPAD_BUTTON_L1,
-		GPAD_BUTTON_R1,
-		GPAD_BUTTON_L2,
-		GPAD_BUTTON_R2,
-		GPAD_BUTTON_L3,
-		GPAD_BUTTON_R3,
+class Input;
+class EngineSystem;
 
-		GPAD_STIC_R,
-		GPAD_STIC_L,
+class Input {
+public:
+	//enum
+	enum in{
+		B1,
+		B2,
+		B3,
+		B4,
+		CD,
+		CU,
+		CR,
+		CL,
+		L1,
+		R1,
+		D1,
+		D2,
+		SR,
+		SL,
 	};
-	enum {
-		AXIS_UP,
-		AXIS_DOWN,
-		AXIS_LEFT,
-		AXIS_RIGHT,
-		AXIS_BUTTON_NUM,
-	};
-	enum Key
-	{
-		//キーボードの仮装キー設定
-		A,
-		S,
-		D,
-		W,
-		Q,
-		E,
-		Z,
-		X,
-		C,
-		R,
-		F,
-		V,
-		T,
-		G,
-		B,
-		Y,
-		H,
-		N,
-		U,
-		J,
-		M,
-		I,
-		K,
-		O,
-		L,
-		P,
-		SPACE,
-		ENTER,
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		ESCAPE,
-	};
+	//class
 	class GamePad
 	{
 	public:
+		enum Pad
+		{
+			//仮装コントローラの入力設定
+			BUTTON_A,		//1
+			BUTTON_B,		//2
+			BUTTON_X,		//3
+			BUTTON_Y,		//4
+			BUTTON_L1,		//5
+			BUTTON_R1,		//6
+			BUTTON_BACK,	//7
+			BUTTON_START,	//8
+			BUTTON_L3,		//9
+			BUTTON_R3,		//10
+			BUTTON_U,		//11
+			BUTTON_R,		//12
+			BUTTON_D,		//13
+			BUTTON_L,		//14
+		};
+		enum AXIS {
+			AXIS_LEFT_X,		//左スティックX値
+			AXIS_LEFT_Y,		//左スティックY値
+			AXIS_RIGHT_X,		//右スティックX値
+			AXIS_RIGHT_Y,		//右スティックY値
+			AXIS_BUTTON_NUM,
+		};
+		explicit GamePad(const int id);
+		bool on(const int index);
+		bool down(const int index);
+		bool up(const int index);
+		float axis(const int index);
+		void upDate();
+		void Initialize();
+		void Reset();
+		bool isPresent() const;
+	private:
+		bool registAxisButton(const int x_index, const int y_index, const float axis_threshold_);
 		int id_;
 		int button_num;
 		int axis_num;
+		int GPadData[14];
 		std::vector<float> axis_value;
 		bool axis_button;
 		float axis_threshold;
@@ -97,46 +90,56 @@ namespace Input {
 		std::vector<u_char> axis_button_on;
 		std::vector<u_char> axis_button_down;
 		std::vector<u_char> axis_button_up;
-		int inputTime_on[256];
-		int inputTime_down[256];
-		int inputTime_up[256];
-		explicit GamePad(const int id);
 		int buttons() const;
 		int axes() const;
-		typedef std::shared_ptr<GamePad> SP;
-		bool isPresent() const;
-		bool Button_On(const int index);
-		bool Button_Down(const int index);
-		bool Button_Up(const int index);
-		bool ButtonOn(const int index);
-		bool ButtonDown(const int index);
-		bool ButtonUp(const int index);
-		float axis(const int index);
-		void Reset();
-		void upDate();
-		void Initialize();
-		bool registAxisButton(const int x_index, const int y_index, const float axis_threshold_);
-		static SP Create(const int id)
-		{
-			return GamePad::SP(new GamePad(id));
-		}
 	};
-	bool ButtonOn(std::vector<Input::GamePad>& gamepad_,const int index);
-	//操作するウィンドウの情報
-	static GLFWwindow *nowWindow;
-	static int KeyInputOnTime[256];
-	static int KeyInputDownTime[256];
-	static int KeyInputUpTime[256];
-	static int KeyData[256];
-	extern void Initialize(GLFWwindow *w);
-	extern bool KeyInputUp(Key key);
-	extern bool KeyInputDown(Key key);
-	extern bool KeyInputOn(Key key);
-	extern void Finalize();
-
-}
-
-
+	class KeyBoard
+	{
+	public:
+		enum Key
+		{
+			//キーボードの仮装キー設定
+			A,S,D,W,Q,E,Z,X,C,R,F,V,T,
+			G,B,Y,H,N,U,J,M,I,K,O,L,P,
+			SPACE,ENTER, ESCAPE,
+			UP,DOWN,LEFT,RIGHT,
+		};
+		KeyBoard();
+		bool up(const int index);
+		bool down(const int index);
+		bool on(const int index);
+		void upDate();
+		GLFWwindow* nowWindow;
+		bool isPresent;
+		std::vector<u_char> button_on;
+		std::vector<u_char> button_down;
+		std::vector<u_char> button_up;
+	private:
+		int KeyData[256];
+	};
+	struct InputData
+	{
+		int button;		//ゲームパッドのボタン
+		int key;		//キーボードのキー
+	};
+	//class宣言
+	std::vector<GamePad> gamepad;
+	KeyBoard keyboard;
+	//変数
+	bool Pad_Connection;
+	//関数
+	void Inputinit();
+	bool on(in in_,int padNum);
+	bool down(in in_,int padNum);
+	bool up(in in_,int padNum);
+	void upDate();
+private:
+	void ResetInputData();
+	int inputData[256];
+	std::vector<Input::GamePad> initGamePad();
+	KeyBoard initkeyBoard(GLFWwindow *w);
+	InputData inputdata[14];
+};
 class Box3D {
 public:
 	float x, y, z, w, h, d;
@@ -232,23 +235,6 @@ public:
 	bool hitCircle(CollisionCircle b);
 private:
 };
-class KeyInput{
-public:
-	KeyInput();
-	bool KeyInputUp(GLFWwindow *w, int key);
-	bool KeyInputDown(GLFWwindow *w, int key);
-	bool KeyInputOn(GLFWwindow *w, int key);
-	typedef std::shared_ptr<KeyInput> SP;
-	static SP Create() {
-		return KeyInput::SP(new KeyInput);
-	}
-private:
-	int KeyInputOnTime[256];
-	int KeyInputDownTime[256];
-	int KeyInputUpTime[256];
-	int Key[256];
-	
-};
 class Texture {
 public:
 	Texture();
@@ -279,6 +265,8 @@ public:
 	void Initialize(Box2D pos);
 	void CameraUpDate();
 	void Move(Vec2 est);
+	void SetPos(Vec2 est);
+	Vec2 GetPos();
 	Vec2 position;
 	typedef std::shared_ptr<Camera2D> SP;
 	static SP Create(Box2D pos);
@@ -311,11 +299,11 @@ public:
 	EngineSystem();
 	EngineSystem(int widht, int height, char* name, bool screen);
 	Camera2D::SP camera;
-	KeyInput::SP keyinput;
-	//Window::SP window;
-	//std::vector<Input::GamePad> gamepad;
+	Window::SP window;
+	Input input;
 	void Initialize();
 	void UpDate();
+	void SetWindow(int width, int height, char* name, bool screen);
 	bool DebugFunction;
 private:
 	int w_wi;

@@ -21,9 +21,6 @@
     <Filter Include="ソースファイル\Task">
       <UniqueIdentifier>{ed08a23c-71f3-4d2f-8c22-2ef6fd05f24b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Task\Sample">
-      <UniqueIdentifier>{75017560-edb5-45b0-b27d-2d3ec253cc29}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\OGSystem\System">
       <UniqueIdentifier>{ce522aeb-86e0-425e-856c-b067ec14c6da}</UniqueIdentifier>
     </Filter>
@@ -64,12 +61,6 @@
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
       <Filter>ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Task\Task_Sample.cpp">
-      <Filter>ソースファイル\Task\Sample</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Task\Task_Sample2.cpp">
-      <Filter>ソースファイル\Task\Sample</Filter>
     </ClCompile>
     <ClCompile Include="src\Object\Object.cpp">
       <Filter>ソースファイル\Object</Filter>
@@ -126,12 +117,6 @@
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
       <Filter>ソースファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Task\Task_Sample.h">
-      <Filter>ソースファイル\Task\Sample</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Task\Task_Sample2.h">
-      <Filter>ソースファイル\Task\Sample</Filter>
     </ClInclude>
     <ClInclude Include="src\Object\Object.h">
       <Filter>ソースファイル\Object</Filter>

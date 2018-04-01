@@ -38,8 +38,8 @@ void Player::UpDate()
 		case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
 		case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
 		}
-		if (Input::KeyInputDown(BUCKET_SPOIL_KEY))
-			bucket->Spill();
+		/*if (Input::KeyInputDown(BUCKET_SPOIL_KEY))
+			bucket->Spill();*/
 	}
 
 	//y方向の速度に加速度を加える
@@ -96,7 +96,7 @@ void Player::JumpMove()
 	if (footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
-		if (Input::KeyInputOn(Input::Z) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_1)*/) {
+		if (gameEngine->input.on(Input::B1,0)) {
 			est.y = Player::JUMP_POWER;
 		}
 		//上昇中
@@ -171,7 +171,7 @@ bool Player::isWalkable(std::string t) {
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::TakeBucket(Bucket* b_) {
-	if (Input::KeyInputDown(BUCKET_TAKEDROP_KEY)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_2)*/) {
+	if (gameEngine->input.down(Input::B2, 0)) {
 		if (bucket) {
 			bucket = nullptr;
 		}

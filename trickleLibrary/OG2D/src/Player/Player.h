@@ -61,8 +61,8 @@ private:
 	const float MOVE_SPEED = 10.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float GRAVITY = 0.98f;								//重力加速度
-	const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
-	const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
+	//const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
+	//const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
 
 	Texture playerimg;
 	Move move;
@@ -77,9 +77,9 @@ private:
 	Object rightBase;
 
 	bool InputLeft() {
-		return Input::KeyInputOn(Input::LEFT) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+		return gameEngine->input.on(Input::CL,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
 	}
 	bool InputRight() {
-		return Input::KeyInputOn(Input::RIGHT) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+		return gameEngine->input.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
 	}
 };

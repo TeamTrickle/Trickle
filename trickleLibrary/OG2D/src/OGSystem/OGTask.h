@@ -8,8 +8,6 @@
 //☆☆☆☆☆☆☆☆☆//
 //追加タスク       //
 //☆☆☆☆☆☆☆☆☆//
-#include "Task\Task_Sample.h"
-#include "Task\Task_Sample2.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
 
@@ -21,8 +19,6 @@ public:
 	//☆☆☆☆☆☆☆☆☆//
 	//タスクclassの追加はここに
 	//cppにも同様に記述
-	Sample s;
-	Sample2 s2;
 	Game game;
 	Title title;
 
@@ -32,7 +28,7 @@ public:
 	//タスク変数
 	TaskFlag nowTask, nextTask;
 	//生成ウィンドウ
-	Window _window;
+	//Window _window;
 	//タスクシステム関数
 	void _myGameInitialize();
 	void _myGameUpDate();

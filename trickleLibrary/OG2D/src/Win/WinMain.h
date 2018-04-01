@@ -6,8 +6,6 @@
 enum TaskFlag
 {
 	NON,
-	Task_Sample,
-	Task_Sample2,
 	Task_Game,
 	Task_Title,
 };

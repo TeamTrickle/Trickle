@@ -42,7 +42,7 @@ void GIMMICK_Control::Finalize()
 TaskFlag GIMMICK_Control::UpDate()
 {
 	//ギミックそれぞれの更新処理
-	TaskFlag nextTask = Task_Sample;
+	TaskFlag nextTask = Task_Title;
 
 	//_e_pointa->UpDate();
 
