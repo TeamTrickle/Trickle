@@ -37,7 +37,7 @@ void Switch::UpDate()                      //更新処理
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::Finalize()                    //解放処理
 {
-	
+	player_pointa = nullptr;
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::Render()                      //描画処理
@@ -49,15 +49,12 @@ void Switch::CheakHit()                                 //当たり判定の処理をまと
 {	
 	Object::CollisionProcess = [&](const Object& o_)                                                          //当たり判定処理                
 	{
-		cout << "ラムダ式" << endl;
 		if (player_pointa->hit(*this))                       //Playerとの接触判定が合ったら・・・                                                               
 		{
-			cout << "接触成功" << endl;                      //出力する
 			Hitflag = true;                                  //当たり判定フラグをtrue
 		}
 		else                                                 //Playerではなかった場合・・・
 		{
-			cout << "接触なし　スイッチ" << endl;            //出力
 			Hitflag = false;                                 //当たり判定フラグをfalse
 		}
 		if (Hitflag)                                         //当たり判定フラグがtrueなら・・・
@@ -87,4 +84,9 @@ bool Switch::HasParent()const
 void Switch::SetParent(Player* player)
 {
 	player_pointa = player;                             //引数からPlayer*に代入する
+}
+
+void Switch::Set_Pos(const Vec2 pos)
+{
+	Pos.push_back(pos);                                 //引数の座標値を追加する
 }

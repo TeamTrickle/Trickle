@@ -93,9 +93,21 @@ public:
 	■ 戻り値 : なし
 	*/
 	void SetParent(Player* obj);
-private:
-	bool Hitflag;                                //当たり判定
+
+
+	/*
+	スイッチの当たり判定座標値をvectorで保存する関数
+	■ 引数   : const Vec2 当たり判定に必要な座標値
+	■ 戻り値 : なし
+	*/
+	void Set_Pos(const Vec2);
+
+public:
+
 	bool switch_ON_OFF;                          //スイッチがONかOFFかを示す ON(true) OFF(false)
+private:
+
+	bool Hitflag;                                //当たり判定
 	std::vector<Vec2>Pos;                        //コンストラクタ時に引数できた座標値を保存する
 	Player* player_pointa;                       //Playerのアドレス値を取得して当たり判定を実装に必要
 };

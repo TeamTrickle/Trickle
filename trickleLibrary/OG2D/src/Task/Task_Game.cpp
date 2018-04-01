@@ -40,12 +40,22 @@ void Game::Initialize()
 	goal.Initialize();
 	cm.AddChild(&goal);
 
+	//当たり判定後の処理でクラスの参照に必要なデータを取得する
+	senpuki.SetParent(&switch_);			    //Switchのアドレスを参照する（Switchのアドレス値)
+	switch_.SetParent(&player);                 //Playerのアドレス値を取得してSwitchクラスのPlayer*に代入する
+
+	//ステージやギミックが複数ある場合の座標値を予め設定し、vectorに代入する
+
+	senpuki.Set_Pos(gimmickpos[2]);             //扇風機の上の座標値をvectorに登録する
+	senpuki.Set_Pos(gimmickpos[3]);             //扇風機の下の座標値をvectorに登録する
+	switch_.Set_Pos(gimmickpos[0]);             //スイッチの上の座標値をvectorに登録する
+
 	//ギミックの初期化
 	senpuki.Initialize(gimmickpos[2]);			//扇風機の初期化処理に移る（Vec2 扇風機の座標）
 	switch_.Initlaize(gimmickpos[0]);           //Switchクラスの初期化処理をする(Vec2 初期座標)
-	//当たり判定の登録
-	//senpuki.SetParent(&switch_);			    //Switchのアドレスを参照する（Switchのアドレス値)
-	switch_.SetParent(&player);                 //Playerのアドレス値を取得してSwitchクラスのPlayer*に代入する
+
+
+	//当たり判定矩形を登録する
 	cm.AddChild(&senpuki);						//扇風機のアドレスをvector objsにputh.back()する
 	cm.AddChild(&switch_);                      //Switchのアドレスをvector objsにputh.back()する
 }

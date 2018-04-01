@@ -38,22 +38,20 @@ bool Senpuki::Initialize(Vec2 pos)
 	cout << "”»’èÀ•W(" << position.x + IMAGE_SIZE_X << "," << position.y + IMAGE_SIZE_Y << endl;		//ƒfƒoƒbƒO‹@”\‚Å‚Ì“–‚½‚è”»’è‚Ì•\¦
 	//
 	Water_flag = false;						//“–‚½‚è”»’è‰Šúƒtƒ‰ƒO‚Ìİ’è
-	Switch_Hitflag = false;                 //Å‰‚Íã‚Ìî•—‹@‚ª“®‚¢‚Ä‚¢‚éó‘Ô
 	CheakHit();								//“–‚½‚è”»’è‚ğs‚¤
+	Switch_Swap();                          //ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO‚É‚æ‚Á‚ÄÀ•W’l‚ÌÄİ’è‚ğ‚µ‚Ü‚·B
 	return true;
 }
 //™™™™//-----------------------------------------------------------------------------
 void Senpuki::UpDate()
 {
-	if (Switch_Hitflag)                     //ƒXƒCƒbƒ`‚Æ‚Ì“–‚½‚è”»’è‚ª‚ ‚é‚Æ‚«EEE
-	{
-		cout << "ƒXƒCƒbƒ`‚ÆÚG’†" << endl;
-	}
+
 }
 //™™™™//-----------------------------------------------------------------------------
 void Senpuki::Finalize()
 {
-	delete parent;
+	parent = nullptr;
+	switch_pointa = nullptr;
 }
 //™™™™//-----------------------------------------------------------------------------
 void Senpuki::Render()
@@ -68,16 +66,15 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 {
 	Object::CollisionProcess = [&](const Object& o_)                 //‘S‚Ä‚Ìƒ[ƒJƒ‹‚Å‚ÌƒNƒ‰ƒX‚ğQÆ‚·‚éH
 	{
-		//cout << "ƒ‰ƒ€ƒ_®‚Ìˆ—’†‚È‚¤" << endl;                      //o—Í
 		if (o_.objectTag == "Water")                                 //Player‚Ì“–‚½‚è”»’èi–{—ˆ‚Í…‚Å”»’è‚ğæ‚éj
 		{
 			this->Water_flag = true;                                 //flag‚ğtrue‚É‚·‚é
-			//cout << "“–‚½‚Á‚Ä‚¢‚Ü‚·" << endl;                        //o—Í
+
 			if (Water_flag)                                          //…‚ÆÚG”»’è‚µ‚½‚çEEE
 			{
 				if (((Water&)o_).GetState() == Water::State::GAS)    //…ö‹C‚Ìó‘Ô‚È‚ç‚ÎEEE
 				{
-					//cout << "•—‚ª‚«‚Ü‚·" << endl;
+					
 				}
 				if (((Water&)o_).GetState() == Water::State::LIQUID) //‰t‘Ì‚Ìó‘Ô‚È‚ç‚ÎEEE
 				{
@@ -89,38 +86,53 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 		{
 			this->Water_flag = false;
 		}
-
-		//_____________________________________________________________________________________________|//
-		//|                                                                                            |//
-		//|î•—‹@‚ÆSwitch‚Æ‚Ì“–‚½‚è”»’èˆ—“à—eƒIƒuƒWƒFƒNƒgƒ^ƒO‚ğg—p‚µ‚Ä‚Å‚Ì“–‚½‚è”»’è‚ğÌ—p‚µ‚Ü‚µ‚½B|//
-		//|¡Œãƒtƒ‰ƒO‚ª‘½‚­‚È‚éê‡‚ÍintŒ^‚Å‚Ìflag‚ğ—˜—p‚µ‚Äƒrƒbƒg‰‰Z‚Ås‚¤—\’è‚Å‚·B                 |//
-		//|____________________________________________________________________________________________|//
-		if (o_.objectTag == "Switch")              //objectTag‚ªSwitch‚¾‚Á‚½‚çEEE
-		{
-			this->Switch_Hitflag = true;           //true‚É‚µ‚Ä‰º‚Ìƒ{ƒ^ƒ“‚ÉØ‚è‘Ö‚¦‚é
-		}
-		else
-		{
-			this->Switch_Hitflag = false;          //ƒXƒCƒbƒ`‚Å‚Í‚È‚¢ê‡‚Ífalse‚ğ•Ô‚·
-		}
 	};
 }
 bool Senpuki::HasParent()const                                       //nullptr‚Å‚Í‚È‚¢‚©Šm”F‚·‚éŠÖ”
 {
 	return parent != nullptr;
 }
-void Senpuki::SetParent(Object* obj)                                 //“–‚½‚è”»’è‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚ğObject* parent ‚É‘ã“ü‚·‚é
+void Senpuki::SetParent(Switch* obj)                                 //“–‚½‚è”»’è‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚ğ(Switch*)‚É‘ã“ü‚·‚é
+{
+	switch_pointa = obj;
+}
+void Senpuki::SetParent(Object* obj)                                 //“–‚½‚è”»’è‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚ÌƒAƒhƒŒƒX’l‚ğŠi”[‚·‚é
 {
 	parent = obj;
 }
-Vec2 Senpuki::Switch_On_or_Off_pos(const Vec2 pos)                   //î•—‹@‚ğØ‚è‘Ö‚¦‚é‚Æ‚«‚ÉÀ•W’l‚àØ‚è‘Ö‚¦‚éŠÖ”‚ğ
+Vec2 Senpuki::Switch_On_or_Off_pos(const Vec2 pos)                   //î•—‹@‚ğØ‚è‘Ö‚¦‚é‚Æ‚«‚ÉÀ•W’l‚àØ‚è‘Ö‚¦‚éŠÖ”
 {
 	return position = pos;
+}
+void Senpuki::Set_Pos(const Vec2 pos)
+{
+	Pos.push_back(pos);
+}
+void Senpuki::Switch_Swap()
+{
+	//_____________________________________________________________________________________________|//
+	//|                                                                                            |//
+	//|ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO‚É‚æ‚Á‚ÄÀ•W’l‚ğ“ü‚ê‘Ö‚¦‚éˆ—‚Å‚·B                                |//
+	//|À•W’l‚É‚Â‚¢‚Ä‚Ívector‚Å•Û‘¶‚µ‚½”z—ñ‚É‚æ‚Á‚Ä’l‚ğ–á‚Á‚Ä‚«‚Ü‚·B                              |//
+	//|‚È‚Ì‚ÅAŒ»İ‚Å‚ÍTask_Game‚Ì‚Æ‚±‚ë‚ÅÀ•W’l‚ğvector‚É“ü‚ê‚é•û®‚É‚È‚è‚Ü‚·B                   |//
+	//|____________________________________________________________________________________________|//
+
+	if (!switch_pointa->switch_ON_OFF)                                 //ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO‚ªtrue‚Ì
+	{
+		Switch_On_or_Off_pos(Pos[0]);                                  //“–‚½‚è”»’è‚ÌÀ•W’l‚ğ•ÏX‚·‚é ã‚ÌÀ•W’l
+	}
+	else
+	{
+		Switch_On_or_Off_pos(Pos[1]);                                  //“–‚½‚è”»’è‚ÌÀ•W’l‚ğ•ÏX‚·‚é ‰º‚ÌÀ•W’l
+	}
+	cout << this->position.x << " , " << this->position.y << endl;     //•ÏX‚µ‚½À•W’l‚Ìo—Í‚·‚é
 }
 
 
 //|__________________________________________________________________________________|//
 //|–¢À‘•@                                                                          |//
-//|EƒXƒCƒbƒ`‚Ìî•ñ‚ğó‚¯æ‚Á‚ÄƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ˆ—‚Æî•—‹@‚ªØ‚è‘Ö‚í‚éˆ—‚ğÀs’†|//
 //|                                                                                  |//
+//|EƒXƒCƒbƒ`‚ğ•¡”“–‚½‚è”»’è‘ÎÛ‚É‚·‚é‚±‚Æ                                          |//
+//|E…‚ÌˆÚ“®iƒAƒNƒZƒX‚·‚é•û–@‚É‹êí)                                               |//
+//|E•—‚ğ”­¶‚³‚ê‚éi•Ç‚Ü‚Å•—‚ğ‘—‚éj                                                |//
 //|__________________________________________________________________________________|//

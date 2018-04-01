@@ -91,6 +91,14 @@ public:
 				
 	
 	/*
+	Swtich* parent に当たり判定に必要なクラスのアドレス値を代入します。
+	■ 引数   : Switch* 当たり判定に必要なクラスのアドレス値
+	■ 戻り値 : なし
+	*/
+	void SetParent(Switch* obj);
+
+
+	/*
 	Object* parent に当たり判定に必要なクラスのアドレス値を代入します。
 	■ 引数   : Object* 当たり判定に必要なクラスのアドレス値
 	■ 戻り値 : なし
@@ -113,11 +121,26 @@ public:
 	*/
 	Vec2 Switch_On_or_Off_pos(const Vec2);
 
+
+	/*
+	vectorに座標値を代入する関数です。
+	■ 引数   : const Vec2 vectorにセット追加したい当たり判定座標値
+	■ 戻り値 : なし
+	*/
+	void Set_Pos(const Vec2);
+
+
+	/*
+	スイッチの切り替えフラグによって座標値の再設定をします。
+	■ 引数   : なし
+	■ 戻り値 : なし
+	*/
+	void Switch_Swap();
 private:
 	bool Water_flag;                                     //当たり判定格納変数
-	bool Switch_Hitflag;                                 //当たり判定格納変数
 	bool Switch_ON_OFF;                                  //OFF(false) 上の扇風機　ON(true)　下の扇風機
 	CollisionBox range;                                  //視野範囲（現在は使用していません）
 	Object* parent;                                      //nullptrCheak関数
 	std::vector<Vec2> Pos;                               //コンストラクタで送られたきた座標値を保存する格納倉庫
+	Switch* switch_pointa;                               //switchのアドレス値を格納する変数
 };
