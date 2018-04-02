@@ -12,7 +12,6 @@
 #include "Water\water.h"
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
-
 #include "Object\Senpuki.h"
 #include "Object\Switch.h"
 
@@ -27,9 +26,9 @@ public:
 	//追加変数//
 	//☆☆☆☆//
 	Player player;
-	Senpuki senpuki;                             //_OTKでの処理エラーの場合、コンストラクタのミスが高いです
-	Switch switch_;                              //クラスの変数宣言
 	//std::vector<Bucket*> bucket;
+	Senpuki senpuki;
+	Switch switch_;
 	Bucket bucket;
 	Back back;
 	Map map;

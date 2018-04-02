@@ -72,13 +72,9 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 
 			if (Water_flag)                                          //…‚ÆÚG”»’è‚µ‚½‚çEEE
 			{
-				if (((Water&)o_).GetState() == Water::State::GAS)    //…ö‹C‚Ìó‘Ô‚È‚ç‚ÎEEE
+				if (((Water&)o_).GetState() == Water::State::GAS)      //…ö‹C‚Ìó‘Ô‚È‚ç‚ÎEEE
 				{
-					
-				}
-				if (((Water&)o_).GetState() == Water::State::LIQUID) //‰t‘Ì‚Ìó‘Ô‚È‚ç‚ÎEEE
-				{
-					
+					const_cast<Object&>(o_).position = Water_Move((Water&)o_);      //const‚ğŠO‚µ‚ÄVec2‚Ì“®‚«‚ğ“n‚·
 				}
 			}
 		}
@@ -127,8 +123,22 @@ void Senpuki::Switch_Swap()
 	}
 	cout << this->position.x << " , " << this->position.y << endl;     //•ÏX‚µ‚½À•W’l‚Ìo—Í‚·‚é
 }
-
-
+Vec2 Senpuki::Water_Move(Water& o_)
+{
+	if (Water_flag)                               //…ŠÖŒW‚Ì“–‚½‚è”»’èƒtƒ‰ƒO‚ªture‚È‚çEEE
+	{
+		if (o_.GetState() == Water::State::GAS)       //…ö‹C‚È‚ç‚ÎEEE
+		{
+			o_.position.x++;                          //xÀ•W‚ÌˆÚ“®‚ğ‚·‚é
+		}
+	}
+	return o_.position;
+}
+template<typename T>
+T& Senpuki::const_off(T& obj)
+{
+	return const_cast<T&>(obj);
+}
 //|__________________________________________________________________________________|//
 //|–¢À‘•@                                                                          |//
 //|                                                                                  |//

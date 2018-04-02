@@ -136,6 +136,21 @@ public:
 	■ 戻り値 : なし
 	*/
 	void Switch_Swap();
+
+	/*
+	水蒸気状態になったときに扇風機によって移動をします。
+	■ 引数   : Water& 水蒸気状態になった水のアドレス値
+	■ 戻り値 : Vec2 移動するべき移動量
+	*/
+	Vec2 Water_Move(Water& o_);
+
+	/*
+	constを外す関数
+	■ 引数   : typename T& constを外したいクラス
+	■ 戻り値 : typaname T& constなし
+	*/
+	template<typename T>
+	T& const_off(T& obj);
 private:
 	bool Water_flag;                                     //当たり判定格納変数
 	bool Switch_ON_OFF;                                  //OFF(false) 上の扇風機　ON(true)　下の扇風機

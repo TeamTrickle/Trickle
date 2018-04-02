@@ -1,5 +1,7 @@
 #include "Switch.h"
 using namespace std;
+typedef Input::KeyBoard It;                     //クラスの名前空間の省略
+
 const int IMAGE_SIZE_X = 64;                    //画像サイズ_X
 const int IMAGE_SIZE_Y = 64;                    //画像サイズ_Y
 
@@ -59,7 +61,7 @@ void Switch::CheakHit()                                 //当たり判定の処理をまと
 		}
 		if (Hitflag)                                         //当たり判定フラグがtrueなら・・・
 		{
-			if (Input::KeyInputDown(Input::S))                    //かつキーボード操作『S』押されたら・・・
+			if (gameEngine->input.keyboard.down(It::S))          //かつキーボード操作『S』押されたら・・・
 			{
 				if (switch_ON_OFF)                                   //この時にスイッチの切り替えフラグがtrueなら・・・
 				{
