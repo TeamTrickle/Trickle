@@ -12,6 +12,7 @@
 #include "Water\water.h"
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
+#include "Block\block.h"
 
 
 class Game
@@ -26,6 +27,7 @@ public:
 	//™™™™//
 	Player player;
 	//std::vector<Bucket*> bucket;
+	Block block;
 	Bucket bucket;
 	Back back;
 	Map map;
