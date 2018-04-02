@@ -38,6 +38,7 @@ bool Senpuki::Initialize(Vec2 pos)
 	cout << "”»’èÀ•W(" << position.x + IMAGE_SIZE_X << "," << position.y + IMAGE_SIZE_Y << endl;		//ƒfƒoƒbƒO‹@”\‚Å‚Ì“–‚½‚è”»’è‚Ì•\¦
 	//
 	Water_flag = false;						//“–‚½‚è”»’è‰Šúƒtƒ‰ƒO‚Ìİ’è
+	Wall_flag = false;                      //•Ç‚Æ‚Ì“–‚½‚è”»’èƒtƒ‰ƒO‚Ìİ’è
 	CheakHit();								//“–‚½‚è”»’è‚ğs‚¤
 	Switch_Swap();                          //ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO‚É‚æ‚Á‚ÄÀ•W’l‚ÌÄİ’è‚ğ‚µ‚Ü‚·B
 	return true;
@@ -50,7 +51,7 @@ void Senpuki::UpDate()
 //™™™™//-----------------------------------------------------------------------------
 void Senpuki::Finalize()
 {
-	parent = nullptr;
+	parent_Wall = nullptr;
 	switch_pointa = nullptr;
 }
 //™™™™//-----------------------------------------------------------------------------
@@ -66,7 +67,7 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 {
 	Object::CollisionProcess = [&](const Object& o_)                 //‘S‚Ä‚Ìƒ[ƒJƒ‹‚Å‚ÌƒNƒ‰ƒX‚ğQÆ‚·‚éH
 	{
-		if (o_.objectTag == "Water")                                 //Player‚Ì“–‚½‚è”»’èi–{—ˆ‚Í…‚Å”»’è‚ğæ‚éj
+		if (o_.objectTag == "Water")                                 //î•—‹@‚Ì“–‚½‚è”»’èi–{—ˆ‚Í…‚Å”»’è‚ğæ‚éj
 		{
 			this->Water_flag = true;                                 //flag‚ğtrue‚É‚·‚é
 
@@ -86,7 +87,7 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 }
 bool Senpuki::HasParent()const                                       //nullptr‚Å‚Í‚È‚¢‚©Šm”F‚·‚éŠÖ”
 {
-	return parent != nullptr;
+	return parent_Wall != nullptr;                                   
 }
 void Senpuki::SetParent(Switch* obj)                                 //“–‚½‚è”»’è‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚ğ(Switch*)‚É‘ã“ü‚·‚é
 {
@@ -94,15 +95,19 @@ void Senpuki::SetParent(Switch* obj)                                 //“–‚½‚è”»’
 }
 void Senpuki::SetParent(Object* obj)                                 //“–‚½‚è”»’è‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚ÌƒAƒhƒŒƒX’l‚ğŠi”[‚·‚é
 {
-	parent = obj;
+
+}
+void Senpuki::SetParent(Map* obj)
+{
+	parent_Wall = obj;                                               //“–‚½‚è”»’è‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚ÌƒAƒhƒŒƒX’l‚ğŠi”[‚·‚é
 }
 Vec2 Senpuki::Switch_On_or_Off_pos(const Vec2 pos)                   //î•—‹@‚ğØ‚è‘Ö‚¦‚é‚Æ‚«‚ÉÀ•W’l‚àØ‚è‘Ö‚¦‚éŠÖ”
 {
-	return position = pos;
+	return position = pos;                                           //Ø‚è‘Ö‚¦‚é‚ÉVec2‚Å–ß‚è’l‚ğ“n‚·
 }
 void Senpuki::Set_Pos(const Vec2 pos)
 {
-	Pos.push_back(pos);
+	Pos.push_back(pos);                                              //À•W’l‚ğVector‚É“n‚·
 }
 void Senpuki::Switch_Swap()
 {
@@ -123,21 +128,37 @@ void Senpuki::Switch_Swap()
 	}
 	cout << this->position.x << " , " << this->position.y << endl;     //•ÏX‚µ‚½À•W’l‚Ìo—Í‚·‚é
 }
-Vec2 Senpuki::Water_Move(Water& o_)
+Vec2 Senpuki::Water_Move(Object& o_)
 {
 	if (Water_flag)                               //…ŠÖŒW‚Ì“–‚½‚è”»’èƒtƒ‰ƒO‚ªture‚È‚çEEE
 	{
-		if (o_.GetState() == Water::State::GAS)       //…ö‹C‚È‚ç‚ÎEEE
+		if (((Water&)o_).GetState() == Water::State::GAS)       //…ö‹C‚È‚ç‚ÎEEE
 		{
-			o_.position.x++;                          //xÀ•W‚ÌˆÚ“®‚ğ‚·‚é
+			while (Wall_flag == false)                           //•Ç‚Æ‚Ì“–‚½‚è”»’èƒtƒ‰ƒO‚ªtrue‚É‚È‚é‚Ü‚Å
+			{
+				o_.position.x++;                                 //xÀ•W‚ÌˆÚ“®‚ğ‚·‚é
+				for (int y = 0; y < parent_Wall->mapSize.y; ++y) //ƒ}ƒbƒv‚Ìy’l‚Ì’l‚Ü‚Åƒ‹[ƒv•Ï”y‚ğ‘‰Á
+				{
+					for (int x = 0; x < parent_Wall->mapSize.x; ++x) //ƒ}ƒbƒv‚Ìx’l‚Ü‚Åƒ‹[ƒv•Ï”x‚ğ‘‰Á
+					{
+						if (parent_Wall->hitBase[y][x].objectTag == "Floor") //ƒ}ƒbƒv‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒO‚ª°‚È‚ç‚ÎEEE
+						{
+							if (parent_Wall->MapHitCheck(o_))        //ƒ}ƒbƒv‚Æ…‚Ì“–‚½‚è”»’èŠÖ”‚ğŒÄ‚Ño‚·
+							{
+								Wall_flag = true;                    //ÚG‚ğ‚µ‚½‚çtrue‚ğ•Ô‚·
+								cout << "ÚG¬Œ÷" << endl;          //“®‚«‚ğŠm”F‚µ‚½‚ço—Í
+								break;                               //for•¶‚ğ”²‚¯o‚·
+							}
+						}
+					}
+					break;              //for•¶‚ğ”²‚¯o‚·
+				}
+				break;        //while•¶‚ğ”²‚¯o‚·
+			}
 		}
+		Wall_flag = false;    //…ö‹CˆÈŠO‚Í‚·‚×‚Äfalse‚É‚·‚é
 	}
 	return o_.position;
-}
-template<typename T>
-T& Senpuki::const_off(T& obj)
-{
-	return const_cast<T&>(obj);
 }
 //|__________________________________________________________________________________|//
 //|–¢À‘•@                                                                          |//

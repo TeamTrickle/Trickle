@@ -15,6 +15,7 @@
 
 #include "Water\water.h"                                 //水との当たり判定
 #include "Switch.h"                                      //スイッチとの当たり判定・Switchの切り替えフラグ
+#include "Map\Map.h"                                     //Mapとの判定
 
 class Senpuki : public Object
 {
@@ -69,7 +70,7 @@ public:
 	■ 引数   : Vec2 扇風機の初期座標に設定する座標値
 	■ 戻り値 : なし
 	*/
-	explicit Senpuki(Vec2 pos);
+	explicit Senpuki(Vec2);
 
 
 
@@ -91,19 +92,27 @@ public:
 				
 	
 	/*
-	Swtich* parent に当たり判定に必要なクラスのアドレス値を代入します。
+	Swtich* 当たり判定に必要なクラスのアドレス値を代入します。
 	■ 引数   : Switch* 当たり判定に必要なクラスのアドレス値
 	■ 戻り値 : なし
 	*/
-	void SetParent(Switch* obj);
+	void SetParent(Switch*);
 
 
 	/*
-	Object* parent に当たり判定に必要なクラスのアドレス値を代入します。
+	Object* 当たり判定に必要なクラスのアドレス値を代入します。
 	■ 引数   : Object* 当たり判定に必要なクラスのアドレス値
 	■ 戻り値 : なし
 	*/
-	void SetParent(Object* obj);
+	void SetParent(Object*);
+
+
+	/*
+	Map* 当たり判定に必要なクラスのアドレス値を代入します。
+	■ 引数   : Map* 当たり判定に必要なクラスのアドレス値 
+	■ 戻り値 : なし
+	*/
+	void SetParent(Map*);
 
 
 	/*
@@ -139,23 +148,18 @@ public:
 
 	/*
 	水蒸気状態になったときに扇風機によって移動をします。
-	■ 引数   : Water& 水蒸気状態になった水のアドレス値
+	■ 引数   : Object& 水蒸気状態になった水のアドレス値
 	■ 戻り値 : Vec2 移動するべき移動量
 	*/
-	Vec2 Water_Move(Water& o_);
+	Vec2 Water_Move(Object&);
 
-	/*
-	constを外す関数
-	■ 引数   : typename T& constを外したいクラス
-	■ 戻り値 : typaname T& constなし
-	*/
-	template<typename T>
-	T& const_off(T& obj);
+
 private:
 	bool Water_flag;                                     //当たり判定格納変数
 	bool Switch_ON_OFF;                                  //OFF(false) 上の扇風機　ON(true)　下の扇風機
+	bool Wall_flag;                                      //壁との当たり判定フラグ格納する変数
 	CollisionBox range;                                  //視野範囲（現在は使用していません）
-	Object* parent;                                      //nullptrCheak関数
+	Map* parent_Wall;                                    //nullptrCheak関数(今回は壁)
 	std::vector<Vec2> Pos;                               //コンストラクタで送られたきた座標値を保存する格納倉庫
 	Switch* switch_pointa;                               //switchのアドレス値を格納する変数
 };
