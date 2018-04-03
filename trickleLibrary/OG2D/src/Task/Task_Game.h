@@ -28,7 +28,7 @@ public:
 	Player player;
 	//std::vector<Bucket*> bucket;
 	Senpuki senpuki;
-	Switch switch_;
+	Switch switch_[2];
 	Bucket bucket;
 	Back back;
 	Map map;

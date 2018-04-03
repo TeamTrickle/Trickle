@@ -3,13 +3,17 @@
 //|履歴：2018/03/29 横尾	   |//
 //|履歴：2018/03/31 横尾　     |//
 //|履歴：2018/04/01 横尾       |//
+//|履歴: 2018/04/02 横尾       |//
+//|履歴: 2018/04/03 横尾       |//
 //|____________________________|//
 #pragma once
 #include "Object.h"
 #include "Player\Player.h"
+#include "Object\Senpuki.h"
 #include <vector>
 
 class Player;
+class Senpuki;
 
 class Switch : public Object
 {
@@ -92,8 +96,15 @@ public:
 	■ 引数   : Player* Playerのクラスのアドレス値
 	■ 戻り値 : なし
 	*/
-	void SetParent(Player* obj);
+	void SetParent(Player*);
 
+
+	/*
+	メンバ変数 senpuki_pointa に引数で受け取ったアドレス値を代入します。
+	■ 引数   : Senpuki* 扇風機のアドレス値
+	■ 戻り値 : なし
+	*/
+	void SetParent(Senpuki*);
 
 	/*
 	スイッチの当たり判定座標値をvectorで保存する関数
@@ -110,4 +121,5 @@ private:
 	bool Hitflag;                                //当たり判定
 	std::vector<Vec2>Pos;                        //コンストラクタ時に引数できた座標値を保存する
 	Player* player_pointa;                       //Playerのアドレス値を取得して当たり判定を実装に必要
+	Senpuki* senpuki_pointa;                     //扇風機のアドレス値を格納するポインタ
 };

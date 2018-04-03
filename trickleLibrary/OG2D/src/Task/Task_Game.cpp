@@ -5,12 +5,13 @@ void Game::Initialize()
 		{100,250},
 		{200,250}
 	};
-	Vec2 gimmickpos[4]
+	Vec2 gimmickpos[5]
 	{
-		{ 64 * 19,64 * 8 },     //スイッチ
+		{ 64 * 19,64 * 8 },     //スイッチ　上
 		{ 64 * 8,64 * 15 },     //加熱器
 		{ 64 * 11,64 * 7 },     //扇風機 上
-		{ 64 * 19 ,64 * 10 }    //扇風機 下
+		{ 64 * 19 ,64 * 10 },   //扇風機 下
+		{ 64 * 12 ,64 *14 },	//スイッチ　下
 	};
 	std::cout << "Game初期化" << std::endl;
 	player.Initialize();
@@ -41,23 +42,33 @@ void Game::Initialize()
 	cm.AddChild(&goal);
 
 	//当たり判定後の処理でクラスの参照に必要なデータを取得する
-	senpuki.SetParent(&switch_);			    //Switchのアドレスを参照する（Switchのアドレス値)
-	switch_.SetParent(&player);                 //Playerのアドレス値を取得してSwitchクラスのPlayer*に代入する
+	senpuki.SetParent(&map);                    //mapのアドレス値を格納する
+	for (int i = 0; i < 2; ++i)
+	{
+		senpuki.SetParent(&switch_[i], i);      //Switchのアドレス値を格納する &switch_[0]
+	}
+	switch_[0].SetParent(&player);              //Playerのアドレス値を取得してSwitchクラスのPlayer*に代入する
+	switch_[1].SetParent(&player);              //同じアドレス値が持ってくる
+	switch_[0].SetParent(&senpuki);             //扇風機のアドレス値を参照する
+	switch_[1].SetParent(&senpuki);             //扇風機のアドレス値を参照する
 
 												//ステージやギミックが複数ある場合の座標値を予め設定し、vectorに代入する
 
 	senpuki.Set_Pos(gimmickpos[2]);             //扇風機の上の座標値をvectorに登録する
 	senpuki.Set_Pos(gimmickpos[3]);             //扇風機の下の座標値をvectorに登録する
-	switch_.Set_Pos(gimmickpos[0]);             //スイッチの上の座標値をvectorに登録する
+	switch_[0].Set_Pos(gimmickpos[0]);          //スイッチの上の座標値をvectorに登録する
+	switch_[1].Set_Pos(gimmickpos[4]);          //スイッチの下の座標値をvectorに登録する
 
-												//ギミックの初期化
+	//ギミックの初期化
+
 	senpuki.Initialize(gimmickpos[2]);			//扇風機の初期化処理に移る（Vec2 扇風機の座標）
-	switch_.Initlaize(gimmickpos[0]);           //Switchクラスの初期化処理をする(Vec2 初期座標)
-
+	switch_[0].Initlaize(gimmickpos[0]);        //Switchクラスの初期化処理をする(Vec2 初期座標)
+	switch_[1].Initlaize(gimmickpos[4]);        //Switchクラスの初期化処理をする(Vec2 初期座標)
 
 												//当たり判定矩形を登録する
 	cm.AddChild(&senpuki);						//扇風機のアドレスをvector objsにputh.back()する
-	cm.AddChild(&switch_);                      //Switchのアドレスをvector objsにputh.back()する
+	cm.AddChild(switch_);                       //Switchのアドレスをvector objsにputh.back()する &switch[0]
+	cm.AddChild(&switch_[1]);                   //Switchのアドレス2つ目をputh.back()する
 }
 
 TaskFlag Game::UpDate()

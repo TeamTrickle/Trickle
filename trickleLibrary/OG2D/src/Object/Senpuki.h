@@ -4,6 +4,8 @@
 //|履歴：2018/03/30 横尾　     |//
 //|履歴：2018/03/31 横尾       |//
 //|履歴：2018/04/01 横尾       |//
+//|履歴: 2018/04/02 横尾       |//
+//|履歴: 2018/04/03 横尾       |//
 //|____________________________|//
 
 #pragma once
@@ -16,6 +18,9 @@
 #include "Water\water.h"                                 //水との当たり判定
 #include "Switch.h"                                      //スイッチとの当たり判定・Switchの切り替えフラグ
 #include "Map\Map.h"                                     //Mapとの判定
+
+class Map;
+class Switch;
 
 class Senpuki : public Object
 {
@@ -93,10 +98,10 @@ public:
 	
 	/*
 	Swtich* 当たり判定に必要なクラスのアドレス値を代入します。
-	■ 引数   : Switch* 当たり判定に必要なクラスのアドレス値
+	■ 引数   : Switch* 当たり判定に必要なクラスのアドレス値  int スイッチの配列要素値
 	■ 戻り値 : なし
 	*/
-	void SetParent(Switch*);
+	void SetParent(Switch*,int);
 
 
 	/*
@@ -141,10 +146,10 @@ public:
 
 	/*
 	スイッチの切り替えフラグによって座標値の再設定をします。
-	■ 引数   : なし
+	■ 引数   : Switch& Sキー（切り替えボタン）が押されたら即座にそのSwitchの切り替えフラグを見て扇風機の稼働するオブジェクトを変更します。
 	■ 戻り値 : なし
 	*/
-	void Switch_Swap();
+	void Switch_Swap(Switch&);
 
 	/*
 	水蒸気状態になったときに扇風機によって移動をします。
@@ -161,5 +166,5 @@ private:
 	CollisionBox range;                                  //視野範囲（現在は使用していません）
 	Map* parent_Wall;                                    //nullptrCheak関数(今回は壁)
 	std::vector<Vec2> Pos;                               //コンストラクタで送られたきた座標値を保存する格納倉庫
-	Switch* switch_pointa;                               //switchのアドレス値を格納する変数
+	Switch* switch_pointa[2];                            //switchのアドレス値を格納する変数
 };

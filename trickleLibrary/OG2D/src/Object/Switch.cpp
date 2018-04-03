@@ -40,6 +40,7 @@ void Switch::UpDate()                      //更新処理
 void Switch::Finalize()                    //解放処理
 {
 	player_pointa = nullptr;
+	senpuki_pointa = nullptr;
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::Render()                      //描画処理
@@ -74,6 +75,7 @@ void Switch::CheakHit()                                 //当たり判定の処理をまと
 					cout << "スイッチon" << endl;                        //出力
 				}
 			}
+			senpuki_pointa->Switch_Swap(*this);              //Switchの情報を貰って参照する
 		}
 	};
 }
@@ -86,6 +88,11 @@ bool Switch::HasParent()const
 void Switch::SetParent(Player* player)
 {
 	player_pointa = player;                             //引数からPlayer*に代入する
+}
+
+void Switch::SetParent(Senpuki* sen)
+{
+	senpuki_pointa = sen;                               //引数で受け取ったアドレス値をsenpuki_pointaに代入する
 }
 
 void Switch::Set_Pos(const Vec2 pos)
