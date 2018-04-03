@@ -179,7 +179,6 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 	while (e_.x != 0.0f)
 	{
 		float preX = this->position.x;
-		std::cout << "preX" << preX << std::endl;
 
 		if (e_.x >= 1.0f)
 		{
@@ -207,7 +206,6 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 	while (e_.y != 0.0f)
 	{
 		float preY = this->position.y;
-		std::cout << "preY" << preY << std::endl;
 
 		if (e_.y >= 1.0f)
 		{
