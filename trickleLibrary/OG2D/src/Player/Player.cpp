@@ -10,6 +10,7 @@ void Player::Initialize()
 
 	CheckJump = true;
 	CheckGravity = true;
+	onLadder = false;
 
 	CheckHead();
 	CheckFoot();
@@ -17,6 +18,29 @@ void Player::Initialize()
 	CheckRight();
 
 	direction = Direction::RIGHT;
+
+
+	//梯子処理
+	Object::CollisionProcess = [&](const Object& o_) {
+		if (o_.objectTag == "Ladder") {
+			CheckJump = false;
+			CheckGravity = false;
+			isCollided = true;
+			onLadder = true;
+			//if (InputDown()) {
+			//	est.y = Player::MOVE_SPEED;
+			//}
+			//if (InputUp()) {
+			//	est.y = (-Player::MOVE_SPEED);
+			//}
+		}
+		else {
+			CheckGravity = true;
+			CheckJump = true;
+			onLadder = false;
+		}
+	};
+
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::UpDate()
@@ -36,23 +60,33 @@ void Player::UpDate()
 	}
 
 	//梯子処理
-	Object::CollisionProcess = [&](const Object& o_) {
-		if (o_.objectTag == "Ladder") {
-			CheckJump = false;
-			CheckGravity = false;
-			isCollided = true;
-			if (InputDown()) {
-				est.y = Player::MOVE_SPEED;
-			}
-			if (InputUp()) {
-				est.y = (-Player::MOVE_SPEED);
-			}
+	if (onLadder) {
+		//std::cout << "はしごHIT" << std::endl;
+		est.y = 0;
+		if (InputDown()) {
+			est.y = Player::MOVE_SPEED;
 		}
-		else {
-			CheckGravity = true;
-			CheckJump = true;
+		if (InputUp()) {
+			est.y = (-Player::MOVE_SPEED);
 		}
-	};
+	}
+	//Object::CollisionProcess = [&](const Object& o_) {
+	//	if (o_.objectTag == "Ladder") {
+	//		CheckJump = false;
+	//		CheckGravity = false;
+	//		isCollided = true;
+	//		if (InputDown()) {
+	//			est.y = Player::MOVE_SPEED;
+	//		}
+	//		if (InputUp()) {
+	//			est.y = (-Player::MOVE_SPEED);
+	//		}
+	//	}
+	//	else {
+	//		CheckGravity = true;
+	//		CheckJump = true;
+	//	}
+	//};
 
 
 	// バケッツ処理
@@ -66,11 +100,11 @@ void Player::UpDate()
 	}
 
 	//y方向の速度に加速度を加える
-	if (CheckGravity == true) {
+	if (CheckGravity) {
 		est.y += Player::GRAVITY;
 	}
 
-	if (CheckJump == true) {
+	if (CheckJump) {
 		JumpMove();
 	}
 
@@ -123,11 +157,11 @@ void Player::JumpMove()
 	if (footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
-		if (gameEngine->input.on(Input::B1,0)) {
+		if (gameEngine->input.on(Input::B1, 0)) {
 			est.y = Player::JUMP_POWER;
 		}
 		//上昇中
-		if (headBase.isCollided){
+		if (headBase.isCollided) {
 			est.y = 0.0f;	//上昇力を無効にする
 		}
 	}

@@ -63,6 +63,7 @@ private:
 	const float GRAVITY = 0.98f;								//重力加速度
 	bool CheckJump;
 	bool CheckGravity;
+	bool onLadder;												//はしご昇降中
 	//const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
 	//const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
 
