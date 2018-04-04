@@ -57,6 +57,9 @@
     <Filter Include="ソースファイル\Goal">
       <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\UI">
+      <UniqueIdentifier>{08c602d3-e273-4e16-9df4-c48c0e57fd2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -113,6 +116,9 @@
     <ClCompile Include="src\Goal\Goal.cpp">
       <Filter>ソースファイル\Goal</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\UI.cpp">
+      <Filter>ソースファイル\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -168,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="src\Goal\Goal.h">
       <Filter>ソースファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\UI.h">
+      <Filter>ソースファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

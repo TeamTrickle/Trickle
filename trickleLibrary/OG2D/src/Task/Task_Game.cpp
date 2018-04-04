@@ -32,10 +32,14 @@ void Game::Initialize()
 	gameEngine->DebugFunction = true;
 	goal.Initialize();
 	cm.AddChild(&goal);
+
+	uitest.Initialize(player.position, "UItest1.png", 2);
 }
 
 TaskFlag Game::UpDate()
 {
+
+
 	timecnt++;
 	if (timecnt >= 120)
 	//if(gameEngine->input.DOWN(Input::Key::L))
@@ -81,6 +85,10 @@ TaskFlag Game::UpDate()
 		player.TakeBucket(bucket[i]);
 	}*/
 	player.TakeBucket(&bucket);
+
+	uitest.Update();
+	uitest.Move(player.position);
+
 
 	cm.Run();
 	if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
@@ -138,6 +146,8 @@ TaskFlag Game::UpDate()
 
 void Game::Render2D()
 {
+	uitest.Render();
+
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Render();
@@ -155,6 +165,9 @@ void Game::Render2D()
 void Game::Finalize()
 {
 	std::cout << "Game‰ð•ú" << std::endl;
+
+	uitest.Finalize();
+
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();

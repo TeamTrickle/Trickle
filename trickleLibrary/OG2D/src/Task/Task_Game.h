@@ -12,6 +12,7 @@
 #include "Water\water.h"
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
+#include "UI\UI.h"
 
 
 class Game
@@ -33,4 +34,6 @@ public:
 	CollisionManager cm;
 	int timecnt;
 	Goal goal;
+
+	UI uitest;
 };

@@ -23,7 +23,7 @@
     <ProjectGuid>{61186991-858F-4A3C-BB26-186468F21C26}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OG2D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>OG2D</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -167,6 +167,7 @@
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
+    <ClCompile Include="src\UI\UI.cpp" />
     <ClCompile Include="src\Water\water.cpp" />
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_GIMMICK_Control.h" />
     <ClInclude Include="src\Task\Task_Title.h" />
+    <ClInclude Include="src\UI\UI.h" />
     <ClInclude Include="src\Water\water.h" />
     <ClInclude Include="src\Win\WinMain.h" />
   </ItemGroup>
