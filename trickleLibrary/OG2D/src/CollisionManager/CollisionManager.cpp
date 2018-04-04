@@ -13,6 +13,8 @@ void CollisionManager::AddChild(Object* obj) {
 }
 
 void CollisionManager::Run() {
+	for (auto& f : collisionFunctions)
+		f(&objs);
 	for (auto& i : objs) {
 		i->isCollided = false;
 		for (auto& j : objs) {

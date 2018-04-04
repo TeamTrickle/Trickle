@@ -180,3 +180,13 @@ void Player::TakeBucket(Bucket* b_) {
 		}
 	}
 }
+
+void Player::CustomCollision(std::vector<Object*>* objs_)
+{
+	static bool isLoged = false;
+	if (!isLoged) {
+		for (auto& o : *objs_)
+			std::cout << o->objectTag << std::endl;
+		isLoged = true;
+	}
+}

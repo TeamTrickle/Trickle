@@ -56,6 +56,8 @@ public:
 	 */
 	void TakeBucket(Bucket*);
 
+	void CustomCollision(std::vector<Object*>*);
+
 private:
 	const std::string fileName = "player.png";
 	const float MOVE_SPEED = 10.f;								//移動スピード

@@ -24,6 +24,12 @@ public:
 	 */
 	void AddChild(Object*);
 
+	template <typename T>
+	void AddCollisionFunction(void (T::*function_)(std::vector<Object*>*), Object* obj_) {
+		std::function<void(std::vector<Object*>*)> obj = std::bind(function_, std::placeholders::_1);
+		collisionFunctions.push_back(obj);
+	}	
+
 	/**
 	 * @brief “–‚½‚è”»’è‚ğÀÛ‚És‚¤•”•ª
 	 * @note Update‚ÅŒÄ‚Ô‚±‚Æ
@@ -38,6 +44,7 @@ public:
 
 private:
 	std::vector<Object*> objs;
+	std::vector <std::function<void(std::vector<Object*>*)>> collisionFunctions;
 };
 
 #endif

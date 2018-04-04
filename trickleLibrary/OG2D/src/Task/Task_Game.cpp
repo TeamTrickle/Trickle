@@ -1,4 +1,9 @@
 #include "Task_Game.h"
+#define ADD_FUNCTION(a) \
+	[](std::vector<Object*>* objs_) { a(objs_); }
+
+
+
 void Game::Initialize()
 {
 	Vec2 bucketpos[2] = {
@@ -32,6 +37,12 @@ void Game::Initialize()
 	gameEngine->DebugFunction = true;
 	goal.Initialize();
 	cm.AddChild(&goal);
+
+
+
+	// V‚µ‚¢“–‚½‚è”»’è‚ÌÀ‘•–@F—á‘è‚Q
+	cm.AddCollisionFunction(&Player::CustomCollision, &player);
+
 }
 
 TaskFlag Game::UpDate()
