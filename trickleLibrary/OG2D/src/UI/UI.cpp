@@ -12,6 +12,7 @@ void UI::Initialize(Vec2 pos, std::string path, int num, int life) {
 	this->num = num;
 	src = Box2D(0, 0, 256, 256);
 	this->life = life;
+	active = true;
 }
 
 void UI::Update() {
@@ -24,6 +25,9 @@ void UI::Update() {
 			src.w = 256;
 		}
 	}
+	if (counter >= life) {
+		active = false;
+	}
 }
 
 void UI::Move(Vec2 pos) {
@@ -31,6 +35,7 @@ void UI::Move(Vec2 pos) {
 }
 
 void UI::Render() {
+	if (!active) { return; }
 	Box2D draw(pos.x, pos.y, 128.f, 128.f);
 	draw.OffsetSize();
 	tex.Draw(draw, src);

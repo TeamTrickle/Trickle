@@ -9,6 +9,7 @@ class UI {
 	Box2D src;		//Draw()‚Ì‘æ“ñˆø”
 	int num;		//‰æ‘œ•ªŠ„”
 	int life;		//õ–½
+	bool active;	//¶€
 
 public:
 	UI();

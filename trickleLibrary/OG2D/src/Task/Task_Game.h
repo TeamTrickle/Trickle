@@ -36,4 +36,6 @@ public:
 	Goal goal;
 
 	UI uitest;
+
+	bool Pause;
 };
