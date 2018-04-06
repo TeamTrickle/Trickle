@@ -5,6 +5,10 @@ void Game::Initialize()
 		{100,250},
 		{200,250}
 	};
+
+	Vec2 blockpos = Vec2(1536 , 100);       //1536テスト
+
+
 	std::cout << "Game初期化" << std::endl;
 	player.Initialize();
 	/*for (int i = 0; i < 2; ++i)
@@ -19,6 +23,10 @@ void Game::Initialize()
 	}*/
 	bucket.Initialize(bucketpos[0]);
 	cm.AddChild(&bucket);
+
+	block.Initialize(blockpos);           //ブロックの生成
+	cm.AddChild(&block);
+
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
@@ -81,6 +89,19 @@ TaskFlag Game::UpDate()
 		player.TakeBucket(bucket[i]);
 	}*/
 	player.TakeBucket(&bucket);
+
+	block.Update(map, block);
+	bucket.Update(map, bucket);
+	//ブロックの挙動テスト中!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	/*block.maphitF = map.MapHitCheck(block.footBase);
+	block.maphitH = map.MapHitCheck(block.headBase);
+	block.maphitL = map.MapHitCheck(block.leftBase);
+	block.maphitR = map.MapHitCheck(block.rightBase);*/
+
+	block.PlCheckHitF(player);
+	block.PlCheckHitH(player);
+	block.PlCheckHitL(player);
+	block.PlCheckHitR(player);
 
 	cm.Run();
 	if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
@@ -146,6 +167,7 @@ void Game::Render2D()
 	/*for (int i = 0; i < bucket.size(); ++i) {
 		bucket[i]->Render();
 	}*/
+	block.Render();
 	goal.Render();
 	bucket.Render();
 	map.MapRender();
@@ -155,6 +177,7 @@ void Game::Render2D()
 void Game::Finalize()
 {
 	std::cout << "Game解放" << std::endl;
+	block.Finalize();
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();

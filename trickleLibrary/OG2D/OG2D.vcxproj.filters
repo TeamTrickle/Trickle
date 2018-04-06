@@ -113,6 +113,9 @@
     <ClCompile Include="src\Goal\Goal.cpp">
       <Filter>ソースファイル\Goal</Filter>
     </ClCompile>
+    <ClCompile Include="src\Block\block.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -168,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="src\Goal\Goal.h">
       <Filter>ソースファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Block\block.h">
+      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

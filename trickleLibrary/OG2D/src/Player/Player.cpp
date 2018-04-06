@@ -92,8 +92,11 @@ void Player::UpDate()
 	// バケッツ処理
 	if (bucket) {
 		switch (direction) {
-		case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
-		case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
+		//case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
+		//case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
+			//バケツの位置を頭上に変更
+		case Direction::LEFT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
+		case Direction::RIGHT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
 		}
 		/*if (Input::KeyInputDown(BUCKET_SPOIL_KEY))
 			bucket->Spill();*/
@@ -234,10 +237,12 @@ bool Player::isWalkable(std::string t) {
 void Player::TakeBucket(Bucket* b_) {
 	if (gameEngine->input.down(Input::B2, 0)) {
 		if (bucket) {
+			bucket->hold = false;
 			bucket = nullptr;
 		}
 		else if (this->hit(*b_)) {
 			bucket = b_;
+			bucket->hold = true;
 		}
 	}
 }
