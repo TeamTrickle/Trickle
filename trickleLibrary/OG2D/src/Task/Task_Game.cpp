@@ -91,6 +91,7 @@ TaskFlag Game::UpDate()
 	player.TakeBucket(&bucket);
 
 	block.Update(map, block);
+	bucket.Update(map, bucket);
 	//ブロックの挙動テスト中!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	/*block.maphitF = map.MapHitCheck(block.footBase);
 	block.maphitH = map.MapHitCheck(block.headBase);

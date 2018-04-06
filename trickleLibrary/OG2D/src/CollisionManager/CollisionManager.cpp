@@ -19,7 +19,7 @@ void CollisionManager::Run() {
 			if (i == j || i->CollisionProcess == nullptr) continue;
 			if (i->hit(*j)) {
 				i->CollisionProcess(*j);
-				
+
 			}
 		}
 	}
