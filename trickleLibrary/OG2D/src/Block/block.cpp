@@ -84,24 +84,24 @@ void Block::Update(Map &map, Block &block) {
 	*/
 
 	//É}ÉbÉvÇ…ÇﬂÇËçûÇ‹Ç»Ç¢èàóùé¿ëï
-	if (plhitL)
-	{
-		if (Input::KeyInputOn(Input::RIGHT))
-		{
-			speed.x += 5.0f;
-			CheckMove(speed, map, block);
-		}
-	}
-	if (plhitR)
-	{
-		if (Input::KeyInputOn(Input::LEFT))
-		{
-			speed.x -= 5.0f;
-			CheckMove(speed, map, block);
-		}
-	}
-		gravity.y = 4.0f;
-		CheckMove(gravity, map, block);
+//	if (plhitL)
+//	{
+//		if (Input::KeyInputOn(Input::RIGHT))
+//		{
+//			speed.x += 5.0f;
+//			CheckMove(speed, map, block);
+//		}
+//	}
+//	if (plhitR)
+//	{
+//		if (Input::KeyInputOn(Input::LEFT))
+//		{
+//			speed.x -= 5.0f;
+//			CheckMove(speed, map, block);
+//		}
+//	}
+//		gravity.y = 4.0f;
+//		CheckMove(gravity, map, block);
 }
 
 void Block::Render() {

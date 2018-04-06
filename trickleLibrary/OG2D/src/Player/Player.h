@@ -37,6 +37,7 @@ private:
 	void CheckLeft();
 	void CheckRight();
 	bool isWalkable(std::string);
+	void LadderMove();
 
 public:
 	void Initialize();
@@ -61,19 +62,17 @@ private:
 	const float MOVE_SPEED = 10.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float GRAVITY = 0.98f;								//重力加速度
-	bool CheckJump;
-	bool CheckGravity;
+	bool CheckJump;												//ジャンプ判定
+	bool CheckGravity;											//重力加速度判定
 	bool onLadder;												//はしご昇降中
-	//const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
-	//const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
 
 	Texture playerimg;
 	Move move;
-	Vec2 est;										//移動量
-	Direction direction;							//向きを格納する変数
+	Vec2 est;													//移動量
+	Direction direction;										//向きを格納する変数
 	Bucket* bucket;
 
-	// 当たり判定用
+	//当たり判定用
 	Object footBase;
 	Object headBase;
 	Object leftBase;

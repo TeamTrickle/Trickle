@@ -104,29 +104,29 @@ TaskFlag Game::UpDate()
 	block.PlCheckHitR(player);
 
 	cm.Run();
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
-	{
-		gameEngine->camera->Move(Vec2(-3.0f, 0.0f));
-	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::D))
-	{
-		gameEngine->camera->Move(Vec2(+3.0f, 0.0f));
-	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::W))
-	{
-		gameEngine->camera->Move(Vec2(0.0f, -3.0f));
-	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::S))
-	{
-		gameEngine->camera->Move(Vec2(0.0f, 3.0f));
-	}
-	if (gameEngine->input.Pad_Connection) {
-		Vec2 cameraest = { 0,0 };
-		cameraest.x = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
-		cameraest.y = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
-		cameraest.y = -cameraest.y;
-		gameEngine->camera->position += cameraest;
-	}
+	//if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
+	//{
+	//	gameEngine->camera->Move(Vec2(-3.0f, 0.0f));
+	//}
+	//if (gameEngine->input.keyboard.on(Input::KeyBoard::D))
+	//{
+	//	gameEngine->camera->Move(Vec2(+3.0f, 0.0f));
+	//}
+	//if (gameEngine->input.keyboard.on(Input::KeyBoard::W))
+	//{
+	//	gameEngine->camera->Move(Vec2(0.0f, -3.0f));
+	//}
+	//if (gameEngine->input.keyboard.on(Input::KeyBoard::S))
+	//{
+	//	gameEngine->camera->Move(Vec2(0.0f, 3.0f));
+	//}
+	//if (gameEngine->input.Pad_Connection) {
+	//	Vec2 cameraest = { 0,0 };
+	//	cameraest.x = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
+	//	cameraest.y = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
+	//	cameraest.y = -cameraest.y;
+	//	gameEngine->camera->position += cameraest;
+	//}
 	if (gameEngine->input.keyboard.down(Input::KeyBoard::U))
 	{
 		for (int i = 0; i < water.size(); ++i)

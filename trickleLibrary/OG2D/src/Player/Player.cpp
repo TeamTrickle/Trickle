@@ -19,32 +19,24 @@ void Player::Initialize()
 
 	direction = Direction::RIGHT;
 
-
-	//梯子処理
-	Object::CollisionProcess = [&](const Object& o_) {
-		if (o_.objectTag == "Ladder") {
-			CheckJump = false;
-			CheckGravity = false;
-			isCollided = true;
-			onLadder = true;
-			//if (InputDown()) {
-			//	est.y = Player::MOVE_SPEED;
-			//}
-			//if (InputUp()) {
-			//	est.y = (-Player::MOVE_SPEED);
-			//}
-		}
-		else {
-			CheckGravity = true;
-			CheckJump = true;
-			onLadder = false;
-		}
-	};
-
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::UpDate()
 {
+	//仮カメラ処理
+	float px = gameEngine->camera->width / 2;
+	float py = gameEngine->camera->height / 2;
+	float cpx = float(est.x - px);
+	float cpy = float(est.y - py);
+	if (gameEngine->input.Pad_Connection) {
+		Vec2 cameraest = { 0,0 };
+		cameraest.x = cpx;
+		cameraest.y = cpy;
+	}
+	gameEngine->camera->Move(Vec2(cpx, 0.0f));
+	gameEngine->camera->Move(Vec2(0.0f, cpy));
+
+
 	//キャラクターの移動処理
 	est.x = 0;
 
@@ -60,41 +52,14 @@ void Player::UpDate()
 	}
 
 	//梯子処理
-	if (onLadder) {
-		//std::cout << "はしごHIT" << std::endl;
-		est.y = 0;
-		if (InputDown()) {
-			est.y = Player::MOVE_SPEED;
-		}
-		if (InputUp()) {
-			est.y = (-Player::MOVE_SPEED);
-		}
-	}
-	//Object::CollisionProcess = [&](const Object& o_) {
-	//	if (o_.objectTag == "Ladder") {
-	//		CheckJump = false;
-	//		CheckGravity = false;
-	//		isCollided = true;
-	//		if (InputDown()) {
-	//			est.y = Player::MOVE_SPEED;
-	//		}
-	//		if (InputUp()) {
-	//			est.y = (-Player::MOVE_SPEED);
-	//		}
-	//	}
-	//	else {
-	//		CheckGravity = true;
-	//		CheckJump = true;
-	//	}
-	//};
-
+	LadderMove();
 
 	// バケッツ処理
 	if (bucket) {
 		switch (direction) {
 		//case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
 		//case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
-			//バケツの位置を頭上に変更
+		//バケツの位置を頭上に変更
 		case Direction::LEFT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
 		case Direction::RIGHT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
 		}
@@ -102,11 +67,11 @@ void Player::UpDate()
 			bucket->Spill();*/
 	}
 
-	//y方向の速度に加速度を加える
+	//y方向の速度に重力加速度を加える
 	if (CheckGravity) {
 		est.y += Player::GRAVITY;
 	}
-
+	//ジャンプ処理
 	if (CheckJump) {
 		JumpMove();
 	}
@@ -243,6 +208,34 @@ void Player::TakeBucket(Bucket* b_) {
 		else if (this->hit(*b_)) {
 			bucket = b_;
 			bucket->hold = true;
+		}
+	}
+}
+//☆☆☆☆//-----------------------------------------------------------------------------
+//梯子処理
+void Player::LadderMove()
+{
+	Object::CollisionProcess = [&](const Object& o_) {
+		if (o_.objectTag == "Ladder") {
+			CheckJump = false;
+			CheckGravity = false;
+			isCollided = true;
+			onLadder = true;
+		}
+		else {
+			CheckGravity = true;
+			CheckJump = true;
+			onLadder = false;
+		}
+	};
+	if (onLadder == true) {
+		//std::cout << "はしごHIT" << std::endl;
+		est.y = 0;
+		if (InputDown()) {
+			est.y = Player::MOVE_SPEED;
+		}
+		if (InputUp()) {
+			est.y = (-Player::MOVE_SPEED);
 		}
 	}
 }
