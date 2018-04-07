@@ -14,6 +14,8 @@
 #include "Goal\Goal.h"
 #include "Object\Senpuki.h"
 #include "Object\Switch.h"
+#include "Object\Kanetuki.h"
+#include "Object\Seihyouki.h"
 
 class Game
 {
@@ -28,6 +30,8 @@ public:
 	Player player;
 	//std::vector<Bucket*> bucket;
 	Senpuki senpuki;
+	Seihyouki seihyouki;
+	Kanetuki kanetuki;
 	Switch switch_[2];
 	Bucket bucket;
 	Back back;

@@ -25,16 +25,18 @@ Switch::~Switch()                               //デストラクタ　現在は特になし
 	
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
-bool Switch::Initlaize(Vec2 pos)
+bool Switch::Initlaize(Vec2 pos,Switch* s_)
 {
-	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);                                    //当たり判定矩形を生成する
-	CheakHit();                            //当たり判定関数を呼び出す
+	switch_pointa = s_;                           //switch_pointaに当たり判定矩形を生成する 
+	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);         //当たり判定矩形を生成する
+	objectTag = "Switch";
+	CheakHit(*switch_pointa);              //当たり判定関数を呼び出す
 	return true;                           //関数処理無事に終了したことをtrueで返す
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::UpDate()                      //更新処理                      
 {
-	CheakHit();                            //当たり判定の処理をまとめた関数
+
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Switch::Finalize()                    //解放処理
@@ -48,11 +50,11 @@ void Switch::Render()                      //描画処理
 	
 }
 //追加変数//-----------------------------------------------------------------------------
-void Switch::CheakHit()                                 //当たり判定の処理をまとめた関数
+void Switch::CheakHit(Switch& s_)                                 //当たり判定の処理をまとめた関数
 {	
 	Object::CollisionProcess = [&](const Object& o_)                                                          //当たり判定処理                
 	{
-		if (player_pointa->hit(*this))                       //Playerとの接触判定が合ったら・・・                                                               
+		if (player_pointa->hit(s_))                          //Playerとの接触判定が合ったら・・・  //エラー箇所                                                             
 		{
 			Hitflag = true;                                  //当たり判定フラグをtrue
 		}
@@ -62,7 +64,7 @@ void Switch::CheakHit()                                 //当たり判定の処理をまと
 		}
 		if (Hitflag)                                         //当たり判定フラグがtrueなら・・・
 		{
-			if (gameEngine->input.keyboard.down(It::S))          //かつキーボード操作『S』押されたら・・・
+			if (gameEngine->input.keyboard.down(It::Q))          //かつキーボード操作『Q』押されたら・・・
 			{
 				if (switch_ON_OFF)                                   //この時にスイッチの切り替えフラグがtrueなら・・・
 				{

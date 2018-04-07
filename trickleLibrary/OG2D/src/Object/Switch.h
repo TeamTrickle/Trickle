@@ -5,6 +5,7 @@
 //|履歴：2018/04/01 横尾       |//
 //|履歴: 2018/04/02 横尾       |//
 //|履歴: 2018/04/03 横尾       |//
+//|履歴：2018/04/07 横尾       |//
 //|____________________________|//
 #pragma once
 #include "Object.h"
@@ -44,10 +45,10 @@ public:
 	
 	/*
 	(引数1 初期座標)初期化処理　当たり判定・矩形の生成・フラグの初期化
-	■ 引数   : Vec2 初期化座標値
+	■ 引数   : Vec2 初期化座標値 , Switch* スイッチのポインタ
 	■ 戻り値 : bool 初期化成功したかを返します。（現状trueしか入りません）
 	*/
-	bool Initlaize(Vec2);
+	bool Initlaize(Vec2,Switch*);
 	
 
 	/*
@@ -76,11 +77,11 @@ public:
 
 	/*
 	当たり判定の処理を書いたところ
-	■ 引数   : なし
+	■ 引数   : Switch& 当たり判定に入れるアドレス値
 	■ 戻り値 : なし
 	*/
 
-	void CheakHit();
+	void CheakHit(Switch&);
 
 
 	/*
@@ -122,4 +123,5 @@ private:
 	std::vector<Vec2>Pos;                        //コンストラクタ時に引数できた座標値を保存する
 	Player* player_pointa;                       //Playerのアドレス値を取得して当たり判定を実装に必要
 	Senpuki* senpuki_pointa;                     //扇風機のアドレス値を格納するポインタ
+	Switch* switch_pointa;                       //当たり判定に使用するアドレス値
 };

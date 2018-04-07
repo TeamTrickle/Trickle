@@ -6,6 +6,8 @@
 //|履歴：2018/04/01 横尾       |//
 //|履歴: 2018/04/02 横尾       |//
 //|履歴: 2018/04/03 横尾       |//
+//|履歴：2018/04/06 横尾       |//
+//|履歴：2018/04/07 横尾       |//
 //|____________________________|//
 
 #pragma once
@@ -158,13 +160,21 @@ public:
 	*/
 	Vec2 Water_Move(Object&);
 
+	/*
+	水との当たり判定をチャックします
+	■ 引数   : const Object& 水のアドレス値
+	■ 戻り値 : bool 視野範囲と当たっているかを返す
+	*/
+	bool Cheak_Water(const Object&);
 
 private:
 	bool Water_flag;                                     //当たり判定格納変数
 	bool Switch_ON_OFF;                                  //OFF(false) 上の扇風機　ON(true)　下の扇風機
 	bool Wall_flag;                                      //壁との当たり判定フラグ格納する変数
-	CollisionBox range;                                  //視野範囲（現在は使用していません）
+	bool Range_Flag;                                     //視野範囲との当たり判定を格納する
 	Map* parent_Wall;                                    //nullptrCheak関数(今回は壁)
 	std::vector<Vec2> Pos;                               //コンストラクタで送られたきた座標値を保存する格納倉庫
 	Switch* switch_pointa[2];                            //switchのアドレス値を格納する変数
+public:
+	Object range;                                        //視野範囲（現在は使用していません）
 };

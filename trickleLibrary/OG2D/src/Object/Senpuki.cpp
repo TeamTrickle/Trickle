@@ -32,10 +32,12 @@ bool Senpuki::Initialize(Vec2 pos)
 
 	//当たり判定の矩形を用意する
 	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);								//当たり判定矩形を生成する
+	range.CreateObject(Objform::Cube, Vec2(position.x + 64,position.y), Vec2(IMAGE_SIZE_X * 6,IMAGE_SIZE_Y),0); //もう一つの当たり判定矩形を生成する
 	cout << "判定座標(" << position.x + IMAGE_SIZE_X << "," << position.y + IMAGE_SIZE_Y << endl;		//デバッグ機能での当たり判定の表示
 	//
 	Water_flag = false;						//当たり判定初期フラグの設定
 	Wall_flag = false;                      //壁との当たり判定フラグの設定
+	Range_Flag = false;                     //視野範囲との当たり判定
 	CheakHit();								//当たり判定を行う
 	return true;
 }
@@ -64,18 +66,21 @@ void Senpuki::Render()
 
 void Senpuki::CheakHit()                                             //当たり判定の処理
 {
-	Object::CollisionProcess = [&](const Object& o_)                 //全てのローカルでのクラスを参照する？
+	this->range.CollisionProcess = [&](const Object& o_)             //全てのローカルでのクラスを参照する？
 	{
-		if (o_.objectTag == "Water")                                 //扇風機の当たり判定（本来は水で判定を取る）
+		if (o_.objectTag == "Water")       //Playerとの当たり判定
 		{
 			this->Water_flag = true;                                 //flagをtrueにする
 
-			if (Water_flag)                                          //水と接触判定したら・・・
+			if (Water_flag)
 			{
-				cout << "作動" << endl;
-				if (((Water&)o_).GetState() == Water::State::GAS)      //水蒸気の状態ならば・・・
-				{
-					const_cast<Object&>(o_).position = Water_Move((Water&)o_);      //constを外してVec2の動きを渡す
+				if (((Water&)o_).GetState() == Water::State::GAS)   //この水は水蒸気であるか？
+				{       
+					Range_Flag = Cheak_Water(o_);                   //当たり判定の戻り値を返す
+					if (Range_Flag)                                 //当たり判定がtrueを返してきたら・・・                        
+					{
+						const_cast<Object&>(o_).position = Water_Move((Water&)o_);      //constを外してVec2の動きを渡す
+					}
 				}
 			}
 		}
@@ -120,21 +125,32 @@ void Senpuki::Switch_Swap(Switch& s_)
 	if (!s_.switch_ON_OFF)                              //スイッチの切り替えフラグがtrueの時
 	{
 		Switch_On_or_Off_pos(Pos[0]);                                  //当たり判定の座標値を変更する 上の座標値
+		range.position.x = Pos[0].x + 64;                              //座標位置の調整する
+		range.position.y = Pos[0].y;                                   //座標位置の調整する
 	}
 	else
 	{
 		Switch_On_or_Off_pos(Pos[1]);                                  //当たり判定の座標値を変更する 下の座標値
+		range.position.x = Pos[1].x - 64 * 6;                          //座標位置の調整
+		range.position.y = Pos[1].y;                                   //座標位置の調整
 	}
 }
-Vec2 Senpuki::Water_Move(Object& o_)
+Vec2 Senpuki::Water_Move(Object& o_) //見直しが必要！！
 {
 	if (Water_flag)                               //水関係の当たり判定フラグがtureなら・・・
 	{
 		if (((Water&)o_).GetState() == Water::State::GAS)       //水蒸気ならば・・・
 		{
-			while (Wall_flag == false)                           //壁との当たり判定フラグがtrueになるまで
+			while (Wall_flag == false)                          //壁との当たり判定フラグがtrueになるまで
 			{
-				o_.position.x++;                                 //x座標の移動をする
+				if (range.position.x == Pos[0].x + 64)         //本当はスイッチのフラグにしますが、バグるので無理やり対応        
+				{
+					o_.position.x++;                           //x座標値の移動
+				}
+				else
+				{
+					o_.position.x--;                           //x座標値の移動
+				}
 				for (int y = 0; y < parent_Wall->mapSize.y; ++y) //マップのy値の値までループ変数yを増加
 				{
 					for (int x = 0; x < parent_Wall->mapSize.x; ++x) //マップのx値までループ変数xを増加
@@ -157,4 +173,12 @@ Vec2 Senpuki::Water_Move(Object& o_)
 		Wall_flag = false;    //水蒸気以外はすべてfalseにする
 	}
 	return o_.position;       //変更したベクトルを返す
+}
+bool Senpuki::Cheak_Water(const Object& o_)
+{
+	if (range.hit(const_cast<Object&>(o_)))                        //視野範囲と水との当たり判定
+	{
+		return true;
+	}
+	return false;
 }
