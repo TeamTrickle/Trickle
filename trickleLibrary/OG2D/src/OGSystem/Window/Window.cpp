@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "stb_image.h"
 Window::Window()
 {
 	this->_widht = 640;
@@ -26,7 +27,7 @@ Window::Window(int wi, int he, char* name, bool screen)
 }
 Window::~Window()
 {
-
+	glfwSetWindowIcon(this->window, 0, NULL);
 }
 
 Window::SP Window::Create(int wi, int he, char* name, bool screen)
@@ -51,4 +52,10 @@ void Window::createWindow(int wi, int he, char* name, bool screen)
 		glfwTerminate();
 		return;
 	}
+}
+void Window::setIcon(std::string& path_)
+{
+	image[0].pixels = stbi_load(path_.c_str(), &image[0].width, &image[0].height, 0, 4);
+	glfwSetWindowIcon(this->window, 1, image);
+	stbi_image_free(image[0].pixels);
 }
