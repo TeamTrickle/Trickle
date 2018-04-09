@@ -3,7 +3,7 @@
 void Title::Initialize()
 {
 	std::cout << "Title‰Šú‰»" << std::endl;
-	sound.createSound(std::string("./data/bgm/playandhope.wav"), true);
+	sound.createSound(std::string("playandhope.wav"), true);
 	objsmp.Initialize();
 	objsmp2.Initialize();
 	map.LoadMap("test.txt");
@@ -57,6 +57,7 @@ TaskFlag Title::UpDate()
 		else
 		{
 			sound.play();
+			sound.volume(0.2f);
 		}
 	}
 	objsmp.UpDate();

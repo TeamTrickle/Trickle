@@ -60,7 +60,7 @@ Audio::Buffer::~Buffer()
 }
 float Audio::Buffer::GetTime() const
 {
-	//isŽžŠÔ‚ð•Ô‚·
+	//‘S‘Ì‚ÌŽžŠÔ
 	return this->nowTime;
 }
 ALuint Audio::Buffer::GetID() const
