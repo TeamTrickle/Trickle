@@ -49,7 +49,7 @@ TaskFlag Game::UpDate()
 
 	// テスト用
 	// ------------------------------------------
-	if (gameEngine->input.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
+	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
 		//	if (bucket[i]->capacity > 0) {
 		//		Water* sizuku = bucket[i]->Spill();
@@ -83,30 +83,30 @@ TaskFlag Game::UpDate()
 	player.TakeBucket(&bucket);
 
 	cm.Run();
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
+	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
-		gameEngine->camera->Move(Vec2(-3.0f, 0.0f));
+		gameEngine->camera->MovePos(Vec2(-3.0f, 0.0f));
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::D))
+	if (gameEngine->in.key.on(Input::KeyBoard::D))
 	{
-		gameEngine->camera->Move(Vec2(+3.0f, 0.0f));
+		gameEngine->camera->MovePos(Vec2(+3.0f, 0.0f));
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::W))
+	if (gameEngine->in.key.on(Input::KeyBoard::W))
 	{
-		gameEngine->camera->Move(Vec2(0.0f, -3.0f));
+		gameEngine->camera->MovePos(Vec2(0.0f, -3.0f));
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::S))
+	if (gameEngine->in.key.on(Input::KeyBoard::S))
 	{
-		gameEngine->camera->Move(Vec2(0.0f, 3.0f));
+		gameEngine->camera->MovePos(Vec2(0.0f, 3.0f));
 	}
-	if (gameEngine->input.Pad_Connection) {
+	if (gameEngine->in.Pad_Connection) {
 		Vec2 cameraest = { 0,0 };
-		cameraest.x = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
-		cameraest.y = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
+		cameraest.x = gameEngine->in.pad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
+		cameraest.y = gameEngine->in.pad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
 		cameraest.y = -cameraest.y;
-		gameEngine->camera->position += cameraest;
+		gameEngine->camera->MovePos(cameraest);
 	}
-	if (gameEngine->input.keyboard.down(Input::KeyBoard::U))
+	if (gameEngine->in.key.down(Input::KeyBoard::U))
 	{
 		for (int i = 0; i < water.size(); ++i)
 		{
@@ -120,16 +120,16 @@ TaskFlag Game::UpDate()
 			}
 		}
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::H))
+	if (gameEngine->in.key.on(Input::KeyBoard::H))
 	{
 		bucket.position.x -= 3.0f;
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::K))
+	if (gameEngine->in.key.on(Input::KeyBoard::K))
 	{
 		bucket.position.x += 3.0f;
 	}
 	TaskFlag nowtask = Task_Game;
-	if (gameEngine->input.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
+	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
 	{
 		nowtask = Task_Title;
 	}

@@ -77,9 +77,9 @@ private:
 	Object rightBase;
 
 	bool InputLeft() {
-		return gameEngine->input.on(Input::CL,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+		return gameEngine->in.on(Input::CL,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
 	}
 	bool InputRight() {
-		return gameEngine->input.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+		return gameEngine->in.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
 	}
 };
