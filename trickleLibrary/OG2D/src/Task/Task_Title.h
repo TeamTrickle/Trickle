@@ -44,4 +44,5 @@ public:
 	ObjectSample objsmp;
 	ObjectSample2 objsmp2;
 	Map map;
+	Sound sound;
 };

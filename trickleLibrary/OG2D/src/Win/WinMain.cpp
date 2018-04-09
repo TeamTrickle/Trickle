@@ -6,9 +6,7 @@
 #define _USE_MATH_DEFINES
 //小数点誤差修正
 #define _OX_EPSILON_ 0.0000001f
-#define STB_IMAGE_IMPLEMENTATION
-#include "ft2build.h"
-#include FT_FREETYPE_H
+
 #include "OGSystem\OGTask.h"
 //------------------
 //class定義
@@ -36,20 +34,19 @@ void TaskFinalize()
 //------------------
 void Initialize() {
 	fps.Initialize();
-	//Input::Initialize(OGTK._window.window);
 }
 //------------------
 //解放
 //------------------
 void Finalize()
 {
-	//Input::Finalize();
+
 }
 //------------------
 //更新
 //------------------
 bool Update() {
-	if (gameEngine->input.keyboard.down(Input::KeyBoard::ESCAPE))
+	if (gameEngine->in.key.down(In::ESCAPE))
 	{
 		TaskFinalize();
 		//ウィンドウの破棄
@@ -75,7 +72,6 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//使用するウィンドウを設定する
-	//glfwMakeContextCurrent(OGTK._window.window);
 	glfwMakeContextCurrent(gameEngine->window->window);
 	//同期(ダブルバッファの入れ替えタイミングの指定)
 	glfwSwapInterval(1);
@@ -89,7 +85,6 @@ int main() {
 	// 透視変換行列を設定
 	glMatrixMode(GL_PROJECTION);
 	//描画範囲の指定
-	//glViewport(0, 0, OGTK._window._widht, OGTK._window._height);
 	glViewport(0, 0, gameEngine->window->_widht, gameEngine->window->_height);
 	//行列の初期化
 	glLoadIdentity();
@@ -108,12 +103,10 @@ int main() {
 	//初期化処理
 	Initialize();
 	//ウィンドウの生成位置の指定
-	//glfwSetWindowPos(OGTK._window.window, 1920 - OGTK._window._widht, 50);
 	glfwSetWindowPos(gameEngine->window->window, 1920 - gameEngine->window->_widht, 50);
 	//ウィンドウが存在する場合ループ
-	//while (!glfwWindowShouldClose(OGTK._window.window)) {
 	while (!glfwWindowShouldClose(gameEngine->window->window)) {
-		//エンジン内の更新処理(カメラ処理等)
+		//エンジン内の更新処理
 		gameEngine->UpDate();
 		//捜査対象の行列をモデルビュー行列に変更
 		glMatrixMode(GL_MODELVIEW);
@@ -129,7 +122,6 @@ int main() {
 		//描画処理
 		TaskRender();
 		//指定したウィンドウのダブルバッファを行う
-		//glfwSwapBuffers(OGTK._window.window);
 		glfwSwapBuffers(gameEngine->window->window);
 		//ウィンドウ、マウス、キーボードの入力の状態をアップデートする
 		glfwPollEvents();

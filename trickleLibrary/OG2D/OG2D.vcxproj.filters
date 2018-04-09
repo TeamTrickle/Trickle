@@ -57,6 +57,33 @@
     <Filter Include="ソースファイル\Goal">
       <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Texture">
+      <UniqueIdentifier>{11a14412-9808-4d80-a312-ad4c908089f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Camera">
+      <UniqueIdentifier>{3492ff9a-2534-43f6-844e-c7a5eb5287c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\FPS">
+      <UniqueIdentifier>{26c27c58-5858-4c00-b521-e24960a7d699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Window">
+      <UniqueIdentifier>{79f205cf-4993-4dbc-8a11-6c1cafb7cd5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Input">
+      <UniqueIdentifier>{7cfba067-a50b-4f3a-8bfe-a7d7ff417bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Font">
+      <UniqueIdentifier>{2d03d8fe-7589-4f5d-bfb5-b2898753bf2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Collision">
+      <UniqueIdentifier>{a0c0deec-7a39-4ffc-8e83-b19ed7dace57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Sound">
+      <UniqueIdentifier>{3bbc2993-e65a-4e4d-a396-6647a9a80059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Sound\Audio">
+      <UniqueIdentifier>{d7c8a8d3-047d-457a-946e-d5a69d8156bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -66,9 +93,6 @@
       <Filter>ソースファイル\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\OGSystem\_OGsystem.cpp">
-      <Filter>ソースファイル\OGSystem\System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OGSystem\OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\Map.cpp">
@@ -112,6 +136,40 @@
     </ClCompile>
     <ClCompile Include="src\Goal\Goal.cpp">
       <Filter>ソースファイル\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Ladder.cpp" />
+    <ClCompile Include="src\OGSystem\Camera\Camera.cpp">
+      <Filter>ソースファイル\OGSystem\System\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\FPS\FPS.cpp">
+      <Filter>ソースファイル\OGSystem\System\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Input\Input.cpp">
+      <Filter>ソースファイル\OGSystem\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Font\Font.cpp">
+      <Filter>ソースファイル\OGSystem\System\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Window\Window.cpp">
+      <Filter>ソースファイル\OGSystem\System\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Texture\Texture.cpp">
+      <Filter>ソースファイル\OGSystem\System\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Collision\Collision.cpp">
+      <Filter>ソースファイル\OGSystem\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Audio\Audio.cpp">
+      <Filter>ソースファイル\OGSystem\System\Sound\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Audio\Sound.cpp">
+      <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Audio\StreamingSound.cpp">
+      <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +226,39 @@
     </ClInclude>
     <ClInclude Include="src\Goal\Goal.h">
       <Filter>ソースファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Ladder.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Camera\Camera.h">
+      <Filter>ソースファイル\OGSystem\System\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\FPS\FPS.h">
+      <Filter>ソースファイル\OGSystem\System\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Input\Input.h">
+      <Filter>ソースファイル\OGSystem\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Font\Font.h">
+      <Filter>ソースファイル\OGSystem\System\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Window\Window.h">
+      <Filter>ソースファイル\OGSystem\System\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Texture\Texture.h">
+      <Filter>ソースファイル\OGSystem\System\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Collision\Collision.h">
+      <Filter>ソースファイル\OGSystem\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Audio\Audio.h">
+      <Filter>ソースファイル\OGSystem\System\Sound\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Audio\Sound.h">
+      <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Audio\StreamingSound.h">
+      <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

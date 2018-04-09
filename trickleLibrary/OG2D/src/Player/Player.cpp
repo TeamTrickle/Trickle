@@ -96,7 +96,7 @@ void Player::JumpMove()
 	if (footBase.isCollided) {
 		est.y = 0.f;
 		//Zボタンを押したら、ジャンプ状態に移行する
-		if (gameEngine->input.on(Input::B1,0)) {
+		if (gameEngine->in.on(Input::B1,0)) {
 			est.y = Player::JUMP_POWER;
 		}
 		//上昇中
@@ -171,7 +171,7 @@ bool Player::isWalkable(std::string t) {
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Player::TakeBucket(Bucket* b_) {
-	if (gameEngine->input.down(Input::B2, 0)) {
+	if (gameEngine->in.down(Input::B2, 0)) {
 		if (bucket) {
 			bucket = nullptr;
 		}

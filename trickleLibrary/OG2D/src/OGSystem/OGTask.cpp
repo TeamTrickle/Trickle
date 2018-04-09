@@ -23,7 +23,8 @@ void _OGTK::_myGameUpDate()
 			break;
 		}
 		nowTask = nextTask;
-		gameEngine->camera->position = { 0,0 };
+		gameEngine->camera->SetPos(Vec2(0.f, 0.f));
+		gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
 		switch (nowTask)
 		{
 		case Task_Title:
