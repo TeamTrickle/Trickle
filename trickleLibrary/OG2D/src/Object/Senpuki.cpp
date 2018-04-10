@@ -28,11 +28,11 @@ Senpuki::~Senpuki()                                                //ƒfƒXƒgƒ‰ƒNƒ
 
 bool Senpuki::Initialize(Vec2 pos)
 {
-	objectTag = "Senpuuki";                 //ƒIƒuƒWƒFƒNƒgƒ^ƒO–¼‚ğ¶¬‚·‚é
+	range.objectTag = "Senpuuki";                 //ƒIƒuƒWƒFƒNƒgƒ^ƒO–¼‚ğ¶¬‚·‚é
 
 	//“–‚½‚è”»’è‚Ì‹éŒ`‚ğ—pˆÓ‚·‚é
-	CreateObject(Objform::Cube, pos, Vec2(IMAGE_SIZE_X, IMAGE_SIZE_Y), 0);								//“–‚½‚è”»’è‹éŒ`‚ğ¶¬‚·‚é
-	range.CreateObject(Objform::Cube, Vec2(position.x + 64,position.y), Vec2(IMAGE_SIZE_X * 6,IMAGE_SIZE_Y),0); //‚à‚¤ˆê‚Â‚Ì“–‚½‚è”»’è‹éŒ`‚ğ¶¬‚·‚é
+	CreateObject(Objform::Cube, Vec2(position.x + 64, position.y), Vec2(IMAGE_SIZE_X * 6, IMAGE_SIZE_Y), 0);
+	range.CreateObject(Objform::Cube, Vec2(position.x + 64, position.y), Vec2(IMAGE_SIZE_X * 6, IMAGE_SIZE_Y), 0); //‚à‚¤ˆê‚Â‚Ì“–‚½‚è”»’è‹éŒ`‚ğ¶¬‚·‚é
 	cout << "”»’èÀ•W(" << position.x + IMAGE_SIZE_X << "," << position.y + IMAGE_SIZE_Y << endl;		//ƒfƒoƒbƒO‹@”\‚Å‚Ì“–‚½‚è”»’è‚Ì•\¦
 	//
 	Water_flag = false;						//“–‚½‚è”»’è‰Šúƒtƒ‰ƒO‚Ìİ’è
@@ -75,7 +75,7 @@ void Senpuki::CheakHit()                                             //“–‚½‚è”»’
 			if (Water_flag)
 			{
 				if (((Water&)o_).GetState() == Water::State::GAS)   //‚±‚Ì…‚Í…ö‹C‚Å‚ ‚é‚©H
-				{       
+				{
 					Range_Flag = Cheak_Water(o_);                   //“–‚½‚è”»’è‚Ì–ß‚è’l‚ğ•Ô‚·
 					if (Range_Flag)                                 //“–‚½‚è”»’è‚ªtrue‚ğ•Ô‚µ‚Ä‚«‚½‚çEEE                        
 					{
@@ -110,11 +110,11 @@ Vec2 Senpuki::Switch_On_or_Off_pos(const Vec2 pos)                   //î•—‹@‚ğ
 {
 	return position = pos;                                           //Ø‚è‘Ö‚¦‚é‚ÉVec2‚Å–ß‚è’l‚ğ“n‚·
 }
-void Senpuki::Set_Pos(const Vec2 pos)
+void Senpuki::Set_Pos(Vec2 pos)
 {
 	Pos.push_back(pos);                                              //À•W’l‚ğVector‚É“n‚·
 }
-void Senpuki::Switch_Swap(Switch& s_)
+void Senpuki::Switch_Swap(Switch* s_,int value)
 {
 	//_____________________________________________________________________________________________|//
 	//|                                                                                            |//
@@ -122,17 +122,13 @@ void Senpuki::Switch_Swap(Switch& s_)
 	//|À•W’l‚É‚Â‚¢‚Ä‚Ívector‚Å•Û‘¶‚µ‚½”z—ñ‚É‚æ‚Á‚Ä’l‚ğ–á‚Á‚Ä‚«‚Ü‚·B                              |//
 	//|‚È‚Ì‚ÅAŒ»İ‚Å‚ÍTask_Game‚Ì‚Æ‚±‚ë‚ÅÀ•W’l‚ğvector‚É“ü‚ê‚é•û®‚É‚È‚è‚Ü‚·B                   |//
 	//|____________________________________________________________________________________________|//
-	if (!s_.switch_ON_OFF)                              //ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO‚ªtrue‚Ì
+	if (s_->switch_ON_OFF[value])                              //ƒXƒCƒbƒ`‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO‚ªtrue‚Ì
 	{
-		Switch_On_or_Off_pos(Pos[0]);                                  //“–‚½‚è”»’è‚ÌÀ•W’l‚ğ•ÏX‚·‚é ã‚ÌÀ•W’l
-		range.position.x = Pos[0].x + 64;                              //À•WˆÊ’u‚Ì’²®‚·‚é
-		range.position.y = Pos[0].y;                                   //À•WˆÊ’u‚Ì’²®‚·‚é
+		range.position.x = Pos[0].x - 64 * 6;
 	}
 	else
 	{
-		Switch_On_or_Off_pos(Pos[1]);                                  //“–‚½‚è”»’è‚ÌÀ•W’l‚ğ•ÏX‚·‚é ‰º‚ÌÀ•W’l
-		range.position.x = Pos[1].x - 64 * 6;                          //À•WˆÊ’u‚Ì’²®
-		range.position.y = Pos[1].y;                                   //À•WˆÊ’u‚Ì’²®
+		range.position.y = Pos[1].x + 64;
 	}
 }
 Vec2 Senpuki::Water_Move(Object& o_) //Œ©’¼‚µ‚ª•K—vII
