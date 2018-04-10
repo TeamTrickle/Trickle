@@ -38,11 +38,6 @@ void Game::Initialize()
 	goal.Initialize();
 	cm.AddChild(&goal);
 
-
-
-	// V‚µ‚¢“–‚½‚è”»’è‚ÌÀ‘•–@F—á‘è‚Q
-	cm.AddCollisionFunction(&Player::CustomCollision, &player);
-
 }
 
 TaskFlag Game::UpDate()

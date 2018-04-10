@@ -7,6 +7,8 @@ void Title::Initialize()
 	objsmp.Initialize();
 	objsmp2.Initialize();
 	map.LoadMap("test.txt");
+	cm.AddChild(&objsmp);
+	cm.AddChild(&objsmp2);
 }
 
 TaskFlag Title::UpDate()
@@ -59,6 +61,7 @@ TaskFlag Title::UpDate()
 			sound.play();
 		}
 	}
+	cm.Run();
 	objsmp.UpDate();
 	objsmp2.UpDate();
 	objsmp.hitcheck = map.MapHitCheck(objsmp);
@@ -79,6 +82,7 @@ void Title::Finalize()
 	objsmp.Finalize();
 	objsmp2.Finalize();
 	map.Finalize();
+	cm.Destroy();
 }
 
 void ObjectSample::Initialize()
@@ -88,6 +92,19 @@ void ObjectSample::Initialize()
 	CreateObject(Cube, Vec2(10.0f, 100.0f), Vec2(128.0f, 128.0f), 0.0f);
 	footHit.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.f), 0.f);
 	this->hitcheck = false;
+
+
+	Object::CollisionIn = [&](const Object& o_) {
+		std::cout << "Collision Start : " << o_.objectTag << std::endl;
+	};
+
+	Object::CollisionProcess = [&](const Object& o_) {
+		std::cout << "Collision On Process : " << o_.objectTag << std::endl;
+	};
+
+	Object::CollisionOut = [&](const Object& o_) {
+		std::cout << "Collision End : " << o_.objectTag << std::endl;
+	};
 }
 
 void ObjectSample::UpDate()

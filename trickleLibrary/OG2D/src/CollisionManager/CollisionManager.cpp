@@ -13,15 +13,23 @@ void CollisionManager::AddChild(Object* obj) {
 }
 
 void CollisionManager::Run() {
-	for (auto& f : collisionFunctions)
-		f(&objs);
 	for (auto& i : objs) {
 		i->isCollided = false;
 		for (auto& j : objs) {
 			if (i == j || i->CollisionProcess == nullptr) continue;
+			bool isCollided = i->isCollidedGlobal;
 			if (i->hit(*j)) {
-				i->CollisionProcess(*j);
-				
+				if (!i->isCollidedGlobal && i->CollisionIn) {
+					i->isCollidedGlobal = true;
+					i->CollisionIn(*j);
+				}
+				else
+					i->CollisionProcess(*j);
+			}
+			else {
+				if (i->isCollidedGlobal && i->CollisionOut)
+					i->CollisionOut(*j);
+				i->isCollidedGlobal = false;
 			}
 		}
 	}
