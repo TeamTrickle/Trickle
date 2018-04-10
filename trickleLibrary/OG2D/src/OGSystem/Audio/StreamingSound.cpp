@@ -122,7 +122,7 @@ bool StreamingSound::isPlaying()
 void StreamingSound::play()
 {
 	if (!this->isplay_) {
-	//新規実行スレッドの生成
+	//実行スレッドの生成
 	std::thread thread(streamProc, this->filepath_, this->loop_, source_, param_);
 	//スレッドの管理を手放す
 	thread.detach();

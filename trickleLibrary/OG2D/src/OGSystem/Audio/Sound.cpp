@@ -7,7 +7,7 @@ Sound::Sound()
 
 };
 Sound::Sound(std::string& path_, bool loop) :
-	buffer(std::make_shared<Audio::Buffer>(path_)),
+	buffer(std::make_shared<Audio::Buffer>(filepath_ + path_)),
 	source(std::make_shared<Audio::Source>())
 {
 	this->source->BindBuffer(*this->buffer);
@@ -19,7 +19,7 @@ Sound::~Sound()
 };
 void Sound::createSound(std::string& path_, bool loop)
 {
-	this->buffer = std::make_shared<Audio::Buffer>(path_);
+	this->buffer = std::make_shared<Audio::Buffer>(filepath_ + path_);
 	this->source = std::make_shared<Audio::Source>();
 	this->source->BindBuffer(*this->buffer);
 	this->looping(loop);

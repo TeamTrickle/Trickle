@@ -7,6 +7,7 @@ private:
 	std::shared_ptr<Audio::Source> source;
 	bool isloop_;
 	Audio audio;
+	std::string filepath_ = "./data/bgm/";
 public:
 	Sound();
 	explicit Sound(std::string& path_, bool loop = false);
