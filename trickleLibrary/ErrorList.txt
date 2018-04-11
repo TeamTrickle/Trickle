@@ -1,8 +1,10 @@
 実装準備中
+
 Font
+
 ☆☆Audio
+
 Shader
-☆コントローラ入力
 ウィンドウアイコン
 不具合
 LNK4098 defaultlib 'MSVCRTD'は他のライブラリの使用と競合しています。/NODEFAULTLIB:libraryを使用ください。LINK

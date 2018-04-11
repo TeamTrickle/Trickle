@@ -3,6 +3,7 @@
 void Title::Initialize()
 {
 	std::cout << "Title‰Šú‰»" << std::endl;
+	sound.createSound(std::string("playandhope.wav"), true);
 	objsmp.Initialize();
 	objsmp2.Initialize();
 	map.LoadMap("test.txt");
@@ -11,25 +12,53 @@ void Title::Initialize()
 TaskFlag Title::UpDate()
 {
 	TaskFlag nowtask = Task_Title;
-	if (Input::KeyInputUp(Input::SPACE))
+	if (gameEngine->in.down(Input::in::D2))
 	{
 		nowtask = Task_Game;
 	}
-	if (Input::KeyInputOn(Input::A))
+	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
-		gameEngine->camera->Move(Vec2(-1.0f, 0.0f));
+		gameEngine->camera->MovePos(Vec2(-1.0f, 0.0f));
 	}
-	if (Input::KeyInputOn(Input::D))
+	if (gameEngine->in.key.on(Input::KeyBoard::D))
 	{
-		gameEngine->camera->Move(Vec2(+1.0f, 0.0f));
+		gameEngine->camera->MovePos(Vec2(+1.0f, 0.0f));
 	}
-	if (Input::KeyInputOn(Input::W))
+	if (gameEngine->in.key.on(Input::KeyBoard::W))
 	{
-		gameEngine->camera->Move(Vec2(0.0f, -1.0f));
+		gameEngine->camera->MovePos(Vec2(0.0f, -1.0f));
 	}
-	if (Input::KeyInputOn(Input::S))
+	if (gameEngine->in.key.on(Input::KeyBoard::S))
 	{
-		gameEngine->camera->Move(Vec2(0.0f, 1.0f));
+		gameEngine->camera->MovePos(Vec2(0.0f, 1.0f));
+	}
+	if (gameEngine->in.on(Input::in::B1, 0))
+	{
+		gameEngine->camera->MoveSize(Vec2(1.0f, 0.0f));
+	}
+	if (gameEngine->in.on(Input::in::B2, 0))
+	{
+		gameEngine->camera->MoveSize(Vec2(0.0f, 1.0f));
+	}
+	if (gameEngine->in.on(In::B3))
+	{
+		gameEngine->camera->MoveSize(Vec2(16.f, 9.f));
+	}
+	if (gameEngine->in.on(In::B4))
+	{
+		gameEngine->camera->MoveSize(Vec2(-16.f, -9.f));
+	}
+	if (gameEngine->in.key.down(In::M))
+	{
+		if (sound.isplay()) 
+		{
+			sound.stop();
+		}
+		else
+		{
+			sound.play();
+			sound.volume(0.2f);
+		}
 	}
 	objsmp.UpDate();
 	objsmp2.UpDate();
@@ -64,30 +93,31 @@ void ObjectSample::Initialize()
 
 void ObjectSample::UpDate()
 {
-	if (Input::KeyInputOn(Input::UP))
+	if (gameEngine->in.on(Input::in::CU, 0))
 	{
 		this->position.y -= 5.0f;
 	}
-	if (Input::KeyInputOn(Input::DOWN))
+	if (gameEngine->in.on(Input::in::CD, 0))
 	{
 		this->position.y += 5.0f;
 	}
-	if (Input::KeyInputOn(Input::RIGHT))
+	if (gameEngine->in.on(Input::in::CR,0))
 	{
 		this->position.x += 5.0f;
 	}
-	if (Input::KeyInputOn(Input::LEFT))
+	if (gameEngine->in.on(Input::in::CL,0))
 	{
 		this->position.x -= 5.0f;
 	}
-	if (Input::KeyInputOn(Input::Q))
+	if (gameEngine->in.on(Input::in::L1,0))
 	{
 		this->angle -= 1.0f;
 	}
-	if (Input::KeyInputOn(Input::E))
+	if (gameEngine->in.on(Input::in::R1,0))
 	{
 		this->angle += 1.0f;
 	}
+	
 }
 
 void ObjectSample::Render()
