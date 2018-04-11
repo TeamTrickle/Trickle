@@ -57,6 +57,8 @@ public:
 	 */
 	void TakeBucket(Bucket*);
 
+	void CustomCollision(std::vector<Object*>*);
+
 private:
 	const std::string fileName = "player.png";
 	const float MOVE_SPEED = 10.f;								//移動スピード
@@ -79,15 +81,15 @@ private:
 	Object rightBase;
 
 	bool InputLeft() {
-		return gameEngine->input.on(Input::CL,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+		return gameEngine->in.on(Input::CL,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
 	}
 	bool InputRight() {
-		return gameEngine->input.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+		return gameEngine->in.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
 	}
 	bool InputDown() {
-		return gameEngine->input.on(Input::CD, 0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+		return gameEngine->in.on(Input::CD, 0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
 	}
 	bool InputUp() {
-		return gameEngine->input.on(Input::CU, 0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+		return gameEngine->in.on(Input::CU, 0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
 	}
 };

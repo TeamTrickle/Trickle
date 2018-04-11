@@ -1,11 +1,11 @@
 #include "Player.h"
 
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::Initialize()
 {
 	Object::CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 
-	std::cout << "Player‰Šú‰»" << std::endl;
+	std::cout << "Playerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
 
 	CheckJump = true;
@@ -20,46 +20,44 @@ void Player::Initialize()
 	direction = Direction::RIGHT;
 
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::UpDate()
 {
-	//‰¼ƒJƒƒ‰ˆ—
-	float px = gameEngine->camera->width / 2;
-	float py = gameEngine->camera->height / 2;
-	float cpx = float(est.x - px);
-	float cpy = float(est.y - py);
-	if (gameEngine->input.Pad_Connection) {
+	//ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	float cpx = float(est.x);
+	float cpy = float(est.y);
+	if (gameEngine->in.Pad_Connection) {
 		Vec2 cameraest = { 0,0 };
 		cameraest.x = cpx;
 		cameraest.y = cpy;
 	}
-	gameEngine->camera->Move(Vec2(cpx, 0.0f));
-	gameEngine->camera->Move(Vec2(0.0f, cpy));
+	gameEngine->camera->MovePos(Vec2(cpx, 0.0f));
+	gameEngine->camera->MovePos(Vec2(0.0f, cpy));
 
 
-	//ƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®ˆ—
+	//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½
 	est.x = 0;
 
 	if (InputLeft()) {
 		est.x = -Player::MOVE_SPEED;
-		//ƒLƒƒƒ‰ƒNƒ^[‚ÌŒü‚«•ÏŠ·
+		//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ÏŠï¿½
 		direction = Direction::LEFT;
 	}
 	if (InputRight()) {
 		est.x = Player::MOVE_SPEED;
-		//Œü‚«‚ğRIGHT‚É
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½RIGHTï¿½ï¿½
 		direction = Direction::RIGHT;
 	}
 
-	//’òqˆ—
+	//ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½
 	LadderMove();
 
-	// ƒoƒPƒbƒcˆ—
+	// ï¿½oï¿½Pï¿½bï¿½cï¿½ï¿½ï¿½ï¿½
 	if (bucket) {
 		switch (direction) {
 		//case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
 		//case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
-		//ƒoƒPƒc‚ÌˆÊ’u‚ğ“ªã‚É•ÏX
+		//ï¿½oï¿½Pï¿½cï¿½ÌˆÊ’uï¿½ğ“ªï¿½É•ÏX
 		case Direction::LEFT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
 		case Direction::RIGHT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
 		}
@@ -67,11 +65,11 @@ void Player::UpDate()
 			bucket->Spill();*/
 	}
 
-	//y•ûŒü‚Ì‘¬“x‚Éd—Í‰Á‘¬“x‚ğ‰Á‚¦‚é
+	//yï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½xï¿½Édï¿½Í‰ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (CheckGravity) {
 		est.y += Player::GRAVITY;
 	}
-	//ƒWƒƒƒ“ƒvˆ—
+	//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
 	if (CheckJump) {
 		JumpMove();
 	}
@@ -86,13 +84,13 @@ void Player::UpDate()
 		position.x += est.x;
 	position.y += est.y;
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::Render()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
 	Box2D src(0, 0, 128, 128);
-	//LEFTŒü‚«‚È‚ç‰æ‘œ‚ğ”½“]‚³‚¹‚é
+	//LEFTï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½æ‘œï¿½ğ”½“]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (direction == Direction::LEFT) {
 		int k = src.w;
 		src.w = src.x;
@@ -100,14 +98,14 @@ void Player::Render()
 	}
 	this->playerimg.Draw(draw, src);
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::Finalize()
 {
-	std::cout << "Player‰ğ•ú" << std::endl;
+	std::cout << "Playerï¿½ï¿½ï¿½" << std::endl;
 	this->playerimg.Finalize();
 
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::Register(CollisionManager* cm) {
 	*cm += this;
 	*cm += &(this->footBase);
@@ -115,27 +113,27 @@ void Player::Register(CollisionManager* cm) {
 	*cm += &(this->leftBase);
 	*cm += &(this->rightBase);
 }
-//™™™™//-----------------------------------------------------------------------------
-//ŠÖ”
-//™™™™//-----------------------------------------------------------------------------
-//ƒWƒƒƒ“ƒv‚Ìˆ—
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
+//ï¿½Öï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
+//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ìï¿½ï¿½ï¿½
 void Player::JumpMove()
 {
-	//‘«”»’ètrue‚Ì‚Í’Êíó‘Ô
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½Ìï¿½ï¿½Í’Êï¿½ï¿½ï¿½
 	if (footBase.isCollided) {
 		est.y = 0.f;
-		//Zƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚çAƒWƒƒƒ“ƒvó‘Ô‚ÉˆÚs‚·‚é
-		if (gameEngine->input.on(Input::B1, 0)) {
+		//Zï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½Ô‚ÉˆÚsï¿½ï¿½ï¿½ï¿½
+		if (gameEngine->in.on(Input::B1,0)) {
 			est.y = Player::JUMP_POWER;
 		}
-		//ã¸’†
+		//ï¿½ã¸ï¿½ï¿½
 		if (headBase.isCollided) {
-			est.y = 0.0f;	//ã¸—Í‚ğ–³Œø‚É‚·‚é
+			est.y = 0.0f;	//ï¿½ã¸ï¿½Í‚ğ–³Œï¿½ï¿½É‚ï¿½ï¿½ï¿½
 		}
 	}
 }
-//™™™™//-----------------------------------------------------------------------------
-//‘«Œ³ÚG”»’è
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ÚGï¿½ï¿½ï¿½ï¿½
 void Player::CheckFoot()
 {
 	footBase.CreateObject(Cube, Vec2(this->position.x + 10.f, this->position.y + this->Scale.y), Vec2(this->Scale.x - 20.f, 1.0f), 0.0f);
@@ -151,23 +149,23 @@ void Player::CheckFoot()
 		}
 	};
 }
-//™™™™//-----------------------------------------------------------------------------
-//“ªÚG”»’è
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ÚGï¿½ï¿½ï¿½ï¿½
 void Player::CheckHead()
 {
 	headBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + 1.f), Vec2(this->Scale.x, 1.f), 0.0f);
 	headBase.objectTag = "PlayerHead";
 	headBase.CollisionProcess = [&](const Object& o_) {
 		//std::cout << o_.objectTag << std::endl;
-		//“–‚½‚è”»’è‚É’Ê‚é‚©”»’f‚·‚é
+		//ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½É’Ê‚é‚©ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½
 		if (isWalkable(o_.objectTag)) {
-			//std::cout << "“ª”»’è’†" << std::endl;
+			//std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½è’†" << std::endl;
 			headBase.isCollided = true;
 			this->est.y = 0.f;
 		}
 	};
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::CheckLeft()
 {
 	leftBase.CreateObject(Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
@@ -179,7 +177,7 @@ void Player::CheckLeft()
 		}
 	};
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::CheckRight()
 {
 	rightBase.CreateObject(Cube, Vec2(this->position.x, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
@@ -191,16 +189,16 @@ void Player::CheckRight()
 		}
 	};
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 bool Player::isWalkable(std::string t) {
 	for (auto& s : WALKABLE_CHIPS)
 		if (t == s)
 			return true;
 	return false;
 }
-//™™™™//-----------------------------------------------------------------------------
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
 void Player::TakeBucket(Bucket* b_) {
-	if (gameEngine->input.down(Input::B2, 0)) {
+	if (gameEngine->in.down(Input::B2, 0)) {
 		if (bucket) {
 			bucket->hold = false;
 			bucket = nullptr;
@@ -211,8 +209,8 @@ void Player::TakeBucket(Bucket* b_) {
 		}
 	}
 }
-//™™™™//-----------------------------------------------------------------------------
-//’òqˆ—
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//-----------------------------------------------------------------------------
+//ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½
 void Player::LadderMove()
 {
 	Object::CollisionProcess = [&](const Object& o_) {
@@ -229,7 +227,7 @@ void Player::LadderMove()
 		}
 	};
 	if (onLadder == true) {
-		//std::cout << "‚Í‚µ‚²HIT" << std::endl;
+		//std::cout << "ï¿½Í‚ï¿½ï¿½ï¿½HIT" << std::endl;
 		est.y = 0;
 		if (InputDown()) {
 			est.y = Player::MOVE_SPEED;
@@ -237,5 +235,15 @@ void Player::LadderMove()
 		if (InputUp()) {
 			est.y = (-Player::MOVE_SPEED);
 		}
+	}
+}
+
+void Player::CustomCollision(std::vector<Object*>* objs_)
+{
+	static bool isLoged = false;
+	if (!isLoged) {
+		for (auto& o : *objs_)
+			std::cout << o->objectTag << std::endl;
+		isLoged = true;
 	}
 }

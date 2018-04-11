@@ -3,34 +3,66 @@
 void Title::Initialize()
 {
 	std::cout << "Title‰Šú‰»" << std::endl;
+	sound.createSound(std::string("playandhope.wav"), true);
 	objsmp.Initialize();
 	objsmp2.Initialize();
 	map.LoadMap("test.txt");
+	cm.AddChild(&objsmp);
+	cm.AddChild(&objsmp2);
 }
 
 TaskFlag Title::UpDate()
 {
 	TaskFlag nowtask = Task_Title;
-	if (gameEngine->input.down(Input::in::D2, 0)/* || gameEngine->gamepad[0].ButtonDown(GLFW_JOYSTICK_8)*/)
+	if (gameEngine->in.down(Input::in::D2))
 	{
 		nowtask = Task_Game;
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
+	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
-		gameEngine->camera->Move(Vec2(-1.0f, 0.0f));
+		gameEngine->camera->MovePos(Vec2(-1.0f, 0.0f));
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::D))
+	if (gameEngine->in.key.on(Input::KeyBoard::D))
 	{
-		gameEngine->camera->Move(Vec2(+1.0f, 0.0f));
+		gameEngine->camera->MovePos(Vec2(+1.0f, 0.0f));
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::W))
+	if (gameEngine->in.key.on(Input::KeyBoard::W))
 	{
-		gameEngine->camera->Move(Vec2(0.0f, -1.0f));
+		gameEngine->camera->MovePos(Vec2(0.0f, -1.0f));
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::S))
+	if (gameEngine->in.key.on(Input::KeyBoard::S))
 	{
-		gameEngine->camera->Move(Vec2(0.0f, 1.0f));
+		gameEngine->camera->MovePos(Vec2(0.0f, 1.0f));
 	}
+	if (gameEngine->in.on(Input::in::B1, 0))
+	{
+		gameEngine->camera->MoveSize(Vec2(1.0f, 0.0f));
+	}
+	if (gameEngine->in.on(Input::in::B2, 0))
+	{
+		gameEngine->camera->MoveSize(Vec2(0.0f, 1.0f));
+	}
+	if (gameEngine->in.on(In::B3))
+	{
+		gameEngine->camera->MoveSize(Vec2(16.f, 9.f));
+	}
+	if (gameEngine->in.on(In::B4))
+	{
+		gameEngine->camera->MoveSize(Vec2(-16.f, -9.f));
+	}
+	if (gameEngine->in.key.down(In::M))
+	{
+		if (sound.isplay()) 
+		{
+			sound.stop();
+		}
+		else
+		{
+			sound.play();
+			sound.volume(0.2f);
+		}
+	}
+	cm.Run();
 	objsmp.UpDate();
 	objsmp2.UpDate();
 	objsmp.hitcheck = map.MapHitCheck(objsmp);
@@ -51,6 +83,7 @@ void Title::Finalize()
 	objsmp.Finalize();
 	objsmp2.Finalize();
 	map.Finalize();
+	cm.Destroy();
 }
 
 void ObjectSample::Initialize()
@@ -60,34 +93,48 @@ void ObjectSample::Initialize()
 	CreateObject(Cube, Vec2(10.0f, 100.0f), Vec2(128.0f, 128.0f), 0.0f);
 	footHit.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.f), 0.f);
 	this->hitcheck = false;
+
+
+	Object::CollisionIn = [&](const Object& o_) {
+		std::cout << "Collision Start : " << o_.objectTag << std::endl;
+	};
+
+	Object::CollisionProcess = [&](const Object& o_) {
+		std::cout << "Collision On Process : " << o_.objectTag << std::endl;
+	};
+
+	Object::CollisionOut = [&](const Object& o_) {
+		std::cout << "Collision End : " << o_.objectTag << std::endl;
+	};
 }
 
 void ObjectSample::UpDate()
 {
-	if (gameEngine->input.on(Input::in::CU, 0))
+	if (gameEngine->in.on(Input::in::CU, 0))
 	{
 		this->position.y -= 5.0f;
 	}
-	if (gameEngine->input.on(Input::in::CD, 0))
+	if (gameEngine->in.on(Input::in::CD, 0))
 	{
 		this->position.y += 5.0f;
 	}
-	if (gameEngine->input.on(Input::in::CR,0))
+	if (gameEngine->in.on(Input::in::CR,0))
 	{
 		this->position.x += 5.0f;
 	}
-	if (gameEngine->input.on(Input::in::CL,0))
+	if (gameEngine->in.on(Input::in::CL,0))
 	{
 		this->position.x -= 5.0f;
 	}
-	if (gameEngine->input.on(Input::in::L1,0))
+	if (gameEngine->in.on(Input::in::L1,0))
 	{
 		this->angle -= 1.0f;
 	}
-	if (gameEngine->input.on(Input::in::R1,0))
+	if (gameEngine->in.on(Input::in::R1,0))
 	{
 		this->angle += 1.0f;
 	}
+	
 }
 
 void ObjectSample::Render()

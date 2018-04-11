@@ -1,4 +1,9 @@
 #include "Task_Game.h"
+#define ADD_FUNCTION(a) \
+	[](std::vector<Object*>* objs_) { a(objs_); }
+
+
+
 void Game::Initialize()
 {
 	Vec2 bucketpos[2] = {
@@ -6,10 +11,10 @@ void Game::Initialize()
 		{200,250}
 	};
 
-	Vec2 blockpos = Vec2(1536 , 100);       //1536ƒeƒXƒg
+	Vec2 blockpos = Vec2(1536 , 100);       //1536ï¿½eï¿½Xï¿½g
 
 
-	std::cout << "Game‰Šú‰»" << std::endl;
+	std::cout << "Gameï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << std::endl;
 	player.Initialize();
 	/*for (int i = 0; i < 2; ++i)
 	{
@@ -24,13 +29,13 @@ void Game::Initialize()
 	bucket.Initialize(bucketpos[0]);
 	cm.AddChild(&bucket);
 
-	block.Initialize(blockpos);           //ƒuƒƒbƒN‚Ì¶¬
+	block.Initialize(blockpos);           //ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ìï¿½ï¿½ï¿½
 	cm.AddChild(&block);
 
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
-	// “–‚½‚è”»’èƒeƒXƒg
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½eï¿½Xï¿½g
 	player.Register(&cm);
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -40,6 +45,7 @@ void Game::Initialize()
 	gameEngine->DebugFunction = true;
 	goal.Initialize();
 	cm.AddChild(&goal);
+
 }
 
 TaskFlag Game::UpDate()
@@ -49,15 +55,15 @@ TaskFlag Game::UpDate()
 	//if(gameEngine->input.DOWN(Input::Key::L))
 	{
 		timecnt = 0;
-		//Water¶¬
+		//Waterï¿½ï¿½ï¿½ï¿½
 		auto w = new Water(Vec2(150, 100));
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
 	}
 
-	// ƒeƒXƒg—p
+	// ï¿½eï¿½Xï¿½gï¿½p
 	// ------------------------------------------
-	if (gameEngine->input.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
+	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
 		//	if (bucket[i]->capacity > 0) {
 		//		Water* sizuku = bucket[i]->Spill();
@@ -92,7 +98,7 @@ TaskFlag Game::UpDate()
 
 	block.Update(map, block);
 	bucket.Update(map, bucket);
-	//ƒuƒƒbƒN‚Ì‹““®ƒeƒXƒg’†!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ì‹ï¿½ï¿½ï¿½ï¿½eï¿½Xï¿½gï¿½ï¿½!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	/*block.maphitF = map.MapHitCheck(block.footBase);
 	block.maphitH = map.MapHitCheck(block.headBase);
 	block.maphitL = map.MapHitCheck(block.leftBase);
@@ -104,30 +110,30 @@ TaskFlag Game::UpDate()
 	block.PlCheckHitR(player);
 
 	cm.Run();
-	//if (gameEngine->input.keyboard.on(Input::KeyBoard::A))
-	//{
-	//	gameEngine->camera->Move(Vec2(-3.0f, 0.0f));
-	//}
-	//if (gameEngine->input.keyboard.on(Input::KeyBoard::D))
-	//{
-	//	gameEngine->camera->Move(Vec2(+3.0f, 0.0f));
-	//}
-	//if (gameEngine->input.keyboard.on(Input::KeyBoard::W))
-	//{
-	//	gameEngine->camera->Move(Vec2(0.0f, -3.0f));
-	//}
-	//if (gameEngine->input.keyboard.on(Input::KeyBoard::S))
-	//{
-	//	gameEngine->camera->Move(Vec2(0.0f, 3.0f));
-	//}
-	//if (gameEngine->input.Pad_Connection) {
-	//	Vec2 cameraest = { 0,0 };
-	//	cameraest.x = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
-	//	cameraest.y = gameEngine->input.gamepad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
-	//	cameraest.y = -cameraest.y;
-	//	gameEngine->camera->position += cameraest;
-	//}
-	if (gameEngine->input.keyboard.down(Input::KeyBoard::U))
+	if (gameEngine->in.key.on(Input::KeyBoard::A))
+	{
+		gameEngine->camera->MovePos(Vec2(-3.0f, 0.0f));
+	}
+	if (gameEngine->in.key.on(Input::KeyBoard::D))
+	{
+		gameEngine->camera->MovePos(Vec2(+3.0f, 0.0f));
+	}
+	if (gameEngine->in.key.on(Input::KeyBoard::W))
+	{
+		gameEngine->camera->MovePos(Vec2(0.0f, -3.0f));
+	}
+	if (gameEngine->in.key.on(Input::KeyBoard::S))
+	{
+		gameEngine->camera->MovePos(Vec2(0.0f, 3.0f));
+	}
+	if (gameEngine->in.Pad_Connection) {
+		Vec2 cameraest = { 0,0 };
+		cameraest.x = gameEngine->in.pad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
+		cameraest.y = gameEngine->in.pad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
+		cameraest.y = -cameraest.y;
+		gameEngine->camera->MovePos(cameraest);
+	}
+	if (gameEngine->in.key.down(Input::KeyBoard::U))
 	{
 		for (int i = 0; i < water.size(); ++i)
 		{
@@ -141,16 +147,16 @@ TaskFlag Game::UpDate()
 			}
 		}
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::H))
+	if (gameEngine->in.key.on(Input::KeyBoard::H))
 	{
 		bucket.position.x -= 3.0f;
 	}
-	if (gameEngine->input.keyboard.on(Input::KeyBoard::K))
+	if (gameEngine->in.key.on(Input::KeyBoard::K))
 	{
 		bucket.position.x += 3.0f;
 	}
 	TaskFlag nowtask = Task_Game;
-	if (gameEngine->input.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
+	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
 	{
 		nowtask = Task_Title;
 	}
@@ -176,7 +182,7 @@ void Game::Render2D()
 
 void Game::Finalize()
 {
-	std::cout << "Game‰ð•ú" << std::endl;
+	std::cout << "Gameï¿½ï¿½ï¿½" << std::endl;
 	block.Finalize();
 	back.Finalize();
 	map.Finalize();
