@@ -21,6 +21,7 @@ public:
 	CollisionBox collisionCube;
 	CollisionCircle collisionBall;
 	bool Gravity;
+	float mass;
 	bool hit(Object o);
 	Object();
 	Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);

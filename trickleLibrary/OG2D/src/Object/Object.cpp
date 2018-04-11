@@ -4,6 +4,7 @@ Object::Object() {
 	this->angle = 0.f;
 	this->objform = Objform::Non;
 	this->CollisionProcess = nullptr;
+	this->mass = 0.f;
 }
 Object::Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 {

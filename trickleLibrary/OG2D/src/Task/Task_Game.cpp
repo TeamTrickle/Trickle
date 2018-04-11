@@ -155,6 +155,20 @@ TaskFlag Game::UpDate()
 	{
 		bucket.position.x += 3.0f;
 	}
+	if (gameEngine->in.key.down(In::I))
+	{
+		for (int i = 0; i < water.size(); ++i)
+		{
+			if (water[i]->GetState() == Water::State::LIQUID)
+			{
+				water[i]->SetState(Water::State::SOLID);
+			}
+			else
+			{
+				water[i]->SetState(Water::State::LIQUID);
+			}
+		}
+	}
 	TaskFlag nowtask = Task_Game;
 	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
 	{
