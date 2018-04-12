@@ -107,9 +107,6 @@
     <ClCompile Include="src\Player\Player.cpp">
       <Filter>ソースファイル\Player</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_Game.cpp">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Task\Task_Title.cpp">
       <Filter>ソースファイル\Task\Title</Filter>
     </ClCompile>
@@ -179,6 +176,9 @@
     <ClCompile Include="src\Block\block.cpp">
       <Filter>ソースファイル\Block</Filter>
     </ClCompile>
+    <ClCompile Include="src\Task\Task_Game.cpp">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -201,9 +201,6 @@
     </ClInclude>
     <ClInclude Include="src\Player\Player.h">
       <Filter>ソースファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Task\Task_Game.h">
-      <Filter>ソースファイル\Task\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_Title.h">
       <Filter>ソースファイル\Task\Title</Filter>
@@ -270,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ソースファイル\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Game.h">
+      <Filter>ソースファイル\Task\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
