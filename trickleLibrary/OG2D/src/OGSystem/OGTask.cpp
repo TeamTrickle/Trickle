@@ -27,6 +27,7 @@ void _OGTK::_myGameUpdate()
 		gameEngine->camera->SetPos(Vec2(0.f, 0.f));
 		gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
 		gameEngine->fps->DeleteData();
+		gameEngine->SetPause(false);
 		switch (nowTask)
 		{
 		case Task_Title:
@@ -37,14 +38,27 @@ void _OGTK::_myGameUpdate()
 			break;
 		}
 	}
-	switch (nowTask)
+	if (!gameEngine->GetPause()) {
+		switch (nowTask)
+		{
+		case Task_Title:
+			nextTask = title.Update();
+			break;
+		case Task_Game:
+			nextTask = game.Update();
+			break;
+		}
+	}
+	else
 	{
-	case Task_Title:
-		nextTask = title.Update();
-		break;
-	case Task_Game:
-		nextTask = game.Update();
-		break;
+		//Pauseˆ—‚ğ‚±‚±‚É‹Lq
+		switch (nowTask)
+		{
+		case Task_Title:
+			break;
+		case Task_Game:
+			break;
+		}
 	}
 }
 

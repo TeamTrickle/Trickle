@@ -62,6 +62,17 @@ TaskFlag Title::Update()
 			sound.volume(0.2f);
 		}
 	}
+	if (gameEngine->in.key.down(In::H))
+	{
+		if (gameEngine->GetPause())
+		{
+			gameEngine->SetPause(false);
+		}
+		else
+		{
+			gameEngine->SetPause(true);
+		}
+	}
 	cm.Run();
 	objsmp.Update();
 	objsmp2.Update();
