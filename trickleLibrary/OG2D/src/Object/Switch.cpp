@@ -32,7 +32,7 @@ using namespace std;
 //	CreateObject(Objform::Cube, Vec2(POS_X, POS_Y), Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
 //}
 ////™™™™//-----------------------------------------------------------------------------
-//void Switch::UpDate()
+//void Switch::Update()
 //{
 //	//CheakHit(enemy_pointa);
 //}

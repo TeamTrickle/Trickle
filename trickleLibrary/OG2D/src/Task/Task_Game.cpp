@@ -61,7 +61,7 @@ void Game::Initialize()
 	swich[0].ON_OFF();
 }
 
-TaskFlag Game::UpDate()
+TaskFlag Game::Update()
 {
 	timecnt++;
 	if (timecnt >= 120)
@@ -103,7 +103,7 @@ TaskFlag Game::UpDate()
 			water.erase(water.begin() + i);
 		}
 	}
-	player.UpDate();
+	player.Update();
 	/*for (int i = 0; i < 2; ++i) {
 		player.TakeBucket(bucket[i]);
 	}*/

@@ -18,7 +18,7 @@ _OGTK OGTK;
 //------------------
 void TaskSystem()
 {
-	OGTK._myGameUpDate();
+	OGTK._myGameUpdate();
 }
 void TaskRender()
 {

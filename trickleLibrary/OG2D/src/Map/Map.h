@@ -11,7 +11,7 @@ public:
 	Map();
 	bool LoadMap(std::string _path);
 	void MapRender();
-	//void MapUpDate();
+	//void MapUpdate();
 	void Finalize();
 	//描画するマップチップの数
 	//int mapX, mapY;

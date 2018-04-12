@@ -42,7 +42,7 @@ using namespace std;
 //	//range.hitBase = Box2D((int)position.x / 2, (int)position.y / 2, IMAGE_SIZE + (int)position.x / 4, IMAGE_SIZE + (int)position.y / 4);
 //}
 ////™™™™//-----------------------------------------------------------------------------
-//void Senpuki::UpDate()
+//void Senpuki::Update()
 //{
 //	//CheckHit(enemy_pointa,1);
 //	if (flag)

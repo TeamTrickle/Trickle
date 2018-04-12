@@ -31,7 +31,7 @@ public:
 	//Window _window;
 	//タスクシステム関数
 	void _myGameInitialize();
-	void _myGameUpDate();
+	void _myGameUpdate();
 	void _myGameRender2D();
 	void _myGameRender3D();
 	void _myGameFinalize();

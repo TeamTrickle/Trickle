@@ -39,16 +39,16 @@
 //	_swi_pointa->Finalize();
 //}
 ////☆☆☆☆//-----------------------------------------------------------------------------
-//TaskFlag GIMMICK_Control::UpDate()
+//TaskFlag GIMMICK_Control::Update()
 //{
 //	//ギミックそれぞれの更新処理
 //	TaskFlag nextTask = Task_Title;
 //
-//	//_e_pointa->UpDate();
+//	//_e_pointa->Update();
 //
-//	_sen_pointa->UpDate();
-//	_ka_pointa->UpDate();
-//	_swi_pointa->UpDate();
+//	_sen_pointa->Update();
+//	_ka_pointa->Update();
+//	_swi_pointa->Update();
 //	return nextTask;
 //}
 ////☆☆☆☆//-----------------------------------------------------------------------------

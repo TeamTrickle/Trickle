@@ -18,7 +18,7 @@
 //	Switch(/*EnemyHitTest* e_pointa*/);
 //	~Switch();
 //	void Initlaize();
-//	void UpDate();
+//	void Update();
 //	void Finalize();
 //	void Render();
 //

@@ -18,7 +18,7 @@
 //{
 //public:
 //	void Initialize();
-//	void UpDate();
+//	void Update();
 //	void Finalize();
 //	void Render();
 //	Senpuki(/*EnemyHitTest* e_pointa*/);

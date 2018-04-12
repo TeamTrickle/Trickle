@@ -9,7 +9,7 @@ void _OGTK::_myGameInitialize()
 	nextTask = Task_Title;
 }
 
-void _OGTK::_myGameUpDate()
+void _OGTK::_myGameUpdate()
 {
 	if (nowTask != nextTask)
 	{
