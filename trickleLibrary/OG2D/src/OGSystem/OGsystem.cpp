@@ -20,6 +20,7 @@ void EngineSystem::Initialize()
 {
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
 	gameEngine->window = Window::Create(w_wi, w_he, w_na, w_sc);
+	gameEngine->fps = FPS::Create();
 	gameEngine->window->setIcon(std::string("./data/image/testicon.png"));
 	gameEngine->in.Inputinit(gameEngine->window->window);
 	DebugFunction = false;
@@ -35,5 +36,10 @@ void EngineSystem::Update()
 {
 	gameEngine->camera->CameraUpdate();
 	gameEngine->in.upDate();
+	gameEngine->fps->Update();
+}
+EngineSystem::~EngineSystem()
+{
+	gameEngine->fps->DeleteData();
 }
 EngineSystem* gameEngine;

@@ -23,8 +23,10 @@ void _OGTK::_myGameUpdate()
 			break;
 		}
 		nowTask = nextTask;
+		//‚±‚Ì•Ó‚¢‚Â‚©ŠÖ”‰»‚³‚¹‚Ü‚·B‚³‚¹‚½‚¢B
 		gameEngine->camera->SetPos(Vec2(0.f, 0.f));
 		gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
+		gameEngine->fps->DeleteData();
 		switch (nowTask)
 		{
 		case Task_Title:

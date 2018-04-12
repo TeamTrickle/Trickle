@@ -96,15 +96,15 @@ void ObjectSample::Initialize()
 
 
 	Object::CollisionIn = [&](const Object& o_) {
-		std::cout << "Collision Start : " << o_.objectTag << std::endl;
+		//std::cout << "Collision Start : " << o_.objectTag << std::endl;
 	};
 
 	Object::CollisionProcess = [&](const Object& o_) {
-		std::cout << "Collision On Process : " << o_.objectTag << std::endl;
+		//std::cout << "Collision On Process : " << o_.objectTag << std::endl;
 	};
 
 	Object::CollisionOut = [&](const Object& o_) {
-		std::cout << "Collision End : " << o_.objectTag << std::endl;
+		//std::cout << "Collision End : " << o_.objectTag << std::endl;
 	};
 }
 

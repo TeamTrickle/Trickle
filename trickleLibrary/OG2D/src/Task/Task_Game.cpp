@@ -2,8 +2,6 @@
 #define ADD_FUNCTION(a) \
 	[](std::vector<Object*>* objs_) { a(objs_); }
 
-
-
 void Game::Initialize()
 {
 	Vec2 bucketpos[2] = {
@@ -12,7 +10,6 @@ void Game::Initialize()
 	};
 
 	Vec2 blockpos = Vec2(1536 , 100);       //1536�e�X�g
-
 
 	std::cout << "Game" << std::endl;
 	player.Initialize();

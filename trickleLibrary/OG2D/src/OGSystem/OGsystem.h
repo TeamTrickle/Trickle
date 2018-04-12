@@ -22,8 +22,10 @@ class EngineSystem
 public:
 	EngineSystem();
 	EngineSystem(int widht, int height, char* name, bool screen);
+	~EngineSystem();
 	Camera2D::SP camera;
 	Window::SP window;
+	FPS::SP fps;
 	Input in;
 	void Initialize();
 	void Update();
