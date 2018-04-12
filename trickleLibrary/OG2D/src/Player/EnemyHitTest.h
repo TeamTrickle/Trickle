@@ -17,7 +17,7 @@ public:
 	State state;
 	void Initialize();
 	void Finalize();
-	void UpDate();
+	void Update();
 	void Render();
 
 	EnemyHitTest();

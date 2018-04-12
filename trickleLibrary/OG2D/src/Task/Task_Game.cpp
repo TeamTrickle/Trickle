@@ -14,7 +14,7 @@ void Game::Initialize()
 	Vec2 blockpos = Vec2(1536 , 100);       //1536�e�X�g
 
 
-	std::cout << "Game������" << std::endl;
+	std::cout << "Game" << std::endl;
 	player.Initialize();
 	/*for (int i = 0; i < 2; ++i)
 	{
@@ -46,6 +46,19 @@ void Game::Initialize()
 	goal.Initialize();
 	cm.AddChild(&goal);
 
+	Vec2 fanpos[2] = { Vec2(64 * 11,64 * 7), Vec2(64 * 19,64 * 10) };
+	float fanrange[2] = { 18,6 };
+	for (int i = 0; i < 2; ++i) {
+		swich[i].Initialize(Vec2(64 * (10 + i*2), 64 * 14));
+ 		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
+		cm.AddChild(&swich[i]);
+		cm.AddChild(&fan[i]);
+	}
+	for (int i = 0; i < 2; ++i) {
+		swich[i].SetTarget(&fan[0]);
+		swich[i].SetTarget(&fan[1]);
+	}
+	swich[0].ON_OFF();
 }
 
 TaskFlag Game::UpDate()
@@ -108,6 +121,12 @@ TaskFlag Game::UpDate()
 	block.PlCheckHitH(player);
 	block.PlCheckHitL(player);
 	block.PlCheckHitR(player);
+
+	//fan_switch test ★★★
+	//for (int i = 0; i < 2; ++i) {
+	//	fan[i].ChangeState();
+	//	swich[i].ChangeState();
+	//}
 
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
@@ -196,7 +215,7 @@ void Game::Render2D()
 
 void Game::Finalize()
 {
-	std::cout << "Game���" << std::endl;
+	std::cout << "Game" << std::endl;
 	block.Finalize();
 	back.Finalize();
 	map.Finalize();
@@ -217,6 +236,10 @@ void Game::Finalize()
 	while (!this->water.empty())
 	{
 		this->water.pop_back();
+	}
+	for (int i = 0; i < 2; ++i) {
+		swich[i].Finalize();
+		fan[i].Finalize();
 	}
 	cm.Destroy();
 }

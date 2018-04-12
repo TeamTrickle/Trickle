@@ -25,7 +25,7 @@ public:
 	GIMMICK_Control();
 	~GIMMICK_Control();
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Finalize();
 	void Render2D();
 public:

@@ -10,6 +10,7 @@
 #include "Bucket\bucket.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Object\Switch.h"
 
 class Player :public Object {
 
@@ -41,7 +42,7 @@ private:
 
 public:
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 

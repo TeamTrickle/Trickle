@@ -41,7 +41,7 @@ void Kanetuki::Initialize()
 	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
 }
 //ÅôÅôÅôÅô//-----------------------------------------------------------------------------
-void Kanetuki::UpDate()
+void Kanetuki::Update()
 {
 	//collisionCube.hitBase = Box2D((int)position.x + 100, (int)position.y /2 + 128, IMAGE_SIZE, IMAGE_SIZE);
 

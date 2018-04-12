@@ -16,7 +16,7 @@ class Kanetuki : public Object
 {
 public:
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Finalize();
 	void Render();
 	Kanetuki(/*EnemyHitTest* e_pointa*/);

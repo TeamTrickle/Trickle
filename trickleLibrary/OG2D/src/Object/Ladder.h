@@ -9,7 +9,7 @@ class Ladder : public Object
 {
 public:
 	bool Initialize();
-	void UpDate();
+	void Update();
 	void Render();			//map‚Å•`‰æ‚ğs‚¤‚Ì‚Å‚ ‚Ü‚èˆÓ–¡‚ª‚È‚¢
 	void Finalize();
 	Ladder();

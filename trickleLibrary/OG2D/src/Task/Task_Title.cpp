@@ -11,7 +11,7 @@ void Title::Initialize()
 	cm.AddChild(&objsmp2);
 }
 
-TaskFlag Title::UpDate()
+TaskFlag Title::Update()
 {
 	TaskFlag nowtask = Task_Title;
 	if (gameEngine->in.down(Input::in::D2))
@@ -63,8 +63,8 @@ TaskFlag Title::UpDate()
 		}
 	}
 	cm.Run();
-	objsmp.UpDate();
-	objsmp2.UpDate();
+	objsmp.Update();
+	objsmp2.Update();
 	objsmp.hitcheck = map.MapHitCheck(objsmp);
 	return nowtask;
 }
@@ -108,7 +108,7 @@ void ObjectSample::Initialize()
 	};
 }
 
-void ObjectSample::UpDate()
+void ObjectSample::Update()
 {
 	if (gameEngine->in.on(Input::in::CU, 0))
 	{
@@ -163,7 +163,7 @@ void ObjectSample2::Initialize()
 	this->hitcheck = false;
 }
 
-void ObjectSample2::UpDate()
+void ObjectSample2::Update()
 {
 	
 }

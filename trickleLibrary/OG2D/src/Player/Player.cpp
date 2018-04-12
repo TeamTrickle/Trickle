@@ -5,7 +5,7 @@ void Player::Initialize()
 {
 	Object::CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 
-	std::cout << "Player������" << std::endl;
+	std::cout << "Player" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
 
 	CheckJump = true;
@@ -21,7 +21,7 @@ void Player::Initialize()
 
 }
 //��������//-----------------------------------------------------------------------------
-void Player::UpDate()
+void Player::Update()
 {
 	//���J��������
 	float cpx = float(est.x);
@@ -101,7 +101,7 @@ void Player::Render()
 //��������//-----------------------------------------------------------------------------
 void Player::Finalize()
 {
-	std::cout << "Player���" << std::endl;
+	std::cout << "Player" << std::endl;
 	this->playerimg.Finalize();
 
 }
@@ -175,6 +175,13 @@ void Player::CheckLeft()
 			est.x = 0.f;
 			leftBase.isCollided = true;
 		}
+		if (o_.objectTag == "Switch") {
+			if (gameEngine->in.down(Input::B4, 0)) {
+				((Switch&)o_).ON_OFF();
+				std::cout << "change" << std::endl;
+			}
+		}
+
 	};
 }
 //��������//-----------------------------------------------------------------------------
@@ -187,6 +194,13 @@ void Player::CheckRight()
 			est.x = 0.f;
 			rightBase.isCollided = true;
 		}
+		if (o_.objectTag == "Switch") {
+			if (gameEngine->in.down(Input::B4, 0)) {
+				((Switch&)o_).ON_OFF();
+				std::cout << "change" << std::endl;
+			}
+		}
+
 	};
 }
 //��������//-----------------------------------------------------------------------------

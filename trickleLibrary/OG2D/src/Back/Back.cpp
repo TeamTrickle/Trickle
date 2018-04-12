@@ -8,7 +8,7 @@ void Back::Initialize() {
 	Scale.y = 1080.0f;
 }
 
-void Back::UpDate() {}
+void Back::Update() {}
 
 void Back::Render() {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);

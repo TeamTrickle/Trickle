@@ -38,10 +38,10 @@ void _OGTK::_myGameUpDate()
 	switch (nowTask)
 	{
 	case Task_Title:
-		nextTask = title.UpDate();
+		nextTask = title.Update();
 		break;
 	case Task_Game:
-		nextTask = game.UpDate();
+		nextTask = game.Update();
 		break;
 	}
 }

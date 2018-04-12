@@ -17,7 +17,7 @@ public:
 	Object toolHit;
 	bool hitcheck;
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 };
@@ -28,7 +28,7 @@ public:
 	std::string fileName = "Collision.png";
 	bool hitcheck;
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 };
@@ -36,7 +36,7 @@ class Title
 {
 public:
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Render2D();
 	void Finalize();
 	//™™™™//

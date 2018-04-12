@@ -13,6 +13,8 @@
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
 #include "Block\block.h"
+#include "Object\Switch.h"
+#include "Object\Senpuki.h"
 
 
 class Game
@@ -35,4 +37,7 @@ public:
 	CollisionManager cm;
 	int timecnt;
 	Goal goal;
+
+	Switch swich[2];
+	Fan fan[2];
 };

@@ -16,7 +16,7 @@ bool Ladder::Initialize()
 	CreateObject(Objform::Cube, POS, IMAGE_SIZE, 0);
 	return true;
 }
-void Ladder::UpDate()
+void Ladder::Update()
 {
 	flag = CheakHit();
 	if (flag)
