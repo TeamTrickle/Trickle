@@ -9,9 +9,9 @@
 //|　                          |//
 //|  クラスの宣言で使用可能____|//
 
-#include "Object\Switch.h"
-#include "Object\Kanetuki.h"
-#include "Object\Senpuki.h"
+#include "Gimmick\NO_MOVE\Kanetuki.h"
+#include "Gimmick\NO_MOVE\Switch.h"
+#include "Gimmick\NO_MOVE\Senpuki.h"
 
 //class Player;
 //class EnemyHitTest;

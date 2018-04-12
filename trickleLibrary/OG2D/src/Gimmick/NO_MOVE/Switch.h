@@ -4,8 +4,8 @@
 //|　                          |//
 //|____________________________|//
 #pragma once
-#include "Object.h"
-#include "Object\Senpuki.h"
+#include "Object\Object.h"
+#include "Senpuki.h"
 //#include "Player\Player.h"
 //#include "Player\EnemyHitTest.h"
 
@@ -34,9 +34,6 @@
 //	bool flag;//当たり判定
 //	bool switchflag;//スイッチがONかOFFかを示す
 //};
-
-
-
 
 //注意！！！！
 //プレイヤが二つ以上のスイッチに同時に接触するとエラー吐きます

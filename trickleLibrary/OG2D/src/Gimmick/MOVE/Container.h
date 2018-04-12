@@ -23,28 +23,29 @@ public:
 	void Finalize();
 };
 
-class Player :public Object
-{
-public:
-	Texture PlImg;
-	std::string fileName = "Collision.png";
-	bool hitCheck;
-
-	void Initialize();
-	void UpDate();
-	void Finalize();
-	void Render();
-};
+//class Player :public Object
+//{
+//public:
+//	Texture PlImg;
+//	std::string fileName = "Collision.png";
+//	bool hitCheck;
+//
+//	void Initialize();
+//	void UpDate();
+//	void Finalize();
+//	void Render();
+//};
 
 class Container_ :public Object
 {
 public:
 	void Initialize();
-	TaskFlag UpDate();
+	//TaskFlag UpDate();
+	void UpDate();
 	void Render();
 	void Finalize();
 
-	Player pl_;
+	//Player pl_;
 	Youki youki_;
 };
 
