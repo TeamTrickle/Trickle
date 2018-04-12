@@ -16,7 +16,7 @@ void Player::Initialize()
 	direction = Direction::RIGHT;
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
-void Player::UpDate()
+void Player::Update()
 {
 	//キャラクターの移動処理
 	est.x = 0;

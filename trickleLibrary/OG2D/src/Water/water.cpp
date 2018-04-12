@@ -95,6 +95,12 @@ void Water::Update() {
 		break;
 	case Water::State::SOLID:
 		//•Xˆ—
+		this->Scale = this->maxSize;
+		if (!isCollided)
+		{
+			this->position.y += 5.0f;
+
+		}
 		break;
 	}
 }

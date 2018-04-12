@@ -18,7 +18,7 @@ _OGTK OGTK;
 //------------------
 void TaskSystem()
 {
-	OGTK._myGameUpDate();
+	OGTK._myGameUpdate();
 }
 void TaskRender()
 {
@@ -107,7 +107,7 @@ int main() {
 	//ウィンドウが存在する場合ループ
 	while (!glfwWindowShouldClose(gameEngine->window->window)) {
 		//エンジン内の更新処理
-		gameEngine->UpDate();
+		gameEngine->Update();
 		//捜査対象の行列をモデルビュー行列に変更
 		glMatrixMode(GL_MODELVIEW);
 		//バッファをクリアして値を設定する

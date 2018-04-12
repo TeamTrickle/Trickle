@@ -1,11 +1,20 @@
 #include "Task_Game.h"
+#define ADD_FUNCTION(a) \
+	[](std::vector<Object*>* objs_) { a(objs_); }
+
+
+
 void Game::Initialize()
 {
 	Vec2 bucketpos[2] = {
 		{100,250},
 		{200,250}
 	};
-	std::cout << "Game‰Šú‰»" << std::endl;
+
+	Vec2 blockpos = Vec2(1536 , 100);       //1536ï¿½eï¿½Xï¿½g
+
+
+	std::cout << "Game" << std::endl;
 	player.Initialize();
 	/*for (int i = 0; i < 2; ++i)
 	{
@@ -19,10 +28,14 @@ void Game::Initialize()
 	}*/
 	bucket.Initialize(bucketpos[0]);
 	cm.AddChild(&bucket);
+
+	block.Initialize(blockpos);           //ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ìï¿½ï¿½ï¿½
+	cm.AddChild(&block);
+
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
-	// “–‚½‚è”»’èƒeƒXƒg
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½eï¿½Xï¿½g
 	player.Register(&cm);
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -32,22 +45,36 @@ void Game::Initialize()
 	gameEngine->DebugFunction = true;
 	goal.Initialize();
 	cm.AddChild(&goal);
+
+	Vec2 fanpos[2] = { Vec2(64 * 11,64 * 7), Vec2(64 * 19,64 * 10) };
+	float fanrange[2] = { 18,6 };
+	for (int i = 0; i < 2; ++i) {
+		swich[i].Initialize(Vec2(64 * (10 + i*2), 64 * 14));
+ 		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
+		cm.AddChild(&swich[i]);
+		cm.AddChild(&fan[i]);
+	}
+	for (int i = 0; i < 2; ++i) {
+		swich[i].SetTarget(&fan[0]);
+		swich[i].SetTarget(&fan[1]);
+	}
+	swich[0].ON_OFF();
 }
 
-TaskFlag Game::UpDate()
+TaskFlag Game::Update()
 {
 	timecnt++;
 	if (timecnt >= 120)
 	//if(gameEngine->input.DOWN(Input::Key::L))
 	{
 		timecnt = 0;
-		//Water¶¬
+		//Waterï¿½ï¿½ï¿½ï¿½
 		auto w = new Water(Vec2(150, 100));
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
 	}
 
-	// ƒeƒXƒg—p
+	// ï¿½eï¿½Xï¿½gï¿½p
 	// ------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
@@ -76,11 +103,30 @@ TaskFlag Game::UpDate()
 			water.erase(water.begin() + i);
 		}
 	}
-	player.UpDate();
+	player.Update();
 	/*for (int i = 0; i < 2; ++i) {
 		player.TakeBucket(bucket[i]);
 	}*/
 	player.TakeBucket(&bucket);
+
+	block.Update(map, block);
+	bucket.Update(map,bucket);
+	//ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ì‹ï¿½ï¿½ï¿½ï¿½eï¿½Xï¿½gï¿½ï¿½!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	/*block.maphitF = map.MapHitCheck(block.footBase);
+	block.maphitH = map.MapHitCheck(block.headBase);
+	block.maphitL = map.MapHitCheck(block.leftBase);
+	block.maphitR = map.MapHitCheck(block.rightBase);*/
+
+	block.PlCheckHitF(player);
+	block.PlCheckHitH(player);
+	block.PlCheckHitL(player);
+	block.PlCheckHitR(player);
+
+	//fan_switch test â˜…â˜…â˜…
+	//for (int i = 0; i < 2; ++i) {
+	//	fan[i].ChangeState();
+	//	swich[i].ChangeState();
+	//}
 
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
@@ -128,6 +174,20 @@ TaskFlag Game::UpDate()
 	{
 		bucket.position.x += 3.0f;
 	}
+	if (gameEngine->in.key.down(In::I))
+	{
+		for (int i = 0; i < water.size(); ++i)
+		{
+			if (water[i]->GetState() == Water::State::LIQUID)
+			{
+				water[i]->SetState(Water::State::SOLID);
+			}
+			else
+			{
+				water[i]->SetState(Water::State::LIQUID);
+			}
+		}
+	}
 	TaskFlag nowtask = Task_Game;
 	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
 	{
@@ -146,6 +206,7 @@ void Game::Render2D()
 	/*for (int i = 0; i < bucket.size(); ++i) {
 		bucket[i]->Render();
 	}*/
+	block.Render();
 	goal.Render();
 	bucket.Render();
 	map.MapRender();
@@ -154,7 +215,8 @@ void Game::Render2D()
 
 void Game::Finalize()
 {
-	std::cout << "Game‰ð•ú" << std::endl;
+	std::cout << "Game" << std::endl;
+	block.Finalize();
 	back.Finalize();
 	map.Finalize();
 	player.Finalize();
@@ -174,6 +236,10 @@ void Game::Finalize()
 	while (!this->water.empty())
 	{
 		this->water.pop_back();
+	}
+	for (int i = 0; i < 2; ++i) {
+		swich[i].Finalize();
+		fan[i].Finalize();
 	}
 	cm.Destroy();
 }

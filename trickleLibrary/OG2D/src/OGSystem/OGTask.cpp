@@ -2,25 +2,19 @@
 void _OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
-	_window.createWindow(960, 540, "trickle", false);
-	//_window.createWindow(1920, 1080, "trickle", true);
+	gameEngine->SetWindow(960, 540, "trickle", false);
+	//gameEngine->SetWindow(1920, 1080, "trickle", true);
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
 	nowTask = NON;
 	nextTask = Task_Title;
 }
 
-void _OGTK::_myGameUpDate()
+void _OGTK::_myGameUpdate()
 {
 	if (nowTask != nextTask)
 	{
 		switch (nowTask)
 		{
-		case Task_Sample:
-			s.Finalize();
-			break;
-		case Task_Sample2:
-			s2.Finalize();
-			break;
 		case Task_Title:
 			title.Finalize();
 			break;
@@ -33,12 +27,6 @@ void _OGTK::_myGameUpDate()
 		gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
 		switch (nowTask)
 		{
-		case Task_Sample:
-			s.Initialize();
-			break;
-		case Task_Sample2:
-			s2.Initialize();
-			break;
 		case Task_Title:
 			title.Initialize();
 			break;
@@ -49,17 +37,11 @@ void _OGTK::_myGameUpDate()
 	}
 	switch (nowTask)
 	{
-	case Task_Sample:
-		nextTask = s.UpDate();
-		break;
-	case Task_Sample2:
-		nextTask = s2.UpDate();
-		break;
 	case Task_Title:
-		nextTask = title.UpDate();
+		nextTask = title.Update();
 		break;
 	case Task_Game:
-		nextTask = game.UpDate();
+		nextTask = game.Update();
 		break;
 	}
 }
@@ -68,12 +50,6 @@ void _OGTK::_myGameRender2D()
 {
 	switch (nowTask)
 	{
-	case Task_Sample:
-		s.Render2D();
-		break;
-	case Task_Sample2:
-		s2.Render2D();
-		break;
 	case Task_Title:
 		title.Render2D();
 		break;
@@ -92,12 +68,6 @@ void _OGTK::_myGameFinalize()
 {
 	switch (nowTask)
 	{
-	case Task_Sample:
-		s.Finalize();
-		break;
-	case Task_Sample2:
-		s2.Finalize();
-		break;
 	case Task_Title:
 		title.Finalize();
 		break;

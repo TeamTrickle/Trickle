@@ -9,7 +9,7 @@ void Title::Initialize()
 	map.LoadMap("test.txt");
 }
 
-TaskFlag Title::UpDate()
+TaskFlag Title::Update()
 {
 	TaskFlag nowtask = Task_Title;
 	if (gameEngine->in.down(Input::in::D2))

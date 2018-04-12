@@ -12,13 +12,16 @@
 #include "Water\water.h"
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
+#include "Block\block.h"
+#include "Object\Switch.h"
+#include "Object\Senpuki.h"
 
 
 class Game
 {
 public:
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Render2D();
 	void Finalize();
 	//™™™™//
@@ -26,6 +29,7 @@ public:
 	//™™™™//
 	Player player;
 	//std::vector<Bucket*> bucket;
+	Block block;
 	Bucket bucket;
 	Back back;
 	Map map;
@@ -33,4 +37,7 @@ public:
 	CollisionManager cm;
 	int timecnt;
 	Goal goal;
+
+	Switch swich[2];
+	Fan fan[2];
 };

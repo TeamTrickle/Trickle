@@ -8,7 +8,7 @@ public:
 	Camera2D(Box2D pos);
 	~Camera2D();
 	void Initialize(Box2D pos);
-	void CameraUpDate() const;
+	void CameraUpdate() const;
 	void MovePos(Vec2 est);
 	void SetPos(Vec2 est);
 	void SetSize(Vec2 size_);

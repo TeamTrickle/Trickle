@@ -40,7 +40,7 @@ private:
 
 public:
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 

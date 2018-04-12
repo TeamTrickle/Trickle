@@ -26,7 +26,7 @@ public:
 	Window::SP window;
 	Input in;
 	void Initialize();
-	void UpDate();
+	void Update();
 	void SetWindow(int width, int height, char* name, bool screen);
 	bool DebugFunction;
 private:

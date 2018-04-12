@@ -35,7 +35,7 @@ class Title
 {
 public:
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Render2D();
 	void Finalize();
 	//™™™™//

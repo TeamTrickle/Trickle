@@ -54,6 +54,9 @@
 #include <map>
 
 #define PI 3.1415926f
+typedef unsigned char u_char;
+typedef unsigned int u_int;
+typedef unsigned long u_long;
 
 class Circle;
 class Vec3;

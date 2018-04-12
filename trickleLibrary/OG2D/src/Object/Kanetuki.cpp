@@ -1,91 +1,78 @@
 #include "Kanetuki.h"
 using namespace std;
-
-const int POS_X = 600;
-const int POS_Y = 100;			
-
-const int IMAGE_SIZE = 128;		//画像サイズ
-
-const int HOTTIME = 1;			//水蒸気になるまでの時間
-const int HOT_TIME = 180;		//水蒸気に変化する時間
+		
+const int IMAGE_SIZE = 64;		//画像サイズ
+const int HOT_SPEED = 3;        //水蒸気になるまでのカウンタ増加量
+const int HOT_MAX = 90;         //水蒸気になるときの最大カウンタ
 
 //☆☆☆☆//-----------------------------------------------------------------------------
-Kanetuki::Kanetuki(/*EnemyHitTest* e_pointa*/)
+Kanetuki::Kanetuki()
 {
-	//player_pointa = p_pointa;
-
-	//EnemyHitTestクラスの情報を取得する
-	//enemy_pointa = e_pointa;     
-
-	_filePath = "Kanetuki.jpg";	
-	position = Vec2(POS_X, POS_Y);
-	flag = false;
-	Count = 0;
+	
 }
-
+//☆☆☆☆//-----------------------------------------------------------------------------
+Kanetuki::Kanetuki(Vec2 pos)
+{
+	Pos.push_back(pos);          //座標データを保存する
+}
 //☆☆☆☆//-----------------------------------------------------------------------------
 Kanetuki::~Kanetuki()
 {
-	//delete player_pointa;
-	//delete enemy_pointa;
+
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::Initialize()
 {
-	/*_filePath = "Kanetuki.jpg";
-	position = Vec2(POS_X, POS_Y);
-	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
-	flag = false;
-	Count = 0;*/
-	image.TextureCreate(_filePath);
-	CreateObject(Objform::Cube, position, Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);
+	//データのやり取り
+	for (int i = 0; i < 2; ++i)                    //データが2個分
+	{
+		HotCount[i] = 0;                           //水蒸気になるまでのカウンタ
+		hitflag[i] = false;                        //当たり判定フラグをfalse
+		hitBace[i].objectTag = "Kanetuki";         //オブジェクトタグの指定
+		hitBace[i].CreateObject(Objform::Cube, Pos[i], Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);           //当たり判定を生成する
+	}
+	//当たり判定を行う
+	for (int i = 0; i < 2; ++i)                    //データが2個分
+	{
+		this->hitBace[i].CollisionProcess = [&](const Object& o_)
+		{
+			if (o_.objectTag == "Water")
+			{
+				//水が液体か個体ならば
+				if ((((Water&)o_).GetState() == Water::State::SOLID) || ((Water&)o_).GetState() == Water::State::LIQUID)
+				{
+					HotCount[i] += HOT_SPEED;
+					if (HotCount[i] >= HOT_MAX)
+					{
+						HotCount[i] = 0;
+						((Water&)o_).SetState(Water::State::GAS);
+					}
+				}
+			}
+		};
+	}
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::UpDate()
 {
-	//collisionCube.hitBase = Box2D((int)position.x + 100, (int)position.y /2 + 128, IMAGE_SIZE, IMAGE_SIZE);
 
-	// ___________________________________________________ //
-	//| Playerに当たり一定の時間が立つと水蒸気に変化します|//
-	//|___________________________________________________|//
-
-	//CheckHit(enemy_pointa);
-	if (flag)								//Playerと接してるとき
-	{
-		//cout << "true" << endl;
-		if (/*Playerが氷の状態なら*/true)
-		{
-			Count += HOTTIME;				//加熱カウンタを増やす
-
-			if (Count >= HOT_TIME)			//加熱カウンタが上限に達したら
-			{
-				//水蒸気の状態にする
-			}
-		}
-	}
-	else
-	{
-		//cout << "false" << endl;
-		Count = 0;							//加熱カウンタを元に戻す
-	}
-}
-//☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::Render()
-{
-	Box2D draw((int)position.x, (int)position.y, IMAGE_SIZE, IMAGE_SIZE);
-	draw.OffsetSize();
-	Box2D src(0, 0, IMAGE_SIZE, IMAGE_SIZE);
-	image.Draw(draw, src);
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 void Kanetuki::Finalize()
 {
-	image.Finalize();
+	
 }
 //☆☆☆☆//-----------------------------------------------------------------------------
 //  関数  //-----------------------------------------------------------------------------
 //☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::CheckHit(Object* objhit)
+void Kanetuki::Input_Pos(Vec2 pos)
 {
-	flag = hit(*objhit);
+	Pos.push_back(pos);                  //座標データを保存する
+}
+//☆☆☆☆//-----------------------------------------------------------------------------
+//  関数  //-----------------------------------------------------------------------------
+//☆☆☆☆//-----------------------------------------------------------------------------
+void Kanetuki::CheakHit()
+{
+	
 }

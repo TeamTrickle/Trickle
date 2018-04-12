@@ -31,9 +31,9 @@ void EngineSystem::SetWindow(int width, int height, char* name, bool screen)
 	this->w_na = name;
 	this->w_sc = screen;
 }
-void EngineSystem::UpDate()
+void EngineSystem::Update()
 {
-	gameEngine->camera->CameraUpDate();
+	gameEngine->camera->CameraUpdate();
 	gameEngine->in.upDate();
 }
 EngineSystem* gameEngine;

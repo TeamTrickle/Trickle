@@ -105,8 +105,39 @@ bool Map::LoadMap(std::string _path)
 		{
 			//オブジェクトの生成
 			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
-			if (this->_arr[y][x] != 0)
+			/*if (this->_arr[y][x] != 0)
+				this->hitBase[y][x].objectTag = "Floor";*/
+
+			switch (this->_arr[y][x])
+			{
+			case 1:
+				//床
 				this->hitBase[y][x].objectTag = "Floor";
+				break;
+			case 2:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
+			case 3:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
+			case 4:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
+			case 6:
+				this->hitBase[y][x].objectTag = "Soil";
+				break;
+			case 7:
+				this->hitBase[y][x].objectTag = "Ladder";
+				break;
+			case 8:
+				this->hitBase[y][x].objectTag = "Ladder";
+				break;
+			case 9:
+				this->hitBase[y][x].objectTag = "Switch";
+				break;
+			default:
+				break;
+			}
 		}
 
 	}

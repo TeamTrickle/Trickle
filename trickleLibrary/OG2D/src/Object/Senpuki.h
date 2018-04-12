@@ -7,32 +7,57 @@
 #include "Object\Object.h"
 #include "Win\WinMain.h"
 #include "Player\EnemyHitTest.h"
+#include "Water\water.h"
 
 //#include "Player\Player.h"
+//
+////class Player;
+//class EnemyHitTest;
+//
+//class Senpuki : public Object
+//{
+//public:
+//	void Initialize();
+//	void Update();
+//	void Finalize();
+//	void Render();
+//	Senpuki(/*EnemyHitTest* e_pointa*/);
+//	//Senpuki(Player* p_pointa);
+//	~Senpuki();
+//private:
+//	//Player* player_pointa;
+//
+//	//EnemyHitTest* enemy_pointa;
+//	bool flag;							//当たり判定格納変数
+//	Texture senimg;						//画像イメージ
+//	Texture collbox;					//画像イメージ
+//	std::string _filePath;				//ファイルパス
+//	std::string _hitbox;				//ファイルパス
+//	CollisionBox range;				    //視野範囲
+//public:
+//	void CheckHit(Object* objhit , int value);
+//};
 
-//class Player;
-class EnemyHitTest;
 
-class Senpuki : public Object
-{
+class Fan :public Object {
+	std::vector<Switch*> switches;		//自身の稼働にかかわっているスイッチ一覧
 public:
-	void Initialize();
-	void UpDate();
+	enum Dir {
+		LEFT,
+		RIGHT,
+	};
+
+	void Initialize(Vec2 pos, float r, Dir d, bool activ);
+	void AddSwitch(Switch* swit);
+	void ChangeState();
 	void Finalize();
 	void Render();
-	Senpuki(/*EnemyHitTest* e_pointa*/);
-	//Senpuki(Player* p_pointa);
-	~Senpuki();
 private:
-	//Player* player_pointa;
+	Dir dir;
+	Texture image;
+	float range;
+	float strength;
+	bool active;
 
-	//EnemyHitTest* enemy_pointa;
-	bool flag;							//当たり判定格納変数
-	Texture senimg;						//画像イメージ
-	Texture collbox;					//画像イメージ
-	std::string _filePath;				//ファイルパス
-	std::string _hitbox;				//ファイルパス
-	CollisionBox range;				    //視野範囲
-public:
-	void CheckHit(Object* objhit , int value);
+
 };

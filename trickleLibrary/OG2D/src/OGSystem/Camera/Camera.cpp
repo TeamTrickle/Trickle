@@ -18,7 +18,7 @@ void Camera2D::Initialize(Box2D pos)
 	this->position = { 0,0 };
 	this->Scale = { pos.w,pos.h };
 }
-void Camera2D::CameraUpDate() const
+void Camera2D::CameraUpdate() const
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

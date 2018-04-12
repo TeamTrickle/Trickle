@@ -84,6 +84,9 @@
     <Filter Include="ソースファイル\OGSystem\System\Sound\Audio">
       <UniqueIdentifier>{d7c8a8d3-047d-457a-946e-d5a69d8156bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Block">
+      <UniqueIdentifier>{3561f149-f02c-4281-910e-b013eba7d0be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -119,9 +122,6 @@
     <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
       <Filter>ソースファイル\CollisionManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Object\Kanetuki.cpp">
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
@@ -137,7 +137,6 @@
     <ClCompile Include="src\Goal\Goal.cpp">
       <Filter>ソースファイル\Goal</Filter>
     </ClCompile>
-    <ClCompile Include="src\Object\Ladder.cpp" />
     <ClCompile Include="src\OGSystem\Camera\Camera.cpp">
       <Filter>ソースファイル\OGSystem\System\Camera</Filter>
     </ClCompile>
@@ -170,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Seihyouki.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Block\block.cpp">
+      <Filter>ソースファイル\Block</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +214,6 @@
     <ClInclude Include="src\CollisionManager\CollisionManager.h">
       <Filter>ソースファイル\CollisionManager</Filter>
     </ClInclude>
-    <ClInclude Include="src\Task\Task_GIMMICK_Control.h">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\Object\Kanetuki.h">
       <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
@@ -226,9 +228,6 @@
     </ClInclude>
     <ClInclude Include="src\Goal\Goal.h">
       <Filter>ソースファイル\Goal</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Ladder.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\Camera\Camera.h">
       <Filter>ソースファイル\OGSystem\System\Camera</Filter>
@@ -259,6 +258,12 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Audio\StreamingSound.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Seihyouki.h">
+      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Block\block.h">
+      <Filter>ソースファイル\Block</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
