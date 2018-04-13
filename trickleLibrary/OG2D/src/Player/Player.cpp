@@ -1,12 +1,16 @@
 #include "Player.h"
 
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::Initialize()
 {
 	Object::CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 
-	std::cout << "Player初期化" << std::endl;
+	std::cout << "Player" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
+
+	CheckJump = true;
+	CheckGravity = true;
+	onLadder = false;
 
 	CheckHead();
 	CheckFoot();
@@ -14,38 +18,61 @@ void Player::Initialize()
 	CheckRight();
 
 	direction = Direction::RIGHT;
+
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::Update()
 {
-	//キャラクターの移動処理
+	//?ｿｽ?ｿｽ?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+	float cpx = float(est.x);
+	float cpy = float(est.y);
+	if (gameEngine->in.Pad_Connection) {
+		Vec2 cameraest = { 0,0 };
+		cameraest.x = cpx;
+		cameraest.y = cpy;
+	}
+	gameEngine->camera->MovePos(Vec2(cpx, 0.0f));
+	gameEngine->camera->MovePos(Vec2(0.0f, cpy));
+
+
+	//?ｿｽL?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽN?ｿｽ^?ｿｽ[?ｿｽﾌ移難ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 	est.x = 0;
 
 	if (InputLeft()) {
 		est.x = -Player::MOVE_SPEED;
-		//キャラクターの向き変換
+		//?ｿｽL?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽN?ｿｽ^?ｿｽ[?ｿｽﾌ鯉ｿｽ?ｿｽ?ｿｽ?ｿｽﾏ奇ｿｽ
 		direction = Direction::LEFT;
 	}
 	if (InputRight()) {
 		est.x = Player::MOVE_SPEED;
-		//向きをRIGHTに
+		//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽRIGHT?ｿｽ?ｿｽ
 		direction = Direction::RIGHT;
 	}
 
-	// バケッツ処理
+	//?ｿｽ?ｿｽq?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+	LadderMove();
+
+	// ?ｿｽo?ｿｽP?ｿｽb?ｿｽc?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 	if (bucket) {
 		switch (direction) {
-		case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
-		case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
+		//case Direction::LEFT:	bucket->position = this->position - Vec2(bucket->Scale.x, 0.f);	break;
+		//case Direction::RIGHT:	bucket->position = this->position + Vec2(bucket->Scale.x, 0.f);	break;
+		//?ｿｽo?ｿｽP?ｿｽc?ｿｽﾌ位置?ｿｽ?ｪ擾ｿｽﾉ変更
+		case Direction::LEFT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
+		case Direction::RIGHT:	bucket->position = this->position - Vec2(0.0f, bucket->Scale.y);	break;
 		}
 		/*if (Input::KeyInputDown(BUCKET_SPOIL_KEY))
 			bucket->Spill();*/
 	}
 
-	//y方向の速度に加速度を加える
-	est.y += Player::GRAVITY;
-
-	JumpMove();
+	//y?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ托ｿｽ?ｿｽx?ｿｽﾉ重?ｿｽﾍ会ｿｽ?ｿｽ?ｿｽ?ｿｽx?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+	if (CheckGravity) {
+		est.y += Player::GRAVITY;
+	}
+	//?ｿｽW?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽv?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+	if (CheckJump) {
+		JumpMove();
+	}
 
 	// Sync collider player
 	footBase.position = Vec2(this->position.x + 10.f, this->position.y + this->Scale.y + est.y);
@@ -57,13 +84,13 @@ void Player::Update()
 		position.x += est.x;
 	position.y += est.y;
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::Render()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
 	Box2D src(0, 0, 128, 128);
-	//LEFT向きなら画像を反転させる
+	//LEFT?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ鞫懶ｿｽ?ｽ転?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 	if (direction == Direction::LEFT) {
 		int k = src.w;
 		src.w = src.x;
@@ -71,14 +98,14 @@ void Player::Render()
 	}
 	this->playerimg.Draw(draw, src);
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::Finalize()
 {
-	std::cout << "Player解放" << std::endl;
+	std::cout << "Player" << std::endl;
 	this->playerimg.Finalize();
 
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::Register(CollisionManager* cm) {
 	*cm += this;
 	*cm += &(this->footBase);
@@ -86,27 +113,27 @@ void Player::Register(CollisionManager* cm) {
 	*cm += &(this->leftBase);
 	*cm += &(this->rightBase);
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
-//関数
-//☆☆☆☆//-----------------------------------------------------------------------------
-//ジャンプの処理
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
+//?ｿｽﾖ撰ｿｽ
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
+//?ｿｽW?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽv?ｿｽﾌ擾ｿｽ?ｿｽ?ｿｽ
 void Player::JumpMove()
 {
-	//足判定trueの時は通常状態
+	//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽtrue?ｿｽﾌ趣ｿｽ?ｿｽﾍ通擾ｿｽ?ｿｽ?ｿｽ
 	if (footBase.isCollided) {
 		est.y = 0.f;
-		//Zボタンを押したら、ジャンプ状態に移行する
+		//Z?ｿｽ{?ｿｽ^?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽA?ｿｽW?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽv?ｿｽ?ｿｽﾔに移行?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 		if (gameEngine->in.on(Input::B1,0)) {
 			est.y = Player::JUMP_POWER;
 		}
-		//上昇中
-		if (headBase.isCollided){
-			est.y = 0.0f;	//上昇力を無効にする
+		//?ｿｽ繽ｸ?ｿｽ?ｿｽ
+		if (headBase.isCollided) {
+			est.y = 0.0f;	//?ｿｽ繽ｸ?ｿｽﾍを無鯉ｿｽ?ｿｽﾉゑｿｽ?ｿｽ?ｿｽ
 		}
 	}
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
-//足元接触判定
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾚ触?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 void Player::CheckFoot()
 {
 	footBase.CreateObject(Cube, Vec2(this->position.x + 10.f, this->position.y + this->Scale.y), Vec2(this->Scale.x - 20.f, 1.0f), 0.0f);
@@ -122,23 +149,23 @@ void Player::CheckFoot()
 		}
 	};
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
-//頭接触判定
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽﾚ触?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 void Player::CheckHead()
 {
 	headBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + 1.f), Vec2(this->Scale.x, 1.f), 0.0f);
 	headBase.objectTag = "PlayerHead";
 	headBase.CollisionProcess = [&](const Object& o_) {
 		//std::cout << o_.objectTag << std::endl;
-		//当たり判定に通るか判断する
+		//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ阡ｻ?ｿｽ?ｿｽﾉ通るか?ｿｽ?ｿｽ?ｿｽf?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 		if (isWalkable(o_.objectTag)) {
-			//std::cout << "頭判定中" << std::endl;
+			//std::cout << "?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ闥?" << std::endl;
 			headBase.isCollided = true;
 			this->est.y = 0.f;
 		}
 	};
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::CheckLeft()
 {
 	leftBase.CreateObject(Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
@@ -148,9 +175,16 @@ void Player::CheckLeft()
 			est.x = 0.f;
 			leftBase.isCollided = true;
 		}
+		if (o_.objectTag == "Switch") {
+			if (gameEngine->in.down(Input::B4, 0)) {
+				((Switch&)o_).ON_OFF();
+				std::cout << "change" << std::endl;
+			}
+		}
+
 	};
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::CheckRight()
 {
 	rightBase.CreateObject(Cube, Vec2(this->position.x, this->position.y), Vec2(1.f, this->Scale.y), 0.0f);
@@ -160,23 +194,70 @@ void Player::CheckRight()
 			est.x = 0.f;
 			rightBase.isCollided = true;
 		}
+		if (o_.objectTag == "Switch") {
+			if (gameEngine->in.down(Input::B4, 0)) {
+				((Switch&)o_).ON_OFF();
+				std::cout << "change" << std::endl;
+			}
+		}
+
 	};
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 bool Player::isWalkable(std::string t) {
 	for (auto& s : WALKABLE_CHIPS)
 		if (t == s)
 			return true;
 	return false;
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
 void Player::TakeBucket(Bucket* b_) {
 	if (gameEngine->in.down(Input::B2, 0)) {
 		if (bucket) {
+			bucket->hold = false;
 			bucket = nullptr;
 		}
 		else if (this->hit(*b_)) {
 			bucket = b_;
+			bucket->hold = true;
 		}
+	}
+}
+//?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ//-----------------------------------------------------------------------------
+//?ｿｽ?ｿｽq?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+void Player::LadderMove()
+{
+	Object::CollisionProcess = [&](const Object& o_) {
+		if (o_.objectTag == "Ladder") {
+			CheckJump = false;
+			CheckGravity = false;
+			isCollided = true;
+			onLadder = true;
+		}
+		else {
+			CheckGravity = true;
+			CheckJump = true;
+			onLadder = false;
+		}
+	};
+	if (onLadder == true) {
+		//std::cout << "?ｿｽﾍゑｿｽ?ｿｽ?ｿｽHIT" << std::endl;
+		est.y = 0;
+		if (InputDown()) {
+			est.y = Player::MOVE_SPEED;
+		}
+		if (InputUp()) {
+			est.y = (-Player::MOVE_SPEED);
+		}
+	}
+}
+
+void Player::CustomCollision(std::vector<Object*>* objs_)
+{
+	static bool isLoged = false;
+	if (!isLoged) {
+		for (auto& o : *objs_)
+			std::cout << o->objectTag << std::endl;
+		isLoged = true;
 	}
 }

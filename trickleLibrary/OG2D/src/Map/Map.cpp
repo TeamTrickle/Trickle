@@ -133,7 +133,7 @@ bool Map::LoadMap(std::string _path)
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
 			case 9:
-				this->hitBase[y][x].objectTag = "Switch";
+				//this->hitBase[y][x].objectTag = "Switch";
 				break;
 			default:
 				break;

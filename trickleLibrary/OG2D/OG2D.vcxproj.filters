@@ -122,6 +122,10 @@
     <ClCompile Include="src\Goal\Goal.cpp">
       <Filter>ソースファイル\Goal</Filter>
     </ClCompile>
+    <ClCompile Include="src\Block\block.cpp">
+      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object\Ladder.cpp" />
     <ClCompile Include="src\OGSystem\Camera\Camera.cpp">
       <Filter>ソースファイル\OGSystem\System\Camera</Filter>
     </ClCompile>
@@ -216,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="src\Goal\Goal.h">
       <Filter>ソースファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Block\block.h">
+      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object\Ladder.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\Camera\Camera.h">
       <Filter>ソースファイル\OGSystem\System\Camera</Filter>
