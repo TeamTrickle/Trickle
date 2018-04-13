@@ -7,6 +7,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Map\Map.h"
+#include "CollisionManager\CollisionManager.h"
 class ObjectSample :public Object{
 public:
 	//Object object;
@@ -16,7 +17,7 @@ public:
 	Object toolHit;
 	bool hitcheck;
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 };
@@ -27,7 +28,7 @@ public:
 	std::string fileName = "Collision.png";
 	bool hitcheck;
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 };
@@ -41,6 +42,7 @@ public:
 	//™™™™//
 	//’Ç‰Á•Ï”//
 	//™™™™//
+	CollisionManager cm;
 	ObjectSample objsmp;
 	ObjectSample2 objsmp2;
 	Map map;

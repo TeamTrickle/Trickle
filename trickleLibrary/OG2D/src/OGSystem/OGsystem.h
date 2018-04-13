@@ -22,18 +22,23 @@ class EngineSystem
 public:
 	EngineSystem();
 	EngineSystem(int widht, int height, char* name, bool screen);
+	~EngineSystem();
 	Camera2D::SP camera;
 	Window::SP window;
+	FPS::SP fps;
 	Input in;
 	void Initialize();
 	void Update();
 	void SetWindow(int width, int height, char* name, bool screen);
 	bool DebugFunction;
+	void SetPause(const bool ispause_);
+	bool GetPause() const;
 private:
 	int w_wi;
 	int w_he;
 	char* w_na;
 	bool w_sc;
+	bool isPause;
 };
 
 extern EngineSystem* gameEngine;

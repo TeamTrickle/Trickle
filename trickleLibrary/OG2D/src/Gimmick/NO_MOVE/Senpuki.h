@@ -186,8 +186,11 @@
 #pragma once
 #include "Object\Object.h"
 #include "Win\WinMain.h"
-#include "Player\EnemyHitTest.h"
+#include "Gimmick\NO_MOVE\Switch.h"
 #include "Water\water.h"
+#include <vector>
+
+class Switch;
 
 class Fan :public Object {
 	std::vector<Switch*> switches;		//自身の稼働にかかわっているスイッチ一覧

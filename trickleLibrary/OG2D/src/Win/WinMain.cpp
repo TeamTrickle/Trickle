@@ -11,8 +11,11 @@
 //------------------
 //class定義
 //------------------
-FPS fps;
 _OGTK OGTK;
+void test()
+{
+	std::cout << "testnow" << std::endl;
+}
 //------------------
 //タスクシステム
 //------------------
@@ -33,14 +36,14 @@ void TaskFinalize()
 //初期化
 //------------------
 void Initialize() {
-	fps.Initialize();
+
 }
 //------------------
 //解放
 //------------------
 void Finalize()
 {
-
+	
 }
 //------------------
 //更新
@@ -50,11 +53,9 @@ bool Update() {
 	{
 		TaskFinalize();
 		//ウィンドウの破棄
-		//glfwDestroyWindow(OGTK._window.window);
 		glfwDestroyWindow(gameEngine->window->window);
 		return true;
 	}
-	fps.Update();
 	return false;
 }
 //------------------

@@ -23,8 +23,11 @@ void _OGTK::_myGameUpdate()
 			break;
 		}
 		nowTask = nextTask;
+		//この辺いつか関数化させます。させたい。
 		gameEngine->camera->SetPos(Vec2(0.f, 0.f));
 		gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
+		gameEngine->fps->DeleteData();
+		gameEngine->SetPause(false);
 		switch (nowTask)
 		{
 		case Task_Title:
@@ -35,14 +38,27 @@ void _OGTK::_myGameUpdate()
 			break;
 		}
 	}
-	switch (nowTask)
+	if (!gameEngine->GetPause()) {
+		switch (nowTask)
+		{
+		case Task_Title:
+			nextTask = title.Update();
+			break;
+		case Task_Game:
+			nextTask = game.Update();
+			break;
+		}
+	}
+	else
 	{
-	case Task_Title:
-		nextTask = title.Update();
-		break;
-	case Task_Game:
-		nextTask = game.Update();
-		break;
+		//Pause処理をここに記述
+		switch (nowTask)
+		{
+		case Task_Title:
+			break;
+		case Task_Game:
+			break;
+		}
 	}
 }
 

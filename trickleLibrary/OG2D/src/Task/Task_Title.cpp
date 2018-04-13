@@ -7,6 +7,8 @@ void Title::Initialize()
 	objsmp.Initialize();
 	objsmp2.Initialize();
 	map.LoadMap("test.txt");
+	cm.AddChild(&objsmp);
+	cm.AddChild(&objsmp2);
 }
 
 TaskFlag Title::Update()
@@ -60,8 +62,20 @@ TaskFlag Title::Update()
 			sound.volume(0.2f);
 		}
 	}
-	objsmp.UpDate();
-	objsmp2.UpDate();
+	if (gameEngine->in.key.down(In::H))
+	{
+		if (gameEngine->GetPause())
+		{
+			gameEngine->SetPause(false);
+		}
+		else
+		{
+			gameEngine->SetPause(true);
+		}
+	}
+	cm.Run();
+	objsmp.Update();
+	objsmp2.Update();
 	objsmp.hitcheck = map.MapHitCheck(objsmp);
 	return nowtask;
 }
@@ -80,6 +94,7 @@ void Title::Finalize()
 	objsmp.Finalize();
 	objsmp2.Finalize();
 	map.Finalize();
+	cm.Destroy();
 }
 
 void ObjectSample::Initialize()
@@ -89,9 +104,22 @@ void ObjectSample::Initialize()
 	CreateObject(Cube, Vec2(10.0f, 100.0f), Vec2(128.0f, 128.0f), 0.0f);
 	footHit.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.f), 0.f);
 	this->hitcheck = false;
+
+
+	Object::CollisionIn = [&](const Object& o_) {
+		//std::cout << "Collision Start : " << o_.objectTag << std::endl;
+	};
+
+	Object::CollisionProcess = [&](const Object& o_) {
+		//std::cout << "Collision On Process : " << o_.objectTag << std::endl;
+	};
+
+	Object::CollisionOut = [&](const Object& o_) {
+		//std::cout << "Collision End : " << o_.objectTag << std::endl;
+	};
 }
 
-void ObjectSample::UpDate()
+void ObjectSample::Update()
 {
 	if (gameEngine->in.on(Input::in::CU, 0))
 	{
@@ -146,7 +174,7 @@ void ObjectSample2::Initialize()
 	this->hitcheck = false;
 }
 
-void ObjectSample2::UpDate()
+void ObjectSample2::Update()
 {
 	
 }

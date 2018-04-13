@@ -107,9 +107,6 @@
     <ClCompile Include="src\Player\Player.cpp">
       <Filter>ソースファイル\Player</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_Title.cpp">
-      <Filter>ソースファイル\Task\Title</Filter>
-    </ClCompile>
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
@@ -164,9 +161,6 @@
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
@@ -178,6 +172,12 @@
     </ClCompile>
     <ClCompile Include="src\Task\Task_Game.cpp">
       <Filter>ソースファイル\Task\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Title.cpp">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +201,6 @@
     </ClInclude>
     <ClInclude Include="src\Player\Player.h">
       <Filter>ソースファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Task\Task_Title.h">
-      <Filter>ソースファイル\Task\Title</Filter>
     </ClInclude>
     <ClInclude Include="src\Back\Back.h">
       <Filter>ソースファイル\Back</Filter>
@@ -256,9 +253,6 @@
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
@@ -270,6 +264,12 @@
     </ClInclude>
     <ClInclude Include="src\Task\Task_Game.h">
       <Filter>ソースファイル\Task\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Title.h">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
