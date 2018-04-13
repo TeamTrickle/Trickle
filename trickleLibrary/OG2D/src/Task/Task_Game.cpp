@@ -45,7 +45,7 @@ void Game::Initialize()
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
-	// ?¿½?¿½?¿½?¿½?¿½è”»?¿½?¿½e?¿½X?¿½g
+	
 	player.Register(&cm);
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -119,7 +119,7 @@ TaskFlag Game::Update()
 		cm.AddChild(water[water.size() - 1]);
 	}
 
-	// ?¿½e?¿½X?¿½g?¿½p
+	
 	// ------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
@@ -156,7 +156,7 @@ TaskFlag Game::Update()
 
 	block.Update(map, block);
 	bucket.Update(map, bucket);
-	//?¿½u?¿½?¿½?¿½b?¿½N?¿½Ì‹ï¿½?¿½?¿½?¿½e?¿½X?¿½g?¿½?¿½!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	/*block.maphitF = map.MapHitCheck(block.footBase);
 	block.maphitH = map.MapHitCheck(block.headBase);
 	block.maphitL = map.MapHitCheck(block.leftBase);
@@ -167,7 +167,7 @@ TaskFlag Game::Update()
 	block.PlCheckHitL(player);
 	block.PlCheckHitR(player);
 
-	//fan_switch test â˜?â˜?â˜?
+	
 	//for (int i = 0; i < 2; ++i) {
 	//	fan[i].ChangeState();
 	//	swich[i].ChangeState();

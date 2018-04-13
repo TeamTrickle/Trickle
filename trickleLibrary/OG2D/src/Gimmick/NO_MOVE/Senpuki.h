@@ -199,7 +199,9 @@ public:
 		LEFT,
 		RIGHT,
 	};
-
+	explicit Fan();
+	explicit Fan(Vec2);
+	virtual ~Fan();
 	void Initialize(Vec2 pos, float r, Dir d, bool activ);
 	void AddSwitch(Switch* swit);
 	void ChangeState();

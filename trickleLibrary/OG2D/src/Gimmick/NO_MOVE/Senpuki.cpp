@@ -186,6 +186,18 @@ using namespace std;
 
 
 //‰¡“c‚³‚ñ•—
+Fan::Fan()
+{
+
+}
+Fan::Fan(Vec2 pos)
+{
+	position = pos;
+}
+Fan::~Fan()
+{
+
+}
 void Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ) {
 	position = pos;
 	objectTag = "Fan";
