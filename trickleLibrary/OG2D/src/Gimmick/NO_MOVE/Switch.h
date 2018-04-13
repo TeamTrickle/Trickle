@@ -9,7 +9,6 @@
 //|____________________________|//
 #pragma once
 #include "Object\Object.h"
-#include "Player\Player.h"
 #include "Senpuki.h"
 #include <vector>
 
