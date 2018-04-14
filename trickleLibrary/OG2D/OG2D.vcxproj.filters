@@ -183,9 +183,6 @@
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp" />
-    <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
-      <Filter>ソースファイル\GameProcessManagement</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameProcessManagement\Timer.cpp">
       <Filter>ソースファイル\GameProcessManagement</Filter>
     </ClCompile>
@@ -283,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
-      <Filter>ソースファイル\GameProcessManagement</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\Timer.h">
       <Filter>ソースファイル\GameProcessManagement</Filter>
