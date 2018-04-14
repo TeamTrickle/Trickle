@@ -87,6 +87,9 @@
     <Filter Include="ソースファイル\GIMMCK\NO_MOVE_GIMMCK">
       <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\GameProcessManagement">
+      <UniqueIdentifier>{b3f4927d-8ba7-4446-96b1-838aa24d70b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -180,6 +183,12 @@
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp" />
+    <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
+      <Filter>ソースファイル\GameProcessManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\Timer.cpp">
+      <Filter>ソースファイル\GameProcessManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -274,6 +283,12 @@
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
+      <Filter>ソースファイル\GameProcessManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\Timer.h">
+      <Filter>ソースファイル\GameProcessManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
