@@ -33,7 +33,13 @@ public:
 	bool DebugFunction;
 	void SetPause(const bool ispause_);
 	bool GetPause() const;
+	void SetVolume(const float value_);
+	float GetVolime() const;
+	void GameEnd();
+	bool GetEnd() const;
 private:
+	bool end;
+	float volume;
 	int w_wi;
 	int w_he;
 	char* w_na;

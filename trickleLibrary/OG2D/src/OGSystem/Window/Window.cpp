@@ -55,7 +55,10 @@ void Window::createWindow(int wi, int he, char* name, bool screen)
 }
 void Window::setIcon(std::string& path_)
 {
+	//stbimageを使って画像を読み込む
 	image[0].pixels = stbi_load(path_.c_str(), &image[0].width, &image[0].height, 0, 4);
+	//glfwに設定したいWindowとアイコンにしたい画像データと個数を送る
 	glfwSetWindowIcon(this->window, 1, image);
+	//データの解放
 	stbi_image_free(image[0].pixels);
 }
