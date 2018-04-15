@@ -8,7 +8,7 @@ Timer::~Timer()
 {
 
 }
-void Timer::Intialize()
+void Timer::Initialize()
 {
 	//時間のゼロクリア
 	frame_time = 0;               //1フレームごとに格納するタイム
@@ -51,8 +51,5 @@ void Timer::Instrumentation_output()
 }
 void Timer::Instrumentation_output(Timer& timer_)
 {
-	if (frame_time % 60 == 0) //60フレームにつき一回だけ出力します
-	{
-	    cout << timer_.frame_time_hours << "時間" << timer_.frame_time_min << "分" << timer_.frame_time_sec << "秒" << endl;
-	}
+	cout << timer_.frame_time_hours << "時間" << timer_.frame_time_min << "分" << timer_.frame_time_sec << "秒" << endl;
 }

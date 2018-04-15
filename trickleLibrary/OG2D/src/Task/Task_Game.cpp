@@ -44,8 +44,8 @@ void Game::Initialize()
 
 	back.Initialize();
 	map.LoadMap("prototype.txt");
-	
-	
+
+
 	player.Register(&cm);
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -104,10 +104,18 @@ void Game::Initialize()
 	//											//cm.AddChild(&kanetuki.hitBace[1]);          //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 	//cm.AddChild(&seihyouki.hitBace);            //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 
+	cm.AddChild(&gameprocess);
+
+	gameprocess.Set_Goal(&goal);
+
+
+	gameprocess.Initialize();
+	gameprocess.Goal_Check();
 }
 
 TaskFlag Game::Update()
 {
+	gameprocess.Update();
 	timecnt++;
 	if (timecnt >= 120)
 		//if(gameEngine->input.DOWN(Input::Key::L))
@@ -119,7 +127,6 @@ TaskFlag Game::Update()
 		cm.AddChild(water[water.size() - 1]);
 	}
 
-	
 	// ------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
@@ -233,6 +240,7 @@ TaskFlag Game::Update()
 			}
 		}
 	}
+
 	TaskFlag nowtask = Task_Game;
 	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
 	{
