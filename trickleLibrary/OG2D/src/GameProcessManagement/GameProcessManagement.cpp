@@ -16,15 +16,15 @@ void GameProcessManagement::Initialize()
 void GameProcessManagement::Update()
 {
 	timer.Update();                          //タイマー時間の出力・計算をしている
-	Goal_Check();
+	Goal_Check();                            //ゴールチェックする
 	Goal_Event();                            //ゲームクリアイベントを呼び出す
 }
 void GameProcessManagement::Set_Goal(Object* goal)
 {
-	//if (goal->objectTag != "Goal")           //オブジェクトタグの確認をする
-	//{
-	//   return;
-	//}
+	if (goal->objectTag != "Goal")           //オブジェクトタグの確認をする
+	{
+	   return;
+	}
 	goals.push_back(goal);                   //push.backをする
 }
 void GameProcessManagement::Goal_Check()
