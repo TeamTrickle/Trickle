@@ -104,18 +104,23 @@ void Game::Initialize()
 	//											//cm.AddChild(&kanetuki.hitBace[1]);          //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 	//cm.AddChild(&seihyouki.hitBace);            //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 
-	cm.AddChild(&gameprocess);
-
-	gameprocess.Set_Goal(&goal);
+	//cm.AddChild(&gameprocess);
+	//goal.cleared = true;
 
 
 	gameprocess.Initialize();
-	gameprocess.Goal_Check();
+	gameprocess.Set_Goal(&goal);
+
 }
 
 TaskFlag Game::Update()
 {
+	//ƒS[ƒ‹ƒ`ƒFƒbƒN------------------
 	gameprocess.Update();
+	if (gameEngine->in.down(Input::in::SR, 0)) { //NƒL[
+		goal.cleared = true;
+	}
+	//-------------------------------
 	timecnt++;
 	if (timecnt >= 120)
 		//if(gameEngine->input.DOWN(Input::Key::L))
@@ -125,7 +130,7 @@ TaskFlag Game::Update()
 		auto w = new Water(Vec2(150, 100));
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
-	}
+	} 
 
 	// ------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {

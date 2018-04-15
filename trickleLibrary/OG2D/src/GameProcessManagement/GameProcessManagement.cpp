@@ -16,7 +16,7 @@ void GameProcessManagement::Initialize()
 void GameProcessManagement::Update()
 {
 	timer.Update();                          //タイマー時間の出力・計算をしている
-
+	Goal_Check();
 	Goal_Event();                            //ゲームクリアイベントを呼び出す
 }
 void GameProcessManagement::Set_Goal(Object* goal)
@@ -36,6 +36,7 @@ void GameProcessManagement::Goal_Check()
 			if (((Goal*)g)->cleared)
 			{
 				gameclear_flag = true;
+				return;
 			}
 		}
 	}
