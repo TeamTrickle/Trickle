@@ -15,8 +15,8 @@ void Timer::Initialize()
 	frame_time_sec = 0;           //秒
 	frame_time_min = 0;           //分
 	frame_time_hours = 0;         //時
-
 }
+
 void Timer::Update()
 {
 	Instrumentation();            //タイマーの計算をする
@@ -24,7 +24,7 @@ void Timer::Update()
 }
 void Timer::Instrumentation()
 {
-	frame_time++;                 //タイマーを動かす
+	Time_Count();                //frame_time++;
 	//計算式
 	if (frame_time == 60)         //タイマーが60フレームいったら・・・
 	{
@@ -41,6 +41,11 @@ void Timer::Instrumentation()
 			frame_time_min = 0;                                    //ゼロクリア
 		}
 	}
+}
+void Timer::Time_Count()
+{
+	frame_time += 1;
+	//std::cout << this->frame_time << std::endl;
 }
 void Timer::Instrumentation_output()
 {

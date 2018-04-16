@@ -57,6 +57,14 @@ public:
 	*/
 	void Instrumentation_output(Timer&);
 
+
+	/*
+	タイム時間をインクリメントします
+	■引数　なし
+	■戻り　なし
+	*/
+	void Time_Count();
+
 private:
 	int frame_time;                                //フレーム時間を格納する
 	int frame_time_hours;                          //〇時間
