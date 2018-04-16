@@ -19,7 +19,7 @@ void Title::Initialize()
 	texPause.TextureCreate("pause.png");
 }
 
-TaskFlag Title::UpDate()
+TaskFlag Title::Update()
 {
 	TaskFlag nowtask = Task_Title;
 
@@ -36,6 +36,10 @@ TaskFlag Title::UpDate()
 	if (state == Close)
 	{
 		//ゲームを終了する処理、またはタスクを移行
+		if (gameEngine->in.down(Input::in::D2))
+		{
+			gameEngine->GameEnd();
+		}
 	}
 
 	if (state == Pause)

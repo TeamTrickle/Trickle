@@ -31,11 +31,20 @@ public:
 	void Update();
 	void SetWindow(int width, int height, char* name, bool screen);
 	bool DebugFunction;
+	void SetPause(const bool ispause_);
+	bool GetPause() const;
+	void SetVolume(const float value_);
+	float GetVolime() const;
+	void GameEnd();
+	bool GetEnd() const;
 private:
+	bool end;
+	float volume;
 	int w_wi;
 	int w_he;
 	char* w_na;
 	bool w_sc;
+	bool isPause;
 };
 
 extern EngineSystem* gameEngine;

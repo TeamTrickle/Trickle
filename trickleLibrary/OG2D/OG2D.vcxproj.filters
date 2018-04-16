@@ -45,15 +45,6 @@
     <Filter Include="ソースファイル\CollisionManager">
       <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Object\GIMMCK">
-      <UniqueIdentifier>{6ad99194-3287-4484-922c-d5acaa43d4c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Object\GIMMCK\MOVE_GMMCK">
-      <UniqueIdentifier>{84c5ea92-4e5e-4e4e-a978-c9ac657a86b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK">
-      <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Goal">
       <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
     </Filter>
@@ -84,6 +75,18 @@
     <Filter Include="ソースファイル\OGSystem\System\Sound\Audio">
       <UniqueIdentifier>{d7c8a8d3-047d-457a-946e-d5a69d8156bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Block">
+      <UniqueIdentifier>{9de36b8e-092d-4d58-a53a-4220b94e99da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\GIMMCK">
+      <UniqueIdentifier>{6ad99194-3287-4484-922c-d5acaa43d4c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\GIMMCK\MOVE_GMMCK">
+      <UniqueIdentifier>{84c5ea92-4e5e-4e4e-a978-c9ac657a86b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\GIMMCK\NO_MOVE_GIMMCK">
+      <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -104,12 +107,6 @@
     <ClCompile Include="src\Player\Player.cpp">
       <Filter>ソースファイル\Player</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_Game.cpp">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Task\Task_Title.cpp">
-      <Filter>ソースファイル\Task\Title</Filter>
-    </ClCompile>
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
@@ -119,28 +116,12 @@
     <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
       <Filter>ソースファイル\CollisionManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_GIMMICK_Control.cpp">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Object\Kanetuki.cpp">
-      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Object\Senpuki.cpp">
-      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Object\Switch.cpp">
-      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
     <ClCompile Include="src\Bucket\bucket.cpp">
-      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Goal\Goal.cpp">
       <Filter>ソースファイル\Goal</Filter>
     </ClCompile>
-    <ClCompile Include="src\Block\block.cpp">
-      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Object\Ladder.cpp" />
     <ClCompile Include="src\OGSystem\Camera\Camera.cpp">
       <Filter>ソースファイル\OGSystem\System\Camera</Filter>
     </ClCompile>
@@ -174,6 +155,31 @@
     <ClCompile Include="src\OGSystem\OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\MOVE\Container.cpp">
+      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Block\block.cpp">
+      <Filter>ソースファイル\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Game.cpp">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Title.cpp">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Block\block.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -197,12 +203,6 @@
     <ClInclude Include="src\Player\Player.h">
       <Filter>ソースファイル\Player</Filter>
     </ClInclude>
-    <ClInclude Include="src\Task\Task_Game.h">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Task\Task_Title.h">
-      <Filter>ソースファイル\Task\Title</Filter>
-    </ClInclude>
     <ClInclude Include="src\Back\Back.h">
       <Filter>ソースファイル\Back</Filter>
     </ClInclude>
@@ -212,29 +212,11 @@
     <ClInclude Include="src\CollisionManager\CollisionManager.h">
       <Filter>ソースファイル\CollisionManager</Filter>
     </ClInclude>
-    <ClInclude Include="src\Task\Task_GIMMICK_Control.h">
-      <Filter>ソースファイル\Task\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Kanetuki.h">
-      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Senpuki.h">
-      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Switch.h">
-      <Filter>ソースファイル\Object\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
     <ClInclude Include="src\Bucket\bucket.h">
-      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
+      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClInclude>
     <ClInclude Include="src\Goal\Goal.h">
       <Filter>ソースファイル\Goal</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Block\block.h">
-      <Filter>ソースファイル\Object\GIMMCK\MOVE_GMMCK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object\Ladder.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\Camera\Camera.h">
       <Filter>ソースファイル\OGSystem\System\Camera</Filter>
@@ -265,6 +247,33 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Audio\StreamingSound.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\MOVE\Container.h">
+      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Block\block.h">
+      <Filter>ソースファイル\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Game.h">
+      <Filter>ソースファイル\Task\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Title.h">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Block\block.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

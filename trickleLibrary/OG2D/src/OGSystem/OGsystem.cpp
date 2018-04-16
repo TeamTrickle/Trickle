@@ -24,6 +24,9 @@ void EngineSystem::Initialize()
 	gameEngine->window->setIcon(std::string("./data/image/testicon.png"));
 	gameEngine->in.Inputinit(gameEngine->window->window);
 	DebugFunction = false;
+	this->isPause = false;
+	this->volume = 1.0f;
+	this->end = false;
 }
 void EngineSystem::SetWindow(int width, int height, char* name, bool screen)
 {
@@ -41,5 +44,29 @@ void EngineSystem::Update()
 EngineSystem::~EngineSystem()
 {
 	gameEngine->fps->DeleteData();
+}
+void EngineSystem::SetPause(const bool ispause_)
+{
+	this->isPause = ispause_;
+}
+bool EngineSystem::GetPause() const
+{
+	return this->isPause;
+}
+void EngineSystem::SetVolume(const float value_)
+{
+	this->volume = value_;
+}
+float EngineSystem::GetVolime() const
+{
+	return this->volume;
+}
+void EngineSystem::GameEnd()
+{
+	this->end = true;
+}
+bool EngineSystem::GetEnd() const
+{
+	return this->end;
 }
 EngineSystem* gameEngine;

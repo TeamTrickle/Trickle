@@ -10,7 +10,7 @@
 #include "Bucket\bucket.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Object\Switch.h"
+#include "Gimmick\NO_MOVE\Switch.h"
 
 class Player :public Object {
 

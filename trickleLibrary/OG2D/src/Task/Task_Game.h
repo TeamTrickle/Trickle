@@ -13,8 +13,10 @@
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
 #include "Block\block.h"
-#include "Object\Switch.h"
-#include "Object\Senpuki.h"
+#include "Gimmick\NO_MOVE\Kanetuki.h"
+#include "Gimmick\NO_MOVE\Seihyouki.h"
+#include "Gimmick\NO_MOVE\Senpuki.h"
+#include "Gimmick\NO_MOVE\Switch.h"
 
 
 class Game
@@ -38,6 +40,14 @@ public:
 	int timecnt;
 	Goal goal;
 
+	//ジャスティン風
+	/*Senpuki senpuki;
+	Seihyouki seihyouki;
+	Kanetuki kanetuki;
+	Switch switch_;*/
+
+	//横田さん風
 	Switch swich[2];
 	Fan fan[2];
+
 };

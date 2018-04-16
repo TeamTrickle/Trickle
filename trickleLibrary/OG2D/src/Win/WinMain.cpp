@@ -49,7 +49,7 @@ void Finalize()
 //更新
 //------------------
 bool Update() {
-	if (gameEngine->in.key.down(In::ESCAPE))
+	if (gameEngine->in.key.down(In::ESCAPE) || gameEngine->GetEnd())
 	{
 		TaskFinalize();
 		//ウィンドウの破棄

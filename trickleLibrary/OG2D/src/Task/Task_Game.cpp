@@ -5,34 +5,47 @@
 void Game::Initialize()
 {
 	Vec2 bucketpos[2] = {
-		{100,250},
-		{200,250}
+		{ 100,250 },
+		{ 200,250 }
 	};
 
-	Vec2 blockpos = Vec2(1536 , 100);       //1536ï¿½eï¿½Xï¿½g
+	Vec2 blockpos = Vec2(1536, 100);
+
+	//ƒWƒƒƒXƒeƒBƒ“•—‚ÌƒMƒ~ƒbƒN‚Ìê‡
+
+	//Vec2 gimmickpos[6]
+	//{
+	//	{ 64 * 19,64 * 8 },     //ƒXƒCƒbƒ` ã
+	//	{ 64 * 18,64 * 15 },    //‰Á”MŠí ¶
+	//	{ 64 * 11,64 * 7 },     //î•—‹@ ã
+	//	{ 64 * 19 ,64 * 10 },   //î•—‹@ ‰º
+	//	{ 64 * 12 ,64 * 14 },	//ƒXƒCƒbƒ` ‰º
+	//	{ 64 * 19,64 * 15 },    //‰Á”MŠí ‰E
+	//};
+
 
 	std::cout << "Game" << std::endl;
 	player.Initialize();
 	/*for (int i = 0; i < 2; ++i)
 	{
-		auto w = new Bucket(Vec2(bucketpos[i].x, bucketpos[i].y));
-		bucket.push_back(w);
+	auto w = new Bucket(Vec2(bucketpos[i].x, bucketpos[i].y));
+	bucket.push_back(w);
 	}
 	for (int i = 0; i < bucket.size(); ++i)
 	{
-		bucket[i]->Initialize();
-		cm.AddChild(bucket[i]);
+	bucket[i]->Initialize();
+	cm.AddChild(bucket[i]);
 	}*/
 	bucket.Initialize(bucketpos[0]);
 	cm.AddChild(&bucket);
 
-	block.Initialize(blockpos);           //ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ìï¿½ï¿½ï¿½
+	block.Initialize(blockpos);
 	cm.AddChild(&block);
 
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
-	// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½eï¿½Xï¿½g
+	
 	player.Register(&cm);
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -43,11 +56,13 @@ void Game::Initialize()
 	goal.Initialize();
 	cm.AddChild(&goal);
 
+	//‰¡“c‚³‚ñ•—
+
 	Vec2 fanpos[2] = { Vec2(64 * 11,64 * 7), Vec2(64 * 19,64 * 10) };
 	float fanrange[2] = { 18,6 };
 	for (int i = 0; i < 2; ++i) {
-		swich[i].Initialize(Vec2(64 * (10 + i*2), 64 * 14));
- 		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
+		swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
+		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
 		cm.AddChild(&swich[i]);
 		cm.AddChild(&fan[i]);
 	}
@@ -56,22 +71,55 @@ void Game::Initialize()
 		swich[i].SetTarget(&fan[1]);
 	}
 	swich[0].ON_OFF();
+
+	//ƒWƒƒƒXƒeƒBƒ“•— Œ»İ‚Í»•X‹@‚ª“®‚«‚Ü‚·
+
+	//senpuki.SetParent(&map);                    //map‚ÌƒAƒhƒŒƒX’l‚ğŠi”[‚·‚é
+	//for (int i = 0; i < 2; ++i)
+	//{
+	//	senpuki.SetParent(&switch_, i);      //Switch‚ÌƒAƒhƒŒƒX’l‚ğŠi”[‚·‚é &switch_[0]
+	//}
+
+	//senpuki.Set_Pos(gimmickpos[2]);             //î•—‹@‚Ìã‚ÌÀ•W’l‚ğvector‚É“o˜^‚·‚é
+	//senpuki.Set_Pos(gimmickpos[3]);             //î•—‹@‚Ì‰º‚ÌÀ•W’l‚ğvector‚É“o˜^‚·‚é
+	//switch_.Set_Pos(gimmickpos[0]);             //ƒXƒCƒbƒ`‚Ìã‚ÌÀ•W’l‚ğvector‚É“o˜^‚·‚é
+	//switch_.Set_Pos(gimmickpos[4]);             //ƒXƒCƒbƒ`‚Ì‰º‚ÌÀ•W’l‚ğvector‚É“o˜^‚·‚é
+	//											//kanetuki.Input_Pos(gimmickpos[1]);        //‰Á”M‹@‚ÌÀ•W’l‚ğvector‚É“o˜^‚·‚é
+	//											//kanetuki.Input_Pos(gimmickpos[5]);        //‰Á”M‹@‚ÌÀ•W’l‚ğvector‚É“o˜^‚·‚é
+	//seihyouki.Input_Pos(gimmickpos[1]);         //‰¼ˆ—
+
+	////ƒMƒ~ƒbƒN‚Ì‰Šú‰»
+
+	//senpuki.Initialize(gimmickpos[2]);			//î•—‹@‚Ì‰Šú‰»ˆ—‚ÉˆÚ‚éiVec2 î•—‹@‚ÌÀ•Wj
+	//switch_.Initlaize();        //SwitchƒNƒ‰ƒX‚Ì‰Šú‰»ˆ—‚ğ‚·‚é(Vec2 ‰ŠúÀ•W)
+	//							//kanetuki.Initialize();                                  //‰Á”M‹@‚ğ“®‚©‚·
+	//seihyouki.Initialize();
+
+	////“–‚½‚è”»’è‹éŒ`‚ğ“o˜^‚·‚é
+	//cm.AddChild(&switch_.hitBace[0]);           //Switch‚ÌƒAƒhƒŒƒX‚ğvector objs‚Éputh.back()
+	//cm.AddChild(&switch_.hitBace[1]);           //Switch‚ÌƒAƒhƒŒƒX‚ğ’Ç‰Á
+	//cm.AddChild(&senpuki);
+	//cm.AddChild(&senpuki.range);                //‹–ì”ÍˆÍ‚ÌƒAƒhƒŒƒX‚ğQÆ‚·‚é
+	//											//cm.AddChild(&kanetuki.hitBace[0]);          //“–‚½‚è”»’è‹éŒ`‚ğ“o˜^‚·‚é
+	//											//cm.AddChild(&kanetuki.hitBace[1]);          //“–‚½‚è”»’è‹éŒ`‚ğ“o˜^‚·‚é
+	//cm.AddChild(&seihyouki.hitBace);            //“–‚½‚è”»’è‹éŒ`‚ğ“o˜^‚·‚é
+
 }
 
 TaskFlag Game::Update()
 {
 	timecnt++;
 	if (timecnt >= 120)
-	//if(gameEngine->input.DOWN(Input::Key::L))
+		//if(gameEngine->input.DOWN(Input::Key::L))
 	{
 		timecnt = 0;
-		//Waterï¿½ï¿½ï¿½ï¿½
+		//Water?¿½?¿½?¿½?¿½
 		auto w = new Water(Vec2(150, 100));
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
 	}
 
-	// ï¿½eï¿½Xï¿½gï¿½p
+	
 	// ------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
@@ -83,10 +131,10 @@ TaskFlag Game::Update()
 		//	}
 		//}
 		if (bucket.capacity > 0) {
-				Water* sizuku = bucket.Spill();
-				water.push_back(sizuku);
-				//cm += sizuku;
-				cm.AddChild(water[water.size() - 1]);
+			Water* sizuku = bucket.Spill();
+			water.push_back(sizuku);
+			//cm += sizuku;
+			cm.AddChild(water[water.size() - 1]);
 		}
 	}
 	// ------------------------------------------
@@ -102,13 +150,13 @@ TaskFlag Game::Update()
 	}
 	player.Update();
 	/*for (int i = 0; i < 2; ++i) {
-		player.TakeBucket(bucket[i]);
+	player.TakeBucket(bucket[i]);
 	}*/
 	player.TakeBucket(&bucket);
 
 	block.Update(map, block);
 	bucket.Update(map, bucket);
-	//ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ì‹ï¿½ï¿½ï¿½ï¿½eï¿½Xï¿½gï¿½ï¿½!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	/*block.maphitF = map.MapHitCheck(block.footBase);
 	block.maphitH = map.MapHitCheck(block.headBase);
 	block.maphitL = map.MapHitCheck(block.leftBase);
@@ -119,7 +167,7 @@ TaskFlag Game::Update()
 	block.PlCheckHitL(player);
 	block.PlCheckHitR(player);
 
-	//fan_switch test â˜…â˜…â˜…
+	
 	//for (int i = 0; i < 2; ++i) {
 	//	fan[i].ChangeState();
 	//	swich[i].ChangeState();
@@ -201,7 +249,7 @@ void Game::Render2D()
 	}
 	player.Render();
 	/*for (int i = 0; i < bucket.size(); ++i) {
-		bucket[i]->Render();
+	bucket[i]->Render();
 	}*/
 	block.Render();
 	goal.Render();

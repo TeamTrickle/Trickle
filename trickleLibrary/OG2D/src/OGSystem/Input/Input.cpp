@@ -4,6 +4,7 @@
 //--------------------------------------------------
 void Input::GamePad::Initialize()
 {
+	//入力値をenumと配列で管理
 	this->GPadData[Pad::BUTTON_A] = GLFW_JOYSTICK_1;
 	this->GPadData[Pad::BUTTON_B] = GLFW_JOYSTICK_2;
 	this->GPadData[Pad::BUTTON_X] = GLFW_JOYSTICK_3;
@@ -21,6 +22,7 @@ void Input::GamePad::Initialize()
 }
 bool Input::GamePad::isPresent() const
 {
+	//Joystickが存在するかどうか
 	return (glfwJoystickPresent(this->id_) == GLFW_TRUE) ? true : false;
 }
 Input::GamePad::GamePad(const int id) :
@@ -30,6 +32,7 @@ Input::GamePad::GamePad(const int id) :
 	axis_button_down(AXIS_BUTTON_NUM),
 	axis_button_up(AXIS_BUTTON_NUM)
 {
+	//GamePadが存在するかどうか、ボタン数スティック数はいくつかの計測とその分の要素の確保
 	glfwGetJoystickButtons(id_, &button_num);
 	glfwGetJoystickAxes(id_, &axis_num);
 	std::cout << "GamePadID: " << id_ << " button:" << button_num << " axis:" << axis_num << std::endl;
@@ -44,6 +47,7 @@ Input::GamePad::GamePad(const int id) :
 }
 void Input::GamePad::Reset()
 {
+	//確保した要素の解放
 	std::fill(std::begin(button_on), std::end(button_on), 0);
 	std::fill(std::begin(button_down), std::end(button_down), 0);
 	std::fill(std::begin(button_up), std::end(button_up), 0);
@@ -54,6 +58,7 @@ void Input::GamePad::Reset()
 }
 std::vector<Input::GamePad> Input::initGamePad()
 {
+	//GamePadが存在する分だけ生成する
 	std::vector<Input::GamePad> gamepad_;
 	for (int id = GLFW_JOYSTICK_1; id <= GLFW_JOYSTICK_LAST; ++id)
 	{
@@ -103,7 +108,9 @@ bool Input::GamePad::registAxisButton(const int x_index, const int y_index, cons
 }
 void Input::GamePad::upDate()
 {
+	//現在の入力状況と1回前の入力状況からtrueかfalseをいれる
 	int button_num_;
+	//GamePadのButtonの状況を取得
 	const auto* buttons_ = glfwGetJoystickButtons(id_, &button_num_);
 	if (button_num_ > 0)
 	{
@@ -115,25 +122,20 @@ void Input::GamePad::upDate()
 		}
 	}
 	int axis_num;
+	//GamePadのJoyStickの状態を取得
 	const auto* axes = glfwGetJoystickAxes(id_, &axis_num);
 	if (axis_num > 0) {
 		for (int i = 0; i < axis_num; ++i) {
 			axis_value[i] = axes[i];
 		}
 		if (axis_button) {
-			// 簡易ボタン向けの処理
 			u_char buttons[AXIS_BUTTON_NUM];
 			std::fill(std::begin(buttons), std::end(buttons), 0);
-			// 簡易ボタンのpress状態を作成
-			// それぞれ軸の値が閾値を超えたらPressとみなす
-			// TIPS:右側の比較式の結果(true / false)をそのまま利用
 			buttons[AXIS_RIGHT_Y] = axis_value[axis_x_index] > axis_threshold;
 			buttons[AXIS_RIGHT_X] = axis_value[axis_x_index] < -axis_threshold;
 			buttons[AXIS_LEFT_Y] = axis_value[axis_y_index] > axis_threshold;
 			buttons[AXIS_LEFT_X] = axis_value[axis_y_index] < -axis_threshold;
 			for (int i = 0; i < AXIS_BUTTON_NUM; ++i) {
-				// ボタンの Press / Push / Pull 情報を生成
-				// Pushは押した瞬間、Pullは離した瞬間だけtrueになる
 				axis_button_down[i] = !axis_button_on[i] && buttons[i];
 				axis_button_up[i] = axis_button_on[i] && !buttons[i];
 				axis_button_on[i] = buttons[i];
@@ -143,6 +145,7 @@ void Input::GamePad::upDate()
 }
 void ResetGamePad(std::vector<Input::GamePad>& gamepad_)
 {
+	//入力状況を初期化する
 	for (auto& id : gamepad_)
 	{
 		if (id.isPresent())
@@ -202,6 +205,7 @@ Input::KeyBoard::KeyBoard()
 }
 Input::KeyBoard Input::initkeyBoard()
 {
+	//キーボードを１つ生成
 	KeyBoard keyBoard_;
 	keyBoard_.isPresent = true;
 	return keyBoard_;
@@ -226,6 +230,7 @@ void Input::KeyBoard::upDate()
 {
 	for (int i = 0; i < 256; ++i)
 	{
+		//キーボードの入力状況を取得
 		int state = glfwGetKey(this->nowWindow, this->KeyData[i]);
 		button_down[i] = !button_on[i] && state;
 		button_up[i] = button_on[i] && !state;
@@ -234,6 +239,7 @@ void Input::KeyBoard::upDate()
 }
 void ResetKeyBoard(Input::KeyBoard& keyboard)
 {
+
 	std::fill(std::begin(keyboard.button_on), std::end(keyboard.button_on), 0);
 	std::fill(std::begin(keyboard.button_down), std::end(keyboard.button_down), 0);
 	std::fill(std::begin(keyboard.button_up), std::end(keyboard.button_up), 0);
