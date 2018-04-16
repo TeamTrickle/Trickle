@@ -23,9 +23,10 @@ void EngineSystem::Initialize()
 	gameEngine->fps = FPS::Create();
 	gameEngine->window->setIcon(std::string("./data/image/testicon.png"));
 	gameEngine->in.Inputinit(gameEngine->window->window);
+	gameEngine->soundManager = SoundManager::Create();
+	gameEngine->audiodevice = Audio::Create();
 	DebugFunction = false;
 	this->isPause = false;
-	this->volume = 1.0f;
 	this->end = false;
 }
 void EngineSystem::SetWindow(int width, int height, char* name, bool screen)
@@ -53,14 +54,6 @@ bool EngineSystem::GetPause() const
 {
 	return this->isPause;
 }
-void EngineSystem::SetVolume(const float value_)
-{
-	this->volume = value_;
-}
-float EngineSystem::GetVolime() const
-{
-	return this->volume;
-}
 void EngineSystem::GameEnd()
 {
 	this->end = true;
@@ -68,5 +61,13 @@ void EngineSystem::GameEnd()
 bool EngineSystem::GetEnd() const
 {
 	return this->end;
+}
+void EngineSystem::ChengeTask()
+{
+	gameEngine->camera->SetPos(Vec2(0.f, 0.f));
+	gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
+	gameEngine->fps->DeleteData();
+	gameEngine->SetPause(false);
+	gameEngine->soundManager->AllDelete();
 }
 EngineSystem* gameEngine;

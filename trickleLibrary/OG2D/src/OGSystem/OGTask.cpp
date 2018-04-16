@@ -21,13 +21,12 @@ void _OGTK::_myGameUpdate()
 		case Task_Game:
 			game.Finalize();
 			break;
+		case Task_Sample:
+			//sample.Finalize();
+			break;
 		}
 		nowTask = nextTask;
-		//‚±‚Ì•Ó‚¢‚Â‚©ŠÖ”‰»‚³‚¹‚Ü‚·B‚³‚¹‚½‚¢B
-		gameEngine->camera->SetPos(Vec2(0.f, 0.f));
-		gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
-		gameEngine->fps->DeleteData();
-		gameEngine->SetPause(false);
+		gameEngine->ChengeTask();
 		switch (nowTask)
 		{
 		case Task_Title:
@@ -35,6 +34,9 @@ void _OGTK::_myGameUpdate()
 			break;
 		case Task_Game:
 			game.Initialize();
+			break;
+		case Task_Sample:
+			//sample.Initialize();
 			break;
 		}
 	}
@@ -46,6 +48,9 @@ void _OGTK::_myGameUpdate()
 			break;
 		case Task_Game:
 			nextTask = game.Update();
+			break;
+		case Task_Sample:
+			//nextTask = sample.UpDate();
 			break;
 		}
 	}

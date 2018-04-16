@@ -12,6 +12,9 @@ Sound::Sound(std::string& path_, bool loop) :
 {
 	this->source->BindBuffer(*this->buffer);
 	this->looping(loop);
+	this->pitch(1.0f);
+	this->volume_ = 1.0f;
+	this->volume(this->volume_);
 }
 Sound::~Sound()
 {
@@ -23,6 +26,9 @@ void Sound::createSound(std::string& path_, bool loop)
 	this->source = std::make_shared<Audio::Source>();
 	this->source->BindBuffer(*this->buffer);
 	this->looping(loop);
+	this->pitch(1.0f);
+	this->volume_ = 1.0f;
+	this->volume(this->volume_);
 }
 void Sound::play() const
 {
@@ -59,4 +65,12 @@ float Sound::currenttime() const
 float Sound::duration() const
 {
 	return this->buffer->GetTime();
+}
+void Sound::SetVolume(float maxVolume_)
+{
+	this->volume_ = maxVolume_;
+}
+float Sound::GetVolume() const
+{
+	return this->volume_;
 }

@@ -5,19 +5,7 @@
 //|____________________________|//
 #include "Win\WinMain.h"
 #include "OGSystem\OGsystem.h"
-#include "Object\Object.h"
-#include "Map\Map.h"
-//class ObjectSample :public Object{
-//public:
-//	//Object object;
-//	Texture sampleimg;
-//	std::string fileName = "Collision.png";
-//	bool hitcheck;
-//	void Initialize();
-//	void UpDate();
-//	void Render();
-//	void Finalize();
-//};
+
 class Sample
 {
 public:
@@ -28,6 +16,8 @@ public:
 	//™™™™//
 	//’Ç‰Á•Ï”//
 	//™™™™//
-//	ObjectSample objsmp;
-	Map map;
+	Sound s;
+	Sound a;
+	std::string file2 = "stereo.wav";
+	std::string file = "playandhope.wav";
 };

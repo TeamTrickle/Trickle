@@ -3,7 +3,6 @@
 void Title::Initialize()
 {
 	std::cout << "Title‰Šú‰»" << std::endl;
-	sound.createSound(std::string("playandhope.wav"), true);
 	objsmp.Initialize();
 	objsmp2.Initialize();
 	map.LoadMap("test.txt");
@@ -52,7 +51,7 @@ TaskFlag Title::Update()
 	}
 	if (gameEngine->in.key.down(In::M))
 	{
-		if (sound.isplay()) 
+		/*if (sound.isplay()) 
 		{
 			sound.stop();
 		}
@@ -60,7 +59,7 @@ TaskFlag Title::Update()
 		{
 			sound.play();
 			sound.volume(0.2f);
-		}
+		}*/
 	}
 	if (gameEngine->in.key.down(In::H))
 	{
