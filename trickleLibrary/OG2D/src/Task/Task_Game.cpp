@@ -242,19 +242,20 @@ TaskFlag Game::Update()
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
 {
+	//”wŒi•`‰æ
+	back.Render();
+	//ƒvƒŒƒCƒ„[•`‰æ
+	player.Render();
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Render();
 	}
-	player.Render();
-	/*for (int i = 0; i < bucket.size(); ++i) {
-	bucket[i]->Render();
-	}*/
 	block.Render();
 	goal.Render();
 	bucket.Render();
+	//ƒ}ƒbƒvƒ`ƒbƒv‚Ì•`‰æ
 	map.MapRender();
-	back.Render();
+	
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Finalize()

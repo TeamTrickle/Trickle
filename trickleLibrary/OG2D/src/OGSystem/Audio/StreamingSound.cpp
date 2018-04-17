@@ -32,7 +32,7 @@ void StreamingSound::streamProc(const std::string path, const bool loop, std::sh
 		param->backStartPos = false;
 		param->mutex.unlock();
 		if (stopped) { break; }
-		stream.BackSound = back;
+	//	stream.BackSound = back;
 		if (source->processed() > 0)
 		{
 			ALuint buffer_id = source->UnqueueBuffer();
@@ -50,7 +50,7 @@ void StreamingSound::streamProc(const std::string path, const bool loop, std::sh
 		std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME_MS));
 	}
 	std::cout << "StreamingI—¹" << std::endl;
-	stream.End();
+	//stream.End();
 }
 StreamingSound::StreamingSound()
 {

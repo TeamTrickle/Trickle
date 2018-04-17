@@ -44,7 +44,7 @@ Texture::Texture()
 {
 
 }
-void Texture::Draw(Box2D draw, Box2D src) {
+void Texture::Draw(Box2D draw, Box2D src,Color color_) {
 	//座標
 	GLfloat vtx[] = {
 		draw.x,draw.h,
@@ -62,10 +62,11 @@ void Texture::Draw(Box2D draw, Box2D src) {
 		src.x / TextureSize.x,src.y / TextureSize.y,
 	};
 	//0.1以下のカラーを表示しない、これで透過されてる部分を切り抜くことで透過された画像になる
-	glAlphaFunc(GL_GREATER, (GLclampf)0.1);
+	glAlphaFunc(GL_GREATER, (GLclampf)0.0);
 	glTexCoordPointer(2, GL_FLOAT, 0, texuv);
 	//OpenGLに登録されているテクスチャを紐づけ
 	glBindTexture(GL_TEXTURE_2D, _TexId);
+	glColor4f(color_.red, color_.green, color_.blue, color_.alpha);
 	//描画
 	//glMatrixMode(GL_TEXTURE);
 	glEnable(GL_ALPHA_TEST);
@@ -77,6 +78,7 @@ void Texture::Draw(Box2D draw, Box2D src) {
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_ALPHA_TEST);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 void Texture::Finalize()
 {

@@ -6,7 +6,7 @@ public:
 	Texture();
 	~Texture();
 	void TextureCreate(std::string _path);
-	void Draw(Box2D draw, Box2D src);
+	void Draw(Box2D draw, Box2D src, Color color_ = { 1.0f,1.0f,1.0f,1.0f });
 	void Finalize();
 	void Rotate(float radian);
 	float angle;

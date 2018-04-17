@@ -6,17 +6,16 @@
 //|____________________________|//
 #include "Camera\Camera.h"
 #include "Window\Window.h"
-#include "Audio\Audio.h"
 #include "FPS\FPS.h"
 #include "Input\Input.h"
 #include "Font\Font.h"
 #include "Texture\Texture.h"
 #include "Collision\Collision.h"
-#include "Audio\Sound.h"
 #include "Font\Font.h"
-/*
+#include "Audio\SoundManager.h"
+
 #include "Audio\StreamingSound.h"
-*/
+
 class EngineSystem
 {
 public:
@@ -26,6 +25,8 @@ public:
 	Camera2D::SP camera;
 	Window::SP window;
 	FPS::SP fps;
+	Audio::SP audiodevice;
+	SoundManager::SP soundManager;
 	Input in;
 	void Initialize();
 	void Update();
@@ -33,7 +34,11 @@ public:
 	bool DebugFunction;
 	void SetPause(const bool ispause_);
 	bool GetPause() const;
+	void GameEnd();
+	bool GetEnd() const;
+	void ChengeTask();
 private:
+	bool end;
 	int w_wi;
 	int w_he;
 	char* w_na;

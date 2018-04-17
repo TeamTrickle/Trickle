@@ -180,6 +180,9 @@
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp" />
+    <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
+      <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Audio\SoundManager.h">
+      <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,7 +21,6 @@ private:
 	std::string filepath_;
 	bool loop_;
 	bool isplay_;
-	Audio audio;
 public:
 	StreamingSound();
 	StreamingSound(const std::string& path, const bool loop = false);

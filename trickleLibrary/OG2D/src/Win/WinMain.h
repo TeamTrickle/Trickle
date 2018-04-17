@@ -8,4 +8,5 @@ enum TaskFlag
 	NON,
 	Task_Game,
 	Task_Title,
+	Task_Sample,
 };

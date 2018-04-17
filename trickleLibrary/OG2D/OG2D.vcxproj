@@ -23,7 +23,7 @@
     <ProjectGuid>{61186991-858F-4A3C-BB26-186468F21C26}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OG2D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>OG2D</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -165,6 +165,7 @@
     <ClCompile Include="src\Object\Object.cpp" />
     <ClCompile Include="src\OGSystem\Audio\Audio.cpp" />
     <ClCompile Include="src\OGSystem\Audio\Sound.cpp" />
+    <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp" />
     <ClCompile Include="src\OGSystem\Audio\StreamingSound.cpp" />
     <ClCompile Include="src\OGSystem\Camera\Camera.cpp" />
     <ClCompile Include="src\OGSystem\Collision\Collision.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="src\Object\Object.h" />
     <ClInclude Include="src\OGSystem\Audio\Audio.h" />
     <ClInclude Include="src\OGSystem\Audio\Sound.h" />
+    <ClInclude Include="src\OGSystem\Audio\SoundManager.h" />
     <ClInclude Include="src\OGSystem\Audio\StreamingSound.h" />
     <ClInclude Include="src\OGSystem\Camera\Camera.h" />
     <ClInclude Include="src\OGSystem\Collision\Collision.h" />
