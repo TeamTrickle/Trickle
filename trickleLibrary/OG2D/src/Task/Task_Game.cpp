@@ -1,7 +1,7 @@
 #include "Task_Game.h"
 #define ADD_FUNCTION(a) \
 	[](std::vector<Object*>* objs_) { a(objs_); }
-
+//-------------------------------------------------------------------------------------------------
 void Game::Initialize()
 {
 	Vec2 bucketpos[2] = {
@@ -105,7 +105,7 @@ void Game::Initialize()
 	//cm.AddChild(&seihyouki.hitBace);            //当たり判定矩形を登録する
 
 }
-
+//-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
 	timecnt++;
@@ -120,7 +120,7 @@ TaskFlag Game::Update()
 	}
 
 	
-	// ------------------------------------------
+//-------------------------------------------------------------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
 		//for (int i = 0; i < 2; ++i) {
 		//	if (bucket[i]->capacity > 0) {
@@ -137,7 +137,7 @@ TaskFlag Game::Update()
 			cm.AddChild(water[water.size() - 1]);
 		}
 	}
-	// ------------------------------------------
+//-------------------------------------------------------------------------------------------------
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Update();
@@ -166,13 +166,7 @@ TaskFlag Game::Update()
 	block.PlCheckHitH(player);
 	block.PlCheckHitL(player);
 	block.PlCheckHitR(player);
-
 	
-	//for (int i = 0; i < 2; ++i) {
-	//	fan[i].ChangeState();
-	//	swich[i].ChangeState();
-	//}
-
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
@@ -233,6 +227,11 @@ TaskFlag Game::Update()
 			}
 		}
 	}
+
+	//カメラ処理
+	Camera_move();
+
+
 	TaskFlag nowtask = Task_Game;
 	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
 	{
@@ -240,7 +239,7 @@ TaskFlag Game::Update()
 	}
 	return nowtask;
 }
-
+//-------------------------------------------------------------------------------------------------
 void Game::Render2D()
 {
 	for (int i = 0; i < water.size(); ++i)
@@ -257,7 +256,7 @@ void Game::Render2D()
 	map.MapRender();
 	back.Render();
 }
-
+//-------------------------------------------------------------------------------------------------
 void Game::Finalize()
 {
 	std::cout << "Game" << std::endl;
@@ -287,4 +286,52 @@ void Game::Finalize()
 		fan[i].Finalize();
 	}
 	cm.Destroy();
+}
+//-------------------------------------------------------------------------------------------------
+//カメラ処理
+void Game::Camera_move()
+{
+	//デバッグ用
+	std::cout << gameEngine->camera->GetSize().x << "//"<<map.DrawSize.y << std::endl;
+	//カメラの移動
+	gameEngine->camera->MovePos(player.GetEst());
+	//カメラ処理
+	Vec2 NowCameraPos = gameEngine->camera->GetPos();
+	Vec2 NowCameraSize = gameEngine->camera->GetSize();
+	//左右のスクロール範囲の設定(サイズの10分の1)
+	float Boundary = NowCameraSize.x / 10.0f;
+	//現在スクロール値とプレイヤーの座標の差を修正
+	Vec2 NowPlayerPos = { player.position.x - NowCameraPos.x,player.position.y - NowCameraPos.y };
+	//x座標
+	if (NowPlayerPos.x < Boundary)
+	{
+		NowCameraPos.x = NowPlayerPos.x - Boundary;
+	}
+	if (NowPlayerPos.x > NowCameraSize.x - Boundary)
+	{
+		NowCameraPos.x = (NowPlayerPos.x + NowCameraPos.x) - NowPlayerPos.x + Boundary;
+	}
+	//y座標
+	if (NowPlayerPos.y < Boundary)
+	{
+		NowCameraPos.y = NowPlayerPos.y - Boundary;
+	}
+	if (NowPlayerPos.y > NowCameraSize.y - Boundary)
+	{
+		NowCameraPos.y = (NowCameraSize.y + NowCameraPos.y) - NowPlayerPos.y + Boundary;
+	}
+	//画面外処理
+	if (NowCameraPos.x < 0) {
+		NowCameraPos.x = 0;
+	}
+	if (NowCameraPos.x + NowCameraSize.x > 34 * map.DrawSize.x) {
+		NowCameraPos.x = (34 * map.DrawSize.x) - NowCameraSize.x;
+	}
+	if (NowCameraPos.y < 0) {
+		NowCameraPos.y = 0;
+	}
+	if (NowCameraPos.y + NowCameraSize.y > 16 * map.DrawSize.y) {
+		NowCameraPos.y = (16 * map.DrawSize.y) - NowCameraSize.y;
+	}
+	gameEngine->camera->SetPos(NowCameraPos);
 }

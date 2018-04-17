@@ -59,6 +59,7 @@ public:
 	void TakeBucket(Bucket*);
 
 	void CustomCollision(std::vector<Object*>*);
+	Vec2 GetEst() const;
 
 private:
 	const std::string fileName = "player.png";

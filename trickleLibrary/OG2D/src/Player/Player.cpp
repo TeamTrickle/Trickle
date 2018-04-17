@@ -2,7 +2,7 @@
 
 void Player::Initialize()
 {
-	Object::CreateObject(Cube, Vec2(100.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
+	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 
 	std::cout << "Player" << std::endl;
 	this->playerimg.TextureCreate(this->fileName);
@@ -22,18 +22,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-
-	float cpx = float(est.x);
-	float cpy = float(est.y);
-	if (gameEngine->in.Pad_Connection) {
-		Vec2 cameraest = { 0,0 };
-		cameraest.x = cpx;
-		cameraest.y = cpy;
-	}
-	gameEngine->camera->MovePos(Vec2(cpx, 0.0f));
-	gameEngine->camera->MovePos(Vec2(0.0f, cpy));
-
-
 	
 	est.x = 0;
 
@@ -250,4 +238,7 @@ void Player::CustomCollision(std::vector<Object*>* objs_)
 			std::cout << o->objectTag << std::endl;
 		isLoged = true;
 	}
+}
+Vec2 Player::GetEst() const {
+	return est;
 }

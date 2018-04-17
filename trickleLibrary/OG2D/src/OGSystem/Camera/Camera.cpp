@@ -15,7 +15,7 @@ Camera2D::~Camera2D()
 void Camera2D::Initialize(Box2D pos)
 {
 	this->cameraPos = pos;
-	this->position = { 0,0 };
+	this->position = {0,0 };
 	this->Scale = { pos.w,pos.h };
 }
 void Camera2D::CameraUpdate() const
