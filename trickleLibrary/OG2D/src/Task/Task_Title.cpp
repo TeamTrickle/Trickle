@@ -102,6 +102,7 @@ TaskFlag Title::Update()
 
 void Title::Render2D()
 {
+	map.MapRender();
 	//カーソルの表示
 	{
 		//表示位置、大きさは仮ゲームスタート
@@ -135,7 +136,7 @@ void Title::Render2D()
 		src.OffsetSize();
 		texPause.Draw(draw, src);
 	}
-	map.MapRender();
+	
 }
 
 void Title::Finalize()

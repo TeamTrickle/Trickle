@@ -91,12 +91,12 @@ int main() {
 	glLoadIdentity();
 	//ウインドウの座標の巻線に基づいてポリゴンをカリングする
 	glEnable(GL_CULL_FACE);
-	//深さの比較を行い、深度バッファを更新する
-	glEnable(GL_DEPTH_TEST);
+	//深さの比較を行い、深度バッファを更新する(3D用)
+	//glEnable(GL_DEPTH_TEST);
 	//法線ベクトルの設定、正規化
 	glEnable(GL_NORMALIZE);
 	//背景color
-	glClearColor(0.0f, 1.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	//初期化処理
 	Initialize();
 	//ウィンドウの生成位置の指定
