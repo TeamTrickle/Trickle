@@ -87,6 +87,9 @@
     <Filter Include="ソースファイル\GIMMCK\NO_MOVE_GIMMCK">
       <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\GameProcessManager">
+      <UniqueIdentifier>{4ec198eb-1768-4256-97fa-d89dff6a1751}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -184,7 +187,10 @@
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
-      <Filter>ソースファイル\GameProcessManagement</Filter>
+      <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\Timer.cpp">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,7 +291,10 @@
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
-      <Filter>ソースファイル\GameProcessManagement</Filter>
+      <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\Timer.h">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
