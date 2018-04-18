@@ -5,6 +5,7 @@
 //__________________________
 //|                      //|
 //|履歴　2018/04/14 横尾 //|
+//|履歴　2018/04/15 横尾 //|
 //|______________________//|
 
 class Timer : public Object
@@ -31,7 +32,7 @@ public:
 	■引数　なし
 	■戻り　なし
 	*/
-	void Intialize();
+	void Initialize();
 
 
 	/*
@@ -49,19 +50,20 @@ public:
 	*/
 	void Instrumentation();
 
-
-	/*
-	タイマーの時間をコマンドプロンプトに出力する
-	■引数　なし
-	■戻り　なし
-	*/
-	void Instrumentation_output();
 	/*
 	指定したタイマーの時間をコマンドプロンプトに出力する
 	■引数　Timer& 出力したいタイマー
 	■戻り　なし
 	*/
 	void Instrumentation_output(Timer&);
+
+
+	/*
+	タイム時間をインクリメントします
+	■引数　なし
+	■戻り　なし
+	*/
+	void Time_Count();
 
 private:
 	int frame_time;                                //フレーム時間を格納する
@@ -70,4 +72,11 @@ private:
 	int frame_time_sec;                            //〇秒
 
 	//ミリ秒は未実装　1秒　=　1000ミリ秒  4分23秒17みたい感じにしたかったら・・・実装します
+private:
+	/*
+	タイマーの時間をコマンドプロンプトに出力する
+	■引数　なし
+	■戻り　なし
+	*/
+	void Instrumentation_output();
 };

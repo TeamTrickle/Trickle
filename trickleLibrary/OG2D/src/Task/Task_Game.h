@@ -19,6 +19,8 @@
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 
+#include "GameProcessManagement\GameProcessManagement.h"
+
 
 class Game
 {
@@ -57,4 +59,5 @@ private:
 	Switch swich[2];
 	Fan fan[2];
 
+	GameProcessManagement gameprocess;
 };

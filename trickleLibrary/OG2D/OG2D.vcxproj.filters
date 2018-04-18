@@ -183,6 +183,9 @@
     <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
+      <Filter>ソースファイル\GameProcessManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Win\WinMain.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Audio\SoundManager.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
+      <Filter>ソースファイル\GameProcessManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
