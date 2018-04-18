@@ -13,8 +13,8 @@
 #include "Collision\Collision.h"
 #include "Font\Font.h"
 #include "Audio\SoundManager.h"
-
-#include "Audio\StreamingSound.h"
+#include "Timer\glTimer.h"
+//#include "Audio\StreamingSound.h"
 
 class EngineSystem
 {

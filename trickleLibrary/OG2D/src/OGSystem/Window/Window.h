@@ -5,6 +5,7 @@ class Window {
 private:
 	GLFWimage image[1];
 	GLuint id_;
+	bool isIcon;
 public:
 	int _widht;
 	int _height;
@@ -19,4 +20,6 @@ public:
 	~Window();
 	void createWindow(int wi, int he, char* name, bool screen);
 	void setIcon(std::string& path_);
+	void LimitsWindow();
+	void WindowIcon();
 };

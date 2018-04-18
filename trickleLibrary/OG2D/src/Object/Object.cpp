@@ -101,3 +101,33 @@ bool Object::hit(Object o)
 	}
 	return false;
 }
+
+void Object::LineDraw()
+{
+	switch (this->objform)
+	{
+	case Objform::Cube:
+	{
+		this->collisionCube.hitBase = {
+			this->position.x,
+			this->position.y,
+			this->Scale.x + this->position.x,
+			this->Scale.y + this->position.y
+		};
+		this->collisionCube.Rotate(this->angle);
+		Vec2 _v[4] = {
+		{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.y },
+		{ this->collisionCube.hitBase.w - 1,this->collisionCube.hitBase.y },
+		{ this->collisionCube.hitBase.w - 1,this->collisionCube.hitBase.h - 1 },
+		{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.h - 1 }
+		};
+		OG::_Rotate(this->collisionCube.angle, _v);
+		OG::LineHitDraw(_v);
+		break;
+	}
+	case Objform::Ball:
+		break;
+	case Objform::Non:
+		break;
+	}
+}

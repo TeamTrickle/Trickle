@@ -30,6 +30,9 @@ public:
 	std::string objectTag;
 	bool isCollided;
 	bool isCollidedGlobal = false;
+
+	void LineDraw();
+
 	/**
 	 * @brief オーバーライドして当たり判定処理を書いてください
 	 * @param Object このオブジェクトに当たった他のオブジェクト

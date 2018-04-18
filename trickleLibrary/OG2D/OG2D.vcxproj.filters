@@ -87,8 +87,14 @@
     <Filter Include="ソースファイル\GIMMCK\NO_MOVE_GIMMCK">
       <UniqueIdentifier>{14266d32-d9f2-4a3a-866e-8ddade1547e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Timer">
+      <UniqueIdentifier>{b0f1c63f-2af4-468d-891d-f836688630b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Shader">
+      <UniqueIdentifier>{07a5ea8b-eb70-4b10-ba9d-e96be3ec8a4f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソースファイル\GameProcessManager">
-      <UniqueIdentifier>{4ec198eb-1768-4256-97fa-d89dff6a1751}</UniqueIdentifier>
+      <UniqueIdentifier>{7a158ccb-92ef-49bf-bba4-eb00b469d726}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -186,10 +192,14 @@
     <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
-      <Filter>ソースファイル\GameProcessManager</Filter>
+    <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
+    <ClCompile Include="src\OGSystem\Timer\glTimer.cpp">
+      <Filter>ソースファイル\OGSystem\System\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\Timer.cpp">
+    <ClCompile Include="src\Shader\shader.cpp">
+      <Filter>ソースファイル\OGSystem\System\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -290,10 +300,16 @@
     <ClInclude Include="src\OGSystem\Audio\SoundManager.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
-      <Filter>ソースファイル\GameProcessManager</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameProcessManagement\Timer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader\shader.h">
+      <Filter>ソースファイル\OGSystem\System\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Timer\glTimer.h">
+      <Filter>ソースファイル\OGSystem\System\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>

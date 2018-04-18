@@ -20,6 +20,7 @@ void EngineSystem::Initialize()
 {
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
 	gameEngine->window = Window::Create(w_wi, w_he, w_na, w_sc);
+	gameEngine->window->LimitsWindow();
 	gameEngine->fps = FPS::Create();
 	gameEngine->window->setIcon(std::string("./data/image/testicon.png"));
 	gameEngine->in.Inputinit(gameEngine->window->window);

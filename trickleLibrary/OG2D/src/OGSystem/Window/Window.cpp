@@ -6,6 +6,7 @@ Window::Window()
 	this->_height = 480;
 	this->_Screen = false;
 	this->_Name = "NoName";
+	this->isIcon = false;
 }
 Window::Window(int wi, int he, char* name, bool screen)
 	:_widht(wi)
@@ -61,4 +62,32 @@ void Window::setIcon(std::string& path_)
 	glfwSetWindowIcon(this->window, 1, image);
 	//データの解放
 	stbi_image_free(image[0].pixels);
+}
+void Window::LimitsWindow()
+{
+	//Windowのサイズを固定化させる
+	glfwSetWindowSizeLimits(this->window, this->_widht, this->_height, this->_widht, this->_height);
+	//windowのアスペクト比を固定させる
+	glfwSetWindowAspectRatio(this->window, 16, 9);
+	//windowのサイズを変更する(固定化されている場合変更はできない)
+	//glfwSetWindowSize(this->window, 1920, 1080);
+	//windowを隠す
+	//glfwHideWindow(this->window);
+	//隠れたwindowを元に戻す
+	//glfwShowWindow(this->window);
+}
+void Window::WindowIcon()
+{
+	if (this->isIcon)
+	{
+		//Icon化されたwindowを元に戻す
+		glfwRestoreWindow(this->window);
+		this->isIcon = false;
+	}
+	else
+	{
+		//windowをIcon化させる
+		glfwIconifyWindow(this->window);
+		this->isIcon = true;
+	}
 }

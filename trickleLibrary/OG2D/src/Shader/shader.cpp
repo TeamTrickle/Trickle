@@ -1,15 +1,7 @@
-#pragma once
+#include "shader.h"
 
-//必要ファイルのインクルード
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <fstream>
-
-//シェーダーのセットアップ
-
-namespace Shader {
-	//コンパイル
+namespace Shader
+{
 	GLuint compile(GLuint type, const std::string &text) {
 		//shaderの生成
 		GLuint shader = glCreateShader(type);
@@ -37,7 +29,7 @@ namespace Shader {
 #endif // _DEBUG
 		return shader;
 	}
-	//準備
+
 	void setup(const GLuint program, const std::string &v_source, const std::string &f_source) {
 		//シェーダーのコンパイル
 		GLint status;
@@ -123,7 +115,7 @@ namespace Shader {
 
 		return program;
 	}
-	//シェーダー内アトリビュート変数の識別子を取得
+
 	GLint attrib(const GLint program, const std::string &name) {
 		return glGetAttribLocation(program, name.c_str());
 	}
