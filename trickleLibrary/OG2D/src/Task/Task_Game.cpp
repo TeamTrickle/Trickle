@@ -292,44 +292,85 @@ void Game::Finalize()
 //カメラ処理
 void Game::Camera_move()
 {
-	//デバッグ用
-	std::cout << gameEngine->camera->GetSize().x << "//"<<gameEngine->camera->GetPos().x << std::endl;
-	//カメラの移動
-	gameEngine->camera->MovePos(player.GetEst());
+	////デバッグ用
+	//std::cout << gameEngine->camera->GetSize().x << "//"<<gameEngine->camera->GetPos().x << std::endl;
+	////カメラの移動
+	//gameEngine->camera->MovePos(player.GetEst());
 
-	//カメラ処理
+	////カメラ処理
+	//Vec2 NowCameraPos = gameEngine->camera->GetPos();
+	//Vec2 NowCameraSize = gameEngine->camera->GetSize();
+
+	////プレイヤーを画面中央
+	//float PlayerCenter_x = NowCameraSize.x / 2.0f;
+	//float PlayerCenter_y = NowCameraSize.y / 2.0f;
+	////カメラ座標を求める
+	//float camera_x = float(player.position.x) - PlayerCenter_x;
+	//float camera_y = float(player.position.y) - PlayerCenter_y;
+	////カメラの座標を更新
+	//NowCameraPos.x = camera_x;
+	//NowCameraPos.y = camera_y;
+
+
+	////左右のスクロール範囲の設定(サイズの10分の1)
+	//float Boundary = NowCameraSize.x / 10.0f;
+	////現在スクロール値とプレイヤーの座標の差を修正
+	//Vec2 NowPlayerPos = { player.position.x - NowCameraPos.x,player.position.y - NowCameraPos.y };
+	////x座標
+	//if (NowPlayerPos.x < Boundary){
+	//	NowCameraPos.x = NowPlayerPos.x - Boundary;
+	//}
+	//if (NowPlayerPos.x > NowCameraSize.x - Boundary){
+	//	NowCameraPos.x = (NowPlayerPos.x + NowCameraPos.x) - NowPlayerPos.x + Boundary;
+	//}
+	////y座標
+	//if (NowPlayerPos.y < Boundary){
+	//	NowCameraPos.y = NowPlayerPos.y - Boundary;
+	//}
+	//if (NowPlayerPos.y > NowCameraSize.y - Boundary){
+	//	NowCameraPos.y = (NowCameraSize.y + NowCameraPos.y) - NowPlayerPos.y + Boundary;
+	//}
+
+
+	//----------------------------------------------------------------------------------------
+	//ここから横田編集
+
 	Vec2 NowCameraPos = gameEngine->camera->GetPos();
 	Vec2 NowCameraSize = gameEngine->camera->GetSize();
 
-	//プレイヤーを画面中央
-	float PlayerCenter_x = NowCameraSize.x / 2.0f;
-	float PlayerCenter_y = NowCameraSize.y / 2.0f;
-	//カメラ座標を求める
-	float camera_x = float(player.position.x) - PlayerCenter_x;
-	float camera_y = float(player.position.y) - PlayerCenter_y;
-	//カメラの座標を更新
-	NowCameraPos.x = camera_x;
-	NowCameraPos.y = camera_y;
+	//カメラが動かない範囲
+	float NoMoveLeft = NowCameraPos.x + NowCameraSize.x*(7.0f / 16.0f);
+	float NoMoveRight = NowCameraPos.x + NowCameraSize.x*(9.0f / 16.0f);
+	float NoMoveUp = NowCameraPos.y + NowCameraSize.y*(7.0f / 16.0f);
+	float NoMoveBottom = NowCameraPos.y + NowCameraSize.y*(9.0f / 16.0f);
+	Vec2 cameracenter = Vec2(NowCameraPos.x + NowCameraSize.x*0.5f, NowCameraPos.y + NowCameraSize.y*0.5f);
+	Vec2 playercenter = Vec2(player.position.x + player.Scale.x*0.5f, player.position.y + player.Scale.y*0.5f);
+	//当たり判定時の処理は終わった後なのでplayer.estは考慮する必要なし？
+	//プレイヤがカメラの動かない範囲を超えていたらカメラ移動
+	//x軸
+	if (playercenter.x < NoMoveLeft) {
+		float cameraest = NoMoveLeft - playercenter.x;
+		NowCameraPos.x -= cameraest;
+	}
+	if (playercenter.x > NoMoveRight) {
+		float cameraest = playercenter.x - NoMoveRight;
+		NowCameraPos.x += cameraest;
+	}
+	//y軸
+	if (playercenter.y < NoMoveUp) {
+		float cameraest = NoMoveUp - playercenter.y;
+		NowCameraPos.y -= cameraest;
+	}
+	if (playercenter.y > NoMoveBottom) {
+		float cameraest = playercenter.y - NoMoveBottom;
+		NowCameraPos.y += cameraest;
+	}
+	//y軸は動かなくていいかも？
+	//NowCameraPos.y = playercenter.y - cameracenter.y;    //注意：めり込みの影響でめっちゃガタつきます
 
+	//ここまで横田
+	//-----------------------------------------------------------------------------------------------
 
-	//左右のスクロール範囲の設定(サイズの10分の1)
-	float Boundary = NowCameraSize.x / 10.0f;
-	//現在スクロール値とプレイヤーの座標の差を修正
-	Vec2 NowPlayerPos = { player.position.x - NowCameraPos.x,player.position.y - NowCameraPos.y };
-	//x座標
-	if (NowPlayerPos.x < Boundary){
-		NowCameraPos.x = NowPlayerPos.x - Boundary;
-	}
-	if (NowPlayerPos.x > NowCameraSize.x - Boundary){
-		NowCameraPos.x = (NowPlayerPos.x + NowCameraPos.x) - NowPlayerPos.x + Boundary;
-	}
-	//y座標
-	if (NowPlayerPos.y < Boundary){
-		NowCameraPos.y = NowPlayerPos.y - Boundary;
-	}
-	if (NowPlayerPos.y > NowCameraSize.y - Boundary){
-		NowCameraPos.y = (NowCameraSize.y + NowCameraPos.y) - NowPlayerPos.y + Boundary;
-	}
 	//画面外処理
 	if (NowCameraPos.x < 0) {
 		NowCameraPos.x = 0;
