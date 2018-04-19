@@ -11,7 +11,20 @@
 
 Task_Gameでcm.AddChild()関数で登録できます。
 
+----------
+
+＋　CollisionProcessを定義しないとStaticObject扱いになります。
+
+＋　InとOutを使わないときには定義しなくてもOKです。
+
+## 処理用関数の説明
+Objectを継承したクラスのみ使えます。
+* CollisionIn - 当たり判定が起きったとき１回だけ呼ばれる
+* CollisionProcess - 当たってる時に毎フレーム呼ばれる
+* CollisionOut - 当たり判定が終わった時１回だけ呼ばれる
+
 ## 例題
+CollisionIn, CollisionOutも下と同じく使えます。
 
 Task_Game.cpp
 
