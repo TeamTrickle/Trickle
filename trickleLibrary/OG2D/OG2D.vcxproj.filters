@@ -192,7 +192,6 @@
     <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp">
       <Filter>ソースファイル\OGSystem\System\Timer</Filter>
     </ClCompile>
@@ -200,6 +199,9 @@
       <Filter>ソースファイル\OGSystem\System\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
+      <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\Timer.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -300,9 +302,6 @@
     <ClInclude Include="src\OGSystem\Audio\SoundManager.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\Timer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\Shader\shader.h">
       <Filter>ソースファイル\OGSystem\System\Shader</Filter>
     </ClInclude>
@@ -310,6 +309,9 @@
       <Filter>ソースファイル\OGSystem\System\Timer</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
+      <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\Timer.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>
