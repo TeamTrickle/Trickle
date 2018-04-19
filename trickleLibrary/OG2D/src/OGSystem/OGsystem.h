@@ -14,6 +14,7 @@
 #include "Font\Font.h"
 #include "Audio\SoundManager.h"
 #include "Timer\glTimer.h"
+#include "Easing\easing.hpp"
 //#include "Audio\StreamingSound.h"
 
 class EngineSystem

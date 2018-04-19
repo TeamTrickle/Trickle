@@ -96,6 +96,9 @@
     <Filter Include="ソースファイル\GameProcessManager">
       <UniqueIdentifier>{7a158ccb-92ef-49bf-bba4-eb00b469d726}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Easing">
+      <UniqueIdentifier>{29be51b7-4dbe-4f28-a121-cac4cd17db15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -311,6 +314,9 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Easing\easing.hpp">
+      <Filter>ソースファイル\OGSystem\System\Easing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

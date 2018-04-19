@@ -6,6 +6,7 @@ private:
 	GLFWimage image[1];
 	GLuint id_;
 	bool isIcon;
+	bool isVisualization;
 public:
 	int _widht;
 	int _height;
@@ -22,4 +23,5 @@ public:
 	void setIcon(std::string& path_);
 	void LimitsWindow();
 	void WindowIcon();
+	void Visualization();
 };

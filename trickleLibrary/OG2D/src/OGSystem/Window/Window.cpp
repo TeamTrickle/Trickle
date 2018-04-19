@@ -7,6 +7,7 @@ Window::Window()
 	this->_Screen = false;
 	this->_Name = "NoName";
 	this->isIcon = false;
+	this->isVisualization = false;
 }
 Window::Window(int wi, int he, char* name, bool screen)
 	:_widht(wi)
@@ -90,4 +91,9 @@ void Window::WindowIcon()
 		glfwIconifyWindow(this->window);
 		this->isIcon = true;
 	}
+}
+
+void Window::Visualization()
+{
+
 }
