@@ -314,13 +314,11 @@
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="src\OGSystem\Easing\easing.hpp">
       <Filter>ソースファイル\OGSystem\System\Easing</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="src\GameProcessManagement\Timer.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
->>>>>>> d9d12e0ffb37efd9f8e3135b9c7d4a1c7842b3e3
     </ClInclude>
   </ItemGroup>
 </Project>
