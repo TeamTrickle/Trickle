@@ -239,10 +239,80 @@ void Input::KeyBoard::upDate()
 }
 void ResetKeyBoard(Input::KeyBoard& keyboard)
 {
-
 	std::fill(std::begin(keyboard.button_on), std::end(keyboard.button_on), 0);
 	std::fill(std::begin(keyboard.button_down), std::end(keyboard.button_down), 0);
 	std::fill(std::begin(keyboard.button_up), std::end(keyboard.button_up), 0);
+}
+//--------------------------------------------------
+//@:Mouseclass									
+//--------------------------------------------------
+Input::Mouse::Mouse()
+{
+	this->MouseData[Mouse_::BUTTON_1] = GLFW_MOUSE_BUTTON_1;
+	this->MouseData[Mouse_::BUTTON_2] = GLFW_MOUSE_BUTTON_2;
+	this->MouseData[Mouse_::BUTTON_3] = GLFW_MOUSE_BUTTON_3;
+	this->MouseData[Mouse_::BUTTON_4] = GLFW_MOUSE_BUTTON_4;
+	this->MouseData[Mouse_::BUTTON_5] = GLFW_MOUSE_BUTTON_5;
+	this->MouseData[Mouse_::BUTTON_6] = GLFW_MOUSE_BUTTON_6;
+	this->MouseData[Mouse_::BUTTON_7] = GLFW_MOUSE_BUTTON_7;
+	this->MouseData[Mouse_::BUTTON_8] = GLFW_MOUSE_BUTTON_8;
+	button_on.resize(256);
+	std::fill(std::begin(button_on), std::end(button_on), 0);
+	button_down.resize(256);
+	std::fill(std::begin(button_down), std::end(button_down), 0);
+	button_up.resize(256);
+	std::fill(std::begin(button_up), std::end(button_up), 0);
+
+	this->isPresent = true;
+}
+Input::Mouse Input::initMouse()
+{
+	Mouse mouse_;
+	mouse_.isPresent = true;
+	return mouse_;
+}
+Input::Mouse::~Mouse()
+{
+
+}
+void Input::Mouse::SetWindow(GLFWwindow* w)
+{
+	this->nowWindow = w;
+}
+bool Input::Mouse::on(const int index)
+{
+	return button_on[index];
+}
+bool Input::Mouse::down(const int index)
+{
+	return button_down[index];
+}
+bool Input::Mouse::up(const int index)
+{
+	return button_up[index];
+}
+void Input::Mouse::upDate()
+{
+	for (int i = 0; i < 256; ++i)
+	{
+		//キーボードの入力状況を取得
+		int state = glfwGetMouseButton(this->nowWindow, this->MouseData[i]);
+		button_down[i] = !button_on[i] && state;
+		button_up[i] = button_on[i] && !state;
+		button_on[i] = state;
+	}
+}
+Vec2 Input::Mouse::GetPos() const
+{
+	double x, y;
+	glfwGetCursorPos(this->nowWindow, &x, &y);
+	return Vec2((float)x, (float)y);
+}
+void ResetMouse(Input::Mouse& mouse)
+{
+	std::fill(std::begin(mouse.button_on), std::end(mouse.button_on), 0);
+	std::fill(std::begin(mouse.button_down), std::end(mouse.button_down), 0);
+	std::fill(std::begin(mouse.button_up), std::end(mouse.button_up), 0);
 }
 //--------------------------------------------------
 //@:Inputclass									
@@ -252,6 +322,9 @@ void Input::Inputinit(GLFWwindow *w)
 	//キーボードの初期化
 	this->key = this->initkeyBoard();
 	this->key.SetWindow(w);
+	//マウスの初期化
+	this->mouse = this->initMouse();
+	this->mouse.SetWindow(w);
 	//ゲームパッドの初期化
 	this->pad = this->initGamePad();
 	//ゲームパッドが１つ以上存在している場合
@@ -311,6 +384,7 @@ void Input::upDate()
 		this->pad[i].upDate();
 	}
 	this->key.upDate();
+	this->mouse.upDate();
 }
 bool Input::down(int index, int padNum)
 {
@@ -343,4 +417,5 @@ void Input::ResetInputData()
 {
 	ResetGamePad(this->pad);
 	ResetKeyBoard(this->key);
+	ResetMouse(this->mouse);
 }

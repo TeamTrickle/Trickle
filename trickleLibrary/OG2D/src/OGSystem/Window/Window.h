@@ -24,4 +24,5 @@ public:
 	void LimitsWindow();
 	void WindowIcon();
 	void Visualization();
+	void InMouseMode(const bool index);
 };

@@ -97,3 +97,15 @@ void Window::Visualization()
 {
 
 }
+
+void Window::InMouseMode(const bool index)
+{
+	if (index)
+	{
+		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+}
