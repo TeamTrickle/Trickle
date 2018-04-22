@@ -9,14 +9,14 @@ bool CollisionBox::hitBox(CollisionBox b)
 	Vec2 _ver[4] = {
 		{ b.hitBase.x,b.hitBase.y },
 	{ b.hitBase.w - 1,b.hitBase.y },
-	{ b.hitBase.w - 1,b.hitBase.h - 1 },
-	{ b.hitBase.x,b.hitBase.h - 1 }
+	{ b.hitBase.w - 1,b.hitBase.h },
+	{ b.hitBase.x,b.hitBase.h }
 	};
 	Vec2 _v[4] = {
 		{ hitBase.x,hitBase.y },
 	{ hitBase.w - 1,hitBase.y },
-	{ hitBase.w - 1,hitBase.h - 1 },
-	{ hitBase.x,hitBase.h - 1 }
+	{ hitBase.w - 1,hitBase.h },
+	{ hitBase.x,hitBase.h }
 	};
 	//‰ñ“]‚Ì“K—p
 	OG::_Rotate(angle, _v);
@@ -52,8 +52,8 @@ bool CollisionBox::hitCircle(CollisionCircle b)
 	Vec2 _v[4] = {
 		{ hitBase.x,hitBase.y },
 	{ hitBase.w - 1,hitBase.y },
-	{ hitBase.w - 1,hitBase.h - 1 },
-	{ hitBase.x,hitBase.h - 1 }
+	{ hitBase.w - 1,hitBase.h },
+	{ hitBase.x,hitBase.h }
 	};
 	//BoxŒ^‚Ì‰ñ“]‚Ì“K—p
 	OG::_Rotate(angle, _v);
@@ -82,8 +82,8 @@ bool CollisionCircle::hitBox(CollisionBox b)
 	Vec2 _v[4] = {
 		{ b.hitBase.x,b.hitBase.y },
 	{ b.hitBase.w - 1,b.hitBase.y },
-	{ b.hitBase.w - 1,b.hitBase.h - 1 },
-	{ b.hitBase.x,b.hitBase.h - 1 }
+	{ b.hitBase.w - 1,b.hitBase.h },
+	{ b.hitBase.x,b.hitBase.h }
 	};
 	//BoxŒ^‚Ì‰ñ“]‚Ì“K—p
 	OG::_Rotate(b.angle, _v);

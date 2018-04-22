@@ -45,8 +45,6 @@ void Game::Initialize()
 	back.Initialize();
 	map.LoadMap("prototype.txt");
 	
-	
-	player.Register(&cm);
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
 		for (auto& j : i)
@@ -103,7 +101,14 @@ void Game::Initialize()
 	//											//cm.AddChild(&kanetuki.hitBace[0]);          //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 	//											//cm.AddChild(&kanetuki.hitBace[1]);          //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 	//cm.AddChild(&seihyouki.hitBace);            //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
-
+	for (int y = 0; y < map.mapSize.y; ++y)
+	{
+		for (int x = 0; x < map.mapSize.x; ++x)
+		{
+			player.AddObject(&map.hitBase[y][x]);
+		}
+	}
+	player.AddBucket(&this->bucket);
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
@@ -152,7 +157,6 @@ TaskFlag Game::Update()
 	/*for (int i = 0; i < 2; ++i) {
 	player.TakeBucket(bucket[i]);
 	}*/
-	player.TakeBucket(&bucket);
 
 	block.Update(map, block);
 	bucket.Update(map, bucket);
@@ -244,18 +248,21 @@ void Game::Render2D()
 {
 	//”wŒi•`‰æ
 	back.Render();
+	//ƒ}ƒbƒvƒ`ƒbƒv‚Ì•`‰æ
+	map.MapRender();
+	//ƒuƒƒbƒN•`‰æ
+	block.Render();
+	//ƒS[ƒ‹•`‰æ
+	goal.Render();
+	//ƒoƒPƒc•`‰æ
+	bucket.Render();
 	//ƒvƒŒƒCƒ„[•`‰æ
 	player.Render();
+	//…•`‰æ
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Render();
 	}
-	block.Render();
-	goal.Render();
-	bucket.Render();
-	//ƒ}ƒbƒvƒ`ƒbƒv‚Ì•`‰æ
-	map.MapRender();
-	
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Finalize()
