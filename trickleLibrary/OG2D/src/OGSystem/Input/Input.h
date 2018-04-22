@@ -108,9 +108,9 @@ public:
 	public:
 		enum Mouse_
 		{
-			BUTTON_1,
-			BUTTON_2,
-			BUTTON_3,
+			LEFT,
+			RIGHT,
+			CENTER,
 			BUTTON_4,
 			BUTTON_5,
 			BUTTON_6,
@@ -218,9 +218,9 @@ namespace Mouse
 {
 	enum
 	{
-		BUTTON_1,
-		BUTTON_2,
-		BUTTON_3,
+		LEFT,
+		RIGTH,
+		CENTER,
 		BUTTON_4,
 		BUTTON_5,
 		BUTTON_6,

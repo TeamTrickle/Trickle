@@ -8,6 +8,8 @@ EngineSystem::EngineSystem()
 	this->w_he = 540;
 	this->w_na = "NoName";
 	this->w_sc = false;
+	this->Cursor_on = true;
+	this->file = "testicon.png";
 }
 EngineSystem::EngineSystem(int widht, int height, char* name, bool screen)
 {
@@ -21,9 +23,9 @@ void EngineSystem::Initialize()
 	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
 	gameEngine->window = Window::Create(w_wi, w_he, w_na, w_sc);
 	gameEngine->window->LimitsWindow();
-	gameEngine->window->InMouseMode(true);
+	gameEngine->window->InMouseMode(this->Cursor_on);
 	gameEngine->fps = FPS::Create();
-	gameEngine->window->setIcon(std::string("./data/image/testicon.png"));
+	gameEngine->window->setIcon(this->path + this->file);
 	gameEngine->in.Inputinit(gameEngine->window->window);
 	gameEngine->soundManager = SoundManager::Create();
 	gameEngine->audiodevice = Audio::Create();
@@ -37,6 +39,14 @@ void EngineSystem::SetWindow(int width, int height, char* name, bool screen)
 	this->w_he = height;
 	this->w_na = name;
 	this->w_sc = screen;
+}
+void EngineSystem::SetCursorOn(const bool on)
+{
+	this->Cursor_on = on;
+}
+void EngineSystem::SetIcon(std::string filepath_)
+{
+	this->file = filepath_;
 }
 void EngineSystem::Update()
 {

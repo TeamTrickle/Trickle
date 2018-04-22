@@ -248,9 +248,9 @@ void ResetKeyBoard(Input::KeyBoard& keyboard)
 //--------------------------------------------------
 Input::Mouse::Mouse()
 {
-	this->MouseData[Mouse_::BUTTON_1] = GLFW_MOUSE_BUTTON_1;
-	this->MouseData[Mouse_::BUTTON_2] = GLFW_MOUSE_BUTTON_2;
-	this->MouseData[Mouse_::BUTTON_3] = GLFW_MOUSE_BUTTON_3;
+	this->MouseData[Mouse_::LEFT] = GLFW_MOUSE_BUTTON_1;
+	this->MouseData[Mouse_::RIGHT] = GLFW_MOUSE_BUTTON_2;
+	this->MouseData[Mouse_::CENTER] = GLFW_MOUSE_BUTTON_3;
 	this->MouseData[Mouse_::BUTTON_4] = GLFW_MOUSE_BUTTON_4;
 	this->MouseData[Mouse_::BUTTON_5] = GLFW_MOUSE_BUTTON_5;
 	this->MouseData[Mouse_::BUTTON_6] = GLFW_MOUSE_BUTTON_6;

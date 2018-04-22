@@ -32,6 +32,8 @@ public:
 	void Initialize();
 	void Update();
 	void SetWindow(int width, int height, char* name, bool screen);
+	void SetCursorOn(const bool on);
+	void SetIcon(std::string filpath_);
 	bool DebugFunction;
 	void SetPause(const bool ispause_);
 	bool GetPause() const;
@@ -45,6 +47,9 @@ private:
 	char* w_na;
 	bool w_sc;
 	bool isPause;
+	bool Cursor_on;
+	std::string path = "./data/image/";
+	std::string file;
 };
 
 extern EngineSystem* gameEngine;

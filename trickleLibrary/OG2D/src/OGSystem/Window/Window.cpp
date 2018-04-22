@@ -72,10 +72,6 @@ void Window::LimitsWindow()
 	glfwSetWindowAspectRatio(this->window, 16, 9);
 	//window‚ÌƒTƒCƒY‚ð•ÏX‚·‚é(ŒÅ’è‰»‚³‚ê‚Ä‚¢‚éê‡•ÏX‚Í‚Å‚«‚È‚¢)
 	//glfwSetWindowSize(this->window, 1920, 1080);
-	//window‚ð‰B‚·
-	//glfwHideWindow(this->window);
-	//‰B‚ê‚½window‚ðŒ³‚É–ß‚·
-	//glfwShowWindow(this->window);
 }
 void Window::WindowIcon()
 {
@@ -95,7 +91,18 @@ void Window::WindowIcon()
 
 void Window::Visualization()
 {
-
+	if (this->isVisualization)
+	{
+		//‰B‚ê‚½window‚ðŒ³‚É–ß‚·
+		glfwShowWindow(this->window);
+		this->isVisualization = false;
+	}
+	else
+	{
+		//window‚ð‰B‚·
+		glfwHideWindow(this->window);
+		this->isVisualization = true;
+	}
 }
 
 void Window::InMouseMode(const bool index)
