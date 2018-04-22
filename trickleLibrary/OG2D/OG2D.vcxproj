@@ -183,6 +183,7 @@
     <ClCompile Include="src\Player\Player.cpp" />
     <ClCompile Include="src\Shader\shader.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
+    <ClCompile Include="src\Task\Task_Option.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
     <ClCompile Include="src\Water\water.cpp" />
     <ClCompile Include="src\Win\WinMain.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Shader\shader.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
+    <ClInclude Include="src\Task\Task_Option.h" />
     <ClInclude Include="src\Task\Task_Title.h" />
     <ClInclude Include="src\Water\water.h" />
     <ClInclude Include="src\Win\WinMain.h" />

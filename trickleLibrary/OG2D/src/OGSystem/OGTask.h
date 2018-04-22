@@ -10,6 +10,7 @@
 //☆☆☆☆☆☆☆☆☆//
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
+#include "Task\Task_Option.h"
 
 class _OGTK
 {
@@ -21,6 +22,7 @@ public:
 	//cppにも同様に記述
 	Game game;
 	Title title;
+	Option option;
 	////////////////////////////
 	//ここから下は変更しないこと//
 	///////////////////////////

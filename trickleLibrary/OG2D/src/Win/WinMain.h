@@ -9,4 +9,5 @@ enum TaskFlag
 	Task_Game,
 	Task_Title,
 	Task_Sample,
+	Task_Option,
 };

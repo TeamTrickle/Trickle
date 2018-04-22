@@ -24,6 +24,9 @@ void _OGTK::_myGameUpdate()
 		case Task_Sample:
 			//sample.Finalize();
 			break;
+		case Task_Option:
+			option.Finalize();
+			break;
 		}
 		nowTask = nextTask;
 		gameEngine->ChengeTask();
@@ -37,6 +40,9 @@ void _OGTK::_myGameUpdate()
 			break;
 		case Task_Sample:
 			//sample.Initialize();
+			break;
+		case Task_Option:
+			option.Initialize();
 			break;
 		}
 	}
@@ -52,6 +58,9 @@ void _OGTK::_myGameUpdate()
 		case Task_Sample:
 			//nextTask = sample.UpDate();
 			break;
+		case Task_Option:
+			nextTask = option.Update();
+			break;
 		}
 	}
 	else
@@ -62,6 +71,8 @@ void _OGTK::_myGameUpdate()
 		case Task_Title:
 			break;
 		case Task_Game:
+			break;
+		case Task_Option:
 			break;
 		}
 	}
@@ -76,6 +87,9 @@ void _OGTK::_myGameRender2D()
 		break;
 	case Task_Game:
 		game.Render2D();
+		break;
+	case Task_Option:
+		option.Render();
 		break;
 	}
 }
@@ -94,6 +108,9 @@ void _OGTK::_myGameFinalize()
 		break;
 	case Task_Game:
 		game.Finalize();
+		break;
+	case Task_Option:
+		option.Finalize();
 		break;
 	}
 }

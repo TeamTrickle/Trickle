@@ -17,6 +17,21 @@ void Title::Initialize()
 	texStart.TextureCreate("start.png");
 	texClose.TextureCreate("close.png");
 	texPause.TextureCreate("pause.png");
+
+	//オプションで変更した音量を反映できることを確認
+
+	//sound.createSound(std::string("playandhope.wav"), true);
+	//サウンド自体の音量を設定
+	//sound.SetVolume(1.0f);
+	//サウンドデータをSoundManagerに登録
+	//gameEngine->soundManager->SetSound(&sound);
+	//最大音量を指定
+	//gameEngine->soundManager->SetMaxVolume(vol);
+
+	//サウンドの音量を最大音量に合わせて適用させる
+	//gameEngine->soundManager->Application();
+	//サウンドの再生
+	//sound.play();
 }
 
 TaskFlag Title::Update()
@@ -44,59 +59,12 @@ TaskFlag Title::Update()
 
 	if (state == Pause)
 	{
-		//設定を行うタスクへ
+		if (gameEngine->in.down(Input::in::D2))
+		{
+			nowtask = Task_Option;
+		}
 	}
 
-
-	/*
-	if (gameEngine->in.down(Input::in::D2))
-	{
-		nowtask = Task_Game;
-	}
-	if (gameEngine->in.key.on(Input::KeyBoard::A))
-	{
-		gameEngine->camera->MovePos(Vec2(-1.0f, 0.0f));
-	}
-	if (gameEngine->in.key.on(Input::KeyBoard::D))
-	{
-		gameEngine->camera->MovePos(Vec2(+1.0f, 0.0f));
-	}
-	if (gameEngine->in.key.on(Input::KeyBoard::W))
-	{
-		gameEngine->camera->MovePos(Vec2(0.0f, -1.0f));
-	}
-	if (gameEngine->in.key.on(Input::KeyBoard::S))
-	{
-		gameEngine->camera->MovePos(Vec2(0.0f, 1.0f));
-	}
-	if (gameEngine->in.on(Input::in::B1, 0))
-	{
-		gameEngine->camera->MoveSize(Vec2(1.0f, 0.0f));
-	}
-	if (gameEngine->in.on(Input::in::B2, 0))
-	{
-		gameEngine->camera->MoveSize(Vec2(0.0f, 1.0f));
-	}
-	if (gameEngine->in.on(In::B3))
-	{
-		gameEngine->camera->MoveSize(Vec2(16.f, 9.f));
-	}
-	if (gameEngine->in.on(In::B4))
-	{
-		gameEngine->camera->MoveSize(Vec2(-16.f, -9.f));
-	}
-	if (gameEngine->in.key.down(In::M))
-	{
-		if (sound.isplay())
-		{
-			sound.stop();
-		}
-		else
-		{
-			sound.play();
-			sound.volume(0.2f);
-		}
-	}*/
 	return nowtask;
 }
 
@@ -184,103 +152,3 @@ void Title::CursorMove()
 	}
 }
 
-/*void ObjectSample::Initialize()
-{
-// イヤヤヤヤー！きゃーーーねこだー！！！
-this->sampleimg.TextureCreate(this->fileName);
-CreateObject(Cube, Vec2(10.0f, 100.0f), Vec2(128.0f, 128.0f), 0.0f);
-footHit.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.f), 0.f);
-this->hitcheck = false;
-
-
-Object::CollisionIn = [&](const Object& o_) {
-std::cout << "Collision Start : " << o_.objectTag << std::endl;
-};
-
-Object::CollisionProcess = [&](const Object& o_) {
-std::cout << "Collision On Process : " << o_.objectTag << std::endl;
-};
-
-Object::CollisionOut = [&](const Object& o_) {
-std::cout << "Collision End : " << o_.objectTag << std::endl;
-};
-}
-
-void ObjectSample::UpDate()
-{
-if (gameEngine->in.on(Input::in::CU, 0))
-{
-this->position.y -= 5.0f;
-}
-if (gameEngine->in.on(Input::in::CD, 0))
-{
-this->position.y += 5.0f;
-}
-if (gameEngine->in.on(Input::in::CR,0))
-{
-this->position.x += 5.0f;
-}
-if (gameEngine->in.on(Input::in::CL,0))
-{
-this->position.x -= 5.0f;
-}
-if (gameEngine->in.on(Input::in::L1,0))
-{
-this->angle -= 1.0f;
-}
-if (gameEngine->in.on(Input::in::R1,0))
-{
-this->angle += 1.0f;
-}
-
-}
-
-void ObjectSample::Render()
-{
-Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
-draw.OffsetSize();
-Box2D src(0, 0, 128, 128);
-if (hitcheck)
-{
-src.y += 128;
-src.OffsetSize();
-}
-this->sampleimg.Rotate(this->angle);
-this->sampleimg.Draw(draw, src);
-}
-
-void ObjectSample::Finalize()
-{
-this->sampleimg.Finalize();
-}
-
-void ObjectSample2::Initialize()
-{
-this->sampleimg.TextureCreate(this->fileName);
-CreateObject(Cube, Vec2(100.0f, 200.0f), Vec2(128.0f, 128.0f), 0.0f);
-this->hitcheck = false;
-}
-
-void ObjectSample2::UpDate()
-{
-
-}
-
-void ObjectSample2::Render()
-{
-Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
-draw.OffsetSize();
-Box2D src(0, 0, 128, 128);
-if (hitcheck)
-{
-src.y += 128;
-src.OffsetSize();
-}
-this->sampleimg.Rotate(this->angle);
-this->sampleimg.Draw(draw, src);
-}
-
-void ObjectSample2::Finalize()
-{
-this->sampleimg.Finalize();
-}*/

@@ -99,6 +99,9 @@
     <Filter Include="ソースファイル\OGSystem\System\Easing">
       <UniqueIdentifier>{29be51b7-4dbe-4f28-a121-cac4cd17db15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\Option">
+      <UniqueIdentifier>{15fb48ad-aba7-4595-a64e-590f92bee760}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -206,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\Timer.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Option.cpp">
+      <Filter>ソースファイル\Task\Option</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\Timer.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Option.h">
+      <Filter>ソースファイル\Task\Option</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

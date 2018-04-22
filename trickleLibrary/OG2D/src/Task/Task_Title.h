@@ -8,30 +8,8 @@
 #include "Object\Object.h"
 #include "Map\Map.h"
 #include "CollisionManager\CollisionManager.h"
-/*class ObjectSample :public Object{
-public:
-//Object object;
-Texture sampleimg;
-std::string fileName = "Collision.png";
-Object footHit;
-Object toolHit;
-bool hitcheck;
-void Initialize();
-void UpDate();
-void Render();
-void Finalize();
-};
-class ObjectSample2 :public Object {
-public:
-//Object object;
-Texture sampleimg;
-std::string fileName = "Collision.png";
-bool hitcheck;
-void Initialize();
-void UpDate();
-void Render();
-void Finalize();
-};*/
+#include "Task\Task_Option.h"
+
 class Title
 {
 	Texture texCursor;
