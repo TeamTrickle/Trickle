@@ -10,6 +10,7 @@
 //関連するプロジェクト//
 #include "Goal\Goal.h"
 #include "Timer.h"
+#include "Win\WinMain.h" //タスクの遷移に必要
 
 class Goal;
 
@@ -59,7 +60,7 @@ public:
 	/*
 	ゴールの判定を行います
 	■引数　なし
-	■戻り　bool ゴール判定を返します。
+	■戻り　なし
 	*/
 	void Goal_Check();
 
@@ -67,27 +68,13 @@ public:
 	/*
 	ゲームのフラグによって変化するイベント管理関数
 	■引数　なし
-	■戻り　なし
+	■戻り　ゲームフラグを返す
 	*/
-	void Goal_Event();
+	TaskFlag Goal_Event();
 
 private:
 
 	bool gameclear_flag;               //様々なフラグを格納する
 	std::vector<Object*>goals;         //ゴール判定を取るVector
 	Timer timer;                       //タイマーのセットをする
-
-	//結果の項目は構造体で生成する
-	struct Rusult
-	{
-		int flag;						//ビット演算でフラグを4つまで管理する
-		std::string Clear_Message;		//クリアメッセージ
-	};
-	enum Achievement
-	{
-		Goal_Flag,						//まずはゴールをしてるかどうか？
-		Color_Flag,						//カラーの達成
-		Time_Falg						//クリアタイム
-	};
 };
-//void game_time_fps() {};                //スタートからゴールまでのタイムを出力する

@@ -1,53 +1,58 @@
 #include "Seihyouki.h"
-
-const int Map_Size = 64;    //当たり判定矩形のサイズ
-const int COLDMAX = 30;     //氷になるまでの時間
-const int COLDSPPED = 2;    //製氷機のパワー
-
-//☆☆☆☆//---------------------------------------------------------
+using namespace std;
 Seihyouki::Seihyouki()
 {
 
 }
-//☆☆☆☆//---------------------------------------------------------
-Seihyouki::Seihyouki(Vec2 pos)
-{
-	Pos.push_back(pos);              //vectorに座標値を追加する
-}
-//☆☆☆☆//---------------------------------------------------------
 Seihyouki::~Seihyouki()
 {
 
 }
-//☆☆☆☆//---------------------------------------------------------
-void Seihyouki::Initialize()
+void Seihyouki::Create(Vec2 pos, Vec2 scale)
 {
-	coldCount = 0;                    //製氷機カウンタを0クリアする
-	hitBace.CreateObject(Objform::Cube, Pos[0], Vec2(Map_Size, Map_Size), 0);                         //当たり判定矩形を生成する
-	hitBace.objectTag = "Seihyouki";
-	CheakHit();                       //当たり判定処理をする
+	movetime = 0;
+	hitBace.CreateObject(Cube, pos, scale, 0);
 }
-//追加関数//---------------------------------------------------------
-void Seihyouki::CheakHit()
+void Seihyouki::Motion()
 {
 	hitBace.CollisionProcess = [&](const Object& o_)
 	{
-		if (o_.objectTag == "Water")           //このオブジェクトは水であるか？
+		if (o_.objectTag == "Water")
 		{
-			if (((Water&)o_).GetState() == Water::State::LIQUID)
+			switch (((Water&)o_).GetState())
 			{
-				coldCount += COLDSPPED;        //徐々に液体を凍らせていく
-				if (coldCount >= COLDMAX)      //液体が氷になったら
+			case Water::State::GAS://ガスの場合
+				movetime++;
+				if (movetime >= movetime_ice)
 				{
-					((Water&)o_).SetState(Water::State::SOLID);         //stateを変更
-					coldCount = 0;                                      //カウンタを元に戻す
+					((Water&)o_).SetState(Water::State::LIQUID);
+					movetime = 0;
 				}
+				break;
+			case Water::State::LIQUID://液体の場合
+				movetime++;
+				if (movetime >= movetime_ice)
+				{
+					((Water&)o_).SetState(Water::State::SOLID);
+					movetime = 0;
+				}
+				break;
+			case Water::State::SOLID://個体の場合
+				break;
+			default:
+				break;
 			}
 		}
 	};
+	
 }
-//追加関数//---------------------------------------------------------
-void Seihyouki::Input_Pos(Vec2 pos)
+void Seihyouki::CheckHit()	//動いている
 {
-	Pos.push_back(pos);                //vectorに引数の座標値を追加する
+	hitBace.CollisionProcess = [&](const Object& o_)
+	{
+		if (o_.objectTag == "Water")
+		{
+			Motion();
+		}
+	};
 }

@@ -1,78 +1,57 @@
 #include "Kanetuki.h"
 using namespace std;
-		
-const int IMAGE_SIZE = 64;		//画像サイズ
-const int HOT_SPEED = 3;        //水蒸気になるまでのカウンタ増加量
-const int HOT_MAX = 90;         //水蒸気になるときの最大カウンタ
-
-//☆☆☆☆//-----------------------------------------------------------------------------
 Kanetuki::Kanetuki()
 {
 	
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
-Kanetuki::Kanetuki(Vec2 pos)
-{
-	Pos.push_back(pos);          //座標データを保存する
-}
-//☆☆☆☆//-----------------------------------------------------------------------------
 Kanetuki::~Kanetuki()
 {
 
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::Initialize()
+void Kanetuki::Create(Vec2 pos, Vec2 scale)
 {
-	//データのやり取り
-	for (int i = 0; i < 2; ++i)                    //データが2個分
+	Fire_movetime = 0;
+	hitBace.CreateObject(Cube, pos, scale, 0);	
+}
+void Kanetuki::Motion()
+{
+	hitBace.CollisionProcess = [&](const Object& o_)
 	{
-		HotCount[i] = 0;                           //水蒸気になるまでのカウンタ
-		hitflag[i] = false;                        //当たり判定フラグをfalse
-		hitBace[i].objectTag = "Kanetuki";         //オブジェクトタグの指定
-		hitBace[i].CreateObject(Objform::Cube, Pos[i], Vec2(IMAGE_SIZE, IMAGE_SIZE), 0);           //当たり判定を生成する
-	}
-	//当たり判定を行う
-	for (int i = 0; i < 2; ++i)                    //データが2個分
-	{
-		this->hitBace[i].CollisionProcess = [&](const Object& o_)
+		if (o_.objectTag == "Water")
 		{
-			if (o_.objectTag == "Water")
+			switch (((Water&)o_).GetState())
 			{
-				//水が液体か個体ならば
-				if ((((Water&)o_).GetState() == Water::State::SOLID) || ((Water&)o_).GetState() == Water::State::LIQUID)
+			case Water::State::GAS://ガスの場合
+				break;
+			case Water::State::LIQUID://液体の場合
+				Fire_movetime++;
+				if (Fire_movetime >= Fire_time_LIQUID)
 				{
-					HotCount[i] += HOT_SPEED;
-					if (HotCount[i] >= HOT_MAX)
-					{
-						HotCount[i] = 0;
-						((Water&)o_).SetState(Water::State::GAS);
-					}
+					((Water&)o_).SetState(Water::State::GAS);
+					Fire_movetime = 0;
 				}
+				break;
+			case Water::State::SOLID://個体の場合
+				Fire_movetime++;
+				if (Fire_movetime >= Fire_time_SOLID)
+				{
+					((Water&)o_).SetState(Water::State::SOLID);
+					Fire_movetime = 0;
+				}
+				break;
+			default:
+				break;
 			}
-		};
-	}
+		}
+	};
 }
-//☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::UpDate()
+void Kanetuki::CheckHit()
 {
-
-}
-//☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::Finalize()
-{
-	
-}
-//☆☆☆☆//-----------------------------------------------------------------------------
-//  関数  //-----------------------------------------------------------------------------
-//☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::Input_Pos(Vec2 pos)
-{
-	Pos.push_back(pos);                  //座標データを保存する
-}
-//☆☆☆☆//-----------------------------------------------------------------------------
-//  関数  //-----------------------------------------------------------------------------
-//☆☆☆☆//-----------------------------------------------------------------------------
-void Kanetuki::CheakHit()
-{
-	
+	hitBace.CollisionProcess = [&](const Object& o_)
+	{
+		if (((Water&)o_).objectTag == "Water")
+		{
+			Motion();
+		}
+	};
 }

@@ -158,8 +158,8 @@
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\Gimmick\MOVE\Container.cpp" />
-    <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
+    <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp" />
     <ClCompile Include="src\Goal\Goal.cpp" />
@@ -184,6 +184,7 @@
     <ClCompile Include="src\Shader\shader.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Option.cpp" />
+    <ClCompile Include="src\Task\Task_Result.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
     <ClCompile Include="src\Water\water.cpp" />
     <ClCompile Include="src\Win\WinMain.cpp" />
@@ -196,8 +197,8 @@
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
     <ClInclude Include="src\Gimmick\MOVE\Container.h" />
-    <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
+    <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h" />
     <ClInclude Include="src\Goal\Goal.h" />
@@ -223,6 +224,7 @@
     <ClInclude Include="src\Shader\shader.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Option.h" />
+    <ClInclude Include="src\Task\Task_Result.h" />
     <ClInclude Include="src\Task\Task_Title.h" />
     <ClInclude Include="src\Water\water.h" />
     <ClInclude Include="src\Win\WinMain.h" />

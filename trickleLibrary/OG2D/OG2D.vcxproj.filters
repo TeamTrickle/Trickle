@@ -102,6 +102,9 @@
     <Filter Include="ソースファイル\Task\Option">
       <UniqueIdentifier>{15fb48ad-aba7-4595-a64e-590f92bee760}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\Result">
+      <UniqueIdentifier>{6efcaf64-f223-4c5d-8313-138097076e7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -170,12 +173,6 @@
     <ClCompile Include="src\OGSystem\OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
@@ -190,9 +187,6 @@
     </ClCompile>
     <ClCompile Include="src\Task\Task_Title.cpp">
       <Filter>ソースファイル\Task\Title</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
@@ -212,6 +206,18 @@
     </ClCompile>
     <ClCompile Include="src\Task\Task_Option.cpp">
       <Filter>ソースファイル\Task\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Result.cpp">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,12 +287,6 @@
     <ClInclude Include="src\OGSystem\Audio\StreamingSound.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
@@ -301,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="src\Task\Task_Title.h">
       <Filter>ソースファイル\Task\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h">
-      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -328,6 +325,18 @@
     </ClInclude>
     <ClInclude Include="src\Task\Task_Option.h">
       <Filter>ソースファイル\Task\Option</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Result.h">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

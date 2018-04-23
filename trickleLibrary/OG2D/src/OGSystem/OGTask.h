@@ -11,6 +11,7 @@
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
 #include "Task\Task_Option.h"
+#include "Task\Task_Result.h"
 
 class _OGTK
 {
@@ -23,6 +24,8 @@ public:
 	Game game;
 	Title title;
 	Option option;
+	Result result;
+
 	////////////////////////////
 	//Ç±Ç±Ç©ÇÁâ∫ÇÕïœçXÇµÇ»Ç¢Ç±Ç∆//
 	///////////////////////////

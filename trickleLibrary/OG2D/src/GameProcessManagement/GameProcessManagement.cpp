@@ -17,7 +17,6 @@ void GameProcessManagement::Update()
 {
 	timer.Update();                      //タイマー時間の出力・計算をしている
 	Goal_Check();                        //ゴールをしているのかどうか？
-	Goal_Event();                        //ゲームクリアイベントを呼び出す
 }
 void GameProcessManagement::Set_Goal(Object* goal)
 {
@@ -47,11 +46,14 @@ void GameProcessManagement::Goal_Check()
 	timer.Frame_Set();			            //フレーム時間を格納する
 	gameclear_flag = false;
 }
-void GameProcessManagement::Goal_Event()
+TaskFlag GameProcessManagement::Goal_Event()
 {
+	TaskFlag nowtask = Task_Game;
 	if (gameclear_flag)						//ゲームフラグがtrueになったら・・・
 	{
 		timer.Instrumentation_output();		//時間を出力
 		timer.Stop();						//タイマーの時間を元に戻す
+		nowtask = Task_Ruselt;				//結果画面へ移る
 	}
+	return nowtask;
 }

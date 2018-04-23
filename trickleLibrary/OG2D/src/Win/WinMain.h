@@ -10,4 +10,5 @@ enum TaskFlag
 	Task_Title,
 	Task_Sample,
 	Task_Option,
+	Task_Ruselt,
 };
