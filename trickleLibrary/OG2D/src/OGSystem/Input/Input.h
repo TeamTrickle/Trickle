@@ -103,6 +103,37 @@ public:
 	private:
 		int KeyData[256];
 	};
+	class Mouse
+	{
+	public:
+		enum Mouse_
+		{
+			LEFT,
+			RIGHT,
+			CENTER,
+			BUTTON_4,
+			BUTTON_5,
+			BUTTON_6,
+			BUTTON_7,
+			BUTTON_8,
+		};
+		Vec2 position;
+		GLFWwindow* nowWindow;
+		Mouse();
+		~Mouse();
+		void upDate();
+		void SetWindow(GLFWwindow *w);
+		Vec2 GetPos() const;
+		bool on(const int index);
+		bool down(const int index);
+		bool up(const int index);
+		bool isPresent;
+		std::vector<u_char> button_on;
+		std::vector<u_char> button_down;
+		std::vector<u_char> button_up;
+	private:
+		int MouseData[256];
+	};
 	struct InputData
 	{
 		int button;		//ゲームパッドのボタン
@@ -111,6 +142,7 @@ public:
 	//class宣言
 	std::vector<GamePad> pad;
 	KeyBoard key;
+	Mouse mouse;
 	//変数
 	bool Pad_Connection;
 	//関数
@@ -124,6 +156,7 @@ private:
 	int inputData[256];
 	std::vector<Input::GamePad> initGamePad();
 	KeyBoard initkeyBoard();
+	Mouse initMouse();
 	InputData inputdata[14];
 };
 namespace In
@@ -179,5 +212,19 @@ namespace In
 		G, B, Y, H, N, U, J, M, I, K, O, L, P,
 		SPACE, ENTER, ESCAPE,
 		UP, DOWN, LEFT, RIGHT,
+	};
+}
+namespace Mouse
+{
+	enum
+	{
+		LEFT,
+		RIGTH,
+		CENTER,
+		BUTTON_4,
+		BUTTON_5,
+		BUTTON_6,
+		BUTTON_7,
+		BUTTON_8,
 	};
 }

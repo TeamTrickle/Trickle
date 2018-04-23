@@ -72,10 +72,6 @@ void Window::LimitsWindow()
 	glfwSetWindowAspectRatio(this->window, 16, 9);
 	//window‚ÌƒTƒCƒY‚ð•ÏX‚·‚é(ŒÅ’è‰»‚³‚ê‚Ä‚¢‚éê‡•ÏX‚Í‚Å‚«‚È‚¢)
 	//glfwSetWindowSize(this->window, 1920, 1080);
-	//window‚ð‰B‚·
-	//glfwHideWindow(this->window);
-	//‰B‚ê‚½window‚ðŒ³‚É–ß‚·
-	//glfwShowWindow(this->window);
 }
 void Window::WindowIcon()
 {
@@ -95,5 +91,40 @@ void Window::WindowIcon()
 
 void Window::Visualization()
 {
+	if (this->isVisualization)
+	{
+		//‰B‚ê‚½window‚ðŒ³‚É–ß‚·
+		glfwShowWindow(this->window);
+		this->isVisualization = false;
+	}
+	else
+	{
+		//window‚ð‰B‚·
+		glfwHideWindow(this->window);
+		this->isVisualization = true;
+	}
+}
 
+void Window::InMouseMode(const bool index)
+{
+	if (index)
+	{
+		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+}
+Vec2 Window::GetSize() const
+{
+	int w, h;
+	glfwGetWindowSize(this->window, &w, &h);
+	return Vec2(w, h);
+}
+Vec2 Window::GetPos() const
+{
+	int x, y;
+	glfwGetWindowPos(this->window, &x, &y);
+	return Vec2(x, y);
 }

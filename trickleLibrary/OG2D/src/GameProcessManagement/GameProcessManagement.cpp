@@ -51,7 +51,6 @@ void GameProcessManagement::Goal_Event()
 {
 	if (gameclear_flag)						//ゲームフラグがtrueになったら・・・
 	{
-		cout << "ゲームクリア" << endl;		
 		timer.Instrumentation_output();		//時間を出力
 		timer.Stop();						//タイマーの時間を元に戻す
 	}

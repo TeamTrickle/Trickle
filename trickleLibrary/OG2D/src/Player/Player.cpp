@@ -32,6 +32,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	this->BlockHit();
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -254,6 +255,8 @@ void Player::DeleteObject(Object* obj_)
 void Player::AllDelete()
 {
 	this->objects.clear();
+	this->buckets.clear();
+	this->blocks.clear();
 }
 
 bool Player::HeadCheck()
@@ -621,6 +624,38 @@ bool Player::ObjectHit(std::string objname_)
 				this->animation.SetAnimaVec(this->position, Vec2(this->objects[i]->position.x, this->position.y));
 				return true;
 			}
+		}
+	}
+	return false;
+}
+
+void Player::AddBlock(Block* block)
+{
+	this->blocks.push_back(block);
+}
+
+bool Player::DeleteBlock(Block* block)
+{
+	for (auto id = this->blocks.begin(); id != this->blocks.end(); ++id)
+	{
+		if ((*id) == block)
+		{
+			this->blocks.erase(id);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Player::BlockHit()
+{
+	for (int i = 0; i < this->blocks.size(); ++i)
+	{
+		if (this->hit(*this->blocks[i]))
+		{
+			//this->blocks[i]->Move(Vec2 x,y);
+			//Vec2 Move(x,y){return Vec2(x,y)};
+
 		}
 	}
 	return false;
