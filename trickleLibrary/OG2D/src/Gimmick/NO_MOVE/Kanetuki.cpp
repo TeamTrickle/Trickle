@@ -8,50 +8,56 @@ Kanetuki::~Kanetuki()
 {
 
 }
-void Kanetuki::Create(Vec2 pos, Vec2 scale)
+bool Kanetuki::Create(Vec2 pos, Vec2 scale)
 {
-	Fire_movetime = 0;
-	hitBace.CreateObject(Cube, pos, scale, 0);	
-}
-void Kanetuki::Motion()
-{
-	hitBace.CollisionProcess = [&](const Object& o_)
+	Initital = false;
+	if(!Initital)
 	{
-		if (o_.objectTag == "Water")
+		Fire_movetime = 0;
+		hitBace.CreateObject(Cube, pos, scale, 0);
+		Initital = true;//‚à‚¤Create‚³‚ê‚È‚¢
+		return true;
+	}
+	return false;
+}
+void Kanetuki::CheckHit()
+{
+	for (auto w : w_vec)
+	{
+		if (w->objectTag == "Water")
 		{
-			switch (((Water&)o_).GetState())
+			switch (w->GetState())
 			{
-			case Water::State::GAS://ƒKƒX‚Ìê‡
+			case Water::State::GAS:
+				Fire_movetime = 0;
 				break;
-			case Water::State::LIQUID://‰t‘Ì‚Ìê‡
+			case Water::State::LIQUID:
 				Fire_movetime++;
 				if (Fire_movetime >= Fire_time_LIQUID)
 				{
-					((Water&)o_).SetState(Water::State::GAS);
-					Fire_movetime = 0;
+					w->SetState(Water::State::GAS);
 				}
 				break;
-			case Water::State::SOLID://ŒÂ‘Ì‚Ìê‡
+			case Water::State::SOLID:
 				Fire_movetime++;
 				if (Fire_movetime >= Fire_time_SOLID)
 				{
-					((Water&)o_).SetState(Water::State::SOLID);
-					Fire_movetime = 0;
+					w->SetState(Water::State::LIQUID);
 				}
 				break;
 			default:
 				break;
 			}
 		}
-	};
+	}
 }
-void Kanetuki::CheckHit()
+void Kanetuki::Set_pointa()
 {
-	hitBace.CollisionProcess = [&](const Object& o_)
+	hitBace.CollisionProcess = [&](const Object& obj)
 	{
-		if (((Water&)o_).objectTag == "Water")
+		if (obj.objectTag == "Water")
 		{
-			Motion();
+			w_vec.push_back(const_cast<Water*>(((Water*)&obj)));
 		}
 	};
 }
