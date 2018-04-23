@@ -116,3 +116,15 @@ void Window::InMouseMode(const bool index)
 		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
 }
+Vec2 Window::GetSize() const
+{
+	int w, h;
+	glfwGetWindowSize(this->window, &w, &h);
+	return Vec2(w, h);
+}
+Vec2 Window::GetPos() const
+{
+	int x, y;
+	glfwGetWindowPos(this->window, &x, &y);
+	return Vec2(x, y);
+}

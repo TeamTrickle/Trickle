@@ -11,6 +11,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Gimmick\NO_MOVE\Switch.h"
+#include "Block\block.h"
 
 class Player :public Object 
 {
@@ -57,7 +58,7 @@ class Player :public Object
 private:
 	const std::string fileName = "player.png";
 	const float MOVE_SPEED = 5.f;								//移動スピード
-	const float JUMP_POWER = -10.f;								//ジャンプパワー
+	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float MAX_FALL = 10.f;
 	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;								//重力加速度
 	const float FIN_SPEED = 0.5f;								//摩擦
@@ -72,6 +73,7 @@ private:
 	State state;
 	std::vector<Object*> objects;
 	std::vector<Bucket*> buckets;
+	std::vector<Block*> blocks;
 	Bucket* haveBucket;
 	Animation animation;
 	int inv;
@@ -85,6 +87,7 @@ private:
 	void Friction();
 	bool BucketHit();
 	void BucketMove();
+	bool BlockHit();
 	void DebugFootCheck();
 	void DebugHeadCheck();
 	bool ObjectHit(std::string objname_);
@@ -100,6 +103,8 @@ public:
 	void AllDelete();
 	void AddBucket(Bucket* bucket);
 	bool DeleteBucket(Bucket* bucket);
+	void AddBlock(Block* block);
+	bool DeleteBlock(Block* block);
 	Vec2 GetEst() const;
 	bool InputLeft() {
 		return gameEngine->in.on(Input::CL);

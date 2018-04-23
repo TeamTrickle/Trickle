@@ -25,4 +25,6 @@ public:
 	void WindowIcon();
 	void Visualization();
 	void InMouseMode(const bool index);
+	Vec2 GetSize() const;
+	Vec2 GetPos() const;
 };

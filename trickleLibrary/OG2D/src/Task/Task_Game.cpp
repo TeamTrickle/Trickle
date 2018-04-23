@@ -109,6 +109,7 @@ void Game::Initialize()
 		}
 	}
 	player.AddBucket(&this->bucket);
+	player.AddBlock(&this->block);
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
@@ -300,7 +301,7 @@ void Game::Finalize()
 void Game::Camera_move()
 {
 	//デバッグ用
-	std::cout << gameEngine->camera->GetSize().x << "//"<<gameEngine->camera->GetPos().x << std::endl;
+	//std::cout << gameEngine->camera->GetSize().x << "//"<<gameEngine->camera->GetPos().x << std::endl;
 	//カメラの移動
 	gameEngine->camera->MovePos(player.GetEst());
 
