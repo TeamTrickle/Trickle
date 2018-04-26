@@ -20,41 +20,37 @@ public:
 	Vec2 speed;
 	Vec2 gravity;
 	bool Initialize(Vec2);
-	void Update(Map &map, Block &block);
+	void Update(Map &map, Block &block, Object& p);
 	void Render();
 	void Finalize();
 
 	void SetParent(Object*);
 	bool HasParent() const;
 
+	//めり込まない処理
+	void CheckMove(Vec2 &e_, Map &map, Block &bock);
+	//プレイヤーとブロックの当たった時の処理
+	void PlCheckHit(Object &p, Block &block);
+	//プレイヤーとブロックの当たり判定フラッグ
+	bool plhit;
+	//プレイヤ側から、移動する量を持ってくる
+	Vec2 GetMove(Vec2 move);
+	//プレイヤーに移動不可分の値を返す
+	Vec2 BackMove();
 
-	//マップとの当たり判定に使用
-	void CreateFoot();
-	void CreateHead();
-	void CreateLeft();
-	void CreateRight();
+	Vec2 backmove;
 
-	//プレイヤとの当たり判定に使用
+	//プレイヤとの当たり判定に使用　　使わなくなった
 	void PlCheckHitR(Object &p);
 	void PlCheckHitL(Object &p);
 	void PlCheckHitH(Object &p);
 	void PlCheckHitF(Object &p);
-
-	//プレイヤとの当たり判定用フラッグ
+	//プレイヤとの当たり判定用フラッグ 使わなくなった
 	bool plhitR;
 	bool plhitL;
 	bool plhitH;
 	bool plhitF;
-	//マップとの当たり判定用フラッグ
-	bool maphitR;
-	bool maphitL;
-	bool maphitH;
-	bool maphitF;
-
-	//めり込まない処理
-	void CheckMove(Vec2 &e_, Map &map , Block &bock);
-
-	//オブジェクトを生成するため
+	//オブジェクトを生成するため 使わなくなった
 	Object footBase;
 	Object headBase;
 	Object leftBase;
