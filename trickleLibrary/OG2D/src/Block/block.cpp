@@ -1,6 +1,6 @@
 #include "Block/block.h"   //変更した
 
-Block::Block(){
+Block::Block() {
 }
 
 Block::Block(Vec2 pos) {
@@ -16,20 +16,15 @@ bool Block::Initialize(Vec2 pos) {
 	//横移動初期値
 	speed.x = 0.0f;
 	speed.y = 0.0f;    //不要
-	//重力初期値
+					   //重力初期値
 	gravity.x = 0.0f;  //不要
 	gravity.y = 0.0f;
 
-	//プレイヤとの当たり判定フラッグ
+	//プレイヤとの当たり判定フラッグ　使わなくなった
 	plhitH = false;
 	plhitF = false;
 	plhitL = false;
 	plhitR = false;
-	//マップとの当たり判定フラッグ
-	maphitH = false;
-	maphitF = false;
-	maphitL = false;
-	maphitR = false;
 
 	Object::CreateObject(Objform::Cube, pos, Vec2(128.f, 128.f), 0.f);       //オブジェクトの生成
 	Object::objectTag = "Block";
@@ -37,18 +32,12 @@ bool Block::Initialize(Vec2 pos) {
 
 	};
 
-	//当たり判定用オブジェクトの生成
-	CreateHead();
-	CreateFoot();
-	CreateLeft();
-	CreateRight();
-
 	tex.TextureCreate("Collision.png");
 
 	return true;
 }
 
-void Block::Update(Map &map, Block &block) {
+void Block::Update(Map &map, Block &block, Object &p) {
 	//追加した----------------------------------------------------------------------------
 	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
 	headBase.position = Vec2(this->position.x, this->position.y - 1.f);
@@ -59,21 +48,21 @@ void Block::Update(Map &map, Block &block) {
 	//現在の状態確認用
 	/*if (maphitF)
 	{
-		std::cout << "足下接触" << std::endl;
+	std::cout << "足下接触" << std::endl;
 	}
 	if (maphitH)
 	{
-		std::cout << "頭上接触" << std::endl;
+	std::cout << "頭上接触" << std::endl;
 
 	}
 	if (maphitL)
 	{
-		std::cout << "左側接触" << std::endl;
+	std::cout << "左側接触" << std::endl;
 
 	}
 	if (maphitR)
 	{
-		std::cout << "右側接触" << std::endl;
+	std::cout << "右側接触" << std::endl;
 	}
 
 	std::cout << "this->Object=" << position.x << "," << position.y << "," << Scale.x << "," << Scale.y << std::endl;
@@ -82,32 +71,28 @@ void Block::Update(Map &map, Block &block) {
 	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
 	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
 	*/
-
-	//マップにめり込まない処理実装
-//	if (plhitL)
-//	{
-//		if (Input::KeyInputOn(Input::RIGHT))
-//		{
-//			speed.x += 5.0f;
-//			CheckMove(speed, map, block);
-//		}
-//	}
-//	if (plhitR)
-//	{
-//		if (Input::KeyInputOn(Input::LEFT))
-//		{
-//			speed.x -= 5.0f;
-//			CheckMove(speed, map, block);
-//		}
-//	}
-//		gravity.y = 4.0f;
-//		CheckMove(gravity, map, block);
+	if (plhit)
+	{
+		if (p.position.x < block.position.x)
+		{
+			//speed.x = 5.0f;はテスト用に設定
+			//speed.x = 5.0f;
+			CheckMove(speed, map, block);
+		}
+		if (p.position.x > block.position.x)
+		{
+			//speed.x = -5.0f;
+			CheckMove(speed, map, block);
+		}
+	}
+	gravity.y = 4.0f;
+	CheckMove(gravity, map, block);
 }
 
 void Block::Render() {
 	Box2D draw(this->position, this->Scale);
 	draw.OffsetSize();
-	Box2D src(0,0,128,128);
+	Box2D src(0, 0, 128, 128);
 	src.OffsetSize();
 	tex.Draw(draw, src);
 }
@@ -124,35 +109,20 @@ bool Block::HasParent() const {
 	return parent != nullptr;
 }
 
-//マップとの当たり判定について
-//---------------------------------------------------------------------------------------------------
-void Block::CreateHead()
+
+Vec2 Block::GetMove(Vec2 move)       //moveにプレイヤから受け取る移動量を入れる
 {
-	headBase.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y), 
-		Vec2(this->Scale.x, 1.0f), 0.0f);
-	headBase.objectTag = "BlockHead";
+	speed.x = move.x;
+	return speed;
 }
-void Block::CreateFoot()
+//めり込んだ値を返す処理
+Vec2 Block::BackMove()
 {
-	footBase.CreateObject(Cube, Vec2(this->position.x, this->position.y - 1.f),
-		Vec2(this->Scale.x , 1.0f), 0.0f);
-	footBase.objectTag = "BlockFoot";
-}
-void Block::CreateLeft()
-{
-	leftBase.CreateObject(Cube, Vec2(this->position.x - 1.f,
-		this->position.y), Vec2(1.0f, this->Scale.y), 0.0f);
-	leftBase.objectTag = "BlockLeft";
-}
-void Block::CreateRight()
-{
-	rightBase.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y),
-		Vec2(1.0f, this->Scale.y), 0.0f);
-	rightBase.objectTag = "BlockRight";
+	return backmove;
 }
 
 
-//プレイヤとの当たり判定について
+//プレイヤとの当たり判定について 使わなくなった
 //--------------------------------------------------------------------------------------------------------------
 void Block::PlCheckHitF(Object &p)
 {
@@ -169,6 +139,11 @@ void Block::PlCheckHitR(Object &p)
 void Block::PlCheckHitL(Object &p)
 {
 	plhitL = leftBase.hit(p);
+}
+
+void Block::PlCheckHit(Object &p, Block &block)
+{
+	plhit = block.hit(p);
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -198,6 +173,7 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 
 		if (map.MapHitCheck(block))
 		{
+			backmove.x = position.x - preX;
 			this->position.x = preX;
 			break;
 		}
@@ -225,6 +201,7 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 
 		if (map.MapHitCheck(block))
 		{
+			backmove.y = position.y - preY;
 			this->position.y = preY;
 			break;
 		}

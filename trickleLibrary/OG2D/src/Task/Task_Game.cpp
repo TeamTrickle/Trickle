@@ -9,7 +9,7 @@ void Game::Initialize()
 		{ 200,250 }
 	};
 
-	Vec2 blockpos = Vec2(1536, 100);
+	Vec2 blockpos = Vec2(200, 100);  //1536,100
 
 	//ジャスティン風のギミックの場合
 
@@ -172,18 +172,15 @@ TaskFlag Game::Update()
 	player.TakeBucket(bucket[i]);
 	}*/
 
-	block.Update(map, block);
+	block.Update(map, block, player);
 	bucket.Update(map, bucket);
 
-	/*block.maphitF = map.MapHitCheck(block.footBase);
-	block.maphitH = map.MapHitCheck(block.headBase);
-	block.maphitL = map.MapHitCheck(block.leftBase);
-	block.maphitR = map.MapHitCheck(block.rightBase);*/
+	block.PlCheckHit(player, block);
 
-	block.PlCheckHitF(player);
-	block.PlCheckHitH(player);
-	block.PlCheckHitL(player);
-	block.PlCheckHitR(player);
+	//block.PlCheckHitF(player);
+	//block.PlCheckHitH(player);
+	//block.PlCheckHitL(player);
+	//block.PlCheckHitR(player);
 	
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
