@@ -60,4 +60,6 @@ private:
 	Fan fan[2];
 
 	GameProcessManagement gameprocess;
+	Texture waterTex;
+	Texture playerTex;
 };

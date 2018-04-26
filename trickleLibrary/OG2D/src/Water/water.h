@@ -38,6 +38,8 @@ public:
 	void Render();
 	void Finalize();
 
+	void SetTexture(Texture* texture);
+
 	/**
 	 * @brief	状態転移します。
 	 * @see	外で使うとこにはWater::State::Liquid こんな形に
@@ -59,7 +61,7 @@ public:
 	//無敵時間
 	int invi;
 private:
-	Texture tex;
+	Texture* tex;
 	std::map<State, Box2D> drawRange;
 	State currentState;
 	Situation nowSituation;

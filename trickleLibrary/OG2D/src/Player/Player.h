@@ -15,11 +15,7 @@
 
 class Player :public Object 
 {
-	struct Move {
-		Vec2 est;
-		float angle;
-	};
-	enum Direction
+	enum Direction						//向きを管理
 	{
 		LEFT,
 		RIGHT,
@@ -46,66 +42,64 @@ class Player :public Object
 	class Animation
 	{
 	public:
-		Vec2 animationVec;
-		Vec2 startVec;
-		Vec2 endVec;
+		Vec2 animationVec;										//移動量
+		Vec2 startVec;											//開始位置
+		Vec2 endVec;											//終了位置
 	public:
-		void SetAnimaVec(Vec2 start_, Vec2 end_);
-		void Initialize();
-		Vec2 Move();
-		bool isMove();
+		void SetAnimaVec(Vec2 start_, Vec2 end_);				//開始位置と終了位置を登録
+		void Initialize();										//初期化
+		Vec2 Move();											//移動処理を行い移動値を返す
+		bool isMove();											//移動処理中かどうかを返す
 	};
 private:
-	const std::string fileName = "player.png";
-	const float MOVE_SPEED = 5.f;								//移動スピード
+	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
-	const float MAX_FALL = 10.f;
-	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;								//重力加速度
+	const float MAX_FALL = 10.f;								//落下最大速度
+	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;		//重力加速度
 	const float FIN_SPEED = 0.5f;								//摩擦
 	bool CheckJump;												//ジャンプ判定
 	bool CheckGravity;											//重力加速度判定
-	int moveCnt;
-	Texture playerimg;
-	Move move;
+	int moveCnt;												//移動カウント
+	Texture* playerimg;											//画像データ
 	Vec2 est;													//移動量
 	Direction direction;										//向きを格納する変数
-	Motion motion;
-	State state;
-	std::vector<Object*> objects;
-	std::vector<Bucket*> buckets;
-	std::vector<Block*> blocks;
-	Bucket* haveBucket;
-	Animation animation;
-	int inv;
+	Motion motion;												//現状モーション
+	State state;												//現状状態
+	std::vector<Object*> objects;								//当たり判定オブジェクト
+	std::vector<Bucket*> buckets;								//バケツ判定
+	std::vector<Block*> blocks;									//ブロック判定
+	Bucket* haveBucket;											//所持バケツ情報
+	Animation animation;										//アニメーションの移動処理
+	int inv;													//無敵時間
 private:
-	bool HeadCheck();
-	bool FootCheck();
-	bool HeadCheck(std::string objname_, int n = 0);
-	bool FootCheck(std::string objname_, int n = 0);
-	void MoveCheck(Vec2 est);
-	void MoveCheck(Vec2 est, std::string objname_);
-	void Friction();
-	bool BucketHit();
-	void BucketMove();
-	bool BlockHit();
-	void DebugFootCheck();
-	void DebugHeadCheck();
-	bool ObjectHit(std::string objname_);
+	bool HeadCheck();											//頭の当たり判定
+	bool FootCheck();											//足元の当たり判定
+	bool HeadCheck(std::string objname_, int n = 0);			//頭の別オブジェクトへの判定,0 = そのオブジェクト,1 = それ以外のオブジェクト
+	bool FootCheck(std::string objname_, int n = 0);			//足元の別オブジェクトへの判定
+	void MoveCheck(Vec2 est);									//移動判定処理
+	void MoveCheck(Vec2 est, std::string objname_);				//梯子状態で使用する移動処理
+	void Friction();											//重力や摩擦の計算
+	bool BucketHit();											//バケツとの当たり判定
+	void BucketMove();											//所持しているバケツの位置を変える
+	bool BlockHit();											//ブロックとの当たり判定
+	bool ObjectHit(std::string objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
 public:
-	Player();
-	~Player();
-	void Initialize();
-	void Update();
-	void Render();
-	void Finalize();
-	void AddObject(Object* obj_);
-	void DeleteObject(Object* obj_);
-	void AllDelete();
-	void AddBucket(Bucket* bucket);
-	bool DeleteBucket(Bucket* bucket);
-	void AddBlock(Block* block);
-	bool DeleteBlock(Block* block);
-	Vec2 GetEst() const;
+	Player();													//コンストラクタ
+	~Player();													//デストラクタ
+	void Initialize();											//初期化
+	void Update();												//更新処理
+	void Render();												//描画処理
+	void Finalize();											//解放処理
+	void AddObject(Object* obj_);								//オブジェクトを登録する
+	void DeleteObject(Object* obj_);							//指定オブジェクトを登録から削除する
+	void AllDelete();											//全登録オブジェクトの削除
+	void AddBucket(Bucket* bucket);								//バケツオブジェクトの登録
+	bool DeleteBucket(Bucket* bucket);							//指定バケツオブジェクトを削除
+	void AddBlock(Block* block);								//ブロックオブジェクトを登録	
+	bool DeleteBlock(Block* block);								//指定ブロックオブジェクトの削除
+	Vec2 GetEst() const;										//現在移動値を返す
+	void SetTexture(Texture* texture);							//テクスチャを登録
+	//入力処理簡略化
 	bool InputLeft() {
 		return gameEngine->in.on(Input::CL);
 	}

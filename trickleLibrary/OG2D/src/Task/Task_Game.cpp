@@ -25,7 +25,7 @@ void Game::Initialize()
 
 
 	std::cout << "Game" << std::endl;
-	player.Initialize();
+	
 	/*for (int i = 0; i < 2; ++i)
 	{
 	auto w = new Bucket(Vec2(bucketpos[i].x, bucketpos[i].y));
@@ -36,14 +36,32 @@ void Game::Initialize()
 	bucket[i]->Initialize();
 	cm.AddChild(bucket[i]);
 	}*/
+
+	//ƒoƒPƒc‰Šúˆ—
 	bucket.Initialize(bucketpos[0]);
 	cm.AddChild(&bucket);
-
+	//ƒuƒƒbƒN‰Šúˆ—
 	block.Initialize(blockpos);
 	cm.AddChild(&block);
-
+	//”wŒi‰Šúˆ—
 	back.Initialize();
+	//ƒ}ƒbƒv‰Šúˆ—
 	map.LoadMap("prototype.txt");
+	//…‰Šúˆ—
+	this->waterTex.TextureCreate("watertest.png");
+	//ƒvƒŒƒCƒ„[‰Šúˆ—
+	this->playerTex.TextureCreate("player.png");
+	player.Initialize();
+	this->player.SetTexture(&this->playerTex);
+	for (int y = 0; y < map.mapSize.y; ++y)
+	{
+		for (int x = 0; x < map.mapSize.x; ++x)
+		{
+			player.AddObject(&map.hitBase[y][x]);
+		}
+	}
+	player.AddBucket(&this->bucket);
+	player.AddBlock(&this->block);
 	
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -101,15 +119,7 @@ void Game::Initialize()
 	//											//cm.AddChild(&kanetuki.hitBace[0]);          //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 	//											//cm.AddChild(&kanetuki.hitBace[1]);          //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
 	//cm.AddChild(&seihyouki.hitBace);            //“–‚½‚è”»’è‹éŒ`‚ð“o˜^‚·‚é
-	for (int y = 0; y < map.mapSize.y; ++y)
-	{
-		for (int x = 0; x < map.mapSize.x; ++x)
-		{
-			player.AddObject(&map.hitBase[y][x]);
-		}
-	}
-	player.AddBucket(&this->bucket);
-	player.AddBlock(&this->block);
+
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
@@ -121,6 +131,7 @@ TaskFlag Game::Update()
 		timecnt = 0;
 		//Water?¿½?¿½?¿½?¿½
 		auto w = new Water(Vec2(150, 100));
+		w->SetTexture(&this->waterTex);
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
 	}
@@ -138,6 +149,7 @@ TaskFlag Game::Update()
 		//}
 		if (bucket.capacity > 0) {
 			Water* sizuku = bucket.Spill();
+			sizuku->SetTexture(&this->waterTex);
 			water.push_back(sizuku);
 			//cm += sizuku;
 			cm.AddChild(water[water.size() - 1]);
@@ -151,6 +163,7 @@ TaskFlag Game::Update()
 		{
 			cm - water[i];
 			water[i]->Finalize();
+			delete water[i];
 			water.erase(water.begin() + i);
 		}
 	}
@@ -285,15 +298,14 @@ void Game::Finalize()
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Finalize();
+		delete water[i];
 	}
-	while (!this->water.empty())
-	{
-		this->water.pop_back();
-	}
+
 	for (int i = 0; i < 2; ++i) {
 		swich[i].Finalize();
 		fan[i].Finalize();
 	}
+	this->waterTex.Finalize();
 	cm.Destroy();
 }
 //-------------------------------------------------------------------------------------------------

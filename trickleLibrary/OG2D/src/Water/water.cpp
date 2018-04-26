@@ -33,7 +33,7 @@ Water::Water(Vec2 pos) {
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, this->minSize, 0.f);
 	//テクスチャの読み込み
-	tex.TextureCreate("watertest.png");
+	//tex.TextureCreate("watertest.png");
 	//衝突判定の初期化
 	this->isCollided = false;
 	//初期ステータスの設定
@@ -46,7 +46,7 @@ Water::Water(Vec2 pos) {
 
 Water::~Water() {
 	//テクスチャの解放
-	tex.Finalize();
+	
 }
 
 
@@ -153,12 +153,11 @@ void Water::Render() {
 	draw.OffsetSize();
 	Box2D src = drawRange[currentState];
 	src.OffsetSize();
-	tex.Draw(draw, src);
+	this->tex->Draw(draw, src);
 }
 
 void Water::Finalize() {
-	tex.Finalize();
-	//delete this;
+	
 }
 
 void Water::SetState(const State& s_) {
@@ -193,4 +192,9 @@ float Water::waterMove()
 float Water::GetWaterVolume() const
 {
 	return this->volume;
+}
+
+void Water::SetTexture(Texture* texture)
+{
+	this->tex = texture;
 }

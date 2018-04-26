@@ -15,7 +15,6 @@ void Player::Initialize()
 	//オブジェクトの初期化
 	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
 	//テクスチャの読み込み
-	this->playerimg.TextureCreate(this->fileName);
 	//各変数の初期化
 	this->CheckJump = true;
 	this->CheckGravity = true;
@@ -219,17 +218,16 @@ void Player::Render()
 		src.w = src.x;
 		src.x = k;
 	}
-	this->playerimg.Draw(draw, src);
+	this->playerimg->Draw(draw, src);
 	this->LineDraw();
 }
 
 void Player::Finalize()
 {
 	//テクスチャの解放
-	this->playerimg.Finalize();
+
 	//保持オブジェクトの情報の解放
 	this->AllDelete();
-	this->buckets.clear();
 }
 
 Vec2 Player::GetEst() const {
@@ -581,38 +579,6 @@ void Player::MoveCheck(Vec2 est, std::string objname_)
 	}
 }
 
-void Player::DebugFootCheck()
-{
-	Object foot;
-	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 0.5f), 0.0f);
-	foot.LineDraw();
-	for (int j = 0; j < this->objects.size(); ++j)
-	{
-		if (foot.hit(*this->objects[j]))
-		{
-			std::cout << "FOOT::" << this->objects[j]->objectTag << "::";
-		}
-
-	}
-	std::cout << std::endl;
-}
-
-void Player::DebugHeadCheck()
-{
-	Object head;
-	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
-	head.LineDraw();
-	for (int j = 0; j < this->objects.size(); ++j)
-	{
-		if (head.hit(*this->objects[j]))
-		{
-			std::cout << "HEAD::" << this->objects[j]->objectTag << "::";
-		}
-
-	}
-	std::cout << std::endl;
-}
-
 bool Player::ObjectHit(std::string objname_)
 {
 	for (int i = 0; i < this->objects.size(); ++i)
@@ -655,8 +621,16 @@ bool Player::BlockHit()
 		{
 			//this->blocks[i]->Move(Vec2 x,y);
 			//Vec2 Move(x,y){return Vec2(x,y)};
-
+			//std::cout << "Hit" << std::endl;
+			float move = this->est.x;
+			float delmove = move;
+			this->est.x = -delmove;
 		}
 	}
 	return false;
+}
+
+void Player::SetTexture(Texture* texture)
+{
+	this->playerimg = texture;
 }
