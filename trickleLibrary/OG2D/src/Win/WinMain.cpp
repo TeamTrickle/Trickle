@@ -6,8 +6,13 @@
 #define _USE_MATH_DEFINES
 //¬”“_Œë·C³
 #define _OX_EPSILON_ 0.0000001f
-
 #include "OGSystem\OGTask.h"
+#if (_DEBUG)
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
 //------------------
 //class’è‹`
 //------------------
@@ -58,6 +63,9 @@ bool Update() {
 //ƒƒCƒ“
 //------------------
 int main() {
+#if(_DEBUG)
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 	//FW‚Ì‰Šú‰»
 	if (!glfwInit()) {
 		return -1;

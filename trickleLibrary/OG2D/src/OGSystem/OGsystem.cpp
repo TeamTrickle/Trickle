@@ -20,15 +20,15 @@ EngineSystem::EngineSystem(int widht, int height, char* name, bool screen)
 }
 void EngineSystem::Initialize()
 {
-	gameEngine->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
-	gameEngine->window = Window::Create(w_wi, w_he, w_na, w_sc);
-	gameEngine->window->LimitsWindow();
-	gameEngine->window->InMouseMode(this->Cursor_on);
-	gameEngine->fps = FPS::Create();
-	gameEngine->window->setIcon(this->path + this->file);
-	gameEngine->in.Inputinit(gameEngine->window->window);
-	gameEngine->soundManager = SoundManager::Create();
-	gameEngine->audiodevice = Audio::Create();
+	this->camera = Camera2D::Create(Box2D(0, 0, 960, 540));
+	this->window = Window::Create(w_wi, w_he, w_na, w_sc);
+	this->window->LimitsWindow();
+	this->window->InMouseMode(this->Cursor_on);
+	this->fps = FPS::Create();
+	this->window->setIcon(this->path + this->file);
+	this->in.Inputinit(this->window->window);
+	this->soundManager = SoundManager::Create();
+	this->audiodevice = Audio::Create();
 	DebugFunction = false;
 	this->isPause = false;
 	this->end = false;
@@ -50,13 +50,13 @@ void EngineSystem::SetIcon(std::string filepath_)
 }
 void EngineSystem::Update()
 {
-	gameEngine->camera->CameraUpdate();
-	gameEngine->in.upDate();
-	gameEngine->fps->Update();
+	this->camera->CameraUpdate();
+	this->in.upDate();
+	this->fps->Update();
 }
 EngineSystem::~EngineSystem()
 {
-	gameEngine->fps->DeleteData();
+	this->fps->DeleteData();
 }
 void EngineSystem::SetPause(const bool ispause_)
 {
@@ -76,10 +76,10 @@ bool EngineSystem::GetEnd() const
 }
 void EngineSystem::ChengeTask()
 {
-	gameEngine->camera->SetPos(Vec2(0.f, 0.f));
-	gameEngine->camera->SetSize(Vec2(gameEngine->window->_widht, gameEngine->window->_height));
-	gameEngine->fps->DeleteData();
-	gameEngine->SetPause(false);
-	gameEngine->soundManager->AllDelete();
+	this->camera->SetPos(Vec2(0.f, 0.f));
+	this->camera->SetSize(Vec2(this->window->_widht, this->window->_height));
+	this->fps->DeleteData();
+	this->SetPause(false);
+	this->soundManager->AllDelete();
 }
 EngineSystem* gameEngine;

@@ -57,7 +57,7 @@ class Player :public Object
 	};
 private:
 	const std::string fileName = "player.png";
-	const float MOVE_SPEED = 5.f;								//移動スピード
+	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float MAX_FALL = 10.f;
 	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;								//重力加速度

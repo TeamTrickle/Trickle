@@ -655,7 +655,10 @@ bool Player::BlockHit()
 		{
 			//this->blocks[i]->Move(Vec2 x,y);
 			//Vec2 Move(x,y){return Vec2(x,y)};
-
+			//std::cout << "Hit" << std::endl;
+			float move = this->est.x;
+			float delmove = move;
+			this->est.x = -delmove;
 		}
 	}
 	return false;

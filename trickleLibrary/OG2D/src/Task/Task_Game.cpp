@@ -151,6 +151,7 @@ TaskFlag Game::Update()
 		{
 			cm - water[i];
 			water[i]->Finalize();
+			delete water[i];
 			water.erase(water.begin() + i);
 		}
 	}
@@ -285,11 +286,9 @@ void Game::Finalize()
 	for (int i = 0; i < water.size(); ++i)
 	{
 		water[i]->Finalize();
+		delete water[i];
 	}
-	while (!this->water.empty())
-	{
-		this->water.pop_back();
-	}
+
 	for (int i = 0; i < 2; ++i) {
 		swich[i].Finalize();
 		fan[i].Finalize();
