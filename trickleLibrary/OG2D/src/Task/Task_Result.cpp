@@ -10,7 +10,7 @@ Result::~Result()
 }
 void Result::Initialize()
 {
-
+	Timer_Input();				//É^ÉCÉÄÇÃèoóÕ
 }
 TaskFlag Result::Update()
 {
@@ -23,9 +23,25 @@ TaskFlag Result::Update()
 }
 void Result::Render()
 {
-	
+	Box2D draw(Vec2(0,0),Vec2(0,0));
+	draw.OffsetSize();
+	Box2D src(Vec2(0, 0), Vec2(0, 0));
+	src.OffsetSize();
+	image.Draw(draw, src);
 }
 void Result::Finalize()
 {
 	image.Finalize();
+}
+void Result::Timer_Input()
+{
+	int i;
+	file = fopen(TimeFilePath, "r");
+	fscanf(file, "%d", &i);
+	fclose(file);
+	int sec, min, hour;
+	sec = i % 60;
+	min = i / 60;
+	hour = i / 60 / 60;
+	cout << hour << "éûä‘" << min << "ï™" << sec << "ïb" << endl;
 }

@@ -49,10 +49,11 @@ public:
 
 	/*
 	アドレスを代入させます
-	■引数　Object アドレス値を受け継ぐ
+	■引数　Timer アドレス値を受け継ぐ
 	■戻り　なし
 	*/
-	//void Set_poina(Object*);
+
+	void Timer_Input();
 private:
 	Texture image;
 	
@@ -68,5 +69,6 @@ private:
 	};
 
 	//結果の際に必要なポインタ　または　ファイルの読み込む
-	Timer* timer;
+	FILE* file;			//ファイルを読み込み用
+	const char* TimeFilePath = "./data/Result.dat";
 };

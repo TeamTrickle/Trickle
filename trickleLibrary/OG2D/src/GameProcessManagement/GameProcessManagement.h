@@ -3,14 +3,14 @@
 //|                      //|
 //|履歴　2018/04/14 横尾 //|
 //|履歴　2018/04/19 横尾 //|
+//|履歴　2018/04/26 横尾 //|
 //|______________________//|
 #include "Object\Object.h"
-#include <vector>
-#include <iostream>
 //関連するプロジェクト//
 #include "Goal\Goal.h"
 #include "Timer.h"
 #include "Win\WinMain.h" //タスクの遷移に必要
+#include "Task\Task_Result.h"
 
 class Goal;
 
@@ -72,9 +72,14 @@ public:
 	*/
 	TaskFlag Goal_Event();
 
+
+	void File_Writing();				//フレームを書きこむ
 private:
 
 	bool gameclear_flag;               //様々なフラグを格納する
 	std::vector<Object*>goals;         //ゴール判定を取るVector
 	Timer timer;                       //タイマーのセットをする
+
+	FILE* Timefile;					  //タイムを出力するタイム
+	const char* TimeFilePath = "./data/Result.dat";
 };
