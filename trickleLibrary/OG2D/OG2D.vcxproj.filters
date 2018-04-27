@@ -105,6 +105,9 @@
     <Filter Include="ソースファイル\Task\Result">
       <UniqueIdentifier>{6efcaf64-f223-4c5d-8313-138097076e7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Random">
+      <UniqueIdentifier>{1e49fbb4-0709-4e02-bb94-4922449ddaaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -218,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\Random\Random.cpp">
+      <Filter>ソースファイル\OGSystem\System\Random</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Random\Random.h">
+      <Filter>ソースファイル\OGSystem\System\Random</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

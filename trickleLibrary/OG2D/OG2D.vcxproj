@@ -176,6 +176,7 @@
     <ClCompile Include="src\OGSystem\Input\Input.cpp" />
     <ClCompile Include="src\OGSystem\OGsystem.cpp" />
     <ClCompile Include="src\OGSystem\OGTask.cpp" />
+    <ClCompile Include="src\OGSystem\Random\Random.cpp" />
     <ClCompile Include="src\OGSystem\Texture\Texture.cpp" />
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp" />
     <ClCompile Include="src\OGSystem\Window\Window.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="src\OGSystem\Input\Input.h" />
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
+    <ClInclude Include="src\OGSystem\Random\Random.h" />
     <ClInclude Include="src\OGSystem\Texture\Texture.h" />
     <ClInclude Include="src\OGSystem\Timer\glTimer.h" />
     <ClInclude Include="src\OGSystem\Window\Window.h" />
