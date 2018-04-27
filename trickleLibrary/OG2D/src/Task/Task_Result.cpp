@@ -45,3 +45,60 @@ void Result::Timer_Input()
 	hour = i / 60 / 60;
 	cout << hour << "時間" << min << "分" << sec << "秒" << endl;
 }
+bool Result::Flag_Judge()
+{
+	if ((Flag & Result::Flag1 )== Result::Flag1)
+	{
+		//フラグ１を持っている
+		return true;
+	}
+	if ((Flag & Result::Flag2) == Result::Flag2)
+	{
+		//フラグ２を持っている
+		return true;
+	}
+	if ((Flag & Result::Flag3) == Result::Flag3)
+	{
+		//フラグ３を持っている
+		return true;
+	}
+	if ((Flag & Result::Flag4) == Result::Flag4)
+	{
+		//フラグ４を持っている
+		return true;
+	}
+	if (Flag & 0x0F)
+	{
+		//全部のフラグが成立している
+		return true;
+	}
+	return false;
+}
+bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2)
+{
+	if ((Flag & achive1) == achive1 && (Flag & achive2) == achive2)
+	{
+		return true;
+	}
+	return false;
+}
+bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2, Result::Achievement achive3)
+{
+	if ((Flag & achive1) == achive1 && (Flag & achive2) == achive2 && (Flag & achive3) == achive3)
+	{
+		return true;
+	}
+	return false;
+}
+void Result::Flag_Input(Result::Achievement achive)
+{
+	Flag |= achive;
+}
+int Result::Get_Flag()
+{
+	return Flag;
+}
+void Result::Flag_Judge_Clear()
+{
+	Flag &= ~Flag;
+}
