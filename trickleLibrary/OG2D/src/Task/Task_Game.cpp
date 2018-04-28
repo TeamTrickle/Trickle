@@ -34,7 +34,7 @@ void Game::Initialize()
 	//背景初期処理
 	back.Initialize();
 	//マップ初期処理
-	map.LoadMap("prototype.txt");
+	map.LoadMap("tutorial1.csv", Format::csv);
 	//水初期処理
 	this->waterTex.TextureCreate("watertest.png");
 	//プレイヤー初期処理

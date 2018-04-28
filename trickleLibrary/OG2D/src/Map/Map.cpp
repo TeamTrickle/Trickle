@@ -1,9 +1,9 @@
 #include "Map.h"
 Map::Map()
 {
-	this->chip.resize(15);
-	this->chipimgname = "prototype.png";
-	this->chipsize = { 32,32 };
+	this->chip.resize(30);
+	this->chipimgname = "mapchip2.png";
+	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
 }
 
@@ -33,7 +33,7 @@ bool Map::LoadMap(std::string path_, Format format)
 	//_isに入っている文字列から','までの文字をtextにいれる
 	std::getline(_is, text, ',');
 	//textのデータを変数にいれる
-	(std::stringstream)text >> this->mapSize.x;
+ 	(std::stringstream)text >> this->mapSize.x;
 	std::getline(_is, text, ',');
 	(std::stringstream)text >> this->mapSize.y;
 	//_arrをmapyのサイズ分にサイズを変更する(配列化)
@@ -63,7 +63,7 @@ bool Map::LoadMap(std::string path_, Format format)
 		//元画像チップの描画範囲の指定
 		int x = (i % 20);
 		int y = (i / 20);
-		this->chip[i] = Box2D(x*32.f, y * 32.f, 32.f, 32.f);
+		this->chip[i] = Box2D(x*chipsize.x, y * chipsize.y, chipsize.x, chipsize.y);
 		this->chip[i].OffsetSize();
 	}
 	for (int y = 0; y < this->mapSize.y; ++y)
@@ -247,7 +247,7 @@ bool Map::LoadMap(std::string _path)
 
 void Map::MapRender()
 {
-	for (int y = 0; y < this->mapSize.y; ++y)
+ 	for  (int y = 0; y < this->mapSize.y; ++y)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
