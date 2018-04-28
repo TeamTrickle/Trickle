@@ -49,17 +49,14 @@ private:
 	//---------------------------------------------------------------------
 	//カメラ処理
 	void Camera_move();
-	//ジャスティン風
-	/*Senpuki senpuki;
-	Seihyouki seihyouki;
-	Kanetuki kanetuki;
-	Switch switch_;*/
-
-	//横田さん風
+	
+	//ギミックの追加
 	Switch swich[2];
 	Fan fan[2];
 
 	GameProcessManagement gameprocess;
+	Seihyouki seihyouki[2];
+
 	Texture waterTex;
 	Texture playerTex;
 };

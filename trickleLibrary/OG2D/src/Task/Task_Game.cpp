@@ -11,18 +11,6 @@ void Game::Initialize()
 
 	Vec2 blockpos = Vec2(1536, 100);  //1536,100
 
-	//ジャスティン風のギミックの場合
-
-	//Vec2 gimmickpos[6]
-	//{
-	//	{ 64 * 19,64 * 8 },     //スイッチ 上
-	//	{ 64 * 18,64 * 15 },    //加熱器 左
-	//	{ 64 * 11,64 * 7 },     //扇風機 上
-	//	{ 64 * 19 ,64 * 10 },   //扇風機 下
-	//	{ 64 * 12 ,64 * 14 },	//スイッチ 下
-	//	{ 64 * 19,64 * 15 },    //加熱器 右
-	//};
-
 
 	std::cout << "Game" << std::endl;
 	
@@ -88,42 +76,22 @@ void Game::Initialize()
 	}
 	swich[0].ON_OFF();
 
-	//ジャスティン風 現在は製氷機が動きます
-
-	//senpuki.SetParent(&map);                    //mapのアドレス値を格納する
-	//for (int i = 0; i < 2; ++i)
-	//{
-	//	senpuki.SetParent(&switch_, i);      //Switchのアドレス値を格納する &switch_[0]
-	//}
-
-	//senpuki.Set_Pos(gimmickpos[2]);             //扇風機の上の座標値をvectorに登録する
-	//senpuki.Set_Pos(gimmickpos[3]);             //扇風機の下の座標値をvectorに登録する
-	//switch_.Set_Pos(gimmickpos[0]);             //スイッチの上の座標値をvectorに登録する
-	//switch_.Set_Pos(gimmickpos[4]);             //スイッチの下の座標値をvectorに登録する
-	//											//kanetuki.Input_Pos(gimmickpos[1]);        //加熱機の座標値をvectorに登録する
-	//											//kanetuki.Input_Pos(gimmickpos[5]);        //加熱機の座標値をvectorに登録する
-	//seihyouki.Input_Pos(gimmickpos[1]);         //仮処理
-
-	////ギミックの初期化
-
-	//senpuki.Initialize(gimmickpos[2]);			//扇風機の初期化処理に移る（Vec2 扇風機の座標）
-	//switch_.Initlaize();        //Switchクラスの初期化処理をする(Vec2 初期座標)
-	//							//kanetuki.Initialize();                                  //加熱機を動かす
-	//seihyouki.Initialize();
-
-	////当たり判定矩形を登録する
-	//cm.AddChild(&switch_.hitBace[0]);           //Switchのアドレスをvector objsにputh.back()
-	//cm.AddChild(&switch_.hitBace[1]);           //Switchのアドレスを追加
-	//cm.AddChild(&senpuki);
-	//cm.AddChild(&senpuki.range);                //視野範囲のアドレスを参照する
-	//											//cm.AddChild(&kanetuki.hitBace[0]);          //当たり判定矩形を登録する
-	//											//cm.AddChild(&kanetuki.hitBace[1]);          //当たり判定矩形を登録する
-	//cm.AddChild(&seihyouki.hitBace);            //当たり判定矩形を登録する
-
+	for (int i = 0; i < 2; ++i)
+	{
+		cm.AddChild(&seihyouki[i].hitBace);
+	}
+	for (int i = 0; i < 2; ++i)
+	{
+		if (seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 10), Vec2(64, 64)))
+		{
+			seihyouki[i].Set_pointa();
+		}
+	}
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
+
 	timecnt++;
 	if (timecnt >= 120)
 		//if(gameEngine->input.DOWN(Input::Key::L))
@@ -182,6 +150,11 @@ TaskFlag Game::Update()
 	//block.PlCheckHitL(player);
 	//block.PlCheckHitR(player);
 	
+	for (int i = 0; i < 2; ++i)
+	{
+		seihyouki[i].CheckHit();
+	}
+
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
