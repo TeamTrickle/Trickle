@@ -13,7 +13,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//オブジェクトの初期化
-	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
+	Object::CreateObject(Cube, Vec2(200.f, 400.0f), Vec2(64.0f, 64.f), 0.0f);
 	//テクスチャの読み込み
 	//各変数の初期化
 	this->CheckJump = true;
