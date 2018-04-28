@@ -279,7 +279,7 @@ void Map::MapRender()
 		{
 			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 			draw.OffsetSize();
-			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+ 			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
 		}
 	}
 }
@@ -288,7 +288,7 @@ void Map::Finalize()
 {
 	this->_arr.clear();
 	this->hitBase.clear();
-	this->chip.clear();
+	//this->chip.clear();
 	mapimg.Finalize();
 }
 
