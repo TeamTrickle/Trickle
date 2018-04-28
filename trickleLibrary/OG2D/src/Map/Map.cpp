@@ -58,7 +58,7 @@ bool Map::LoadMap(std::string path_, Format format)
 	ifs.close();
 	//画像読み込み
 	this->mapimg.TextureCreate(chipimgname);
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < chip.size(); ++i)
 	{
 		//元画像チップの描画範囲の指定
 		int x = (i % 20);
@@ -75,30 +75,43 @@ bool Map::LoadMap(std::string path_, Format format)
 			switch (this->_arr[y][x])
 			{
 			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
 				//床
 				this->hitBase[y][x].objectTag = "Floor";
 				break;
-			case 2:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
 				this->hitBase[y][x].objectTag = "Net";
 				break;
-			case 3:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 4:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 6:
+				//case 3:
+				//	this->hitBase[y][x].objectTag = "Net";
+				//	break;
+				//case 4:
+				//	this->hitBase[y][x].objectTag = "Net";
+				//	break;
+			case 18:
+			case 19:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
-			case 7:
+			case 21:
+			case 22:
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
-			case 8:
-				this->hitBase[y][x].objectTag = "Ladder";
-				break;
-			case 9:
+				//case 8:
+				//	this->hitBase[y][x].objectTag = "Ladder";
+				//	break;
+				//case 9:
 				//this->hitBase[y][x].objectTag = "Switch";
-				break;
+				//break;
 			default:
 				break;
 			}
@@ -211,30 +224,43 @@ bool Map::LoadMap(std::string _path)
 			switch (this->_arr[y][x])
 			{
 			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
 				//床
 				this->hitBase[y][x].objectTag = "Floor";
 				break;
-			case 2:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
 				this->hitBase[y][x].objectTag = "Net";
 				break;
-			case 3:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 4:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 6:
+			//case 3:
+			//	this->hitBase[y][x].objectTag = "Net";
+			//	break;
+			//case 4:
+			//	this->hitBase[y][x].objectTag = "Net";
+			//	break;
+			case 18:
+			case 19:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
-			case 7:
+			case 21:
+			case 22:
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
-			case 8:
-				this->hitBase[y][x].objectTag = "Ladder";
-				break;
-			case 9:
+			//case 8:
+			//	this->hitBase[y][x].objectTag = "Ladder";
+			//	break;
+			//case 9:
 				//this->hitBase[y][x].objectTag = "Switch";
-				break;
+				//break;
 			default:
 				break;
 			}
