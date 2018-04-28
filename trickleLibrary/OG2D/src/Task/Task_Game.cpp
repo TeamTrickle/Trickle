@@ -9,7 +9,7 @@ void Game::Initialize()
 		{ 200,250 }
 	};
 
-	Vec2 blockpos = Vec2(200, 100);  //1536,100
+	Vec2 blockpos = Vec2(1536, 100);  //1536,100
 
 	//ジャスティン風のギミックの場合
 
@@ -62,7 +62,7 @@ void Game::Initialize()
 	}
 	player.AddBucket(&this->bucket);
 	player.AddBlock(&this->block);
-	
+	this->timecnt = 0;
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
 		for (auto& j : i)
@@ -297,12 +297,13 @@ void Game::Finalize()
 		water[i]->Finalize();
 		delete water[i];
 	}
-
+	water.clear();
 	for (int i = 0; i < 2; ++i) {
 		swich[i].Finalize();
 		fan[i].Finalize();
 	}
 	this->waterTex.Finalize();
+	this->playerTex.Finalize();
 	cm.Destroy();
 }
 //-------------------------------------------------------------------------------------------------

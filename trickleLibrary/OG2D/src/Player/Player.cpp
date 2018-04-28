@@ -13,7 +13,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//オブジェクトの初期化
-	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.0f), 0.0f);
+	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
 	//テクスチャの読み込み
 	//各変数の初期化
 	this->CheckJump = true;
@@ -31,7 +31,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	this->BlockHit();
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -115,6 +114,7 @@ void Player::Update()
 				}
 			}
 		}
+		this->BlockHit();
 		break;
 	case Motion::Jump:
 		//飛び出したときに初期値を入れる
@@ -271,6 +271,13 @@ bool Player::HeadCheck()
 			}
 		}
 	}
+	for (int i = 0; i < this->blocks.size(); ++i)
+	{
+		if (head.hit(*this->blocks[i]))
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -388,6 +395,14 @@ void Player::MoveCheck(Vec2 est)
 				}
 			}
 		}
+		for (int i = 0; i < this->blocks.size(); ++i)
+		{
+			if (this->hit(*this->blocks[i]))
+			{
+				this->position.x = preX;
+				break;
+			}
+		}
 	}
 	while (est.y != 0.f)
 	{
@@ -415,6 +430,14 @@ void Player::MoveCheck(Vec2 est)
 					this->position.y = preY;
 					break;
 				}
+			}
+		}
+		for (int i = 0; i < this->blocks.size(); ++i)
+		{
+			if (this->hit(*this->blocks[i]))
+			{
+				this->position.y = preY;
+				break;
 			}
 		}
 	}
@@ -615,17 +638,32 @@ bool Player::DeleteBlock(Block* block)
 
 bool Player::BlockHit()
 {
+	Object left;
+	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f,this->Scale.y), 0.0f);
+	Object right;
+	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(1.0f, this->Scale.y), 0.0f);
 	for (int i = 0; i < this->blocks.size(); ++i)
 	{
-		if (this->hit(*this->blocks[i]))
+		if (left.hit(*this->blocks[i]))
 		{
-			//this->blocks[i]->Move(Vec2 x,y);
-			//Vec2 Move(x,y){return Vec2(x,y)};
-			//std::cout << "Hit" << std::endl;
-			float move = this->est.x;
-			float delmove = move;
-			this->est.x = -delmove;
+			std::cout << "LEFT :Hit" << std::endl;
+			this->blocks[i]->PlCheckHit(left, *blocks[i]);
+			this->blocks[i]->GetMove(this->est);
 		}
+		if (right.hit(*this->blocks[i]))
+		{
+			std::cout << "RIGHT:Hit" << std::endl;
+			this->blocks[i]->PlCheckHit(right, *blocks[i]);
+			this->blocks[i]->GetMove(this->est);
+		}
+		//if (left.hit(*this->blocks[i]) || right.hit(*this->blocks[i]))
+		//{
+		//	std::cout << this->est.x << ":";
+		//	
+		//	this->blocks[i]->GetMove(this->est);
+		//	//this->est = this->blocks[i]->BackMove();
+		//	std::cout << this->est.x << std::endl;
+		//}
 	}
 	return false;
 }
