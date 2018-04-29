@@ -10,7 +10,8 @@ Result::~Result()
 }
 void Result::Initialize()
 {
-	Timer_Input();				//タイムの出力
+	Result_DataInput();
+	Flag_Judge();
 }
 TaskFlag Result::Update()
 {
@@ -33,23 +34,52 @@ void Result::Finalize()
 {
 	image.Finalize();
 }
-void Result::Timer_Input()
+void Result::Result_DataInput()
 {
-	int i;
-	file = fopen(TimeFilePath, "r");
-	fscanf(file, "%d", &i);
-	fclose(file);
+	int Frametime;				//タイムをフレーム格納する
+	string GameFalg;			//ゲームフラグ
+	//データの読み込み
+	ifstream fin(TimeFilePath);
+
+	if (!fin)
+	{
+		return;
+	}
+	//読み込んだデータを入れておく変数
+	string line;
+	//改行か終了時点までの文字の文字列をlineに入れる
+	getline(fin, line);
+	//文字列を操作するための入力クラス、直接アクセスする
+	istringstream _fin(line);
+	//一字書き込み変数
+	string text;
+	//_finに入っている文字列から','までの文字をtextにいれる
+	getline(_fin, text, ',');
+	//textのデータを変数にいれる
+	(stringstream)text >> Frametime;
+	getline(_fin, text, ',');
+	(stringstream)text >> GameFalg;
+	if (GameFalg == "GameClear")		//ゲームがクリア
+	{
+		Flag_Input(Result::Achievement::Flag1);
+	}
+	//時間の計算
 	int sec, min, hour;
-	sec = i % 60;
-	min = i / 60;
-	hour = i / 60 / 60;
+	sec = Frametime % 60;
+	min = Frametime / 60;
+	hour = Frametime / 60 / 60;
 	cout << hour << "時間" << min << "分" << sec << "秒" << endl;
+
+	fin.close();
+
+	
 }
 bool Result::Flag_Judge()
 {
 	if ((Flag & Result::Flag1 )== Result::Flag1)
 	{
 		//フラグ１を持っている
+		cout << "Goal" << endl;
 		return true;
 	}
 	if ((Flag & Result::Flag2) == Result::Flag2)
@@ -101,4 +131,8 @@ int Result::Get_Flag()
 void Result::Flag_Judge_Clear()
 {
 	Flag &= ~Flag;
+}
+void Result::Set_pointa(Goal* obj)
+{
+	g_pointa = obj;
 }

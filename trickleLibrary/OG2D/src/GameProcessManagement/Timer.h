@@ -37,29 +37,6 @@ public:
 	*/
 	void Initialize();
 
-
-	/*
-	タイマーの関数をまとめて呼び出す
-	■引数　なし
-	■戻り　なし
-	*/
-	void Update();
-
-
-	/*
-	タイマーの時間を1フレームづつ計測する
-	■引数　なし
-	■戻り　なし
-	*/
-	void Instrumentation();
-
-	/*
-	指定したタイマーの時間をコマンドプロンプトに出力する
-	■引数　Timer& 出力したいタイマー
-	■戻り　なし
-	*/
-	void Instrumentation_output(Timer&);
-
 	/*
 	タイマーの時間をフレーム時間に格納する
 	■引数　なし

@@ -59,7 +59,18 @@ TaskFlag GameProcessManagement::Goal_Event()
 }
 void GameProcessManagement::File_Writing()
 {
-	Timefile = fopen(TimeFilePath, "w");			//始めから生成する
-	fprintf(Timefile, "%d", timer.Get_frame());
-	fclose(Timefile);
+	ofstream fin(TimeFilePath);				//ファイルのパスの指定
+	fin << timer.Get_frame();				//タイマーのフレーム数を書き込み
+	fin << ',';								//,の書き込み
+	if (gameclear_flag)
+	{
+		fin << "GameClear";					//ゲームクリアフラグ
+		fin << ',';							//,の書き込み
+	}
+	else
+	{
+		fin << "NoGame";					//ゲーム未クリア
+		fin << ',';							//,の書き込み
+	}
+	fin.close();							//ファイルを閉じる
 }
