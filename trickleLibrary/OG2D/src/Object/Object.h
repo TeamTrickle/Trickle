@@ -22,7 +22,7 @@ public:
 	CollisionCircle collisionBall;
 	bool Gravity;
 	float mass;
-	float fricition = 0.f;
+	float fricition = 0.1f;
 	float fricition_current = 0.f;
 	bool hit(Object o);
 	Object();
