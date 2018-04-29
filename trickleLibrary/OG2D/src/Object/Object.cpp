@@ -131,3 +131,17 @@ void Object::LineDraw()
 		break;
 	}
 }
+
+void Object::UpdatePhysics() {
+	if (fricition_current <= 0.f) {
+		fricition_current -= fricition;
+	}
+}
+
+void Object::SetFricition(float f_) {
+	this->fricition_current = f_;
+}
+
+Vec2 Object::UseFricition() const {
+	return Vec2(fricition_current, 0.f);
+}

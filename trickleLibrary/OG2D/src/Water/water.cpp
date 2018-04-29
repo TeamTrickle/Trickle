@@ -6,6 +6,13 @@ Water::Water(Vec2 pos) {
 	//ƒ^ƒOÝ’è
 	this->objectTag = "Water";
 	//Õ“Ë”»’è
+	Object::CollisionIn = [&](Object& o_) {
+		// •X‚ÌŽž‚É‚Í–€ŽC—Í‚ðŒ¸‚ç‚·B
+		if (this->GetState() == State::SOLID) {
+			o_.SetFricition(5.f);
+		}
+	};
+
 	Object::CollisionProcess = [&](const Object& o_) {
 		if (o_.objectTag == "Floor") {
 			this->isCollided = true;

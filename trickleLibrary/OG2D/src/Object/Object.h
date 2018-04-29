@@ -22,6 +22,8 @@ public:
 	CollisionCircle collisionBall;
 	bool Gravity;
 	float mass;
+	float fricition = 0.f;
+	float fricition_current = 0.f;
 	bool hit(Object o);
 	Object();
 	Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
@@ -32,6 +34,16 @@ public:
 	bool isCollidedGlobal = false;
 
 	void LineDraw();
+
+	void SetFricition(float);
+	Vec2 UseFricition() const;
+
+
+	/**
+	 * @note 物理処理を使うオブジェクトのなかでこの関数を読んで下さい
+	 * @code void Update() { Object::updatePhysics(); .... }
+	 */
+	void UpdatePhysics();
 
 	/**
 	 * @brief オーバーライドして当たり判定処理を書いてください
@@ -49,7 +61,7 @@ public:
 	* @brief 当たり判定が始まるときの最後の１フレームだけ呼び出されます。
 	* @param 当たったオブジェクト
 	*/
-	std::function<void(const Object&)> CollisionIn;
+	std::function<void(Object&)> CollisionIn;
 
 private:
 };
