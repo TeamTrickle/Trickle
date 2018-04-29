@@ -132,7 +132,3 @@ void Result::Flag_Judge_Clear()
 {
 	Flag &= ~Flag;
 }
-void Result::Set_pointa(Goal* obj)
-{
-	g_pointa = obj;
-}

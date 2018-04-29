@@ -87,11 +87,15 @@ void Game::Initialize()
 			seihyouki[i].Set_pointa();
 		}
 	}
+
+	gameprocess.Set_Goal(&goal);
+	gameprocess.Initialize();
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
-
+	gameprocess.Update();
+	
 	timecnt++;
 	if (timecnt >= 120)
 		//if(gameEngine->input.DOWN(Input::Key::L))
@@ -225,6 +229,7 @@ TaskFlag Game::Update()
 	{
 		nowtask = Task_Title;
 	}
+	nowtask = gameprocess.Goal_Event();
 	return nowtask;
 }
 //-------------------------------------------------------------------------------------------------

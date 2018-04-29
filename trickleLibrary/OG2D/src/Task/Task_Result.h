@@ -2,7 +2,6 @@
 #include "Object\Object.h"
 #include "Win\WinMain.h"
 #include "GameProcessManagement\Timer.h"
-#include "Goal\Goal.h"
 
 
 class Result
@@ -73,8 +72,6 @@ public:
 	bool Flag_Judge(Achievement, Achievement, Achievement);
 
 	void Flag_Judge_Clear();
-
-	void Set_pointa(Goal*);
 private:
 	Texture image;
 
@@ -84,7 +81,5 @@ private:
 	int Flag;
 
 	//結果の際に必要なポインタ　または　ファイルの読み込む
-	const char* TimeFilePath = "./data/Result.dat";
-
-	Goal* g_pointa;
+	const char* TimeFilePath = "./data/Result/Result.dat";
 };
