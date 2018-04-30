@@ -12,7 +12,7 @@ public:
 	std::string fileName = "back.png";
 
 	void Initialize();
-	void UpDate();
+	void Update();
 	void Render();
 	void Finalize();
 };

@@ -5,16 +5,15 @@
 //|____________________________|//
 #include "Object\Object.h"
 
+enum Format
+{
+	csv,
+};
+
 class Map
 {
 public:
-	Map();
-	bool LoadMap(std::string _path);
-	void MapRender();
-	//void MapUpDate();
-	void Finalize();
 	//描画するマップチップの数
-	//int mapX, mapY;
 	Vec2 mapSize;
 	//描画マップ配列
 	std::vector<std::vector<int>> _arr;
@@ -22,13 +21,19 @@ public:
 	std::vector<Box2D> chip;
 	//オブジェクト情報
 	std::vector<std::vector<Object>> hitBase;
-	//std::vector<std::vector<Box2D>> hitBase;
 	//使用画像情報
 	Texture mapimg;
 	//元画像の縦横サイズ
 	Vec2 chipsize;
 	//描画の縦横サイズ
 	Vec2 DrawSize;
+public:
+	Map();
+	bool LoadMap(std::string _path);
+	bool LoadMap(std::string _path, Format format);
+	void MapRender();
+	//void MapUpdate();
+	void Finalize();
 	//マップとの当たり判定
 	bool MapHitCheck(Object &p);
 private:

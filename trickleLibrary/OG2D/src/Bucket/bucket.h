@@ -9,6 +9,7 @@
  */
 
 #include "Water\water.h"
+#include "Map\Map.h"
 
 class Bucket : public Object {
 
@@ -23,12 +24,13 @@ public:
 	virtual ~Bucket();
 
 	bool Initialize(Vec2 pos);
-	void Update();
+	void Update(Map &map, Bucket &bucket);
 	void Render();
 	void Finalize();
 
 	void SetParent(Object*);
 	bool HasParent() const;
+	void CheckMove(Vec2 &e_, Map &map, Bucket &bucket);
 
 	/**
 	 * @brief	バケッツから水をこぼします
@@ -37,6 +39,8 @@ public:
 	 */
 	Water* Spill();
 	float capacity;
+	Vec2 gravity;      //重力
+	bool hold;         //プレイヤがバケツを持っているかの判断
 private:
 	Object * parent;
 	Texture tex;

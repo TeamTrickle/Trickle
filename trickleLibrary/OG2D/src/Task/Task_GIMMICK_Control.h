@@ -9,9 +9,9 @@
 //|　                          |//
 //|  クラスの宣言で使用可能____|//
 
-#include "Object\Switch.h"
-#include "Object\Kanetuki.h"
-#include "Object\Senpuki.h"
+#include "Gimmick\NO_MOVE\Kanetuki.h"
+#include "Gimmick\NO_MOVE\Switch.h"
+#include "Gimmick\NO_MOVE\Senpuki.h"
 
 //class Player;
 //class EnemyHitTest;
@@ -25,7 +25,7 @@ public:
 	GIMMICK_Control();
 	~GIMMICK_Control();
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Finalize();
 	void Render2D();
 public:

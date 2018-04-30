@@ -1,7 +1,110 @@
 #include "Map.h"
 Map::Map()
 {
-	
+	this->chip.resize(15);
+	this->chipimgname = "prototype.png";
+	this->chipsize = { 32,32 };
+	this->DrawSize = { 64,64 };
+}
+
+bool Map::LoadMap(std::string path_, Format format)
+{
+	if (Format::csv != format)
+	{
+		std::cout << "ファイル形式が読み込みに対応していません" << std::endl;
+		return false;
+	}
+	//ファイルの読み込み(入力用式、バイナリデータでの読み込み)
+	std::ifstream ifs(this->_FilePath + path_, std::ios::in | std::ios::binary);
+	//読み込めなかった時のエラー処理
+	if (!ifs) 
+	{
+		std::cout << "マップ読み込みエラー" << std::endl;
+		return false; 
+	}
+	//読み込んだデータを入れておく変数
+	std::string line;
+	//改行か終了地点までの文字の文字列をlineにいれる
+	std::getline(ifs, line);
+	//文字列を操作するための入力class、直接アクセスできる
+	std::istringstream _is(line);
+	//一字書き込み変数
+	std::string text;
+	//_isに入っている文字列から','までの文字をtextにいれる
+	std::getline(_is, text, ',');
+	//textのデータを変数にいれる
+	(std::stringstream)text >> this->mapSize.x;
+	std::getline(_is, text, ',');
+	(std::stringstream)text >> this->mapSize.y;
+	//_arrをmapyのサイズ分にサイズを変更する(配列化)
+	this->_arr.resize(this->mapSize.y);
+	this->hitBase.resize(this->mapSize.y);
+	//_arr[]をmapxのサイズ分にサイズを変更する(二次配列化)
+	for (int i = 0; i < this->mapSize.y; ++i)
+	{
+		this->_arr[i].resize(this->mapSize.x);
+		this->hitBase[i].resize(this->mapSize.x);
+	}
+	for (int y = 0; y < this->mapSize.y; ++y) {
+		std::string lineText;
+		std::getline(ifs, lineText);
+		std::istringstream  ss_lt(lineText);
+		for (int x = 0; x < this->mapSize.x; ++x) {
+			std::string  text;
+			std::getline(ss_lt, text, ',');
+			(std::stringstream)text >> this->_arr[y][x];
+		}
+	}
+	ifs.close();
+	//画像読み込み
+	this->mapimg.TextureCreate(chipimgname);
+	for (int i = 0; i < 15; ++i)
+	{
+		//元画像チップの描画範囲の指定
+		int x = (i % 20);
+		int y = (i / 20);
+		this->chip[i] = Box2D(x*32.f, y * 32.f, 32.f, 32.f);
+		this->chip[i].OffsetSize();
+	}
+	for (int y = 0; y < this->mapSize.y; ++y)
+	{
+		for (int x = 0; x < this->mapSize.x; ++x)
+		{
+			//オブジェクトの生成
+			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
+			switch (this->_arr[y][x])
+			{
+			case 1:
+				//床
+				this->hitBase[y][x].objectTag = "Floor";
+				break;
+			case 2:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
+			case 3:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
+			case 4:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
+			case 6:
+				this->hitBase[y][x].objectTag = "Soil";
+				break;
+			case 7:
+				this->hitBase[y][x].objectTag = "Ladder";
+				break;
+			case 8:
+				this->hitBase[y][x].objectTag = "Ladder";
+				break;
+			case 9:
+				//this->hitBase[y][x].objectTag = "Switch";
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	return true;
 }
 
 bool Map::LoadMap(std::string _path)
@@ -105,9 +208,6 @@ bool Map::LoadMap(std::string _path)
 		{
 			//オブジェクトの生成
 			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
-			/*if (this->_arr[y][x] != 0)
-				this->hitBase[y][x].objectTag = "Floor";*/
-
 			switch (this->_arr[y][x])
 			{
 			case 1:
@@ -133,7 +233,7 @@ bool Map::LoadMap(std::string _path)
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
 			case 9:
-				this->hitBase[y][x].objectTag = "Switch";
+				//this->hitBase[y][x].objectTag = "Switch";
 				break;
 			default:
 				break;
@@ -160,8 +260,9 @@ void Map::MapRender()
 
 void Map::Finalize()
 {
-	while (!this->_arr.empty())
-		this->_arr.pop_back();
+	this->_arr.clear();
+	this->hitBase.clear();
+	this->chip.clear();
 	mapimg.Finalize();
 }
 

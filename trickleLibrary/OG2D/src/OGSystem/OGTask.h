@@ -10,6 +10,8 @@
 //☆☆☆☆☆☆☆☆☆//
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
+#include "Task\Task_Option.h"
+#include "Task\Task_Result.h"
 
 class _OGTK
 {
@@ -21,6 +23,8 @@ public:
 	//cppにも同様に記述
 	Game game;
 	Title title;
+	Option option;
+	Result result;
 
 	////////////////////////////
 	//ここから下は変更しないこと//
@@ -31,7 +35,7 @@ public:
 	//Window _window;
 	//タスクシステム関数
 	void _myGameInitialize();
-	void _myGameUpDate();
+	void _myGameUpdate();
 	void _myGameRender2D();
 	void _myGameRender3D();
 	void _myGameFinalize();

@@ -7,41 +7,40 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Map\Map.h"
-class ObjectSample :public Object{
-public:
-	//Object object;
-	Texture sampleimg;
-	std::string fileName = "Collision.png";
-	Object footHit;
-	Object toolHit;
-	bool hitcheck;
-	void Initialize();
-	void UpDate();
-	void Render();
-	void Finalize();
-};
-class ObjectSample2 :public Object {
-public:
-	//Object object;
-	Texture sampleimg;
-	std::string fileName = "Collision.png";
-	bool hitcheck;
-	void Initialize();
-	void UpDate();
-	void Render();
-	void Finalize();
-};
+#include "CollisionManager\CollisionManager.h"
+#include "Task\Task_Option.h"
+
 class Title
 {
+	Texture texCursor;
+	Texture texStart;
+	Texture texClose;
+	Texture texPause;
+
+	Vec2 startPos;
+	Vec2 pausePos;
+	Vec2 closePos;
+	Vec2 cursorPos;
+
 public:
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Render2D();
 	void Finalize();
+
+	void CursorMove();
 	//☆☆☆☆//
 	//追加変数//
 	//☆☆☆☆//
-	ObjectSample objsmp;
-	ObjectSample2 objsmp2;
+	CollisionManager cm;
 	Map map;
+	Sound sound;
+
+	enum State
+	{
+		Start,        //ゲームスタート
+		Pause,         //設定
+		Close        //ゲームを閉じる
+	};
+	State state;
 };

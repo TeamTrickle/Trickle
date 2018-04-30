@@ -9,7 +9,7 @@ void _OGTK::_myGameInitialize()
 	nextTask = Task_Title;
 }
 
-void _OGTK::_myGameUpDate()
+void _OGTK::_myGameUpdate()
 {
 	if (nowTask != nextTask)
 	{
@@ -21,9 +21,18 @@ void _OGTK::_myGameUpDate()
 		case Task_Game:
 			game.Finalize();
 			break;
+		case Task_Sample:
+			//sample.Finalize();
+			break;
+		case Task_Option:
+			option.Finalize();
+			break;
+		case Task_Ruselt:
+			result.Finalize();
+			break;
 		}
 		nowTask = nextTask;
-		gameEngine->camera->position = { 0,0 };
+		gameEngine->ChengeTask();
 		switch (nowTask)
 		{
 		case Task_Title:
@@ -32,16 +41,51 @@ void _OGTK::_myGameUpDate()
 		case Task_Game:
 			game.Initialize();
 			break;
+		case Task_Sample:
+			//sample.Initialize();
+			break;
+		case Task_Option:
+			option.Initialize();
+			break;
+		case Task_Ruselt:
+			result.Initialize();
+			break;
 		}
 	}
-	switch (nowTask)
+	if (!gameEngine->GetPause()) {
+		switch (nowTask)
+		{
+		case Task_Title:
+			nextTask = title.Update();
+			break;
+		case Task_Game:
+			nextTask = game.Update();
+			break;
+		case Task_Sample:
+			//nextTask = sample.UpDate();
+			break;
+		case Task_Option:
+			nextTask = option.Update();
+			break;
+		case Task_Ruselt:
+			nextTask = result.Update();
+			break;
+		}
+	}
+	else
 	{
-	case Task_Title:
-		nextTask = title.UpDate();
-		break;
-	case Task_Game:
-		nextTask = game.UpDate();
-		break;
+		//PauseèàóùÇÇ±Ç±Ç…ãLèq
+		switch (nowTask)
+		{
+		case Task_Title:
+			break;
+		case Task_Game:
+			break;
+		case Task_Option:
+			break;
+		case Task_Ruselt:
+			break;
+		}
 	}
 }
 
@@ -54,6 +98,12 @@ void _OGTK::_myGameRender2D()
 		break;
 	case Task_Game:
 		game.Render2D();
+		break;
+	case Task_Option:
+		option.Render();
+		break;
+	case Task_Ruselt:
+		result.Render();
 		break;
 	}
 }
@@ -72,6 +122,12 @@ void _OGTK::_myGameFinalize()
 		break;
 	case Task_Game:
 		game.Finalize();
+		break;
+	case Task_Option:
+		option.Finalize();
+		break;
+	case Task_Ruselt:
+		result.Finalize();
 		break;
 	}
 }

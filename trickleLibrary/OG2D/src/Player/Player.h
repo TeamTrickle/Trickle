@@ -10,76 +10,106 @@
 #include "Bucket\bucket.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Gimmick\NO_MOVE\Switch.h"
+#include "Block\block.h"
 
-class Player :public Object {
-
-	struct Move {
-		Vec2 est;
-		float angle;
-	};
-
-	enum Direction
+class Player :public Object 
+{
+	enum Direction						//向きを管理
 	{
 		LEFT,
 		RIGHT,
 	};
-
 	const std::array<std::string, 3> WALKABLE_CHIPS{
 		"Floor",
 		"Soil",
 		"Net"
 	};
-
+	enum State
+	{
+		NORMAL,		//通常
+		LADDER,		//はしご中
+		BUCKET,		//バケツ所持
+		ANIMATION,	//アニメーション中
+	};
+	enum Motion
+	{
+		Normal,		//通常
+		Jump,		//ジャンプ
+		Ladder,		//はしご
+		Fall,		//落下
+	};
+	class Animation
+	{
+	public:
+		Vec2 animationVec;										//移動量
+		Vec2 startVec;											//開始位置
+		Vec2 endVec;											//終了位置
+	public:
+		void SetAnimaVec(Vec2 start_, Vec2 end_);				//開始位置と終了位置を登録
+		void Initialize();										//初期化
+		Vec2 Move();											//移動処理を行い移動値を返す
+		bool isMove();											//移動処理中かどうかを返す
+	};
 private:
-	void JumpMove();
-	void CheckFoot();
-	void CheckHead();
-	void CheckLeft();
-	void CheckRight();
-	bool isWalkable(std::string);
-
-public:
-	void Initialize();
-	void UpDate();
-	void Render();
-	void Finalize();
-
-	/**
-	 * @brief	当たり判定に登録する
-	 * @param	当たり判定管理者のアドレス値
-	 */
-	void Register(CollisionManager*);
-
-	/**
-	 * @brief	バケッツのためなスペシャルな処理
-	 * @note	当たり判定設計ミスですデへペロ
-	 */
-	void TakeBucket(Bucket*);
-
-private:
-	const std::string fileName = "player.png";
-	const float MOVE_SPEED = 10.f;								//移動スピード
+	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
-	const float GRAVITY = 0.98f;								//重力加速度
-	//const Input::Key BUCKET_SPOIL_KEY = Input::Key::B;			//バケッツこぼすキー
-	//const Input::Key BUCKET_TAKEDROP_KEY = Input::Key::F;		//バケッツ拾う・捨てるキー
-
-	Texture playerimg;
-	Move move;
-	Vec2 est;										//移動量
-	Direction direction;							//向きを格納する変数
-	Bucket* bucket;
-
-	// 当たり判定用
-	Object footBase;
-	Object headBase;
-	Object leftBase;
-	Object rightBase;
-
+	const float MAX_FALL = 10.f;								//落下最大速度
+	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;		//重力加速度
+	const float FIN_SPEED = 0.5f;								//摩擦
+	bool CheckJump;												//ジャンプ判定
+	bool CheckGravity;											//重力加速度判定
+	int moveCnt;												//移動カウント
+	Texture* playerimg;											//画像データ
+	Vec2 est;													//移動量
+	Direction direction;										//向きを格納する変数
+	Motion motion;												//現状モーション
+	State state;												//現状状態
+	std::vector<Object*> objects;								//当たり判定オブジェクト
+	std::vector<Bucket*> buckets;								//バケツ判定
+	std::vector<Block*> blocks;									//ブロック判定
+	Bucket* haveBucket;											//所持バケツ情報
+	Animation animation;										//アニメーションの移動処理
+	int inv;													//無敵時間
+private:
+	bool HeadCheck();											//頭の当たり判定
+	bool FootCheck();											//足元の当たり判定
+	bool HeadCheck(std::string objname_, int n = 0);			//頭の別オブジェクトへの判定,0 = そのオブジェクト,1 = それ以外のオブジェクト
+	bool FootCheck(std::string objname_, int n = 0);			//足元の別オブジェクトへの判定
+	void MoveCheck(Vec2 est);									//移動判定処理
+	void MoveCheck(Vec2 est, std::string objname_);				//梯子状態で使用する移動処理
+	void Friction();											//重力や摩擦の計算
+	bool BucketHit();											//バケツとの当たり判定
+	void BucketMove();											//所持しているバケツの位置を変える
+	bool BlockHit();											//ブロックとの当たり判定
+	bool ObjectHit(std::string objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
+public:
+	Player();													//コンストラクタ
+	~Player();													//デストラクタ
+	void Initialize();											//初期化
+	void Update();												//更新処理
+	void Render();												//描画処理
+	void Finalize();											//解放処理
+	void AddObject(Object* obj_);								//オブジェクトを登録する
+	void DeleteObject(Object* obj_);							//指定オブジェクトを登録から削除する
+	void AllDelete();											//全登録オブジェクトの削除
+	void AddBucket(Bucket* bucket);								//バケツオブジェクトの登録
+	bool DeleteBucket(Bucket* bucket);							//指定バケツオブジェクトを削除
+	void AddBlock(Block* block);								//ブロックオブジェクトを登録	
+	bool DeleteBlock(Block* block);								//指定ブロックオブジェクトの削除
+	Vec2 GetEst() const;										//現在移動値を返す
+	void SetTexture(Texture* texture);							//テクスチャを登録
+	//入力処理簡略化
 	bool InputLeft() {
-		return gameEngine->input.on(Input::CL,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_14)*/;
+		return gameEngine->in.on(Input::CL);
 	}
 	bool InputRight() {
-		return gameEngine->input.on(Input::CR,0) /*|| gameEngine->gamepad[0].ButtonOn(GLFW_JOYSTICK_12)*/;
+		return gameEngine->in.on(Input::CR);
+	}
+	bool InputDown() {
+		return gameEngine->in.on(Input::CD);
+	}
+	bool InputUp() {
+		return gameEngine->in.on(Input::CU);
 	}
 };

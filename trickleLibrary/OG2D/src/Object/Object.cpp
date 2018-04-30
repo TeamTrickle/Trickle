@@ -4,6 +4,7 @@ Object::Object() {
 	this->angle = 0.f;
 	this->objform = Objform::Non;
 	this->CollisionProcess = nullptr;
+	this->mass = 0.f;
 }
 Object::Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 {
@@ -99,4 +100,34 @@ bool Object::hit(Object o)
 		break;
 	}
 	return false;
+}
+
+void Object::LineDraw()
+{
+	switch (this->objform)
+	{
+	case Objform::Cube:
+	{
+		this->collisionCube.hitBase = {
+			this->position.x,
+			this->position.y,
+			this->Scale.x + this->position.x,
+			this->Scale.y + this->position.y
+		};
+		this->collisionCube.Rotate(this->angle);
+		Vec2 _v[4] = {
+		{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.y },
+		{ this->collisionCube.hitBase.w - 1,this->collisionCube.hitBase.y },
+		{ this->collisionCube.hitBase.w - 1,this->collisionCube.hitBase.h - 1 },
+		{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.h - 1 }
+		};
+		OG::_Rotate(this->collisionCube.angle, _v);
+		OG::LineHitDraw(_v);
+		break;
+	}
+	case Objform::Ball:
+		break;
+	case Objform::Non:
+		break;
+	}
 }

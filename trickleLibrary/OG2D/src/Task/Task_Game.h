@@ -2,6 +2,7 @@
 //______________________________//
 //|タスクサンプル               |//
 //|履歴：2018/03/20金子翔       |//
+//|履歴：2018/04/17劉韋君　    |//
 //|____________________________|//
 #include "Win\WinMain.h"
 #include "CollisionManager\CollisionManager.h"
@@ -12,14 +13,20 @@
 #include "Water\water.h"
 #include "Bucket\bucket.h"
 #include "Goal\Goal.h"
-#include "UI\UI.h"
+#include "Block\block.h"
+#include "Gimmick\NO_MOVE\Kanetuki.h"
+#include "Gimmick\NO_MOVE\Seihyouki.h"
+#include "Gimmick\NO_MOVE\Senpuki.h"
+#include "Gimmick\NO_MOVE\Switch.h"
+
+#include "GameProcessManagement\GameProcessManagement.h"
 
 
 class Game
 {
 public:
 	void Initialize();
-	TaskFlag UpDate();
+	TaskFlag Update();
 	void Render2D();
 	void Finalize();
 	//☆☆☆☆//
@@ -27,6 +34,7 @@ public:
 	//☆☆☆☆//
 	Player player;
 	//std::vector<Bucket*> bucket;
+	Block block;
 	Bucket bucket;
 	Back back;
 	Map map;
@@ -35,7 +43,20 @@ public:
 	int timecnt;
 	Goal goal;
 
-	UI uitest;
+private:
+	//---------------------------------------------------------------------
+	//メンバー関数
+	//---------------------------------------------------------------------
+	//カメラ処理
+	void Camera_move();
+	
+	//ギミックの追加
+	Switch swich[2];
+	Fan fan[2];
 
-	bool Pause;
+	GameProcessManagement gameprocess;
+	Seihyouki seihyouki[2];
+
+	Texture waterTex;
+	Texture playerTex;
 };
