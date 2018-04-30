@@ -329,6 +329,13 @@ bool Player::FootCheck()
 			}
 		}
 	}
+	for (int i = 0; i < this->blocks.size(); ++i)
+	{
+		if (foot.hit(*this->blocks[i]))
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -646,13 +653,13 @@ bool Player::BlockHit()
 	{
 		if (left.hit(*this->blocks[i]))
 		{
-			std::cout << "LEFT :Hit" << std::endl;
+			//std::cout << "LEFT :Hit" << std::endl;
 			this->blocks[i]->PlCheckHit(left, *blocks[i]);
 			this->blocks[i]->GetMove(this->est);
 		}
 		if (right.hit(*this->blocks[i]))
 		{
-			std::cout << "RIGHT:Hit" << std::endl;
+			//std::cout << "RIGHT:Hit" << std::endl;
 			this->blocks[i]->PlCheckHit(right, *blocks[i]);
 			this->blocks[i]->GetMove(this->est);
 		}

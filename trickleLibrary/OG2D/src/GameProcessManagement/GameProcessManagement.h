@@ -80,6 +80,5 @@ private:
 	std::vector<Object*>goals;         //ゴール判定を取るVector
 	Timer timer;                       //タイマーのセットをする
 
-	FILE* Timefile;					  //タイムを出力するタイム
-	const char* TimeFilePath = "./data/Result.dat";
+	const char* TimeFilePath = "./data/Result/Result.dat";
 };

@@ -2,6 +2,8 @@
 #include "Object\Object.h"
 #include "Win\WinMain.h"
 #include "GameProcessManagement\Timer.h"
+
+
 class Result
 {
 public:
@@ -53,7 +55,7 @@ public:
 	■戻り　なし
 	*/
 
-	void Timer_Input();
+	void Result_DataInput();
 
 	enum Achievement
 	{
@@ -69,7 +71,6 @@ public:
 	bool Flag_Judge(Achievement, Achievement);
 	bool Flag_Judge(Achievement, Achievement, Achievement);
 
-
 	void Flag_Judge_Clear();
 private:
 	Texture image;
@@ -80,6 +81,5 @@ private:
 	int Flag;
 
 	//結果の際に必要なポインタ　または　ファイルの読み込む
-	FILE* file;			//ファイルを読み込み用
-	const char* TimeFilePath = "./data/Result.dat";
+	const char* TimeFilePath = "./data/Result/Result.dat";
 };
