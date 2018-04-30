@@ -34,7 +34,7 @@ void Game::Initialize()
 	//背景初期処理
 	back.Initialize();
 	//マップ初期処理
-	map.LoadMap("prototype.txt");
+	map.LoadMap("stage1.csv", Format::csv);
 	//水初期処理
 	this->waterTex.TextureCreate("watertest.png");
 	//プレイヤー初期処理
@@ -325,14 +325,14 @@ void Game::Camera_move()
 	if (NowCameraPos.x < 0) {
 		NowCameraPos.x = 0;
 	}
-	if (NowCameraPos.x + NowCameraSize.x > 34 * map.DrawSize.x) {
-		NowCameraPos.x = (34 * map.DrawSize.x) - NowCameraSize.x;
+	if (NowCameraPos.x + NowCameraSize.x > map.mapSize.x * map.DrawSize.x) {
+		NowCameraPos.x = (map.mapSize.x * map.DrawSize.x) - NowCameraSize.x;
 	}
 	if (NowCameraPos.y < 0) {
 		NowCameraPos.y = 0;
 	}
-	if (NowCameraPos.y + NowCameraSize.y > 16 * map.DrawSize.y) {
-		NowCameraPos.y = (16 * map.DrawSize.y) - NowCameraSize.y;
+	if (NowCameraPos.y + NowCameraSize.y > map.mapSize.y * map.DrawSize.y) {
+		NowCameraPos.y = (map.mapSize.y * map.DrawSize.y) - NowCameraSize.y;
 	}
 	gameEngine->camera->SetPos(NowCameraPos);
 }
