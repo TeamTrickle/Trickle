@@ -4,10 +4,10 @@
 //|履歴：2018/03/20金子翔       |//
 //|____________________________|//
 
-//#if !defined (DEBUG)
-//// Degub版のみコンソールを表示する設定
-//#pragma comment(linker, "/subsystem:windows /entry:mainCRTStartup")
-//#endif
+#if !defined (_DEBUG)
+// Degub版のみコンソールを表示する設定
+#pragma comment(linker, "/subsystem:windows /entry:mainCRTStartup")
+#endif
 
 // Windows:GLEWをスタティックライブラリ形式で利用
 #define GLEW_STATIC
