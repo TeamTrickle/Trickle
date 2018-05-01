@@ -79,7 +79,7 @@ private:
 	const std::string _FilePath = "";
 
 	int Flag;
-
+	int FrameTime;				//結果タイムを格納する
 	//結果の際に必要なポインタ　または　ファイルの読み込む
 	const char* TimeFilePath = "./data/Result/Result.dat";
 };
