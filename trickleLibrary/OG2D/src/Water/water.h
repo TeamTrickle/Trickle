@@ -27,6 +27,7 @@ public:
 		Normal,				//通常
 		Deleteform,			//削除中
 		CreaDelete,			//削除
+		Rainfrom			//雨状態
 	};
 
 public:
@@ -54,22 +55,42 @@ public:
 	float waterMove();
 	//水量のチェック
 	float GetWaterVolume() const;
-
+	void AddObject(Object* obj_);								//オブジェクトを登録する
+	bool DeleteObject(Object* obj_);							//指定オブジェクトを登録から削除する
+	void AllDelete();											//全登録オブジェクトの削除
 	bool active;
 	//水量
 	float volume;
 	//無敵時間
 	int invi;
+	//カウント時間
+	int nowTime;
 private:
+	const float MOVE_SPEED = 15.f;								//移動スピード
+	const float JUMP_POWER = -20.f;								//ジャンプパワー
+	const float MAX_FALL = 30.f;								//落下最大速度
+	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 50;		//重力加速度
+	const float FIN_SPEED = 0.5f;								//摩擦
+	const int RAIN_TIME = 180;
 	Texture* tex;
+	std::vector<Object*> mapObj;
 	std::map<State, Box2D> drawRange;
 	State currentState;
 	Situation nowSituation;
 	Vec2 minSize;
 	Vec2 maxSize;
+	Vec2 move;
 	int setTime;
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();
+	void SetMapObject(Object* mapobj);
+	std::vector<Object*> objects;
+	void Friction();
+	bool FootCheck(std::string&,int = 0);
+	void MoveWATERCheck(Vec2&);
+	void MoveGASCheck(Vec2&);
+	void MoveSOILDCheck(Vec2&);
+	bool HeadCheck(std::string&,int = 0);
 };
 #endif

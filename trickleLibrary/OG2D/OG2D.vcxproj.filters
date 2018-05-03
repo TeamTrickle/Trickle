@@ -125,9 +125,6 @@
     <ClCompile Include="src\OGSystem\OGTask.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\Player\Player.cpp">
-      <Filter>ソースファイル\Player</Filter>
-    </ClCompile>
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
@@ -224,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\Random\Random.cpp">
       <Filter>ソースファイル\OGSystem\System\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\Player.cpp">
+      <Filter>ソースファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

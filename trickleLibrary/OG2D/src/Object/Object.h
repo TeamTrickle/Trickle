@@ -33,6 +33,12 @@ public:
 
 	void LineDraw();
 
+	std::vector<Object*> hitObj;
+
+	void AddObject(Object* obj);
+	bool DeleteObject(Object* obj);
+	void AllDeleteObject();
+
 	/**
 	 * @brief オーバーライドして当たり判定処理を書いてください
 	 * @param Object このオブジェクトに当たった他のオブジェクト
@@ -53,3 +59,20 @@ public:
 
 private:
 };
+
+class CollisionObject
+{
+public:
+	CollisionObject();
+	~CollisionObject();
+	std::vector<Object*> hitObject;
+	void AddObject(Object*);
+	bool DeleteObject(Object*);
+	void AllDeleteObject();
+	bool ObjectHit(std::string);
+	void ResetObject();
+};
+namespace OG
+{
+	//extern CollisionObject* HitObject;
+}

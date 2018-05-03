@@ -14,6 +14,8 @@ void Player::Initialize()
 {
 	//オブジェクトの初期化
 	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
+	//デバッグ用位置調整
+	//this->position = { 841,700 };
 	//テクスチャの読み込み
 	//各変数の初期化
 	this->CheckJump = true;
@@ -663,14 +665,6 @@ bool Player::BlockHit()
 			this->blocks[i]->PlCheckHit(right, *blocks[i]);
 			this->blocks[i]->GetMove(this->est);
 		}
-		//if (left.hit(*this->blocks[i]) || right.hit(*this->blocks[i]))
-		//{
-		//	std::cout << this->est.x << ":";
-		//	
-		//	this->blocks[i]->GetMove(this->est);
-		//	//this->est = this->blocks[i]->BackMove();
-		//	std::cout << this->est.x << std::endl;
-		//}
 	}
 	return false;
 }

@@ -13,17 +13,6 @@ void Game::Initialize()
 
 
 	std::cout << "Game" << std::endl;
-	
-	/*for (int i = 0; i < 2; ++i)
-	{
-	auto w = new Bucket(Vec2(bucketpos[i].x, bucketpos[i].y));
-	bucket.push_back(w);
-	}
-	for (int i = 0; i < bucket.size(); ++i)
-	{
-	bucket[i]->Initialize();
-	cm.AddChild(bucket[i]);
-	}*/
 
 	//ƒoƒPƒc‰Šúˆ—
 	bucket.Initialize(bucketpos[0]);
@@ -90,6 +79,22 @@ void Game::Initialize()
 
 	gameprocess.Set_Goal(&goal);
 	gameprocess.Initialize();
+	auto w = new Water(Vec2(150, 100));
+	w->SetTexture(&this->waterTex);
+	for (int y = 0; y < map.mapSize.y; ++y)
+	{
+		for (int x = 0; x < map.mapSize.x; ++x)
+		{
+			w->AddObject(&map.hitBase[y][x]);
+		}
+	}
+	for (int i = 0; i < this->water.size(); ++i)
+	{
+		w->AddObject(this->water[i]);
+		this->water[i]->AddObject(w);
+	}
+	water.push_back(w);
+	cm.AddChild(water[water.size() - 1]);
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
@@ -98,30 +103,45 @@ TaskFlag Game::Update()
 	
 	timecnt++;
 	if (timecnt >= 120)
-		//if(gameEngine->input.DOWN(Input::Key::L))
 	{
 		timecnt = 0;
 		//Water?¿½?¿½?¿½?¿½
 		auto w = new Water(Vec2(150, 100));
 		w->SetTexture(&this->waterTex);
+		for (int y = 0; y < map.mapSize.y; ++y)
+		{
+			for (int x = 0; x < map.mapSize.x; ++x)
+			{
+				w->AddObject(&map.hitBase[y][x]);
+			}
+		}
+		for (int i = 0; i < this->water.size(); ++i)
+		{
+			w->AddObject(this->water[i]);
+			this->water[i]->AddObject(w);
+		}
 		water.push_back(w);
 		cm.AddChild(water[water.size() - 1]);
 	}
 
 	
 //-------------------------------------------------------------------------------------------------
-	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
-		//for (int i = 0; i < 2; ++i) {
-		//	if (bucket[i]->capacity > 0) {
-		//		Water* sizuku = bucket[i]->Spill();
-		//		water.push_back(sizuku);
-		//		//cm += sizuku;
-		//		cm.AddChild(water[water.size() - 1]);
-		//	}
-		//}
+	if (gameEngine->in.down(Input::in::B3, 0)) {
 		if (bucket.capacity > 0) {
 			Water* sizuku = bucket.Spill();
 			sizuku->SetTexture(&this->waterTex);
+			for (int y = 0; y < map.mapSize.y; ++y)
+			{
+				for (int x = 0; x < map.mapSize.x; ++x)
+				{
+					sizuku->AddObject(&map.hitBase[y][x]);
+				}
+			}
+			for (int i = 0; i < this->water.size(); ++i)
+			{
+				sizuku->AddObject(this->water[i]);
+				this->water[i]->AddObject(sizuku);
+			}
 			water.push_back(sizuku);
 			//cm += sizuku;
 			cm.AddChild(water[water.size() - 1]);
@@ -136,23 +156,22 @@ TaskFlag Game::Update()
 			cm - water[i];
 			water[i]->Finalize();
 			delete water[i];
+			for (int j = 0; j < water.size(); ++j)
+			{
+				if (i != j)
+				{
+					water[j]->DeleteObject(water[i]);
+				}
+			}
 			water.erase(water.begin() + i);
 		}
 	}
 	player.Update();
-	/*for (int i = 0; i < 2; ++i) {
-	player.TakeBucket(bucket[i]);
-	}*/
 
 	block.Update(map, block, player);
 	bucket.Update(map, bucket);
 
 	block.PlCheckHit(player, block);
-
-	//block.PlCheckHitF(player);
-	//block.PlCheckHitH(player);
-	//block.PlCheckHitL(player);
-	//block.PlCheckHitR(player);
 	
 	for (int i = 0; i < 2; ++i)
 	{
@@ -225,11 +244,11 @@ TaskFlag Game::Update()
 
 
 	TaskFlag nowtask = Task_Game;
-	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
+	nowtask = gameprocess.Goal_Event();
+	if (gameEngine->in.down(Input::in::D2, 0))
 	{
 		nowtask = Task_Title;
 	}
-	nowtask = gameprocess.Goal_Event();
 	return nowtask;
 }
 //-------------------------------------------------------------------------------------------------
