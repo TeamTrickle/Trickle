@@ -32,6 +32,8 @@ public:
 	bool HasParent() const;
 	void CheckMove(Vec2 &e_, Map &map, Bucket &bucket);
 
+	bool WaterHit(Water*);
+
 	/**
 	 * @brief	バケッツから水をこぼします
 	 * @return	バケッツの中にあった量だけの水のアドレス地

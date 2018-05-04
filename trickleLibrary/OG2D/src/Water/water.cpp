@@ -31,8 +31,6 @@ Water::Water(Vec2 pos)
 	this->invi = 0;
 	//ˆÚ“®’l‚Ì‰Šú‰»
 	this->move = { 0,0 };
-	//Ž©•ª‚ð“–‚½‚è”»’è‚É“o˜^
-	this->AddObject(this);
 	//Œo‰ßŽžŠÔ‰Šú‰»
 	this->nowTime = 0;
 }
@@ -441,7 +439,11 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->hit(*this->objects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Net" || this->objects[i]->objectTag == "SOILD" || this->objects[i]->objectTag == "Soil") {
+				if (this->objects[i]->objectTag == "Floor" || 
+					this->objects[i]->objectTag == "Net" || 
+					this->objects[i]->objectTag == "SOLID" || 
+					this->objects[i]->objectTag == "Soil") 
+				{
 					this->position.x = preX;
 					break;
 				}
@@ -470,9 +472,11 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->hit(*this->objects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Net" || this->objects[i]->objectTag == "SOILD" || this->objects[i]->objectTag == "Soil")
+				if (this->objects[i]->objectTag == "Floor" || 
+					this->objects[i]->objectTag == "Net" || 
+					this->objects[i]->objectTag == "SOLID" ||
+					this->objects[i]->objectTag == "Soil")
 				{
-	
 					this->position.y = preY;
 					break;
 				}
