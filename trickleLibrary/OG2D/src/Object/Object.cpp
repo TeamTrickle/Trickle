@@ -5,6 +5,7 @@ Object::Object() {
 	this->objform = Objform::Non;
 	this->CollisionProcess = nullptr;
 	this->mass = 0.f;
+	this->objectTag = "";
 }
 Object::Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 {
@@ -130,4 +131,73 @@ void Object::LineDraw()
 	case Objform::Non:
 		break;
 	}
+}
+
+void Object::AddObject(Object* obj)
+{
+	this->hitObj.push_back(obj);
+}
+
+bool Object::DeleteObject(Object* obj)
+{
+	for (auto id = this->hitObj.begin(); id != this->hitObj.end(); ++id)
+	{
+		if ((*id) == obj)
+		{
+			this->hitObj.erase(id);
+			return true;
+		}
+	}
+	return false;
+}
+
+void Object::AllDeleteObject()
+{
+	this->hitObj.clear();
+}
+
+CollisionObject::CollisionObject()
+{
+	this->hitObject.clear();
+}
+CollisionObject::~CollisionObject()
+{
+	this->hitObject.clear();
+}
+
+void CollisionObject::AddObject(Object* obj)
+{
+	this->hitObject.push_back(obj);
+}
+
+bool CollisionObject::DeleteObject(Object* obj)
+{
+	for (auto id = this->hitObject.begin(); id != this->hitObject.end(); ++id)
+	{
+		if ((*id) == obj)
+		{
+			this->hitObject.erase(id);
+			return true;
+		}
+	}
+	return false;
+}
+
+void CollisionObject::AllDeleteObject()
+{
+	this->hitObject.clear();
+}
+
+bool CollisionObject::ObjectHit(std::string objtag)
+{
+	for (int i = 0; i < this->hitObject.size(); ++i)
+	{
+		
+	}
+	return false;
+}
+
+void CollisionObject::ResetObject()
+{
+	this->hitObject.clear();
 }

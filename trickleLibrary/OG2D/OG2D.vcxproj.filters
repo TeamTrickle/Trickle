@@ -108,9 +108,6 @@
     <Filter Include="ソースファイル\OGSystem\System\Random">
       <UniqueIdentifier>{1e49fbb4-0709-4e02-bb94-4922449ddaaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\UI">
-      <UniqueIdentifier>{08c602d3-e273-4e16-9df4-c48c0e57fd2b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Win\WinMain.cpp">
@@ -127,9 +124,6 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\OGTask.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Player\Player.cpp">
-      <Filter>ソースファイル\Player</Filter>
     </ClCompile>
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
@@ -228,8 +222,8 @@
     <ClCompile Include="src\OGSystem\Random\Random.cpp">
       <Filter>ソースファイル\OGSystem\System\Random</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\UI.cpp">
-      <Filter>ソースファイル\UI</Filter>
+    <ClCompile Include="src\Player\Player.cpp">
+      <Filter>ソースファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,9 +346,6 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Random\Random.h">
       <Filter>ソースファイル\OGSystem\System\Random</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\UI.h">
-      <Filter>ソースファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

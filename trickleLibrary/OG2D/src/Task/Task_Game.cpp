@@ -13,17 +13,6 @@ void Game::Initialize()
 
 
 	std::cout << "Game" << std::endl;
-	
-	/*for (int i = 0; i < 2; ++i)
-	{
-	auto w = new Bucket(Vec2(bucketpos[i].x, bucketpos[i].y));
-	bucket.push_back(w);
-	}
-	for (int i = 0; i < bucket.size(); ++i)
-	{
-	bucket[i]->Initialize();
-	cm.AddChild(bucket[i]);
-	}*/
 
 	//バケツ初期処理
 	bucket.Initialize(bucketpos[0]);
@@ -90,6 +79,31 @@ void Game::Initialize()
 
 	gameprocess.Set_Goal(&goal);
 	gameprocess.Initialize();
+
+	//水出現処理
+	auto w = new Water(Vec2(150, 100));
+	w->SetTexture(&this->waterTex);
+	for (int y = 0; y < map.mapSize.y; ++y)
+	{
+		for (int x = 0; x < map.mapSize.x; ++x)
+		{
+			if (map._arr[y][x] > 0)
+			{
+				w->AddObject(&map.hitBase[y][x]);
+			}
+		}
+	}
+	for (int i = 0; i < this->water.size(); ++i)
+	{
+		if (this->water[i]->GetSituation() != Water::Situation::Deleteform)
+		{
+			w->AddObject(this->water[i]);
+			this->water[i]->AddObject(w);
+		}
+	}
+	water.push_back(w);
+	player.AddWater(w);
+	//cm.AddChild(water[water.size() - 1]);
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
@@ -98,61 +112,128 @@ TaskFlag Game::Update()
 	
 	timecnt++;
 	if (timecnt >= 120)
-		//if(gameEngine->input.DOWN(Input::Key::L))
 	{
 		timecnt = 0;
-		//Water?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+		//Water出現処理
 		auto w = new Water(Vec2(150, 100));
 		w->SetTexture(&this->waterTex);
+		for (int y = 0; y < map.mapSize.y; ++y)
+		{
+			for (int x = 0; x < map.mapSize.x; ++x)
+			{
+				if (map._arr[y][x] > 0)
+				{
+					w->AddObject(&map.hitBase[y][x]);
+				}
+			}
+		}
+		for (int i = 0; i < this->water.size(); ++i)
+		{
+			if (this->water[i]->GetSituation() != Water::Situation::Deleteform)
+			{
+				w->AddObject(this->water[i]);
+				this->water[i]->AddObject(w);
+			}
+		}
 		water.push_back(w);
-		cm.AddChild(water[water.size() - 1]);
+		player.AddWater(w);
+		//cm.AddChild(water[water.size() - 1]);
 	}
 
 	
 //-------------------------------------------------------------------------------------------------
-	if (gameEngine->in.down(Input::in::B3, 0)/* || gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_3)*/) {
-		//for (int i = 0; i < 2; ++i) {
-		//	if (bucket[i]->capacity > 0) {
-		//		Water* sizuku = bucket[i]->Spill();
-		//		water.push_back(sizuku);
-		//		//cm += sizuku;
-		//		cm.AddChild(water[water.size() - 1]);
-		//	}
-		//}
+	if (gameEngine->in.down(Input::in::B3, 0)) {
+		//バケツから水がこぼれる処理
 		if (bucket.capacity > 0) {
 			Water* sizuku = bucket.Spill();
 			sizuku->SetTexture(&this->waterTex);
+			for (int y = 0; y < map.mapSize.y; ++y)
+			{
+				for (int x = 0; x < map.mapSize.x; ++x)
+				{
+					if (map._arr[y][x] > 0)
+					{
+						sizuku->AddObject(&map.hitBase[y][x]);
+					}
+				}
+			}
+			for (int i = 0; i < this->water.size(); ++i)
+			{
+				if (this->water[i]->GetSituation() != Water::Situation::Deleteform)
+				{
+					sizuku->AddObject(this->water[i]);
+					this->water[i]->AddObject(sizuku);
+				}
+			}
 			water.push_back(sizuku);
+			player.AddWater(sizuku);
 			//cm += sizuku;
-			cm.AddChild(water[water.size() - 1]);
+			//cm.AddChild(water[water.size() - 1]);
 		}
 	}
 //-------------------------------------------------------------------------------------------------
 	for (int i = 0; i < water.size(); ++i)
 	{
-		water[i]->Update();
+		if (this->bucket.WaterHit(water[i]))
+		{
+			//水とバケツの判定処理
+			if (water[i]->GetSituation() == Water::Situation::Normal && water[i]->GetState() == Water::State::LIQUID && water[i]->invi <= 0)
+			{
+				float w = water[i]->waterMove();
+				if (bucket.capacity < 1.0f)
+				{
+					bucket.capacity += w;
+					water[i]->SetSituation(Water::Situation::CreaDelete);
+					water[i]->Finalize();
+					
+					player.DeleteWater(water[i]);
+					for (int j = 0; j < water.size(); ++j)
+					{
+						if (i != j)
+						{
+							water[j]->DeleteObject(water[i]);
+						}
+					}
+					delete water[i];
+					water[i] = nullptr;
+					water.erase(water.begin() + i);
+				}
+			}
+		}
+	}
+	for (int i = 0; i < water.size(); ++i)
+	{
+		//水の状態で地面の落ちた時に消える時の処理
 		if (water[i]->GetSituation() == Water::Situation::CreaDelete)
 		{
-			cm - water[i];
+			//	cm - water[i];
 			water[i]->Finalize();
+			player.DeleteWater(water[i]);
+			for (int j = 0; j < water.size(); ++j)
+			{
+				if (i != j)
+				{
+					if (!water[j]->DeleteObject(water[i]))
+					{
+						break;
+					}
+				}
+			}
 			delete water[i];
+			water[i] = nullptr;
 			water.erase(water.begin() + i);
+		}
+		else
+		{
+			water[i]->Update();
 		}
 	}
 	player.Update();
-	/*for (int i = 0; i < 2; ++i) {
-	player.TakeBucket(bucket[i]);
-	}*/
 
 	block.Update(map, block, player);
 	bucket.Update(map, bucket);
-
+	
 	block.PlCheckHit(player, block);
-
-	//block.PlCheckHitF(player);
-	//block.PlCheckHitH(player);
-	//block.PlCheckHitL(player);
-	//block.PlCheckHitR(player);
 	
 	for (int i = 0; i < 2; ++i)
 	{
@@ -225,11 +306,11 @@ TaskFlag Game::Update()
 
 
 	TaskFlag nowtask = Task_Game;
-	if (gameEngine->in.down(Input::in::D2, 0)/*|| gameEngine->gamepad[0].DOWN(GLFW_JOYSTICK_8)*/)
+	nowtask = gameprocess.Goal_Event();
+	if (gameEngine->in.down(Input::in::D2, 0))
 	{
 		nowtask = Task_Title;
 	}
-	nowtask = gameprocess.Goal_Event();
 	return nowtask;
 }
 //-------------------------------------------------------------------------------------------------

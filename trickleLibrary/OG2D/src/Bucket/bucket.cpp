@@ -15,20 +15,20 @@ bool Bucket::Initialize(Vec2 pos) {
 	this->position = pos;
 	gravity = Vec2(0.0f, 0.0f);
 	hold = false;
-
+	this->capacity = 0;
 	Object::CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
 	Object::objectTag = "Bucket";
-	Object::CollisionProcess = [&](const Object& o_) {
-		if (o_.objectTag == "Water") {
-			if (((Water&)o_).GetSituation() == Water::Situation::Normal && ((Water&)o_).GetState() == Water::State::LIQUID && ((Water&)o_).invi <= 0) {
-				float waterdrop = ((Water&)o_).waterMove();
-				if (capacity < 1.f) {
-					capacity += waterdrop;
-					((Water&)o_).SetSituation(Water::Situation::CreaDelete);
-				}
-			}
-		}
-	};
+	//Object::CollisionProcess = [&](const Object& o_) {
+	//	if (o_.objectTag == "Water") {
+	//		/*if (((Water&)o_).GetSituation() == Water::Situation::Normal && ((Water&)o_).GetState() == Water::State::LIQUID && ((Water&)o_).invi <= 0) {
+	//			float waterdrop = ((Water&)o_).waterMove();
+	//			if (capacity < 1.f) {
+	//				capacity += waterdrop;
+	//				((Water&)o_).SetSituation(Water::Situation::CreaDelete);
+	//			}
+	//		}*/
+	//	}
+	//};
 
 	tex.TextureCreate("bucket.png");
 	
@@ -138,4 +138,9 @@ void Bucket::CheckMove(Vec2 &e_, Map &map, Bucket &bucket)
 			break;
 		}
 	}
+}
+
+bool Bucket::WaterHit(Water* water)
+{
+	return this->hit(*water);
 }

@@ -68,6 +68,7 @@ private:
 	std::vector<Object*> objects;								//当たり判定オブジェクト
 	std::vector<Bucket*> buckets;								//バケツ判定
 	std::vector<Block*> blocks;									//ブロック判定
+	std::vector<Object*> waters;								//水判定
 	Bucket* haveBucket;											//所持バケツ情報
 	Animation animation;										//アニメーションの移動処理
 	int inv;													//無敵時間
@@ -97,6 +98,8 @@ public:
 	bool DeleteBucket(Bucket* bucket);							//指定バケツオブジェクトを削除
 	void AddBlock(Block* block);								//ブロックオブジェクトを登録	
 	bool DeleteBlock(Block* block);								//指定ブロックオブジェクトの削除
+	void AddWater(Object*);										//水オブジェクトを登録
+	bool DeleteWater(Object*);									//指定水オブジェクトの削除
 	Vec2 GetEst() const;										//現在移動値を返す
 	void SetTexture(Texture* texture);							//テクスチャを登録
 	//入力処理簡略化

@@ -14,6 +14,8 @@ void Player::Initialize()
 {
 	//オブジェクトの初期化
 	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
+	//デバッグ用位置調整
+	//this->position = { 841,700 };
 	//テクスチャの読み込み
 	//各変数の初期化
 	this->CheckJump = true;
@@ -255,6 +257,7 @@ void Player::AllDelete()
 	this->objects.clear();
 	this->buckets.clear();
 	this->blocks.clear();
+	this->waters.clear();
 }
 
 bool Player::HeadCheck()
@@ -336,6 +339,16 @@ bool Player::FootCheck()
 			return true;
 		}
 	}
+	for (int i = 0; i < this->waters.size(); ++i)
+	{
+		if (foot.hit(*this->waters[i]))
+		{
+			if (this->waters[i]->objectTag == "SOLID")
+			{
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
@@ -396,7 +409,7 @@ void Player::MoveCheck(Vec2 est)
 		{
 			if (this->hit(*this->objects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor"/* || this->objects[i]->objectTag == "Ladder"*/ || this->objects[i]->objectTag == "Net") {
+				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Net") {
 					this->position.x = preX;
 					break;
 				}
@@ -408,6 +421,17 @@ void Player::MoveCheck(Vec2 est)
 			{
 				this->position.x = preX;
 				break;
+			}
+		}
+		for (int i = 0; i < this->waters.size(); ++i)
+		{
+			if (this->hit(*this->waters[i]))
+			{
+				if (this->waters[i]->objectTag == "SOLID")
+				{
+					this->position.x = preX;
+					break;
+				}
 			}
 		}
 	}
@@ -445,6 +469,17 @@ void Player::MoveCheck(Vec2 est)
 			{
 				this->position.y = preY;
 				break;
+			}
+		}
+		for (int i = 0; i < this->waters.size(); ++i)
+		{
+			if (this->hit(*this->waters[i]))
+			{
+				if (this->waters[i]->objectTag == "SOLID")
+				{
+					this->position.y = preY;
+					break;
+				}
 			}
 		}
 	}
@@ -663,14 +698,6 @@ bool Player::BlockHit()
 			this->blocks[i]->PlCheckHit(right, *blocks[i]);
 			this->blocks[i]->GetMove(this->est);
 		}
-		//if (left.hit(*this->blocks[i]) || right.hit(*this->blocks[i]))
-		//{
-		//	std::cout << this->est.x << ":";
-		//	
-		//	this->blocks[i]->GetMove(this->est);
-		//	//this->est = this->blocks[i]->BackMove();
-		//	std::cout << this->est.x << std::endl;
-		//}
 	}
 	return false;
 }
@@ -678,4 +705,22 @@ bool Player::BlockHit()
 void Player::SetTexture(Texture* texture)
 {
 	this->playerimg = texture;
+}
+
+void Player::AddWater(Object* water)
+{
+	waters.push_back(water);
+}
+
+bool Player::DeleteWater(Object* water)
+{
+	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
+	{
+		if ((*id) == water)
+		{
+			this->waters.erase(id);
+			return true;
+		}
+	}
+	return false;
 }

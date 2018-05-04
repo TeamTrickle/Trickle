@@ -3,6 +3,8 @@ using namespace std;
 Result::Result()
 {
 	cout << "結果画面処理初期化" << endl;
+	FrameTime = 0;
+	Flag_Judge_Clear();
 }
 Result::~Result()
 {
@@ -36,7 +38,6 @@ void Result::Finalize()
 }
 void Result::Result_DataInput()
 {
-	int Frametime;				//タイムをフレーム格納する
 	string GameFalg;			//ゲームフラグ
 	//データの読み込み
 	ifstream fin(TimeFilePath);
@@ -56,7 +57,22 @@ void Result::Result_DataInput()
 	//_finに入っている文字列から','までの文字をtextにいれる
 	getline(_fin, text, ',');
 	//textのデータを変数にいれる
-	(stringstream)text >> Frametime;
+	(stringstream)text >> FrameTime;
+	if (FrameTime <= 30)//30秒以内にゴール
+	{
+		Flag_Input(Result::Achievement::Flag2);
+		Flag_Input(Result::Achievement::Flag3);
+		Flag_Input(Result::Achievement::Flag4);
+	}
+	else if (FrameTime <= 60)//60秒以内にゴール
+	{
+		Flag_Input(Result::Achievement::Flag3);
+		Flag_Input(Result::Achievement::Flag4);
+	}
+	else
+	{
+		Flag_Input(Result::Achievement::Flag4);
+	}
 	getline(_fin, text, ',');
 	(stringstream)text >> GameFalg;
 	if (GameFalg == "GameClear")		//ゲームがクリア
@@ -65,9 +81,9 @@ void Result::Result_DataInput()
 	}
 	//時間の計算
 	int sec, min, hour;
-	sec = Frametime % 60;
-	min = Frametime / 60;
-	hour = Frametime / 60 / 60;
+	sec = FrameTime % 60;
+	min = FrameTime / 60;
+	hour = min / 60;
 	cout << hour << "時間" << min << "分" << sec << "秒" << endl;
 
 	fin.close();
@@ -76,33 +92,36 @@ void Result::Result_DataInput()
 }
 bool Result::Flag_Judge()
 {
+	bool active = false;
 	if ((Flag & Result::Flag1 )== Result::Flag1)
 	{
 		//フラグ１を持っている
+		active = true;
 		cout << "Goal" << endl;
-		return true;
 	}
 	if ((Flag & Result::Flag2) == Result::Flag2)
 	{
 		//フラグ２を持っている
-		return true;
+		active = true;
+		cout << "30秒以内にゴールをした" << endl;
 	}
 	if ((Flag & Result::Flag3) == Result::Flag3)
 	{
 		//フラグ３を持っている
-		return true;
+		cout << "60秒以内にゴールをした" << endl;
+		active = true;
 	}
 	if ((Flag & Result::Flag4) == Result::Flag4)
 	{
 		//フラグ４を持っている
-		return true;
+		cout << "普通にゴールをした" << endl;
+		active = true;
 	}
 	if (Flag & 0x0F)
 	{
-		//全部のフラグが成立している
-		return true;
+		cout << "マスタークリア" << endl;
 	}
-	return false;
+	return active;
 }
 bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2)
 {
