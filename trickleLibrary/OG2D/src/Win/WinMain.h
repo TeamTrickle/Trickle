@@ -11,4 +11,6 @@ enum TaskFlag
 	Task_Sample,
 	Task_Option,
 	Task_Ruselt,
+	Task_StageSelect,
 };
+extern unsigned short* MapNum;

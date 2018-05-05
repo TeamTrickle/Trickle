@@ -108,11 +108,11 @@
     <Filter Include="ソースファイル\OGSystem\System\Random">
       <UniqueIdentifier>{1e49fbb4-0709-4e02-bb94-4922449ddaaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\StageSelect">
+      <UniqueIdentifier>{d62b9534-5856-4b17-88fe-d86f28d56ad2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Win\WinMain.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\Object\Object.cpp">
       <Filter>ソースファイル\Object</Filter>
     </ClCompile>
@@ -185,9 +185,6 @@
     <ClCompile Include="src\Task\Task_Game.cpp">
       <Filter>ソースファイル\Task\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_Title.cpp">
-      <Filter>ソースファイル\Task\Title</Filter>
-    </ClCompile>
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
@@ -224,6 +221,15 @@
     </ClCompile>
     <ClCompile Include="src\Player\Player.cpp">
       <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\StageSelect.cpp">
+      <Filter>ソースファイル\Task\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Title.cpp">
+      <Filter>ソースファイル\Task\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Win\WinMain.cpp">
+      <Filter>ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Random\Random.h">
       <Filter>ソースファイル\OGSystem\System\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\StageSelect.h">
+      <Filter>ソースファイル\Task\StageSelect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
