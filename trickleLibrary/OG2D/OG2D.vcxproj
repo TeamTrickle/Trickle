@@ -183,6 +183,7 @@
     <ClCompile Include="src\OGSystem\_OGsystem.cpp" />
     <ClCompile Include="src\Player\Player.cpp" />
     <ClCompile Include="src\Shader\shader.cpp" />
+    <ClCompile Include="src\Task\StageSelect.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Option.cpp" />
     <ClCompile Include="src\Task\Task_Result.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
     <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Shader\shader.h" />
+    <ClInclude Include="src\Task\StageSelect.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Option.h" />
     <ClInclude Include="src\Task\Task_Result.h" />

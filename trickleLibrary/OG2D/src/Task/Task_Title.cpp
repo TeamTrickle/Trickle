@@ -44,7 +44,7 @@ TaskFlag Title::Update()
 	{
 		if (gameEngine->in.down(Input::in::D2))
 		{
-			nowtask = Task_Game;
+			nowtask = Task_StageSelect;
 		}
 	}
 
