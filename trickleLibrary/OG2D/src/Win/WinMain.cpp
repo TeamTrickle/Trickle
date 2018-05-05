@@ -13,6 +13,7 @@
 #include <crtdbg.h>
 #define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
+unsigned short* MapNum;
 //------------------
 //class定義
 //------------------
@@ -71,6 +72,7 @@ int main() {
 		return -1;
 	}
 	gameEngine = new EngineSystem();
+	MapNum = new unsigned short;
 	OGTK._myGameInitialize();
 	gameEngine->Initialize();
 	//使用OpenGLのVersion指定
@@ -134,6 +136,7 @@ int main() {
 	//解放
 	Finalize();
 	//ゲームエンジンの内容を解放
+	delete MapNum;
 	delete gameEngine;
 	//GLFWのライブラリを終了する
 	glfwTerminate();

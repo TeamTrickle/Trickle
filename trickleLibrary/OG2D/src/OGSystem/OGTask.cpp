@@ -1,4 +1,5 @@
 #include "OGSystem\OGTask.h"
+
 void _OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
@@ -30,6 +31,9 @@ void _OGTK::_myGameUpdate()
 		case Task_Ruselt:
 			result.Finalize();
 			break;
+		case Task_StageSelect:
+			select.Finalize();
+			break;
 		}
 		nowTask = nextTask;
 		gameEngine->ChengeTask();
@@ -49,6 +53,9 @@ void _OGTK::_myGameUpdate()
 			break;
 		case Task_Ruselt:
 			result.Initialize();
+			break;
+		case Task_StageSelect:
+			select.Initialize();
 			break;
 		}
 	}
@@ -70,6 +77,9 @@ void _OGTK::_myGameUpdate()
 		case Task_Ruselt:
 			nextTask = result.Update();
 			break;
+		case Task_StageSelect:
+			nextTask = select.UpDate();
+			break;
 		}
 	}
 	else
@@ -84,6 +94,8 @@ void _OGTK::_myGameUpdate()
 		case Task_Option:
 			break;
 		case Task_Ruselt:
+			break;
+		case Task_StageSelect:
 			break;
 		}
 	}
@@ -104,6 +116,9 @@ void _OGTK::_myGameRender2D()
 		break;
 	case Task_Ruselt:
 		result.Render();
+		break;
+	case Task_StageSelect:
+		select.Render();
 		break;
 	}
 }
@@ -128,6 +143,9 @@ void _OGTK::_myGameFinalize()
 		break;
 	case Task_Ruselt:
 		result.Finalize();
+		break;
+	case Task_StageSelect:
+		select.Finalize();
 		break;
 	}
 }

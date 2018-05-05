@@ -23,7 +23,33 @@ void Game::Initialize()
 	//背景初期処理
 	back.Initialize();
 	//マップ初期処理
-	map.LoadMap("tutorial1.csv", Format::csv);
+	switch (*MapNum)
+	{
+	case 0:
+		map.LoadMap("prototype.txt");
+		break;
+	case 1:
+		map.LoadMap("tutorial1.csv", Format::csv);
+		break;
+	case 2:
+		map.LoadMap("tutorial2.csv", Format::csv);
+		break;
+	case 3:
+		map.LoadMap("tutorial3.csv", Format::csv);
+		break;
+	case 4:
+		map.LoadMap("tutorial4.csv", Format::csv);
+		break;
+	case 5:
+		map.LoadMap("stage1.csv", Format::csv);
+		break;
+	case 6:
+		map.LoadMap("stage2.csv", Format::csv);
+		break;
+	default:
+		std::cout << "マップ番号が存在しません" << std::endl;
+		break;
+	}
 	//水初期処理
 	this->waterTex.TextureCreate("watertest.png");
 	//プレイヤー初期処理
@@ -104,10 +130,6 @@ void Game::Initialize()
 	water.push_back(w);
 	player.AddWater(w);
 	//cm.AddChild(water[water.size() - 1]);
-
-	//UI-----------------------------------------
-	
-
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
@@ -415,14 +437,14 @@ void Game::Camera_move()
 	if (NowCameraPos.x < 0) {
 		NowCameraPos.x = 0;
 	}
-	if (NowCameraPos.x + NowCameraSize.x > map.mapSize.x * map.DrawSize.x) {
-		NowCameraPos.x = (map.mapSize.x * map.DrawSize.x) - NowCameraSize.x;
+	if (NowCameraPos.x + NowCameraSize.x > 34 * map.DrawSize.x) {
+		NowCameraPos.x = (34 * map.DrawSize.x) - NowCameraSize.x;
 	}
 	if (NowCameraPos.y < 0) {
 		NowCameraPos.y = 0;
 	}
-	if (NowCameraPos.y + NowCameraSize.y > map.mapSize.y * map.DrawSize.y) {
-		NowCameraPos.y = (map.mapSize.y * map.DrawSize.y) - NowCameraSize.y;
+	if (NowCameraPos.y + NowCameraSize.y > 16 * map.DrawSize.y) {
+		NowCameraPos.y = (16 * map.DrawSize.y) - NowCameraSize.y;
 	}
 	gameEngine->camera->SetPos(NowCameraPos);
 }

@@ -12,6 +12,7 @@
 #include "Task\Task_Title.h"
 #include "Task\Task_Option.h"
 #include "Task\Task_Result.h"
+#include "Task\StageSelect.h"
 
 class _OGTK
 {
@@ -25,6 +26,7 @@ public:
 	Title title;
 	Option option;
 	Result result;
+	StageSelect select;
 
 	////////////////////////////
 	//Ç±Ç±Ç©ÇÁâ∫ÇÕïœçXÇµÇ»Ç¢Ç±Ç∆//
