@@ -11,6 +11,7 @@
 #include <map>
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include <algorithm>
 
 class Water : public Object {
 

@@ -23,7 +23,7 @@ void Game::Initialize()
 	//背景初期処理
 	back.Initialize();
 	//マップ初期処理
-	map.LoadMap("stage1.csv", Format::csv);
+	map.LoadMap("tutorial1.csv", Format::csv);
 	//水初期処理
 	this->waterTex.TextureCreate("watertest.png");
 	//プレイヤー初期処理
@@ -104,6 +104,10 @@ void Game::Initialize()
 	water.push_back(w);
 	player.AddWater(w);
 	//cm.AddChild(water[water.size() - 1]);
+
+	//UI-----------------------------------------
+	
+
 }
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
