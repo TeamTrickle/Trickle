@@ -86,6 +86,7 @@ void Game::Initialize()
 	}
 	player.AddBucket(&this->bucket);
 	player.AddBlock(&this->block);
+	cm.AddChild(&player);
 	this->timecnt = 0;
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)

@@ -13,6 +13,7 @@ void UI::Initialize(Vec2 renderPos, Box2D coll, std::string path, int life, int 
 	this->num = num;
 	this->life = life;
 	active = false;
+	visible = true;
 	srcTable.resize(num);
 	for (int i = 0; i < num; ++i) {
 		srcTable[i] = Box2D(256 * i, 0, 256, 256);
@@ -25,12 +26,13 @@ void UI::Initialize(Vec2 renderPos, Box2D coll, std::string path, int life, int 
 	//	if (o_.objectTag == "Player") {
 	//		this->isCollided = true;
 	//		active = true;
+	//		visible = true;
 	//	}
 	//};
 	//Object::CollisionOut = [&](const Object& o_) {
 	//	if (o_.objectTag == "Player") {
 	//		this->isCollided = false;
-	//		active = false;
+	//		visible = false;
 	//	}
 	//};
 }
@@ -47,10 +49,10 @@ void UI::Update() {
 		active = false;
 	}
 	if (hit(*player)) {
-		active = true;
+		visible = true;
 	}
 	else {
-		active = false;
+		visible = false;
 	}
 }
 
@@ -59,7 +61,7 @@ void UI::Move(Vec2 pos) {
 }
 
 void UI::Render() {
-	if (!active) { return; }
+	if (!active || !visible) { return; }
 	Box2D draw(pos.x, pos.y, 128.f, 128.f);
 	draw.OffsetSize();
 	tex.Draw(draw, srcTable[index]);

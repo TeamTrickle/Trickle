@@ -13,6 +13,7 @@ class UI :public Object {
 	int num;		//‰æ‘œ•ªŠ„”
 	int life;		//õ–½
 	bool active;	//¶€
+	bool visible;	//‰Â‹•s‰Â‹
 	std::vector<Box2D> srcTable;
 	Object* player;
 
