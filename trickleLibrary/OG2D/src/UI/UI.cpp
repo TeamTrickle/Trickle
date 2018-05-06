@@ -11,20 +11,17 @@ void UI::Initialize(Vec2 pos, std::string path, int life, int num) {
 	counter = 0;
 	index = 0;
 	this->num = num;
-	//src = Box2D(0, 0, 256, 256);
 	this->life = life;
-	active = true;
+	active = false;
 	srcTable.resize(num);
 	for (int i = 0; i < num; ++i) {
 		srcTable[i] = Box2D(256 * i, 0, 256, 256);
 		srcTable[i].OffsetSize();
 	}
+	CreateObject(Cube, this->pos, Vec2(128, 128), 0.0f);
 }
 
 void UI::Update() {
-	//if (checkAppear) {
-	//	active = true;
-	//}
 	counter++;
 	if (counter % 30 == 0) {
 		index++;
@@ -52,3 +49,9 @@ void UI::Finalize() {
 	tex.Finalize();
 }
 
+void UI::Appear() {
+
+}
+void UI::Vanish() {
+
+}

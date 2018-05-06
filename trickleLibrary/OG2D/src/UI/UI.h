@@ -1,9 +1,10 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
+#include "Object\Object.h"
 #include <vector>
 
 
-class UI {
+class UI :public Object {
 	Texture tex;
 	Vec2 pos;		//ç¿ïW
 	int counter;	//éûä‘ÇÕÇ©ÇÈÅB
@@ -25,4 +26,6 @@ public:
 	void Render();
 	void Finalize();
 
+	void Appear();
+	void Vanish();
 };

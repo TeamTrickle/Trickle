@@ -30,12 +30,26 @@ void Game::Initialize()
 		break;
 	case 1:
 		map.LoadMap("tutorial1.csv", Format::csv);
+		walkui.Initialize(Vec2(200, 200), "walkui.png", 300, 4);
+		jumpui.Initialize(Vec2(200, 200), "pusha.png", 300, 2);
+		getbucketui.Initialize(Vec2(400, 200), "pushb.png", 300, 2);
+		getwaterui.Initialize(Vec2(100, 200), "arrowdown.png", 300, 1);
+		spillwaterui.Initialize(Vec2(600, 200), "pushx.png", 300, 2);
+		cm.AddChild(&walkui);
+		cm.AddChild(&jumpui);
+		cm.AddChild(&getbucketui);
+		cm.AddChild(&getwaterui);
+		cm.AddChild(&spillwaterui);
 		break;
 	case 2:
 		map.LoadMap("tutorial2.csv", Format::csv);
 		break;
 	case 3:
 		map.LoadMap("tutorial3.csv", Format::csv);
+		//switchui;
+		//evaporationui;
+		//cm.AddChild(&switchui);
+		//cm.AddChild(&evaporationui);
 		break;
 	case 4:
 		map.LoadMap("tutorial4.csv", Format::csv);
@@ -165,7 +179,6 @@ TaskFlag Game::Update()
 		player.AddWater(w);
 		//cm.AddChild(water[water.size() - 1]);
 	}
-
 	
 //-------------------------------------------------------------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)) {
@@ -327,6 +340,15 @@ TaskFlag Game::Update()
 		}
 	}
 
+	//UI------------------------------------
+	walkui.Update();
+	jumpui.Update();
+	getbucketui.Update();
+	getwaterui.Update();
+	spillwaterui.Update();
+	//switchui.Update();
+	//evaporationui.Update();
+
 	//ƒJƒƒ‰ˆ—
 	Camera_move();
 
@@ -359,6 +381,14 @@ void Game::Render2D()
 	{
 		water[i]->Render();
 	}
+	//UI
+	walkui.Render();
+	jumpui.Render();
+	getbucketui.Render();
+	getwaterui.Render();
+	spillwaterui.Render();
+	//switchui.Render();
+	//evaporationui.Render();
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Finalize()
@@ -389,6 +419,17 @@ void Game::Finalize()
 	}
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
+
+	//UI
+	walkui.Finalize();
+	jumpui.Finalize();
+	getbucketui.Finalize();
+	getwaterui.Finalize();
+	spillwaterui.Finalize();
+	//switchui.Finalize();
+	//evaporationui.Finalize();
+
+
 	cm.Destroy();
 }
 //-------------------------------------------------------------------------------------------------
