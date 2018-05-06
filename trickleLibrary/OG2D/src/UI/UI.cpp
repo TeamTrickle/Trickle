@@ -5,8 +5,8 @@ UI::UI() {}
 UI::~UI() {}
 
 //座標、ファイルパス、画像分割数
-void UI::Initialize(Vec2 pos, std::string path, int life, int num) {
-	this->pos = pos;
+void UI::Initialize(Vec2 renderPos, Box2D coll, std::string path, int life, int num) {
+	this->pos = renderPos;
 	tex.TextureCreate(path);
 	counter = 0;
 	index = 0;
@@ -18,7 +18,21 @@ void UI::Initialize(Vec2 pos, std::string path, int life, int num) {
 		srcTable[i] = Box2D(256 * i, 0, 256, 256);
 		srcTable[i].OffsetSize();
 	}
-	CreateObject(Cube, this->pos, Vec2(128, 128), 0.0f);
+	CreateObject(Cube, Vec2(coll.x, coll.y), Vec2(coll.w, coll.h), 0.0f);
+	//objectTag = "UI";
+	//this->isCollided = false;
+	//Object::CollisionIn = [&](const Object& o_) {
+	//	if (o_.objectTag == "Player") {
+	//		this->isCollided = true;
+	//		active = true;
+	//	}
+	//};
+	//Object::CollisionOut = [&](const Object& o_) {
+	//	if (o_.objectTag == "Player") {
+	//		this->isCollided = false;
+	//		active = false;
+	//	}
+	//};
 }
 
 void UI::Update() {
@@ -30,6 +44,12 @@ void UI::Update() {
 		index = 0;
 	}
 	if (counter >= life) {
+		active = false;
+	}
+	if (hit(*player)) {
+		active = true;
+	}
+	else {
 		active = false;
 	}
 }
@@ -50,8 +70,18 @@ void UI::Finalize() {
 }
 
 void UI::Appear() {
-
+	if (isCollided) {
+		active = true;
+	}
 }
 void UI::Vanish() {
-
+	if (!isCollided) {
+		active = false;
+	}
+}
+bool UI::CheckHitPlayer() {
+	return false;
+}
+void UI::SetPlayerPtr(Object* pl) {
+	this->player = pl;
 }

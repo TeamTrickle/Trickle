@@ -30,11 +30,16 @@ void Game::Initialize()
 		break;
 	case 1:
 		map.LoadMap("tutorial1.csv", Format::csv);
-		walkui.Initialize(Vec2(200, 200), "walkui.png", 300, 4);
-		jumpui.Initialize(Vec2(200, 200), "pusha.png", 300, 2);
-		getbucketui.Initialize(Vec2(400, 200), "pushb.png", 300, 2);
-		getwaterui.Initialize(Vec2(100, 200), "arrowdown.png", 300, 1);
-		spillwaterui.Initialize(Vec2(600, 200), "pushx.png", 300, 2);
+		walkui.Initialize(Vec2(200, 200), Box2D(200, 200, 300, 500), "walkui.png", 300, 4);
+		walkui.SetPlayerPtr(&player);
+		jumpui.Initialize(Vec2(200, 200), Box2D(0, 0, 0, 0), "pusha.png", 300, 2);
+		jumpui.SetPlayerPtr(&player);
+		getbucketui.Initialize(Vec2(400, 200), Box2D(0, 0, 0, 0), "pushb.png", 300, 2);
+		getbucketui.SetPlayerPtr(&player);
+		getwaterui.Initialize(Vec2(100, 200), Box2D(0, 0, 0, 0), "arrowdown.png", 300, 1);
+		getwaterui.SetPlayerPtr(&player);
+		spillwaterui.Initialize(Vec2(600, 200), Box2D(0, 0, 0, 0), "pushx.png", 300, 2);
+		spillwaterui.SetPlayerPtr(&player);
 		cm.AddChild(&walkui);
 		cm.AddChild(&jumpui);
 		cm.AddChild(&getbucketui);
@@ -47,7 +52,9 @@ void Game::Initialize()
 	case 3:
 		map.LoadMap("tutorial3.csv", Format::csv);
 		//switchui;
+		//switchui.SetPlayerPtr(&player);
 		//evaporationui;
+		//evaporationui.SetPlayerPtr(&player);
 		//cm.AddChild(&switchui);
 		//cm.AddChild(&evaporationui);
 		break;
@@ -279,6 +286,15 @@ TaskFlag Game::Update()
 		seihyouki[i].CheckHit();
 	}
 
+	//UI------------------------------------
+	walkui.Update();
+	jumpui.Update();
+	getbucketui.Update();
+	getwaterui.Update();
+	spillwaterui.Update();
+	//switchui.Update();
+	//evaporationui.Update();
+
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
@@ -340,14 +356,6 @@ TaskFlag Game::Update()
 		}
 	}
 
-	//UI------------------------------------
-	walkui.Update();
-	jumpui.Update();
-	getbucketui.Update();
-	getwaterui.Update();
-	spillwaterui.Update();
-	//switchui.Update();
-	//evaporationui.Update();
 
 	//ƒJƒƒ‰ˆ—
 	Camera_move();
