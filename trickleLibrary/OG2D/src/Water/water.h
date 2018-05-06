@@ -58,6 +58,9 @@ public:
 	void AddObject(Object* obj_);								//オブジェクトを登録する
 	bool DeleteObject(Object* obj_);							//指定オブジェクトを登録から削除する
 	void AllDelete();											//全登録オブジェクトの削除
+	//色関連
+	bool SetColor(Color&);
+	Color GetColor() const;
 	bool active;
 	//水量
 	float volume;
@@ -80,6 +83,7 @@ private:
 	Vec2 minSize;
 	Vec2 maxSize;
 	Vec2 move;
+	Color color;
 	int setTime;
 	Situation UpNewform();
 	Situation UpDeleteform();
