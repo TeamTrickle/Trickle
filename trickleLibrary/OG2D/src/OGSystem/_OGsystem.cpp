@@ -103,21 +103,38 @@ namespace OG {
 	float doubleinner(int _x, int _y) {
 		return inner(_x, _y, _x, _y);
 	}
-	void LineHitDraw(Vec2 _b[4]) {
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	void LineHitDraw(Vec2* _b, Color& color_) {
+		glColor4f(color_.red, color_.green, color_.blue, color_.alpha);
 		glBegin(GL_LINES);
-		glVertex2f(_b[0].x, _b[0].y);
-		glVertex2f(_b[1].x, _b[1].y);
+		glVertex2f((_b)->x, (_b)->y);
+		glVertex2f((_b + 1)->x, (_b + 1)->y);
 
-		glVertex2f(_b[1].x, _b[1].y);
-		glVertex2f(_b[2].x, _b[2].y);
+		glVertex2f((_b + 1)->x, (_b + 1)->y);
+		glVertex2f((_b + 2)->x, (_b + 2)->y);
 
-		glVertex2f(_b[2].x, _b[2].y);
-		glVertex2f(_b[3].x, _b[3].y);
+		glVertex2f((_b + 2)->x, (_b + 2)->y);
+		glVertex2f((_b + 3)->x, (_b + 3)->y);
 
-		glVertex2f(_b[3].x, _b[3].y);
-		glVertex2f(_b[0].x, _b[0].y);
+		glVertex2f((_b + 3)->x, (_b + 3)->y);
+		glVertex2f((_b)->x, (_b)->y);
 		glEnd();
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+	void LineHitDraw(Vec2* _b) {
+		glBegin(GL_LINES);
+		glVertex2f((_b)->x, (_b)->y);
+		glVertex2f((_b + 1)->x, (_b + 1)->y);
+
+		glVertex2f((_b + 1)->x, (_b + 1)->y);
+		glVertex2f((_b + 2)->x, (_b + 2)->y);
+
+		glVertex2f((_b + 2)->x, (_b + 2)->y);
+		glVertex2f((_b + 3)->x, (_b + 3)->y);
+
+		glVertex2f((_b + 3)->x, (_b + 3)->y);
+		glVertex2f((_b)->x, (_b)->y);
+		glEnd();
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	float get_distance(float x, float y, float x1, float y1, float x2, float y2) {
 		float dx, dy, a, b, t, tx, ty;
@@ -134,19 +151,19 @@ namespace OG {
 		distance = sqrt((x - tx)*(x - tx) + (y - ty)*(y - ty));
 		return distance;
 	}
-	void _Rotate(float _ang, Vec2 _b[4])
+	void _Rotate(float _ang, Vec2* _b)
 	{
 		//ラジアンの値に変更
 		float tora = OG::ToRadian(_ang);
 		//原点を指定
-		Vec2 Center((_b[2].x + _b[0].x) / 2, (_b[2].y + _b[0].y) / 2);
+		Vec2 Center(((_b + 2)->x + (_b)->x) / 2, ((_b + 2)->y + (_b)->y) / 2);
 		//回転軸の原点の値を導く
 		GLfloat v[]
 		{
-			_b[0].x - Center.x,_b[0].y - Center.y,
-			_b[1].x - Center.x,_b[1].y - Center.y,
-			_b[2].x - Center.x,_b[2].y - Center.y,
-			_b[3].x - Center.x,_b[3].y - Center.y,
+			_b->x - Center.x,_b->y - Center.y,
+			(_b + 1)->x - Center.x,(_b + 1)->y - Center.y,
+			(_b + 2)->x - Center.x,(_b + 2)->y - Center.y,
+			(_b + 3)->x - Center.x,(_b + 3)->y - Center.y,
 		};
 		//回転行列の生成
 		GLfloat ma[4] = {
@@ -154,30 +171,30 @@ namespace OG {
 			sinf(tora),cosf(tora),
 		};
 		//回転行列の計算
-		_b[0].x = (v[0] * ma[0]) + (v[1] * ma[1]);
-		_b[0].y = (v[0] * ma[2]) + (v[1] * ma[3]);
+		(_b)->x = (*(v) * *(ma)) + (*(v + 1)* *(ma + 1));
+		(_b)->y = (*(v) * *(ma + 2)) + (*(v + 1)* *(ma + 3));
 
-		_b[1].x = (v[2] * ma[0]) + (v[3] * ma[1]);
-		_b[1].y = (v[2] * ma[2]) + (v[3] * ma[3]);
+		(_b + 1)->x = (*(v + 2)* *(ma)) + (*(v + 3)* *(ma + 1));
+		(_b + 1)->y = (*(v + 2)* *(ma + 2)) + (*(v + 3)* *(ma + 3));
 
-		_b[2].x = (v[4] * ma[0]) + (v[5] * ma[1]);
-		_b[2].y = (v[4] * ma[2]) + (v[5] * ma[3]);
+		(_b + 2)->x = (*(v + 4)* *(ma)) + (*(v + 5)* *(ma + 1));
+		(_b + 2)->y = (*(v + 4)* *(ma + 2)) + (*(v + 5)* *(ma + 3));
 
-		_b[3].x = (v[6] * ma[0]) + (v[7] * ma[1]);
-		_b[3].y = (v[6] * ma[2]) + (v[7] * ma[3]);
+		(_b + 3)->x = (*(v + 6)* *(ma)) + (*(v + 7)* *(ma + 1));
+		(_b + 3)->y = (*(v + 6)* *(ma + 2)) + (*(v + 7)* *(ma + 3));
 
 		//回転軸の原点の移動した分を元に戻す
-		_b[0].x = _b[0].x + Center.x;
-		_b[0].y = _b[0].y + Center.y;
+		(_b)->x = (_b)->x + Center.x;
+		(_b)->y = (_b)->y + Center.y;
 
-		_b[1].x = _b[1].x + Center.x;
-		_b[1].y = _b[1].y + Center.y;
+		(_b + 1)->x = (_b + 1)->x + Center.x;
+		(_b + 1)->y = (_b + 1)->y + Center.y;
 
-		_b[2].x = _b[2].x + Center.x;
-		_b[2].y = _b[2].y + Center.y;
+		(_b + 2)->x = (_b + 2)->x + Center.x;
+		(_b + 2)->y = (_b + 2)->y + Center.y;
 
-		_b[3].x = _b[3].x + Center.x;
-		_b[3].y = _b[3].y + Center.y;
+		(_b + 3)->x = (_b + 3)->x + Center.x;
+		(_b + 3)->y = (_b + 3)->y + Center.y;
 	}
 }
 unsigned int Color::Getcolor() const {

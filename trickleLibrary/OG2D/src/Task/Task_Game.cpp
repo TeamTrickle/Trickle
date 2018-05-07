@@ -33,9 +33,9 @@ void Game::Initialize()
 		break;
 	}
 	//…‰Šúˆ—
-	this->waterTex.TextureCreate("watertest.png");
+	this->waterTex.TextureCreate((std::string)"watertest.png");
 	//ƒvƒŒƒCƒ„[‰Šúˆ—
-	this->playerTex.TextureCreate("player.png");
+	this->playerTex.TextureCreate((std::string)"player.png");
 	player.Initialize();
 	this->player.SetTexture(&this->playerTex);
 	for (int y = 0; y < map.mapSize.y; ++y)

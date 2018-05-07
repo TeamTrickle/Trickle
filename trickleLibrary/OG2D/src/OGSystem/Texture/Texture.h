@@ -3,21 +3,22 @@
 
 class Texture {
 public:
-	Texture();
-	~Texture();
-	void TextureCreate(std::string _path);
-	void Draw(Box2D draw, Box2D src, Color color_ = { 1.0f,1.0f,1.0f,1.0f });
-	void Finalize();
-	void Rotate(float radian);
-	float angle;
+	Texture();							//コンストラクタ
+	~Texture();							//デストラクタ	
+	//void TextureCreate(std::string&);	//画像データの生成
+	void TextureCreate(std::string);
+	void Draw(							//描画処理
+		Box2D, 
+		Box2D, 
+		Color = { 1.0f,1.0f,1.0f,1.0f });
+	void Finalize();					//解放処理
+	void Rotate(float);				//回転の適応
 private:
-	GLuint _TexId;
-	int TextureID;
-	Box2D TexPos;
-	Box2D Double;
-	Vec2 TextureSize;
-	GLfloat rotate[16];
-	Vec2 _materix[4];
-	const std::string FileName = "./data/image/";
-	void _Rotate(float radian, GLfloat *mate);
+	GLuint _TexId;						//テクスチャのID
+	Vec2 TextureSize;					//画像サイズ
+	Vec2 _materix[4];					//頂点情報
+	const std::string FileName = "./data/image/";//画像ファイルパス
+	void _Rotate(float,					//頂点座標を回転させる
+				GLfloat*);
+	float angle;						//回転値
 };

@@ -3,19 +3,13 @@
 #include <functional>
 class FPS {
 public:
-	FPS();
-	~FPS();
-	void Initialize();
-	void Update();
-	void SetData(void data_());
-	void DeleteData();
-	typedef std::shared_ptr<FPS> SP;
-	static SP Create();
+	FPS();							//コンストラクタ
+	~FPS();							//デストラクタ
+	void Update();					//更新処理
+	typedef std::shared_ptr<FPS> SP;//スマートポインタの生成
+	static SP Create();				//スマートポインタを返す
 private:
-	float lastTime;
-	int count;
-	GLfloat fps;
-	std::vector<std::function<void()>> data;
-	float Setfps;
-	float setlast;
+	float lastTime;					//前フレームタイム
+	int count;						//カウント数
+	GLfloat fps;					//fps値
 };
