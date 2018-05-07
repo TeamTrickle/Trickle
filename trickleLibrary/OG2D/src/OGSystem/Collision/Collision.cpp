@@ -31,6 +31,7 @@ bool CollisionBox::hitBox(CollisionBox& b)
 			return true;
 		}
 	}
+	//相手オブジェクト目線でも同じく処理を行う
 	for (int i = 0; i < 4; ++i) {
 		if ((((_ver[1].x - _ver[0].x)*(_v[i].y - _ver[0].y)) - ((_v[i].x - _ver[0].x)*(_ver[1].y - _ver[0].y))) >= 0 &&
 			(((_ver[2].x - _ver[1].x)*(_v[i].y - _ver[1].y)) - ((_v[i].x - _ver[1].x)*(_ver[2].y - _ver[1].y))) >= 0 &&

@@ -4,6 +4,7 @@ class Input
 {
 public:
 	//enum
+	//入力用仮想入力
 	enum in {
 		B1,
 		B2,
@@ -21,6 +22,7 @@ public:
 		SL,
 	};
 	//class
+	//ゲームパッド
 	class GamePad
 	{
 	public:
@@ -49,35 +51,39 @@ public:
 			AXIS_RIGHT_Y,		//右スティックY値
 			AXIS_BUTTON_NUM,
 		};
-		explicit GamePad(const int id);
-		bool on(const int index);
-		bool down(const int index);
-		bool up(const int index);
-		float axis(const int index);
-		void upDate();
-		void Initialize();
-		void Reset();
-		bool isPresent() const;
+		explicit GamePad(const int id);		//コンストラクタ
+		bool on(const int index);			//indexのonのboolを返す
+		bool down(const int index);			//indexのdownのboolを返す
+		bool up(const int index);			//indexのupのboolを返す
+		float axis(const int index);		//indexのスティックの値を返す(0~1)
+		bool isPresent() const;				//ゲームパッドの有無
+		void upDate();						//入力状況の更新
+		void Initialize();					//初期化処理
+		void Reset();						//入力状況のリセット
 	private:
-		bool registAxisButton(const int x_index, const int y_index, const float axis_threshold_);
-		int id_;
-		int button_num;
-		int axis_num;
-		int GPadData[14];
-		std::vector<float> axis_value;
-		bool axis_button;
-		float axis_threshold;
-		int axis_x_index;
-		int axis_y_index;
-		std::vector<u_char> button_on;
-		std::vector<u_char> button_down;
-		std::vector<u_char> button_up;
-		std::vector<u_char> axis_button_on;
-		std::vector<u_char> axis_button_down;
-		std::vector<u_char> axis_button_up;
-		int buttons() const;
-		int axes() const;
+		bool registAxisButton(				//スティックの範囲外処理
+			const int x_index, 
+			const int y_index, 
+			const float axis_threshold_);
+		int id_;							//ゲームパッド複数個に対応させるために１つ１つにidを振り分ける
+		int button_num;						//ゲームパッドのボタン数
+		int axis_num;						//ゲームパッドのスティック数
+		int GPadData[14];					//入力データを格納する変数
+		std::vector<float> axis_value;		//スティック情報を格納する変数
+		bool axis_button;					//スティックの押し込み有無
+		float axis_threshold;				//スティックの頂点値
+		int axis_x_index;					//Right側スティックのindex
+		int axis_y_index;					//Left側スティックのindex
+		std::vector<u_char> button_on;		//buttonのonを格納する変数
+		std::vector<u_char> button_down;	//buttonのdownを格納する変数
+		std::vector<u_char> button_up;		//buttonのupを格納する変数
+		std::vector<u_char> axis_button_on;	//axisのonを格納する変数
+		std::vector<u_char> axis_button_down;//axisのdownを格納する変数
+		std::vector<u_char> axis_button_up;	//axisのupを格納する変数
+		int buttons() const;				//ボタン数を返す関数
+		int axes() const;					//スティック数を返す関数
 	};
+	//キーボード
 	class KeyBoard
 	{
 	public:
@@ -89,20 +95,21 @@ public:
 			SPACE, ENTER, ESCAPE,
 			UP, DOWN, LEFT, RIGHT,
 		};
-		KeyBoard();
-		bool up(const int index);
-		bool down(const int index);
-		bool on(const int index);
-		void upDate();
-		void SetWindow(GLFWwindow* w);
-		GLFWwindow* nowWindow;
-		bool isPresent;
-		std::vector<u_char> button_on;
-		std::vector<u_char> button_down;
-		std::vector<u_char> button_up;
+		explicit KeyBoard();				//コンストラクタ
+		bool up(const int index);			//indexのupのboolを返す
+		bool down(const int index);			//indexのdownのboolを返す
+		bool on(const int index);			//indexのonのboolを返す
+		void upDate();						//入力状況の更新
+		void SetWindow(GLFWwindow* w);		//反映させるWindowを登録する
+		GLFWwindow* nowWindow;				//Window情報を格納する
+		bool isPresent;						//キーボードの有無(おそらく必要ないがパッドにあるので一応こちらでも準備しておく)
+		std::vector<u_char> button_on;		//buttonのonを格納する変数
+		std::vector<u_char> button_down;	//buttonのdownを格納する変数
+		std::vector<u_char> button_up;		//buttonのupを格納する変数
 	private:
-		int KeyData[256];
+		int KeyData[256];					//入力データを格納する変数
 	};
+	//マウス
 	class Mouse
 	{
 	public:
@@ -117,48 +124,52 @@ public:
 			BUTTON_7,
 			BUTTON_8,
 		};
-		Vec2 position;
-		GLFWwindow* nowWindow;
-		Mouse();
-		~Mouse();
-		void upDate();
-		void SetWindow(GLFWwindow *w);
-		Vec2 GetPos() const;
-		bool on(const int index);
-		bool down(const int index);
-		bool up(const int index);
-		bool isPresent;
-		std::vector<u_char> button_on;
-		std::vector<u_char> button_down;
-		std::vector<u_char> button_up;
+		Vec2 position;						//マウスの座標を保存する変数
+		GLFWwindow* nowWindow;				//Windowの情報を格納する
+		explicit Mouse();					//コンストラクタ
+		void upDate();						//入力状況の更新
+		void SetWindow(GLFWwindow *w);		//反映させるWindowを登録する
+		Vec2 GetPos() const;				//Windowの0,0座標から見た位置を返す
+		bool on(const int index);			//indexのonのboolを返す
+		bool down(const int index);			//indexのdownのboolを返す
+		bool up(const int index);			//indexのupのboolを返す
+		bool isPresent;						//マウスの有無の情報
+		std::vector<u_char> button_on;		//buttonのonを格納する変数
+		std::vector<u_char> button_down;	//buttonのdownを格納する変数
+		std::vector<u_char> button_up;		//buttonのupを格納する変数
 	private:
-		int MouseData[256];
+		int MouseData[8];					//MauseButtonデータ
 	};
+	//ゲームパッドとキーボードを区別する
 	struct InputData
 	{
 		int button;		//ゲームパッドのボタン
 		int key;		//キーボードのキー
 	};
 	//class宣言
+	//ゲームパッド配列
 	std::vector<GamePad> pad;
+	//キーボード
 	KeyBoard key;
+	//マウス
 	Mouse mouse;
 	//変数
-	bool Pad_Connection;
+	bool Pad_Connection;				//ゲームパッドの存在有無
 	//関数
-	void Inputinit(GLFWwindow *w);
-	bool on(int in_, int padNum = 0);
-	bool down(int in_, int padNum = 0);
-	bool up(int in_, int padNum = 0);
-	void upDate();
+	void Inputinit(GLFWwindow *w);		//入力初期化
+	bool on(int in_, int padNum = 0);	//押してるとき
+	bool down(int in_, int padNum = 0);	//押したとき
+	bool up(int in_, int padNum = 0);	//あげたとき
+	void upDate();						//入力情報更新
 private:
-	void ResetInputData();
-	int inputData[256];
-	std::vector<Input::GamePad> initGamePad();
-	KeyBoard initkeyBoard();
-	Mouse initMouse();
-	InputData inputdata[14];
+	void ResetInputData();				//入力状態をリセット
+	int inputData[256];					//入力データ
+	std::vector<Input::GamePad> initGamePad();//ゲームパッド初期化
+	KeyBoard initkeyBoard();			//キーボード初期化
+	Mouse initMouse();					//マウス初期化
+	InputData inputdata[14];			//in分のデータ
 };
+//簡易引数用
 namespace In
 {
 	enum
@@ -214,6 +225,7 @@ namespace In
 		UP, DOWN, LEFT, RIGHT,
 	};
 }
+//マウス用簡易引数
 namespace Mouse
 {
 	enum

@@ -5,8 +5,9 @@ class Easing
 {
 private:
 	float cnt;
+	bool toplay = false;
 public:
-	Easing() { cnt = 0; };
+	Easing() { cnt = 0; this->toplay = true; };
 	//イージング用カウンタ
 	float Time(float duration)
 	{
@@ -14,7 +15,16 @@ public:
 		{
 			cnt += 0.1f;
 		}
+		if (cnt >= duration)
+		{
+			this->toplay = false;
+		}
 		return cnt;
+	}
+	//イージング中の判定
+	bool isplay() const
+	{
+		return this->toplay;
 	}
 
 	//t = 時間 d = 始点 c = 終点-始点 d = 経過時間

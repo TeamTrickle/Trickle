@@ -6,19 +6,19 @@ class CollisionCircle;
 class CollisionBox
 {
 public:
-	Box2D hitBase;
-	bool hitBox(CollisionBox& b);
-	bool hitCircle(CollisionCircle& b);
-	void Rotate(float _angle);
-	float angle;
+	Box2D hitBase;						//“–‚½‚è”»’è	
+	bool hitBox(CollisionBox& b);		//‹éŒ`‚Æ‚Ì”»’è
+	bool hitCircle(CollisionCircle& b);	//‰~‚Æ‚Ì”»’è
+	void Rotate(float _angle);			//‰ñ“]‚ð“K—p
+	float angle;						//‰ñ“]’l
 private:
-	void hitdraw();
+	void hitdraw();						//Šm”F—p
 };
 class CollisionCircle
 {
 public:
-	Circle hitBase;
-	bool hitBox(CollisionBox& b);
-	bool hitCircle(CollisionCircle& b);
+	Circle hitBase;						//“–‚½‚è”»’è
+	bool hitBox(CollisionBox& b);		//‹éŒ`‚Æ‚Ì”»’è
+	bool hitCircle(CollisionCircle& b);	//‰~‚Æ‚Ì”»’è
 private:
 };

@@ -9,11 +9,12 @@ Window::Window()
 	this->isIcon = false;
 	this->isVisualization = false;
 }
-Window::Window(int wi, int he, char* name, bool screen)
+Window::Window(int wi, int he, char* name, bool screen,Vec2& pos)
 	:_widht(wi)
 	, _height(he)
 	, _Name(name)
 	, _Screen(screen)
+	, position(pos)
 {
 	if (_Screen) {
 		window = glfwCreateWindow(_widht, _height, _Name, glfwGetPrimaryMonitor(), NULL);
@@ -26,23 +27,25 @@ Window::Window(int wi, int he, char* name, bool screen)
 		glfwTerminate();
 		return;
 	}
+	glfwSetWindowPos(this->window, this->position.x, this->position.y);
 }
 Window::~Window()
 {
 	glfwSetWindowIcon(this->window, 0, NULL);
 }
 
-Window::SP Window::Create(int wi, int he, char* name, bool screen)
+Window::SP Window::Create(int wi, int he, char* name, bool screen,Vec2& pos)
 {
-	return Window::SP(new Window(wi, he, name, screen));
+	return Window::SP(new Window(wi, he, name, screen, pos));
 }
 
-void Window::createWindow(int wi, int he, char* name, bool screen)
+void Window::createWindow(int wi, int he, char* name, bool screen,Vec2& pos)
 {
 	this->_widht = wi;
 	this->_height = he;
 	this->_Name = name;
 	this->_Screen = screen;
+	this->position = pos;
 	if (this->_Screen) {
 		this->window = glfwCreateWindow(this->_widht, this->_height, this->_Name, glfwGetPrimaryMonitor(), NULL);
 	}
@@ -54,6 +57,7 @@ void Window::createWindow(int wi, int he, char* name, bool screen)
 		glfwTerminate();
 		return;
 	}
+	glfwSetWindowPos(this->window, this->position.x, this->position.y);
 }
 void Window::setIcon(std::string& path_)
 {
@@ -127,4 +131,8 @@ Vec2 Window::GetPos() const
 	int x, y;
 	glfwGetWindowPos(this->window, &x, &y);
 	return Vec2(x, y);
+}
+void Window::SetWindowPos(Vec2& pos)
+{
+	this->position = pos;
 }
