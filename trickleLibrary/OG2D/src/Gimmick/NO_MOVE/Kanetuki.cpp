@@ -22,31 +22,35 @@ bool Kanetuki::Create(Vec2 pos, Vec2 scale)
 }
 void Kanetuki::CheckHit()
 {
+	
 	for (auto w : w_vec)
 	{
-		if (w->objectTag == "Water")
+		if (this->hit(*w))
 		{
-			switch (w->GetState())
+			if (w->objectTag == "Water")
 			{
-			case Water::State::GAS:
-				Fire_movetime = 0;
-				break;
-			case Water::State::LIQUID:
-				Fire_movetime++;
-				if (Fire_movetime >= Fire_time_LIQUID)
+				switch (w->GetState())
 				{
-					w->SetState(Water::State::GAS);
+				case Water::State::GAS:
+					Fire_movetime = 0;
+					break;
+				case Water::State::LIQUID:
+					Fire_movetime++;
+					if (Fire_movetime >= Fire_time_LIQUID)
+					{
+						w->SetState(Water::State::GAS);
+					}
+					break;
+				case Water::State::SOLID:
+					Fire_movetime++;
+					if (Fire_movetime >= Fire_time_SOLID)
+					{
+						w->SetState(Water::State::LIQUID);
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			case Water::State::SOLID:
-				Fire_movetime++;
-				if (Fire_movetime >= Fire_time_SOLID)
-				{
-					w->SetState(Water::State::LIQUID);
-				}
-				break;
-			default:
-				break;
 			}
 		}
 	}
@@ -57,7 +61,11 @@ void Kanetuki::Set_pointa()
 	{
 		if (obj.objectTag == "Water")
 		{
-			w_vec.push_back(const_cast<Water*>(((Water*)&obj)));
+			w_vec.push_back(const_cast<Water*>((Water*)&obj));
 		}
 	};
+}
+void Kanetuki::Set_pointa(Water* obj)
+{
+	w_vec.push_back(obj);
 }

@@ -73,23 +73,22 @@ void Game::Initialize()
 	}
 	swich[0].ON_OFF();
 
+	gameprocess.Set_Goal(&goal);
+	gameprocess.Initialize();
+
 	for (int i = 0; i < 2; ++i)
 	{
 		cm.AddChild(&seihyouki[i].hitBace);
 	}
+	//…oŒ»ˆ—
+	auto w = new Water(Vec2(150, 100));
 	for (int i = 0; i < 2; ++i)
 	{
 		if (seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 10), Vec2(64, 64)))
 		{
-			seihyouki[i].Set_pointa();
+			seihyouki[i].Set_pointa(w);
 		}
 	}
-
-	gameprocess.Set_Goal(&goal);
-	gameprocess.Initialize();
-
-	//…oŒ»ˆ—
-	auto w = new Water(Vec2(150, 100));
 	w->SetTexture(&this->waterTex);
 	for (int y = 0; y < map.mapSize.y; ++y)
 	{
@@ -116,6 +115,10 @@ void Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
+	for (int i = 0; i < 2; ++i)
+	{
+		seihyouki[i].CheckHit();
+	}
 	gameprocess.Update();
 	
 	timecnt++;
@@ -124,6 +127,10 @@ TaskFlag Game::Update()
 		timecnt = 0;
 		//WateroŒ»ˆ—
 		auto w = new Water(Vec2(150, 100));
+		for (int i = 0; i < 2; ++i)
+		{
+			seihyouki[i].Set_pointa(w);
+		}
 		w->SetTexture(&this->waterTex);
 		for (int y = 0; y < map.mapSize.y; ++y)
 		{

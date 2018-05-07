@@ -3,7 +3,7 @@
 //@:Collisionclass									
 //--------------------------------------------------
 //’·•ûŒ`~’·•ûŒ`
-bool CollisionBox::hitBox(CollisionBox b)
+bool CollisionBox::hitBox(CollisionBox& b)
 {
 	//’¸“_î•ñ‚ÌƒZƒbƒg
 	Vec2 _ver[4] = {
@@ -43,7 +43,7 @@ bool CollisionBox::hitBox(CollisionBox b)
 	return false;
 }
 //’·•ûŒ`~‰~
-bool CollisionBox::hitCircle(CollisionCircle b)
+bool CollisionBox::hitCircle(CollisionCircle& b)
 {
 	//’¸“_î•ñ‚ÌƒZƒbƒg
 	Vec2 _ver[1] = {
@@ -73,7 +73,7 @@ bool CollisionBox::hitCircle(CollisionCircle b)
 	return false;
 }
 //‰~~’·•ûŒ`
-bool CollisionCircle::hitBox(CollisionBox b)
+bool CollisionCircle::hitBox(CollisionBox& b)
 {
 	//’¸“_î•ñ‚ÌƒZƒbƒg
 	Vec2 _ver[1] = {
@@ -103,7 +103,7 @@ bool CollisionCircle::hitBox(CollisionBox b)
 	return false;
 }
 //‰~~‰~
-bool CollisionCircle::hitCircle(CollisionCircle b)
+bool CollisionCircle::hitCircle(CollisionCircle& b)
 {
 	//‰~‚Ì”ÍˆÍ“à‚É‘Šè‚Ì‰~‚Ì”ÍˆÍ‚ª‘¶İ‚·‚éê‡TRUE‚ğ•Ô‚·
 	if (((b.hitBase.CenterX - this->hitBase.CenterX)*

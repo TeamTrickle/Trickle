@@ -7,8 +7,8 @@ class CollisionBox
 {
 public:
 	Box2D hitBase;
-	bool hitBox(CollisionBox b);
-	bool hitCircle(CollisionCircle b);
+	bool hitBox(CollisionBox& b);
+	bool hitCircle(CollisionCircle& b);
 	void Rotate(float _angle);
 	float angle;
 private:
@@ -18,7 +18,7 @@ class CollisionCircle
 {
 public:
 	Circle hitBase;
-	bool hitBox(CollisionBox b);
-	bool hitCircle(CollisionCircle b);
+	bool hitBox(CollisionBox& b);
+	bool hitCircle(CollisionCircle& b);
 private:
 };

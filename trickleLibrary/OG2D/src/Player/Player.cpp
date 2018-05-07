@@ -221,7 +221,6 @@ void Player::Render()
 		src.x = k;
 	}
 	this->playerimg->Draw(draw, src);
-	this->LineDraw();
 }
 
 void Player::Finalize()

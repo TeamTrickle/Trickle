@@ -34,7 +34,7 @@ Water::Water(Vec2 pos)
 	//Œo‰ßŽžŠÔ‰Šú‰»
 	this->nowTime = 0;
 	//Œ»ÝƒJƒ‰[‚ðÝ’è
-	this->color = { 0,0,0,1 };
+	this->color = { 0,0,0,0 };
 }
 
 Water::~Water() 
@@ -151,7 +151,7 @@ Water::Situation Water::UpDeleteform()
 Water::Situation Water::UpNormal()
 {
 	Water::Situation now = this->nowSituation;
-	if (this->FootCheck((std::string)"Floor"))
+	if (this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil"))
 	{
 		now = Water::Situation::Deleteform;
 	}
@@ -168,7 +168,7 @@ void Water::Render()
 	draw.OffsetSize();
 	Box2D src = drawRange[currentState];
 	src.OffsetSize();
-	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f });
+	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f - this->color.alpha });
 }
 
 void Water::Finalize()

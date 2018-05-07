@@ -52,7 +52,7 @@ class Player :public Object
 		bool isMove();											//移動処理中かどうかを返す
 	};
 private:
-	const float MOVE_SPEED = 15.f;								//移動スピード
+	const float MOVE_SPEED = 10.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float MAX_FALL = 10.f;								//落下最大速度
 	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;		//重力加速度

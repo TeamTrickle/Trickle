@@ -76,7 +76,7 @@ namespace OG {
 		dst[1] = src1[2] * src2[0] - src1[0] * src2[2];
 		dst[2] = src1[0] * src2[1] - src1[1] * src2[0];
 	}
-	float inner(Vec2 _v1, Vec2 _v2) {
+	float inner(Vec2& _v1, Vec2& _v2) {
 		return ((_v1.x * _v2.x) + (_v1.y*_v2.y));
 	}
 	float inner(float _x1, float _y1, float _x2, float _y2) {
@@ -85,7 +85,7 @@ namespace OG {
 	float inner(int _x1, int _y1, int _x2, int _y2) {
 		return (float)((_x1 * _x2) + (_y1*_y2));
 	}
-	float cross(Vec2 _v1, Vec2 _v2) {
+	float cross(Vec2& _v1, Vec2& _v2) {
 		return ((_v1.x * _v2.x) - (_v1.y*_v2.y));
 	}
 	float cross(float _x1, float _y1, float _x2, float _y2) {
@@ -94,7 +94,7 @@ namespace OG {
 	float cross(int _x1, int _y1, int _x2, int _y2) {
 		return (float)((_x1 * _x2) - (_y1*_y2));
 	}
-	float doubleinner(Vec2 _v) {
+	float doubleinner(Vec2& _v) {
 		return inner(_v, _v);
 	}
 	float doubleinner(float _x, float _y) {

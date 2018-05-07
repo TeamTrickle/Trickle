@@ -252,13 +252,13 @@ namespace OG {
 	void MulitMatrixf(GLfloat*src1, GLfloat*src2, GLfloat*dst);
 	void Normalize(GLfloat *v);
 	void Cross(float* src1, float* src2, float* dst);
-	float inner(Vec2 _v1, Vec2 _v2);
+	float inner(Vec2& _v1, Vec2& _v2);
 	float inner(float _x1, float _y1, float _x2, float _y2);
 	float inner(int _x1, int _y1, int _x2, int _y2);
-	float cross(Vec2 _v1, Vec2 _v2);
+	float cross(Vec2& _v1, Vec2& _v2);
 	float cross(float _x1, float _y1, float _x2, float _y2);
 	float cross(int _x1, int _y1, int _x2, int _y2);
-	float doubleinner(Vec2 _v);
+	float doubleinner(Vec2& _v);
 	float doubleinner(float _x, float _y);
 	float doubleinner(int _x, int _y);
 	float get_distance(float x, float y, float x1, float y1, float x2, float y2);

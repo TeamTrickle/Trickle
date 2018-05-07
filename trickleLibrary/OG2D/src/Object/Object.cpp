@@ -43,7 +43,7 @@ void Object::CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 	}
 	this->angle = _ang;
 }
-bool Object::hit(Object o)
+bool Object::hit(Object& o)
 {
 	switch (this->objform)
 	{
