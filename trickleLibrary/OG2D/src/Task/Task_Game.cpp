@@ -63,9 +63,8 @@ void Game::Initialize()
 	float fanrange[2] = { 18,6 };
 	for (int i = 0; i < 2; ++i) {
 		swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
-		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : true);
-		cm.AddChild(&swich[i]);
-		cm.AddChild(&fan[i]);
+		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
+		fan[i].SetWaterPool(&water);
 	}
 	for (int i = 0; i < 2; ++i) {
 		swich[i].SetTarget(&fan[0]);
@@ -126,6 +125,7 @@ TaskFlag Game::Update()
 	for (int i = 0; i < 2; ++i)
 	{
 		seihyouki[i].UpDate();
+		fan[i].UpDate();
 	}
 
 	gameprocess.Update();

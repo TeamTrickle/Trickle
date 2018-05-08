@@ -31,19 +31,31 @@ void Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
 		CreateObject(Cube, Vec2(position.x + 64.0f, position.y), Vec2(64.0f*range, 64.0f), 0.0f);
 		strength = 1;
 	}
-	Object::CollisionProcess = [&](const Object& o_) 
+}
+void Fan::SetWaterPool(std::vector<Water*> *w)
+{
+	water = w;
+}
+void Fan::UpDate()
+{
+	for (auto& w : *water)
 	{
-		if (active) 
-		{
-			if (o_.objectTag == "Water") 
-			{
-				if (((Water&)o_).GetSituation() == Water::Situation::Normal && ((Water&)o_).GetState() == Water::State::GAS) 
-				{
-					const_cast<Object&>(o_).position.x += strength;
-				}
-			}
+		//当たり判定
+		if (hit(*w))
+		{//スイッチの状態
+			Motion(w);
 		}
-	};
+	}
+}
+void Fan::Motion(Water* w)
+{
+	if (active)
+	{//水蒸気なら
+		if (w->GetState() == Water::State::GAS)
+		{
+			w->position.x += strength;
+		}
+	}
 }
 void Fan::AddSwitch(Switch* swit) 
 {
