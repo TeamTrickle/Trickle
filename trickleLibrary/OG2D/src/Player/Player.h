@@ -106,6 +106,8 @@ public:
 	Vec2 GetEst() const;										//現在移動値を返す
 	void SetTexture(Texture* texture);							//テクスチャを登録
 	State NowState() const;										//現在のStateを返す
+	void SetPos(Vec2&);											//プレイヤーの位置を設定する
+	Vec2 GetPos() const;										//プレイヤーの位置を返す
 	//入力処理簡略化
 	bool InputLeft() {
 		return gameEngine->in.on(Input::CL);
