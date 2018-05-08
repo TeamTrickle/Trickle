@@ -35,6 +35,7 @@ class Player :public Object
 	enum Motion
 	{
 		Normal,		//通常
+		Walk,
 		Jump,		//ジャンプ
 		Ladder,		//はしご
 		Fall,		//落下
@@ -45,6 +46,8 @@ class Player :public Object
 		Vec2 animationVec;										//移動量
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
+		int timeCnt;											//アニメーション経過時間
+		//int idle[10];											//Normal状態のアニメーション
 	public:
 		void SetAnimaVec(Vec2 start_, Vec2 end_);				//開始位置と終了位置を登録
 		void Initialize();										//初期化

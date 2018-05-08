@@ -213,9 +213,20 @@ void Player::Render()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-	Box2D src(0, 0, 128, 128);
+
+	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };
+
+	if (this->state == Normal && animation.timeCnt < 30) {
+		++animation.timeCnt;
+	}
+	if (animation.timeCnt >= 30) {
+		animation.timeCnt = 0;
+	}
+
+	Box2D src(idle[animation.timeCnt/3] * 550, 0, 550, 550);
+	src.OffsetSize();
 	//¶Œü‚«‚È‚ç‰æ‘œ‚ð‹t‚É‚·‚é
-	if (direction == Direction::LEFT) {
+	if (direction == Direction::RIGHT) {
 		int k = src.w;
 		src.w = src.x;
 		src.x = k;
@@ -557,6 +568,7 @@ void Player::Animation::Initialize()
 	this->animationVec = { 0.f,0.f };
 	this->startVec = { 0.f,0.f };
 	this->endVec = { 0.f,0.f };
+	this->timeCnt = 0;
 }
 
 Vec2 Player::Animation::Move()
