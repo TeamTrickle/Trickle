@@ -6,38 +6,42 @@ Kanetuki::Kanetuki()
 }
 Kanetuki::~Kanetuki()
 {
-
+	w_vec.clear();
 }
 bool Kanetuki::Create(Vec2 pos, Vec2 scale)
 {
-	Initital = false;
-	if (!Initital)
-	{
-		Fire_movetime = 0;
-		hitBace.CreateObject(Cube, pos, scale, 0);
-		Initital = true;//‚à‚¤Create‚³‚ê‚È‚¢
-		return true;
-	}
-	return false;
+	Fire_movetime = 0;
+	hitBace.CreateObject(Cube, pos, scale, 0);
+	Createflag = false;
+	return true;
 }
 void Kanetuki::CheckHit()
 {
 	for (auto w : w_vec)
 	{
-		if (hitBace.hit(*w))
+		if (w->hit(hitBace))
 		{
 			switch (w->GetState())
 			{
 			case Water::State::GAS:
-				Fire_movetime = 0;
 				break;
 			case Water::State::LIQUID:
-				cout << "…‚Å‚·" << endl;
-				Fire_movetime++;
-				if (Fire_movetime >= Fire_time_LIQUID)
+				cout << "ÚG’†" << endl;
+				while (true)
 				{
-					w->SetState(Water::State::GAS);
-					Fire_movetime = 0;
+					bool flag = false;
+					Fire_movetime++;
+					if (Fire_movetime >= Fire_time_LIQUID)
+					{
+						w->SetState(Water::State::GAS);
+						w->position.y = hitBace.position.y - 64;
+						Fire_movetime = 0;
+						flag = true;
+					}
+					if (flag)
+					{
+						break;
+					}
 				}
 				break;
 			case Water::State::SOLID:
@@ -45,24 +49,25 @@ void Kanetuki::CheckHit()
 				if (Fire_movetime >= Fire_time_SOLID)
 				{
 					w->SetState(Water::State::LIQUID);
-					Fire_movetime = 0;
 				}
+				Fire_movetime = 0;
 				break;
 			}
 		}
 	}
+	this->hitBace.LineDraw();
 }
 void Kanetuki::Set_pointa()
 {
-	hitBace.CollisionProcess = [&](const Object& obj)
+	/*hitBace.CollisionProcess = [&](const Object& obj)
 	{
 		if (obj.objectTag == "Water")
 		{
 			w_vec.push_back(const_cast<Water*>((Water*)&obj));
 		}
-	};
+	};*/
 }
 void Kanetuki::Set_pointa(Water* obj)
 {
-	w_vec.push_back(obj);
+	w_vec.push_back(obj);	
 }

@@ -41,5 +41,6 @@ private:
 	float range;
 	float movePos;
 	bool active;
+	int strength;
 };
 

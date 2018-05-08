@@ -34,8 +34,6 @@ void Seihyouki::CheckHit()	//“®‚¢‚Ä‚¢‚é
 	{
 		if (w->hit(hitBace))
 		{
-			cout << "“–‚½‚Á‚Ä‚¢‚Ü‚·" << endl;
-
 			switch (w->GetState())
 			{
 			case Water::State::GAS://ƒKƒX‚Ìê‡
