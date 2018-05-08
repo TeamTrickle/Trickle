@@ -48,6 +48,8 @@ public:
 	 */
 	void SetState(const State&);
 	State GetState() const;
+	void MovePos(Vec2&);
+	Vec2 GetMove() const;
 
 	void SetSituation(const Situation&);
 	Situation GetSituation() const;
