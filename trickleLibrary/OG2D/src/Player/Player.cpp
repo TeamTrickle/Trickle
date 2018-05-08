@@ -744,3 +744,13 @@ Player::State Player::NowState() const
 {
 	return this->state;
 }
+
+void Player::SetPos(Vec2& pos)
+{
+	this->position = pos;
+}
+
+Vec2 Player::GetPos() const
+{
+	return this->position;
+}
