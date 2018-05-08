@@ -11,6 +11,8 @@ void Game::Initialize()
 
 	Vec2 blockpos = Vec2(1536, 100);  //1536,100
 
+	Vec2 fanpos[2] = { Vec2(64 * 11,64 * 7), Vec2(64 * 19,64 * 10) };
+	float fanrange[2] = { 18,6 };
 
 	std::cout << "Game" << std::endl;
 
@@ -27,6 +29,28 @@ void Game::Initialize()
 	{
 	case 0:
 		map.LoadMap("prototype.txt");
+		
+		for (int i = 0; i < 2; ++i) 
+		{
+			//swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
+			fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT,true);
+			fan[i].SetWaterPool(&water);
+		}
+		/*for (int i = 0; i < 2; ++i) {
+			swich[i].SetTarget(&fan[0]);
+			swich[i].SetTarget(&fan[1]);
+		}*/
+		//ギミックの初期化をします
+		for (int i = 0; i < 2; ++i)
+		{
+			seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 11), Vec2(64, 64));
+			seihyouki[i].SetWaterPool(&water);
+		}
+		kanetuki.Create(Vec2(18 * 64, 15 * 64), Vec2(64 * 2, 64 * 2));
+		kanetuki.SetWaterPool(&water);
+
+		//swich[0].ON_OFF();
+
 		break;
 	case 1:
 		map.LoadMap("tutorial1.csv", Format::csv);
@@ -97,31 +121,6 @@ void Game::Initialize()
 	goal.Initialize();
 	cm.AddChild(&goal);
 
-	//横田さん風
-
-	Vec2 fanpos[2] = { Vec2(64 * 11,64 * 7), Vec2(64 * 19,64 * 10) };
-	float fanrange[2] = { 18,6 };
-	for (int i = 0; i < 2; ++i) {
-		swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
-		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
-		fan[i].SetWaterPool(&water);
-	}
-	for (int i = 0; i < 2; ++i) {
-		swich[i].SetTarget(&fan[0]);
-		swich[i].SetTarget(&fan[1]);
-	}
-
-	//ギミックの初期化をします
-	for (int i = 0; i < 2; ++i)
-	{
-		seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 11), Vec2(64, 64));
-		seihyouki[i].SetWaterPool(&water);
-	}
-	kanetuki.Create(Vec2(18 * 64, 15 * 64), Vec2(64 * 2, 64 * 2));
-	kanetuki.SetWaterPool(&water);
-
-	swich[0].ON_OFF();
-
 	gameprocess.Set_Goal(&goal);
 	gameprocess.Initialize();
 
@@ -160,13 +159,7 @@ void Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
-	//ギミックの更新
-	kanetuki.Update();
-	for (int i = 0; i < 2; ++i)
-	{
-		seihyouki[i].UpDate();
-		fan[i].UpDate();
-	}
+	
 
 	gameprocess.Update();
 	
@@ -175,7 +168,7 @@ TaskFlag Game::Update()
 	{
 		timecnt = 0;
 		//Water出現処理
-		auto w = new Water(Vec2(150, 100));
+		auto w = new Water(Vec2(150,100));
 		w->SetTexture(&this->waterTex);
 		for (int y = 0; y < map.mapSize.y; ++y)
 		{
@@ -300,6 +293,13 @@ TaskFlag Game::Update()
 	switch (*MapNum)
 	{
 	case 0:
+		//ギミックの更新
+		kanetuki.Update();
+		for (int i = 0; i < 2; ++i)
+		{
+			seihyouki[i].UpDate();
+			fan[i].UpDate();
+		}
 		break;
 	case 1:
 		walkui.Update();
