@@ -44,6 +44,7 @@ void Game::Initialize()
 		for (int i = 0; i < 2; ++i)
 		{
 			seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 11), Vec2(64, 64));
+			//Vector range‚Ì‚½‚ß‚É‚Q‚Â‚Æ‚à“–‚Ä‚Ä‚¢‚Ü‚·
 			seihyouki[i].SetWaterPool(&water);
 		}
 		kanetuki.Create(Vec2(18 * 64, 15 * 64), Vec2(64 * 2, 64 * 2));
@@ -87,6 +88,13 @@ void Game::Initialize()
 		break;
 	case 5:
 		map.LoadMap("stage1.csv", Format::csv);
+		kanetuki.Create(Vec2(64 * 18, 64 * 16), Vec2(64 * 2, 64 * 2));
+		kanetuki.SetWaterPool(&water);
+		for (int i = 0; i < 2; ++i)
+		{
+			seihyouki[i].Create(Vec2(64 * 5, 64 * 7), Vec2(64, 64));
+			seihyouki[i].SetWaterPool(&water);
+		}
 		break;
 	case 6:
 		map.LoadMap("stage2.csv", Format::csv);
@@ -307,6 +315,8 @@ TaskFlag Game::Update()
 		getbucketui.Update();
 		getwaterui.Update();
 		spillwaterui.Update();
+
+		
 		break;
 	case 2:
 		break;
@@ -317,6 +327,10 @@ TaskFlag Game::Update()
 	case 4:
 		break;
 	case 5:
+		//ƒMƒ~ƒbƒN‚ÌXV
+		kanetuki.Update();
+		//ŽÀÛ‚É“®‚©‚·‚Ì‚Í‚P‚Â
+		seihyouki[0].UpDate();
 		break;
 	case 6:
 		break;
