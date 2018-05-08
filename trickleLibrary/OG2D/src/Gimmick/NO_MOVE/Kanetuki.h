@@ -16,12 +16,11 @@ public:
 	Object hitBace;
 private:
 	bool Initital;						//‰Šú‰»ˆ—‚ğ1“x‚µ‚©‚µ‚È‚¢‚½‚ß‚ÉEEE
-	const int Fire_time_LIQUID = 10;	//‰Á”M‚·‚éŠÔ ‰t‘Ì
-	const int Fire_time_SOLID = 15;	    //‰Á”M‚·‚éŠÔ ŒÂ‘Ì
+	const int Fire_time_LIQUID = 70;	//‰Á”M‚·‚éŠÔ ‰t‘Ì
+	const int Fire_time_SOLID = 40;	    //‰Á”M‚·‚éŠÔ ŒÂ‘Ì
 	int Fire_movetime;					//”R‚â‚·ŠÔ‚ğŠi”[‚·‚é
 	std::vector <Water*>w_vec;
-
-	
+	bool Createflag;
 };
 
 //cm ‚ÉƒAƒhƒŒƒX‚ğ“n‚·
