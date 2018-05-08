@@ -32,6 +32,24 @@ void Kanetuki::Update()
 }
 void Kanetuki::toSteam(Water* obj)
 {
+	if (obj->GetState() == Water::State::SOLID)
+	{
+		while (true)
+		{
+			bool flag = false;
+			Fire_movetime++;
+			if (Fire_movetime >= Fire_time_SOLID)
+			{
+				obj->SetState(Water::State::LIQUID);
+				Fire_movetime = 0;
+				flag = true;
+			}
+			if (flag)
+			{
+				break;
+			}
+		}
+	}
 	if (obj->GetState() == Water::State::LIQUID)
 	{
 		while (true)
