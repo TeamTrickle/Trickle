@@ -2,7 +2,7 @@
 using namespace std;
 Kanetuki::Kanetuki()
 {
-	
+
 }
 Kanetuki::~Kanetuki()
 {
@@ -11,7 +11,7 @@ Kanetuki::~Kanetuki()
 bool Kanetuki::Create(Vec2 pos, Vec2 scale)
 {
 	Initital = false;
-	if(!Initital)
+	if (!Initital)
 	{
 		Fire_movetime = 0;
 		hitBace.CreateObject(Cube, pos, scale, 0);
@@ -22,35 +22,32 @@ bool Kanetuki::Create(Vec2 pos, Vec2 scale)
 }
 void Kanetuki::CheckHit()
 {
-	
 	for (auto w : w_vec)
 	{
-		if (this->hit(*w))
+		if (hitBace.hit(*w))
 		{
-			if (w->objectTag == "Water")
+			switch (w->GetState())
 			{
-				switch (w->GetState())
+			case Water::State::GAS:
+				Fire_movetime = 0;
+				break;
+			case Water::State::LIQUID:
+				cout << "…‚Å‚·" << endl;
+				Fire_movetime++;
+				if (Fire_movetime >= Fire_time_LIQUID)
 				{
-				case Water::State::GAS:
+					w->SetState(Water::State::GAS);
 					Fire_movetime = 0;
-					break;
-				case Water::State::LIQUID:
-					Fire_movetime++;
-					if (Fire_movetime >= Fire_time_LIQUID)
-					{
-						w->SetState(Water::State::GAS);
-					}
-					break;
-				case Water::State::SOLID:
-					Fire_movetime++;
-					if (Fire_movetime >= Fire_time_SOLID)
-					{
-						w->SetState(Water::State::LIQUID);
-					}
-					break;
-				default:
-					break;
 				}
+				break;
+			case Water::State::SOLID:
+				Fire_movetime++;
+				if (Fire_movetime >= Fire_time_SOLID)
+				{
+					w->SetState(Water::State::LIQUID);
+					Fire_movetime = 0;
+				}
+				break;
 			}
 		}
 	}

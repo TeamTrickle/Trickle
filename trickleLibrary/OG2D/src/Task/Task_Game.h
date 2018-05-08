@@ -56,6 +56,7 @@ private:
 
 	GameProcessManagement gameprocess;
 	Seihyouki seihyouki[2];
+	Kanetuki kanetuki[2];
 
 	Texture waterTex;
 	Texture playerTex;
