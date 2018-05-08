@@ -36,7 +36,7 @@ void Option::Render()
 {
 	//背景の描画
 	{
-		Box2D draw(0, 0, 960, 540);     //画像サイズは仮
+		Box2D draw(Vec2(0, 0), gameEngine->window->GetSize());  //画像サイズは仮
 		draw.OffsetSize();
 		Box2D src(0, 0, 1920, 1080);
 		src.OffsetSize();

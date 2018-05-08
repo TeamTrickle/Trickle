@@ -44,7 +44,7 @@ void StageSelect::Render()
 {
 	//”wŒi
 	{
-		Box2D draw(0, 0, 960, 540);
+		Box2D draw(Vec2(0, 0), gameEngine->window->GetSize());
 		draw.OffsetSize();
 		Box2D src(0, 0, 1920, 1080);
 		src.OffsetSize();
