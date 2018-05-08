@@ -11,7 +11,7 @@ void Game::Initialize()
 
 	Vec2 blockpos = Vec2(1536, 100);  //1536,100
 
-	Vec2 fanpos[2] = { Vec2(64 * 11,64 * 7), Vec2(64 * 19,64 * 10) };
+	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 18,6 };
 
 	std::cout << "Game" << std::endl;
@@ -24,18 +24,15 @@ void Game::Initialize()
 	cm.AddChild(&block);
 	//”wŒi‰Šúˆ—
 	back.Initialize();
+	//î•—‹@‰æ‘œ“Ç‚İ‚İ
+	this->fanTex.TextureCreate((std::string)"fan.png");
 	//ƒ}ƒbƒv‰Šúˆ—
 	switch (*MapNum)
 	{
 	case 0:
 		map.LoadMap("prototype.txt");
 		
-		for (int i = 0; i < 2; ++i) 
-		{
-			//swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
-			fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT,true);
-			fan[i].SetWaterPool(&water);
-		}
+		
 		/*for (int i = 0; i < 2; ++i) {
 			swich[i].SetTarget(&fan[0]);
 			swich[i].SetTarget(&fan[1]);
@@ -103,6 +100,9 @@ void Game::Initialize()
 		{
 			seihyouki[i].Create(Vec2(64 * 5, 64 * 7), Vec2(64, 64));
 			seihyouki[i].SetWaterPool(&water);
+			//swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
+			fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
+			fan[i].SetTexture(&this->fanTex);
 		}
 		break;
 	case 6:
@@ -147,9 +147,6 @@ void Game::Initialize()
 	}
 	//…oŒ»ˆ—
 	auto w = new Water(Vec2(150, 100));
-
-	
-
 	w->SetTexture(&this->waterTex);
 	for (int y = 0; y < map.mapSize.y; ++y)
 	{
@@ -171,6 +168,10 @@ void Game::Initialize()
 	}
 	water.push_back(w);
 	player.AddWater(w);
+	for (int i = 0; i < 2; ++i)
+	{
+		fan[i].SetWaterPool(w);
+	}
 	//cm.AddChild(water[water.size() - 1]);
 }
 //-------------------------------------------------------------------------------------------------
@@ -207,6 +208,10 @@ TaskFlag Game::Update()
 		}
 		water.push_back(w);
 		player.AddWater(w);
+		for (int i = 0; i < 2; ++i)
+		{
+			fan[i].SetWaterPool(w);
+		}
 		//cm.AddChild(water[water.size() - 1]);
 	}
 	
@@ -238,6 +243,10 @@ TaskFlag Game::Update()
 			}
 			water.push_back(sizuku);
 			player.AddWater(sizuku);
+			for (int i = 0; i < 2; ++i)
+			{
+				fan[i].SetWaterPool(sizuku);
+			}
 			//cm += sizuku;
 			//cm.AddChild(water[water.size() - 1]);
 		}
@@ -258,6 +267,10 @@ TaskFlag Game::Update()
 					water[i]->Finalize();
 					
 					player.DeleteWater(water[i]);
+					for (int j = 0; j < 2; ++j)
+					{
+						fan[j].DeleteWaterPool(water[i]);
+					}
 					for (int j = 0; j < water.size(); ++j)
 					{
 						if (i != j)
@@ -280,6 +293,10 @@ TaskFlag Game::Update()
 			//	cm - water[i];
 			water[i]->Finalize();
 			player.DeleteWater(water[i]);
+			for (int j = 0; j < 2; ++j)
+			{
+				fan[j].DeleteWaterPool(water[i]);
+			}
 			for (int j = 0; j < water.size(); ++j)
 			{
 				if (i != j)
@@ -343,6 +360,10 @@ TaskFlag Game::Update()
 		kanetuki.Update();
 		//ÀÛ‚É“®‚©‚·‚Ì‚Í‚P‚Â
 		seihyouki[0].UpDate();
+		for (int i = 0; i < 2; ++i)
+		{
+			this->fan[i].UpDate();
+		}
 		break;
 	case 6:
 		break;
@@ -466,6 +487,10 @@ void Game::Render2D()
 	case 4:
 		break;
 	case 5:
+		for (int i = 0; i < 2; ++i)
+		{
+			this->fan[i].Render();
+		}
 		break;
 	case 6:
 		break;
@@ -503,7 +528,7 @@ void Game::Finalize()
 	}
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
-
+	this->fanTex.Finalize();
 	//UI
 	walkui.Finalize();
 	jumpui.Finalize();

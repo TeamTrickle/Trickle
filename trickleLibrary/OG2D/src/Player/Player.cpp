@@ -672,7 +672,7 @@ void Player::MoveCheck(Vec2 est, std::string objname_)
 		{
 			if (this->hit(*this->objects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "") {
+				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "LadderTop") {
 					this->position.y = preY;
 					break;
 				}

@@ -4,7 +4,7 @@ void _OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
 	//gameEngine->SetWindow(960, 540, "trickle", false);
-	gameEngine->SetWindow(1920, 1080, "trickle", false);
+	gameEngine->SetWindow(1920, 1080, "trickle", true);
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
 	nowTask = NON;
 	nextTask = Task_Title;

@@ -35,22 +35,25 @@ public:
 	void ChangeState();
 	void Finalize();
 	void Render();
+	void SetTexture(Texture*);
 
 	//Motion
 	void UpDate();
 
 	//WaterのVector情報のアドレス値を受け取る
-	void SetWaterPool(std::vector<Water*> *);
+	void SetWaterPool(Water*);
+	bool DeleteWaterPool(Water*);
 
 	//
 	void Motion(Water*);
 private:
 	Dir dir;
-	Texture image;
+	Texture* image;
 	float range;
 	float movePos;
 	bool active;
 	int strength;
-	std::vector<Water*> *water;
+	std::vector<Water*>water;
+	Object WindHitBase;
 };
 

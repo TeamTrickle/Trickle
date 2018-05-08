@@ -102,12 +102,16 @@ void Water::Update()
 				this->nowSituation = Situation::Rainfrom;
 				this->position.x += this->maxSize.x / 2;
 			}
-			this->MoveGASCheck(move);
+			else
+			{
+				this->MoveGASCheck(move);
+			}
 			break;
 		case Water::Situation::Rainfrom:
 			this->nowSituation = Situation::Newfrom;
 			this->currentState = State::LIQUID;
 			this->Scale = this->minSize;
+			this->setTime = 0;
 			break;
 		}
 		break;

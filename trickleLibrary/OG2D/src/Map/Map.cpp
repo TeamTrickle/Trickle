@@ -102,6 +102,9 @@ bool Map::LoadMap(std::string path_, Format format)
 			case 19:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
+			case 20:
+				this->hitBase[y][x].objectTag = "LadderTop";
+				break;
 			case 21:
 			case 22:
 				this->hitBase[y][x].objectTag = "Ladder";
@@ -280,9 +283,6 @@ void Map::MapRender()
 			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 			draw.OffsetSize();
 			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
-			if (this->_arr[y][x] != 0) {
-				this->hitBase[y][x].LineDraw();
-			}
 		}
 	}
 }
@@ -302,7 +302,12 @@ bool Map::MapHitCheck(Object &p)
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0 && this->_arr[y][x] != 10 && this->_arr[y][x] != 12 && this->_arr[y][x] != 13) {
+			if (this->_arr[y][x] != 0 && 
+				this->_arr[y][x] != 10 && 
+				this->_arr[y][x] != 12 && 
+				this->_arr[y][x] != 13 &&
+				this->_arr[y][x] != 21 && 
+				this->_arr[y][x] != 22) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;

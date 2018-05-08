@@ -59,6 +59,7 @@ private:
 
 	Texture waterTex;
 	Texture playerTex;
+	Texture fanTex;
 
 	//UI----------------------------------------
 	//tutorial_1
