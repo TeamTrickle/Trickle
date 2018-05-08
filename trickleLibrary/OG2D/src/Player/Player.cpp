@@ -32,6 +32,28 @@ void Player::Initialize()
 	this->animation.Initialize();
 }
 
+void Player::Initialize(Vec2& pos)
+{
+	//オブジェクトの初期化
+	Object::CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
+	this->objectTag = "Player";
+	//デバッグ用位置調整
+	//this->position = { 841,700 };
+	//テクスチャの読み込み
+	//各変数の初期化
+	this->CheckJump = true;
+	this->CheckGravity = true;
+	this->est = { 0.f,0.f };
+	this->moveCnt = 0;
+	this->inv = 0;
+	//状態の初期化
+	this->direction = Direction::RIGHT;
+	this->motion = Motion::Normal;
+	this->state = State::NORMAL;
+	//自動移動用値の初期化
+	this->animation.Initialize();
+}
+
 void Player::Update()
 {
 	switch (this->state)
