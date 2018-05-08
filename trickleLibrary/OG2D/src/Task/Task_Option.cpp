@@ -19,7 +19,7 @@ TaskFlag Option::Update()
 	VolControl();    //サウンドのボリュームコントロール
 	DrawVol();     //移動する描画について
 
-	if (gameEngine->in.down(Input::in::D2))
+	if (gameEngine->in.down(Input::in::B1))
 	{
 		sound.stop();
 		nowtask = Task_Title;
@@ -75,7 +75,7 @@ void Option::VolControl()
 {
 	//音量調節について
 	//上キーで音量を上げる
-	if (gameEngine->in.key.down(In::UP))
+	if (gameEngine->in.down(In::CU))
 	{
 		if (vol < 1.0f)
 		{
@@ -83,7 +83,7 @@ void Option::VolControl()
 		}
 	}
 	//下キーで音量を下げる
-	if (gameEngine->in.key.down(In::DOWN))
+	if (gameEngine->in.down(In::CD))
 	{
 		if (vol > 0.1f)
 		{

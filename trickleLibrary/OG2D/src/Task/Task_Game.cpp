@@ -407,7 +407,7 @@ TaskFlag Game::Update()
 
 	TaskFlag nowtask = Task_Game;
 	nowtask = gameprocess.Goal_Event();
-	if (gameEngine->in.down(Input::in::D2, 0))
+	if (gameEngine->in.down(Input::in::D2, 0) && gameEngine->in.down(In::D1))
 	{
 		nowtask = Task_Title;
 	}

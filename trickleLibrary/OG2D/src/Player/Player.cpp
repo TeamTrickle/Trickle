@@ -217,8 +217,11 @@ void Player::Render()
 
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };
 
-	if (this->state == Normal && animation.timeCnt < 30) {
-		++animation.timeCnt;
+	if (animation.timeCnt < 30) {
+		if (this->NowState() == State::NORMAL || this->NowState() == State::BUCKET)
+		{
+			++animation.timeCnt;
+		}
 	}
 	if (animation.timeCnt >= 30) {
 		animation.timeCnt = 0;
@@ -735,4 +738,9 @@ bool Player::DeleteWater(Object* water)
 		}
 	}
 	return false;
+}
+
+Player::State Player::NowState() const
+{
+	return this->state;
 }

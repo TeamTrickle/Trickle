@@ -42,7 +42,7 @@ TaskFlag Title::Update()
 
 	if (state == Start)
 	{
-		if (gameEngine->in.down(Input::in::D2))
+		if (gameEngine->in.down(Input::in::B2))
 		{
 			nowtask = Task_StageSelect;
 		}
@@ -51,7 +51,7 @@ TaskFlag Title::Update()
 	if (state == Close)
 	{
 		//ゲームを終了する処理、またはタスクを移行
-		if (gameEngine->in.down(Input::in::D2))
+		if (gameEngine->in.down(Input::in::B2))
 		{
 			gameEngine->GameEnd();
 		}
@@ -59,7 +59,7 @@ TaskFlag Title::Update()
 
 	if (state == Pause)
 	{
-		if (gameEngine->in.down(Input::in::D2))
+		if (gameEngine->in.down(Input::in::B2))
 		{
 			nowtask = Task_Option;
 		}
@@ -125,14 +125,14 @@ void Title::CursorMove()
 {
 	if (cursorPos.y > startPos.y)
 	{
-		if (gameEngine->in.key.down(Input::KeyBoard::UP))
+		if (gameEngine->in.down(In::CU))
 		{
 			cursorPos.y -= 100.0f;
 		}
 	}
 	if (cursorPos.y < closePos.y)
 	{
-		if (gameEngine->in.key.down(Input::KeyBoard::DOWN))
+		if (gameEngine->in.down(In::CD))
 		{
 			cursorPos.y += 100.0f;
 		}

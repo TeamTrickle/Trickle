@@ -23,7 +23,7 @@ TaskFlag StageSelect::UpDate()
 	CursorMove();
 
 	TaskFlag nowTask = Task_StageSelect;
-	if (gameEngine->in.key.down(In::ENTER))
+	if (gameEngine->in.down(In::B2))
 	{
 		switch (state) {
 		case Tutorial:
@@ -106,14 +106,14 @@ void StageSelect::Finalize()
 void StageSelect::CursorMove() {
 	if (cursorPos.y > tutorialPos.y)
 	{
-		if (gameEngine->in.key.down(Input::KeyBoard::UP))
+		if (gameEngine->in.down(In::CU))
 		{
 			cursorPos.y -= 100.0f;
 		}
 	}
 	if (cursorPos.y < toTitlePos.y)
 	{
-		if (gameEngine->in.key.down(Input::KeyBoard::DOWN))
+		if (gameEngine->in.down(In::CD))
 		{
 			cursorPos.y += 100.0f;
 		}
