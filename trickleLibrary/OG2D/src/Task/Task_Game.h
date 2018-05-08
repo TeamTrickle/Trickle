@@ -18,6 +18,7 @@
 #include "Gimmick\NO_MOVE\Seihyouki.h"
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
+#include "UI\UI.h"
 
 #include "GameProcessManagement\GameProcessManagement.h"
 
@@ -58,4 +59,19 @@ private:
 
 	Texture waterTex;
 	Texture playerTex;
+
+	//UI----------------------------------------
+	//tutorial_1
+	UI walkui;
+	UI jumpui;
+	UI getbucketui;
+	UI getwaterui;
+	UI spillwaterui;
+	//tutorial_2	
+	//tutorial_3
+	UI switchui;
+	UI evaporationui;
+	//tutorial_4
+	//stage1
+	//stage2
 };

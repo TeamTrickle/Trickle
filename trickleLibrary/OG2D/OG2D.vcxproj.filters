@@ -111,6 +111,9 @@
     <Filter Include="ソースファイル\Task\StageSelect">
       <UniqueIdentifier>{d62b9534-5856-4b17-88fe-d86f28d56ad2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\UI">
+      <UniqueIdentifier>{ed486ab6-cbaa-43d5-8a3f-8fa2f40002ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -230,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="src\Win\WinMain.cpp">
       <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\UI.cpp">
+      <Filter>ソースファイル\Task\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="src\Task\StageSelect.h">
       <Filter>ソースファイル\Task\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\UI.h">
+      <Filter>ソースファイル\Task\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

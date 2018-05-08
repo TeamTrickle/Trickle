@@ -28,6 +28,45 @@ void Game::Initialize()
 	case 0:
 		map.LoadMap("prototype.txt");
 		break;
+	case 1:
+		map.LoadMap("tutorial1.csv", Format::csv);
+		walkui.Initialize(Vec2(200, 300), Box2D(100, 300, 200, 300), "walkui.png", 300, 4);
+		walkui.SetPlayerPtr(&player);
+		jumpui.Initialize(Vec2(400, 300), Box2D(400, 300, 200, 300), "pusha.png", 300, 2);
+		jumpui.SetPlayerPtr(&player);
+		getbucketui.Initialize(Vec2(1200, 200), Box2D(1150, 200, 100, 200), "pushb.png", 300, 2);
+		getbucketui.SetPlayerPtr(&player);
+		getwaterui.Initialize(Vec2(100, 200), Box2D(0, 0, 0, 0), "arrowdown.png", 300, 1);
+		getwaterui.SetPlayerPtr(&player);
+		spillwaterui.Initialize(Vec2(1600, 200), Box2D(1550, 200, 300, 200), "pushx.png", 300, 2);
+		spillwaterui.SetPlayerPtr(&player);
+		//cm.AddChild(&walkui);
+		//cm.AddChild(&jumpui);
+		//cm.AddChild(&getbucketui);
+		//cm.AddChild(&getwaterui);
+		//cm.AddChild(&spillwaterui);
+		break;
+	case 2:
+		map.LoadMap("tutorial2.csv", Format::csv);
+		break;
+	case 3:
+		map.LoadMap("tutorial3.csv", Format::csv);
+		//switchui;
+		//switchui.SetPlayerPtr(&player);
+		//evaporationui;
+		//evaporationui.SetPlayerPtr(&player);
+		//cm.AddChild(&switchui);
+		//cm.AddChild(&evaporationui);
+		break;
+	case 4:
+		map.LoadMap("tutorial4.csv", Format::csv);
+		break;
+	case 5:
+		map.LoadMap("stage1.csv", Format::csv);
+		break;
+	case 6:
+		map.LoadMap("stage2.csv", Format::csv);
+		break;
 	default:
 		std::cout << "マップ番号が存在しません" << std::endl;
 		break;
@@ -47,6 +86,7 @@ void Game::Initialize()
 	}
 	player.AddBucket(&this->bucket);
 	player.AddBlock(&this->block);
+	cm.AddChild(&player);
 	this->timecnt = 0;
 	//cm.AddChild(&bucket);
 	for (auto& i : map.hitBase)
@@ -159,7 +199,6 @@ TaskFlag Game::Update()
 		player.AddWater(w);
 		//cm.AddChild(water[water.size() - 1]);
 	}
-
 	
 
 	
@@ -257,6 +296,35 @@ TaskFlag Game::Update()
 	
 	block.PlCheckHit(player, block);
 
+	//UI------------------------------------
+	switch (*MapNum)
+	{
+	case 0:
+		break;
+	case 1:
+		walkui.Update();
+		jumpui.Update();
+		getbucketui.Update();
+		getwaterui.Update();
+		spillwaterui.Update();
+		break;
+	case 2:
+		break;
+	case 3:
+		switchui.Update();
+		evaporationui.Update();
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	default:
+		break;
+	}
+	//--------------------------------------
+
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
 	{
@@ -318,6 +386,7 @@ TaskFlag Game::Update()
 		}
 	}
 
+
 	//カメラ処理
 	Camera_move();
 
@@ -350,6 +419,34 @@ void Game::Render2D()
 	{
 		water[i]->Render();
 	}
+	//UI------------------------------------
+	switch (*MapNum)
+	{
+	case 0:
+		break;
+	case 1:
+		walkui.Render();
+		jumpui.Render();
+		getbucketui.Render();
+		getwaterui.Render();
+		spillwaterui.Render();
+		break;
+	case 2:
+		break;
+	case 3:
+		switchui.Render();
+		evaporationui.Render();
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	default:
+		break;
+	}
+	//--------------------------------------
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Finalize()
@@ -380,6 +477,17 @@ void Game::Finalize()
 	}
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
+
+	//UI
+	walkui.Finalize();
+	jumpui.Finalize();
+	getbucketui.Finalize();
+	getwaterui.Finalize();
+	spillwaterui.Finalize();
+	//switchui.Finalize();
+	//evaporationui.Finalize();
+
+
 	cm.Destroy();
 }
 //-------------------------------------------------------------------------------------------------
@@ -428,14 +536,14 @@ void Game::Camera_move()
 	if (NowCameraPos.x < 0) {
 		NowCameraPos.x = 0;
 	}
-	if (NowCameraPos.x + NowCameraSize.x > 34 * map.DrawSize.x) {
-		NowCameraPos.x = (34 * map.DrawSize.x) - NowCameraSize.x;
+	if (NowCameraPos.x + NowCameraSize.x > map.mapSize.x * map.DrawSize.x) {
+		NowCameraPos.x = (map.mapSize.x * map.DrawSize.x) - NowCameraSize.x;
 	}
 	if (NowCameraPos.y < 0) {
 		NowCameraPos.y = 0;
 	}
-	if (NowCameraPos.y + NowCameraSize.y > 16 * map.DrawSize.y) {
-		NowCameraPos.y = (16 * map.DrawSize.y) - NowCameraSize.y;
+	if (NowCameraPos.y + NowCameraSize.y > map.mapSize.y * map.DrawSize.y) {
+		NowCameraPos.y = (map.mapSize.y * map.DrawSize.y) - NowCameraSize.y;
 	}
 	gameEngine->camera->SetPos(NowCameraPos);
 }

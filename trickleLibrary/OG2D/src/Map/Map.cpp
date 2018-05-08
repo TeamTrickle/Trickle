@@ -1,9 +1,9 @@
 #include "Map.h"
 Map::Map()
 {
-	this->chip.resize(15);
-	this->chipimgname = "prototype.png";
-	this->chipsize = { 32,32 };
+	this->chip.resize(30);
+	this->chipimgname = "mapchip2.png";
+	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
 }
 
@@ -33,7 +33,7 @@ bool Map::LoadMap(std::string path_, Format format)
 	//_isに入っている文字列から','までの文字をtextにいれる
 	std::getline(_is, text, ',');
 	//textのデータを変数にいれる
-	(std::stringstream)text >> this->mapSize.x;
+ 	(std::stringstream)text >> this->mapSize.x;
 	std::getline(_is, text, ',');
 	(std::stringstream)text >> this->mapSize.y;
 	//_arrをmapyのサイズ分にサイズを変更する(配列化)
@@ -58,12 +58,12 @@ bool Map::LoadMap(std::string path_, Format format)
 	ifs.close();
 	//画像読み込み
 	this->mapimg.TextureCreate(chipimgname);
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < chip.size(); ++i)
 	{
 		//元画像チップの描画範囲の指定
 		int x = (i % 20);
 		int y = (i / 20);
-		this->chip[i] = Box2D(x*32.f, y * 32.f, 32.f, 32.f);
+		this->chip[i] = Box2D(x*chipsize.x, y * chipsize.y, chipsize.x, chipsize.y);
 		this->chip[i].OffsetSize();
 	}
 	for (int y = 0; y < this->mapSize.y; ++y)
@@ -75,30 +75,43 @@ bool Map::LoadMap(std::string path_, Format format)
 			switch (this->_arr[y][x])
 			{
 			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
 				//床
 				this->hitBase[y][x].objectTag = "Floor";
 				break;
-			case 2:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
 				this->hitBase[y][x].objectTag = "Net";
 				break;
-			case 3:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 4:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 6:
+				//case 3:
+				//	this->hitBase[y][x].objectTag = "Net";
+				//	break;
+				//case 4:
+				//	this->hitBase[y][x].objectTag = "Net";
+				//	break;
+			case 18:
+			case 19:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
-			case 7:
+			case 21:
+			case 22:
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
-			case 8:
-				this->hitBase[y][x].objectTag = "Ladder";
-				break;
-			case 9:
+				//case 8:
+				//	this->hitBase[y][x].objectTag = "Ladder";
+				//	break;
+				//case 9:
 				//this->hitBase[y][x].objectTag = "Switch";
-				break;
+				//break;
 			default:
 				break;
 			}
@@ -211,30 +224,43 @@ bool Map::LoadMap(std::string _path)
 			switch (this->_arr[y][x])
 			{
 			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
 				//床
 				this->hitBase[y][x].objectTag = "Floor";
 				break;
-			case 2:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
 				this->hitBase[y][x].objectTag = "Net";
 				break;
-			case 3:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 4:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			case 6:
+			//case 3:
+			//	this->hitBase[y][x].objectTag = "Net";
+			//	break;
+			//case 4:
+			//	this->hitBase[y][x].objectTag = "Net";
+			//	break;
+			case 18:
+			case 19:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
-			case 7:
+			case 21:
+			case 22:
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
-			case 8:
-				this->hitBase[y][x].objectTag = "Ladder";
-				break;
-			case 9:
+			//case 8:
+			//	this->hitBase[y][x].objectTag = "Ladder";
+			//	break;
+			//case 9:
 				//this->hitBase[y][x].objectTag = "Switch";
-				break;
+				//break;
 			default:
 				break;
 			}
@@ -247,13 +273,16 @@ bool Map::LoadMap(std::string _path)
 
 void Map::MapRender()
 {
-	for (int y = 0; y < this->mapSize.y; ++y)
+ 	for  (int y = 0; y < this->mapSize.y; ++y)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 			draw.OffsetSize();
 			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+			if (this->_arr[y][x] != 0) {
+				this->hitBase[y][x].LineDraw();
+			}
 		}
 	}
 }
@@ -262,7 +291,7 @@ void Map::Finalize()
 {
 	this->_arr.clear();
 	this->hitBase.clear();
-	this->chip.clear();
+	//this->chip.clear();
 	mapimg.Finalize();
 }
 
@@ -273,7 +302,7 @@ bool Map::MapHitCheck(Object &p)
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0) {
+			if (this->_arr[y][x] != 0 && this->_arr[y][x] != 10 && this->_arr[y][x] != 12 && this->_arr[y][x] != 13) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;
