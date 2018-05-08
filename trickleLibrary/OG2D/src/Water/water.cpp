@@ -91,7 +91,10 @@ void Water::Update()
 			}
 			else
 			{
-				this->nowTime++;
+				if (this->GetMove().x == 0 && this->GetMove().y == 0)
+				{
+					this->nowTime++;
+				}
 			}
 			//ÃŽ~ŽžŠÔ‚ª‰J‚ð~‚ç‚·ŽžŠÔ•ª‚ð’´‚¦‚½‚Æ‚«
 			if (this->RAIN_TIME < this->nowTime)
@@ -522,4 +525,14 @@ bool Water::SetColor(Color& color)
 Color Water::GetColor() const
 {
 	return this->color;
+}
+
+void Water::MovePos(Vec2& est)
+{
+	this->move += est;
+}
+
+Vec2 Water::GetMove() const
+{
+	return this->move;
 }
