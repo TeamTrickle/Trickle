@@ -8,7 +8,7 @@ void StreamingSound::queueStream(Audio::StreamWav& stream, Audio::Source& source
 	buffer.Bind(stream.isStereo(), &sound_buffer[0], static_cast<u_int>(length), stream.sampleRate());
 	source.queueBuffer(buffer);
 }
-void StreamingSound::streamProc(const std::string path, const bool loop, std::shared_ptr<Audio::Source> source, std::shared_ptr<Param> param)
+void StreamingSound::streamProc(const std::string& path, const bool loop, std::shared_ptr<Audio::Source>& source, std::shared_ptr<Param>& param)
 {
 	Audio::StreamWav stream(path);
 	stream.loop(loop);

@@ -10,6 +10,7 @@ public:
 	bool Create(Vec2, Vec2);		//座標値　当たり判定サイズ
 	void CheckHit();				//当たり判定
 	void Set_pointa();				//水の当たり判定を登録する
+	void Set_pointa(Water*);		//
 	Object hitBace;
 private:
 	bool Initital;					//1度初期化処理をしているかどうか・・・

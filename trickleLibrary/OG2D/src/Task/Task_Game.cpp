@@ -72,9 +72,9 @@ void Game::Initialize()
 		break;
 	}
 	//水初期処理
-	this->waterTex.TextureCreate("watertest.png");
+	this->waterTex.TextureCreate((std::string)"watertest.png");
 	//プレイヤー初期処理
-	this->playerTex.TextureCreate("player.png");
+	this->playerTex.TextureCreate((std::string)"player2.png");
 	player.Initialize();
 	this->player.SetTexture(&this->playerTex);
 	for (int y = 0; y < map.mapSize.y; ++y)
@@ -103,7 +103,7 @@ void Game::Initialize()
 	float fanrange[2] = { 18,6 };
 	for (int i = 0; i < 2; ++i) {
 		swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
-		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
+		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : true);
 		cm.AddChild(&swich[i]);
 		cm.AddChild(&fan[i]);
 	}
@@ -113,23 +113,26 @@ void Game::Initialize()
 	}
 	swich[0].ON_OFF();
 
+	gameprocess.Set_Goal(&goal);
+	gameprocess.Initialize();
+
 	for (int i = 0; i < 2; ++i)
 	{
 		cm.AddChild(&seihyouki[i].hitBace);
 	}
-	for (int i = 0; i < 2; ++i)
-	{
-		if (seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 10), Vec2(64, 64)))
-		{
-			seihyouki[i].Set_pointa();
-		}
-	}
-
-	gameprocess.Set_Goal(&goal);
-	gameprocess.Initialize();
-
 	//水出現処理
 	auto w = new Water(Vec2(150, 100));
+	for (int i = 0; i < 2; ++i)
+	{
+		if (seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 11), Vec2(64, 64)))
+		{
+			seihyouki[i].Set_pointa(w);
+		}
+	}
+	if (kanetuki.Create(Vec2(18* 64, 15 * 64), Vec2(64 * 2, 64 * 2)))
+	{
+		kanetuki.Set_pointa(w);
+	}
 	w->SetTexture(&this->waterTex);
 	for (int y = 0; y < map.mapSize.y; ++y)
 	{
@@ -156,6 +159,11 @@ void Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
+	for (int i = 0; i < 2; ++i)
+	{
+		seihyouki[i].CheckHit();
+	}
+	kanetuki.CheckHit();
 	gameprocess.Update();
 	
 	timecnt++;
@@ -164,6 +172,11 @@ TaskFlag Game::Update()
 		timecnt = 0;
 		//Water出現処理
 		auto w = new Water(Vec2(150, 100));
+		for (int i = 0; i < 2; ++i)
+		{
+			seihyouki[i].Set_pointa(w);
+		}
+		kanetuki.Set_pointa(w);
 		w->SetTexture(&this->waterTex);
 		for (int y = 0; y < map.mapSize.y; ++y)
 		{

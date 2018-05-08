@@ -35,6 +35,7 @@ class Player :public Object
 	enum Motion
 	{
 		Normal,		//通常
+		Walk,
 		Jump,		//ジャンプ
 		Ladder,		//はしご
 		Fall,		//落下
@@ -45,6 +46,8 @@ class Player :public Object
 		Vec2 animationVec;										//移動量
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
+		int timeCnt;											//アニメーション経過時間
+		//int idle[10];											//Normal状態のアニメーション
 	public:
 		void SetAnimaVec(Vec2 start_, Vec2 end_);				//開始位置と終了位置を登録
 		void Initialize();										//初期化
@@ -52,7 +55,7 @@ class Player :public Object
 		bool isMove();											//移動処理中かどうかを返す
 	};
 private:
-	const float MOVE_SPEED = 15.f;								//移動スピード
+	const float MOVE_SPEED = 10.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float MAX_FALL = 10.f;								//落下最大速度
 	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;		//重力加速度

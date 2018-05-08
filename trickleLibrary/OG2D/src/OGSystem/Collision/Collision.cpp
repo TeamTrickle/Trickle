@@ -3,7 +3,7 @@
 //@:Collisionclass									
 //--------------------------------------------------
 //長方形×長方形
-bool CollisionBox::hitBox(CollisionBox b)
+bool CollisionBox::hitBox(CollisionBox& b)
 {
 	//頂点情報のセット
 	Vec2 _ver[4] = {
@@ -31,6 +31,7 @@ bool CollisionBox::hitBox(CollisionBox b)
 			return true;
 		}
 	}
+	//相手オブジェクト目線でも同じく処理を行う
 	for (int i = 0; i < 4; ++i) {
 		if ((((_ver[1].x - _ver[0].x)*(_v[i].y - _ver[0].y)) - ((_v[i].x - _ver[0].x)*(_ver[1].y - _ver[0].y))) >= 0 &&
 			(((_ver[2].x - _ver[1].x)*(_v[i].y - _ver[1].y)) - ((_v[i].x - _ver[1].x)*(_ver[2].y - _ver[1].y))) >= 0 &&
@@ -43,7 +44,7 @@ bool CollisionBox::hitBox(CollisionBox b)
 	return false;
 }
 //長方形×円
-bool CollisionBox::hitCircle(CollisionCircle b)
+bool CollisionBox::hitCircle(CollisionCircle& b)
 {
 	//頂点情報のセット
 	Vec2 _ver[1] = {
@@ -73,7 +74,7 @@ bool CollisionBox::hitCircle(CollisionCircle b)
 	return false;
 }
 //円×長方形
-bool CollisionCircle::hitBox(CollisionBox b)
+bool CollisionCircle::hitBox(CollisionBox& b)
 {
 	//頂点情報のセット
 	Vec2 _ver[1] = {
@@ -103,7 +104,7 @@ bool CollisionCircle::hitBox(CollisionBox b)
 	return false;
 }
 //円×円
-bool CollisionCircle::hitCircle(CollisionCircle b)
+bool CollisionCircle::hitCircle(CollisionCircle& b)
 {
 	//円の範囲内に相手の円の範囲が存在する場合TRUEを返す
 	if (((b.hitBase.CenterX - this->hitBase.CenterX)*

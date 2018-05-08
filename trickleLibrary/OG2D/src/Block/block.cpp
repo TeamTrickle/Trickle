@@ -32,7 +32,7 @@ bool Block::Initialize(Vec2 pos) {
 
 	};
 
-	tex.TextureCreate("Collision.png");
+	tex.TextureCreate((std::string)"Collision.png");
 
 	return true;
 }

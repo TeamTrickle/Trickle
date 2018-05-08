@@ -271,10 +271,6 @@ Input::Mouse Input::initMouse()
 	mouse_.isPresent = true;
 	return mouse_;
 }
-Input::Mouse::~Mouse()
-{
-
-}
 void Input::Mouse::SetWindow(GLFWwindow* w)
 {
 	this->nowWindow = w;
