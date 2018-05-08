@@ -8,53 +8,51 @@ Seihyouki::~Seihyouki()
 {
 
 }
-bool Seihyouki::Create(Vec2 pos, Vec2 scale)
+void Seihyouki::Create(Vec2 pos, Vec2 scale)
 {
 	movetime = 0;
 	hitBace.CreateObject(Cube, pos, scale, 0);
-	return true;
 }
-void Seihyouki::Set_pointa()
+void Seihyouki::SetWaterPool(std::vector<Water*>*w)
 {
-	hitBace.CollisionProcess = [&](const Object& obj)
-	{
-		if (obj.objectTag == "Water")
-		{
-			w_vec.push_back(const_cast<Water*>(((Water*)&obj)));
-		}
-	};
+	water = w;
 }
-void Seihyouki::Set_pointa(Water* w)
+void Seihyouki::UpDate()
 {
-	w_vec.push_back(w);
-}
-void Seihyouki::CheckHit()	//“®‚¢‚Ä‚¢‚é
-{
-	for (auto w : w_vec)
+	for (auto& w : *water)
 	{
 		if (w->hit(hitBace))
 		{
-			switch (w->GetState())
+			toIce(w);
+		}
+	}
+}
+void Seihyouki::toIce(Water* obj)
+{
+	if (obj->GetState() == Water::State::SOLID)
+	{
+		while (true)
+		{
+			movetime++;
+			if (movetime >= movetime_ice)
 			{
-			case Water::State::GAS://ƒKƒX‚Ìê‡
-				movetime++;
-				if (movetime >= movetime_ice)
-				{
-					w->SetState(Water::State::LIQUID);
-					movetime = 0;
-				}
-				break;
-			case Water::State::LIQUID://‰t‘Ì‚Ìê‡
-				movetime++;
-				if (movetime >= movetime_ice)
-				{
-					w->SetState(Water::State::SOLID);
-					movetime = 0;
-				}
-				break;
-			case Water::State::SOLID://ŒÂ‘Ì‚Ìê‡
+				obj->SetState(Water::State::LIQUID);
+				movetime = 0;
 				break;
 			}
 		}
 	}
-};
+	if (obj->GetState() == Water::State::LIQUID)
+	{
+		while (true)
+		{
+			movetime++;
+			if (movetime >= movetime_ice)
+			{
+				obj->SetState(Water::State::SOLID);
+				movetime = 0;
+				break;
+			}
+		}
+	}
+}

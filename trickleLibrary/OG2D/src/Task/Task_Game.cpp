@@ -71,6 +71,16 @@ void Game::Initialize()
 		swich[i].SetTarget(&fan[0]);
 		swich[i].SetTarget(&fan[1]);
 	}
+
+	//ギミックの初期化をします
+	for (int i = 0; i < 2; ++i)
+	{
+		seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 11), Vec2(64, 64));
+		seihyouki[i].SetWaterPool(&water);
+	}
+	kanetuki.Create(Vec2(18 * 64, 15 * 64), Vec2(64 * 2, 64 * 2));
+	kanetuki.SetWaterPool(&water);
+
 	swich[0].ON_OFF();
 
 	gameprocess.Set_Goal(&goal);
@@ -82,17 +92,9 @@ void Game::Initialize()
 	}
 	//水出現処理
 	auto w = new Water(Vec2(150, 100));
-	for (int i = 0; i < 2; ++i)
-	{
-		if (seihyouki[i].Create(Vec2(64 * 6 + i * 64, 64 * 11), Vec2(64, 64)))
-		{
-			seihyouki[i].Set_pointa(w);
-		}
-	}
-	if (kanetuki.Create(Vec2(18* 64, 15 * 64), Vec2(64 * 2, 64 * 2)))
-	{
-		kanetuki.Set_pointa(w);
-	}
+
+	
+
 	w->SetTexture(&this->waterTex);
 	for (int y = 0; y < map.mapSize.y; ++y)
 	{
@@ -119,11 +121,13 @@ void Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
+	//ギミックの更新
+	kanetuki.Update();
 	for (int i = 0; i < 2; ++i)
 	{
-		seihyouki[i].CheckHit();
+		seihyouki[i].UpDate();
 	}
-	kanetuki.CheckHit();
+
 	gameprocess.Update();
 	
 	timecnt++;
@@ -132,11 +136,6 @@ TaskFlag Game::Update()
 		timecnt = 0;
 		//Water出現処理
 		auto w = new Water(Vec2(150, 100));
-		for (int i = 0; i < 2; ++i)
-		{
-			seihyouki[i].Set_pointa(w);
-		}
-		kanetuki.Set_pointa(w);
 		w->SetTexture(&this->waterTex);
 		for (int y = 0; y < map.mapSize.y; ++y)
 		{
@@ -160,6 +159,8 @@ TaskFlag Game::Update()
 		player.AddWater(w);
 		//cm.AddChild(water[water.size() - 1]);
 	}
+
+	
 
 	
 //-------------------------------------------------------------------------------------------------
@@ -255,11 +256,6 @@ TaskFlag Game::Update()
 	bucket.Update(map, bucket);
 	
 	block.PlCheckHit(player, block);
-	
-	for (int i = 0; i < 2; ++i)
-	{
-		seihyouki[i].CheckHit();
-	}
 
 	cm.Run();
 	if (gameEngine->in.key.on(Input::KeyBoard::A))
