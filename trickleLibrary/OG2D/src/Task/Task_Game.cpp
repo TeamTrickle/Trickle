@@ -87,6 +87,13 @@ void Game::Initialize()
 		break;
 	case 4:
 		map.LoadMap("tutorial4.csv", Format::csv);
+		kanetuki.Create(Vec2(16 * 64, 18 * 64), Vec2(64, 64));
+		kanetuki.SetWaterPool(&water);
+		for (int i = 0; i < 2; ++i)
+		{
+			seihyouki[i].Create(Vec2(4 * 64, 11 * 64), Vec2(64,64));
+			seihyouki[i].SetWaterPool(&water);
+		}
 		break;
 	case 5:
 		map.LoadMap("stage1.csv", Format::csv);
@@ -328,6 +335,8 @@ TaskFlag Game::Update()
 		kanetuki.Update();
 		break;
 	case 4:
+		kanetuki.Update();
+		seihyouki[0].UpDate();
 		break;
 	case 5:
 		//ギミックの更新
