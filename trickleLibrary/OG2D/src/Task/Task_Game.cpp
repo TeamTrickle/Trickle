@@ -63,7 +63,7 @@ void Game::Initialize()
 	float fanrange[2] = { 18,6 };
 	for (int i = 0; i < 2; ++i) {
 		swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
-		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : false);
+		fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, (i == 0) ? true : true);
 		cm.AddChild(&swich[i]);
 		cm.AddChild(&fan[i]);
 	}
@@ -80,10 +80,6 @@ void Game::Initialize()
 	{
 		cm.AddChild(&seihyouki[i].hitBace);
 	}
-	for (int i = 0; i < 2; ++i)
-	{
-		cm.AddChild(&kanetuki[i].hitBace);
-	}
 	//…oŒ»ˆ—
 	auto w = new Water(Vec2(150, 100));
 	for (int i = 0; i < 2; ++i)
@@ -93,12 +89,9 @@ void Game::Initialize()
 			seihyouki[i].Set_pointa(w);
 		}
 	}
-	for (int i = 0; i < 2; ++i)
+	if (kanetuki.Create(Vec2(18* 64, 15 * 64), Vec2(64 * 2, 64 * 2)))
 	{
-		if (kanetuki[i].Create(Vec2(64 * 18 + i * 64, 64 * 16), Vec2(64, 64)))
-		{
-			kanetuki[i].Set_pointa(w);
-		}
+		kanetuki.Set_pointa(w);
 	}
 	w->SetTexture(&this->waterTex);
 	for (int y = 0; y < map.mapSize.y; ++y)
@@ -129,8 +122,8 @@ TaskFlag Game::Update()
 	for (int i = 0; i < 2; ++i)
 	{
 		seihyouki[i].CheckHit();
-		kanetuki[i].CheckHit();
 	}
+	kanetuki.CheckHit();
 	gameprocess.Update();
 	
 	timecnt++;
@@ -142,8 +135,8 @@ TaskFlag Game::Update()
 		for (int i = 0; i < 2; ++i)
 		{
 			seihyouki[i].Set_pointa(w);
-			kanetuki[i].Set_pointa(w);
 		}
+		kanetuki.Set_pointa(w);
 		w->SetTexture(&this->waterTex);
 		for (int y = 0; y < map.mapSize.y; ++y)
 		{

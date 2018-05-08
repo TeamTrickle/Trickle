@@ -21,7 +21,6 @@
 
 #include "GameProcessManagement\GameProcessManagement.h"
 
-
 class Game
 {
 public:
@@ -42,7 +41,6 @@ public:
 	CollisionManager cm;
 	int timecnt;
 	Goal goal;
-
 private:
 	//---------------------------------------------------------------------
 	//ƒƒ“ƒo[ŠÖ”
@@ -56,7 +54,7 @@ private:
 
 	GameProcessManagement gameprocess;
 	Seihyouki seihyouki[2];
-	Kanetuki kanetuki[2];
+	Kanetuki kanetuki;
 
 	Texture waterTex;
 	Texture playerTex;
