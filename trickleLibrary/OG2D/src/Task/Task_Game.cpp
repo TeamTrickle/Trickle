@@ -76,6 +76,8 @@ void Game::Initialize()
 		break;
 	case 3:
 		map.LoadMap("tutorial3.csv", Format::csv);
+		kanetuki.Create(Vec2(64 * 12, 64 * 10), Vec2(64, 64));
+		kanetuki.SetWaterPool(&water);		
 		//switchui;
 		//switchui.SetPlayerPtr(&player);
 		//evaporationui;
@@ -323,6 +325,7 @@ TaskFlag Game::Update()
 	case 3:
 		switchui.Update();
 		evaporationui.Update();
+		kanetuki.Update();
 		break;
 	case 4:
 		break;

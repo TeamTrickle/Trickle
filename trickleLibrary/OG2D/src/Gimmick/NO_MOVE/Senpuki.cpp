@@ -52,7 +52,7 @@ void Fan::Motion(Water* w)
 	{
 		if (w->GetState() == Water::State::GAS)
 		{
-			w->position.x += strength;
+			w->position.x += strength; // Left -1 Right 1
 		}
 	}
 }
