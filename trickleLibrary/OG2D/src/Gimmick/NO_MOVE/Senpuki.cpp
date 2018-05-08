@@ -1,7 +1,6 @@
 #include "Senpuki.h"
 using namespace std;
 
-//‰¡“c‚³‚ñ•—
 Fan::Fan()
 {
 
@@ -50,7 +49,7 @@ void Fan::UpDate()
 void Fan::Motion(Water* w)
 {
 	if (active)
-	{//…ö‹C‚È‚ç
+	{
 		if (w->GetState() == Water::State::GAS)
 		{
 			w->position.x += strength;

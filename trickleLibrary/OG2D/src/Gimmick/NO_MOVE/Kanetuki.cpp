@@ -34,7 +34,6 @@ void Kanetuki::toSteam(Water* obj)
 {
 	if (obj->GetState() == Water::State::LIQUID)
 	{
-		cout << "ÚG’†" << endl;
 		while (true)
 		{
 			bool flag = false;
