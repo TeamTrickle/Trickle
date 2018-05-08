@@ -91,6 +91,7 @@ public:
 	Player();													//コンストラクタ
 	~Player();													//デストラクタ
 	void Initialize();											//初期化
+	void Initialize(Vec2&);										//位置設定初期化
 	void Update();												//更新処理
 	void Render();												//描画処理
 	void Finalize();											//解放処理
