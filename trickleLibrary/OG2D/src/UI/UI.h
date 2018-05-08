@@ -13,9 +13,10 @@ class UI :public Object {
 	int num;		//画像分割数
 	int life;		//寿命
 	bool active;	//生死
-	bool visible;	//可視不可視
+	//bool visible;	//可視不可視
 	std::vector<Box2D> srcTable;
 	Object* player;
+	int appeared;	//初期：-1、一度プレイヤと接触したら0、出たら1
 
 public:
 	UI();
@@ -28,8 +29,8 @@ public:
 	void Render();
 	void Finalize();
 
-	void Appear();
-	void Vanish();
-	bool CheckHitPlayer();
+	//void Appear();
+	//void Vanish();
+	//bool CheckHitPlayer();
 	void SetPlayerPtr(Object* pl);
 };

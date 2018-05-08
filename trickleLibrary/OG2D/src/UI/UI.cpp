@@ -13,7 +13,7 @@ void UI::Initialize(Vec2 renderPos, Box2D coll, std::string path, int life, int 
 	this->num = num;
 	this->life = life;
 	active = false;
-	visible = true;
+	appeared = -1;
 	srcTable.resize(num);
 	for (int i = 0; i < num; ++i) {
 		srcTable[i] = Box2D(256 * i, 0, 256, 256);
@@ -26,33 +26,48 @@ void UI::Initialize(Vec2 renderPos, Box2D coll, std::string path, int life, int 
 	//	if (o_.objectTag == "Player") {
 	//		this->isCollided = true;
 	//		active = true;
-	//		visible = true;
+	//		appeared = 0;
+	//		//visible = true;
+	//		std::cout << "HitUI" << std::endl;
 	//	}
 	//};
 	//Object::CollisionOut = [&](const Object& o_) {
 	//	if (o_.objectTag == "Player") {
 	//		this->isCollided = false;
-	//		visible = false;
+	//		//visible = false;
+	//		std::cout << "OffUI" << std::endl;
 	//	}
 	//};
+	//Object::CollisionProcess = [&](const Object& o_) {
+	//	if (o_.objectTag == "Player") {
+	//		this->isCollided = false;
+	//		//visible = false;
+	//		std::cout << "ProcessUI" << std::endl;
+	//	}
+	//};
+
 }
 
 void UI::Update() {
 	counter++;
+	//‰æ‘œsrc”ÍˆÍ•ÏX
 	if (counter % 30 == 0) {
 		index++;
 	}
 	if (index >= num) {
 		index = 0;
 	}
+	//Žõ–½‚ÅŽ€‚Ê
 	if (counter >= life) {
 		active = false;
 	}
-	if (hit(*player)) {
-		visible = true;
+	//ƒvƒŒƒCƒ„‚ª”ÍˆÍ“à‚É“ü‚Á‚½‚ç
+	if (hit(*player) && appeared == -1) {
+		active = true;
+		appeared = 0;
 	}
-	else {
-		visible = false;
+	if (!this->hit(*player) && appeared == 0) {
+		appeared = 1;
 	}
 }
 
@@ -61,7 +76,8 @@ void UI::Move(Vec2 pos) {
 }
 
 void UI::Render() {
-	if (!active || !visible) { return; }
+	Object::LineDraw();
+	if (!active || appeared == 1) { return; }
 	Box2D draw(pos.x, pos.y, 128.f, 128.f);
 	draw.OffsetSize();
 	tex.Draw(draw, srcTable[index]);
@@ -71,19 +87,19 @@ void UI::Finalize() {
 	tex.Finalize();
 }
 
-void UI::Appear() {
-	if (isCollided) {
-		active = true;
-	}
-}
-void UI::Vanish() {
-	if (!isCollided) {
-		active = false;
-	}
-}
-bool UI::CheckHitPlayer() {
-	return false;
-}
+//void UI::Appear() {
+//	if (isCollided) {
+//		active = true;
+//	}
+//}
+//void UI::Vanish() {
+//	if (!isCollided) {
+//		active = false;
+//	}
+//}
+//bool UI::CheckHitPlayer() {
+//	return false;
+//}
 void UI::SetPlayerPtr(Object* pl) {
 	this->player = pl;
 }
