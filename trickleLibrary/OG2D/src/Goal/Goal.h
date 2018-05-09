@@ -12,12 +12,16 @@ public:
 	virtual ~Goal();
 
 	bool Initialize();
+	bool Initialize(Vec2&);
 	void Update();
 	void Render();
 	void Finalize();
 
 	bool cleared;
-
+	std::vector<Water*> waters;
+	void AddWater(Water*);
+	bool DeleteWater(Water*);
+	bool ClearCheck(Water&);
 	Texture tex;
 };
 

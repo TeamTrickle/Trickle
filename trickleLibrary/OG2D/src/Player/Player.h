@@ -56,6 +56,7 @@ class Player :public Object
 	};
 private:
 	const float MOVE_SPEED = 5.f;								//移動スピード
+	//const float JUMP_POWER = -30.f;							//ジャンプパワー(test)
 	const float JUMP_POWER = -13.f;								//ジャンプパワー
 	const float MAX_FALL = 15.f;								//落下最大速度
 	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 10;		//重力加速度

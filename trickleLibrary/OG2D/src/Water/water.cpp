@@ -18,7 +18,7 @@ Water::Water(Vec2 pos)
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, this->minSize, 0.f);
 	//デバッグ用位置調整
-	//this->position = { 1186,800 };
+	//this->position = { 28 * 64 + 32, 12 * 64 };
 	//テクスチャの読み込み
 	//tex.TextureCreate("watertest.png");
 	//衝突判定の初期化
@@ -83,7 +83,7 @@ void Water::Update()
 		case Water::Situation::Normal:
 			this->objectTag = "GAS";
 			//水蒸気処理
-			this->Scale = { this->maxSize.x,this->maxSize.y };
+			this->Scale = this->maxSize;
 			if (!this->HeadCheck((std::string)"Floor"))
 			{
 				this->move.y -= 3.0f;
@@ -112,6 +112,12 @@ void Water::Update()
 			this->currentState = State::LIQUID;
 			this->Scale = this->minSize;
 			this->setTime = 0;
+			break;
+		case Water::Situation::Newfrom:
+			this->nowSituation = Water::Situation::Normal;
+			break;
+		case Water::Situation::Deleteform:
+			this->nowSituation = Water::Situation::Normal;
 			break;
 		}
 		break;

@@ -53,7 +53,7 @@ public:
 
 	void SetSituation(const Situation&);
 	Situation GetSituation() const;
-	Vec2 MoveSolid(Vec2&);
+	//Vec2 MoveSolid(Vec2&);									//•X‚ğ‰Ÿ‚µo‚·ˆ—(–¢À‘•)
 
 	//…—Ê‚ÌˆÚ“®
 	float waterMove();

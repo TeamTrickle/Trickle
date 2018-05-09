@@ -10,6 +10,10 @@ void StageSelect::Initialize()
 	stage2Pos = Vec2(700.0f, 300.0f);
 	toTitlePos = Vec2(700.0f, 400.0f);
 
+	Vec2 kari = toTitlePos;
+	toTitlePos = stage2Pos;
+	stage2Pos = kari;
+
 	texBack.TextureCreate("back.png");
 	texCursor.TextureCreate("Collision.png");
 	texTutorial.TextureCreate("tutorial.png");
@@ -27,11 +31,12 @@ TaskFlag StageSelect::UpDate()
 	{
 		switch (state) {
 		case Tutorial:
-			*MapNum = 1;	break;
+			*MapNum = 3;	break;
 		case Stage1:
 			*MapNum = 5;	break;
 		case Stage2:	//未実装
 			//*MapNum = 6;	break;
+			break;
 		default:
 			*MapNum = 0;	break;
 		}
@@ -76,11 +81,11 @@ void StageSelect::Render()
 	}
 	//ステージ２
 	{
-		Box2D draw(stage2Pos.x, stage2Pos.y, 256.0f, 64.0f);
+		/*Box2D draw(stage2Pos.x, stage2Pos.y, 256.0f, 64.0f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 256);
 		src.OffsetSize();
-		texStage2.Draw(draw, src);
+		texStage2.Draw(draw, src);*/
 	}
 	//タイトルに戻る
 	{

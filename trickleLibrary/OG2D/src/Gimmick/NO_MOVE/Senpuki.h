@@ -36,6 +36,7 @@ public:
 	void Finalize();
 	void Render();
 	void SetTexture(Texture*);
+	void SetWindRange(Vec2&);
 
 	//Motion
 	void UpDate();

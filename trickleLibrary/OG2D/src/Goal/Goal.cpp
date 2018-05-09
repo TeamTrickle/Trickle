@@ -14,19 +14,28 @@ bool Goal::Initialize() {
 	tex.TextureCreate("goal.png");
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, Vec2(28 * 64, 14 * 64), Vec2(64, 64), 0.f);
-	Object::CollisionProcess = [&](const Object& o_) {
-		if (o_.objectTag == "Water") {
-			if (((Water&)o_).GetSituation() == Water::Situation::Normal && ((Water&)o_).GetState() == Water::State::LIQUID) {
-				((Water&)o_).SetSituation(Water::Situation::CreaDelete);
-				this->cleared = true;
-			}
-		}
-	};
 	return true;
 }
 
-void Goal::Update() {
+bool Goal::Initialize(Vec2& pos) {
+	cleared = false;
+	this->objectTag = "Goal";
+	//テクスチャの読み込み
+	tex.TextureCreate("goal.png");
+	//オブジェクトの生成
+	CreateObject(Objform::Cube, pos, Vec2(64, 64), 0.f);
+	return true;
+}
 
+void Goal::Update() 
+{
+	for (int i = 0; i < this->waters.size(); ++i)
+	{
+		if (this->ClearCheck(*waters[i]))
+		{
+			this->cleared = true;
+		}
+	}
 }
 
 void Goal::Render() {
@@ -43,6 +52,38 @@ void Goal::Render() {
 	tex.Draw(draw, src);
 }
 
-void Goal::Finalize() {
+void Goal::Finalize() 
+{
 	tex.Finalize();
+	this->waters.clear();
+}
+
+void Goal::AddWater(Water* o)
+{
+	this->waters.push_back(o);
+}
+
+bool Goal::DeleteWater(Water* o)
+{
+	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
+	{
+		if ((*id) == o)
+		{
+			this->waters.erase(id);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Goal::ClearCheck(Water& o)
+{
+	if (this->hit(o))
+	{
+		if (o.GetSituation() == Water::Situation::Normal && o.GetState() == Water::State::LIQUID)
+		{
+			return true;
+		}
+	}
+	return false;
 }

@@ -34,14 +34,14 @@ public:
 	//™™™™//
 	Player player;
 	//std::vector<Bucket*> bucket;
-	Block block;
-	Bucket bucket;
+	std::vector<Block*> block;
+	std::vector<Bucket*> bucket;
 	Back back;
 	Map map;
 	std::vector<Water*> water;
 	CollisionManager cm;
 	int timecnt;
-	Goal goal;
+	std::vector<Goal*> goal;
 private:
 	//---------------------------------------------------------------------
 	//ƒƒ“ƒo[ŠÖ”
@@ -56,6 +56,7 @@ private:
 	GameProcessManagement gameprocess;
 	Seihyouki seihyouki[2];
 	Kanetuki kanetuki;
+	Vec2 _waterpos;
 
 	Texture waterTex;
 	Texture playerTex;

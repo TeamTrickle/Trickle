@@ -30,8 +30,8 @@ void Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
 	{
 		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = 3;
-		//this->WindHitBase.CreateObject(Cube, Vec2((pos.x + this->Scale.x), pos.y), Vec2(64 * 16, 64), 0.0f);
-		this->WindHitBase.CreateObject(Cube, Vec2(0,0), Vec2(0,0), 0.0f);
+		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * 16, 64), 0.0f);
+		//this->WindHitBase.CreateObject(Cube, Vec2(0,0), Vec2(0,0), 0.0f);
 	}
 }
 void Fan::SetWaterPool(Water* w)
@@ -83,6 +83,7 @@ void Fan::ChangeState()
 void Fan::Finalize() 
 {
 	switches.clear();
+	this->water.clear();
 }
 void Fan::Render()
 {
@@ -100,4 +101,9 @@ void Fan::Render()
 void Fan::SetTexture(Texture* tex)
 {
 	this->image = tex;
+}
+
+void Fan::SetWindRange(Vec2& b)
+{
+	this->WindHitBase.Scale = b;
 }

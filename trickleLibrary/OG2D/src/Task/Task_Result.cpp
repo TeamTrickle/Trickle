@@ -14,11 +14,12 @@ void Result::Initialize()
 {
 	Result_DataInput();
 	Flag_Judge();
+	this->image.TextureCreate((std::string)"outlook.png");
 }
 TaskFlag Result::Update()
 {
 	TaskFlag nowTask = TaskFlag::Task_Ruselt;
-	if (gameEngine->in.key.down(Input::KeyBoard::S))
+	if (gameEngine->in.down(In::B2))
 	{
 		nowTask = Task_Title;
 	}
@@ -26,9 +27,9 @@ TaskFlag Result::Update()
 }
 void Result::Render()
 {
-	Box2D draw(Vec2(0,0),Vec2(0,0));
+	Box2D draw(Vec2(0,0),gameEngine->window->GetSize());
 	draw.OffsetSize();
-	Box2D src(Vec2(0, 0), Vec2(0, 0));
+	Box2D src(Vec2(0, 0), Vec2(1280, 720));
 	src.OffsetSize();
 	image.Draw(draw, src);
 }
