@@ -78,8 +78,9 @@ void Player::Update()
 			//Œ³‚É–ß‚·
 			this->state = State::NORMAL;
 			//‚Á‚Ä‚¢‚é”»’è‚ğŒ³‚É–ß‚·
-			this->haveBucket->hold = false;
+			this->haveBucket->HoldCheck(false);
 			this->inv = 10;
+			this->haveBucket = nullptr;
 		}
 		break;
 	case State::NORMAL:
@@ -551,7 +552,7 @@ bool Player::BucketHit()
 	{
 		if (this->hit(*this->buckets[i]))
 		{
-			this->buckets[i]->hold = true;
+			this->buckets[i]->HoldCheck(true);
 			this->haveBucket = this->buckets[i];
 			return true;
 		}

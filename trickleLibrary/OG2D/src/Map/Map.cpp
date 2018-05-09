@@ -307,7 +307,8 @@ bool Map::MapHitCheck(Object &p)
 				this->_arr[y][x] != 12 && 
 				this->_arr[y][x] != 13 &&
 				this->_arr[y][x] != 21 && 
-				this->_arr[y][x] != 22) {
+				this->_arr[y][x] != 22 && 
+				this->_arr[y][x] != 20) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;

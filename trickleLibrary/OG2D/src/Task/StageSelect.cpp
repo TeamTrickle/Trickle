@@ -31,7 +31,16 @@ TaskFlag StageSelect::UpDate()
 	{
 		switch (state) {
 		case Tutorial:
-			*MapNum = 3;	break;
+			*MapNum = 3;	
+			if (gameEngine->in.on(In::SL))
+			{
+				*MapNum = 1;
+			}
+			if (gameEngine->in.on(In::SR))
+			{
+				*MapNum = 2;
+			}
+			break;
 		case Stage1:
 			*MapNum = 5;	break;
 		case Stage2:	//–¢ŽÀ‘•

@@ -144,3 +144,14 @@ bool Bucket::WaterHit(Water* water)
 {
 	return this->hit(*water);
 }
+
+void Bucket::HoldCheck(bool flag)
+{
+	this->hold = flag;
+}
+
+
+bool Bucket::GetHold() const
+{
+	return this->hold;
+}

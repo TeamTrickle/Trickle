@@ -261,7 +261,8 @@ void Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 TaskFlag Game::Update()
 {
-	
+
+	//std::cout << bucket[0]->GetHold() << bucket[1]->GetHold() << std::endl;
 
 	gameprocess.Update();
 	
@@ -303,13 +304,12 @@ TaskFlag Game::Update()
 		//cm.AddChild(water[water.size() - 1]);
 	}
 	
-
 	
 //-------------------------------------------------------------------------------------------------
 	if (gameEngine->in.down(Input::in::B3, 0)) {
 		//ƒoƒPƒc‚©‚ç…‚ª‚±‚Ú‚ê‚éˆ—
 		for (int i = 0; i < this->bucket.size(); ++i) {
-			if (bucket[i]->capacity > 0) {
+			if (bucket[i]->capacity > 0 && bucket[i]->hold) {
 				Water* sizuku = bucket[i]->Spill();
 				sizuku->SetTexture(&this->waterTex);
 				for (int y = 0; y < map.mapSize.y; ++y)
@@ -549,7 +549,7 @@ TaskFlag Game::Update()
 
 	TaskFlag nowtask = Task_Game;
 	nowtask = gameprocess.Goal_Event();
-	if (gameEngine->in.down(Input::in::D2, 0) && gameEngine->in.down(In::D1))
+	if (gameEngine->in.on(Input::in::D2, 0) && gameEngine->in.on(In::D1))
 	{
 		nowtask = Task_Title;
 	}

@@ -33,6 +33,8 @@ public:
 	void CheckMove(Vec2 &e_, Map &map, Bucket &bucket);
 
 	bool WaterHit(Water*);
+	void HoldCheck(bool = true);
+	bool GetHold() const;
 
 	/**
 	 * @brief	バケッツから水をこぼします
