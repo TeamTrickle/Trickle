@@ -6,14 +6,12 @@ class SoundManager
 public:
 	explicit SoundManager();				//コンストラクタ
 	~SoundManager();						//デストラクタ
-	typedef std::shared_ptr<SoundManager> SP;//スマートポインタ
-	static SP Create();						//スマートポインタを返す
 	void SetMaxVolume(const float value_);	//最大音量を登録する
 	float GetMaxVolume() const;				//最大音量を返す
 	void SetVolume(const Sound* s,			//選択されたSoundの音量を最大音量に適応した値に変える
 					const float value_);
 	void SetSound(Sound* s);				//Soundデータを登録する
-	bool DeleteSoundData(const Sound* s);	//Soundデータを破棄する
+	bool DeleteSound(const Sound* s);	//Soundデータを破棄する
 	void AllDelete();						//Soundデータを全削除する
 	void Application();						//最大音量を登録されているSoundすべてに適応させる
 private:

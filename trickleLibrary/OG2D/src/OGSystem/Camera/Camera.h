@@ -14,8 +14,6 @@ public:
 	void MoveSize(Vec2&);				//サイズを加算する
 	Vec2 GetPos() const;				//位置を返す
 	Vec2 GetSize() const;				//サイズを返す
-	typedef std::shared_ptr<Camera2D> SP;//スマートポインタの生成
-	static SP Create(Box2D&);			//スマートポインタを返す
 private:
 	Box2D cameraPos;					//実際位置
 	Vec2 position;						//位置

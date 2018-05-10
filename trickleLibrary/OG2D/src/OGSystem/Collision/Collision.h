@@ -1,6 +1,6 @@
 #pragma once
 #include "OGSystem\_OGsystem.h"
-#include "OGSystem\GameEngine\GameEngine.h"
+
 class CollisionBox;
 class CollisionCircle;
 class CollisionBox

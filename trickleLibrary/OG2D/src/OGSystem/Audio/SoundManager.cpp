@@ -19,7 +19,7 @@ void SoundManager::SetSound(Sound* s)
 {
 	sounddata.push_back(s);
 }
-bool SoundManager::DeleteSoundData(const Sound* s) 
+bool SoundManager::DeleteSound(const Sound* s) 
 {
 	for (auto id = sounddata.begin(); id != sounddata.end(); ++id)
 	{
@@ -39,14 +39,10 @@ SoundManager::~SoundManager()
 {
 	this->sounddata.clear();
 }
-SoundManager::SP SoundManager::Create()
-{
-	return SoundManager::SP(new SoundManager());
-}
 void SoundManager::Application()
 {
 	for (int i = 0; i < this->sounddata.size(); ++i)
 	{
-		this->sounddata[i]->volume(sounddata[i]->GetVolume() * this->GetMaxVolume());
+		this->sounddata[i]->volume(sounddata[i]->getVolume() * this->GetMaxVolume());
 	}
 }
