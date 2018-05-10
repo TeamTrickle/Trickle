@@ -1,12 +1,59 @@
 #include "Kanetuki.h"
 using namespace std;
-Kanetuki::Kanetuki()
-{
 
-}
-Kanetuki::~Kanetuki()
+//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+
+bool Kanetuki::Initialize()
 {
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
+
+	this->CreateObject(Cube, Vec2(100, 100), Vec2(128, 128), 0.0f);
+
+	return true;
+}
+void Kanetuki::UpDate()
+{
+	//--------------------
+	//更新時に行う処理を記述
+	//--------------------
+
+	//加熱器のMotion起動
+	for (auto& w : *water)
+	{
+		/*if (hitBace.hit(*w))
+		{
+			toSteam(w);
+		}*/
+	}
+}
+
+void Kanetuki::Render2D()
+{
+	//--------------------
+	//描画時に行う処理を記述
+	//--------------------
+	Box2D draw(this->position, this->Scale);
+	draw.OffsetSize();
 	
+}
+
+bool Kanetuki::Finalize()
+{
+	//-----------------------------------------
+	//このオブジェクトが消滅するときに行う処理を記述
+	//-----------------------------------------
+
+	//次のタスクを作るかかつアプリケーションが終了予定かどうか
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		//自分を消す場合はKillを使う
+		this->Kill();
+	}
+	return true;
 }
 void Kanetuki::Create(Vec2 pos, Vec2 scale)
 {
@@ -14,21 +61,9 @@ void Kanetuki::Create(Vec2 pos, Vec2 scale)
 	hitBace.CreateObject(Cube, pos, scale, 0);
 }
 
-void Kanetuki::SetWaterPool(std::vector<Water*>* w) 
+void Kanetuki::SetWaterPool(std::vector<Water*>* w)
 {
 	water = w;
-}
-
-void Kanetuki::Update() 
-{
-	//加熱器のMotion起動
-	for (auto& w : *water)
-	{
-		if (hitBace.hit(*w))
-		{
-			toSteam(w);
-		}
-	}
 }
 void Kanetuki::toSteam(Water* obj)
 {
@@ -68,4 +103,36 @@ void Kanetuki::toSteam(Water* obj)
 			}
 		}
 	}
+}
+//----------------------------
+//ここから下はclass名のみ変更する
+//ほかは変更しないこと
+//----------------------------
+Kanetuki::Kanetuki()
+{
+
+}
+
+Kanetuki::~Kanetuki()
+{
+	this->Finalize();
+}
+
+Kanetuki::SP Kanetuki::Create(bool flag_)
+{
+	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize())
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }
