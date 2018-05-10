@@ -114,13 +114,13 @@
     <Filter Include="ソースファイル\Task\UI">
       <UniqueIdentifier>{ed486ab6-cbaa-43d5-8a3f-8fa2f40002ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\OG">
+      <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
       <Filter>ソースファイル\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OGSystem\_OGsystem.cpp">
-      <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\Map.cpp">
       <Filter>ソースファイル\Map</Filter>
@@ -172,9 +172,6 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\Audio\StreamingSound.cpp">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OGSystem\OGsystem.cpp">
-      <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
@@ -237,22 +234,25 @@
     <ClCompile Include="src\UI\UI.cpp">
       <Filter>ソースファイル\Task\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\OGSystem\_OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGlib.cpp">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\TaskObject.cpp">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Win\WinMain.h">
-      <Filter>ソースファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\Object\Object.h">
       <Filter>ソースファイル\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\OGTask.h">
       <Filter>ソースファイル\OGSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OGSystem\OGsystem.h">
-      <Filter>ソースファイル\OGSystem\System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OGSystem\_OGsystem.h">
-      <Filter>ソースファイル\OGSystem\System</Filter>
     </ClInclude>
     <ClInclude Include="src\Map\Map.h">
       <Filter>ソースファイル\Map</Filter>
@@ -364,6 +364,18 @@
     </ClInclude>
     <ClInclude Include="src\UI\UI.h">
       <Filter>ソースファイル\Task\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\_OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGlib.h">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\TaskObject.h">
+      <Filter>ソースファイル\OGSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -174,9 +174,11 @@
     <ClCompile Include="src\OGSystem\Font\Font.cpp" />
     <ClCompile Include="src\OGSystem\FPS\FPS.cpp" />
     <ClCompile Include="src\OGSystem\Input\Input.cpp" />
+    <ClCompile Include="src\OGSystem\OGlib.cpp" />
     <ClCompile Include="src\OGSystem\OGsystem.cpp" />
     <ClCompile Include="src\OGSystem\OGTask.cpp" />
     <ClCompile Include="src\OGSystem\Random\Random.cpp" />
+    <ClCompile Include="src\OGSystem\TaskObject.cpp" />
     <ClCompile Include="src\OGSystem\Texture\Texture.cpp" />
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp" />
     <ClCompile Include="src\OGSystem\Window\Window.cpp" />
@@ -217,9 +219,11 @@
     <ClInclude Include="src\OGSystem\Font\Font.h" />
     <ClInclude Include="src\OGSystem\FPS\FPS.h" />
     <ClInclude Include="src\OGSystem\Input\Input.h" />
+    <ClInclude Include="src\OGSystem\OGlib.h" />
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
     <ClInclude Include="src\OGSystem\Random\Random.h" />
+    <ClInclude Include="src\OGSystem\TaskObject.h" />
     <ClInclude Include="src\OGSystem\Texture\Texture.h" />
     <ClInclude Include="src\OGSystem\Timer\glTimer.h" />
     <ClInclude Include="src\OGSystem\Window\Window.h" />
@@ -233,7 +237,6 @@
     <ClInclude Include="src\Task\Task_Title.h" />
     <ClInclude Include="src\UI\UI.h" />
     <ClInclude Include="src\Water\water.h" />
-    <ClInclude Include="src\Win\WinMain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
