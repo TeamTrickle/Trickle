@@ -8,7 +8,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
-	this->taskName = "";			//検索時に使うための名を登録する
+	this->taskName = "Senpuki";			//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
 	position = pos;

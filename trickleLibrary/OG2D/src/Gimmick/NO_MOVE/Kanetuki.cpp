@@ -8,7 +8,7 @@ bool Kanetuki::Initialize()
 	//-----------------------------
 	//¶¬Žž‚Éˆ—‚·‚é‰Šú‰»ˆ—‚ð‹Lq
 	//-----------------------------
-	this->taskName = "";			//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
+	this->taskName = "Kanetuki";			//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 
 	this->CreateObject(Cube, Vec2(100, 100), Vec2(128, 128), 0.0f);

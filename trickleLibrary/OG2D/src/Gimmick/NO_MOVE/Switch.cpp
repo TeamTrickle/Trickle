@@ -8,7 +8,7 @@ bool Switch::Initialize(Vec2 pos)
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
-	this->taskName = "";			//検索時に使うための名を登録する
+	this->taskName = "Switch";			//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
 									//座標の設定
