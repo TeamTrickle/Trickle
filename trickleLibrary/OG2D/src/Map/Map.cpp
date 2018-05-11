@@ -324,3 +324,22 @@ bool Map::MapHitCheck(GameObject &p)
 	}
 	return false;
 }
+
+Map::SP Map::Create(std::string& path, Format format, bool flag_)
+{
+	auto to = Map::SP(new Map());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->LoadMap(path, format))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
