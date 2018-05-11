@@ -1,5 +1,4 @@
-#ifndef __WATER_H__
-#define __WATER_H__
+#pragma once
 
 
 /**
@@ -13,7 +12,7 @@
 #include "Object\Object.h"
 #include <algorithm>
 
-class Water : public Object {
+class Water : public GameObject,public TaskObject {
 
 public:
 	enum class State : int {
@@ -36,9 +35,9 @@ public:
 	virtual ~Water();
 
 	bool Initialize();
-	void Update();
-	void Render();
-	void Finalize();
+	void UpDate();
+	void Render2D();
+	bool Finalize();
 
 	void SetTexture(Texture* texture);
 
@@ -59,8 +58,8 @@ public:
 	float waterMove();
 	//水量のチェック
 	float GetWaterVolume() const;
-	void AddObject(Object* obj_);								//オブジェクトを登録する
-	bool DeleteObject(Object* obj_);							//指定オブジェクトを登録から削除する
+	void AddGameObject(GameObject* obj_);								//オブジェクトを登録する
+	bool DeleteGameObject(GameObject* obj_);							//指定オブジェクトを登録から削除する
 	void AllDelete();											//全登録オブジェクトの削除
 	//色関連
 	bool SetColor(Color&);
@@ -72,6 +71,8 @@ public:
 	int invi;
 	//カウント時間
 	int nowTime;
+	typedef std::shared_ptr<Water> SP;
+	static SP Create(Vec2&, bool = true);
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
@@ -80,7 +81,7 @@ private:
 	const float FIN_SPEED = 0.5f;								//摩擦
 	const int RAIN_TIME = 180;
 	Texture* tex;
-	std::vector<Object*> mapObj;
+	std::vector<GameObject*> mapObj;
 	std::map<State, Box2D> drawRange;
 	State currentState;
 	Situation nowSituation;
@@ -92,8 +93,8 @@ private:
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();
-	void SetMapObject(Object* mapobj);
-	std::vector<Object*> objects;
+	void SetMapGameObject(GameObject* mapobj);
+	std::vector<GameObject*> GameObjects;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
 	void MoveWATERCheck(Vec2&);
@@ -101,4 +102,3 @@ private:
 	void MoveSOILDCheck(Vec2&);
 	bool HeadCheck(std::string&,int = 0);
 };
-#endif

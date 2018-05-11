@@ -151,10 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Back\Back.cpp" />
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\Bucket\bucket.cpp" />
-    <ClCompile Include="src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\Gimmick\MOVE\Container.cpp" />
@@ -195,10 +193,8 @@
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Back\Back.h" />
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />
-    <ClInclude Include="src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
     <ClInclude Include="src\Gimmick\MOVE\Container.h" />

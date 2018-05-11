@@ -4,11 +4,8 @@
 //|履歴：2018/03/20金子翔       |//
 //|履歴：2018/04/17劉韋君　    |//
 //|____________________________|//
-#include "Win\WinMain.h"
-#include "CollisionManager\CollisionManager.h"
 #include "OGSystem\OGsystem.h"
 #include "Player\Player.h"
-#include "Back\Back.h"
 #include "Map\Map.h"
 #include "Water\water.h"
 #include "Bucket\bucket.h"
@@ -19,16 +16,17 @@
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "UI\UI.h"
-
 #include "GameProcessManagement\GameProcessManagement.h"
 
-class Game
+class Game : public TaskObject
 {
 public:
-	void Initialize();
-	TaskFlag Update();
+	typedef std::shared_ptr<Game> SP;
+	static SP Create(bool = true);
+	bool Initialize();
+	void UpDate();
 	void Render2D();
-	void Finalize();
+	bool Finalize();
 	//☆☆☆☆//
 	//追加変数//
 	//☆☆☆☆//
@@ -36,10 +34,8 @@ public:
 	//std::vector<Bucket*> bucket;
 	std::vector<Block*> block;
 	std::vector<Bucket*> bucket;
-	Back back;
 	Map map;
 	std::vector<Water*> water;
-	CollisionManager cm;
 	int timecnt;
 	std::vector<Goal*> goal;
 private:

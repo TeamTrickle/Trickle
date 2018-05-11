@@ -103,10 +103,13 @@ public:
 	Color(const float r, const float g, const float b, const float a);
 	Color(const int r, const int g, const int b, const int a);
 	unsigned int Getcolor() const;
-	void Color::operator+=(Color& b);
-	void Color::operator*=(Color& b);
-	void Color::operator-=(Color& b);
-	void Color::operator=(Color& b);
+	void operator+=(Color& b);
+	void operator*=(Color& b);
+	void operator-=(Color& b);
+	//void operator=(Color& b);
+	Color operator+(Color&);
+	Color operator-(Color&);
+	Color operator*(Color&);
 };
 
 namespace OG
