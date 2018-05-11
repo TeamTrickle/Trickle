@@ -4,13 +4,14 @@
 //|履歴：2018/03/24金子翔       |//
 //|____________________________|//
 #include "Object\Object.h"
-
+#include "OGSystem\Texture\Texture.h"
+#include "OGSystem\OGsystem.h"
 enum Format
 {
 	csv,
 };
 
-class Map
+class Map : public TaskObject
 {
 public:
 	//描画するマップチップの数
@@ -20,7 +21,7 @@ public:
 	//元画像の画像位置
 	std::vector<Box2D> chip;
 	//オブジェクト情報
-	std::vector<std::vector<Object>> hitBase;
+	std::vector<std::vector<GameObject>> hitBase;
 	//使用画像情報
 	Texture mapimg;
 	//元画像の縦横サイズ
@@ -29,13 +30,16 @@ public:
 	Vec2 DrawSize;
 public:
 	Map();
-	bool LoadMap(std::string _path);
-	bool LoadMap(std::string _path, Format format);
-	void MapRender();
+	typedef std::shared_ptr<Map> SP;
+	static SP Create(std::string&, Format = csv, bool = true);
+	bool LoadMap(std::string& _path);
+	bool LoadMap(std::string& _path, Format format);
+	void UpDate();
+	void Render2D();
 	//void MapUpdate();
-	void Finalize();
+	bool Finalize();
 	//マップとの当たり判定
-	bool MapHitCheck(Object &p);
+	bool MapHitCheck(GameObject &p);
 private:
 	//ファイルパス
 	const std::string _FilePath = "./data/map/";

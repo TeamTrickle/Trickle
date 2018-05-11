@@ -41,17 +41,18 @@ void TaskFinalize()
 //------------------
 //‰Šú‰»
 //------------------
-void Initialize() 
+bool Initialize() 
 {
 	random::Init();
 	ogtk->StartTaskObject();
+	return true;
 }
 //------------------
 //‰ğ•ú
 //------------------
-void Finalize()
+bool Finalize()
 {
-	
+	return true;
 }
 //------------------
 //XV

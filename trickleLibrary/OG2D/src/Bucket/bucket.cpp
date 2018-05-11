@@ -3,7 +3,7 @@ Bucket::Bucket() {
 	
 }
 
-Bucket::Bucket(Vec2 pos) {
+Bucket::Bucket(Vec2& pos) {
 	this->position = pos;
 }
 
@@ -11,40 +11,29 @@ Bucket::~Bucket() {
 
 }
 
-bool Bucket::Initialize(Vec2 pos) {
+bool Bucket::Initialize(Vec2& pos) {
 	this->position = pos;
 	gravity = Vec2(0.0f, 0.0f);
 	hold = false;
 	this->capacity = 0;
-	Object::CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
-	Object::objectTag = "Bucket";
-	//Object::CollisionProcess = [&](const Object& o_) {
-	//	if (o_.objectTag == "Water") {
-	//		/*if (((Water&)o_).GetSituation() == Water::Situation::Normal && ((Water&)o_).GetState() == Water::State::LIQUID && ((Water&)o_).invi <= 0) {
-	//			float waterdrop = ((Water&)o_).waterMove();
-	//			if (capacity < 1.f) {
-	//				capacity += waterdrop;
-	//				((Water&)o_).SetSituation(Water::Situation::CreaDelete);
-	//			}
-	//		}*/
-	//	}
-	//};
+	GameObject::CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
+	GameObject::objectTag = "Bucket";
 
-	tex.TextureCreate("bucket.png");
+	tex.Create((std::string)"bucket.png");
 	
 	return true;
 }
 
-void Bucket::Update(Map &map, Bucket &bucket) {
+void Bucket::UpDate() {
 	if (hold)
 	{
 		gravity.y = 0.0f;
 	}
 	gravity.y += 5.0f;
-	CheckMove(gravity, map, bucket);
+	//CheckMove(gravity, map, bucket);
 }
 
-void Bucket::Render() {
+void Bucket::Render2D() {
 	Box2D draw(this->position, this->Scale);
 	draw.OffsetSize();
 	Box2D src(GetSpriteCrop());
@@ -52,8 +41,9 @@ void Bucket::Render() {
 	tex.Draw(draw, src);
 }
 
-void Bucket::Finalize() {
+bool Bucket::Finalize() {
 	tex.Finalize();
+	return true;
 }
 
 Box2D Bucket::GetSpriteCrop() const {
@@ -72,7 +62,7 @@ Water* Bucket::Spill() {
 	return ret;
 }
 
-void Bucket::SetParent(Object* o_) {
+void Bucket::SetParent(GameObject* o_) {
 	parent = o_;
 }
 
@@ -154,4 +144,23 @@ void Bucket::HoldCheck(bool flag)
 bool Bucket::GetHold() const
 {
 	return this->hold;
+}
+
+Bucket::SP Bucket::Create(Vec2& pos, bool flag_)
+{
+	auto to = Bucket::SP(new Bucket(pos));
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }
