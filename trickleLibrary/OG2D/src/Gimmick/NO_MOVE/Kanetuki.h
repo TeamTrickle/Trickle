@@ -19,7 +19,7 @@ public:
 	std::string taskName;
 	virtual ~Kanetuki();
 	typedef std::shared_ptr<Kanetuki> SP;
-	static Kanetuki::SP Create(bool);
+	static Kanetuki::SP Create(bool = true);
 	Kanetuki();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ

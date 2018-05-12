@@ -25,7 +25,6 @@ public:
 	void ON_OFF();
 	//void SetTarget(GameObject* t);
 private:
-	std::vector<GameObject*> targets;
 	Texture image;
 	std::string path;
 	bool is_on;
@@ -36,12 +35,12 @@ public:
 	std::string taskName;
 	virtual ~Switch();
 	typedef std::shared_ptr<Switch> SP;
-	static Switch::SP Create(bool, Vec2 pos);
+	static Switch::SP Create(Vec2& pos,bool = true);
 	Switch();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ
 	//-------------
-	bool Initialize(Vec2 pos);	//‰Šú‰»ˆ—
+	bool Initialize(Vec2& pos);	//‰Šú‰»ˆ—
 	void UpDate();				//XVˆ—
 	void Render2D();			//•`‰æˆ—
 	bool Finalize();			//‰ğ•úˆ—

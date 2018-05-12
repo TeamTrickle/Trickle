@@ -22,7 +22,7 @@ public:
 	std::string taskName;
 	virtual ~Seihyouki();
 	typedef std::shared_ptr<Seihyouki> SP;
-	static Seihyouki::SP Create(bool);
+	static Seihyouki::SP Create(bool = true);
 	Seihyouki();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ
