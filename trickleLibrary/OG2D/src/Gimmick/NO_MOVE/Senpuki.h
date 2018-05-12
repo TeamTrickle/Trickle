@@ -34,7 +34,6 @@ public:
 		RIGHT,
 	};
 	Fan(Vec2);
-	bool Initialize(Vec2 pos, float r, Dir d, bool activ);
 	void AddSwitch(Switch* swit);
 	void ChangeState();
 	void SetTexture(Texture*);
@@ -52,12 +51,12 @@ public:
 	std::string taskName;
 	virtual ~Fan();
 	typedef std::shared_ptr<Fan> SP;
-	static Fan::SP Create(bool, Vec2 pos, float r, Fan::Dir d, bool activ);
+	static Fan::SP Create( Vec2 pos, float r, Fan::Dir d, bool activ,bool = true);
 	Fan();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ
 	//-------------
-	bool Initialize();		//‰Šú‰»ˆ—
+	bool Initialize(Vec2 pos, float r, Dir d, bool activ);
 	void UpDate();			//XVˆ—
 	void Render2D();		//•`‰æˆ—
 	bool Finalize();		//‰ğ•úˆ—

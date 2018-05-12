@@ -11,7 +11,7 @@ bool Kanetuki::Initialize()
 	this->taskName = "Kanetuki";			//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 
-	this->CreateObject(Cube, Vec2(100, 100), Vec2(128, 128), 0.0f);
+	
 
 	return true;
 }
@@ -24,10 +24,10 @@ void Kanetuki::UpDate()
 	//‰Á”MŠí‚ÌMotion‹N“®
 	for (auto& w : *water)
 	{
-		/*if (hitBace.hit(*w))
+		if (hitBace.hit(*w))
 		{
 			toSteam(w);
-		}*/
+		}
 	}
 }
 

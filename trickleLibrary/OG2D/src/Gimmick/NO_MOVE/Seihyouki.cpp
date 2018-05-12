@@ -21,10 +21,10 @@ void Seihyouki::UpDate()
 	//--------------------
 	for (auto& w : *water)
 	{
-		/*if (w->hit(hitBace))
+		if (w->hit(hitBace))
 		{
 			toIce(w);
-		}*/
+		}
 	}
 }
 

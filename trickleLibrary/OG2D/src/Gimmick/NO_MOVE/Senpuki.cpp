@@ -139,7 +139,7 @@ Fan::~Fan()
 	this->Finalize();
 }
 
-Fan::SP Fan::Create(bool flag_, Vec2 pos, float r, Fan::Dir d, bool activ)
+Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool activ, bool flag_)
 {
 	Fan::SP to = Fan::SP(new Fan());
 	if (to)
