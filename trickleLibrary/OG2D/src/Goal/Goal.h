@@ -5,8 +5,6 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-#include "Water\water.h"
-
 class Goal : public GameObject, public TaskObject
 {
 	//-------------------------------------------
@@ -15,10 +13,10 @@ class Goal : public GameObject, public TaskObject
 public:
 	bool Initialize(Vec2&);
 	bool cleared;
-	std::vector<Water*> waters;
-	void AddWater(Water*);
-	bool DeleteWater(Water*);
-	bool ClearCheck(Water&);
+	
+	//void AddWater();
+	//bool DeleteWater();
+	bool ClearCheck();
 private:
 	Texture tex;
 

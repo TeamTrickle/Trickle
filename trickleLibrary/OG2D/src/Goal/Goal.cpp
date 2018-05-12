@@ -1,6 +1,6 @@
 #include "Goal.h"
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-
+#include "Water\water.h"
 bool Goal::Initialize()
 {
 	//-----------------------------
@@ -15,7 +15,6 @@ bool Goal::Initialize()
 	tex.Create((std::string&)"goal.png");
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, Vec2(28 * 64, 14 * 64), Vec2(64, 64), 0.f);
-	return true;
 	return true;
 }
 bool Goal::Initialize(Vec2& pos) {
@@ -33,12 +32,9 @@ void Goal::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	for (int i = 0; i < this->waters.size(); ++i)
+	if (this->ClearCheck())
 	{
-		if (this->ClearCheck(*waters[i]))
-		{
-			this->cleared = true;
-		}
+		cleared = true;
 	}
 }
 
@@ -70,35 +66,35 @@ bool Goal::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		tex.Finalize();
-		this->waters.clear();
 		//自分を消す場合はKillを使う
 		this->Kill();
 	}
 	return true;
 }
-void Goal::AddWater(Water* o)
-{
-	this->waters.push_back(o);
-}
+//void Goal::AddWater(Water* o)
+//{
+//	this->waters.push_back(o);
+//}
 
-bool Goal::DeleteWater(Water* o)
-{
-	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
-	{
-		if ((*id) == o)
-		{
-			this->waters.erase(id);
-			return true;
-		}
-	}
-	return false;
-}
+//bool Goal::DeleteWater(Water* o)
+//{
+//	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
+//	{
+//		if ((*id) == o)
+//		{
+//			this->waters.erase(id);
+//			return true;
+//		}
+//	}
+//	return false;
+//}
 
-bool Goal::ClearCheck(Water& o)
+bool Goal::ClearCheck()
 {
-	if (this->hit(o))
+	auto water = OGge->GetTask<Water>("Water");
+	if (this->hit(*water))
 	{
-		if (o.GetSituation() == Water::Situation::Normal && o.GetState() == Water::State::LIQUID)
+		if (water->GetSituation() == Water::Situation::Normal && water->GetState() == Water::State::LIQUID)
 		{
 			return true;
 		}
