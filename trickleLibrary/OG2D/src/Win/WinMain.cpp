@@ -82,6 +82,7 @@ int main() {
 	//ゲームエンジンの生成
 	OGge = new EngineSystem();
 	ogtk = new OGTK();
+	rm = new ResourceManager();
 	MapNum = new unsigned short;
 	//タスクの初期化処理
 	ogtk->_myGameInitialize();
@@ -149,6 +150,7 @@ int main() {
 	Finalize();
 	//ゲームエンジンの内容を解放
 	delete MapNum;
+	delete rm;
 	delete OGge;
 	//GLFWのライブラリを終了する
 	glfwTerminate();

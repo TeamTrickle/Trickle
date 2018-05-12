@@ -61,6 +61,7 @@ public:
 	void AddGameObject(GameObject* obj_);								//オブジェクトを登録する
 	bool DeleteGameObject(GameObject* obj_);							//指定オブジェクトを登録から削除する
 	void AllDelete();											//全登録オブジェクトの削除
+	bool IsBucket();
 	//色関連
 	bool SetColor(Color&);
 	Color GetColor() const;

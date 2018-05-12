@@ -7,8 +7,8 @@
  * @date 2018-03-30
  */
 
-#include "Water\water.h"
-#include "Map\Map.h"
+#include "OGSystem\OGSystem.h"
+#include "Object\Object.h"
 
 class Bucket : public GameObject,public TaskObject {
 
@@ -16,6 +16,7 @@ private:
 	const Box2D BUCKET_NOTHING = Box2D(0, 0, 64, 64);
 	const Box2D BUCKET_WATER = Box2D(64, 0, 64, 64);
 	Box2D GetSpriteCrop() const;
+	bool BucketWaterCreate();
 
 public:
 	explicit Bucket();
@@ -31,18 +32,17 @@ public:
 
 	void SetParent(GameObject*);
 	bool HasParent() const;
-	void CheckMove(Vec2 &e_, Map &map, Bucket &bucket);
+	void CheckMove(Vec2 &);
 
 	bool WaterHit(Water*);
 	void HoldCheck(bool = true);
 	bool GetHold() const;
-
+	void WaterIsHitCheck();
 	/**
 	 * @brief	バケッツから水をこぼします
 	 * @return	バケッツの中にあった量だけの水のアドレス地
 	 * @note	new使ったので必ず消してください
 	 */
-	Water* Spill();
 	float capacity;
 	Vec2 gravity;      //重力
 	bool hold;         //プレイヤがバケツを持っているかの判断
