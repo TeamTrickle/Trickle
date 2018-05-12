@@ -1,4 +1,5 @@
 #include "OGSystem\OGTask.h"
+#include "Task\Task_Title.h"
 void OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
@@ -8,5 +9,5 @@ void OGTK::_myGameInitialize()
 void OGTK::StartTaskObject()
 {
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
-	
+	auto topTask = Title::Create();
 }

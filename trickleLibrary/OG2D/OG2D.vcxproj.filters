@@ -170,9 +170,6 @@
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gimmick\MOVE\Container.cpp">
-      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
-    </ClCompile>
     <ClCompile Include="src\Block\block.cpp">
       <Filter>ソースファイル\Block</Filter>
     </ClCompile>
@@ -292,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gimmick\MOVE\Container.h">
-      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ソースファイル\Block</Filter>

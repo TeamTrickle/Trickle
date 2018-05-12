@@ -155,7 +155,6 @@
     <ClCompile Include="src\Bucket\bucket.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
-    <ClCompile Include="src\Gimmick\MOVE\Container.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp" />
@@ -197,7 +196,6 @@
     <ClInclude Include="src\Bucket\bucket.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
-    <ClInclude Include="src\Gimmick\MOVE\Container.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h" />

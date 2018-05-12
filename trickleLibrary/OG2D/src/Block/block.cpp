@@ -8,7 +8,11 @@ Block::Block(Vec2& pos) {
 }
 
 Block::~Block() {
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
 
+	}
 }
 
 bool Block::Initialize(Vec2& pos) {

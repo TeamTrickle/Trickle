@@ -1,6 +1,22 @@
 #include "Task_Game.h"
+#include "Task\Task_Result.h"
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
+
+Game::Game()
+{
+
+}
+
+Game::~Game()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+
+	}
+}
+
 //-------------------------------------------------------------------------------------------------
 bool Game::Initialize()
 {

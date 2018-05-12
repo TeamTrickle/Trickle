@@ -8,7 +8,11 @@ Bucket::Bucket(Vec2& pos) {
 }
 
 Bucket::~Bucket() {
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
 
+	}
 }
 
 bool Bucket::Initialize(Vec2& pos) {

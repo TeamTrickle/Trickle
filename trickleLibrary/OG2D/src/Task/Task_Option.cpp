@@ -1,4 +1,18 @@
 #include "Task_Option.h"
+#include "Task\Task_Title.h"
+Option::Option()
+{
+
+}
+
+Option::~Option()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		auto nextTask = Title::Create();
+	}
+}
 
 bool Option::Initialize()
 {

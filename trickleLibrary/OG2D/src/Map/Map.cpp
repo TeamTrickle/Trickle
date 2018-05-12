@@ -7,6 +7,15 @@ Map::Map()
 	this->DrawSize = { 64,64 };
 }
 
+Map::~Map()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+
+	}
+}
+
 bool Map::LoadMap(std::string& path_, Format format)
 {
 	if (Format::csv != format)

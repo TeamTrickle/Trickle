@@ -5,7 +5,6 @@
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
 #include "Map\Map.h"
-#include "Task\Task_Option.h"
 
 class Title:public TaskObject
 {
@@ -19,7 +18,11 @@ class Title:public TaskObject
 	Vec2 closePos;
 	Vec2 cursorPos;
 
+	int nextTaskCheck;
+
 public:
+	Title();
+	virtual ~Title();
 	bool Initialize();
 	void UpDate();
 	void Render2D();

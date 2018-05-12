@@ -1,4 +1,18 @@
 #include "StageSelect.h"
+#include "Task\Task_Game.h"
+StageSelect::StageSelect()
+{
+
+}
+
+StageSelect::~StageSelect()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		auto nexttask = Game::Create();
+	}
+}
 
 bool StageSelect::Initialize()
 {
@@ -49,6 +63,7 @@ void StageSelect::UpDate()
 		default:
 			*MapNum = 0;	break;
 		}
+		this->Kill();
 	}
 }
 

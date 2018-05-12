@@ -30,6 +30,7 @@ public:
 	Vec2 DrawSize;
 public:
 	Map();
+	virtual ~Map();
 	typedef std::shared_ptr<Map> SP;
 	static SP Create(std::string&, Format = csv, bool = true);
 	bool LoadMap(std::string& _path);

@@ -18,6 +18,8 @@ class StageSelect : public TaskObject
 	Vec2 toTitlePos;
 
 public:
+	StageSelect();
+	virtual ~StageSelect();
 	bool Initialize();
 	void UpDate();
 	void Render2D();
