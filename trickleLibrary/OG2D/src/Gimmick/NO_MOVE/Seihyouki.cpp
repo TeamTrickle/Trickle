@@ -3,7 +3,7 @@ using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
-bool Seihyouki::Initialize()
+bool Seihyouki::Initialize(Vec2& pos , Vec2& scale)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
@@ -11,6 +11,7 @@ bool Seihyouki::Initialize()
 	this->taskName = "Seihyouki";			//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
+	HitGeneration(pos,scale);
 
 	return true;
 }
@@ -79,7 +80,7 @@ void Seihyouki::toIce()
 		}
 	}
 }
-void Seihyouki::Create(Vec2 pos, Vec2 scale)
+void Seihyouki::HitGeneration(Vec2& pos, Vec2& scale)
 {
 	movetime = 0;
 	hitBace.CreateObject(Cube, pos, scale, 0);
@@ -98,7 +99,7 @@ Seihyouki::~Seihyouki()
 	this->Finalize();
 }
 
-Seihyouki::SP Seihyouki::Create(bool flag_)
+Seihyouki::SP Seihyouki::Create(Vec2& pos,Vec2& scale,bool flag_)
 {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
 	if (to)
@@ -108,7 +109,7 @@ Seihyouki::SP Seihyouki::Create(bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize())
+		if (!to->Initialize(pos , scale))
 		{
 			to->Kill();
 		}

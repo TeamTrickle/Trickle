@@ -19,12 +19,12 @@ public:
 	std::string taskName;
 	virtual ~Kanetuki();
 	typedef std::shared_ptr<Kanetuki> SP;
-	static Kanetuki::SP Create(bool = true);
+	static Kanetuki::SP Create(Vec2&, Vec2&,bool = true);
 	Kanetuki();
 	//-------------
 	//変更しないこと
 	//-------------
-	bool Initialize();		//初期化処理
+	bool Initialize(Vec2&, Vec2&);		//初期化処理
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
@@ -36,6 +36,6 @@ private:
 	//状態遷移
 	void toSteam();		//水から水蒸気にする
 public:
-	void Create(Vec2, Vec2);	//座標値　当たり判定サイズ
+	void HitGeneration(Vec2& pos, Vec2& scale);	//座標値　当たり判定サイズ
 	//void SetWaterPool(std::vector<Water*> *);
 };

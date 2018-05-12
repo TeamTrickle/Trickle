@@ -4,7 +4,7 @@ using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
 
-bool Kanetuki::Initialize()
+bool Kanetuki::Initialize(Vec2& pos , Vec2& scale)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
@@ -12,7 +12,7 @@ bool Kanetuki::Initialize()
 	this->taskName = "Kanetuki";			//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
-	
+	Set_Pos(pos, scale);
 
 	return true;
 }
@@ -51,7 +51,7 @@ bool Kanetuki::Finalize()
 	}
 	return true;
 }
-void Kanetuki::Create(Vec2 pos, Vec2 scale)
+void Kanetuki::HitGeneration(Vec2& pos , Vec2& scale)
 {
 	Fire_movetime = 0;
 	hitBace.CreateObject(Cube, pos, scale, 0);
@@ -116,7 +116,7 @@ Kanetuki::~Kanetuki()
 	this->Finalize();
 }
 
-Kanetuki::SP Kanetuki::Create(bool flag_)
+Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2& scale,bool flag_)
 {
 	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
 	if (to)
@@ -126,7 +126,7 @@ Kanetuki::SP Kanetuki::Create(bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize())
+		if (!to->Initialize(pos ,scale))
 		{
 			to->Kill();
 		}
