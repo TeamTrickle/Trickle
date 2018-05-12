@@ -1,4 +1,15 @@
 #include "Task_Title.h"
+#include "Task\Task_Option.h"
+#include "Task\StageSelect.h"
+Title::Title()
+{
+
+}
+
+Title::~Title()
+{
+	this->Finalize();
+}
 
 bool Title::Initialize()
 {
@@ -32,6 +43,7 @@ bool Title::Initialize()
 	//OGge->soundManager->Application();
 	//ƒTƒEƒ“ƒh‚ÌÄ¶
 	//sound.play();
+	this->nextTaskCheck = 0;
 	return true;
 }
 
@@ -62,6 +74,10 @@ void Title::UpDate()
 		{
 			
 		}
+	}
+	if (OGge->in->down(Input::in::B2))
+	{
+		this->Kill();
 	}
 }
 
@@ -113,6 +129,28 @@ bool Title::Finalize()
 	texStart.Finalize();
 	texClose.Finalize();
 	texPause.Finalize();
+
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		switch (state)
+		{
+		case Close:
+			OGge->GameEnd();
+			break;
+		case Start:
+		{
+			auto stage = StageSelect::Create();
+		}
+			break;
+		case Pause:
+		{
+			auto option = Option::Create();
+		}
+			break;
+		default:
+			break;
+		}
+	}
 
 	return true;
 }

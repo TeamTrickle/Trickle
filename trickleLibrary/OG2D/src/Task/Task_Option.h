@@ -17,6 +17,8 @@ class Option : public TaskObject
 	Texture texBar;               //仮のボリューム表示画像
 	Texture texGear;               //仮のボリューム表示画像
 public:
+	Option();
+	virtual ~Option();
 	bool Initialize();
 	void UpDate();
 	void Render2D();

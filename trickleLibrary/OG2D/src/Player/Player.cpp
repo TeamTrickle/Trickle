@@ -8,7 +8,10 @@ Player::Player()
 Player::~Player()
 {
 	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
 
+	}
 }
 
 bool Player::Initialize()

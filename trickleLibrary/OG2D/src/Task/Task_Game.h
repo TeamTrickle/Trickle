@@ -23,6 +23,8 @@ class Game : public TaskObject
 public:
 	typedef std::shared_ptr<Game> SP;
 	static SP Create(bool = true);
+	Game();
+	virtual ~Game();
 	bool Initialize();
 	void UpDate();
 	void Render2D();
