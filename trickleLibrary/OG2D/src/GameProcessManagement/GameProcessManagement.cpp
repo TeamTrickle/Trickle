@@ -2,6 +2,8 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "Task\Task_Result.h"
+#include "Goal\Goal.h"
 
 bool GameProcessManagement::Initialize()
 {
@@ -12,8 +14,10 @@ bool GameProcessManagement::Initialize()
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
 	gameclear_flag = false;                 //初期値はfalseにしておく
-	timer.Start();							//タイマーをスタートさせる
+	timer = Timer::Create();
+	timer->Start();							//タイマーをスタートさせる
 
+	cout << "進行管理クラス　生成" << endl;
 	return true;
 }
 void GameProcessManagement::UpDate()
@@ -21,7 +25,6 @@ void GameProcessManagement::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-
 	Goal_Check();                        //ゴールをしているのかどうか？
 }
 
@@ -42,54 +45,47 @@ bool GameProcessManagement::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		goals.clear();                           //vectorを解放
 		//自分を消す場合はKillを使う
 		this->Kill();
 	}
 	return true;
 }
-void GameProcessManagement::Set_Goal(GameObject* goal)
-{
-	if (goal->objectTag != "Goal")           //オブジェクトタグの確認をする
-	{
-		return;
-	}
-	goals.push_back(goal);                   //push.backをする
-}
+//void GameProcessManagement::Set_Goal(GameObject* goal)
+//{
+//	if (goal->objectTag != "Goal")           //オブジェクトタグの確認をする
+//	{
+//		return;
+//	}
+//	goals.push_back(goal);                   //push.backをする
+//}
 void GameProcessManagement::Goal_Check()
 {
-	for (auto g : goals)
+	auto goal = OGge->GetTask<Goal>("Goal");
+	if (goal->cleared)
 	{
-		if (g->objectTag == "Goal")          //オブジェクトタグがGoalならば・・・
+		if (!gameclear_flag)
 		{
-			if (((Goal*)g)->cleared)
-			{
-				if (!gameclear_flag)		//1回だけ発動させることでストップを維持させる
-				{
-					timer.Pause();			//タイマーをストップする
-				}
-				gameclear_flag = true;		//フラグをtrueにする
-				return;
-			}
+			timer->Pause();
 		}
+		gameclear_flag = true;
+		return;
 	}
-	timer.Frame_Set();			            //フレーム時間を格納する
+	timer->Frame_Set();
 	gameclear_flag = false;
 }
 void GameProcessManagement::Goal_Event()
 {
 	if (gameclear_flag)						//ゲームフラグがtrueになったら・・・
 	{
-		timer.Stop();						//タイマーの時間を元に戻す
+		timer->Stop();						//タイマーの時間を元に戻す
 		File_Writing();						//フレームを書き込み
 		//結果画面へ行く
-
 	}
 }
 void GameProcessManagement::File_Writing()
 {
 	ofstream fin(TimeFilePath);				//ファイルのパスの指定
-	fin << timer.Get_frame();				//タイマーのフレーム数を書き込み
+	fin << timer->Get_frame();				//タイマーのフレーム数を書き込み
 	fin << ',';								//,の書き込み
 	if (gameclear_flag)
 	{
@@ -109,12 +105,13 @@ void GameProcessManagement::File_Writing()
 //----------------------------
 GameProcessManagement::GameProcessManagement()
 {
-
+	cout << "進行管理クラス　生成" << endl;
 }
 
 GameProcessManagement::~GameProcessManagement()
 {
 	this->Finalize();
+	cout << "進行管理クラス　解放" << endl;
 }
 
 GameProcessManagement::SP GameProcessManagement::Create(bool flag_)

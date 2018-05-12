@@ -1,100 +1,64 @@
 #include "Task_Result.h"
 using namespace std;
-Result::Result()
+//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "GameProcessManagement\GameProcessManagement.h"
+#include "Task_Title.h"
+
+bool Result::Initialize()
 {
-	cout << "結果画面処理初期化" << endl;
-	FrameTime = 0;
-	Flag_Judge_Clear();
-}
-Result::~Result()
-{
-	cout << "結果画面処理解放" << endl;
-}
-void Result::Initialize()
-{
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "Result";		//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
+
+	//生成例
 	Result_DataInput();
 	Flag_Judge();
-	this->image.TextureCreate((std::string)"outlook.png");
+	this->image.Create((std::string)"outlook.png");
+	cout << "結果画面処理　初期化" << endl;
+	return true;
 }
-TaskFlag Result::Update()
+
+void Result::UpDate()
 {
-	TaskFlag nowTask = TaskFlag::Task_Ruselt;
-	if (gameEngine->in.down(In::B2))
+	//--------------------
+	//更新時に行う処理を記述
+	//--------------------
+	if (OGge->in->down(In::B2))
 	{
-		nowTask = Task_Title;
+		Kill();
+		auto title = Title::Create();
 	}
-	return nowTask;
 }
-void Result::Render()
+
+void Result::Render2D()
 {
-	Box2D draw(Vec2(0,0),gameEngine->window->GetSize());
+	//--------------------
+	//描画時に行う処理を記述
+	//--------------------
+	Box2D draw(Vec2(0, 0), OGge->window->GetSize());
 	draw.OffsetSize();
 	Box2D src(Vec2(0, 0), Vec2(1280, 720));
 	src.OffsetSize();
 	image.Draw(draw, src);
 }
-void Result::Finalize()
+bool Result::Finalize()
 {
-	image.Finalize();
-}
-void Result::Result_DataInput()
-{
-	string GameFalg;			//ゲームフラグ
-	//データの読み込み
-	ifstream fin(TimeFilePath);
-
-	if (!fin)
+	//-----------------------------------------
+	//このオブジェクトが消滅するときに行う処理を記述
+	//-----------------------------------------
+	//次のタスクを作るかかつアプリケーションが終了予定かどうか
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		return;
+		image.Finalize();
 	}
-	//読み込んだデータを入れておく変数
-	string line;
-	//改行か終了時点までの文字の文字列をlineに入れる
-	getline(fin, line);
-	//文字列を操作するための入力クラス、直接アクセスする
-	istringstream _fin(line);
-	//一字書き込み変数
-	string text;
-	//_finに入っている文字列から','までの文字をtextにいれる
-	getline(_fin, text, ',');
-	//textのデータを変数にいれる
-	(stringstream)text >> FrameTime;
-	if (FrameTime <= 30)//30秒以内にゴール
-	{
-		Flag_Input(Result::Achievement::Flag2);
-		Flag_Input(Result::Achievement::Flag3);
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	else if (FrameTime <= 60)//60秒以内にゴール
-	{
-		Flag_Input(Result::Achievement::Flag3);
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	else
-	{
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	getline(_fin, text, ',');
-	(stringstream)text >> GameFalg;
-	if (GameFalg == "GameClear")		//ゲームがクリア
-	{
-		Flag_Input(Result::Achievement::Flag1);
-	}
-	//時間の計算
-	int sec, min, hour;
-	sec = FrameTime % 60;
-	min = FrameTime / 60;
-	hour = min / 60;
-	cout << hour << "時間" << min << "分" << sec << "秒" << endl;
-
-	fin.close();
-
-	
+	return true;
 }
 bool Result::Flag_Judge()
 {
 	bool active = false;
-	if ((Flag & Result::Flag1 )== Result::Flag1)
+	if ((Flag & Result::Flag1) == Result::Flag1)
 	{
 		//フラグ１を持っている
 		active = true;
@@ -151,4 +115,94 @@ int Result::Get_Flag()
 void Result::Flag_Judge_Clear()
 {
 	Flag &= ~Flag;
+}
+void Result::Result_DataInput()
+{
+	string GameFalg;			//ゲームフラグ
+								//データの読み込み
+	ifstream fin(TimeFilePath);
+
+	if (!fin)
+	{
+		return;
+	}
+	//読み込んだデータを入れておく変数
+	string line;
+	//改行か終了時点までの文字の文字列をlineに入れる
+	getline(fin, line);
+	//文字列を操作するための入力クラス、直接アクセスする
+	istringstream _fin(line);
+	//一字書き込み変数
+	string text;
+	//_finに入っている文字列から','までの文字をtextにいれる
+	getline(_fin, text, ',');
+	//textのデータを変数にいれる
+	(stringstream)text >> FrameTime;
+	if (FrameTime <= 30)//30秒以内にゴール
+	{
+		Flag_Input(Result::Achievement::Flag2);
+		Flag_Input(Result::Achievement::Flag3);
+		Flag_Input(Result::Achievement::Flag4);
+	}
+	else if (FrameTime <= 60)//60秒以内にゴール
+	{
+		Flag_Input(Result::Achievement::Flag3);
+		Flag_Input(Result::Achievement::Flag4);
+	}
+	else
+	{
+		Flag_Input(Result::Achievement::Flag4);
+	}
+	getline(_fin, text, ',');
+	(stringstream)text >> GameFalg;
+	if (GameFalg == "GameClear")		//ゲームがクリア
+	{
+		Flag_Input(Result::Achievement::Flag1);
+	}
+	//時間の計算
+	int sec, min, hour;
+	sec = FrameTime % 60;
+	min = FrameTime / 60;
+	hour = min / 60;
+	cout << hour << "時間" << min << "分" << sec << "秒" << endl;
+
+	fin.close();
+
+
+}
+//----------------------------
+//ここから下はclass名のみ変更する
+//ほかは変更しないこと
+//----------------------------
+Result::Result()
+{
+	cout << "結果画面処理初期化" << endl;
+	FrameTime = 0;
+	Flag_Judge_Clear();
+}
+
+Result::~Result()
+{
+	this->Finalize();
+	cout << "結果画面処理解放" << endl;
+}
+
+Result::SP Result::Create(bool flag_)
+{
+
+	Result::SP to = Result::SP(new Result());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize())
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

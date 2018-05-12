@@ -2,6 +2,7 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "Water\water.h"
 
 bool Kanetuki::Initialize()
 {
@@ -9,7 +10,7 @@ bool Kanetuki::Initialize()
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
 	this->taskName = "Kanetuki";			//検索時に使うための名を登録する
-	__super::Init(taskName);		//TaskObject内の処理を行う
+	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
 	
 
@@ -20,14 +21,10 @@ void Kanetuki::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-
-	//加熱器のMotion起動
-	for (auto& w : *water)
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->hit(hitBace))
 	{
-		if (hitBace.hit(*w))
-		{
-			toSteam(w);
-		}
+		toSteam();
 	}
 }
 
@@ -50,8 +47,7 @@ bool Kanetuki::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		//自分を消す場合はKillを使う
-		this->Kill();
+		
 	}
 	return true;
 }
@@ -61,13 +57,15 @@ void Kanetuki::Create(Vec2 pos, Vec2 scale)
 	hitBace.CreateObject(Cube, pos, scale, 0);
 }
 
-void Kanetuki::SetWaterPool(std::vector<Water*>* w)
+//void Kanetuki::SetWaterPool(std::vector<Water*>* w)
+//{
+//	water = w;
+//}
+void Kanetuki::toSteam()
 {
-	water = w;
-}
-void Kanetuki::toSteam(Water* obj)
-{
-	if (obj->GetState() == Water::State::SOLID)
+	auto water = OGge->GetTask<Water>("Water");
+
+	if (water->GetState() == Water::State::SOLID)
 	{
 		while (true)
 		{
@@ -75,7 +73,7 @@ void Kanetuki::toSteam(Water* obj)
 			Fire_movetime++;
 			if (Fire_movetime >= Fire_time_SOLID)
 			{
-				obj->SetState(Water::State::LIQUID);
+				water->SetState(Water::State::LIQUID);
 				Fire_movetime = 0;
 				flag = true;
 			}
@@ -85,7 +83,7 @@ void Kanetuki::toSteam(Water* obj)
 			}
 		}
 	}
-	if (obj->GetState() == Water::State::LIQUID)
+	if (water->GetState() == Water::State::LIQUID)
 	{
 		while (true)
 		{
@@ -93,7 +91,7 @@ void Kanetuki::toSteam(Water* obj)
 			Fire_movetime++;
 			if (Fire_movetime >= Fire_time_LIQUID)
 			{
-				obj->SetState(Water::State::GAS);
+				water->SetState(Water::State::GAS);
 				Fire_movetime = 0;
 				flag = true;
 			}

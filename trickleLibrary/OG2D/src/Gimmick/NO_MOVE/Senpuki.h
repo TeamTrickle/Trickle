@@ -15,9 +15,6 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-#include "Gimmick\NO_MOVE\Switch.h"
-#include "Water\water.h"
-
 class Switch;
 
 class Fan : public GameObject, public TaskObject
@@ -33,16 +30,15 @@ public:
 		LEFT,
 		RIGHT,
 	};
-	Fan(Vec2);
 	void AddSwitch(Switch* swit);
 	void ChangeState();
 	void SetTexture(Texture*);
 	void SetWindRange(Vec2&);
 
 	//WaterのVector情報のアドレス値を受け取る
-	void SetWaterPool(Water*);
-	bool DeleteWaterPool(Water*);
-	void Motion(Water*);
+	//void SetWaterPool(Water*);
+	//bool DeleteWaterPool(Water*);
+	void Motion();
 private:
 	//------------------
 	//固定化されている処理
@@ -52,10 +48,10 @@ public:
 	virtual ~Fan();
 	typedef std::shared_ptr<Fan> SP;
 	static Fan::SP Create( Vec2 pos, float r, Fan::Dir d, bool activ,bool = true);
-	Fan();
 	//-------------
 	//変更しないこと
 	//-------------
+	Fan();
 	bool Initialize(Vec2 pos, float r, Dir d, bool activ);
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
@@ -67,7 +63,7 @@ private:
 	float movePos;
 	bool active;
 	int strength;
-	std::vector<Water*>water;
+	//std::vector<Water*>water;
 	GameObject WindHitBase;
 };
 

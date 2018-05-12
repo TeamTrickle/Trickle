@@ -1,8 +1,8 @@
 #include "Switch.h"
 using namespace std;
 
+#include "Senpuki.h"
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-
 bool Switch::Initialize(Vec2 pos)
 {
 	//-----------------------------
@@ -14,9 +14,8 @@ bool Switch::Initialize(Vec2 pos)
 	this->Init(taskName);			//TaskObject内の処理を行う
 
 									//座標の設定
-	position = pos;
 	//当たり判定の実装
-	CreateObject(Cube, position, Vec2(64, 64), 0.0f);
+	CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
 	//オブジェクトタグの追加
 	objectTag = "Switch";
 	//スイッチの切り替えフラグをONにする
@@ -67,21 +66,18 @@ void Switch::ON_OFF()
 	//trueとfalseの切り替えフラグを切り替える
 	is_on = !is_on;
 	//スイッチのONOFFが切り替わった時だけターゲットのChangeState()を呼び出す
-	for (auto t : targets)
+	auto target = OGge->GetTask<Fan>("Fan");
+	if (target->objectTag == "Fan")
 	{
-		if (t->objectTag == "Fan")
-		{
-			//スイッチを押すと・・・
-			((Fan*)t)->ChangeState();
-		}
+		target->ChangeState();
 	}
 }
-void Switch::SetTarget(GameObject* t)
-{
-	//あとで加熱器と製氷機のタグも追加すること
-	if (t->objectTag != "Fan") { return; }
-	targets.push_back(t);
-}
+//void Switch::SetTarget(GameObject* t)
+//{
+//	//あとで加熱器と製氷機のタグも追加すること
+//	if (t->objectTag != "Fan") { return; }
+//	targets.push_back(t);
+//}
 //----------------------------
 //ここから下はclass名のみ変更する
 //ほかは変更しないこと

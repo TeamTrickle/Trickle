@@ -8,12 +8,7 @@
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-
-#include "Task\Task_Result.h"
 #include "Timer.h"
-#include "Goal\Goal.h"
-
-class Goal;
 
 class GameProcessManagement : public GameObject,public TaskObject
 {
@@ -26,7 +21,7 @@ public:
 	■引数　Object*　追加したいゴールオブジェクト
 	■戻り　なし
 	*/
-	void Set_Goal(GameObject*);
+	//void Set_Goal();
 
 
 	/*
@@ -44,11 +39,11 @@ public:
 	*/
 	void Goal_Event();
 
-	void File_Writing();				//フレームを書きこむ
+	void File_Writing();				 //フレームを書きこむ
 private:
-	bool gameclear_flag;               //様々なフラグを格納する
-	std::vector<GameObject*>goals;     //ゴール判定を取るVector
-	Timer timer;                       //タイマーのセットをする
+	bool gameclear_flag;                 //様々なフラグを格納する
+	//std::vector<GameObject*>goals;     //ゴール判定を取るVector
+	Timer::SP timer;                     //タイマーのセットをする
 
 	const char* TimeFilePath = "./data/Result/Result.dat";
 
@@ -59,7 +54,7 @@ public:
 	std::string taskName;
 	virtual ~GameProcessManagement();
 	typedef std::shared_ptr<GameProcessManagement> SP;
-	static GameProcessManagement::SP Create(bool);
+	static GameProcessManagement::SP Create(bool = true);
 	GameProcessManagement();
 	//-------------
 	//変更しないこと

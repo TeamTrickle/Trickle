@@ -12,7 +12,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-#include "Senpuki.h"
+
 
 class Switch : public GameObject, public TaskObject
 {
@@ -20,10 +20,10 @@ class Switch : public GameObject, public TaskObject
 	//各自で制作するときに使用するものはここに記述する
 	//-------------------------------------------
 public:
-	bool Initialize(Vec2 pos);
+	
 	bool isON();
 	void ON_OFF();
-	void SetTarget(GameObject* t);
+	//void SetTarget(GameObject* t);
 private:
 	std::vector<GameObject*> targets;
 	Texture image;
@@ -41,8 +41,8 @@ public:
 	//-------------
 	//変更しないこと
 	//-------------
-	bool Initialize();		//初期化処理
-	void UpDate();			//更新処理
-	void Render2D();		//描画処理
-	bool Finalize();		//解放処理
+	bool Initialize(Vec2 pos);	//初期化処理
+	void UpDate();				//更新処理
+	void Render2D();			//描画処理
+	bool Finalize();			//解放処理
 };

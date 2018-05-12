@@ -2,7 +2,6 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-#include "OGSystem\Timer\glTimer.h"
 //__________________________
 //|                      //|
 //|—š—ğ@2018/04/14 ‰¡”ö //|
@@ -33,7 +32,7 @@ public:
 	std::string taskName;
 	virtual ~Timer();
 	typedef std::shared_ptr<Timer> SP;
-	static Timer::SP Create(bool);
+	static Timer::SP Create(bool = true);
 	Timer();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ

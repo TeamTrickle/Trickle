@@ -13,6 +13,7 @@ bool Timer::Initialize()
 
 	//時間のゼロクリア
 	frame_time = 0;               //GetTimeの時間を代入する変数
+	std::cout << "タイマー　初期化" << std::endl;
 	return true;
 }
 void Timer::UpDate()
@@ -27,8 +28,6 @@ void Timer::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
-	Box2D draw(this->position, this->Scale);
-	draw.OffsetSize();
 }
 
 bool Timer::Finalize()
@@ -39,8 +38,7 @@ bool Timer::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		//自分を消す場合はKillを使う
-		this->Kill();
+		
 	}
 	return true;
 }
@@ -58,12 +56,13 @@ int Timer::Get_frame()
 //----------------------------
 Timer::Timer()
 {
-
+	std::cout << "タイマー　生成" << std::endl;
 }
 
 Timer::~Timer()
 {
 	this->Finalize();
+	std::cout << "タイマー　解放" << std::endl;
 }
 
 Timer::SP Timer::Create(bool flag_)

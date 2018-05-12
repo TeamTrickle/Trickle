@@ -3,7 +3,6 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-#include "Water\water.h"
 class Seihyouki : public GameObject, public TaskObject
 {
 	//-------------------------------------------
@@ -12,8 +11,7 @@ class Seihyouki : public GameObject, public TaskObject
 public:
 	void Create(Vec2, Vec2);		//座標値　当たり判定サイズ
 	
-	void toIce(Water*);				//氷にする
-	void SetWaterPool(std::vector<Water*>*);			//データを渡す関数
+	void toIce();					//氷にする
 private:
 	Texture sampleImage;
 	GameObject hitBace;
@@ -37,5 +35,4 @@ public:
 private:
 	int movetime;					//氷にするまでの格納するフレーム数
 	const int movetime_ice = 20;	//氷にするまで・・・
-	std::vector<Water*> *water;		//Vectorポインタ
 };

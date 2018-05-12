@@ -2,7 +2,7 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-
+#include "Water\water.h"
 bool Seihyouki::Initialize()
 {
 	//-----------------------------
@@ -19,12 +19,10 @@ void Seihyouki::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	for (auto& w : *water)
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->hit(hitBace))
 	{
-		if (w->hit(hitBace))
-		{
-			toIce(w);
-		}
+		toIce();
 	}
 }
 
@@ -47,34 +45,34 @@ bool Seihyouki::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		//自分を消す場合はKillを使う
-		this->Kill();
+		
 	}
 	return true;
 }
-void Seihyouki::toIce(Water* obj)
+void Seihyouki::toIce()
 {
-	if (obj->GetState() == Water::State::SOLID)
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->GetState() == Water::State::SOLID)
 	{
 		while (true)
 		{
 			movetime++;
 			if (movetime >= movetime_ice)
 			{
-				obj->SetState(Water::State::LIQUID);
+				water->SetState(Water::State::LIQUID);
 				movetime = 0;
 				break;
 			}
 		}
 	}
-	if (obj->GetState() == Water::State::LIQUID)
+	if (water->GetState() == Water::State::LIQUID)
 	{
 		while (true)
 		{
 			movetime++;
 			if (movetime >= movetime_ice)
 			{
-				obj->SetState(Water::State::SOLID);
+				water->SetState(Water::State::SOLID);
 				movetime = 0;
 				break;
 			}
@@ -85,10 +83,6 @@ void Seihyouki::Create(Vec2 pos, Vec2 scale)
 {
 	movetime = 0;
 	hitBace.CreateObject(Cube, pos, scale, 0);
-}
-void Seihyouki::SetWaterPool(std::vector<Water*>*w)
-{
-	water = w;
 }
 //----------------------------
 //ここから下はclass名のみ変更する

@@ -3,7 +3,6 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-#include "Water\water.h"
 class Kanetuki : public GameObject, public TaskObject
 {
 	//-------------------------------------------
@@ -34,12 +33,9 @@ private:
 	const int Fire_time_SOLID = 40;	    //加熱する時間 個体
 	int Fire_movetime;					//燃やす時間を格納する
 
-										//typedef std::vecor<Water*> WaterPool;
-	std::vector<Water*> *water;
-
 	//状態遷移
-	void toSteam(Water*);		//水から水蒸気にする
+	void toSteam();		//水から水蒸気にする
 public:
 	void Create(Vec2, Vec2);	//座標値　当たり判定サイズ
-	void SetWaterPool(std::vector<Water*> *);
+	//void SetWaterPool(std::vector<Water*> *);
 };

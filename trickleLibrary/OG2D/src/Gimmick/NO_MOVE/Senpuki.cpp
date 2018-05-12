@@ -2,7 +2,8 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-
+#include "Gimmick\NO_MOVE\Switch.h"
+#include "Water\water.h"
 bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
 {
 	//-----------------------------
@@ -30,7 +31,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
 		//this->WindHitBase.CreateObject(Cube, Vec2(0,0), Vec2(0,0), 0.0f);
 	}
 
-
+	std::cout << "扇風機　初期化" << std::endl;
 	return true;
 }
 void Fan::UpDate()
@@ -38,14 +39,10 @@ void Fan::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-
-	for (auto& w : water)
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->hit(*this))
 	{
-		//当たり判定
-		//if (this->WindHitBase.hit(*w))
-		//{//スイッチの状態
-		//	Motion(w);
-		//}
+		Motion();
 	}
 }
 
@@ -75,10 +72,7 @@ bool Fan::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		switches.clear();
-		this->water.clear();
-		//自分を消す場合はKillを使う
-		this->Kill();
+		
 	}
 	return true;
 }
@@ -86,22 +80,22 @@ void Fan::SetTexture(Texture* tex)
 {
 	this->image = tex;
 }
-void Fan::SetWaterPool(Water* w)
-{
-	this->water.push_back(w);
-}
-bool Fan::DeleteWaterPool(Water* w)
-{
-	for (auto id = this->water.begin(); id != this->water.end(); ++id)
-	{
-		if ((*id) == w)
-		{
-			this->water.erase(id);
-			return true;
-		}
-	}
-	return false;
-}
+//void Fan::SetWaterPool(Water* w)
+//{
+//	this->water.push_back(w);
+//}
+//bool Fan::DeleteWaterPool(Water* w)
+//{
+//	for (auto id = this->water.begin(); id != this->water.end(); ++id)
+//	{
+//		if ((*id) == w)
+//		{
+//			this->water.erase(id);
+//			return true;
+//		}
+//	}
+//	return false;
+//}
 void Fan::SetWindRange(Vec2& b)
 {
 	this->WindHitBase.Scale = b;
@@ -114,14 +108,15 @@ void Fan::ChangeState()
 {
 	active = !active;
 }
-void Fan::Motion(Water* w)
+void Fan::Motion()
 {
+	auto water = OGge->GetTask<Water>("Water");
 	if (active)
 	{
-		if (w->GetState() == Water::State::GAS)
+		if (water->GetState() == Water::State::GAS)
 		{
 			//w->position.x += strength; // Left -1 Right 1
-			w->MovePos(Vec2(strength, 0));
+			water->MovePos(Vec2(strength, 0));
 		}
 	}
 }
@@ -131,12 +126,12 @@ void Fan::Motion(Water* w)
 //----------------------------
 Fan::Fan()
 {
-
+	std::cout << "扇風機　生成" << std::endl;
 }
-
 Fan::~Fan()
 {
 	this->Finalize();
+	std::cout << "扇風機　解放" << std::endl;
 }
 
 Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool activ, bool flag_)
