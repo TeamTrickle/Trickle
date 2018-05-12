@@ -128,14 +128,8 @@
     <ClCompile Include="src\OGSystem\OGTask.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\Back\Back.cpp">
-      <Filter>ソースファイル\Back</Filter>
-    </ClCompile>
     <ClCompile Include="src\Water\water.cpp">
       <Filter>ソースファイル\Water</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
-      <Filter>ソースファイル\CollisionManager</Filter>
     </ClCompile>
     <ClCompile Include="src\Bucket\bucket.cpp">
       <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
@@ -175,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Gimmick\MOVE\Container.cpp">
-      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp">
       <Filter>ソースファイル\Block</Filter>
@@ -260,15 +251,6 @@
     <ClInclude Include="src\Player\Player.h">
       <Filter>ソースファイル\Player</Filter>
     </ClInclude>
-    <ClInclude Include="src\Back\Back.h">
-      <Filter>ソースファイル\Back</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Water\water.h">
-      <Filter>ソースファイル\Water</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CollisionManager\CollisionManager.h">
-      <Filter>ソースファイル\CollisionManager</Filter>
-    </ClInclude>
     <ClInclude Include="src\Bucket\bucket.h">
       <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClInclude>
@@ -307,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gimmick\MOVE\Container.h">
-      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ソースファイル\Block</Filter>
@@ -376,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\TaskObject.h">
       <Filter>ソースファイル\OGSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Water\water.h">
+      <Filter>ソースファイル\Water</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

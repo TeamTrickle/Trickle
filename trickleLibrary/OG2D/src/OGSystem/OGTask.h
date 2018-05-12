@@ -4,7 +4,6 @@
 //|—š—ğF2018/03/20    
 //|____________________________
 #include "OGSystem\OGsystem.h"
-#include "Task\Task_Sample.h"
 
 class OGTK
 {

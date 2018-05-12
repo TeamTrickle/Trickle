@@ -7,13 +7,17 @@ Player::Player()
 
 Player::~Player()
 {
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
 
+	}
 }
 
-void Player::Initialize()
+bool Player::Initialize()
 {
 	//オブジェクトの初期化
-	Object::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
+	GameObject::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -30,12 +34,15 @@ void Player::Initialize()
 	this->state = State::NORMAL;
 	//自動移動用値の初期化
 	this->animation.Initialize();
+	return true;
 }
 
-void Player::Initialize(Vec2& pos)
+bool Player::Initialize(Vec2& pos)
 {
+	this->taskName = "Player";
+	__super::Init(this->taskName);
 	//オブジェクトの初期化
-	Object::CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
+	GameObject::CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -52,9 +59,10 @@ void Player::Initialize(Vec2& pos)
 	this->state = State::NORMAL;
 	//自動移動用値の初期化
 	this->animation.Initialize();
+	return true;
 }
 
-void Player::Update()
+void Player::UpDate()
 {
 	switch (this->state)
 	{
@@ -73,7 +81,7 @@ void Player::Update()
 	case State::BUCKET:
 		//バケツの値を自分に合わせる
 		this->BucketMove();
-		if (gameEngine->in.down(In::B2))
+		if (OGge->in->down(In::B2))
 		{
 			//元に戻す
 			this->state = State::NORMAL;
@@ -100,13 +108,13 @@ void Player::Update()
 			this->motion = Motion::Fall;
 			break;
 		}
-		if (gameEngine->in.on(In::B1))
+		if (OGge->in->on(In::B1))
 		{
 			//落下していない時のみジャンプが有効
 			this->motion = Motion::Jump;
 			this->moveCnt = 0;
 		}
-		if (gameEngine->in.down(In::B2))
+		if (OGge->in->down(In::B2))
 		{
 			//バケツを持つ
 			if (this->BucketHit() && this->inv == 0) 
@@ -117,7 +125,7 @@ void Player::Update()
 		if (this->state != State::BUCKET) {
 			if (this->InputDown())
 			{
-				if (this->FootCheck("Ladder"))
+				if (this->FootCheck((std::string)"Ladder"))
 				{
 					//梯子状態に移行
 					this->motion = Motion::Ladder;
@@ -131,7 +139,7 @@ void Player::Update()
 			}
 			if (this->InputUp())
 			{
-				if (this->ObjectHit("Ladder"))
+				if (this->ObjectHit((std::string)"Ladder"))
 				{
 					this->motion = Motion::Ladder;
 					this->state = State::ANIMATION;
@@ -172,7 +180,7 @@ void Player::Update()
 		//アニメーション中以外
 		if (this->state != State::ANIMATION) 
 		{
-			if (gameEngine->in.on(In::B1))
+			if (OGge->in->on(In::B1))
 			{
 				this->motion = Motion::Jump;
 				this->moveCnt = 0;
@@ -180,8 +188,8 @@ void Player::Update()
 			if (this->InputUp())
 			{
 				Vec2 e = { 0.f,-5.0f };
-				this->MoveCheck(e, "Floor");
-				if (this->HeadCheck("Ladder", 1))
+				this->MoveCheck(e, (std::string)"Floor");
+				if (this->HeadCheck((std::string)"Ladder", 1))
 				{
 					this->motion = Motion::Normal;
 					//アニメーション状態に移行
@@ -195,8 +203,8 @@ void Player::Update()
 			if (this->InputDown())
 			{
 				Vec2 e = { 0.f,5.0f };
-				this->MoveCheck(e, "Floor");
-				if (this->FootCheck("Ladder", 1))
+				this->MoveCheck(e, (std::string)"Floor");
+				if (this->FootCheck((std::string)"Ladder", 1))
 				{
 					this->motion = Motion::Normal;
 				}
@@ -233,7 +241,7 @@ void Player::Update()
 	this->MoveCheck(this->est);
 }
 
-void Player::Render()
+void Player::Render2D()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
@@ -261,24 +269,27 @@ void Player::Render()
 	this->playerimg->Draw(draw, src);
 }
 
-void Player::Finalize()
+bool Player::Finalize()
 {
-	//テクスチャの解放
-
 	//保持オブジェクトの情報の解放
 	this->AllDelete();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		
+	}
+	return true;
 }
 
 Vec2 Player::GetEst() const {
 	return est;
 }
 
-void Player::AddObject(Object* obj_)
+void Player::AddObject(GameObject* obj_)
 {
 	this->objects.push_back(obj_);
 }
 
-void Player::DeleteObject(Object* obj_)
+void Player::DeleteObject(GameObject* obj_)
 {
 	for (auto id = this->objects.begin(); id != this->objects.end(); ++id)
 	{
@@ -299,7 +310,7 @@ void Player::AllDelete()
 
 bool Player::HeadCheck()
 {
-	Object head;
+	GameObject head;
 	head.CreateObject(Objform::Cube, Vec2(this->position.x,this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
 	for (int i = 0; i < this->objects.size(); ++i)
 	{
@@ -321,9 +332,9 @@ bool Player::HeadCheck()
 	return false;
 }
 
-bool Player::HeadCheck(std::string objname_, int n)
+bool Player::HeadCheck(std::string& objname_, int n)
 {
-	Object head;
+	GameObject head;
 	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	if (n == 0) {
 		for (int j = 0; j < this->objects.size(); ++j)
@@ -357,7 +368,7 @@ bool Player::HeadCheck(std::string objname_, int n)
 
 bool Player::FootCheck()
 {
-	Object foot;
+	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
 	for (int j = 0; j < this->objects.size(); ++j)
 	{
@@ -389,9 +400,9 @@ bool Player::FootCheck()
 	return false;
 }
 
-bool Player::FootCheck(std::string objname_,int n)
+bool Player::FootCheck(std::string& objname_,int n)
 {
-	Object foot;
+	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	if (n == 0) {
 		for (int j = 0; j < this->objects.size(); ++j)
@@ -422,7 +433,7 @@ bool Player::FootCheck(std::string objname_,int n)
 	return false;
 }
 
-void Player::MoveCheck(Vec2 est)
+void Player::MoveCheck(Vec2& est)
 {
 	while (est.x != 0.f)
 	{
@@ -583,19 +594,20 @@ bool Player::DeleteBucket(Bucket* bucket)
 	return false;
 }
 
-void Player::Animation::SetAnimaVec(Vec2 start_, Vec2 end_)
+void Player::Animation::SetAnimaVec(Vec2& start_, Vec2& end_)
 {
 	this->startVec = start_;
 	this->endVec = end_;
 	this->animationVec = { this->endVec.x - this->startVec.x ,this->endVec.y - this->startVec.y };
 }
 
-void Player::Animation::Initialize()
+bool Player::Animation::Initialize()
 {
 	this->animationVec = { 0.f,0.f };
 	this->startVec = { 0.f,0.f };
 	this->endVec = { 0.f,0.f };
 	this->timeCnt = 0;
+	return true;
 }
 
 Vec2 Player::Animation::Move()
@@ -649,7 +661,7 @@ bool Player::Animation::isMove()
 	return false;
 }
 
-void Player::MoveCheck(Vec2 est, std::string objname_)
+void Player::MoveCheck(Vec2& est, std::string& objname_)
 {
 	while (est.y != 0.f)
 	{
@@ -682,7 +694,7 @@ void Player::MoveCheck(Vec2 est, std::string objname_)
 	}
 }
 
-bool Player::ObjectHit(std::string objname_)
+bool Player::ObjectHit(std::string& objname_)
 {
 	for (int i = 0; i < this->objects.size(); ++i)
 	{
@@ -718,9 +730,9 @@ bool Player::DeleteBlock(Block* block)
 
 bool Player::BlockHit()
 {
-	Object left;
+	GameObject left;
 	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f,this->Scale.y), 0.0f);
-	Object right;
+	GameObject right;
 	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(1.0f, this->Scale.y), 0.0f);
 	for (int i = 0; i < this->blocks.size(); ++i)
 	{
@@ -745,12 +757,12 @@ void Player::SetTexture(Texture* texture)
 	this->playerimg = texture;
 }
 
-void Player::AddWater(Object* water)
+void Player::AddWater(GameObject* water)
 {
 	waters.push_back(water);
 }
 
-bool Player::DeleteWater(Object* water)
+bool Player::DeleteWater(GameObject* water)
 {
 	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
 	{
@@ -776,4 +788,23 @@ void Player::SetPos(Vec2& pos)
 Vec2 Player::GetPos() const
 {
 	return this->position;
+}
+
+Player::SP Player::Create(Vec2& pos, bool flag)
+{
+	auto to = Player::SP(new Player());
+	if (to)
+	{
+		to->me = to;
+		if (flag)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

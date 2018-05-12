@@ -26,15 +26,15 @@ public:
 	GameObject();									//コンストラクタ	
 	GameObject(										//コンストラクタ
 		Objform form, 
-		Vec2 _posi, 
-		Vec2 _Sca, 
+		Vec2& _posi, 
+		Vec2& _Sca, 
 		float _ang
 	);
 	~GameObject();									//デストラクタ
 	void CreateObject(								//GameObjectの情報を登録
 		Objform form,
-		Vec2 _posi,
-		Vec2 _Sca,
+		Vec2& _posi,
+		Vec2& _Sca,
 		float _ang
 	);
 	std::string objectTag;							//タグ名

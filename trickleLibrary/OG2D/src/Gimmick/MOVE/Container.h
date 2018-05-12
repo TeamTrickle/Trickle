@@ -2,7 +2,6 @@
 
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Win\WinMain.h"
 
 class Youki :public Object
 {

@@ -191,7 +191,10 @@ unsigned int Color::Getcolor() const
 void Color::operator+=(Color& b) { red += b.red; green += b.green; blue += b.blue; alpha += b.alpha; }
 void Color::operator*=(Color& b) { red *= b.red; green *= b.green; blue *= b.blue; alpha *= b.alpha; }
 void Color::operator-=(Color& b) { red -= b.red; green -= b.green; blue -= b.blue; alpha -= b.alpha; }
-void Color::operator=(Color& b) { red = b.red; green = b.green; blue = b.blue; alpha = b.alpha; }
+//void Color::operator=(Color& b) { red = b.red; green = b.green; blue = b.blue; alpha = b.alpha; }
+Color Color::operator+(Color& b) { return Color(red += b.red, green += b.green, blue += b.blue, alpha += b.alpha); }
+Color Color::operator-(Color& b){ return Color(red -= b.red, green -= b.green, blue -= b.blue, alpha -= b.alpha); }
+Color Color::operator*(Color& b){ return Color(red *= b.red, green *= b.green, blue *= b.blue, alpha *= b.alpha); }
 
 float OG::ToRadian(const  float  degree_)
 {

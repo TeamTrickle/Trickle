@@ -1,5 +1,4 @@
-#ifndef __BUCKET_H__
-#define __BUCKET_H__
+#pragma once
 
 
 /**
@@ -11,7 +10,7 @@
 #include "Water\water.h"
 #include "Map\Map.h"
 
-class Bucket : public Object {
+class Bucket : public GameObject,public TaskObject {
 
 private:
 	const Box2D BUCKET_NOTHING = Box2D(0, 0, 64, 64);
@@ -20,15 +19,17 @@ private:
 
 public:
 	explicit Bucket();
-	explicit Bucket(Vec2 pos);
+	explicit Bucket(Vec2& pos);
 	virtual ~Bucket();
 
-	bool Initialize(Vec2 pos);
-	void Update(Map &map, Bucket &bucket);
-	void Render();
-	void Finalize();
+	typedef std::shared_ptr<Bucket> SP;
+	static SP Create(Vec2&, bool = true);
+	bool Initialize(Vec2& pos);
+	void UpDate();
+	void Render2D();
+	bool Finalize();
 
-	void SetParent(Object*);
+	void SetParent(GameObject*);
 	bool HasParent() const;
 	void CheckMove(Vec2 &e_, Map &map, Bucket &bucket);
 
@@ -46,10 +47,6 @@ public:
 	Vec2 gravity;      //重力
 	bool hold;         //プレイヤがバケツを持っているかの判断
 private:
-	Object * parent;
+	GameObject * parent;
 	Texture tex;
 };
-
-
-
-#endif

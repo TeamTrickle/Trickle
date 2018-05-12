@@ -114,3 +114,4 @@ private:
 };
 
 extern EngineSystem* OGge;
+extern unsigned short* MapNum;
