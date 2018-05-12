@@ -1,4 +1,5 @@
 #include "Block/block.h"   //•ÏX‚µ‚½
+#include "Player\Player.h"
 
 Block::Block() {
 }

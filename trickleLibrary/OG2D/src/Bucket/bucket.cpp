@@ -1,4 +1,6 @@
 #include "Bucket\bucket.h"
+#include "Water\water.h"
+#include "Map\Map.h"
 Bucket::Bucket() {
 	
 }
@@ -34,7 +36,23 @@ void Bucket::UpDate() {
 		gravity.y = 0.0f;
 	}
 	gravity.y += 5.0f;
-	//CheckMove(gravity, map, bucket);
+	if (this->BucketWaterCreate())	//バケツから水を出す処理
+	{
+		auto water = Water::Create(Vec2(150, 100));
+		auto tex = rm->GetTextureData((std::string)"waterTex");
+		if (tex)
+		{
+			water->SetTexture(tex);
+		}
+		else
+		{
+			water->Kill();
+		}
+	}
+	//水が当たった時の処理
+	this->WaterIsHitCheck();
+	
+	CheckMove(gravity);
 }
 
 void Bucket::Render2D() {
@@ -56,16 +74,6 @@ Box2D Bucket::GetSpriteCrop() const {
 	return BUCKET_NOTHING;
 }
 
-//バケツから水をこぼす処理 ここには要らなくなる予定
-Water* Bucket::Spill() {
-	Water* ret = new Water(this->position);
-	ret->position = Vec2(this->position.x + this->Scale.x, this->position.y);
-	ret->volume = capacity;
-	ret->invi = 60;
-	capacity = 0.f;
-	return ret;
-}
-
 void Bucket::SetParent(GameObject* o_) {
 	parent = o_;
 }
@@ -76,8 +84,13 @@ bool Bucket::HasParent() const {
 
 //-----------------------------------------------------------------------------------------------
 //めり込まない処理
-void Bucket::CheckMove(Vec2 &e_, Map &map, Bucket &bucket)
+void Bucket::CheckMove(Vec2 &e_)
 {
+	auto map = OGge->GetTask<Map>("Map");
+	if (!map)
+	{
+		return;
+	}
 	//x軸について
 	while (e_.x != 0.0f)
 	{
@@ -99,7 +112,7 @@ void Bucket::CheckMove(Vec2 &e_, Map &map, Bucket &bucket)
 			e_.x = 0.0f;
 		}
 
-		if (map.MapHitCheck(bucket))
+		if (map->MapHitCheck(*this))
 		{
 			this->position.x = preX;
 			break;
@@ -126,7 +139,7 @@ void Bucket::CheckMove(Vec2 &e_, Map &map, Bucket &bucket)
 			e_.y = 0.0f;
 		}
 
-		if (map.MapHitCheck(bucket))
+		if (map->MapHitCheck(*this))
 		{
 			this->position.y = preY;
 			break;
@@ -150,6 +163,11 @@ bool Bucket::GetHold() const
 	return this->hold;
 }
 
+bool Bucket::BucketWaterCreate()
+{
+	return this->hold && OGge->in->down(In::B3) && this->capacity > 0.f;
+}
+
 Bucket::SP Bucket::Create(Vec2& pos, bool flag_)
 {
 	auto to = Bucket::SP(new Bucket(pos));
@@ -167,4 +185,15 @@ Bucket::SP Bucket::Create(Vec2& pos, bool flag_)
 		return to;
 	}
 	return nullptr;
+}
+void Bucket::WaterIsHitCheck()
+{
+	auto waters = OGge->GetTasks<Water>("water");
+	for (int i = 0; i < (*waters).size(); ++i)
+	{
+		if (this->hit(*(*waters)[i]))
+		{
+			this->capacity += (*waters)[i]->waterMove();
+		}
+	}
 }

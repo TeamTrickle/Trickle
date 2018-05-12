@@ -117,6 +117,9 @@
     <Filter Include="ソースファイル\OGSystem\System\OG">
       <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\ResourceManager">
+      <UniqueIdentifier>{93ee20bc-893b-439e-b693-016b7b7832ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -183,9 +186,6 @@
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp">
       <Filter>ソースファイル\OGSystem\System\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shader\shader.cpp">
-      <Filter>ソースファイル\OGSystem\System\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
@@ -236,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\TaskObject.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
+      <Filter>ソースファイル\ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,9 +308,6 @@
     <ClInclude Include="src\OGSystem\Audio\SoundManager.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shader\shader.h">
-      <Filter>ソースファイル\OGSystem\System\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="src\OGSystem\Timer\glTimer.h">
       <Filter>ソースファイル\OGSystem\System\Timer</Filter>
     </ClInclude>
@@ -358,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceManager\ResourceManager.h">
+      <Filter>ソースファイル\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

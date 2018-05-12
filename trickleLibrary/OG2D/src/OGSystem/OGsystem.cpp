@@ -261,3 +261,4 @@ bool EngineSystem::GetDeleteEngine()
 //	return nullptr;
 //}
 EngineSystem* OGge;
+ResourceManager* rm;

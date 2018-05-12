@@ -1,10 +1,6 @@
 #pragma once
-
-
-
-#include "Water\water.h"
-#include "Map\Map.h"
-//#include "Object\Object.h"
+#include "OGSystem\OGsystem.h"
+#include "Object\Object.h"
 
 class Block : public GameObject ,public TaskObject{
 

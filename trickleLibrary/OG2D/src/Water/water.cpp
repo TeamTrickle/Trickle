@@ -1,5 +1,5 @@
 #include "water.h"
-
+#include "Map\Map.h"
 
 
 Water::Water(Vec2 pos)
@@ -68,6 +68,7 @@ void Water::UpDate()
 			this->nowSituation = Water::UpDeleteform();
 			break;
 		case Water::Situation::CreaDelete:
+			this->Kill();
 			break;
 		}
 		this->MoveWATERCheck(move);
@@ -208,11 +209,16 @@ Water::Situation Water::GetSituation() const
 float Water::waterMove()
 {
 	float _v = 0;
-	if (Water::Situation::Normal == this->nowSituation && Water::State::LIQUID == this->currentState)
+	if (this->IsBucket())
 	{
 		_v = this->volume;
 		this->volume = 0.f;
-	}	
+	}
+	else
+	{
+		return 0.0f;
+	}
+	this->Kill();
 	return _v;
 }
 
@@ -541,6 +547,11 @@ void Water::MovePos(Vec2& est)
 Vec2 Water::GetMove() const
 {
 	return this->move;
+}
+
+bool Water::IsBucket()
+{
+	return this->GetSituation() == Water::Situation::Normal && this->GetState() == Water::State::LIQUID && this->invi <= 0;
 }
 
 Water::SP Water::Create(Vec2& pos, bool flag_)
