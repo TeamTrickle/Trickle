@@ -357,6 +357,7 @@ bool Game::Initialize()
 		default:
 			break;
 	}
+	__super::Init((std::string)"game");
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -524,126 +525,73 @@ void Game::UpDate()
 	//	}
 	//}
 	//player.UpDate();
-	for (int i = 0; i < this->block.size(); ++i)
-	{
-		//block[i]->UpDate(map, *block[i], player);
-		block[i]->PlCheckHit(player, *block[i]);
-	}
-	for (int i = 0; i < this->bucket.size(); ++i)
-	{
-		//bucket[i]->UpDate(map, *bucket[i]);
-	}
+	//for (int i = 0; i < this->block.size(); ++i)
+	//{
+	//	//block[i]->UpDate(map, *block[i], player);
+	//	block[i]->PlCheckHit(player, *block[i]);
+	//}
+	//for (int i = 0; i < this->bucket.size(); ++i)
+	//{
+	//	//bucket[i]->UpDate(map, *bucket[i]);
+	//}
 	
 	
-	for (int i = 0; i < this->goal.size(); ++i)
+	/*for (int i = 0; i < this->goal.size(); ++i)
 	{
 		this->goal[i]->UpDate();
-	}
+	}*/
 	//UI------------------------------------
-	switch (*MapNum)
-	{
-	case 0:
-		//ギミックの更新
-		kanetuki.UpDate();
-		for (int i = 0; i < 2; ++i)
-		{
-			seihyouki[i].UpDate();
-			fan[i].UpDate();
-		}
-		break;
-	case 1:
-		walkui.UpDate();
-		jumpui.UpDate();
-		getbucketui.UpDate();
-		getwaterui.UpDate();
-		spillwaterui.UpDate();
+	//switch (*MapNum)
+	//{
+	//case 0:
+	//	//ギミックの更新
+	//	kanetuki.UpDate();
+	//	for (int i = 0; i < 2; ++i)
+	//	{
+	//		seihyouki[i].UpDate();
+	//		fan[i].UpDate();
+	//	}
+	//	break;
+	//case 1:
+	///*	walkui.UpDate();
+	//	jumpui.UpDate();
+	//	getbucketui.UpDate();
+	//	getwaterui.UpDate();
+	//	spillwaterui.UpDate();*/
 
-		
-		break;
-	case 2:
-		break;
-	case 3:
-		switchui.UpDate();
-		evaporationui.UpDate();
-		kanetuki.UpDate();
-		for (int i = 0; i < 1; ++i)
-		{
-			this->fan[i].UpDate();
-		}
-		break;
-	case 4:
-		kanetuki.UpDate();
-		seihyouki[0].UpDate();
-		break;
-	case 5:
-		//ギミックの更新
-		kanetuki.UpDate();
-		//実際に動かすのは１つ
-		seihyouki[0].UpDate();
-		for (int i = 0; i < 2; ++i)
-		{
-			this->fan[i].UpDate();
-		}
-		break;
-	case 6:
-		break;
-	default:
-		break;
-	}
+	//	
+	//	break;
+	//case 2:
+	//	break;
+	//case 3:
+	//	/*switchui.UpDate();
+	//	evaporationui.UpDate();*/
+	//	kanetuki.UpDate();
+	//	for (int i = 0; i < 1; ++i)
+	//	{
+	//		this->fan[i].UpDate();
+	//	}
+	//	break;
+	//case 4:
+	//	kanetuki.UpDate();
+	//	seihyouki[0].UpDate();
+	//	break;
+	//case 5:
+	//	//ギミックの更新
+	//	kanetuki.UpDate();
+	//	//実際に動かすのは１つ
+	//	seihyouki[0].UpDate();
+	//	for (int i = 0; i < 2; ++i)
+	//	{
+	//		this->fan[i].UpDate();
+	//	}
+	//	break;
+	//case 6:
+	//	break;
+	//default:
+	//	break;
+	//}
 	//--------------------------------------
-
-	
-	if (OGge->in->key.on(Input::KeyBoard::A))
-	{
-		OGge->camera->MovePos(Vec2(-3.0f, 0.0f));
-	}
-	if (OGge->in->key.on(Input::KeyBoard::D))
-	{
-		OGge->camera->MovePos(Vec2(+3.0f, 0.0f));
-	}
-	if (OGge->in->key.on(Input::KeyBoard::W))
-	{
-		OGge->camera->MovePos(Vec2(0.0f, -3.0f));
-	}
-	if (OGge->in->key.on(Input::KeyBoard::S))
-	{
-		OGge->camera->MovePos(Vec2(0.0f, 3.0f));
-	}
-	if (OGge->in->Pad_Connection) {
-		Vec2 cameraest = { 0,0 };
-		cameraest.x = OGge->in->pad[0].axis(Input::GamePad::AXIS_RIGHT_X) *10.f;
-		cameraest.y = OGge->in->pad[0].axis(Input::GamePad::AXIS_RIGHT_Y) * 10.f;
-		cameraest.y = -cameraest.y;
-		OGge->camera->MovePos(cameraest);
-	}
-	if (OGge->in->key.down(Input::KeyBoard::U))
-	{
-		for (int i = 0; i < water.size(); ++i)
-		{
-			if (water[i]->GetState() == Water::State::LIQUID)
-			{
-				water[i]->SetState(Water::State::GAS);
-			}
-			else
-			{
-				water[i]->SetState(Water::State::LIQUID);
-			}
-		}
-	}
-	if (OGge->in->key.down(In::I))
-	{
-		for (int i = 0; i < water.size(); ++i)
-		{
-			if (water[i]->GetState() == Water::State::LIQUID)
-			{
-				water[i]->SetState(Water::State::SOLID);
-			}
-			else
-			{
-				water[i]->SetState(Water::State::LIQUID);
-			}
-		}
-	}
 
 
 	//カメラ処理
@@ -663,29 +611,29 @@ void Game::Render2D()
 	
 	
 	//プレイヤー描画
-	player.Render2D();
-	//水描画
-	for (int i = 0; i < water.size(); ++i)
-	{
-		water[i]->Render2D();
-	}
+	//player.Render2D();
+	////水描画
+	//for (int i = 0; i < water.size(); ++i)
+	//{
+	//	water[i]->Render2D();
+	//}
 	//UI------------------------------------
 	switch (*MapNum)
 	{
 	case 0:
 		break;
 	case 1:
-		walkui.Render2D();
+	/*	walkui.Render2D();
 		jumpui.Render2D();
 		getbucketui.Render2D();
 		getwaterui.Render2D();
-		spillwaterui.Render2D();
+		spillwaterui.Render2D();*/
 		break;
 	case 2:
 		break;
 	case 3:
-		switchui.Render2D();
-		evaporationui.Render2D();
+		/*switchui.Render2D();
+		evaporationui.Render2D();*/
 	case 4:
 		break;
 	case 5:
@@ -701,18 +649,18 @@ void Game::Render2D()
 bool Game::Finalize()
 {
 	std::cout << "Game" << std::endl;
-	for (int i = 0; i < this->block.size(); ++i)
+	/*for (int i = 0; i < this->block.size(); ++i)
 	{
 		block[i]->Finalize();
 		delete block[i];
 	}
 	map.Finalize();
-	player.Finalize();
-	for (int i = 0; i < this->goal.size(); ++i)
+	player.Finalize();*/
+	/*for (int i = 0; i < this->goal.size(); ++i)
 	{
 		this->goal[i]->Finalize();
 		delete this->goal[i];
-	}
+	}*/
 	//for (int i = 0; i < bucket.size(); ++i) {
 	//	bucket[i]->Finalize();
 	//}
@@ -721,7 +669,7 @@ bool Game::Finalize()
 	//	this->bucket.pop_back();
 	//}
 	
-	for (int i = 0; i < this->bucket.size(); ++i)
+	/*for (int i = 0; i < this->bucket.size(); ++i)
 	{
 		bucket[i]->Finalize();
 		delete bucket[i];
@@ -731,26 +679,26 @@ bool Game::Finalize()
 		water[i]->Finalize();
 		delete water[i];
 	}
-	water.clear();
-	for (int i = 0; i < 2; ++i) {
+	water.clear();*/
+	/*for (int i = 0; i < 2; ++i) {
 		swich[i].Finalize();
 		fan[i].Finalize();
-	}
+	}*/
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
 	//UI
-	walkui.Finalize();
+	/*walkui.Finalize();
 	jumpui.Finalize();
 	getbucketui.Finalize();
 	getwaterui.Finalize();
-	spillwaterui.Finalize();
+	spillwaterui.Finalize();*/
 	//switchui.Finalize();
 	//evaporationui.Finalize();
-	this->water.clear();
-	this->bucket.clear();
-	this->block.clear();
-	this->goal.clear();
+	//this->water.clear();
+	//this->bucket.clear();
+	//this->block.clear();
+	//this->goal.clear();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -760,7 +708,9 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
-	OGge->camera->MovePos(player.GetEst());
+	auto player = OGge->GetTask<Player>("player");
+	auto map = OGge->GetTask<Map>("map");
+	OGge->camera->MovePos(player->GetEst());
 
 	//カメラ処理
 	Vec2 NowCameraPos = OGge->camera->GetPos();
@@ -770,8 +720,8 @@ void Game::Camera_move()
 	float PlayerCenter_x = NowCameraSize.x / 2.0f;
 	float PlayerCenter_y = NowCameraSize.y / 2.0f;
 	//カメラ座標を求める
-	float camera_x = float(player.position.x) - PlayerCenter_x;
-	float camera_y = float(player.position.y) - PlayerCenter_y;
+	float camera_x = float(player->position.x) - PlayerCenter_x;
+	float camera_y = float(player->position.y) - PlayerCenter_y;
 	//カメラの座標を更新
 	NowCameraPos.x = camera_x;
 	NowCameraPos.y = camera_y;
@@ -780,7 +730,7 @@ void Game::Camera_move()
 	//左右のスクロール範囲の設定(サイズの10分の1)
 	float Boundary = NowCameraSize.x / 10.0f;
 	//現在スクロール値とプレイヤーの座標の差を修正
-	Vec2 NowPlayerPos = { player.position.x - NowCameraPos.x,player.position.y - NowCameraPos.y };
+	Vec2 NowPlayerPos = { player->position.x - NowCameraPos.x,player->position.y - NowCameraPos.y };
 	//x座標
 	if (NowPlayerPos.x < Boundary){
 		NowCameraPos.x = NowPlayerPos.x - Boundary;
@@ -799,14 +749,14 @@ void Game::Camera_move()
 	if (NowCameraPos.x < 0) {
 		NowCameraPos.x = 0;
 	}
-	if (NowCameraPos.x + NowCameraSize.x > map.mapSize.x * map.DrawSize.x) {
-		NowCameraPos.x = (map.mapSize.x * map.DrawSize.x) - NowCameraSize.x;
+	if (NowCameraPos.x + NowCameraSize.x > map->mapSize.x * map->DrawSize.x) {
+		NowCameraPos.x = (map->mapSize.x * map->DrawSize.x) - NowCameraSize.x;
 	}
 	if (NowCameraPos.y < 0) {
 		NowCameraPos.y = 0;
 	}
-	if (NowCameraPos.y + NowCameraSize.y > map.mapSize.y * map.DrawSize.y) {
-		NowCameraPos.y = (map.mapSize.y * map.DrawSize.y) - NowCameraSize.y;
+	if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
+		NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
 	}
 	OGge->camera->SetPos(NowCameraPos);
 }

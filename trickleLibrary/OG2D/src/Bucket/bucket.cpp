@@ -26,7 +26,7 @@ bool Bucket::Initialize(Vec2& pos) {
 	GameObject::objectTag = "Bucket";
 
 	tex.Create((std::string)"bucket.png");
-	
+	__super::Init((std::string)"bucket");
 	return true;
 }
 
@@ -86,7 +86,7 @@ bool Bucket::HasParent() const {
 //‚ß‚èž‚Ü‚È‚¢ˆ—
 void Bucket::CheckMove(Vec2 &e_)
 {
-	auto map = OGge->GetTask<Map>("Map");
+	auto map = OGge->GetTask<Map>("map");
 	if (!map)
 	{
 		return;
@@ -145,11 +145,6 @@ void Bucket::CheckMove(Vec2 &e_)
 			break;
 		}
 	}
-}
-
-bool Bucket::WaterHit(Water* water)
-{
-	return this->hit(*water);
 }
 
 void Bucket::HoldCheck(bool flag)

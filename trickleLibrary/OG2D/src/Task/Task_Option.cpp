@@ -25,6 +25,7 @@ bool Option::Initialize()
 	this->vol = 0.5f;
 
 	Option::Set();    //サウンドの用意
+	__super::Init((std::string)"option");
 	return true;
 }
 void Option::UpDate()

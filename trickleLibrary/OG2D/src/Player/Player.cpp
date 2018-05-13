@@ -1,4 +1,8 @@
 #include "Player.h"
+#include "Bucket\bucket.h"
+#include "Water\water.h"
+#include "Map\Map.h"
+#include "Block\block.h"
 
 Player::Player()
 {
@@ -34,6 +38,7 @@ bool Player::Initialize()
 	this->state = State::NORMAL;
 	//自動移動用値の初期化
 	this->animation.Initialize();
+	__super::Init((std::string)"player");
 	return true;
 }
 
@@ -86,9 +91,12 @@ void Player::UpDate()
 			//元に戻す
 			this->state = State::NORMAL;
 			//持っている判定を元に戻す
-			this->haveBucket->HoldCheck(false);
+			auto bucket = OGge->GetTasks<Bucket>("bucket");
+			for (auto id = bucket->begin(); id != bucket->end(); ++id)
+			{
+				(*id)->HoldCheck(false);
+			}
 			this->inv = 10;
-			this->haveBucket = nullptr;
 		}
 		break;
 	case State::NORMAL:
@@ -271,8 +279,6 @@ void Player::Render2D()
 
 bool Player::Finalize()
 {
-	//保持オブジェクトの情報の解放
-	this->AllDelete();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		
@@ -284,50 +290,31 @@ Vec2 Player::GetEst() const {
 	return est;
 }
 
-void Player::AddObject(GameObject* obj_)
-{
-	this->objects.push_back(obj_);
-}
-
-void Player::DeleteObject(GameObject* obj_)
-{
-	for (auto id = this->objects.begin(); id != this->objects.end(); ++id)
-	{
-		if ((*id) == obj_)
-		{
-			this->objects.erase(id);
-		}
-	}
-}
-
-void Player::AllDelete()
-{
-	this->objects.clear();
-	this->buckets.clear();
-	this->blocks.clear();
-	this->waters.clear();
-}
 
 bool Player::HeadCheck()
 {
 	GameObject head;
 	head.CreateObject(Objform::Cube, Vec2(this->position.x,this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
-	for (int i = 0; i < this->objects.size(); ++i)
+	auto map = OGge->GetTask<Map>("map");
+	for (int y = 0; y < map->mapSize.y; ++y)
 	{
-		if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Net" || this->objects[i]->objectTag == "Soil")
+		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (head.hit(*this->objects[i]))
+			if (map->hitBase[y][x].objectTag == "Floor" ||
+				map->hitBase[y][x].objectTag == "Net" ||
+				map->hitBase[y][x].objectTag == "Soil")
 			{
-				return true;
+				if (head.hit(map->hitBase[y][x]))
+				{
+					return true;
+				}
 			}
 		}
 	}
-	for (int i = 0; i < this->blocks.size(); ++i)
+	auto block = OGge->GetTask<Block>("block");
+	if (head.hit(*block))
 	{
-		if (head.hit(*this->blocks[i]))
-		{
-			return true;
-		}
+		return true;
 	}
 	return false;
 }
@@ -336,29 +323,36 @@ bool Player::HeadCheck(std::string& objname_, int n)
 {
 	GameObject head;
 	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	auto map = OGge->GetTask<Map>("map");
 	if (n == 0) {
-		for (int j = 0; j < this->objects.size(); ++j)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->objects[j]->objectTag == objname_)
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (head.hit(*this->objects[j]))
+				if (map->hitBase[y][x].objectTag == objname_)
 				{
-					this->animation.SetAnimaVec(this->position, this->objects[j]->position);
-					return true;
+					if (head.hit(map->hitBase[y][x]))
+					{
+						this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+						return true;
+					}
 				}
 			}
 		}
 	}
 	else
 	{
-		for (int j = 0; j < this->objects.size(); ++j)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->objects[j]->objectTag != objname_)
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (head.hit(*this->objects[j]))
+				if (map->hitBase[y][x].objectTag != objname_)
 				{
-					this->animation.SetAnimaVec(this->position, Vec2(this->objects[j]->position.x, this->objects[j]->position.y - 1.0f));
-					return true;
+					if (head.hit(map->hitBase[y][x]))
+					{
+						this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - 1.0f));
+						return true;
+					}
 				}
 			}
 		}
@@ -370,28 +364,33 @@ bool Player::FootCheck()
 {
 	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
-	for (int j = 0; j < this->objects.size(); ++j)
+	auto map = OGge->GetTask<Map>("map");
+	for (int y = 0; y < map->mapSize.y; ++y)
 	{
-		if (this->objects[j]->objectTag == "Floor" || this->objects[j]->objectTag == "Net" || this->objects[j]->objectTag == "Soil")
+		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (foot.hit(*this->objects[j]))
+			if (map->hitBase[y][x].objectTag == "Floor" ||
+				map->hitBase[y][x].objectTag == "Net" ||
+				map->hitBase[y][x].objectTag == "Soil")
 			{
-				return true;
+				if (foot.hit(map->hitBase[y][x]))
+				{
+					return true;
+				}
 			}
 		}
 	}
-	for (int i = 0; i < this->blocks.size(); ++i)
+	auto block = OGge->GetTask<Block>("block");
+	if (foot.hit(*block))
 	{
-		if (foot.hit(*this->blocks[i]))
-		{
-			return true;
-		}
+		return true;
 	}
-	for (int i = 0; i < this->waters.size(); ++i)
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		if (foot.hit(*this->waters[i]))
+		if (foot.hit(*(*id)))
 		{
-			if (this->waters[i]->objectTag == "SOLID")
+			if ((*id)->objectTag == "SOLID")
 			{
 				return true;
 			}
@@ -404,28 +403,35 @@ bool Player::FootCheck(std::string& objname_,int n)
 {
 	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	auto map = OGge->GetTask<Map>("map");
 	if (n == 0) {
-		for (int j = 0; j < this->objects.size(); ++j)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->objects[j]->objectTag == objname_)
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (foot.hit(*this->objects[j]))
+				if (map->hitBase[y][x].objectTag == objname_)
 				{
-					this->animation.SetAnimaVec(this->position, Vec2(this->objects[j]->position.x, this->objects[j]->position.y + 10.f));
-					return true;
+					if (foot.hit(map->hitBase[y][x]))
+					{
+						this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y + 10.f));
+						return true;
+					}
 				}
 			}
 		}
 	}
 	else
 	{
-		for (int j = 0; j < this->objects.size(); ++j)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->objects[j]->objectTag != objname_)
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (foot.hit(*this->objects[j]))
+				if (map->hitBase[y][x].objectTag != objname_)
 				{
-					return true;
+					if (foot.hit(map->hitBase[y][x]))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -453,29 +459,34 @@ void Player::MoveCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		auto map = OGge->GetTask<Map>("map");
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->objects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Net") {
-					this->position.x = preX;
-					break;
+				if (this->hit(map->hitBase[y][x]))
+				{
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "Net")
+					{
+						this->position.x = preX;
+						break;
+					}
 				}
 			}
 		}
-		for (int i = 0; i < this->blocks.size(); ++i)
+		auto block = OGge->GetTask<Block>("block");
+		if (this->hit(*block))
 		{
-			if (this->hit(*this->blocks[i]))
-			{
-				this->position.x = preX;
-				break;
-			}
+			this->position.x = preX;
+			break;
 		}
-		for (int i = 0; i < this->waters.size(); ++i)
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 		{
-			if (this->hit(*this->waters[i]))
+			if (this->hit(*(*id)))
 			{
-				if (this->waters[i]->objectTag == "SOLID")
+				if ((*id)->objectTag == "SOLID")
 				{
 					this->position.x = preX;
 					break;
@@ -501,29 +512,34 @@ void Player::MoveCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		auto map = OGge->GetTask<Map>("map");
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->objects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->objects[i]->objectTag == "Floor"/* || this->objects[i]->objectTag == "Ladder"*/ || this->objects[i]->objectTag == "Net") {
-					this->position.y = preY;
-					break;
+				if (this->hit(map->hitBase[y][x]))
+				{
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "Net")
+					{
+						this->position.y = preY;
+						break;
+					}
 				}
 			}
 		}
-		for (int i = 0; i < this->blocks.size(); ++i)
+		auto block = OGge->GetTask<Block>("block");
+		if (this->hit(*block))
 		{
-			if (this->hit(*this->blocks[i]))
-			{
-				this->position.y = preY;
-				break;
-			}
+			this->position.y = preY;
+			break;
 		}
-		for (int i = 0; i < this->waters.size(); ++i)
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 		{
-			if (this->hit(*this->waters[i]))
+			if (this->hit(*(*id)))
 			{
-				if (this->waters[i]->objectTag == "SOLID")
+				if ((*id)->objectTag == "SOLID")
 				{
 					this->position.y = preY;
 					break;
@@ -559,12 +575,12 @@ void Player::Friction()
 
 bool Player::BucketHit()
 {
-	for (int i = 0; i < this->buckets.size(); ++i)
+	auto bucket = OGge->GetTasks<Bucket>("bicket");
+	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
-		if (this->hit(*this->buckets[i]))
+		if (this->hit(*(*id)))
 		{
-			this->buckets[i]->HoldCheck(true);
-			this->haveBucket = this->buckets[i];
+			(*id)->HoldCheck(true);
 			return true;
 		}
 	}
@@ -573,25 +589,14 @@ bool Player::BucketHit()
 
 void Player::BucketMove()
 {
-	this->haveBucket->position = { this->position.x,this->position.y - this->haveBucket->Scale.y };
-}
-
-void Player::AddBucket(Bucket* bucket)
-{
-	this->buckets.push_back(bucket);
-}
-
-bool Player::DeleteBucket(Bucket* bucket)
-{
-	for (auto id = this->buckets.begin(); id != this->buckets.end(); ++id)
+	auto buckets = OGge->GetTasks<Bucket>("bucket");
+	for (auto id = (*buckets).begin(); id != (*buckets).end(); ++id)
 	{
-		if ((*id) == bucket)
+		if ((*id)->GetHold())
 		{
-			this->buckets.erase(id);
-			return true;
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y };
 		}
 	}
-	return false;
 }
 
 void Player::Animation::SetAnimaVec(Vec2& start_, Vec2& end_)
@@ -681,13 +686,19 @@ void Player::MoveCheck(Vec2& est, std::string& objname_)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		auto map = OGge->GetTask<Map>("map");
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->objects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "LadderTop") {
-					this->position.y = preY;
-					break;
+				if (this->hit(map->hitBase[y][x]))
+				{
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "LadderTop")
+					{
+						this->position.y = preY;
+						break;
+					}
 				}
 			}
 		}
@@ -696,33 +707,19 @@ void Player::MoveCheck(Vec2& est, std::string& objname_)
 
 bool Player::ObjectHit(std::string& objname_)
 {
-	for (int i = 0; i < this->objects.size(); ++i)
+	auto map = OGge->GetTask<Map>("map");
+	for (int y = 0; y < map->mapSize.y; ++y)
 	{
-		if (this->hit(*this->objects[i]))
+		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (this->objects[i]->objectTag == objname_) 
+			if (this->hit(map->hitBase[y][x]))
 			{
-				this->animation.SetAnimaVec(this->position, Vec2(this->objects[i]->position.x, this->position.y));
-				return true;
+				if (map->hitBase[y][x].objectTag == objname_)
+				{
+					this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, this->position.y));
+					return true;
+				}
 			}
-		}
-	}
-	return false;
-}
-
-void Player::AddBlock(Block* block)
-{
-	this->blocks.push_back(block);
-}
-
-bool Player::DeleteBlock(Block* block)
-{
-	for (auto id = this->blocks.begin(); id != this->blocks.end(); ++id)
-	{
-		if ((*id) == block)
-		{
-			this->blocks.erase(id);
-			return true;
 		}
 	}
 	return false;
@@ -734,19 +731,18 @@ bool Player::BlockHit()
 	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f,this->Scale.y), 0.0f);
 	GameObject right;
 	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(1.0f, this->Scale.y), 0.0f);
-	for (int i = 0; i < this->blocks.size(); ++i)
+	auto blocks = OGge->GetTasks<Block>("block");
+	for (auto id = (*blocks).begin(); id != (*blocks).end(); ++id)
 	{
-		if (left.hit(*this->blocks[i]))
+		if (left.hit(*(*id)))
 		{
-			//std::cout << "LEFT :Hit" << std::endl;
-			this->blocks[i]->PlCheckHit(left, *blocks[i]);
-			this->blocks[i]->GetMove(this->est);
+			(*id)->PlCheckHit(left);
+			(*id)->GetMove(this->est);
 		}
-		if (right.hit(*this->blocks[i]))
+		if (right.hit(*(*id)))
 		{
-			//std::cout << "RIGHT:Hit" << std::endl;
-			this->blocks[i]->PlCheckHit(right, *blocks[i]);
-			this->blocks[i]->GetMove(this->est);
+			(*id)->PlCheckHit(right);
+			(*id)->GetMove(this->est);
 		}
 	}
 	return false;
@@ -755,24 +751,6 @@ bool Player::BlockHit()
 void Player::SetTexture(Texture* texture)
 {
 	this->playerimg = texture;
-}
-
-void Player::AddWater(GameObject* water)
-{
-	waters.push_back(water);
-}
-
-bool Player::DeleteWater(GameObject* water)
-{
-	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
-	{
-		if ((*id) == water)
-		{
-			this->waters.erase(id);
-			return true;
-		}
-	}
-	return false;
 }
 
 Player::State Player::NowState() const

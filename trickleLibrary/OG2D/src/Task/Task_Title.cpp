@@ -44,6 +44,7 @@ bool Title::Initialize()
 	//ƒTƒEƒ“ƒh‚ÌÄ¶
 	//sound.play();
 	this->nextTaskCheck = 0;
+	__super::Init((std::string)"title");
 	return true;
 }
 

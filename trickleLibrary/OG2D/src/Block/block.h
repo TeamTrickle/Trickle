@@ -25,9 +25,9 @@ public:
 	bool HasParent() const;
 
 	//めり込まない処理
-	void CheckMove(Vec2 &e_, Map &map, Block &bock);
+	void CheckMove(Vec2 &e_);
 	//プレイヤーとブロックの当たった時の処理
-	void PlCheckHit(GameObject &p, Block &block);
+	void PlCheckHit(GameObject &p);
 	//プレイヤーとブロックの当たり判定フラッグ
 	bool plhit;
 	//プレイヤ側から、移動する量を持ってくる

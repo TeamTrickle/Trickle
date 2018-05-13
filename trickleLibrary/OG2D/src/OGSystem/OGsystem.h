@@ -134,3 +134,4 @@ private:
 
 extern EngineSystem* OGge;
 extern ResourceManager* rm;
+extern unsigned short* MapNum;

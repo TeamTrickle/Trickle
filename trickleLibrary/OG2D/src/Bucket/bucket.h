@@ -34,7 +34,6 @@ public:
 	bool HasParent() const;
 	void CheckMove(Vec2 &);
 
-	bool WaterHit(Water*);
 	void HoldCheck(bool = true);
 	bool GetHold() const;
 	void WaterIsHitCheck();

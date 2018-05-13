@@ -34,6 +34,7 @@ bool StageSelect::Initialize()
 	texStage1.Create((std::string)"stage1.png");
 	texStage2.Create((std::string)"stage2.png");
 	texToTitle.Create((std::string)"totitle.png");
+	__super::Init((std::string)"select");
 	return true;
 }
 
