@@ -37,6 +37,11 @@ void Option::UpDate()
 	{
 		sound.stop();
 	}
+	if (OGge->in->down(In::B2))
+	{
+		//ƒ^ƒCƒgƒ‹‚É–ß‚é
+		this->Kill();
+	}
 }
 bool Option::Finalize()
 {
@@ -132,6 +137,7 @@ Option::SP Option::Create(bool flag_)
 	auto to = Option::SP(new Option());
 	if (to)
 	{
+		to->me = to;
 		if (flag_)
 		{
 			OGge->SetTaskObject(to);

@@ -124,6 +124,7 @@ void StageSelect::Render2D()
 
 bool StageSelect::Finalize()
 {
+	texBack.Finalize();
 	texCursor.Finalize();
 	texTutorial.Finalize();
 	texStage1.Finalize();
@@ -172,6 +173,7 @@ StageSelect::SP StageSelect::Create(bool flag_)
 	auto to = StageSelect::SP(new StageSelect());
 	if (to)
 	{
+		to->me = to;
 		if (flag_)
 		{
 			OGge->SetTaskObject(to);

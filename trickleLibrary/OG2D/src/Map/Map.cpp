@@ -129,6 +129,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 			}
 		}
 	}
+	__super::Init((std::string)"map");
 	return true;
 }
 

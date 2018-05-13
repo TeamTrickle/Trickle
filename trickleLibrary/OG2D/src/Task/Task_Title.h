@@ -32,7 +32,6 @@ public:
 	//™™™™//
 	//’Ç‰Á•Ï”//
 	//™™™™//
-	Map map;
 	Sound sound;
 
 	enum State

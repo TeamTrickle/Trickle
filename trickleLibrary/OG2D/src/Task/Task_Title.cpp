@@ -15,7 +15,6 @@ bool Title::Initialize()
 {
 	std::cout << "Title‰Šú‰»" << std::endl;
 	sound.create(std::string("playandhope.wav"), true);
-	map.LoadMap((std::string)"test.txt");
 
 	cursorPos.x = 600.0f;
 	cursorPos.y = 100.0f;
@@ -123,7 +122,6 @@ void Title::Render2D()
 bool Title::Finalize()
 {
 	std::cout << "Title‰ð•ú" << std::endl;
-	map.Finalize();
 
 	//Žg—p‰æ‘œ‚Ì‰ð•ú
 	texCursor.Finalize();
@@ -133,6 +131,7 @@ bool Title::Finalize()
 
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
+		OGge->ChengeTask();
 		switch (state)
 		{
 		case Close:
@@ -152,7 +151,7 @@ bool Title::Finalize()
 			break;
 		}
 	}
-
+	
 	return true;
 }
 
