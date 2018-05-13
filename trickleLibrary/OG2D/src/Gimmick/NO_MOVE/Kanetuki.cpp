@@ -12,7 +12,7 @@ bool Kanetuki::Initialize(Vec2& pos , Vec2& scale)
 	this->taskName = "Kanetuki";			//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//Taskwaterect“à‚Ìˆ—‚ðs‚¤
 
-	Set_Pos(pos, scale);
+	this->HitGeneration(pos, scale);
 
 	return true;
 }
