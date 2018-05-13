@@ -115,7 +115,7 @@ public:
 		}
 		if (!flag)
 		{
-			w = nullptr;
+			//w = nullptr;
 		}
 		return w;
 	}
