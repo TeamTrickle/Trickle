@@ -684,6 +684,63 @@ bool Game::Finalize()
 		swich[i].Finalize();
 		fan[i].Finalize();
 	}*/
+
+	//各オブジェクトが存在している場合にKillする。
+	auto map = OGge->GetTask<Map>("map");
+	if (map)
+	{
+		map->Kill();
+	}
+	auto block = OGge->GetTasks<Block>("block");
+	for (auto id = (*block).begin(); id != (*block).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto UIs = OGge->GetTasks<UI>("UI");
+	for (auto id = (*UIs).begin(); id != (*UIs).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto buckets = OGge->GetTasks<Bucket>("bucket");
+	for (auto id = (*buckets).begin(); id != (*buckets).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	for (auto id = (*goals).begin(); id != (*goals).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto kanetukis = OGge->GetTasks<Kanetuki>("Kanetuki");
+	for (auto id = (*kanetukis).begin(); id != (*kanetukis).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto fans = OGge->GetTasks<Fan>("Senpuki");
+	for (auto id = (*fans).begin(); id != (*fans).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto seihyoukis = OGge->GetTasks<Seihyouki>("Seihyouki");
+	for (auto id = (*seihyoukis).begin(); id != (*seihyoukis).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto players = OGge->GetTasks<Player>("player");
+	for (auto id = (*players).begin(); id != (*players).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto gamepros = OGge->GetTasks<GameProcessManagement>("GameProcessManagement");
+	for (auto id = (*gamepros).begin(); id != (*gamepros).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
