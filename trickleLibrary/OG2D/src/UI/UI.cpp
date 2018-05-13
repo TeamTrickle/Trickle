@@ -1,4 +1,5 @@
 #include "UI.h"
+#include "Player\Player.h"
 
 UI::UI() {}
 
@@ -20,6 +21,7 @@ bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, i
 		srcTable[i].OffsetSize();
 	}
 	CreateObject(Cube, Vec2(coll.x, coll.y), Vec2(coll.w, coll.h), 0.0f);
+	__super::Init((std::string)"UI");
 	return true;
 }
 
@@ -37,6 +39,7 @@ void UI::UpDate() {
 		active = false;
 	}
 	//ƒvƒŒƒCƒ„‚ª”ÍˆÍ“à‚É“ü‚Á‚½‚ç
+	auto player = OGge->GetTask<Player>("player");
 	if (hit(*player) && appeared == -1) {
 		active = true;
 		appeared = 0;
@@ -76,9 +79,6 @@ bool UI::Finalize() {
 //bool UI::CheckHitPlayer() {
 //	return false;
 //}
-void UI::SetPlayerPtr(GameObject* pl) {
-	this->player = pl;
-}
 
 UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num,bool flag_)
 {

@@ -43,6 +43,7 @@ Water::~Water()
 
 bool Water::Initialize() 
 {
+	__super::Init((std::string)"water");
 	return true;
 }
 

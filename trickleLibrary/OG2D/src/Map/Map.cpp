@@ -280,6 +280,7 @@ bool Map::LoadMap(std::string& _path)
 
 	}
 	ifs2.close();
+	__super::Init((std::string)"map");
 	return true;
 }
 

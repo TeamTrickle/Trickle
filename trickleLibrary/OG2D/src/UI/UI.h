@@ -15,7 +15,6 @@ class UI :public GameObject,public TaskObject {
 	bool active;	//生死
 	//bool visible;	//可視不可視
 	std::vector<Box2D> srcTable;
-	GameObject* player;
 	int appeared;	//初期：-1、一度プレイヤと接触したら0、出たら1
 
 public:
@@ -33,5 +32,4 @@ public:
 	//void Appear();
 	//void Vanish();
 	//bool CheckHitPlayer();
-	void SetPlayerPtr(GameObject* pl);
 };

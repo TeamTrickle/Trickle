@@ -6,11 +6,8 @@
 //|履歴：2018/03/29劉韋君　    |//
 //|履歴：2018/03/30木務　    |//
 //|____________________________|//
-#include "Bucket\bucket.h"
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Gimmick\NO_MOVE\Switch.h"
-#include "Block\block.h"
 
 class Player :public GameObject ,public TaskObject
 {
@@ -68,11 +65,6 @@ private:
 	Direction direction;										//向きを格納する変数
 	Motion motion;												//現状モーション
 	State state;												//現状状態
-	std::vector<GameObject*> objects;								//当たり判定オブジェクト
-	std::vector<Bucket*> buckets;								//バケツ判定
-	std::vector<Block*> blocks;									//ブロック判定
-	std::vector<GameObject*> waters;								//水判定
-	Bucket* haveBucket;											//所持バケツ情報
 	Animation animation;										//アニメーションの移動処理
 	int inv;													//無敵時間
 	std::string taskName;
@@ -98,15 +90,6 @@ public:
 	void UpDate();												//更新処理
 	void Render2D();												//描画処理
 	bool Finalize();											//解放処理
-	void AddObject(GameObject* obj_);								//オブジェクトを登録する
-	void DeleteObject(GameObject* obj_);							//指定オブジェクトを登録から削除する
-	void AllDelete();											//全登録オブジェクトの削除
-	void AddBucket(Bucket* bucket);								//バケツオブジェクトの登録
-	bool DeleteBucket(Bucket* bucket);							//指定バケツオブジェクトを削除
-	void AddBlock(Block* block);								//ブロックオブジェクトを登録	
-	bool DeleteBlock(Block* block);								//指定ブロックオブジェクトの削除
-	void AddWater(GameObject*);										//水オブジェクトを登録
-	bool DeleteWater(GameObject*);									//指定水オブジェクトの削除
 	Vec2 GetEst() const;										//現在移動値を返す
 	void SetTexture(Texture* texture);							//テクスチャを登録
 	State NowState() const;										//現在のStateを返す

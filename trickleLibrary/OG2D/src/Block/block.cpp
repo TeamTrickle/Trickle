@@ -1,5 +1,6 @@
 #include "Block/block.h"   //変更した
 #include "Player\Player.h"
+#include "Map\Map.h"
 
 Block::Block() {
 }
@@ -38,7 +39,7 @@ bool Block::Initialize(Vec2& pos) {
 	};*/
 
 	tex.Create((std::string)"Collision.png");
-
+	__super::Init((std::string)"block");
 	return true;
 }
 
@@ -76,22 +77,24 @@ void Block::UpDate() {
 	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
 	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
 	*/
-	//if (plhit)
-	//{
-	//	if (p.position.x < block.position.x)
-	//	{
-	//		//speed.x = 5.0f;はテスト用に設定
-	//		//speed.x = 5.0f;
-	//		CheckMove(speed, map, block);
-	//	}
-	//	if (p.position.x > block.position.x)
-	//	{
-	//		//speed.x = -5.0f;
-	//		CheckMove(speed, map, block);
-	//	}
-	//}
-	//gravity.y = 4.0f;
-	//CheckMove(gravity, map, block);
+	auto p = OGge->GetTask<Player>("player");
+	this->PlCheckHit(*p);
+	if (plhit)
+	{
+		if (p->position.x < this->position.x)
+		{
+			//speed.x = 5.0f;はテスト用に設定
+			//speed.x = 5.0f;
+			CheckMove(speed);
+		}
+		if (p->position.x > this->position.x)
+		{
+			//speed.x = -5.0f;
+			CheckMove(speed);
+		}
+	}
+	gravity.y = 4.0f;
+	CheckMove(gravity);
 }
 
 void Block::Render2D() {
@@ -147,15 +150,16 @@ void Block::PlCheckHitL(GameObject &p)
 	plhitL = leftBase.hit(p);
 }
 
-void Block::PlCheckHit(GameObject &p, Block &block)
+void Block::PlCheckHit(GameObject &p)
 {
-	plhit = block.hit(p);
+	plhit = this->hit(p);
 }
 
 //-----------------------------------------------------------------------------------------------
 //めり込まない処理
-void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
+void Block::CheckMove(Vec2 &e_)
 {
+	auto map = OGge->GetTask<Map>("map");
 	//x軸について
 	while (e_.x != 0.0f)
 	{
@@ -177,7 +181,7 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 			e_.x = 0.0f;
 		}
 
-		if (map.MapHitCheck(block))
+		if (map->MapHitCheck(*this))
 		{
 			backmove.x = position.x - preX;
 			this->position.x = preX;
@@ -205,7 +209,7 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 			e_.y = 0.0f;
 		}
 
-		if (map.MapHitCheck(block))
+		if (map->MapHitCheck(*this))
 		{
 			backmove.y = position.y - preY;
 			this->position.y = preY;
