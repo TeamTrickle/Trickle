@@ -34,12 +34,7 @@ Window::~Window()
 	glfwSetWindowIcon(this->window, 0, NULL);
 }
 
-Window::SP Window::Create(int wi, int he, char* name, bool screen,Vec2& pos)
-{
-	return Window::SP(new Window(wi, he, name, screen, pos));
-}
-
-void Window::createWindow(int wi, int he, char* name, bool screen,Vec2& pos)
+bool Window::createWindow(int wi, int he, char* name, bool screen,Vec2& pos)
 {
 	this->_widht = wi;
 	this->_height = he;
@@ -55,9 +50,10 @@ void Window::createWindow(int wi, int he, char* name, bool screen,Vec2& pos)
 	}
 	if (!this->window) {
 		glfwTerminate();
-		return;
+		return false;
 	}
 	glfwSetWindowPos(this->window, this->position.x, this->position.y);
+	return true;
 }
 void Window::setIcon(std::string& path_)
 {
@@ -135,4 +131,8 @@ Vec2 Window::GetPos() const
 void Window::SetWindowPos(Vec2& pos)
 {
 	this->position = pos;
+}
+GLFWwindow* Window::GetWindow() const
+{
+	return this->window;
 }

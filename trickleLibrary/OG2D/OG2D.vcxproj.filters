@@ -36,14 +36,8 @@
     <Filter Include="ソースファイル\Task\Title">
       <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Back">
-      <UniqueIdentifier>{b2f9d793-2158-4aac-a61b-5e4346de2548}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\CollisionManager">
-      <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Goal">
       <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
@@ -114,13 +108,16 @@
     <Filter Include="ソースファイル\Task\UI">
       <UniqueIdentifier>{ed486ab6-cbaa-43d5-8a3f-8fa2f40002ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\OG">
+      <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\ResourceManager">
+      <UniqueIdentifier>{93ee20bc-893b-439e-b693-016b7b7832ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
       <Filter>ソースファイル\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OGSystem\_OGsystem.cpp">
-      <Filter>ソースファイル\OGSystem\System</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\Map.cpp">
       <Filter>ソースファイル\Map</Filter>
@@ -128,14 +125,8 @@
     <ClCompile Include="src\OGSystem\OGTask.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\Back\Back.cpp">
-      <Filter>ソースファイル\Back</Filter>
-    </ClCompile>
     <ClCompile Include="src\Water\water.cpp">
       <Filter>ソースファイル\Water</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CollisionManager\CollisionManager.cpp">
-      <Filter>ソースファイル\CollisionManager</Filter>
     </ClCompile>
     <ClCompile Include="src\Bucket\bucket.cpp">
       <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
@@ -173,14 +164,8 @@
     <ClCompile Include="src\OGSystem\Audio\StreamingSound.cpp">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="src\OGSystem\OGsystem.cpp">
-      <Filter>ソースファイル\OGSystem\System</Filter>
-    </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Gimmick\MOVE\Container.cpp">
-      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp">
       <Filter>ソースファイル\Block</Filter>
@@ -194,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp">
       <Filter>ソースファイル\OGSystem\System\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Shader\shader.cpp">
-      <Filter>ソースファイル\OGSystem\System\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
@@ -237,37 +219,34 @@
     <ClCompile Include="src\UI\UI.cpp">
       <Filter>ソースファイル\Task\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\OGSystem\_OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGsystem.cpp">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\OGlib.cpp">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGSystem\TaskObject.cpp">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
+      <Filter>ソースファイル\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Win\WinMain.h">
-      <Filter>ソースファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\Object\Object.h">
       <Filter>ソースファイル\Object</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\OGTask.h">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClInclude>
-    <ClInclude Include="src\OGSystem\OGsystem.h">
-      <Filter>ソースファイル\OGSystem\System</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OGSystem\_OGsystem.h">
-      <Filter>ソースファイル\OGSystem\System</Filter>
-    </ClInclude>
     <ClInclude Include="src\Map\Map.h">
       <Filter>ソースファイル\Map</Filter>
     </ClInclude>
     <ClInclude Include="src\Player\Player.h">
       <Filter>ソースファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Back\Back.h">
-      <Filter>ソースファイル\Back</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Water\water.h">
-      <Filter>ソースファイル\Water</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CollisionManager\CollisionManager.h">
-      <Filter>ソースファイル\CollisionManager</Filter>
     </ClInclude>
     <ClInclude Include="src\Bucket\bucket.h">
       <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
@@ -308,9 +287,6 @@
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gimmick\MOVE\Container.h">
-      <Filter>ソースファイル\GIMMCK\MOVE_GMMCK</Filter>
-    </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ソースファイル\Block</Filter>
     </ClInclude>
@@ -325,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Audio\SoundManager.h">
       <Filter>ソースファイル\OGSystem\System\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Shader\shader.h">
-      <Filter>ソースファイル\OGSystem\System\Shader</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\Timer\glTimer.h">
       <Filter>ソースファイル\OGSystem\System\Timer</Filter>
@@ -364,6 +337,24 @@
     </ClInclude>
     <ClInclude Include="src\UI\UI.h">
       <Filter>ソースファイル\Task\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\_OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGsystem.h">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\OGlib.h">
+      <Filter>ソースファイル\OGSystem\System\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\TaskObject.h">
+      <Filter>ソースファイル\OGSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Water\water.h">
+      <Filter>ソースファイル\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceManager\ResourceManager.h">
+      <Filter>ソースファイル\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

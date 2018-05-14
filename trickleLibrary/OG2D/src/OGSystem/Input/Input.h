@@ -101,13 +101,13 @@ public:
 		bool on(const int index);			//indexのonのboolを返す
 		void upDate();						//入力状況の更新
 		void SetWindow(GLFWwindow* w);		//反映させるWindowを登録する
-		GLFWwindow* nowWindow;				//Window情報を格納する
 		bool isPresent;						//キーボードの有無(おそらく必要ないがパッドにあるので一応こちらでも準備しておく)
 		std::vector<u_char> button_on;		//buttonのonを格納する変数
 		std::vector<u_char> button_down;	//buttonのdownを格納する変数
 		std::vector<u_char> button_up;		//buttonのupを格納する変数
 	private:
 		int KeyData[256];					//入力データを格納する変数
+		GLFWwindow* nowWindow;				//Window情報を格納する
 	};
 	//マウス
 	class Mouse
@@ -124,8 +124,7 @@ public:
 			BUTTON_7,
 			BUTTON_8,
 		};
-		Vec2 position;						//マウスの座標を保存する変数
-		GLFWwindow* nowWindow;				//Windowの情報を格納する
+		
 		explicit Mouse();					//コンストラクタ
 		void upDate();						//入力状況の更新
 		void SetWindow(GLFWwindow *w);		//反映させるWindowを登録する
@@ -139,6 +138,8 @@ public:
 		std::vector<u_char> button_up;		//buttonのupを格納する変数
 	private:
 		int MouseData[8];					//MauseButtonデータ
+		Vec2 position;						//マウスの座標を保存する変数
+		GLFWwindow* nowWindow;				//Windowの情報を格納する
 	};
 	//ゲームパッドとキーボードを区別する
 	struct InputData

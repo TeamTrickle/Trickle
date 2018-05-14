@@ -1,78 +1,43 @@
 #pragma once
-//______________________________//
-//|ゲームオブジェクト            |//
-//|履歴：2018/03/20金子翔       |//
-//|____________________________|//
-#include "OGSystem\OGsystem.h"
-#include <functional>
+//_____________________________
+//|ゲームオブジェクト            
+//|履歴：2018/03/20   
+//|____________________________
+#include "OGSystem\OGlib.h"
+#include "OGSystem\Collision\Collision.h"
 enum Objform
 {
-	Non,
-	Ball,
-	Cube,
+	Non,											//無
+	Ball,											//円
+	Cube,											//矩形
 };
-class Object
+class GameObject
 {
 public:
-	Objform objform;
-	Vec2 position;
-	Vec2 Scale;
-	float angle;
-	CollisionBox collisionCube;
-	CollisionCircle collisionBall;
-	bool Gravity;
-	float mass;
-	bool hit(Object& o);
-	Object();
-	Object(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
-	~Object();
-	void CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang);
-	std::string objectTag;
-	bool isCollided;
-	bool isCollidedGlobal = false;
-
-	void LineDraw();
-
-	std::vector<Object*> hitObj;
-
-	void AddObject(Object* obj);
-	bool DeleteObject(Object* obj);
-	void AllDeleteObject();
-
-	/**
-	 * @brief オーバーライドして当たり判定処理を書いてください
-	 * @param Object このオブジェクトに当たった他のオブジェクト
-	 */
-	std::function<void(const Object&)> CollisionProcess;
-
-	/**
-	 * @brief 当たり判定が終了されるときの最後の１フレームだけ呼び出されます。
-	 * @param 当たったオブジェクト
-	 */
-	std::function<void(const Object&)> CollisionOut;
-
-	/**
-	* @brief 当たり判定が始まるときの最後の１フレームだけ呼び出されます。
-	* @param 当たったオブジェクト
-	*/
-	std::function<void(const Object&)> CollisionIn;
-
+	Objform objform;								//オブジェクトの状態
+	Vec2 position;									//位置
+	Vec2 Scale;										//サイズ
+	float angle;									//回転度
+	CollisionBox collisionCube;						//矩形当たり判定
+	CollisionCircle collisionBall;					//円当たり判定
+	bool Gravity;									//重力の有無
+	float mass;										//質量
+	bool hit(GameObject& o);						//GameObject同士の当たり判定
+	GameObject();									//コンストラクタ	
+	GameObject(										//コンストラクタ
+		Objform form, 
+		Vec2& _posi, 
+		Vec2& _Sca, 
+		float _ang
+	);
+	~GameObject();									//デストラクタ
+	void CreateObject(								//GameObjectの情報を登録
+		Objform form,
+		Vec2& _posi,
+		Vec2& _Sca,
+		float _ang
+	);
+	std::string objectTag;							//タグ名
+	void LineDraw();								//当たり判定をラインを引いて確認用
 private:
 };
-
-class CollisionObject
-{
-public:
-	CollisionObject();
-	~CollisionObject();
-	std::vector<Object*> hitObject;
-	void AddObject(Object*);
-	bool DeleteObject(Object*);
-	void AllDeleteObject();
-	bool ObjectHit(std::string);
-	void ResetObject();
-};
-namespace OG
-{
-	//extern CollisionObject* HitObject;
-}

@@ -8,29 +8,40 @@
 //|履歴：2018/04/07 横尾       |//
 //|____________________________|//
 #pragma once
+//必要読み込みファイル
+#include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Senpuki.h"
 
 
-//横田さん風
 
-//注意！！！！
-//プレイヤが二つ以上のスイッチに同時に接触するとエラー吐きます
-//必ずスイッチを複数置くときは１マス以上離して配置
-class Switch :public Object {
-public:	
-	void Initialize(Vec2 pos);
-	void Update();
-	void Finalize();
-	void Render();
+class Switch : public GameObject, public TaskObject
+{
+	//-------------------------------------------
+	//各自で制作するときに使用するものはここに記述する
+	//-------------------------------------------
+public:
+	
 	bool isON();
 	void ON_OFF();
-	void SetTarget(Object* t);
+	//void SetTarget(GameObject* t);
 private:
-	//オブジェクトなのでオブジェクトを継承している限りはスイッチが切り替える
-	std::vector<Object*> targets;
 	Texture image;
 	std::string path;
 	bool is_on;
-
+	//------------------
+	//固定化されている処理
+	//------------------
+public:
+	std::string taskName;
+	virtual ~Switch();
+	typedef std::shared_ptr<Switch> SP;
+	static Switch::SP Create(Vec2& pos,bool = true);
+	Switch();
+	//-------------
+	//変更しないこと
+	//-------------
+	bool Initialize(Vec2& pos);	//初期化処理
+	void UpDate();				//更新処理
+	void Render2D();			//描画処理
+	bool Finalize();			//解放処理
 };

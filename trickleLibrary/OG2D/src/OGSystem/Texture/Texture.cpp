@@ -4,48 +4,13 @@
 //--------------------------------------------------
 //@:Textureclass									
 //--------------------------------------------------
-//void Texture::TextureCreate(std::string& path)
-//{
-//	GLuint id;
-//	//テクスチャを1つだけ生成する
-//	glGenTextures(1, &id);
-//	//テクスチャをバインドする
-//	glBindTexture(GL_TEXTURE_2D, id);
-//	//画像を読み込む
-//	int width;
-//	int height;
-//	int comp;
-//	std::string filepath = FileName + path;
-//	//画像データを読み込む
-//	unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
-//	//データ形式を選ぶ
-//	GLint type = (comp == 3) ? GL_RGB : GL_RGBA;
-//	//画像データをOpenGLへ送る
-//	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//	glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, GL_UNSIGNED_BYTE, data);
-//	this->TextureSize = Vec2(width, height);
-//	//元データの破棄
-//	stbi_image_free(data);
-//	//表示用設定
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//
-//	this->_TexId = id;
-//	this->_materix[0] = { 0,0 };
-//	this->_materix[1] = { width,0 };
-//	this->_materix[2] = { width,height };
-//	this->_materix[3] = { 0,height };
-//	this->angle = 0.f;
-//}
-void Texture::TextureCreate(std::string path)
+bool Texture::Create(std::string& path)
 {
-	GLuint id;
+	//GLuint id;
 	//テクスチャを1つだけ生成する
-	glGenTextures(1, &id);
+	glGenTextures(1, &this->_TexId);
 	//テクスチャをバインドする
-	glBindTexture(GL_TEXTURE_2D, id);
+	glBindTexture(GL_TEXTURE_2D, this->_TexId);
 	//画像を読み込む
 	int width;
 	int height;
@@ -67,12 +32,12 @@ void Texture::TextureCreate(std::string path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	this->_TexId = id;
 	this->_materix[0] = { 0,0 };
 	this->_materix[1] = { width,0 };
 	this->_materix[2] = { width,height };
 	this->_materix[3] = { 0,height };
 	this->angle = 0.f;
+	return true;
 }
 Texture::Texture()
 {
@@ -99,7 +64,7 @@ void Texture::Draw(Box2D draw, Box2D src,Color color_) {
 	glAlphaFunc(GL_GREATER, (GLclampf)0.0);
 	glTexCoordPointer(2, GL_FLOAT, 0, texuv);
 	//OpenGLに登録されているテクスチャを紐づけ
-	glBindTexture(GL_TEXTURE_2D, _TexId);
+	glBindTexture(GL_TEXTURE_2D, this->_TexId);
 	glColor4f(color_.red, color_.green, color_.blue, color_.alpha);
 	//描画
 	//glMatrixMode(GL_TEXTURE);
@@ -113,10 +78,13 @@ void Texture::Draw(Box2D draw, Box2D src,Color color_) {
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_ALPHA_TEST);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
-void Texture::Finalize()
+bool Texture::Finalize()
 {
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &this->_TexId);
+	return true;
 }
 void Texture::Rotate(float radian)
 {
@@ -169,5 +137,5 @@ void Texture::_Rotate(float radian, GLfloat *_mate)
 }
 Texture::~Texture()
 {
-	glDeleteTextures(1, &this->_TexId);
+	//glDeleteTextures(1, &this->_TexId);
 }

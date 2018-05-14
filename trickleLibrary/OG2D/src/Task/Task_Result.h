@@ -1,54 +1,13 @@
 #pragma once
-#include "Object\Object.h"
-#include "Win\WinMain.h"
-#include "GameProcessManagement\Timer.h"
+//必要読み込みファイル
+#include "OGSystem\OGsystem.h"
 
-
-class Result
+class Result : public TaskObject
 {
+	//-------------------------------------------
+	//各自で制作するときに使用するものはここに記述する
+	//-------------------------------------------
 public:
-	/*
-	コンストラクタ
-	■引数　なし
-	■戻り　なし
-	*/
-	Result();
-
-	/*
-	デストラクタ
-	■引数　なし
-	■戻り　なし
-	*/
-	~Result();
-
-	/*
-	特になし
-	■引数　なし
-	■戻り　なし
-	*/
-	void Initialize();
-
-	/*
-	タスクを遷移する判定をとる
-	■引数　なし
-	■戻り　なし
-	*/
-	TaskFlag Update();
-
-	/*
-	リザルト画面を描画をします
-	■引数　なし
-	■戻り　ゲームのタスク
-	*/
-	void Render();
-
-	/*
-	使用した画像を解放します
-	■引数　なし
-	■戻り　なし
-	*/
-	void Finalize();
-
 	/*
 	アドレスを代入させます
 	■引数　Timer アドレス値を受け継ぐ
@@ -80,6 +39,22 @@ private:
 
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
-	//結果の際に必要なポインタ　または　ファイルの読み込む
+								//結果の際に必要なポインタ　または　ファイルの読み込む
 	const char* TimeFilePath = "./data/Result/Result.dat";
+	//------------------
+	//固定化されている処理
+	//------------------
+public:
+	std::string taskName;
+	virtual ~Result();
+	typedef std::shared_ptr<Result> SP;
+	static Result::SP Create(bool);
+	Result();
+	//-------------
+	//変更しないこと
+	//-------------
+	bool Initialize();		//初期化処理
+	void UpDate();			//更新処理
+	void Render2D();		//描画処理
+	bool Finalize();		//解放処理
 };

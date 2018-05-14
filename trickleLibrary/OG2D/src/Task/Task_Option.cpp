@@ -1,42 +1,60 @@
 #include "Task_Option.h"
+#include "Task\Task_Title.h"
+Option::Option()
+{
 
-void Option::Initialize()
+}
+
+Option::~Option()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		auto nextTask = Title::Create();
+	}
+}
+
+bool Option::Initialize()
 {
 	this->soundName = "playandhope.wav";
 
-	texBack.TextureCreate("back.png");    //1920*1080
-	texBar.TextureCreate("Collision.png");
-	texGear.TextureCreate("Collision.png");
+	texBack.Create((std::string)"back.png");    //1920*1080
+	texBar.Create((std::string)"Collision.png");
+	texGear.Create((std::string)"Collision.png");
 
 	this->vol = 0.5f;
 
 	Option::Set();    //サウンドの用意
+	__super::Init((std::string)"option");
+	return true;
 }
-TaskFlag Option::Update()
+void Option::UpDate()
 {
-	TaskFlag nowtask = Task_Option;
-
 	VolControl();    //サウンドのボリュームコントロール
 	DrawVol();     //移動する描画について
 
-	if (gameEngine->in.down(Input::in::B1))
+	if (OGge->in->down(Input::in::B1))
 	{
 		sound.stop();
-		nowtask = Task_Title;
 	}
-	return nowtask;
+	if (OGge->in->down(In::B2))
+	{
+		//タイトルに戻る
+		this->Kill();
+	}
 }
-void Option::Finalize()
+bool Option::Finalize()
 {
 	texBack.Finalize();
 	texBar.Finalize();
 	texGear.Finalize();
+	return true;
 }
-void Option::Render()
+void Option::Render2D()
 {
 	//背景の描画
 	{
-		Box2D draw(Vec2(0, 0), gameEngine->window->GetSize());  //画像サイズは仮
+		Box2D draw(Vec2(0, 0), OGge->window->GetSize());  //画像サイズは仮
 		draw.OffsetSize();
 		Box2D src(0, 0, 1920, 1080);
 		src.OffsetSize();
@@ -62,11 +80,11 @@ void Option::Render()
 
 void Option::Set()
 {
-	sound.createSound(soundName, true);
+	sound.create(soundName, true);
 	//サウンド自体の音量を設定 ここをユーザーが変更?
-	sound.SetVolume(1.0f);
+	sound.setVolume(1.0f);
 	//サウンドデータをSoundManagerに登録
-	gameEngine->soundManager->SetSound(&sound);
+	OGge->soundManager->SetSound(&sound);
 	//サウンドの再生
 	sound.play();
 }
@@ -75,7 +93,7 @@ void Option::VolControl()
 {
 	//音量調節について
 	//上キーで音量を上げる
-	if (gameEngine->in.down(In::CU))
+	if (OGge->in->down(In::CU))
 	{
 		if (vol < 1.0f)
 		{
@@ -83,7 +101,7 @@ void Option::VolControl()
 		}
 	}
 	//下キーで音量を下げる
-	if (gameEngine->in.down(In::CD))
+	if (OGge->in->down(In::CD))
 	{
 		if (vol > 0.1f)
 		{
@@ -93,9 +111,9 @@ void Option::VolControl()
 	//サウンドの音量の調整用 使用しない
 	//sound.volume(vol);
 	//最大音量を指定
-	gameEngine->soundManager->SetMaxVolume(vol);
+	OGge->soundManager->SetMaxVolume(vol);
 	//サウンドの音量を最大音量に合わせて適用させる
-	gameEngine->soundManager->Application();
+	OGge->soundManager->Application();
 }
 
 //音量調節画像の位置調節
@@ -112,4 +130,23 @@ void Option::DrawVol()
 		gearPos = 48;
 		barwidth = nowVol * 80;
 	}
+}
+
+Option::SP Option::Create(bool flag_)
+{
+	auto to = Option::SP(new Option());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize())
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

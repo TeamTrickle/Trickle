@@ -1,8 +1,8 @@
 #pragma once
-#include "Win\WinMain.h"
+
 #include "OGSystem\OGsystem.h"
 
-class StageSelect
+class StageSelect : public TaskObject
 {
 	Texture texBack;
 	Texture texCursor;
@@ -18,10 +18,12 @@ class StageSelect
 	Vec2 toTitlePos;
 
 public:
-	void Initialize();
-	TaskFlag UpDate();
-	void Render();
-	void Finalize();
+	StageSelect();
+	virtual ~StageSelect();
+	bool Initialize();
+	void UpDate();
+	void Render2D();
+	bool Finalize();
 
 	void CursorMove();
 
@@ -33,5 +35,6 @@ public:
 		ToTitle,
 	};
 	State state;
-
+	typedef std::shared_ptr<StageSelect> SP;
+	static SP Create(bool = true);
 };

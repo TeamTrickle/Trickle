@@ -11,42 +11,51 @@
 //|____________________________|//
 
 #pragma once
+//必要読み込みファイル
+#include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Win\WinMain.h"
-#include "Gimmick\NO_MOVE\Switch.h"
-#include "Water\water.h"
 
 class Switch;
 
-class Fan :public Object 
+class Fan : public GameObject, public TaskObject
 {
-	std::vector<Switch*> switches;		//自身の稼働にかかわっているスイッチ一覧
+	//-------------------------------------------
+	//各自で制作するときに使用するものはここに記述する
+	//-------------------------------------------
 public:
-	enum Dir 
+	std::vector<Switch*> switches;		//自身の稼働にかかわっているスイッチ一覧
+
+	enum Dir
 	{
 		LEFT,
 		RIGHT,
 	};
-	explicit Fan();
-	explicit Fan(Vec2);
-	virtual ~Fan();
-	void Initialize(Vec2 pos, float r, Dir d, bool activ);
 	void AddSwitch(Switch* swit);
 	void ChangeState();
-	void Finalize();
-	void Render();
 	void SetTexture(Texture*);
 	void SetWindRange(Vec2&);
 
-	//Motion
-	void UpDate();
-
 	//WaterのVector情報のアドレス値を受け取る
-	void SetWaterPool(Water*);
-	bool DeleteWaterPool(Water*);
-
-	//
-	void Motion(Water*);
+	//void SetWaterPool(Water*);
+	//bool DeleteWaterPool(Water*);
+	void Motion();
+private:
+	//------------------
+	//固定化されている処理
+	//------------------
+public:
+	std::string taskName;
+	virtual ~Fan();
+	typedef std::shared_ptr<Fan> SP;
+	static Fan::SP Create( Vec2 pos, float r, Fan::Dir d, bool activ,bool = true);
+	//-------------
+	//変更しないこと
+	//-------------
+	Fan();
+	bool Initialize(Vec2 pos, float r, Dir d, bool activ);
+	void UpDate();			//更新処理
+	void Render2D();		//描画処理
+	bool Finalize();		//解放処理
 private:
 	Dir dir;
 	Texture* image;
@@ -54,7 +63,7 @@ private:
 	float movePos;
 	bool active;
 	int strength;
-	std::vector<Water*>water;
-	Object WindHitBase;
+	//std::vector<Water*>water;
+	GameObject WindHitBase;
 };
 

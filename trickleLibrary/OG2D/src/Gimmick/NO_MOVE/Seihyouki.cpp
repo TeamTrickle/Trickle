@@ -1,58 +1,130 @@
 #include "Seihyouki.h"
 using namespace std;
-Seihyouki::Seihyouki()
-{
 
-}
-Seihyouki::~Seihyouki()
+//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "Water\water.h"
+bool Seihyouki::Initialize(Vec2& pos , Vec2& scale)
 {
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "Seihyouki";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
 
+	HitGeneration(pos,scale);
+
+	cout << "製氷機　初期化" << endl;
+	return true;
 }
-void Seihyouki::Create(Vec2 pos, Vec2 scale)
+void Seihyouki::UpDate()
+{
+	//--------------------
+	//更新時に行う処理を記述
+	//--------------------
+	auto water = OGge->GetTasks<Water>("water");
+	if (water != nullptr)
+	{
+		for (int i = 0; i < (*water).size(); ++i)
+		{
+			if ((*water)[i]->hit(hitBace))
+			{
+				toIce();
+			}
+		}
+	}
+}
+
+void Seihyouki::Render2D()
+{
+	//--------------------
+	//描画時に行う処理を記述
+	//--------------------
+	Box2D draw(this->position, this->Scale);
+	draw.OffsetSize();
+	
+}
+
+bool Seihyouki::Finalize()
+{
+	//-----------------------------------------
+	//このオブジェクトが消滅するときに行う処理を記述
+	//-----------------------------------------
+	this->sampleImage.Finalize();
+	//次のタスクを作るかかつアプリケーションが終了予定かどうか
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		
+	}
+	return true;
+}
+void Seihyouki::toIce()
+{
+	auto water = OGge->GetTask<Water>("water");
+	if (water != nullptr)
+	{
+		if (water->GetState() == Water::State::SOLID)
+		{
+			while (true)
+			{
+				movetime++;
+				if (movetime >= movetime_ice)
+				{
+					water->SetState(Water::State::LIQUID);
+					movetime = 0;
+					break;
+				}
+			}
+		}
+		if (water->GetState() == Water::State::LIQUID)
+		{
+			while (true)
+			{
+				movetime++;
+				if (movetime >= movetime_ice)
+				{
+					water->SetState(Water::State::SOLID);
+					movetime = 0;
+					break;
+				}
+			}
+		}
+	}
+}
+void Seihyouki::HitGeneration(Vec2& pos, Vec2& scale)
 {
 	movetime = 0;
 	hitBace.CreateObject(Cube, pos, scale, 0);
 }
-void Seihyouki::SetWaterPool(std::vector<Water*>*w)
+//----------------------------
+//ここから下はclass名のみ変更する
+//ほかは変更しないこと
+//----------------------------
+Seihyouki::Seihyouki()
 {
-	water = w;
+	cout << "製氷機　生成" << endl;
 }
-void Seihyouki::UpDate()
+
+Seihyouki::~Seihyouki()
 {
-	for (auto& w : *water)
-	{
-		if (w->hit(hitBace))
-		{
-			toIce(w);
-		}
-	}
+	this->Finalize();
+	cout << "製氷機　解放" << endl;
 }
-void Seihyouki::toIce(Water* obj)
+
+Seihyouki::SP Seihyouki::Create(Vec2& pos,Vec2& scale,bool flag_)
 {
-	if (obj->GetState() == Water::State::SOLID)
+	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
+	if (to)
 	{
-		while (true)
+		to->me = to;
+		if (flag_)
 		{
-			movetime++;
-			if (movetime >= movetime_ice)
-			{
-				obj->SetState(Water::State::LIQUID);
-				movetime = 0;
-				break;
-			}
+			OGge->SetTaskObject(to);
 		}
-	}
-	if (obj->GetState() == Water::State::LIQUID)
-	{
-		while (true)
+		if (!to->Initialize(pos , scale))
 		{
-			movetime++;
-			if (movetime >= movetime_ice)
-			{
-				obj->SetState(Water::State::SOLID);
-				movetime = 0;
-				break;
-			}
+			to->Kill();
 		}
+		return to;
 	}
+	return nullptr;
 }
