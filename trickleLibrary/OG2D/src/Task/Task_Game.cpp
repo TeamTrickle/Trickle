@@ -157,7 +157,7 @@ bool Game::Initialize()
 			//map生成
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
 			//加熱器生成
-			auto kanetuki = Kanetuki::Create(Vec2(64 * 12, 64 * 10), Vec2(64, 64));
+			//auto kanetuki = Kanetuki::Create(Vec2(64 * 12, 64 * 10), Vec2(64, 64));
 			//バケツ生成
 			for (int i = 0; i < 1; ++i)
 			{
@@ -166,14 +166,14 @@ bool Game::Initialize()
 			//goal生成
 			for (int i = 0; i < 1; ++i)
 			{
-				auto goal = Goal::Create(true, Vec2(16 * 64, 8 * 64));
+				//auto goal = Goal::Create(true, Vec2(16 * 64, 8 * 64));
 			}
 			//扇風機生成
 			for (int i = 0; i < 1; ++i)
 			{
-				auto fan = Fan::Create(Vec2(64, 64 * 2), fanrange[0], Fan::Dir::RIGHT, true);
+			/*	auto fan = Fan::Create(Vec2(64, 64 * 2), fanrange[0], Fan::Dir::RIGHT, true);
 				fan->SetTexture(&this->fanTex);
-				fan->SetWindRange(Vec2(64 * 15, 64));
+				fan->SetWindRange(Vec2(64 * 15, 64));*/
 			}
 		}
 		break;
@@ -313,7 +313,7 @@ bool Game::Initialize()
 
 	
 	//gameprocess.Initialize();
-	auto gameprocess = GameProcessManagement::Create();
+	//auto gameprocess = GameProcessManagement::Create();
 
 	//水出現処理
 	/*auto w = new Water(_waterpos);
@@ -765,7 +765,7 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
-	auto player = OGge->GetTask<Player>("player");
+	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)
 	{

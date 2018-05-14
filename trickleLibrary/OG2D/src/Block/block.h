@@ -21,9 +21,6 @@ public:
 	void Render2D();
 	bool Finalize();
 
-	void SetParent(GameObject*);
-	bool HasParent() const;
-
 	//めり込まない処理
 	void CheckMove(Vec2 &e_);
 	//プレイヤーとブロックの当たった時の処理
@@ -54,6 +51,5 @@ public:
 	GameObject rightBase;
 
 private:
-	GameObject * parent;
 	Texture tex;
 };

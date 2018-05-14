@@ -66,9 +66,9 @@ bool Player::Initialize(Vec2& pos)
 	this->animation.Initialize();
 	return true;
 }
-
 void Player::UpDate()
 {
+	//std::cout << est.x << ":" << est.y << ":";
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -246,9 +246,9 @@ void Player::UpDate()
 		}
 	}
 	//ÅI“I‚ÈˆÚ“®’l‚ğ”½‰f‚³‚¹‚é
+	//std::cout << est.x << ":" << est.y << std::endl;
 	this->MoveCheck(this->est);
 }
-
 void Player::Render2D()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
@@ -276,7 +276,6 @@ void Player::Render2D()
 	}
 	this->playerimg->Draw(draw, src);
 }
-
 bool Player::Finalize()
 {
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
@@ -285,12 +284,9 @@ bool Player::Finalize()
 	}
 	return true;
 }
-
 Vec2 Player::GetEst() const {
 	return est;
 }
-
-
 bool Player::HeadCheck()
 {
 	GameObject head;
@@ -312,13 +308,15 @@ bool Player::HeadCheck()
 		}
 	}
 	auto block = OGge->GetTask<Block>("block");
-	if (head.hit(*block))
+	if (block)
 	{
-		return true;
+		if (head.hit(*block))
+		{
+			return true;
+		}
 	}
 	return false;
 }
-
 bool Player::HeadCheck(std::string& objname_, int n)
 {
 	GameObject head;
@@ -381,9 +379,12 @@ bool Player::FootCheck()
 		}
 	}
 	auto block = OGge->GetTask<Block>("block");
-	if (foot.hit(*block))
+	if (block) 
 	{
-		return true;
+		if (foot.hit(*block))
+		{
+			return true;
+		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -476,10 +477,13 @@ void Player::MoveCheck(Vec2& est)
 			}
 		}
 		auto block = OGge->GetTask<Block>("block");
-		if (this->hit(*block))
+		if (block)
 		{
-			this->position.x = preX;
-			break;
+			if (this->hit(*block))
+			{
+				this->position.x = preX;
+				break;
+			}
 		}
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -529,10 +533,13 @@ void Player::MoveCheck(Vec2& est)
 			}
 		}
 		auto block = OGge->GetTask<Block>("block");
-		if (this->hit(*block))
+		if (block)
 		{
-			this->position.y = preY;
-			break;
+			if (this->hit(*block))
+			{
+				this->position.y = preY;
+				break;
+			}
 		}
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -575,7 +582,7 @@ void Player::Friction()
 
 bool Player::BucketHit()
 {
-	auto bucket = OGge->GetTasks<Bucket>("bicket");
+	auto bucket = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
 		if (this->hit(*(*id)))

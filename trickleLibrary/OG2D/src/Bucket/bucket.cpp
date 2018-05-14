@@ -2,11 +2,12 @@
 #include "Water\water.h"
 #include "Map\Map.h"
 Bucket::Bucket() {
-	
+	this->invi = 0;
 }
 
 Bucket::Bucket(Vec2& pos) {
 	this->position = pos;
+	this->invi = 0;
 }
 
 Bucket::~Bucket() {
@@ -17,7 +18,8 @@ Bucket::~Bucket() {
 	}
 }
 
-bool Bucket::Initialize(Vec2& pos) {
+bool Bucket::Initialize(Vec2& pos) 
+{
 	this->position = pos;
 	gravity = Vec2(0.0f, 0.0f);
 	hold = false;
@@ -31,6 +33,11 @@ bool Bucket::Initialize(Vec2& pos) {
 }
 
 void Bucket::UpDate() {
+	if (this->invi > 0)
+	{
+		std::cout << this->invi << std::endl;
+		--this->invi;
+	}
 	if (hold)
 	{
 		gravity.y = 0.0f;
@@ -38,7 +45,10 @@ void Bucket::UpDate() {
 	gravity.y += 5.0f;
 	if (this->BucketWaterCreate())	//バケツから水を出す処理
 	{
-		auto water = Water::Create(Vec2(150, 100));
+		auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2), this->position.y));
+		this->capacity = 0.f;
+		//70カウント中は次の水を引き受けない
+		this->invi = 70;
 		auto tex = rm->GetTextureData((std::string)"waterTex");
 		if (tex)
 		{
@@ -72,14 +82,6 @@ Box2D Bucket::GetSpriteCrop() const {
 	if (capacity > 0.f)
 		return BUCKET_WATER;
 	return BUCKET_NOTHING;
-}
-
-void Bucket::SetParent(GameObject* o_) {
-	parent = o_;
-}
-
-bool Bucket::HasParent() const {
-	return parent != nullptr;
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -183,6 +185,10 @@ Bucket::SP Bucket::Create(Vec2& pos, bool flag_)
 }
 void Bucket::WaterIsHitCheck()
 {
+	if (this->invi > 0)
+	{
+		return;
+	}
 	auto waters = OGge->GetTasks<Water>("water");
 	for (int i = 0; i < (*waters).size(); ++i)
 	{

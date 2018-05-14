@@ -6,10 +6,6 @@ Water::Water(Vec2 pos)
 {
 	//タグ設定
 	this->objectTag = "Water";
-	//描画元画像座標
-	this->drawRange[Water::State::LIQUID] = Box2D(0, 0, 128, 128);
-	this->drawRange[Water::State::GAS] = Box2D(128, 0, 128, 128);
-	this->drawRange[Water::State::SOLID] = Box2D(256, 0, 128, 128);
 	//描画最大最小サイズ
 	this->minSize = { 0,0 };
 	this->maxSize = { 64,64 };
@@ -176,14 +172,21 @@ void Water::Render2D()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-	Box2D src = drawRange[currentState];
+	Box2D src = Box2D(0, 0, 128, 128);
+	if (this->currentState == State::GAS)
+	{
+		src.x += 128;
+	}
+	if (this->currentState == State::SOLID)
+	{
+		src.x += 256;
+	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f - this->color.alpha });
 }
 
 bool Water::Finalize()
 {
-	this->AllDelete();
 	return true;
 }
 
@@ -233,33 +236,6 @@ void Water::SetTexture(Texture* texture)
 	this->tex = texture;
 }
 
-void Water::SetMapGameObject(GameObject* mapobj)
-{
-	this->mapObj.push_back(mapobj);
-}
-void Water::AddGameObject(GameObject* obj_)
-{
-	this->GameObjects.push_back(obj_);
-}
-
-bool Water::DeleteGameObject(GameObject* obj_)
-{
-	for (auto id = this->GameObjects.begin(); id != this->GameObjects.end(); ++id)
-	{
-		if ((*id) == obj_)
-		{
-			this->GameObjects.erase(id);
-			return true;
-		}
-	}
-	return false;
-}
-
-void Water::AllDelete()
-{
-	this->GameObjects.clear();
-}
-
 void Water::Friction()
 {
 	if (this->move.x > 0)
@@ -283,21 +259,26 @@ bool Water::FootCheck(std::string& objtag,int n)
 {
 	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y + 0.1f), Vec2(this->Scale.x, 0.9f), 0.0f);
-	for (int j = 0; j < this->GameObjects.size(); ++j)
+	auto map = OGge->GetTask<Map>("map");
+	for (int y = 0; y < map->mapSize.y; ++y)
 	{
-		if (foot.hit(*this->GameObjects[j]))
+		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (n == 0) {
-				if (this->GameObjects[j]->objectTag == objtag)
-				{
-					return true;
-				}
-			}
-			else
+			if (foot.hit(map->hitBase[y][x]))
 			{
-				if (this->GameObjects[j]->objectTag != objtag)
+				if (n == 0)
 				{
-					return true;
+					if (map->hitBase[y][x].objectTag == objtag)
+					{
+						return true;
+					}
+				}
+				else
+				{
+					if (map->hitBase[y][x].objectTag != objtag)
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -307,6 +288,7 @@ bool Water::FootCheck(std::string& objtag,int n)
 
 void Water::MoveWATERCheck(Vec2& est)
 {
+	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -325,14 +307,17 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->GameObjects.size(); ++i)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->GameObjects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->GameObjects[i]->objectTag == "Floor" || this->GameObjects[i]->objectTag == "Soil") {
-					//std::cout << "hit" << std::endl;
-					this->position.x = preX;
-					break;
+				if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
+				{
+					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.x = preX;
+						break;
+					}
 				}
 			}
 		}
@@ -355,14 +340,17 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->GameObjects.size(); ++i)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->GameObjects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->GameObjects[i]->objectTag == "Floor" || this->GameObjects[i]->objectTag == "Soil") {
-					//std::cout << "hit" << std::endl;
-					this->position.y = preY;
-					break;
+				if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
+				{
+					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.y = preY;
+						break;
+					}
 				}
 			}
 		}
@@ -371,6 +359,7 @@ void Water::MoveWATERCheck(Vec2& est)
 
 void Water::MoveGASCheck(Vec2& est)
 {
+	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -389,14 +378,17 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->GameObjects.size(); ++i)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->GameObjects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->GameObjects[i]->objectTag == "Floor") {
-					//std::cout << "hit" << std::endl;
-					this->position.x = preX;
-					break;
+				if (map->hitBase[y][x].objectTag == "Floor")
+				{
+					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.x = preX;
+						break;
+					}
 				}
 			}
 		}
@@ -419,14 +411,17 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->GameObjects.size(); ++i)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->GameObjects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->GameObjects[i]->objectTag == "Floor") {
-					//std::cout << "hit" << std::endl;
-					this->position.y = preY;
-					break;
+				if (map->hitBase[y][x].objectTag == "Floor")
+				{
+					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.y = preY;
+						break;
+					}
 				}
 			}
 		}
@@ -435,6 +430,7 @@ void Water::MoveGASCheck(Vec2& est)
 
 void Water::MoveSOILDCheck(Vec2& est)
 {
+	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -453,17 +449,20 @@ void Water::MoveSOILDCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->GameObjects.size(); ++i)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->GameObjects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->GameObjects[i]->objectTag == "Floor" || 
-					this->GameObjects[i]->objectTag == "Net" || 
-					this->GameObjects[i]->objectTag == "SOLID" || 
-					this->GameObjects[i]->objectTag == "Soil") 
+				if (map->hitBase[y][x].objectTag == "Floor" || 
+					map->hitBase[y][x].objectTag == "Soil" || 
+					map->hitBase[y][x].objectTag == "Net" || 
+					map->hitBase[y][x].objectTag == "SOLID")
 				{
-					this->position.x = preX;
-					break;
+					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.x = preX;
+						break;
+					}
 				}
 			}
 		}
@@ -486,17 +485,20 @@ void Water::MoveSOILDCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->GameObjects.size(); ++i)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
-			if (this->hit(*this->GameObjects[i]))
+			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->GameObjects[i]->objectTag == "Floor" || 
-					this->GameObjects[i]->objectTag == "Net" || 
-					this->GameObjects[i]->objectTag == "SOLID" ||
-					this->GameObjects[i]->objectTag == "Soil")
+				if (map->hitBase[y][x].objectTag == "Floor" ||
+					map->hitBase[y][x].objectTag == "Soil" ||
+					map->hitBase[y][x].objectTag == "Net" ||
+					map->hitBase[y][x].objectTag == "SOLID")
 				{
-					this->position.y = preY;
-					break;
+					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.y = preY;
+						break;
+					}
 				}
 			}
 		}
@@ -507,21 +509,26 @@ bool Water::HeadCheck(std::string& objtag,int n)
 {
 	GameObject head;
 	head.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
-	for (int i = 0; i < this->GameObjects.size(); ++i)
+	auto map = OGge->GetTask<Map>("map");
+	for (int y = 0; y < map->mapSize.y; ++y)
 	{
-		if (head.hit(*this->GameObjects[i]))
+		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (n == 0) {
-				if (this->GameObjects[i]->objectTag == objtag)
-				{
-					return true;
-				}
-			}
-			else
+			if (head.hit(map->hitBase[y][x]))
 			{
-				if (this->GameObjects[i]->objectTag != objtag)
+				if (n == 0)
 				{
-					return true;
+					if (map->hitBase[y][x].objectTag == objtag)
+					{
+						return true;
+					}
+				}
+				else
+				{
+					if (map->hitBase[y][x].objectTag != objtag)
+					{
+						return true;
+					}
 				}
 			}
 		}

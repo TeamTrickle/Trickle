@@ -30,8 +30,6 @@ public:
 	void Render2D();
 	bool Finalize();
 
-	void SetParent(GameObject*);
-	bool HasParent() const;
 	void CheckMove(Vec2 &);
 
 	void HoldCheck(bool = true);
@@ -43,9 +41,9 @@ public:
 	 * @note	new使ったので必ず消してください
 	 */
 	float capacity;
-	Vec2 gravity;      //重力
-	bool hold;         //プレイヤがバケツを持っているかの判断
+	Vec2 gravity;			//重力
+	bool hold;				//プレイヤがバケツを持っているかの判断
+	int invi;				//無敵時間(水との判定を行わない時間)
 private:
-	GameObject * parent;
 	Texture tex;
 };
