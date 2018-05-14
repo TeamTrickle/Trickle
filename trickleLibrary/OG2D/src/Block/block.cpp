@@ -110,15 +110,6 @@ bool Block::Finalize() {
 	return true;
 }
 
-void Block::SetParent(GameObject* o_) {
-	parent = o_;
-}
-
-bool Block::HasParent() const {
-	return parent != nullptr;
-}
-
-
 Vec2 Block::GetMove(Vec2& move)       //move‚ÉƒvƒŒƒCƒ„‚©‚çŽó‚¯Žæ‚éˆÚ“®—Ê‚ð“ü‚ê‚é
 {
 	speed.x = move.x;

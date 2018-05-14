@@ -58,9 +58,6 @@ public:
 	float waterMove();
 	//水量のチェック
 	float GetWaterVolume() const;
-	void AddGameObject(GameObject* obj_);								//オブジェクトを登録する
-	bool DeleteGameObject(GameObject* obj_);							//指定オブジェクトを登録から削除する
-	void AllDelete();											//全登録オブジェクトの削除
 	bool IsBucket();
 	//色関連
 	bool SetColor(Color&);
@@ -82,8 +79,6 @@ private:
 	const float FIN_SPEED = 0.5f;								//摩擦
 	const int RAIN_TIME = 180;
 	Texture* tex;
-	std::vector<GameObject*> mapObj;
-	std::map<State, Box2D> drawRange;
 	State currentState;
 	Situation nowSituation;
 	Vec2 minSize;
@@ -94,8 +89,6 @@ private:
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();
-	void SetMapGameObject(GameObject* mapobj);
-	std::vector<GameObject*> GameObjects;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
 	void MoveWATERCheck(Vec2&);

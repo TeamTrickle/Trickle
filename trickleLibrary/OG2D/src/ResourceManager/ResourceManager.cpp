@@ -39,3 +39,9 @@ Texture* ResourceManager::GetTextureData(std::string& dataname)
 	}
 	return nullptr;
 }
+
+ResourceManager::~ResourceManager()
+{
+	this->soundData.clear();
+	this->textureData.clear();
+}

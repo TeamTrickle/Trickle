@@ -36,14 +36,8 @@
     <Filter Include="ソースファイル\Task\Title">
       <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Back">
-      <UniqueIdentifier>{b2f9d793-2158-4aac-a61b-5e4346de2548}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\CollisionManager">
-      <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Goal">
       <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
