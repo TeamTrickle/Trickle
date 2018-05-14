@@ -89,14 +89,14 @@ bool Goal::Finalize()
 
 bool Goal::ClearCheck()
 {
-	auto waters = OGge->GetTasks<Water>("Water");
+	auto waters = OGge->GetTasks<Water>("water");
 	if (waters == nullptr)
 	{
 		return false;
 	}
 	for (int i = 0; i < (*waters).size(); ++i)
 	{
-		if (!(*waters)[i]->hit(*this))
+		if ((*waters)[i]->hit(*this))
 		{
 			if ((*waters)[i]->GetSituation() == Water::Situation::Normal && (*waters)[i]->GetState() == Water::State::LIQUID)
 			{

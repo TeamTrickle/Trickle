@@ -21,11 +21,7 @@ void Kanetuki::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto water = OGge->GetTask<Water>("Water");
-	if (water != nullptr)
-	{
-		toSteam();
-	}
+	toSteam();
 }
 
 void Kanetuki::Render2D()
@@ -63,7 +59,7 @@ void Kanetuki::HitGeneration(Vec2& pos, Vec2& scale)
 //}
 void Kanetuki::toSteam()
 {
-	auto water = OGge->GetTasks<Water>("Water");
+	auto water = OGge->GetTasks<Water>("water");
 	if (water != nullptr)
 	{
 		for (int i = 0; i < (*water).size(); ++i)
@@ -87,22 +83,22 @@ void Kanetuki::toSteam()
 							break;
 						}
 					}
-					if ((*water)[i]->GetState() == Water::State::LIQUID)
+				}
+				if ((*water)[i]->GetState() == Water::State::LIQUID)
+				{
+					while (true)
 					{
-						while (true)
+						bool flag = false;
+						Fire_movetime++;
+						if (Fire_movetime >= Fire_time_LIQUID)
 						{
-							bool flag = false;
-							Fire_movetime++;
-							if (Fire_movetime >= Fire_time_LIQUID)
-							{
-								(*water)[i]->SetState(Water::State::GAS);
-								Fire_movetime = 0;
-								flag = true;
-							}
-							if (flag)
-							{
-								break;
-							}
+							(*water)[i]->SetState(Water::State::GAS);
+							Fire_movetime = 0;
+							flag = true;
+						}
+						if (flag)
+						{
+							break;
 						}
 					}
 				}

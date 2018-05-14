@@ -39,7 +39,7 @@ void Fan::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto waters = OGge->GetTasks<Water>("Water");
+	auto waters = OGge->GetTasks<Water>("water");
 	if (waters)
 	{
 		for (int i = 0; i < (*waters).size(); ++i)
@@ -116,7 +116,7 @@ void Fan::ChangeState()
 }
 void Fan::Motion()
 {
-	auto water = OGge->GetTask<Water>("Water");
+	auto water = OGge->GetTask<Water>("water");
 	if (water)
 	{
 		if (active)

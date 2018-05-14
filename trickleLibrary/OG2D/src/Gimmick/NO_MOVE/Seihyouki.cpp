@@ -21,8 +21,8 @@ void Seihyouki::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto water = OGge->GetTasks<Water>("Water");
-	if (water)
+	auto water = OGge->GetTasks<Water>("water");
+	if (water != nullptr)
 	{
 		for (int i = 0; i < (*water).size(); ++i)
 		{
@@ -59,8 +59,8 @@ bool Seihyouki::Finalize()
 }
 void Seihyouki::toIce()
 {
-	auto water = OGge->GetTask<Water>("Water");
-	if (water)
+	auto water = OGge->GetTask<Water>("water");
+	if (water != nullptr)
 	{
 		if (water->GetState() == Water::State::SOLID)
 		{
