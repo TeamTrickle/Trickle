@@ -35,7 +35,6 @@ bool Bucket::Initialize(Vec2& pos)
 void Bucket::UpDate() {
 	if (this->invi > 0)
 	{
-		std::cout << this->invi << std::endl;
 		--this->invi;
 	}
 	if (hold)
@@ -185,7 +184,7 @@ Bucket::SP Bucket::Create(Vec2& pos, bool flag_)
 }
 void Bucket::WaterIsHitCheck()
 {
-	if (this->invi > 0)
+	if (this->invi > 0 || this->capacity >= 1.0f)
 	{
 		return;
 	}
