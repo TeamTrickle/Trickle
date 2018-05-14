@@ -16,8 +16,8 @@
 #include "Easing\easing.hpp"
 #include "Audio\StreamingSound.h"
 #include "Random\Random.h"
-#include "TaskObject.h"
 #include "ResourceManager\ResourceManager.h"
+#include "TaskObject.h"
 
 class OrderCheck
 {
