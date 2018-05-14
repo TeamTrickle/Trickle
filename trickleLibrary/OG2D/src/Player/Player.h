@@ -73,7 +73,7 @@ private:
 	bool FootCheck();											//足元の当たり判定
 	bool HeadCheck(std::string& objname_, int n = 0);			//頭の別オブジェクトへの判定,0 = そのオブジェクト,1 = それ以外のオブジェクト
 	bool FootCheck(std::string& objname_, int n = 0);			//足元の別オブジェクトへの判定
-	void MoveCheck(Vec2& est);									//移動判定処理
+	void MoveCheck(Vec2 est);									//移動判定処理
 	void MoveCheck(Vec2& est, std::string& objname_);			//梯子状態で使用する移動処理
 	void Friction();											//重力や摩擦の計算
 	bool BucketHit();											//バケツとの当たり判定

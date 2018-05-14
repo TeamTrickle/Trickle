@@ -68,7 +68,6 @@ bool Player::Initialize(Vec2& pos)
 }
 void Player::UpDate()
 {
-	//std::cout << est.x << ":" << est.y << ":";
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -125,7 +124,7 @@ void Player::UpDate()
 		if (OGge->in->down(In::B2))
 		{
 			//バケツを持つ
-			if (this->BucketHit() && this->inv == 0) 
+			if (this->BucketHit()) 
 			{
 				this->state = State::BUCKET;
 			}
@@ -246,7 +245,6 @@ void Player::UpDate()
 		}
 	}
 	//最終的な移動値を反映させる
-	//std::cout << est.x << ":" << est.y << std::endl;
 	this->MoveCheck(this->est);
 }
 void Player::Render2D()
@@ -440,7 +438,7 @@ bool Player::FootCheck(std::string& objname_,int n)
 	return false;
 }
 
-void Player::MoveCheck(Vec2& est)
+void Player::MoveCheck(Vec2 est)
 {
 	while (est.x != 0.f)
 	{
@@ -582,6 +580,10 @@ void Player::Friction()
 
 bool Player::BucketHit()
 {
+	if (this->inv != 0)
+	{
+		return false;
+	}
 	auto bucket = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
