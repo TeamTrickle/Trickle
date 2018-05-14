@@ -45,8 +45,7 @@ bool GameProcessManagement::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		//自分を消す場合はKillを使う
-		this->Kill();
+		
 	}
 	return true;
 }
@@ -61,17 +60,20 @@ bool GameProcessManagement::Finalize()
 void GameProcessManagement::Goal_Check()
 {
 	auto goal = OGge->GetTask<Goal>("Goal");
-	if (goal->cleared)
+	if (goal)
 	{
-		if (!gameclear_flag)
+		if (goal->cleared)
 		{
-			timer->Pause();
+			if (!gameclear_flag)
+			{
+				timer->Pause();
+			}
+			gameclear_flag = true;
+			return;
 		}
-		gameclear_flag = true;
-		return;
-	}
-	timer->Frame_Set();
-	gameclear_flag = false;
+		timer->Frame_Set();
+		gameclear_flag = false;
+	}	
 }
 void GameProcessManagement::Goal_Event()
 {

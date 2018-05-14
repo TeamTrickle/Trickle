@@ -21,6 +21,7 @@ bool Switch::Initialize(Vec2& pos)
 	//スイッチの切り替えフラグをONにする
 	is_on = false;
 
+	cout << "スイッチ　初期化" << endl;
 	return true;
 }
 void Switch::UpDate()
@@ -63,30 +64,21 @@ void Switch::ON_OFF()
 	//trueとfalseの切り替えフラグを切り替える
 	is_on = !is_on;
 	//スイッチのONOFFが切り替わった時だけターゲットのChangeState()を呼び出す
-	auto target = OGge->GetTask<Fan>("Fan");
-	if (target->objectTag == "Fan")
+	auto target = OGge->GetTasks<Fan>("Fan");
+	for (int i = 0; i < (*target).size(); ++i)
 	{
-		target->ChangeState();
+		(*target)[i]->ChangeState();
 	}
 }
-//void Switch::SetTarget(GameObject* t)
-//{
-//	//あとで加熱器と製氷機のタグも追加すること
-//	if (t->objectTag != "Fan") { return; }
-//	targets.push_back(t);
-//}
-//----------------------------
-//ここから下はclass名のみ変更する
-//ほかは変更しないこと
-//----------------------------
 Switch::Switch()
 {
-
+	cout << "スイッチ　生成" << endl;
 }
 
 Switch::~Switch()
 {
 	this->Finalize();
+	cout << "スイッチ　解放" << endl;
 }
 
 Switch::SP Switch::Create(Vec2& pos , bool flag_)

@@ -12,7 +12,7 @@ bool Goal::Initialize()
 	cleared = false;
 	this->objectTag = "Goal";
 	//テクスチャの読み込み
-	tex.Create((std::string&)"goal.png");
+	tex.Create((std::string)"goal.png");
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, Vec2(28 * 64, 14 * 64), Vec2(64, 64), 0.f);
 	return true;
@@ -21,7 +21,7 @@ bool Goal::Initialize(Vec2& pos) {
 	cleared = false;
 	this->objectTag = "Goal";
 	//テクスチャの読み込み
-	tex.Create((std::string&)"goal.png");
+	tex.Create((std::string)"goal.png");
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, Vec2(64, 64), 0.f);
 	return true;
@@ -66,8 +66,6 @@ bool Goal::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		tex.Finalize();
-		//自分を消す場合はKillを使う
-		this->Kill();
 	}
 	return true;
 }
@@ -91,12 +89,19 @@ bool Goal::Finalize()
 
 bool Goal::ClearCheck()
 {
-	auto water = OGge->GetTask<Water>("Water");
-	if (this->hit(*water))
+	auto waters = OGge->GetTasks<Water>("Water");
+	if (waters == nullptr)
 	{
-		if (water->GetSituation() == Water::Situation::Normal && water->GetState() == Water::State::LIQUID)
+		return false;
+	}
+	for (int i = 0; i < (*waters).size(); ++i)
+	{
+		if (!(*waters)[i]->hit(*this))
 		{
-			return true;
+			if ((*waters)[i]->GetSituation() == Water::Situation::Normal && (*waters)[i]->GetState() == Water::State::LIQUID)
+			{
+				return true;
+			}
 		}
 	}
 	return false;
@@ -107,7 +112,7 @@ bool Goal::ClearCheck()
 //----------------------------
 Goal::Goal()
 {
-
+	
 }
 
 Goal::~Goal()

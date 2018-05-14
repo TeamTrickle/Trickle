@@ -39,10 +39,16 @@ void Fan::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto water = OGge->GetTask<Water>("Water");
-	if (water->hit(*this))
+	auto waters = OGge->GetTasks<Water>("Water");
+	if (waters)
 	{
-		Motion();
+		for (int i = 0; i < (*waters).size(); ++i)
+		{
+			if ((*waters)[i]->hit(WindHitBase))
+			{
+				Motion();
+			}
+		}
 	}
 }
 
@@ -111,12 +117,14 @@ void Fan::ChangeState()
 void Fan::Motion()
 {
 	auto water = OGge->GetTask<Water>("Water");
-	if (active)
+	if (water)
 	{
-		if (water->GetState() == Water::State::GAS)
+		if (active)
 		{
-			//w->position.x += strength; // Left -1 Right 1
-			water->MovePos(Vec2(strength, 0));
+			if (water->GetState() == Water::State::GAS)
+			{
+				water->MovePos(Vec2(strength, 0));
+			}
 		}
 	}
 }
