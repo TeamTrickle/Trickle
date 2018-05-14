@@ -78,19 +78,22 @@ void Block::UpDate() {
 	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
 	*/
 	auto p = OGge->GetTask<Player>("player");
-	this->PlCheckHit(*p);
-	if (plhit)
+	if (p)
 	{
-		if (p->position.x < this->position.x)
+		this->PlCheckHit(*p);
+		if (plhit)
 		{
-			//speed.x = 5.0f;はテスト用に設定
-			//speed.x = 5.0f;
-			CheckMove(speed);
-		}
-		if (p->position.x > this->position.x)
-		{
-			//speed.x = -5.0f;
-			CheckMove(speed);
+			if (p->position.x < this->position.x)
+			{
+				//speed.x = 5.0f;はテスト用に設定
+				//speed.x = 5.0f;
+				CheckMove(speed);
+			}
+			if (p->position.x > this->position.x)
+			{
+				//speed.x = -5.0f;
+				CheckMove(speed);
+			}
 		}
 	}
 	gravity.y = 4.0f;
