@@ -1,17 +1,23 @@
 #include "Block/block.h"   //変更した
+#include "Player\Player.h"
+#include "Map\Map.h"
 
 Block::Block() {
 }
 
-Block::Block(Vec2 pos) {
+Block::Block(Vec2& pos) {
 	this->position = pos;
 }
 
 Block::~Block() {
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
 
+	}
 }
 
-bool Block::Initialize(Vec2 pos) {
+bool Block::Initialize(Vec2& pos) {
 	//speed = 0.0f;
 	//横移動初期値
 	speed.x = 0.0f;
@@ -26,18 +32,18 @@ bool Block::Initialize(Vec2 pos) {
 	plhitL = false;
 	plhitR = false;
 
-	Object::CreateObject(Objform::Cube, pos, Vec2(128.f, 128.f), 0.f);       //オブジェクトの生成
-	Object::objectTag = "Block";
-	Object::CollisionProcess = [&](const Object& o_) {
+	GameObject::CreateObject(Objform::Cube, pos, Vec2(128.f, 128.f), 0.f);       //オブジェクトの生成
+	GameObject::objectTag = "Block";
+	/*GameObject::CollisionProcess = [&](const GameObject& o_) {
 
-	};
+	};*/
 
-	tex.TextureCreate((std::string)"Collision.png");
-
+	tex.Create((std::string)"Collision.png");
+	__super::Init((std::string)"block");
 	return true;
 }
 
-void Block::Update(Map &map, Block &block, Object &p) {
+void Block::UpDate() {
 	//追加した----------------------------------------------------------------------------
 	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
 	headBase.position = Vec2(this->position.x, this->position.y - 1.f);
@@ -65,31 +71,33 @@ void Block::Update(Map &map, Block &block, Object &p) {
 	std::cout << "右側接触" << std::endl;
 	}
 
-	std::cout << "this->Object=" << position.x << "," << position.y << "," << Scale.x << "," << Scale.y << std::endl;
+	std::cout << "this->GameObject=" << position.x << "," << position.y << "," << Scale.x << "," << Scale.y << std::endl;
 	std::cout << "headBase=" << headBase.position.x << "," << headBase.position.y << "," << headBase.Scale.x << "," << headBase.Scale.y << std::endl;
 	std::cout << "footBase=" << footBase.position.x << "," << footBase.position.y << "," << footBase.Scale.x << "," << footBase.Scale.y << std::endl;
 	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
 	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
 	*/
+	auto p = OGge->GetTask<Player>("player");
+	this->PlCheckHit(*p);
 	if (plhit)
 	{
-		if (p.position.x < block.position.x)
+		if (p->position.x < this->position.x)
 		{
 			//speed.x = 5.0f;はテスト用に設定
 			//speed.x = 5.0f;
-			CheckMove(speed, map, block);
+			CheckMove(speed);
 		}
-		if (p.position.x > block.position.x)
+		if (p->position.x > this->position.x)
 		{
 			//speed.x = -5.0f;
-			CheckMove(speed, map, block);
+			CheckMove(speed);
 		}
 	}
 	gravity.y = 4.0f;
-	CheckMove(gravity, map, block);
+	CheckMove(gravity);
 }
 
-void Block::Render() {
+void Block::Render2D() {
 	Box2D draw(this->position, this->Scale);
 	draw.OffsetSize();
 	Box2D src(0, 0, 128, 128);
@@ -97,11 +105,12 @@ void Block::Render() {
 	tex.Draw(draw, src);
 }
 
-void Block::Finalize() {
+bool Block::Finalize() {
 	tex.Finalize();
+	return true;
 }
 
-void Block::SetParent(Object* o_) {
+void Block::SetParent(GameObject* o_) {
 	parent = o_;
 }
 
@@ -110,7 +119,7 @@ bool Block::HasParent() const {
 }
 
 
-Vec2 Block::GetMove(Vec2 move)       //moveにプレイヤから受け取る移動量を入れる
+Vec2 Block::GetMove(Vec2& move)       //moveにプレイヤから受け取る移動量を入れる
 {
 	speed.x = move.x;
 	return speed;
@@ -124,32 +133,33 @@ Vec2 Block::BackMove()
 
 //プレイヤとの当たり判定について 使わなくなった
 //--------------------------------------------------------------------------------------------------------------
-void Block::PlCheckHitF(Object &p)
+void Block::PlCheckHitF(GameObject &p)
 {
 	plhitF = footBase.hit(p);
 }
-void Block::PlCheckHitH(Object &p)
+void Block::PlCheckHitH(GameObject &p)
 {
 	plhitH = headBase.hit(p);
 }
-void Block::PlCheckHitR(Object &p)
+void Block::PlCheckHitR(GameObject &p)
 {
 	plhitR = rightBase.hit(p);
 }
-void Block::PlCheckHitL(Object &p)
+void Block::PlCheckHitL(GameObject &p)
 {
 	plhitL = leftBase.hit(p);
 }
 
-void Block::PlCheckHit(Object &p, Block &block)
+void Block::PlCheckHit(GameObject &p)
 {
-	plhit = block.hit(p);
+	plhit = this->hit(p);
 }
 
 //-----------------------------------------------------------------------------------------------
 //めり込まない処理
-void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
+void Block::CheckMove(Vec2 &e_)
 {
+	auto map = OGge->GetTask<Map>("map");
 	//x軸について
 	while (e_.x != 0.0f)
 	{
@@ -171,7 +181,7 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 			e_.x = 0.0f;
 		}
 
-		if (map.MapHitCheck(block))
+		if (map->MapHitCheck(*this))
 		{
 			backmove.x = position.x - preX;
 			this->position.x = preX;
@@ -199,11 +209,30 @@ void Block::CheckMove(Vec2 &e_, Map &map, Block &block)
 			e_.y = 0.0f;
 		}
 
-		if (map.MapHitCheck(block))
+		if (map->MapHitCheck(*this))
 		{
 			backmove.y = position.y - preY;
 			this->position.y = preY;
 			break;
 		}
 	}
+}
+
+Block::SP Block::Create(Vec2& pos, bool flag_)
+{
+	auto to = Block::SP(new Block(pos));
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

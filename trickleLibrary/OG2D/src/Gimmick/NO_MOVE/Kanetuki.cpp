@@ -1,73 +1,136 @@
 #include "Kanetuki.h"
 using namespace std;
-Kanetuki::Kanetuki()
-{
 
-}
-Kanetuki::~Kanetuki()
+//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "Water\water.h"
+
+bool Kanetuki::Initialize(Vec2& pos , Vec2& scale)
 {
-	w_vec.clear();
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "Kanetuki";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//Taskwaterect内の処理を行う
+
+	this->HitGeneration(pos, scale);
+
+	return true;
 }
-bool Kanetuki::Create(Vec2 pos, Vec2 scale)
+void Kanetuki::UpDate()
+{
+	//--------------------
+	//更新時に行う処理を記述
+	//--------------------
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->hit(hitBace))
+	{
+		toSteam();
+	}
+}
+
+void Kanetuki::Render2D()
+{
+	//--------------------
+	//描画時に行う処理を記述
+	//--------------------
+	Box2D draw(this->position, this->Scale);
+	draw.OffsetSize();
+	
+}
+
+bool Kanetuki::Finalize()
+{
+	//-----------------------------------------
+	//このオブジェクトが消滅するときに行う処理を記述
+	//-----------------------------------------
+
+	//次のタスクを作るかかつアプリケーションが終了予定かどうか
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		
+	}
+	return true;
+}
+void Kanetuki::HitGeneration(Vec2& pos , Vec2& scale)
 {
 	Fire_movetime = 0;
 	hitBace.CreateObject(Cube, pos, scale, 0);
-	Createflag = false;
-	return true;
 }
-void Kanetuki::CheckHit()
+
+//void Kanetuki::SetWaterPool(std::vector<Water*>* w)
+//{
+//	water = w;
+//}
+void Kanetuki::toSteam()
 {
-	for (auto w : w_vec)
+	auto water = OGge->GetTask<Water>("Water");
+
+	if (water->GetState() == Water::State::SOLID)
 	{
-		if (w->hit(hitBace))
+		while (true)
 		{
-			switch (w->GetState())
+			bool flag = false;
+			Fire_movetime++;
+			if (Fire_movetime >= Fire_time_SOLID)
 			{
-			case Water::State::GAS:
-				break;
-			case Water::State::LIQUID:
-				cout << "接触中" << endl;
-				while (true)
-				{
-					bool flag = false;
-					Fire_movetime++;
-					if (Fire_movetime >= Fire_time_LIQUID)
-					{
-						w->SetState(Water::State::GAS);
-						w->position.y = hitBace.position.y - 64;
-						Fire_movetime = 0;
-						flag = true;
-					}
-					if (flag)
-					{
-						break;
-					}
-				}
-				break;
-			case Water::State::SOLID:
-				Fire_movetime++;
-				if (Fire_movetime >= Fire_time_SOLID)
-				{
-					w->SetState(Water::State::LIQUID);
-				}
+				water->SetState(Water::State::LIQUID);
 				Fire_movetime = 0;
+				flag = true;
+			}
+			if (flag)
+			{
 				break;
 			}
 		}
 	}
-	this->hitBace.LineDraw();
-}
-void Kanetuki::Set_pointa()
-{
-	/*hitBace.CollisionProcess = [&](const Object& obj)
+	if (water->GetState() == Water::State::LIQUID)
 	{
-		if (obj.objectTag == "Water")
+		while (true)
 		{
-			w_vec.push_back(const_cast<Water*>((Water*)&obj));
+			bool flag = false;
+			Fire_movetime++;
+			if (Fire_movetime >= Fire_time_LIQUID)
+			{
+				water->SetState(Water::State::GAS);
+				Fire_movetime = 0;
+				flag = true;
+			}
+			if (flag)
+			{
+				break;
+			}
 		}
-	};*/
+	}
 }
-void Kanetuki::Set_pointa(Water* obj)
+//----------------------------
+//ここから下はclass名のみ変更する
+//ほかは変更しないこと
+//----------------------------
+Kanetuki::Kanetuki()
 {
-	w_vec.push_back(obj);	
+
+}
+
+Kanetuki::~Kanetuki()
+{
+	this->Finalize();
+}
+
+Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2& scale,bool flag_)
+{
+	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos ,scale))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

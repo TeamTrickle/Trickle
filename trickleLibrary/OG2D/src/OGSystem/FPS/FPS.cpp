@@ -24,8 +24,3 @@ FPS::~FPS()
 {
 
 }
-FPS::SP FPS::Create()
-{
-	//スマートポインタを返す
-	return FPS::SP(new FPS());
-}

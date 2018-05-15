@@ -1,61 +1,68 @@
-//______________________________//
-//|メインシステム               |//
-//|履歴：2018/03/20金子翔       |//
-//|履歴：2018/03/23金子翔       |//
-//|____________________________|//
+//_____________________________
+//|メインシステム               
+//|履歴：2018/03/20       
+//|履歴：2018/03/23
+//|履歴：2018/04/26
+//|____________________________
+//数値演算定数
 #define _USE_MATH_DEFINES
 //小数点誤差修正
 #define _OX_EPSILON_ 0.0000001f
 #include "OGSystem\OGTask.h"
+#include "OGSystem\Random\Random.h"
+//#include "ft2build.h"
+//#include FT_FREETYPE_H
+//メモリリーク検知
 #if (_DEBUG)
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
 #define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
+
+OGTK* ogtk;
 unsigned short* MapNum;
-//------------------
-//class定義
-//------------------
-_OGTK OGTK;
 //------------------
 //タスクシステム
 //------------------
 void TaskSystem()
 {
-	OGTK._myGameUpdate();
+	OGge->TaskGameUpDate();
 }
 void TaskRender()
 {
-	OGTK._myGameRender2D();
-	OGTK._myGameRender3D();
+	
 }
 void TaskFinalize()
 {
-	OGTK._myGameFinalize();
+	//解放処理
+	OGge->SetDeleteEngine(true);
 }
 //------------------
 //初期化
 //------------------
-void Initialize() {
-
+bool Initialize() 
+{
+	random::Init();
+	ogtk->StartTaskObject();
+	return true;
 }
 //------------------
 //解放
 //------------------
-void Finalize()
+bool Finalize()
 {
-	
+	return true;
 }
 //------------------
 //更新
 //------------------
 bool Update() {
-	if (gameEngine->in.key.down(In::ESCAPE) || gameEngine->GetEnd())
+	if (OGge->in->key.down(In::ESCAPE) || OGge->GetEnd())
 	{
 		TaskFinalize();
 		//ウィンドウの破棄
-		glfwDestroyWindow(gameEngine->window->window);
+		glfwDestroyWindow(OGge->window->GetWindow());
 		return true;
 	}
 	return false;
@@ -64,6 +71,7 @@ bool Update() {
 //メイン
 //------------------
 int main() {
+	//メモリリーク検知
 #if(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
@@ -71,20 +79,26 @@ int main() {
 	if (!glfwInit()) {
 		return -1;
 	}
-	gameEngine = new EngineSystem();
+	//ゲームエンジンの生成
+	OGge = new EngineSystem();
+	ogtk = new OGTK();
+	rm = new ResourceManager();
 	MapNum = new unsigned short;
-	OGTK._myGameInitialize();
-	gameEngine->Initialize();
+	//タスクの初期化処理
+	ogtk->_myGameInitialize();
+	//ゲームエンジンの初期化
+	OGge->Initialize();
 	//使用OpenGLのVersion指定
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//使用するウィンドウを設定する
-	glfwMakeContextCurrent(gameEngine->window->window);
+	glfwMakeContextCurrent(OGge->window->GetWindow());
 	//同期(ダブルバッファの入れ替えタイミングの指定)
 	glfwSwapInterval(1);
 #if defined(_MSC_VER)
 	//GLEW初期化
 	if (glewInit() != GLEW_OK) {
+		//ウィンドウとカーソルをすべて破棄しリソースを解放します。
 		glfwTerminate();
 		return -1;
 	}
@@ -92,7 +106,7 @@ int main() {
 	// 透視変換行列を設定
 	glMatrixMode(GL_PROJECTION);
 	//描画範囲の指定
-	glViewport(0, 0, gameEngine->window->_widht, gameEngine->window->_height);
+	glViewport(0, 0, (GLsizei)OGge->window->GetSize().x, (GLsizei)OGge->window->GetSize().y);
 	//行列の初期化
 	glLoadIdentity();
 	// 操作対象の行列をモデリングビュー行列に切り替えておく
@@ -109,12 +123,11 @@ int main() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	//初期化処理
 	Initialize();
-	//ウィンドウの生成位置の指定
-	glfwSetWindowPos(gameEngine->window->window, 1920 - gameEngine->window->_widht, 50);
+	delete ogtk;
 	//ウィンドウが存在する場合ループ
-	while (!glfwWindowShouldClose(gameEngine->window->window)) {
+	while (!glfwWindowShouldClose(OGge->window->GetWindow())) {
 		//エンジン内の更新処理
-		gameEngine->Update();
+		OGge->Update();
 		//捜査対象の行列をモデルビュー行列に変更
 		glMatrixMode(GL_MODELVIEW);
 		//バッファをクリアして値を設定する
@@ -129,7 +142,7 @@ int main() {
 		//描画処理
 		TaskRender();
 		//指定したウィンドウのダブルバッファを行う
-		glfwSwapBuffers(gameEngine->window->window);
+		glfwSwapBuffers(OGge->window->GetWindow());
 		//ウィンドウ、マウス、キーボードの入力の状態をアップデートする
 		glfwPollEvents();
 	}
@@ -137,7 +150,8 @@ int main() {
 	Finalize();
 	//ゲームエンジンの内容を解放
 	delete MapNum;
-	delete gameEngine;
+	delete rm;
+	delete OGge;
 	//GLFWのライブラリを終了する
 	glfwTerminate();
 }

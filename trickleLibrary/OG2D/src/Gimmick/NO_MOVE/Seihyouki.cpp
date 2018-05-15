@@ -1,60 +1,119 @@
 #include "Seihyouki.h"
 using namespace std;
-Seihyouki::Seihyouki()
-{
 
-}
-Seihyouki::~Seihyouki()
+//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "Water\water.h"
+bool Seihyouki::Initialize(Vec2& pos , Vec2& scale)
 {
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "Seihyouki";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
 
-}
-bool Seihyouki::Create(Vec2 pos, Vec2 scale)
-{
-	movetime = 0;
-	hitBace.CreateObject(Cube, pos, scale, 0);
+	HitGeneration(pos,scale);
+
 	return true;
 }
-void Seihyouki::Set_pointa()
+void Seihyouki::UpDate()
 {
-	hitBace.CollisionProcess = [&](const Object& obj)
+	//--------------------
+	//更新時に行う処理を記述
+	//--------------------
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->hit(hitBace))
 	{
-		if (obj.objectTag == "Water")
-		{
-			w_vec.push_back(const_cast<Water*>(((Water*)&obj)));
-		}
-	};
+		toIce();
+	}
 }
-void Seihyouki::Set_pointa(Water* w)
+
+void Seihyouki::Render2D()
 {
-	w_vec.push_back(w);
+	//--------------------
+	//描画時に行う処理を記述
+	//--------------------
+	Box2D draw(this->position, this->Scale);
+	draw.OffsetSize();
+	
 }
-void Seihyouki::CheckHit()	//動いている
+
+bool Seihyouki::Finalize()
 {
-	for (auto w : w_vec)
+	//-----------------------------------------
+	//このオブジェクトが消滅するときに行う処理を記述
+	//-----------------------------------------
+	this->sampleImage.Finalize();
+	//次のタスクを作るかかつアプリケーションが終了予定かどうか
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		if (w->hit(hitBace))
+		
+	}
+	return true;
+}
+void Seihyouki::toIce()
+{
+	auto water = OGge->GetTask<Water>("Water");
+	if (water->GetState() == Water::State::SOLID)
+	{
+		while (true)
 		{
-			switch (w->GetState())
+			movetime++;
+			if (movetime >= movetime_ice)
 			{
-			case Water::State::GAS://ガスの場合
-				movetime++;
-				if (movetime >= movetime_ice)
-				{
-					w->SetState(Water::State::LIQUID);
-					movetime = 0;
-				}
-				break;
-			case Water::State::LIQUID://液体の場合
-				movetime++;
-				if (movetime >= movetime_ice)
-				{
-					w->SetState(Water::State::SOLID);
-					movetime = 0;
-				}
-				break;
-			case Water::State::SOLID://個体の場合
+				water->SetState(Water::State::LIQUID);
+				movetime = 0;
 				break;
 			}
 		}
 	}
-};
+	if (water->GetState() == Water::State::LIQUID)
+	{
+		while (true)
+		{
+			movetime++;
+			if (movetime >= movetime_ice)
+			{
+				water->SetState(Water::State::SOLID);
+				movetime = 0;
+				break;
+			}
+		}
+	}
+}
+void Seihyouki::HitGeneration(Vec2& pos, Vec2& scale)
+{
+	movetime = 0;
+	hitBace.CreateObject(Cube, pos, scale, 0);
+}
+//----------------------------
+//ここから下はclass名のみ変更する
+//ほかは変更しないこと
+//----------------------------
+Seihyouki::Seihyouki()
+{
+
+}
+
+Seihyouki::~Seihyouki()
+{
+	this->Finalize();
+}
+
+Seihyouki::SP Seihyouki::Create(Vec2& pos,Vec2& scale,bool flag_)
+{
+	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos , scale))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}

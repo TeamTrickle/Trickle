@@ -7,7 +7,16 @@ Map::Map()
 	this->DrawSize = { 64,64 };
 }
 
-bool Map::LoadMap(std::string path_, Format format)
+Map::~Map()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+
+	}
+}
+
+bool Map::LoadMap(std::string& path_, Format format)
 {
 	if (Format::csv != format)
 	{
@@ -57,7 +66,7 @@ bool Map::LoadMap(std::string path_, Format format)
 	}
 	ifs.close();
 	//画像読み込み
-	this->mapimg.TextureCreate(chipimgname);
+	this->mapimg.Create(chipimgname);
 	for (int i = 0; i < chip.size(); ++i)
 	{
 		//元画像チップの描画範囲の指定
@@ -71,7 +80,7 @@ bool Map::LoadMap(std::string path_, Format format)
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//オブジェクトの生成
-			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
+			this->hitBase[y][x].CreateObject(Objform::Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
 			switch (this->_arr[y][x])
 			{
 			case 1:
@@ -102,6 +111,9 @@ bool Map::LoadMap(std::string path_, Format format)
 			case 19:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
+			case 20:
+				this->hitBase[y][x].objectTag = "LadderTop";
+				break;
 			case 21:
 			case 22:
 				this->hitBase[y][x].objectTag = "Ladder";
@@ -117,10 +129,11 @@ bool Map::LoadMap(std::string path_, Format format)
 			}
 		}
 	}
+	__super::Init((std::string)"map");
 	return true;
 }
 
-bool Map::LoadMap(std::string _path)
+bool Map::LoadMap(std::string& _path)
 {
 	std::ifstream ifs(this->_FilePath + _path, std::ios::in | std::ios::binary);
 	if (!ifs)
@@ -186,7 +199,7 @@ bool Map::LoadMap(std::string _path)
 	}
 	ifs.close();
 	//画像読み込み
-	mapimg.TextureCreate(chipimgname);
+	mapimg.Create(chipimgname);
 	int j = 0;
 	std::ifstream ifs2(this->_FilePath + _path, std::ios::in | std::ios::binary);
 	if (!ifs2)
@@ -268,38 +281,51 @@ bool Map::LoadMap(std::string _path)
 
 	}
 	ifs2.close();
+	__super::Init((std::string)"map");
 	return true;
 }
 
-void Map::MapRender()
+void Map::UpDate()
 {
- 	for  (int y = 0; y < this->mapSize.y; ++y)
+
+}
+
+void Map::Render2D()
+{
+	for (int y = 0; y < this->mapSize.y; ++y)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 			draw.OffsetSize();
- 			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
 		}
 	}
 }
 
-void Map::Finalize()
+bool Map::Finalize()
 {
 	this->_arr.clear();
 	this->hitBase.clear();
 	//this->chip.clear();
 	mapimg.Finalize();
+	return true;
 }
 
-bool Map::MapHitCheck(Object &p)
+bool Map::MapHitCheck(GameObject &p)
 {
 	for (int y = 0; y < this->mapSize.y; ++y)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0) {
+			if (this->_arr[y][x] != 0 && 
+				this->_arr[y][x] != 10 && 
+				this->_arr[y][x] != 12 && 
+				this->_arr[y][x] != 13 &&
+				this->_arr[y][x] != 21 && 
+				this->_arr[y][x] != 22 && 
+				this->_arr[y][x] != 20) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;
@@ -308,4 +334,23 @@ bool Map::MapHitCheck(Object &p)
 		}
 	}
 	return false;
+}
+
+Map::SP Map::Create(std::string& path, Format format, bool flag_)
+{
+	auto to = Map::SP(new Map());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->LoadMap(path, format))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

@@ -71,8 +71,3 @@ Vec2 Camera2D::GetSize() const
 	//サイズを返す
 	return this->Scale;
 }
-Camera2D::SP Camera2D::Create(Box2D& pos)
-{
-	//新規Camera2Dを返す
-	return Camera2D::SP(new Camera2D(pos));
-}

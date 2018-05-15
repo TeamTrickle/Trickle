@@ -1,5 +1,5 @@
 #include "water.h"
-
+#include "Map\Map.h"
 
 
 Water::Water(Vec2 pos)
@@ -18,11 +18,9 @@ Water::Water(Vec2 pos)
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, this->minSize, 0.f);
 	//デバッグ用位置調整
-	//this->position = { 1186,800 };
+	//this->position = { 28 * 64 + 32, 12 * 64 };
 	//テクスチャの読み込み
-	//tex.TextureCreate("watertest.png");
-	//衝突判定の初期化
-	this->isCollided = false;
+	//tex.Create("watertest.png");
 	//初期ステータスの設定
 	this->nowSituation = Water::Situation::Newfrom;
 	this->currentState = Water::State::LIQUID;
@@ -45,13 +43,11 @@ Water::~Water()
 
 bool Water::Initialize() 
 {
-	this->objectTag = "Water";
-	CreateObject(Objform::Cube, Vec2(100, 100), Vec2(64, 64), 0.f);
-	this->isCollided = false;
+	__super::Init((std::string)"water");
 	return true;
 }
 
-void Water::Update()
+void Water::UpDate()
 {
 	if (this->invi > 0)
 	{
@@ -73,6 +69,7 @@ void Water::Update()
 			this->nowSituation = Water::UpDeleteform();
 			break;
 		case Water::Situation::CreaDelete:
+			this->Kill();
 			break;
 		}
 		this->MoveWATERCheck(move);
@@ -83,7 +80,7 @@ void Water::Update()
 		case Water::Situation::Normal:
 			this->objectTag = "GAS";
 			//水蒸気処理
-			this->Scale = { this->maxSize.x,this->maxSize.y };
+			this->Scale = this->maxSize;
 			if (!this->HeadCheck((std::string)"Floor"))
 			{
 				this->move.y -= 3.0f;
@@ -91,7 +88,10 @@ void Water::Update()
 			}
 			else
 			{
-				this->nowTime++;
+				if (this->GetMove().x == 0 && this->GetMove().y == 0)
+				{
+					this->nowTime++;
+				}
 			}
 			//静止時間が雨を降らす時間分を超えたとき
 			if (this->RAIN_TIME < this->nowTime)
@@ -99,12 +99,22 @@ void Water::Update()
 				this->nowSituation = Situation::Rainfrom;
 				this->position.x += this->maxSize.x / 2;
 			}
-			this->MoveGASCheck(move);
+			else
+			{
+				this->MoveGASCheck(move);
+			}
 			break;
 		case Water::Situation::Rainfrom:
 			this->nowSituation = Situation::Newfrom;
 			this->currentState = State::LIQUID;
 			this->Scale = this->minSize;
+			this->setTime = 0;
+			break;
+		case Water::Situation::Newfrom:
+			this->nowSituation = Water::Situation::Normal;
+			break;
+		case Water::Situation::Deleteform:
+			this->nowSituation = Water::Situation::Normal;
 			break;
 		}
 		break;
@@ -162,7 +172,7 @@ Water::Situation Water::UpNormal()
 	return now;
 }
 
-void Water::Render()
+void Water::Render2D()
 {
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
@@ -171,9 +181,10 @@ void Water::Render()
 	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f - this->color.alpha });
 }
 
-void Water::Finalize()
+bool Water::Finalize()
 {
 	this->AllDelete();
+	return true;
 }
 
 void Water::SetState(const State& s_)
@@ -199,11 +210,16 @@ Water::Situation Water::GetSituation() const
 float Water::waterMove()
 {
 	float _v = 0;
-	if (Water::Situation::Normal == this->nowSituation && Water::State::LIQUID == this->currentState)
+	if (this->IsBucket())
 	{
 		_v = this->volume;
 		this->volume = 0.f;
-	}	
+	}
+	else
+	{
+		return 0.0f;
+	}
+	this->Kill();
 	return _v;
 }
 
@@ -217,22 +233,22 @@ void Water::SetTexture(Texture* texture)
 	this->tex = texture;
 }
 
-void Water::SetMapObject(Object* mapobj)
+void Water::SetMapGameObject(GameObject* mapobj)
 {
 	this->mapObj.push_back(mapobj);
 }
-void Water::AddObject(Object* obj_)
+void Water::AddGameObject(GameObject* obj_)
 {
-	this->objects.push_back(obj_);
+	this->GameObjects.push_back(obj_);
 }
 
-bool Water::DeleteObject(Object* obj_)
+bool Water::DeleteGameObject(GameObject* obj_)
 {
-	for (auto id = this->objects.begin(); id != this->objects.end(); ++id)
+	for (auto id = this->GameObjects.begin(); id != this->GameObjects.end(); ++id)
 	{
 		if ((*id) == obj_)
 		{
-			this->objects.erase(id);
+			this->GameObjects.erase(id);
 			return true;
 		}
 	}
@@ -241,7 +257,7 @@ bool Water::DeleteObject(Object* obj_)
 
 void Water::AllDelete()
 {
-	this->objects.clear();
+	this->GameObjects.clear();
 }
 
 void Water::Friction()
@@ -265,21 +281,21 @@ void Water::Friction()
 }
 bool Water::FootCheck(std::string& objtag,int n)
 {
-	Object foot;
+	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y + 0.1f), Vec2(this->Scale.x, 0.9f), 0.0f);
-	for (int j = 0; j < this->objects.size(); ++j)
+	for (int j = 0; j < this->GameObjects.size(); ++j)
 	{
-		if (foot.hit(*this->objects[j]))
+		if (foot.hit(*this->GameObjects[j]))
 		{
 			if (n == 0) {
-				if (this->objects[j]->objectTag == objtag)
+				if (this->GameObjects[j]->objectTag == objtag)
 				{
 					return true;
 				}
 			}
 			else
 			{
-				if (this->objects[j]->objectTag != objtag)
+				if (this->GameObjects[j]->objectTag != objtag)
 				{
 					return true;
 				}
@@ -309,11 +325,11 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		for (int i = 0; i < this->GameObjects.size(); ++i)
 		{
-			if (this->hit(*this->objects[i]))
+			if (this->hit(*this->GameObjects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Soil") {
+				if (this->GameObjects[i]->objectTag == "Floor" || this->GameObjects[i]->objectTag == "Soil") {
 					//std::cout << "hit" << std::endl;
 					this->position.x = preX;
 					break;
@@ -339,11 +355,11 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		for (int i = 0; i < this->GameObjects.size(); ++i)
 		{
-			if (this->hit(*this->objects[i]))
+			if (this->hit(*this->GameObjects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || this->objects[i]->objectTag == "Soil") {
+				if (this->GameObjects[i]->objectTag == "Floor" || this->GameObjects[i]->objectTag == "Soil") {
 					//std::cout << "hit" << std::endl;
 					this->position.y = preY;
 					break;
@@ -373,11 +389,11 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		for (int i = 0; i < this->GameObjects.size(); ++i)
 		{
-			if (this->hit(*this->objects[i]))
+			if (this->hit(*this->GameObjects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor") {
+				if (this->GameObjects[i]->objectTag == "Floor") {
 					//std::cout << "hit" << std::endl;
 					this->position.x = preX;
 					break;
@@ -403,11 +419,11 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		for (int i = 0; i < this->GameObjects.size(); ++i)
 		{
-			if (this->hit(*this->objects[i]))
+			if (this->hit(*this->GameObjects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor") {
+				if (this->GameObjects[i]->objectTag == "Floor") {
 					//std::cout << "hit" << std::endl;
 					this->position.y = preY;
 					break;
@@ -437,14 +453,14 @@ void Water::MoveSOILDCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		for (int i = 0; i < this->GameObjects.size(); ++i)
 		{
-			if (this->hit(*this->objects[i]))
+			if (this->hit(*this->GameObjects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || 
-					this->objects[i]->objectTag == "Net" || 
-					this->objects[i]->objectTag == "SOLID" || 
-					this->objects[i]->objectTag == "Soil") 
+				if (this->GameObjects[i]->objectTag == "Floor" || 
+					this->GameObjects[i]->objectTag == "Net" || 
+					this->GameObjects[i]->objectTag == "SOLID" || 
+					this->GameObjects[i]->objectTag == "Soil") 
 				{
 					this->position.x = preX;
 					break;
@@ -470,14 +486,14 @@ void Water::MoveSOILDCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int i = 0; i < this->objects.size(); ++i)
+		for (int i = 0; i < this->GameObjects.size(); ++i)
 		{
-			if (this->hit(*this->objects[i]))
+			if (this->hit(*this->GameObjects[i]))
 			{
-				if (this->objects[i]->objectTag == "Floor" || 
-					this->objects[i]->objectTag == "Net" || 
-					this->objects[i]->objectTag == "SOLID" ||
-					this->objects[i]->objectTag == "Soil")
+				if (this->GameObjects[i]->objectTag == "Floor" || 
+					this->GameObjects[i]->objectTag == "Net" || 
+					this->GameObjects[i]->objectTag == "SOLID" ||
+					this->GameObjects[i]->objectTag == "Soil")
 				{
 					this->position.y = preY;
 					break;
@@ -489,21 +505,21 @@ void Water::MoveSOILDCheck(Vec2& est)
 
 bool Water::HeadCheck(std::string& objtag,int n)
 {
-	Object head;
+	GameObject head;
 	head.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
-	for (int i = 0; i < this->objects.size(); ++i)
+	for (int i = 0; i < this->GameObjects.size(); ++i)
 	{
-		if (head.hit(*this->objects[i]))
+		if (head.hit(*this->GameObjects[i]))
 		{
 			if (n == 0) {
-				if (this->objects[i]->objectTag == objtag)
+				if (this->GameObjects[i]->objectTag == objtag)
 				{
 					return true;
 				}
 			}
 			else
 			{
-				if (this->objects[i]->objectTag != objtag)
+				if (this->GameObjects[i]->objectTag != objtag)
 				{
 					return true;
 				}
@@ -522,4 +538,38 @@ bool Water::SetColor(Color& color)
 Color Water::GetColor() const
 {
 	return this->color;
+}
+
+void Water::MovePos(Vec2& est)
+{
+	this->move += est;
+}
+
+Vec2 Water::GetMove() const
+{
+	return this->move;
+}
+
+bool Water::IsBucket()
+{
+	return this->GetSituation() == Water::Situation::Normal && this->GetState() == Water::State::LIQUID && this->invi <= 0;
+}
+
+Water::SP Water::Create(Vec2& pos, bool flag_)
+{
+	auto to = Water::SP(new Water(pos));
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize())
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

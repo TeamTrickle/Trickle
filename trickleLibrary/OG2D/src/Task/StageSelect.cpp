@@ -1,6 +1,20 @@
 #include "StageSelect.h"
+#include "Task\Task_Game.h"
+StageSelect::StageSelect()
+{
 
-void StageSelect::Initialize()
+}
+
+StageSelect::~StageSelect()
+{
+	this->Finalize();
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		auto nexttask = Game::Create();
+	}
+}
+
+bool StageSelect::Initialize()
 {
 	cursorPos.x = 600.0f;
 	cursorPos.y = 100.0f;
@@ -10,41 +24,55 @@ void StageSelect::Initialize()
 	stage2Pos = Vec2(700.0f, 300.0f);
 	toTitlePos = Vec2(700.0f, 400.0f);
 
-	texBack.TextureCreate("back.png");
-	texCursor.TextureCreate("Collision.png");
-	texTutorial.TextureCreate("tutorial.png");
-	texStage1.TextureCreate("stage1.png");
-	texStage2.TextureCreate("stage2.png");
-	texToTitle.TextureCreate("totitle.png");
+	Vec2 kari = toTitlePos;
+	toTitlePos = stage2Pos;
+	stage2Pos = kari;
+
+	texBack.Create((std::string)"back.png");
+	texCursor.Create((std::string)"Collision.png");
+	texTutorial.Create((std::string)"tutorial.png");
+	texStage1.Create((std::string)"stage1.png");
+	texStage2.Create((std::string)"stage2.png");
+	texToTitle.Create((std::string)"totitle.png");
+	__super::Init((std::string)"select");
+	return true;
 }
 
-TaskFlag StageSelect::UpDate()
+void StageSelect::UpDate()
 {
 	CursorMove();
 
-	TaskFlag nowTask = Task_StageSelect;
-	if (gameEngine->in.key.down(In::ENTER))
+	if (OGge->in->down(In::B2))
 	{
 		switch (state) {
 		case Tutorial:
-			*MapNum = 1;	break;
+			*MapNum = 3;	
+			if (OGge->in->on(In::SL))
+			{
+				*MapNum = 1;
+			}
+			if (OGge->in->on(In::SR))
+			{
+				*MapNum = 2;
+			}
+			break;
 		case Stage1:
 			*MapNum = 5;	break;
 		case Stage2:	//未実装
 			//*MapNum = 6;	break;
+			break;
 		default:
 			*MapNum = 0;	break;
 		}
-		nowTask = (state == ToTitle) ? Task_Title : Task_Game;
+		this->Kill();
 	}
-	return nowTask;
 }
 
-void StageSelect::Render()
+void StageSelect::Render2D()
 {
 	//背景
 	{
-		Box2D draw(0, 0, 960, 540);
+		Box2D draw(Vec2(0, 0), OGge->window->GetSize());
 		draw.OffsetSize();
 		Box2D src(0, 0, 1920, 1080);
 		src.OffsetSize();
@@ -76,11 +104,11 @@ void StageSelect::Render()
 	}
 	//ステージ２
 	{
-		Box2D draw(stage2Pos.x, stage2Pos.y, 256.0f, 64.0f);
+		/*Box2D draw(stage2Pos.x, stage2Pos.y, 256.0f, 64.0f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 256);
 		src.OffsetSize();
-		texStage2.Draw(draw, src);
+		texStage2.Draw(draw, src);*/
 	}
 	//タイトルに戻る
 	{
@@ -94,26 +122,28 @@ void StageSelect::Render()
 
 }
 
-void StageSelect::Finalize()
+bool StageSelect::Finalize()
 {
+	texBack.Finalize();
 	texCursor.Finalize();
 	texTutorial.Finalize();
 	texStage1.Finalize();
 	texStage2.Finalize();
 	texToTitle.Finalize();
+	return true;
 }
 
 void StageSelect::CursorMove() {
 	if (cursorPos.y > tutorialPos.y)
 	{
-		if (gameEngine->in.key.down(Input::KeyBoard::UP))
+		if (OGge->in->down(In::CU))
 		{
 			cursorPos.y -= 100.0f;
 		}
 	}
 	if (cursorPos.y < toTitlePos.y)
 	{
-		if (gameEngine->in.key.down(Input::KeyBoard::DOWN))
+		if (OGge->in->down(In::CD))
 		{
 			cursorPos.y += 100.0f;
 		}
@@ -136,4 +166,23 @@ void StageSelect::CursorMove() {
 		state = ToTitle;
 	}
 
+}
+
+StageSelect::SP StageSelect::Create(bool flag_)
+{
+	auto to = StageSelect::SP(new StageSelect());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize())
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
 }

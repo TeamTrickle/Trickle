@@ -1,7 +1,6 @@
 #pragma once
-#include "OGSystem\_OGsystem.h"
 #include <random>
-
+#include <iostream>
 //ƒ‰ƒ“ƒ_ƒ€¶¬–¼‘O‹óŠÔ
 namespace random
 {

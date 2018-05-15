@@ -48,7 +48,7 @@ bool CollisionBox::hitCircle(CollisionCircle& b)
 {
 	//頂点情報のセット
 	Vec2 _ver[1] = {
-		{ b.hitBase.CenterX,b.hitBase.CenterY }
+		{ b.hitBase.center_x,b.hitBase.center_y }
 	};
 	Vec2 _v[4] = {
 		{ hitBase.x,hitBase.y },
@@ -78,7 +78,7 @@ bool CollisionCircle::hitBox(CollisionBox& b)
 {
 	//頂点情報のセット
 	Vec2 _ver[1] = {
-		{ hitBase.CenterX,hitBase.CenterY }
+		{ hitBase.center_x,hitBase.center_y }
 	};
 	Vec2 _v[4] = {
 		{ b.hitBase.x,b.hitBase.y },
@@ -107,10 +107,10 @@ bool CollisionCircle::hitBox(CollisionBox& b)
 bool CollisionCircle::hitCircle(CollisionCircle& b)
 {
 	//円の範囲内に相手の円の範囲が存在する場合TRUEを返す
-	if (((b.hitBase.CenterX - this->hitBase.CenterX)*
-		(b.hitBase.CenterX - this->hitBase.CenterX)) +
-		((b.hitBase.CenterY - this->hitBase.CenterY)*
-		(b.hitBase.CenterY - this->hitBase.CenterY)) <=
+	if (((b.hitBase.center_x - this->hitBase.center_x)*
+		(b.hitBase.center_x - this->hitBase.center_x)) +
+		((b.hitBase.center_y - this->hitBase.center_y)*
+		(b.hitBase.center_y - this->hitBase.center_y)) <=
 			(b.hitBase.r + this->hitBase.r)*(b.hitBase.r + this->hitBase.r))
 	{
 		return true;
