@@ -29,10 +29,6 @@ bool TaskObject::GetNextTask()
 {
 	return this->NextTask;
 }
-void TaskObject::Delete()
-{
-	Finalize();
-}
 void TaskObject::ResetKillCount()
 {
 	this->KillCount = 0;

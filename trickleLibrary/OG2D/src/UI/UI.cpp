@@ -39,7 +39,7 @@ void UI::UpDate() {
 		active = false;
 	}
 	//ƒvƒŒƒCƒ„‚ª”ÍˆÍ“à‚É“ü‚Á‚½‚ç
-	auto player = OGge->GetTask<Player>("player");
+	auto player = OGge->GetTask<Player>("Player");
 	if (hit(*player) && appeared == -1) {
 		active = true;
 		appeared = 0;
