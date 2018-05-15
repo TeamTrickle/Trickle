@@ -746,12 +746,18 @@ bool Player::BlockHit()
 		if (left.hit(*(*id)))
 		{
 			(*id)->PlCheckHit(left);
-			(*id)->GetMove(this->est);
+			if (this->est.x < 0)
+			{
+				(*id)->GetMove(this->est);
+			}
 		}
 		if (right.hit(*(*id)))
 		{
 			(*id)->PlCheckHit(right);
-			(*id)->GetMove(this->est);
+			if (this->est.x > 0)
+			{
+				(*id)->GetMove(this->est);
+			}
 		}
 	}
 	return false;
