@@ -48,7 +48,7 @@ public:
 	std::string taskName;
 	virtual ~Result();
 	typedef std::shared_ptr<Result> SP;
-	static Result::SP Create(bool);
+	static Result::SP Create(bool = true);
 	Result();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ

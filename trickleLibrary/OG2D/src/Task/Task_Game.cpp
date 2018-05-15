@@ -358,6 +358,9 @@ bool Game::Initialize()
 			break;
 	}
 	__super::Init((std::string)"game");
+
+
+	auto gameprocess = GameProcessManagement::Create();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -367,7 +370,18 @@ void Game::UpDate()
 	//std::cout << bucket[0]->GetHold() << bucket[1]->GetHold() << std::endl;
 
 	//gameprocess.UpDate();
-	
+	{
+		auto goal = OGge->GetTask<Goal>("Goal");
+		if (goal != nullptr)
+		{
+			if (OGge->in->key.down(Input::KeyBoard::ENTER))
+			{
+				goal->cleared = true;
+			}
+		}
+	}
+
+
 	timecnt++;
 	if (timecnt >= 120)
 	{

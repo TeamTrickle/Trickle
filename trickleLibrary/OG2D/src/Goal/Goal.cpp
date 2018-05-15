@@ -15,6 +15,8 @@ bool Goal::Initialize()
 	tex.Create((std::string)"goal.png");
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, Vec2(28 * 64, 14 * 64), Vec2(64, 64), 0.f);
+
+	std::cout << "ゴール　初期化" << std::endl;
 	return true;
 }
 bool Goal::Initialize(Vec2& pos) {
@@ -90,17 +92,16 @@ bool Goal::Finalize()
 bool Goal::ClearCheck()
 {
 	auto waters = OGge->GetTasks<Water>("water");
-	if (waters == nullptr)
+	if (waters != nullptr)
 	{
-		return false;
-	}
-	for (int i = 0; i < (*waters).size(); ++i)
-	{
-		if ((*waters)[i]->hit(*this))
+		for (int i = 0; i < (*waters).size(); ++i)
 		{
-			if ((*waters)[i]->GetSituation() == Water::Situation::Normal && (*waters)[i]->GetState() == Water::State::LIQUID)
+			if ((*waters)[i]->hit(*this))
 			{
-				return true;
+				if ((*waters)[i]->GetSituation() == Water::Situation::Normal && (*waters)[i]->GetState() == Water::State::LIQUID)
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -112,12 +113,13 @@ bool Goal::ClearCheck()
 //----------------------------
 Goal::Goal()
 {
-	
+	std::cout << "ゴール　生成" << std::endl;
 }
 
 Goal::~Goal()
 {
 	this->Finalize();
+	std::cout << "ゴール　解放" << std::endl;
 }
 
 Goal::SP Goal::Create(bool flag_)
