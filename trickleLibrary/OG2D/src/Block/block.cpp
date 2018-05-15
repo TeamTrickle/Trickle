@@ -153,7 +153,6 @@ void Block::PlCheckHit(GameObject &p)
 //‚ß‚èž‚Ü‚È‚¢ˆ—
 void Block::CheckMove(Vec2 &e_)
 {
-	auto map = OGge->GetTask<Map>("map");
 	//xŽ²‚É‚Â‚¢‚Ä
 	while (e_.x != 0.0f)
 	{
@@ -175,7 +174,7 @@ void Block::CheckMove(Vec2 &e_)
 			e_.x = 0.0f;
 		}
 
-		if (map->MapHitCheck(*this))
+		if (isCollideSomething())
 		{
 			backmove.x = position.x - preX;
 			this->position.x = preX;
@@ -203,13 +202,28 @@ void Block::CheckMove(Vec2 &e_)
 			e_.y = 0.0f;
 		}
 
-		if (map->MapHitCheck(*this))
+		if (isCollideSomething())
 		{
 			backmove.y = position.y - preY;
 			this->position.y = preY;
 			break;
 		}
 	}
+}
+
+
+bool Block::isCollideSomething() 
+{
+	auto map = OGge->GetTask<Map>("map");
+	if (!map) {
+		return false;
+	}
+	auto bucket = OGge->GetTask<Bucket>("bucket");
+	if (!bucket) {
+		return false;
+	}
+
+	return map->MapHitCheck(*this) || bucket->hit(*this);
 }
 
 Block::SP Block::Create(Vec2& pos, bool flag_)
