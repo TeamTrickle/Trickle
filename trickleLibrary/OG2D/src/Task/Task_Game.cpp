@@ -740,7 +740,7 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto players = OGge->GetTasks<Player>("player");
+	auto players = OGge->GetTasks<Player>("Player");
 	for (auto id = (*players).begin(); id != (*players).end(); ++id)
 	{
 		(*id)->Kill();

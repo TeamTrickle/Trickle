@@ -38,7 +38,7 @@ bool Player::Initialize()
 	this->state = State::NORMAL;
 	//Ž©“®ˆÚ“®—p’l‚Ì‰Šú‰»
 	this->animation.Initialize();
-	__super::Init((std::string)"player");
+	__super::Init((std::string)"Player");
 	return true;
 }
 
