@@ -158,6 +158,7 @@ void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
 	if (text == "b")
 	{
 		auto bucket = Bucket::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		return;
 	}
 }
 
