@@ -2,10 +2,8 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-#include "Task\Task_Result.h"
 #include "Goal\Goal.h"
-
-#include "Task\Task_Game.h"
+#include "Task\Task_Result.h"
 bool GameProcessManagement::Initialize()
 {
 	//-----------------------------
@@ -43,11 +41,10 @@ bool GameProcessManagement::Finalize()
 	//-----------------------------------------
 	//このオブジェクトが消滅するときに行う処理を記述
 	//-----------------------------------------
-	
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		
+
 	}
 	return true;
 }
@@ -83,8 +80,6 @@ void GameProcessManagement::Goal_Event()
 	{
 		timer->Stop();						//タイマーの時間を元に戻す
 		File_Writing();						//フレームを書き込み
-		//結果画面へ行く
-		auto result = Result::Create();
 	}
 }
 void GameProcessManagement::File_Writing()

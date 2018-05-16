@@ -215,17 +215,6 @@ bool Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 void Game::UpDate()
 {
-	{
-		auto goal = OGge->GetTask<Goal>("Goal");
-		if (goal != nullptr)
-		{
-			if (OGge->in->key.down(Input::KeyBoard::ENTER))
-			{
-				goal->cleared = true;
-			}
-		}
-	}
-	
 	timecnt++;
 	if (timecnt >= 120)
 	{
@@ -239,6 +228,21 @@ void Game::UpDate()
 	if (OGge->in->on(Input::in::D2, 0) && OGge->in->on(In::D1))
 	{
 		this->Kill();
+	}
+
+	{
+		auto goal = OGge->GetTask<Goal>("Goal");
+		if (goal != nullptr)
+		{
+			if (OGge->in->key.down(Input::KeyBoard::ENTER))
+			{
+				goal->cleared = true;
+				if (goal->cleared)
+				{
+					this->Kill();
+				}
+			}
+		}
 	}
 }
 //-------------------------------------------------------------------------------------------------

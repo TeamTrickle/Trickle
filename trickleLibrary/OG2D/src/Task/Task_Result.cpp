@@ -30,7 +30,6 @@ void Result::UpDate()
 	if (OGge->in->down(In::B2))
 	{
 		Kill();
-		auto title = Title::Create();
 	}
 
 }
@@ -55,6 +54,7 @@ bool Result::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		image.Finalize();
+		auto title = Title::Create();
 	}
 	return true;
 }
@@ -179,7 +179,7 @@ void Result::Result_DataInput()
 //----------------------------
 Result::Result()
 {
-	cout << "Œ‹‰Ê‰æ–Êˆ—‰Šú‰»" << endl;
+	cout << "Œ‹‰Ê‰æ–Êˆ—@¶¬" << endl;
 	FrameTime = 0;
 	Flag_Judge_Clear();
 }
@@ -187,7 +187,7 @@ Result::Result()
 Result::~Result()
 {
 	this->Finalize();
-	cout << "Œ‹‰Ê‰æ–Êˆ—‰ð•ú" << endl;
+	cout << "Œ‹‰Ê‰æ–Êˆ—@‰ð•ú" << endl;
 }
 
 Result::SP Result::Create(bool flag_)
