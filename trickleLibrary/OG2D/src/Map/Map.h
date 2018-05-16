@@ -6,6 +6,7 @@
 #include "Object\Object.h"
 #include "OGSystem\Texture\Texture.h"
 #include "OGSystem\OGsystem.h"
+#include <cctype>
 enum Format
 {
 	csv,
@@ -33,7 +34,6 @@ public:
 	virtual ~Map();
 	typedef std::shared_ptr<Map> SP;
 	static SP Create(std::string&, Format = csv, bool = true);
-	bool LoadMap(std::string& _path);
 	bool LoadMap(std::string& _path, Format format);
 	void UpDate();
 	void Render2D();
@@ -45,4 +45,6 @@ private:
 	//ファイルパス
 	const std::string _FilePath = "./data/map/";
 	std::string chipimgname;
+private:
+	void ObjectCreateCheck(std::string&,int,int);
 };
