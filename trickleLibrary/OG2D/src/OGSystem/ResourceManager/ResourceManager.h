@@ -13,5 +13,7 @@ public:
 	Sound* GetSoundData(std::string&);
 	void SetTextureData(std::string&,Texture*);
 	Texture* GetTextureData(std::string&);
+	bool DeleteTexture(std::string&);
+	bool DeleteSound(std::string&);
 	virtual ~ResourceManager();
 };
