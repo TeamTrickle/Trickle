@@ -5,7 +5,7 @@
 Water::Water(Vec2 pos)
 {
 	//タグ設定
-	this->objectTag = "Water";
+	this->objectTag = "water";
 	//描画最大最小サイズ
 	this->minSize = { 0,0 };
 	this->maxSize = { 64,64 };

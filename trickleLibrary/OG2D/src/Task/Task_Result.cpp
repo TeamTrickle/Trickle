@@ -16,6 +16,7 @@ bool Result::Initialize()
 	Result_DataInput();
 	Flag_Judge();
 	this->image.Create((std::string)"outlook.png");
+	SetDrawOrder(0.0f);
 	cout << "結果画面処理　初期化" << endl;
 	return true;
 }
@@ -25,11 +26,13 @@ void Result::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
+	//タイトルシーンへ遷移
 	if (OGge->in->down(In::B2))
 	{
 		Kill();
 		auto title = Title::Create();
 	}
+
 }
 
 void Result::Render2D()
