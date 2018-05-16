@@ -180,6 +180,8 @@ void Result::Result_DataInput()
 Result::Result()
 {
 	cout << "Œ‹‰Ê‰æ–Êˆ—@¶¬" << endl;
+	//ƒJƒƒ‰À•W‚ðŒ³‚É–ß‚·
+	OGge->SetWindowPos(Vec2(0, 0));
 	FrameTime = 0;
 	Flag_Judge_Clear();
 }
