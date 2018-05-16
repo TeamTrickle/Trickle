@@ -21,7 +21,7 @@ Player::~Player()
 bool Player::Initialize()
 {
 	//オブジェクトの初期化
-	GameObject::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
+	this->CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -38,7 +38,7 @@ bool Player::Initialize()
 	this->state = State::NORMAL;
 	//自動移動用値の初期化
 	this->animation.Initialize();
-	__super::Init((std::string)"player");
+	__super::Init((std::string)"Player");
 	return true;
 }
 
@@ -746,12 +746,18 @@ bool Player::BlockHit()
 		if (left.hit(*(*id)))
 		{
 			(*id)->PlCheckHit(left);
-			(*id)->GetMove(this->est);
+			if (this->est.x < 0)
+			{
+				(*id)->GetMove(this->est);
+			}
 		}
 		if (right.hit(*(*id)))
 		{
 			(*id)->PlCheckHit(right);
-			(*id)->GetMove(this->est);
+			if (this->est.x > 0)
+			{
+				(*id)->GetMove(this->est);
+			}
 		}
 	}
 	return false;

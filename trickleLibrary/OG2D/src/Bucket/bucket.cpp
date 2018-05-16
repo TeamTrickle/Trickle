@@ -60,8 +60,10 @@ void Bucket::UpDate() {
 	}
 	//…‚ª“–‚½‚Á‚½Žž‚Ìˆ—
 	this->WaterIsHitCheck();
-	
-	CheckMove(gravity);
+	if (!hold)
+	{
+		CheckMove(gravity);
+	}
 }
 
 void Bucket::Render2D() {
