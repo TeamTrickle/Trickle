@@ -84,7 +84,14 @@ void EngineSystem::Task_UpDate()
 	{
 		if (this->taskobjects[id].second->GetKillCount() == 0) 
 		{
-			this->taskobjects[id].second->T_UpDate();
+			if (!this->GetPause())
+			{
+				this->taskobjects[id].second->T_UpDate();
+			}
+			else
+			{
+				this->taskobjects[id].second->T_Pause();
+			}
 		}
 	}
 }
@@ -95,7 +102,7 @@ void EngineSystem::Task_Render_AF()
 	{
 		if (this->taskobjects[this->Orders[i].id].second->GetKillCount() == 0)
 		{
-			this->taskobjects[this->Orders[i].id].second->Draw2D();
+			this->taskobjects[this->Orders[i].id].second->T_Render();
 		}
 	}
 }

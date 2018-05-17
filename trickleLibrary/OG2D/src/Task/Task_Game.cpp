@@ -312,8 +312,8 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	this->waterTex.Finalize();
-	this->playerTex.Finalize();
+	//this->waterTex.Finalize();
+	//this->playerTex.Finalize();
 	this->fanTex.Finalize();
 	return true;
 }
