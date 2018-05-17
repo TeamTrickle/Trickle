@@ -35,7 +35,14 @@ void TaskObject::ResetKillCount()
 }
 void TaskObject::SetDrawOrder(float order_)
 {
-	this->order = order_;
+	if (order_ >= 0.0f)
+	{
+		this->order = order_;
+	}
+	else
+	{
+		this->order = 0.0f;
+	}
 }
 float TaskObject::GetDrawOrder() const
 {
@@ -47,7 +54,7 @@ std::string TaskObject::GetTaskName() const
 }
 void TaskObject::T_Pause()
 {
-	PauseUpDate();
+	Pause();
 }
 void TaskObject::UpDate()
 {
@@ -57,7 +64,7 @@ void TaskObject::Render2D()
 {
 
 }
-void TaskObject::PauseUpDate()
+void TaskObject::Pause()
 {
 
 }
