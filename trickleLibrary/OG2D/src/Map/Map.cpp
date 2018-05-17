@@ -115,29 +115,19 @@ bool Map::LoadMap(std::string& path_, Format format)
 			case 17:
 				this->hitBase[y][x].objectTag = "Net";
 				break;
-				//case 3:
-				//	this->hitBase[y][x].objectTag = "Net";
-				//	break;
-				//case 4:
-				//	this->hitBase[y][x].objectTag = "Net";
-				//	break;
 			case 18:
 			case 19:
+			case 20:
+			case 21:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
-			case 20:
+			case 22:
 				this->hitBase[y][x].objectTag = "LadderTop";
 				break;
-			case 21:
-			case 22:
+			case 23:
+			case 24:
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
-				//case 8:
-				//	this->hitBase[y][x].objectTag = "Ladder";
-				//	break;
-				//case 9:
-				//this->hitBase[y][x].objectTag = "Switch";
-				//break;
 			default:
 				break;
 			}

@@ -54,7 +54,7 @@ std::string TaskObject::GetTaskName() const
 }
 void TaskObject::T_Pause()
 {
-	Pause();
+	PauseUpDate();
 }
 void TaskObject::UpDate()
 {
@@ -64,7 +64,7 @@ void TaskObject::Render2D()
 {
 
 }
-void TaskObject::Pause()
+void TaskObject::PauseUpDate()
 {
 
 }
