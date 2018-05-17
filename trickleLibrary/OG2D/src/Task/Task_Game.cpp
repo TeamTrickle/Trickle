@@ -312,8 +312,10 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	//this->waterTex.Finalize();
-	//this->playerTex.Finalize();
+	this->waterTex.Finalize();
+	this->playerTex.Finalize();
+	rm->DeleteTexture((std::string)"playerTex");
+	rm->DeleteTexture((std::string)"waterTex");
 	this->fanTex.Finalize();
 	return true;
 }
