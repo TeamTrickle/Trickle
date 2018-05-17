@@ -12,7 +12,7 @@ void TaskObject::T_UpDate()
 {
 	UpDate();
 }
-void TaskObject::Draw2D()
+void TaskObject::T_Render()
 {
 	Render2D();
 }
@@ -44,4 +44,20 @@ float TaskObject::GetDrawOrder() const
 std::string TaskObject::GetTaskName() const
 {
 	return this->taskName;
+}
+void TaskObject::T_Pause()
+{
+	PauseUpDate();
+}
+void TaskObject::UpDate()
+{
+
+}
+void TaskObject::Render2D()
+{
+
+}
+void TaskObject::PauseUpDate()
+{
+
 }
