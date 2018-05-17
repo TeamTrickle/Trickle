@@ -231,6 +231,9 @@
     <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -352,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
+      <Filter>ソースファイル\Task\Result</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
