@@ -1,9 +1,8 @@
 #include "Task_Result.h"
 using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-#include "GameProcessManagement\GameProcessManagement.h"
 #include "Task_Title.h"
-
+#include "GameProcessManagement\FlagUI.h"
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -16,7 +15,13 @@ bool Result::Initialize()
 	Result_DataInput();
 	Flag_Judge();
 	this->image.Create((std::string)"outlook.png");
+
 	SetDrawOrder(0.0f);
+
+	for (int i = 0; i < 3; ++i)
+	{
+		auto ster = FlagUI::Create(Vec2(100 * (i + 1), 100));
+	}
 	cout << "結果画面処理　初期化" << endl;
 	return true;
 }
@@ -31,7 +36,12 @@ void Result::UpDate()
 	{
 		Kill();
 	}
-
+	int Count = 0;
+	auto ster = OGge->GetTasks<FlagUI>("Ster");
+	for (auto id = (*ster).begin(); id != (*ster).end(); ++id,++Count)
+	{
+		(*id)->FalgJudge(1 << Count);
+	}
 }
 
 void Result::Render2D()
@@ -39,11 +49,13 @@ void Result::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
-	Box2D draw(Vec2(0, 0), OGge->window->GetSize());
-	draw.OffsetSize();
-	Box2D src(Vec2(0, 0), Vec2(1280, 720));
-	src.OffsetSize();
-	image.Draw(draw, src);
+	{
+		Box2D draw(Vec2(0, 0), OGge->window->GetSize());
+		draw.OffsetSize();
+		Box2D src(Vec2(0, 0), Vec2(1280, 720));
+		src.OffsetSize();
+		image.Draw(draw, src);
+	}
 }
 bool Result::Finalize()
 {
@@ -54,6 +66,11 @@ bool Result::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		image.Finalize();
+		auto ster = OGge->GetTasks<FlagUI>("Ster");
+		for (auto id = (*ster).begin(); id != (*ster).end(); ++id)
+		{
+			(*id)->Kill();
+		}
 		auto title = Title::Create();
 	}
 	return true;

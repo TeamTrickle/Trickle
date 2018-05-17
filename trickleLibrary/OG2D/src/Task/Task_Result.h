@@ -31,9 +31,10 @@ public:
 	bool Flag_Judge(Achievement, Achievement, Achievement);
 
 	void Flag_Judge_Clear();
+	
 private:
 	Texture image;
-
+	Texture ster[2];
 
 	const std::string _FilePath = "";
 

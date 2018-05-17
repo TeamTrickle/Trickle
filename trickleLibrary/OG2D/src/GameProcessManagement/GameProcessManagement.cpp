@@ -42,7 +42,6 @@ bool GameProcessManagement::Finalize()
 	//このオブジェクトが消滅するときに行う処理を記述
 	//-----------------------------------------
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
-	OGge->GetTask<Timer>("Timer");
 	if (timer != nullptr)
 	{
 		timer->Kill();
