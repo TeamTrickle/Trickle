@@ -20,7 +20,7 @@ bool Result::Initialize()
 
 	for (int i = 0; i < 3; ++i)
 	{
-		auto ster = FlagUI::Create(Vec2(100 * (i + 1), 100));
+		auto ster = FlagUI::Create(Vec2(100 * (i + 1), 100),1 << 0);
 	}
 	cout << "Œ‹‰Ê‰æ–Êˆ—@‰Šú‰»" << endl;
 	return true;
@@ -35,12 +35,6 @@ void Result::UpDate()
 	if (OGge->in->down(In::B2))
 	{
 		Kill();
-	}
-	int Count = 0;
-	auto ster = OGge->GetTasks<FlagUI>("Ster");
-	for (auto id = (*ster).begin(); id != (*ster).end(); ++id,++Count)
-	{
-		(*id)->FalgJudge(1 << Count);
 	}
 }
 

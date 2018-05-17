@@ -1,14 +1,17 @@
 #include "FlagUI.h"
 
 
-bool FlagUI::Initialize(Vec2& pos)
+bool FlagUI::Initialize(Vec2& pos,int& target)
 {
 	std::cout << "ミッション達成エフェクト　初期化" << std::endl;
 	this->taskName = "Ster";
 	this->Init(taskName);
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
-	//フラグの初期化
+	//フラグ代入を格納する
 	Resultflag = 0;
+	//ターゲットフラグの設定
+	targetflag = target;
+	//画像判定に必要なフラグ
 	flagactive = false;
 	SetDrawOrder(0.1f);
 	image[0].Create((std::string)"Ster.jpg");
@@ -19,6 +22,7 @@ void FlagUI::UpDate()
 {
 	//フラグを代入する
 	this->SetResultflag();
+	this->FalgJudge(targetflag);
 }
 void FlagUI::Render2D()
 {
@@ -66,7 +70,7 @@ FlagUI::~FlagUI()
 	this->Finalize();
 	std::cout << "ミッション達成エフェクト　解放" << std::endl;
 }
-FlagUI::SP FlagUI::Create(Vec2& pos,bool flag_)
+FlagUI::SP FlagUI::Create(Vec2& pos,int target,bool flag_)
 {
 	FlagUI::SP to = FlagUI::SP(new FlagUI());
 	if (to)
@@ -76,7 +80,7 @@ FlagUI::SP FlagUI::Create(Vec2& pos,bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos))
+		if (!to->Initialize(pos,target))
 		{
 			to->Kill();
 		}
