@@ -49,6 +49,8 @@ bool Game::Initialize()
 
 	//扇風機画像読み込み
 	this->fanTex.Create((std::string)"fan.png");
+	this->playerTex.Create((std::string)"player2.png");
+	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
 	//マップ初期処理
 	switch (*MapNum)
 	{
@@ -154,10 +156,10 @@ bool Game::Initialize()
 			fan->SetTexture(&this->fanTex);
 		}
 		//バケツ生成
-		for (int i = 0; i < 2; ++i)
+		/*for (int i = 0; i < 2; ++i)
 		{
 			auto bucket = Bucket::Create(bucketpos[i]);
-		}
+		}*/
 		//ブロック生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -186,11 +188,11 @@ bool Game::Initialize()
 	}
 	//プレイヤー初期処理
 	//プレイヤー画像の読み込み
-	this->playerTex.Create((std::string)"player2.png");
+	
 	//プレイヤーを生成
-	auto player = Player::Create(Vec2(200, 200));
+	//auto player = Player::Create(Vec2(200, 200));
 	//画像を渡す
-	player->SetTexture(&this->playerTex);
+	//player->SetTexture(&this->playerTex);
 	//水が自動で降ってくる時間の初期化
 	this->timecnt = 0;
 	//水の生成
@@ -201,7 +203,7 @@ bool Game::Initialize()
 	{
 	case 3:
 		//プレイヤーの位置を変更
-		player->SetPos(Vec2(200, 400));
+	//	player->SetPos(Vec2(200, 400));
 		break;
 		default:
 			break;
@@ -215,17 +217,6 @@ bool Game::Initialize()
 //-------------------------------------------------------------------------------------------------
 void Game::UpDate()
 {
-	{
-		auto goal = OGge->GetTask<Goal>("Goal");
-		if (goal != nullptr)
-		{
-			if (OGge->in->key.down(Input::KeyBoard::ENTER))
-			{
-				goal->cleared = true;
-			}
-		}
-	}
-	
 	timecnt++;
 	if (timecnt >= 120)
 	{
@@ -239,6 +230,21 @@ void Game::UpDate()
 	if (OGge->in->on(Input::in::D2, 0) && OGge->in->on(In::D1))
 	{
 		this->Kill();
+	}
+
+	{
+		auto goal = OGge->GetTask<Goal>("Goal");
+		if (goal != nullptr)
+		{
+			if (OGge->in->key.down(Input::KeyBoard::ENTER))
+			{
+				goal->cleared = true;
+				if (goal->cleared)
+				{
+					this->Kill();
+				}
+			}
+		}
 	}
 }
 //-------------------------------------------------------------------------------------------------

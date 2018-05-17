@@ -30,7 +30,6 @@ void Result::UpDate()
 	if (OGge->in->down(In::B2))
 	{
 		Kill();
-		auto title = Title::Create();
 	}
 
 }
@@ -55,6 +54,7 @@ bool Result::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		image.Finalize();
+		auto title = Title::Create();
 	}
 	return true;
 }
@@ -179,7 +179,9 @@ void Result::Result_DataInput()
 //----------------------------
 Result::Result()
 {
-	cout << "結果画面処理初期化" << endl;
+	cout << "結果画面処理　生成" << endl;
+	//カメラ座標を元に戻す
+	OGge->camera->SetPos(Vec2(0, 0));
 	FrameTime = 0;
 	Flag_Judge_Clear();
 }
@@ -187,7 +189,7 @@ Result::Result()
 Result::~Result()
 {
 	this->Finalize();
-	cout << "結果画面処理解放" << endl;
+	cout << "結果画面処理　解放" << endl;
 }
 
 Result::SP Result::Create(bool flag_)

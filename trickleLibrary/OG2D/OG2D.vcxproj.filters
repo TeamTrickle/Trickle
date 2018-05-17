@@ -84,9 +84,6 @@
     <Filter Include="ソースファイル\OGSystem\System\Timer">
       <UniqueIdentifier>{b0f1c63f-2af4-468d-891d-f836688630b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\OGSystem\System\Shader">
-      <UniqueIdentifier>{07a5ea8b-eb70-4b10-ba9d-e96be3ec8a4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\GameProcessManager">
       <UniqueIdentifier>{7a158ccb-92ef-49bf-bba4-eb00b469d726}</UniqueIdentifier>
     </Filter>
