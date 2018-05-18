@@ -13,8 +13,8 @@
 class Bucket : public GameObject,public TaskObject {
 
 private:
-	const Box2D BUCKET_NOTHING = Box2D(0, 0, 64, 64);
-	const Box2D BUCKET_WATER = Box2D(64, 0, 64, 64);
+	const Box2D BUCKET_NOTHING = Box2D(0, 0, 256, 256);
+	const Box2D BUCKET_WATER = Box2D(256, 0, 256, 256);
 	Box2D GetSpriteCrop() const;
 	bool BucketWaterCreate();
 
