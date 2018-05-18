@@ -61,6 +61,22 @@ void Camera2D::MoveSize(Vec2& size_)
 	//サイズを加算する
 	this->Scale += size_;
 }
+void Camera2D::SetPos_x(float x_)
+{
+	this->position.x = x_;
+}
+void Camera2D::SetPos_y(float y_)
+{
+	this->position.y = y_;
+}
+void Camera2D::SetSize_w(float w_)
+{
+	this->Scale.x = w_;
+}
+void Camera2D::SetSize_h(float h_)
+{
+	this->Scale.y = h_;
+}
 Vec2 Camera2D::GetPos() const
 {
 	//位置を返す

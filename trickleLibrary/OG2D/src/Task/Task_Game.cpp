@@ -182,17 +182,10 @@ bool Game::Initialize()
 	//水初期処理
 	{
 		//水画像の読み込み
-		this->waterTex.Create((std::string)"watertest.png");
+		this->waterTex.Create((std::string)"waterTex.png");
 		//リソース管理classへデータを渡す
 		rm->SetTextureData((std::string)"waterTex", &waterTex);
 	}
-	//プレイヤー初期処理
-	//プレイヤー画像の読み込み
-	
-	//プレイヤーを生成
-	//auto player = Player::Create(Vec2(200, 200));
-	//画像を渡す
-	//player->SetTexture(&this->playerTex);
 	//水が自動で降ってくる時間の初期化
 	this->timecnt = 0;
 	//水の生成
@@ -312,10 +305,10 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	this->waterTex.Finalize();
-	this->playerTex.Finalize();
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
+	this->waterTex.Finalize();
+	this->playerTex.Finalize();
 	this->fanTex.Finalize();
 	return true;
 }

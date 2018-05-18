@@ -1,6 +1,7 @@
 #include "Task_Title.h"
 #include "Task\Task_Option.h"
 #include "Task\StageSelect.h"
+#include "Water\water.h"
 Title::Title()
 {
 
@@ -27,21 +28,14 @@ bool Title::Initialize()
 	texStart.Create((std::string)"start.png");
 	texClose.Create((std::string)"close.png");
 	texPause.Create((std::string)"pause.png");
-
-	//オプションで変更した音量を反映できることを確認
-
-	//sound.create(std::string("playandhope.wav"), true);
-	//サウンド自体の音量を設定
-	//sound.SetVolume(1.0f);
-	//サウンドデータをSoundManagerに登録
-	//OGge->soundManager->SetSound(&sound);
-	//最大音量を指定
-	//OGge->soundManager->SetMaxVolume(vol);
-
-	//サウンドの音量を最大音量に合わせて適用させる
-	//OGge->soundManager->Application();
-	//サウンドの再生
-	//sound.play();
+	//背景画像の読み込み
+	back.Create((std::string)"outlook.png");
+	//カメラ位置の移動
+	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
+	//水読み込みと生成
+	/*auto water = Water::Create(Vec2(OGge->window->GetSize().x - 64.f, 0.f));
+	waterTex.Create((std::string)"waterTex.png");
+	water->SetTexture(&this->waterTex);*/
 	this->nextTaskCheck = 0;
 	__super::Init((std::string)"title");
 	return true;
@@ -83,6 +77,13 @@ void Title::UpDate()
 
 void Title::Render2D()
 {
+	{
+		Box2D draw(Vec2(0, 0), OGge->window->GetSize() * 2);
+		draw.OffsetSize();
+		Box2D src(0, 0, 1280, 720);
+		src.OffsetSize();
+		back.Draw(draw, src);
+	}
 	//カーソルの表示
 	{
 		//表示位置、大きさは仮ゲームスタート
@@ -128,6 +129,14 @@ bool Title::Finalize()
 	texStart.Finalize();
 	texClose.Finalize();
 	texPause.Finalize();
+
+	back.Finalize();
+
+	//auto water = OGge->GetTasks<Water>("water");
+	//for (auto id = (*water).begin(); id != (*water).end(); ++id)
+	//{
+	//	(*id)->Kill();
+	//}
 
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
