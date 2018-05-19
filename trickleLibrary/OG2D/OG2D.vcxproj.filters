@@ -84,9 +84,6 @@
     <Filter Include="ソースファイル\OGSystem\System\Timer">
       <UniqueIdentifier>{b0f1c63f-2af4-468d-891d-f836688630b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\OGSystem\System\Shader">
-      <UniqueIdentifier>{07a5ea8b-eb70-4b10-ba9d-e96be3ec8a4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\GameProcessManager">
       <UniqueIdentifier>{7a158ccb-92ef-49bf-bba4-eb00b469d726}</UniqueIdentifier>
     </Filter>
@@ -234,6 +231,9 @@
     <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -355,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
+      <Filter>ソースファイル\Task\Result</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

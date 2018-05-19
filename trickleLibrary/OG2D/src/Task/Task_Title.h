@@ -8,6 +8,14 @@
 
 class Title:public TaskObject
 {
+	class Animation
+	{
+	public:
+		void Move();
+		Vec2 StartPos;
+		Vec2 EndPos;
+		Animation();
+	};
 	Texture texCursor;
 	Texture texStart;
 	Texture texClose;
@@ -17,6 +25,9 @@ class Title:public TaskObject
 	Vec2 pausePos;
 	Vec2 closePos;
 	Vec2 cursorPos;
+
+	Texture back;
+	//Texture waterTex;
 
 	int nextTaskCheck;
 

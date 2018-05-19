@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\Bucket\bucket.cpp" />
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
@@ -194,6 +195,7 @@
   <ItemGroup>
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
