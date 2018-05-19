@@ -3,6 +3,7 @@ using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Task_Title.h"
 #include "GameProcessManagement\FlagUI.h"
+#include "Player\ResultPlayer.h"
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -17,7 +18,10 @@ bool Result::Initialize()
 	this->image.Create((std::string)"outlook.png");
 
 	SetDrawOrder(0.0f);
-
+	{
+		Vec2 windowsize = OGge->window->GetSize();
+		auto player = ResultPlayer::Create(Vec2(0, (int)windowsize.y - 200),Vec2(3,0));
+	}
 	for (int i = 0; i < 3; ++i)
 	{
 		auto ster = FlagUI::Create(Vec2(100 * (i + 1), 100),1 << 0);
@@ -37,7 +41,6 @@ void Result::UpDate()
 		Kill();
 	}
 }
-
 void Result::Render2D()
 {
 	//--------------------
@@ -60,10 +63,15 @@ bool Result::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		image.Finalize();
+		auto player = OGge->GetTask<ResultPlayer>("ResultPlayer");
 		auto ster = OGge->GetTasks<FlagUI>("Ster");
 		for (auto id = (*ster).begin(); id != (*ster).end(); ++id)
 		{
 			(*id)->Kill();
+		}
+		if (player)
+		{
+			player->Kill();
 		}
 		auto title = Title::Create();
 	}

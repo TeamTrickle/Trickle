@@ -234,6 +234,9 @@
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
       <Filter>ソースファイル\Task\Result</Filter>
     </ClCompile>
+    <ClCompile Include="src\Player\ResultPlayer.cpp">
+      <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\FlagUI.h">
       <Filter>ソースファイル\Task\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\ResultPlayer.h">
+      <Filter>ソースファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

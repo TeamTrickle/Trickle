@@ -31,17 +31,12 @@ public:
 	bool Flag_Judge(Achievement, Achievement, Achievement);
 
 	void Flag_Judge_Clear();
-	
 private:
-	Texture image;
-	Texture ster[2];
-
-	const std::string _FilePath = "";
-
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
 								//結果の際に必要なポインタ　または　ファイルの読み込む
 	const char* TimeFilePath = "./data/Result/Result.dat";
+	Texture image;
 	//------------------
 	//固定化されている処理
 	//------------------
