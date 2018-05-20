@@ -9,6 +9,7 @@
 
 #include "OGSystem\OGSystem.h"
 #include "Object\Object.h"
+#include "Block\block.h"
 
 class Bucket : public GameObject,public TaskObject {
 
@@ -17,6 +18,7 @@ private:
 	const Box2D BUCKET_WATER = Box2D(256, 0, 256, 256);
 	Box2D GetSpriteCrop() const;
 	bool BucketWaterCreate();
+	bool isObjectCollided();
 
 public:
 	explicit Bucket();

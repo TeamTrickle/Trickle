@@ -89,11 +89,6 @@ Box2D Bucket::GetSpriteCrop() const {
 //‚ß‚èž‚Ü‚È‚¢ˆ—
 void Bucket::CheckMove(Vec2 &e_)
 {
-	auto map = OGge->GetTask<Map>("map");
-	if (!map)
-	{
-		return;
-	}
 	//xŽ²‚É‚Â‚¢‚Ä
 	while (e_.x != 0.0f)
 	{
@@ -115,7 +110,7 @@ void Bucket::CheckMove(Vec2 &e_)
 			e_.x = 0.0f;
 		}
 
-		if (map->MapHitCheck(*this))
+		if (isObjectCollided())
 		{
 			this->position.x = preX;
 			break;
@@ -142,12 +137,25 @@ void Bucket::CheckMove(Vec2 &e_)
 			e_.y = 0.0f;
 		}
 
-		if (map->MapHitCheck(*this))
+		if (isObjectCollided())
 		{
 			this->position.y = preY;
 			break;
 		}
 	}
+}
+
+bool Bucket::isObjectCollided() {
+	auto map = OGge->GetTask<Map>("map");
+	if (!map) {
+		return false;
+	}
+	auto block = OGge->GetTask<Block>("block");
+	if (!block)
+		return false;
+
+	return map->MapHitCheck(*this) || 
+		   block->hit(*this);
 }
 
 void Bucket::HoldCheck(bool flag)
