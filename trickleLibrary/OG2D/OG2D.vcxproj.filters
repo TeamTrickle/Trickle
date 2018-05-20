@@ -84,9 +84,6 @@
     <Filter Include="ソースファイル\OGSystem\System\Timer">
       <UniqueIdentifier>{b0f1c63f-2af4-468d-891d-f836688630b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\OGSystem\System\Shader">
-      <UniqueIdentifier>{07a5ea8b-eb70-4b10-ba9d-e96be3ec8a4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\GameProcessManager">
       <UniqueIdentifier>{7a158ccb-92ef-49bf-bba4-eb00b469d726}</UniqueIdentifier>
     </Filter>
@@ -111,8 +108,8 @@
     <Filter Include="ソースファイル\OGSystem\System\OG">
       <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\ResourceManager">
-      <UniqueIdentifier>{93ee20bc-893b-439e-b693-016b7b7832ce}</UniqueIdentifier>
+    <Filter Include="ソースファイル\OGSystem\System\ResourceManager">
+      <UniqueIdentifier>{a6a06207-bbbb-436f-9e8e-50db74cd07d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,8 +228,14 @@
     <ClCompile Include="src\OGSystem\TaskObject.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
-      <Filter>ソースファイル\ResourceManager</Filter>
+    <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp">
+      <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\ResultPlayer.cpp">
+      <Filter>ソースファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,8 +356,14 @@
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceManager\ResourceManager.h">
-      <Filter>ソースファイル\ResourceManager</Filter>
+    <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h">
+      <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\ResultPlayer.h">
+      <Filter>ソースファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

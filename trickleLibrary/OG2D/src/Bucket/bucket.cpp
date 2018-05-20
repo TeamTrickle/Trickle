@@ -24,8 +24,8 @@ bool Bucket::Initialize(Vec2& pos)
 	gravity = Vec2(0.0f, 0.0f);
 	hold = false;
 	this->capacity = 0;
-	GameObject::CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
-	GameObject::objectTag = "Bucket";
+	this->CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
+	this->objectTag = "Bucket";
 
 	tex.Create((std::string)"bucket.png");
 	__super::Init((std::string)"bucket");
@@ -60,8 +60,10 @@ void Bucket::UpDate() {
 	}
 	//…‚ª“–‚½‚Á‚½Žž‚Ìˆ—
 	this->WaterIsHitCheck();
-	
-	CheckMove(gravity);
+	if (!hold)
+	{
+		CheckMove(gravity);
+	}
 }
 
 void Bucket::Render2D() {

@@ -5,7 +5,7 @@
 Water::Water(Vec2 pos)
 {
 	//タグ設定
-	this->objectTag = "Water";
+	this->objectTag = "water";
 	//描画最大最小サイズ
 	this->minSize = { 0,0 };
 	this->maxSize = { 64,64 };
@@ -142,12 +142,13 @@ Water::Situation Water::UpNewform()
 Water::Situation Water::UpDeleteform()
 {
 	Water::Situation now = this->nowSituation;
-	this->setTime++;
+	/*this->setTime++;
 	this->Scale.x -= 2;
 	this->Scale.y -= 2;
 	this->position.y += 2;
-	this->position.x++;
-	if (this->setTime >= this->maxSize.x)
+	this->position.x++;*/
+	++this->nowTime;
+	if (this->nowTime >= 72)
 	{
 		now = Water::Situation::CreaDelete;
 	}
@@ -160,6 +161,7 @@ Water::Situation Water::UpNormal()
 	if (this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil"))
 	{
 		now = Water::Situation::Deleteform;
+		this->nowTime = 0;
 	}
 	else
 	{
@@ -170,16 +172,25 @@ Water::Situation Water::UpNormal()
 
 void Water::Render2D()
 {
+	if (this->nowSituation == Situation::CreaDelete && this->currentState == State::LIQUID)
+	{
+		return;
+	}
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-	Box2D src = Box2D(0, 0, 128, 128);
+	Box2D src(0, 0, 256, 256);
 	if (this->currentState == State::GAS)
 	{
-		src.x += 128;
+		src.x += 256;
 	}
 	if (this->currentState == State::SOLID)
 	{
-		src.x += 256;
+		src.x += 512;
+	}
+	if (this->currentState == State::LIQUID && this->nowSituation == Situation::Deleteform)
+	{
+		src.y += 256;
+		src.x = (this->nowTime / 6) * 256;
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f - this->color.alpha });
@@ -260,6 +271,10 @@ bool Water::FootCheck(std::string& objtag,int n)
 	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y + 0.1f), Vec2(this->Scale.x, 0.9f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
+	if (!map)
+	{
+		return false;
+	}
 	for (int y = 0; y < map->mapSize.y; ++y)
 	{
 		for (int x = 0; x < map->mapSize.x; ++x)
@@ -289,6 +304,11 @@ bool Water::FootCheck(std::string& objtag,int n)
 void Water::MoveWATERCheck(Vec2& est)
 {
 	auto map = OGge->GetTask<Map>("map");
+	if (!map)
+	{
+		this->position += est;
+		return;
+	}
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;

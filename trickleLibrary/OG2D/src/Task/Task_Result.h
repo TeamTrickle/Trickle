@@ -32,15 +32,11 @@ public:
 
 	void Flag_Judge_Clear();
 private:
-	Texture image;
-
-
-	const std::string _FilePath = "";
-
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
 								//結果の際に必要なポインタ　または　ファイルの読み込む
 	const char* TimeFilePath = "./data/Result/Result.dat";
+	Texture image;
 	//------------------
 	//固定化されている処理
 	//------------------
@@ -48,7 +44,7 @@ public:
 	std::string taskName;
 	virtual ~Result();
 	typedef std::shared_ptr<Result> SP;
-	static Result::SP Create(bool);
+	static Result::SP Create(bool = true);
 	Result();
 	//-------------
 	//変更しないこと

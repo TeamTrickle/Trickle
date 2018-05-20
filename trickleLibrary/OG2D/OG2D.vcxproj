@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\Bucket\bucket.cpp" />
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
@@ -175,13 +176,14 @@
     <ClCompile Include="src\OGSystem\OGsystem.cpp" />
     <ClCompile Include="src\OGSystem\OGTask.cpp" />
     <ClCompile Include="src\OGSystem\Random\Random.cpp" />
+    <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="src\OGSystem\TaskObject.cpp" />
     <ClCompile Include="src\OGSystem\Texture\Texture.cpp" />
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp" />
     <ClCompile Include="src\OGSystem\Window\Window.cpp" />
     <ClCompile Include="src\OGSystem\_OGsystem.cpp" />
     <ClCompile Include="src\Player\Player.cpp" />
-    <ClCompile Include="src\ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="src\Player\ResultPlayer.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Option.cpp" />
@@ -194,6 +196,7 @@
   <ItemGroup>
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
@@ -217,13 +220,14 @@
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
     <ClInclude Include="src\OGSystem\Random\Random.h" />
+    <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h" />
     <ClInclude Include="src\OGSystem\TaskObject.h" />
     <ClInclude Include="src\OGSystem\Texture\Texture.h" />
     <ClInclude Include="src\OGSystem\Timer\glTimer.h" />
     <ClInclude Include="src\OGSystem\Window\Window.h" />
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
     <ClInclude Include="src\Player\Player.h" />
-    <ClInclude Include="src\ResourceManager\ResourceManager.h" />
+    <ClInclude Include="src\Player\ResultPlayer.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Option.h" />

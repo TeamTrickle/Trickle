@@ -12,7 +12,7 @@ void TaskObject::T_UpDate()
 {
 	UpDate();
 }
-void TaskObject::Draw2D()
+void TaskObject::T_Render()
 {
 	Render2D();
 }
@@ -29,17 +29,20 @@ bool TaskObject::GetNextTask()
 {
 	return this->NextTask;
 }
-//void TaskObject::Delete()
-//{
-//	Finalize();
-//}
 void TaskObject::ResetKillCount()
 {
 	this->KillCount = 0;
 }
 void TaskObject::SetDrawOrder(float order_)
 {
-	this->order = order_;
+	if (order_ >= 0.0f)
+	{
+		this->order = order_;
+	}
+	else
+	{
+		this->order = 0.0f;
+	}
 }
 float TaskObject::GetDrawOrder() const
 {
@@ -48,4 +51,20 @@ float TaskObject::GetDrawOrder() const
 std::string TaskObject::GetTaskName() const
 {
 	return this->taskName;
+}
+void TaskObject::T_Pause()
+{
+	PauseUpDate();
+}
+void TaskObject::UpDate()
+{
+
+}
+void TaskObject::Render2D()
+{
+
+}
+void TaskObject::PauseUpDate()
+{
+
 }

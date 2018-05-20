@@ -16,8 +16,8 @@
 #include "Easing\easing.hpp"
 #include "Audio\StreamingSound.h"
 #include "Random\Random.h"
-#include "TaskObject.h"
 #include "ResourceManager\ResourceManager.h"
+#include "TaskObject.h"
 
 class OrderCheck
 {
@@ -94,9 +94,12 @@ public:
 	{
 		for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
 		{
-			if ((*id).second->GetTaskName() == taskName)
+			if ((*id).second)
 			{
-				return std::static_pointer_cast<T>((*id).second);
+				if ((*id).second->GetTaskName() == taskName)
+				{
+					return std::static_pointer_cast<T>((*id).second);
+				}
 			}
 		}
 		return nullptr;
@@ -107,10 +110,13 @@ public:
 		bool flag = false;
 		for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
 		{
-			if ((*id).second->GetTaskName() == taskName)
+			if ((*id).second)
 			{
-				w->push_back(std::static_pointer_cast<T>((*id).second));
-				flag = true;
+				if ((*id).second->GetTaskName() == taskName)
+				{
+					w->push_back(std::static_pointer_cast<T>((*id).second));
+					flag = true;
+				}
 			}
 		}
 		if (!flag)

@@ -150,8 +150,8 @@ int main() {
 	Finalize();
 	//ゲームエンジンの内容を解放
 	delete MapNum;
-	delete rm;
 	delete OGge;
+	delete rm;
 	//GLFWのライブラリを終了する
 	glfwTerminate();
 }

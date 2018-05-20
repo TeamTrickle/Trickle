@@ -77,10 +77,10 @@ void Block::UpDate() {
 	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
 	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
 	*/
-	auto p = OGge->GetTask<Player>("player");
+	auto p = OGge->GetTask<Player>("Player");
 	if (p)
 	{
-		this->PlCheckHit(*p);
+		//this->PlCheckHit(*p);
 		if (plhit)
 		{
 			if (p->position.x < this->position.x)

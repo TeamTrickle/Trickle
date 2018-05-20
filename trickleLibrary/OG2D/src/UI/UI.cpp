@@ -20,7 +20,7 @@ bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, i
 		srcTable[i] = Box2D(256 * i, 0, 256, 256);
 		srcTable[i].OffsetSize();
 	}
-	CreateObject(Cube, Vec2(coll.x, coll.y), Vec2(coll.w, coll.h), 0.0f);
+	this->CreateObject(Cube, Vec2(coll.x, coll.y), Vec2(coll.w, coll.h), 0.0f);
 	__super::Init((std::string)"UI");
 	return true;
 }
@@ -39,7 +39,7 @@ void UI::UpDate() {
 		active = false;
 	}
 	//ƒvƒŒƒCƒ„‚ª”ÍˆÍ“à‚É“ü‚Á‚½‚ç
-	auto player = OGge->GetTask<Player>("player");
+	auto player = OGge->GetTask<Player>("Player");
 	if (hit(*player) && appeared == -1) {
 		active = true;
 		appeared = 0;
