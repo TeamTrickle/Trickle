@@ -3,7 +3,7 @@
 #include "Bucket\bucket.h"
 Map::Map()
 {
-	this->chip.resize(33);
+	this->chip.resize(45);
 	this->chipimgname = "mapchip2.png";
 	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };

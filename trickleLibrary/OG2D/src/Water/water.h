@@ -71,6 +71,8 @@ public:
 	int nowTime;
 	typedef std::shared_ptr<Water> SP;
 	static SP Create(Vec2&, bool = true);
+
+	void SetMaxSize(Vec2&);
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
@@ -95,4 +97,5 @@ private:
 	void MoveGASCheck(Vec2&);
 	void MoveSOILDCheck(Vec2&);
 	bool HeadCheck(std::string&,int = 0);
+	
 };

@@ -60,6 +60,7 @@ void Water::UpDate()
 			break;
 		case Water::Situation::Normal:
 			this->nowSituation = Water::UpNormal();
+			this->MoveWATERCheck(move);
 			break;
 		case Water::Situation::Deleteform:
 			this->nowSituation = Water::UpDeleteform();
@@ -68,7 +69,6 @@ void Water::UpDate()
 			this->Kill();
 			break;
 		}
-		this->MoveWATERCheck(move);
 		break;
 	case Water::State::GAS:
 		switch (this->nowSituation)
@@ -122,7 +122,6 @@ void Water::UpDate()
 		this->MoveSOILDCheck(move);
 		break;
 	}
-	
 }
 
 Water::Situation Water::UpNewform()
@@ -580,6 +579,11 @@ Vec2 Water::GetMove() const
 bool Water::IsBucket()
 {
 	return this->GetSituation() == Water::Situation::Normal && this->GetState() == Water::State::LIQUID && this->invi <= 0;
+}
+
+void Water::SetMaxSize(Vec2& max)
+{
+	this->maxSize = max;
 }
 
 Water::SP Water::Create(Vec2& pos, bool flag_)

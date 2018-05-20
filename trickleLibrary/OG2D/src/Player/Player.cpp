@@ -8,7 +8,6 @@ Player::Player()
 {
 	
 }
-
 Player::~Player()
 {
 	this->Finalize();
@@ -17,7 +16,6 @@ Player::~Player()
 
 	}
 }
-
 bool Player::Initialize()
 {
 	//オブジェクトの初期化
@@ -41,13 +39,12 @@ bool Player::Initialize()
 	__super::Init((std::string)"Player");
 	return true;
 }
-
 bool Player::Initialize(Vec2& pos)
 {
 	this->taskName = "Player";
 	__super::Init(this->taskName);
 	//オブジェクトの初期化
-	GameObject::CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
+	this->CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -355,7 +352,6 @@ bool Player::HeadCheck(std::string& objname_, int n)
 	}
 	return false;
 }
-
 bool Player::FootCheck()
 {
 	GameObject foot;
@@ -397,7 +393,6 @@ bool Player::FootCheck()
 	}
 	return false;
 }
-
 bool Player::FootCheck(std::string& objname_,int n)
 {
 	GameObject foot;
@@ -437,7 +432,6 @@ bool Player::FootCheck(std::string& objname_,int n)
 	}
 	return false;
 }
-
 void Player::MoveCheck(Vec2 est)
 {
 	while (est.x != 0.f)
@@ -553,7 +547,6 @@ void Player::MoveCheck(Vec2 est)
 		}
 	}
 }
-
 void Player::Friction()
 {
 	if (this->motion == Motion::Ladder)
@@ -577,7 +570,6 @@ void Player::Friction()
 		this->est.y = 0.0f;
 	}
 }
-
 bool Player::BucketHit()
 {
 	if (this->inv != 0)
@@ -595,7 +587,6 @@ bool Player::BucketHit()
 	}
 	return false;
 }
-
 void Player::BucketMove()
 {
 	auto buckets = OGge->GetTasks<Bucket>("bucket");
@@ -607,14 +598,12 @@ void Player::BucketMove()
 		}
 	}
 }
-
 void Player::Animation::SetAnimaVec(Vec2& start_, Vec2& end_)
 {
 	this->startVec = start_;
 	this->endVec = end_;
 	this->animationVec = { this->endVec.x - this->startVec.x ,this->endVec.y - this->startVec.y };
 }
-
 bool Player::Animation::Initialize()
 {
 	this->animationVec = { 0.f,0.f };
@@ -623,7 +612,6 @@ bool Player::Animation::Initialize()
 	this->timeCnt = 0;
 	return true;
 }
-
 Vec2 Player::Animation::Move()
 {
 	Vec2 move = { 0.f,0.f };
@@ -665,7 +653,6 @@ Vec2 Player::Animation::Move()
 	}
 	return move;
 }
-
 bool Player::Animation::isMove()
 {
 	if (this->animationVec.x != 0.f || this->animationVec.y != 0.f)
@@ -674,7 +661,6 @@ bool Player::Animation::isMove()
 	}
 	return false;
 }
-
 void Player::MoveCheck(Vec2& est, std::string& objname_)
 {
 	while (est.y != 0.f)
@@ -713,7 +699,6 @@ void Player::MoveCheck(Vec2& est, std::string& objname_)
 		}
 	}
 }
-
 bool Player::ObjectHit(std::string& objname_)
 {
 	auto map = OGge->GetTask<Map>("map");
@@ -733,7 +718,6 @@ bool Player::ObjectHit(std::string& objname_)
 	}
 	return false;
 }
-
 bool Player::BlockHit()
 {
 	GameObject left;
@@ -762,27 +746,22 @@ bool Player::BlockHit()
 	}
 	return false;
 }
-
 void Player::SetTexture(Texture* texture)
 {
 	this->playerimg = texture;
 }
-
 Player::State Player::NowState() const
 {
 	return this->state;
 }
-
 void Player::SetPos(Vec2& pos)
 {
 	this->position = pos;
 }
-
 Vec2 Player::GetPos() const
 {
 	return this->position;
 }
-
 Player::SP Player::Create(Vec2& pos, bool flag)
 {
 	auto to = Player::SP(new Player());

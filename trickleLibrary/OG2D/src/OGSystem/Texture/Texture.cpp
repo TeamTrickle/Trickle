@@ -43,7 +43,7 @@ Texture::Texture()
 {
 
 }
-void Texture::Draw(Box2D draw, Box2D src,Color color_) {
+void Texture::Draw(Box2D& draw, Box2D& src,Color color_) {
 	//À•W
 	GLfloat vtx[] = {
 		draw.x,draw.h,
@@ -134,6 +134,10 @@ void Texture::_Rotate(float radian, GLfloat *_mate)
 
 	*(_mate + 6) = *(_mate + 6) + Center.x;
 	*(_mate + 7) = *(_mate + 7) + Center.y;
+}
+Vec2 Texture::GetTextureSize() const
+{
+	return this->TextureSize;
 }
 Texture::~Texture()
 {

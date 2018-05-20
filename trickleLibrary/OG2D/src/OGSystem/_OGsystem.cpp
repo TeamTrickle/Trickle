@@ -51,6 +51,23 @@ namespace OG {
 		glEnd();
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
+	void LineHitDraw(Box2D* _b)
+	{
+		glBegin(GL_LINES);
+		glVertex2f((_b)->x, (_b)->y);
+		glVertex2f((_b)->w, (_b)->y);
+
+		glVertex2f((_b)->w, (_b)->y);
+		glVertex2f((_b)->w, (_b)->h);
+
+		glVertex2f((_b)->w, (_b)->h);
+		glVertex2f((_b)->x, (_b)->h);
+
+		glVertex2f((_b)->x, (_b)->h);
+		glVertex2f((_b)->x, (_b)->y);
+		glEnd();
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	}
 	void _Rotate(float _ang, Vec2* _b)
 	{
 		//ラジアンの値に変更

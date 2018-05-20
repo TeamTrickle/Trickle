@@ -111,6 +111,12 @@
     <Filter Include="ソースファイル\OGSystem\System\ResourceManager">
       <UniqueIdentifier>{a6a06207-bbbb-436f-9e8e-50db74cd07d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\CameraManager">
+      <UniqueIdentifier>{d2e787fa-356a-4206-b4a2-a949a42836b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Back">
+      <UniqueIdentifier>{a9725f9c-e94a-4a8c-82f6-0a84daac45e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -236,6 +242,12 @@
     </ClCompile>
     <ClCompile Include="src\Player\ResultPlayer.cpp">
       <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraManager\CameraManager.cpp">
+      <Filter>ソースファイル\CameraManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Back\Back.cpp">
+      <Filter>ソースファイル\Back</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,6 +376,12 @@
     </ClInclude>
     <ClInclude Include="src\Player\ResultPlayer.h">
       <Filter>ソースファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraManager\CameraManager.h">
+      <Filter>ソースファイル\CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Back\Back.h">
+      <Filter>ソースファイル\Back</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
