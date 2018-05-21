@@ -249,6 +249,9 @@
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp">
+      <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -382,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="src\Back\Back.h">
       <Filter>ソースファイル\Back</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\GameClearCamera.h">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
