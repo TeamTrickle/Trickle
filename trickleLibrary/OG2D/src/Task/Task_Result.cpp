@@ -15,7 +15,7 @@ bool Result::Initialize()
 	//¶¬—á
 	Result_DataInput();
 	Flag_Judge();
-	this->image.Create((std::string)"outlook.png");
+	this->image.Create((std::string)"back.png");
 
 	SetDrawOrder(0.0f);
 	{

@@ -6,6 +6,7 @@ bool GameClearCamera::Initialize()
 	this->taskName = "GameClearCamera";
 	this->Init(taskName);
 	this->Flag_Reset();
+	this->Set_CameraSpeed(Vec2(3, 3));
 	std::cout << "ƒS[ƒ‹ƒJƒƒ‰@‰Šú‰»" << std::endl;
 	return true;
 }
@@ -13,6 +14,18 @@ void GameClearCamera::Flag_Reset()
 {
 	this->cameraMovefinish = false;
 	this->active = false;
+	this->Move = false;
+}
+void GameClearCamera::Set_CameraSpeed(Vec2& moveVec)
+{
+	cameraMove = moveVec;
+}
+void GameClearCamera::SetCameraPos()
+{
+	if (!Move)
+	{
+		cameraPos = OGge->camera->GetPos();
+	}
 }
 bool GameClearCamera::GetCameraMoveFinish()
 {
@@ -24,6 +37,7 @@ bool GameClearCamera::Finalize()
 }
 void GameClearCamera::UpDate()
 {
+	SetCameraPos();
 	CameraMove();
 }
 void GameClearCamera::Render2D()
@@ -37,26 +51,26 @@ void GameClearCamera::CameraMove()
 	{
 		if (goal->cleared)
 		{
+			Move = true;
 			active = true;
-			if (cameraPos.x < goal->position.x / 2)
+			if (cameraPos.x < goal->position.x - OGge->window->GetPos().x / 2)
 			{
-				cameraPos.x += 1;
-				OGge->camera->MovePos(cameraPos);
+				cameraPos.x += cameraMove.x;
 			}
-			else if (cameraPos.y < goal->position.y + 64)
+			else if (cameraPos.y < goal->position.y - OGge->window->GetSize().y / 2)
 			{
-				cameraPos.y += 1;
-				OGge->camera->MovePos(cameraPos);
+				cameraPos.y += cameraMove.y;
 			}
 			else
 			{
 				this->cameraMovefinish = true;
-			}		
+			}
+			OGge->camera->SetPos(cameraPos);
 		}
 	}
 	if (OGge->in->key.down(Input::KeyBoard::S))
 	{
-		std::cout << cameraPos.x << cameraPos.y << std::endl;
+		std::cout << cameraPos.x << "   " << cameraPos.y << std::endl;
 	}
 }
 GameClearCamera::GameClearCamera()
