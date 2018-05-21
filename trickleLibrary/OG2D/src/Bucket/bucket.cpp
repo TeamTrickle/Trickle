@@ -18,7 +18,7 @@ Bucket::~Bucket() {
 	}
 }
 
-bool Bucket::Initialize(Vec2& pos) 
+bool Bucket::Initialize(Vec2& pos)
 {
 	this->position = pos;
 	gravity = Vec2(0.0f, 0.0f);
@@ -45,6 +45,7 @@ void Bucket::UpDate() {
 	if (this->BucketWaterCreate())	//バケツから水を出す処理
 	{
 		auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2), this->position.y));
+		water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
 		this->capacity = 0.f;
 		//70カウント中は次の水を引き受けない
 		this->invi = 70;
@@ -80,8 +81,14 @@ bool Bucket::Finalize() {
 }
 
 Box2D Bucket::GetSpriteCrop() const {
-	if (capacity > 0.f)
+	if (capacity > 0.f && capacity < 1.0f)
+	{
 		return BUCKET_WATER;
+	}
+	else if (capacity >= 1.0f)
+	{
+		return BUCKET_WATERMAX;
+	}
 	return BUCKET_NOTHING;
 }
 
@@ -154,8 +161,8 @@ bool Bucket::isObjectCollided() {
 	if (!block)
 		return false;
 
-	return map->MapHitCheck(*this) || 
-		   block->hit(*this);
+	return map->MapHitCheck(*this) ||
+		block->hit(*this);
 }
 
 void Bucket::HoldCheck(bool flag)

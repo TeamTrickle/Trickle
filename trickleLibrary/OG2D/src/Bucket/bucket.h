@@ -2,20 +2,21 @@
 
 
 /**
- * @brief ’その’バケッツ
- * @author Heewon Kim
- * @date 2018-03-30
- */
+* @brief ’その’バケッツ
+* @author Heewon Kim
+* @date 2018-03-30
+*/
 
 #include "OGSystem\OGSystem.h"
 #include "Object\Object.h"
 #include "Block\block.h"
 
-class Bucket : public GameObject,public TaskObject {
+class Bucket : public GameObject, public TaskObject {
 
 private:
 	const Box2D BUCKET_NOTHING = Box2D(0, 0, 256, 256);
 	const Box2D BUCKET_WATER = Box2D(256, 0, 256, 256);
+	const Box2D BUCKET_WATERMAX = Box2D(512, 0, 256, 256);
 	Box2D GetSpriteCrop() const;
 	bool BucketWaterCreate();
 	bool isObjectCollided();
@@ -38,10 +39,10 @@ public:
 	bool GetHold() const;
 	void WaterIsHitCheck();
 	/**
-	 * @brief	バケッツから水をこぼします
-	 * @return	バケッツの中にあった量だけの水のアドレス地
-	 * @note	new使ったので必ず消してください
-	 */
+	* @brief	バケッツから水をこぼします
+	* @return	バケッツの中にあった量だけの水のアドレス地
+	* @note	new使ったので必ず消してください
+	*/
 	float capacity;
 	Vec2 gravity;			//重力
 	bool hold;				//プレイヤがバケツを持っているかの判断
