@@ -337,6 +337,11 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
+	auto goal = OGge->GetTask<Goal>("Goal");
+	if (goal->ClearCheck())
+	{
+		return;
+	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)
