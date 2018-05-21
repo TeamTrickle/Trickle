@@ -4,6 +4,7 @@ using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Goal\Goal.h"
 #include "Task\Task_Result.h"
+#include "GameProcessManagement\GameClearCamera.h"
 bool GameProcessManagement::Initialize()
 {
 	//-----------------------------
@@ -11,6 +12,8 @@ bool GameProcessManagement::Initialize()
 	//-----------------------------
 	this->taskName = "GameProcessManagement";		//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
+
+	auto gameClearcamera = GameClearCamera::Create();
 
 	gameclear_flag = false;                 //初期値はfalseにしておく
 	timer = Timer::Create();
@@ -45,6 +48,11 @@ bool GameProcessManagement::Finalize()
 	if (timer != nullptr)
 	{
 		timer->Kill();
+	}
+	auto goal = OGge->GetTask<Goal>("Goal");
+	if (goal != nullptr)
+	{
+		goal->Kill();
 	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{

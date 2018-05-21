@@ -12,6 +12,7 @@ bool GameClearCamera::Initialize()
 void GameClearCamera::Flag_Reset()
 {
 	this->cameraMovefinish = false;
+	this->active = false;
 }
 bool GameClearCamera::GetCameraMoveFinish()
 {
@@ -23,7 +24,6 @@ bool GameClearCamera::Finalize()
 }
 void GameClearCamera::UpDate()
 {
-	cameraPos = OGge->camera->GetPos();
 	CameraMove();
 }
 void GameClearCamera::Render2D()
@@ -37,12 +37,13 @@ void GameClearCamera::CameraMove()
 	{
 		if (goal->cleared)
 		{
-			if (cameraPos.x < goal->position.x)
+			active = true;
+			if (cameraPos.x < goal->position.x / 2)
 			{
 				cameraPos.x += 1;
 				OGge->camera->MovePos(cameraPos);
 			}
-			else if (cameraPos.y < goal->position.y)
+			else if (cameraPos.y < goal->position.y + 64)
 			{
 				cameraPos.y += 1;
 				OGge->camera->MovePos(cameraPos);
@@ -50,7 +51,7 @@ void GameClearCamera::CameraMove()
 			else
 			{
 				this->cameraMovefinish = true;
-			}
+			}		
 		}
 	}
 	if (OGge->in->key.down(Input::KeyBoard::S))

@@ -13,6 +13,9 @@
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 
+#include "GameProcessManagement\GameClearCamera.h"
+#include "GameProcessManagement\Timer.h"
+
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
 
@@ -232,10 +235,15 @@ void Game::UpDate()
 			if (OGge->in->key.down(Input::KeyBoard::ENTER))
 			{
 				goal->cleared = true;
-				if (goal->cleared)
-				{
-					this->Kill();
-				}
+			}
+		}
+
+		auto cameraMove = OGge->GetTask<GameClearCamera>("GameClearCamera");
+		if (cameraMove != nullptr)
+		{
+			if (cameraMove->GetCameraMoveFinish())
+			{
+				this->Kill();
 			}
 		}
 	}
@@ -302,6 +310,16 @@ bool Game::Finalize()
 	}
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto gamecamera = OGge->GetTasks<GameClearCamera>("GameClearCamera");
+	for (auto id = (*gamecamera).begin(); id != (*gamecamera).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto timers = OGge->GetTasks<Timer>("Timer");
+	for (auto id = (*timers).begin(); id != (*timers).end(); ++id)
 	{
 		(*id)->Kill();
 	}

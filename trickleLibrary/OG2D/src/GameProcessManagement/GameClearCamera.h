@@ -7,6 +7,7 @@ class GameClearCamera : public GameObject , public TaskObject
 private:
 	std::string taskName;
 	bool cameraMovefinish;
+	bool active;			//Œ»İƒJƒƒ‰‚ªˆÚ“®’†‚©H
 	Vec2 cameraPos;
 private:
 	void CameraMove();
