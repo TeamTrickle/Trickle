@@ -56,6 +56,8 @@ public:
 
 	//水量の移動
 	float waterMove();
+	//水量を外部から上書きする
+	void SetWaterVolume(float);
 	//水量のチェック
 	float GetWaterVolume() const;
 	bool IsBucket();

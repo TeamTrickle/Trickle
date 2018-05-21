@@ -154,12 +154,14 @@ void Title::UpDate()
 		if (this->tex_a >= 1.0f)
 		{
 			this->mode = from5;
+			//auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 300));
 		}
 	}
 		break;
 	case from5:	//矢印とプレイヤー出現
 	{
 		this->cursor_a += 0.01f;
+
 		if (this->cursor_a >= 1.0f)
 		{
 			this->mode = from6;
@@ -399,6 +401,9 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->objectTag = this->taskName;
 	this->direction = Direction::LEFT;
 	this->AnimCnt = 0;
+	this->isAuto = true;
+	this->isCollision = true;
+	this->MoveCnt = 0;
 }
 Chara::~Chara()
 {
@@ -406,7 +411,20 @@ Chara::~Chara()
 }
 void Chara::UpDate()
 {
-
+	if (this->isAuto)
+	{
+		this->AutoMove();
+	}
+	else
+	{
+		this->MoveCnt++;
+	}
+	if (this->MoveCnt > 10)
+	{
+		this->isAuto = true;
+	}
+	this->Friction();
+	this->MoveCheck(this->move);
 }
 void Chara::Render2D()
 {
@@ -453,10 +471,74 @@ void Chara::Friction()
 }
 void Chara::MoveCheck(Vec2& est)
 {
-
+	auto map = OGge->GetTask<Map>("map");
+	while (est.x != 0.f)
+	{
+		float preX = this->position.x;
+		if (est.x >= 1.f)
+		{
+			this->position.x += 1.f;
+			est.x -= 1.f;
+		}
+		else if (est.x <= -1.f)
+		{
+			this->position.x -= 1.f;
+			est.x += 1.f;
+		}
+		else
+		{
+			this->position.x += est.x;
+			est.x = 0.f;
+		}
+		if (map && this->isCollision)
+		{
+			if (map->MapHitCheck(*this))
+			{
+				this->position.x = preX;
+				break;
+			}
+		}
+	}
+	while (est.y != 0.f)
+	{
+		float preY = this->position.y;
+		if (est.y >= 1.f)
+		{
+			this->position.y += 1.f;
+			est.y -= 1.f;
+		}
+		else if (est.y <= -1.f)
+		{
+			this->position.y -= 1.f;
+			est.y += 1.f;
+		}
+		else
+		{
+			this->position.y += est.y;
+			est.y = 0.f;
+		}
+		if (map && this->isCollision)
+		{
+			if (map->MapHitCheck(*this))
+			{
+				this->position.y = preY;
+				break;
+			}
+		}
+	}
 }
 bool Chara::FootCheck()
 {
+	GameObject foot;
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
+	auto map = OGge->GetTask<Map>("map");
+	if (map && this->isCollision)
+	{
+		if (map->MapHitCheck(*this))
+		{
+			return true;
+		}
+	}
 	return false;
 }
 bool Chara::Jump()
@@ -469,7 +551,9 @@ void Chara::AutoMove()
 }
 void Chara::ManualMove(Vec2& est)
 {
-
+	this->isAuto = false;
+	this->MoveCnt = 0;
+	this->move += est;
 }
 Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 {

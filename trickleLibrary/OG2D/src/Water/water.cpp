@@ -586,6 +586,11 @@ void Water::SetMaxSize(Vec2& max)
 	this->maxSize = max;
 }
 
+void Water::SetWaterVolume(float value)
+{
+	this->volume = value;
+}
+
 Water::SP Water::Create(Vec2& pos, bool flag_)
 {
 	auto to = Water::SP(new Water(pos));

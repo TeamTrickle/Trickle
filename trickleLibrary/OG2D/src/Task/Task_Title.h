@@ -114,6 +114,9 @@ class Chara : public GameObject, public TaskObject
 	Direction direction;										//Œü‚«‚ğŠi”[‚·‚é•Ï”
 	std::string taskName;										//–¼
 	int AnimCnt;
+	bool isAuto;
+	bool isCollision;			
+	int MoveCnt;
 public:
 	Chara(std::string&,Vec2&);
 	virtual ~Chara();
