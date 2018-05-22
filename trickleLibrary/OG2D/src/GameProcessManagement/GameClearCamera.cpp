@@ -18,16 +18,17 @@ void GameClearCamera::Flag_Reset()
 	this->Move = false;
 	moveCnt = 0;
 }
-void GameClearCamera::Set_CameraSpeed(Vec2& moveVec)
+void GameClearCamera::NowCameraPos()
 {
-	cameraMove = moveVec;
-}
-void GameClearCamera::SetCameraPos()
-{
+	//ƒJƒƒ‰‚ª“®‚©‚È‚¢ŠÔ
 	if (!Move)
 	{
 		cameraPos = OGge->camera->GetPos();
 	}
+}
+void GameClearCamera::Set_CameraSpeed(Vec2& moveVec)
+{
+	cameraMove = moveVec;
 }
 bool GameClearCamera::GetCameraMoveFinish()
 {
@@ -39,7 +40,7 @@ bool GameClearCamera::Finalize()
 }
 void GameClearCamera::UpDate()
 {
-	SetCameraPos();
+	NowCameraPos();
 	CameraMove();
 }
 void GameClearCamera::Render2D()

@@ -17,14 +17,13 @@ private:
 	void CameraMove();
 	void Flag_Reset();
 	void Set_CameraSpeed(Vec2& moveVec);
-	void GetCameraSize();
+	void NowCameraPos();
 private:
 	bool Finalize();
 	void UpDate();
 	void Render2D();
 public:
 	bool GetCameraMoveFinish();
-	void SetCameraPos();	//初期値のカメラのサイズを代入する
 	void SetCameraSize();	//カメラの座標値をOGから代入する
 public:
 	typedef std::shared_ptr<GameClearCamera> SP;
