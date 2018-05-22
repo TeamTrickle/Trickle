@@ -338,9 +338,12 @@ void Game::Camera_move()
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//ƒJƒƒ‰‚ÌˆÚ“®
 	auto goal = OGge->GetTask<Goal>("Goal");
-	if (goal->ClearCheck())
+	if (goal != nullptr)
 	{
-		return;
+		if (goal->ClearCheck())
+		{
+			return;
+		}
 	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
