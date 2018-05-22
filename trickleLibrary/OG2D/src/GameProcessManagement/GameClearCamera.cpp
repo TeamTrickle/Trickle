@@ -7,6 +7,7 @@ bool GameClearCamera::Initialize()
 	this->Init(taskName);
 	this->Flag_Reset();
 	this->Set_CameraSpeed(Vec2(3, 3));
+	this->SetCameraSize();
 	std::cout << "ゴールカメラ　初期化" << std::endl;
 	return true;
 }
@@ -54,16 +55,19 @@ void GameClearCamera::CameraMove()
 		{
 			Move = true;
 			active = true;
-			if (cameraPos.x <= goal->position.x)
+			if (cameraPos.x <= goal->position.x - cameraSize.x / 2)
 			{
 				cameraPos.x += cameraMove.x;
+				OGge->camera->SetPos(cameraPos);
 			}
-			else if (cameraPos.y <= goal->position.y)
+			else if (cameraPos.y <= goal->position.y + goal->Scale.y - cameraSize.y)
 			{
 				cameraPos.y += cameraMove.y;
+				OGge->camera->SetPos(cameraPos);
 			}
 			else
 			{
+				OGge->camera->SetPos(goal->position);
 				//カメラのサイズを合わせる
 				OGge->camera->SetSize(goal->Scale);
 				moveCnt++;
@@ -73,7 +77,6 @@ void GameClearCamera::CameraMove()
 					return;
 				}
 			}
-			OGge->camera->SetPos(cameraPos);
 		}
 	}
 	if (OGge->in->key.down(Input::KeyBoard::S))
@@ -81,9 +84,9 @@ void GameClearCamera::CameraMove()
 		std::cout << cameraPos.x << "   " << cameraPos.y << std::endl;
 	}
 }
-void GameClearCamera::GetCameraSize()
+void GameClearCamera::SetCameraSize()
 {
-
+	cameraSize = OGge->camera->GetSize();
 }
 GameClearCamera::GameClearCamera()
 {

@@ -11,6 +11,7 @@ private:
 	bool Move;				//動く準備をする
 	Vec2 cameraPos;			//カメラの座標値
 	Vec2 cameraMove;		//カメラの移動量
+	Vec2 cameraSize;		//カメラのサイズ
 	int  moveCnt;
 private:
 	void CameraMove();
@@ -23,7 +24,8 @@ private:
 	void Render2D();
 public:
 	bool GetCameraMoveFinish();
-	void SetCameraPos();	//現在のカメラ座標を代入する
+	void SetCameraPos();	//初期値のカメラのサイズを代入する
+	void SetCameraSize();	//カメラの座標値をOGから代入する
 public:
 	typedef std::shared_ptr<GameClearCamera> SP;
 	GameClearCamera();
