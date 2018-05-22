@@ -11,10 +11,12 @@ private:
 	bool Move;				//動く準備をする
 	Vec2 cameraPos;			//カメラの座標値
 	Vec2 cameraMove;		//カメラの移動量
+	int  moveCnt;
 private:
 	void CameraMove();
 	void Flag_Reset();
 	void Set_CameraSpeed(Vec2& moveVec);
+	void GetCameraSize();
 private:
 	bool Finalize();
 	void UpDate();

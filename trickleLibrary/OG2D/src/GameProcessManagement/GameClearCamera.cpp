@@ -15,6 +15,7 @@ void GameClearCamera::Flag_Reset()
 	this->cameraMovefinish = false;
 	this->active = false;
 	this->Move = false;
+	moveCnt = 0;
 }
 void GameClearCamera::Set_CameraSpeed(Vec2& moveVec)
 {
@@ -53,17 +54,24 @@ void GameClearCamera::CameraMove()
 		{
 			Move = true;
 			active = true;
-			if (cameraPos.x < goal->position.x - OGge->window->GetPos().x / 2)
+			if (cameraPos.x <= goal->position.x)
 			{
 				cameraPos.x += cameraMove.x;
 			}
-			else if (cameraPos.y < goal->position.y - OGge->window->GetSize().y / 2)
+			else if (cameraPos.y <= goal->position.y)
 			{
 				cameraPos.y += cameraMove.y;
 			}
 			else
 			{
-				this->cameraMovefinish = true;
+				//カメラのサイズを合わせる
+				OGge->camera->SetSize(goal->Scale);
+				moveCnt++;
+				if (moveCnt >= 90)
+				{
+					this->cameraMovefinish = true;
+					return;
+				}
 			}
 			OGge->camera->SetPos(cameraPos);
 		}
@@ -72,6 +80,10 @@ void GameClearCamera::CameraMove()
 	{
 		std::cout << cameraPos.x << "   " << cameraPos.y << std::endl;
 	}
+}
+void GameClearCamera::GetCameraSize()
+{
+
 }
 GameClearCamera::GameClearCamera()
 {
