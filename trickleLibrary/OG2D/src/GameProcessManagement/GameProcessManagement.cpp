@@ -49,10 +49,15 @@ bool GameProcessManagement::Finalize()
 	{
 		timer->Kill();
 	}
-	auto goal = OGge->GetTask<Goal>("Goal");
-	if (goal != nullptr)
-	{
-		goal->Kill();
+	try {
+		auto goal = OGge->GetTask<Goal>("Goal");
+		if (goal != nullptr)
+		{
+			goal->Kill();
+		}
+	}
+	catch (const std::exception& e) {
+		std::cout << "‚f‚‚‚Œ‰ðœ“r’†ƒGƒ‰[”­¶F" << e.what() << std::endl;
 	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{

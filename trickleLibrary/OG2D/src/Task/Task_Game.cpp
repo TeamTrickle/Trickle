@@ -15,6 +15,7 @@
 
 #include "GameProcessManagement\GameClearCamera.h"
 #include "GameProcessManagement\Timer.h"
+#include "Task\Task_Pause.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -37,6 +38,13 @@ Game::~Game()
 //-------------------------------------------------------------------------------------------------
 bool Game::Initialize()
 {
+	// ˆêŽž’âŽ~ƒ^ƒXƒN‚Ì¶¬
+	auto pauseTask = OGge->GetTask<Pause>("pause");
+	if (!pauseTask)
+	{
+		Pause::Create(true);
+	}
+
 	//switch‚Ü‚Å‚Í‚»‚Ì‚Ü‚Ü
 	Vec2 bucketpos[2] = {
 		{ 150,250 },

@@ -291,13 +291,13 @@ bool Title::Finalize()
 		{
 		case 0:
 		{
-			auto stage = StageSelect::Create();
+			/*auto stage = */StageSelect::Create();
 		}
 		break;
 		case 1:
 		
 			{
-				auto option = Option::Create();
+				/*auto option = */Option::Create();
 			}
 			break;
 		case 2:

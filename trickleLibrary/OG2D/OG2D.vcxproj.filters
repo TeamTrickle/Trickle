@@ -117,6 +117,9 @@
     <Filter Include="ソースファイル\Back">
       <UniqueIdentifier>{a9725f9c-e94a-4a8c-82f6-0a84daac45e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\Pause">
+      <UniqueIdentifier>{cec74670-6d16-4ae5-b777-9b93f3aaba27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -251,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Pause.cpp">
+      <Filter>ソースファイル\Task\Pause</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\GameClearCamera.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Pause.h">
+      <Filter>ソースファイル\Task\Pause</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
