@@ -40,6 +40,9 @@ class Title:public TaskObject
 	Texture texClose;
 	Texture texPause;
 
+	Texture GierLogo;
+	Texture flowerLogo;
+
 	Texture texLogo;
 
 	Vec2 startPos;
@@ -69,6 +72,10 @@ class Title:public TaskObject
 	float cursor_a;
 	__int8 cursorNum;
 
+	unsigned __int8 gierCnt;
+	bool isGierAng;
+	float flowerVolume;
+
 public:
 	Title();
 	virtual ~Title();
@@ -80,10 +87,6 @@ public:
 	int timeCnt;
 
 	void CursorMove();
-	//☆☆☆☆//
-	//追加変数//
-	//☆☆☆☆//
-	Sound sound;
 
 	enum State
 	{
@@ -107,8 +110,8 @@ class Chara : public GameObject, public TaskObject
 	Texture Image;
 	Vec2 move;
 	const float MOVE_SPEED = 5.f;								//移動スピード
-	const float JUMP_POWER = -13.f;								//ジャンプパワー
-	const float MAX_FALL = 15.f;								//落下最大速度
+	const float JUMP_POWER = -30.f;								//ジャンプパワー
+	const float MAX_FALL = 100.f;								//落下最大速度
 	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 10;		//重力加速度
 	const float FIN_SPEED = 0.5f;								//摩擦
 	Direction direction;										//向きを格納する変数
@@ -117,6 +120,7 @@ class Chara : public GameObject, public TaskObject
 	bool isAuto;
 	bool isCollision;			
 	int MoveCnt;
+	__int8 isCollisionNow;
 public:
 	Chara(std::string&,Vec2&);
 	virtual ~Chara();
@@ -124,10 +128,13 @@ public:
 	static SP Create(std::string&, Vec2&, bool = true);
 	void UpDate();
 	void Render2D();
-	void Friction();
-	void MoveCheck(Vec2&);
+	void Friction(Vec2&);
+	void MoveCheck(Vec2);
 	bool FootCheck();
 	bool Jump();
 	void AutoMove();
 	void ManualMove(Vec2&);
+	void IsCollisionCheck();
+	bool CollisionNumCheck(__int8);
+	void MoveReset();
 };

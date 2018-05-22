@@ -12,6 +12,8 @@ Title::Title()
 	this->tex_a = 0.0f;
 	this->cursor_a = 0.0f;
 	this->cursorNum = 0;
+	this->isGierAng = false;
+	this->flowerVolume = 0.f;
 }
 
 Title::~Title()
@@ -22,23 +24,27 @@ Title::~Title()
 bool Title::Initialize()
 {
 	std::cout << "Title初期化" << std::endl;
-	sound.create(std::string("playandhope.wav"), true);
-	auto back = Back::Create((std::string)"outlook.png", 1920 * 2, 1080 * 2);
-
+	//背景読み込み
+	auto back = Back::Create((std::string)"back.png", 1920 * 2, 1080 * 2);
+	//ロゴオブジェクト生成
 	this->Logo.CreateObject(Cube, Vec2(400,250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
+	//文字位置設定
 	startPos = Vec2(720.f - 128.f,624.f + 30.f);
 	pausePos = Vec2(720.f - 128.f,624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f,624.f + 258.f + 30.f);
+	//配列管理を行う
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[1] = { this->pausePos.x - 30.f - 64.f,this->pausePos.y };
 	this->cursorPos[2] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
-
+	//画像読み込み
 	texCursor.Create((std::string)"gear.png");
 	texStart.Create((std::string)"start.png");
 	texClose.Create((std::string)"close.png");
 	texPause.Create((std::string)"pause.png");
 	this->texLogo.Create((std::string)"logo.png");
+	this->GierLogo.Create((std::string)"gearofi.png");
+	this->flowerLogo.Create((std::string)"flower.png");
 
 	//カメラ位置の移動
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
@@ -50,9 +56,11 @@ bool Title::Initialize()
 
 	//マップ生成(地面用)
 	auto map = Map::Create((std::string)"title.csv");
-	
+	//矢印の位置で使用する
 	this->nextTaskCheck = 0;
+	//タグ設定
 	__super::Init((std::string)"title");
+	//描画順の決定
 	__super::SetDrawOrder(0.5f);
 
 	//-----------------------
@@ -63,16 +71,21 @@ bool Title::Initialize()
 	OGge->camera->SetSize(Vec2(960 / 2, 540 / 2));
 	OGge->camera->SetPos(Vec2(500 - (480 / 2), 0));
 	this->cm.SetSize(Box2D(Vec2(0, 0), OGge->window->GetSize() * 2));
-	this->cm.SetRange(Box2D(100.f, 100.f, OGge->window->GetSize().x - 200.f, OGge->window->GetSize().y - 600.f));
+	//this->cm.SetRange(Box2D(100.f, 100.f, OGge->window->GetSize().x - 200.f, OGge->window->GetSize().y - 800.f));//今は意味をなさない
 	this->mode = Mode::from1;
 	return true;
 }
 
 void Title::UpDate()
 {
+	//std::cout << "x:" << this->testObj.position.x << "y:" << this->testObj.position.y << std::endl;
 	//----------------
 	//テスト
 	//----------------
+	if (OGge->in->key.down(In::SPACE))
+	{
+		this->Kill();
+	}
 	if (OGge->in->key.on(In::A))
 	{
 		this->testObj.position.x -= 10.0f;
@@ -100,6 +113,14 @@ void Title::UpDate()
 		OGge->camera->MovePos(Vec2(-16.f, -9.f));
 	}
 	this->cm.move();
+	if (this->isGierAng)
+	{
+		this->gierCnt++;
+		if (this->gierCnt >= 360)
+		{
+			this->gierCnt = 0;
+		}
+	}
 	switch (this->mode)
 	{
 	case from1:	//水出現から水消滅まで
@@ -124,14 +145,26 @@ void Title::UpDate()
 		break;
 	case from2:	//花咲き開始から終了まで
 	{
+		if (this->timeCnt < 3)
+		{
+			OGge->camera->MovePos(Vec2(0, 30));
+		}
 		//テスト用10フレーム後移動
-		if (this->timeCnt > 10)
+		if (this->flowerVolume >= 1.0f)
 		{
 			this->mode = from3;
 			//歯車を回す処理
+			this->isGierAng = true;
 			//カメラの移動値を登録
 			this->cameraPos.Set(OGge->camera->GetPos(), Vec2(0, 200));
 			this->cameraSize.Set(OGge->camera->GetSize(), Vec2(1440, 810));
+		}
+		else
+		{
+			if (this->flowerVolume < 1.f)
+			{
+				this->flowerVolume += 0.01f;
+			}
 		}
 	}
 		break;
@@ -154,14 +187,18 @@ void Title::UpDate()
 		if (this->tex_a >= 1.0f)
 		{
 			this->mode = from5;
-			//auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 300));
+			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 500));
 		}
 	}
 		break;
 	case from5:	//矢印とプレイヤー出現
 	{
+		auto Npc = OGge->GetTask<Chara>("Chara");
+		if (Npc)
+		{
+			Npc->ManualMove(Vec2(-8.f, 0.0f));
+		}
 		this->cursor_a += 0.01f;
-
 		if (this->cursor_a >= 1.0f)
 		{
 			this->mode = from6;
@@ -171,15 +208,68 @@ void Title::UpDate()
 	case from6:	//決定待ち状態
 	{
 		CursorMove();
+
 		if (OGge->in->down(Input::in::B2))
 		{
-			this->mode = from7;
+			switch (this->cursorNum)
+			{
+			case 0:
+			{
+				auto chara = OGge->GetTask<Chara>("Chara");
+				if (chara->position.x > 740)
+				{
+					chara->ManualMove(Vec2(-10.f, 0.0f));
+				}
+				else
+				{
+					chara->ManualMove(Vec2(10.f, 0.0f));
+				}
+				chara->Jump();
+				this->mode = from7;
+			}
+				break;
+			case 1:
+				break;
+			case 2:
+				OGge->GameEnd();
+				break;
+			}
 		}
 	}
 		break;
 	case from7:	//ジャンプからselectまでの移動
 	{
-		this->mode = End;
+		if (OGge->camera->GetPos().y < 1340)
+		{
+			OGge->camera->MovePos(Vec2(0.0f, 10.f));
+		}
+		auto chara = OGge->GetTask<Chara>("Chara");
+		if (chara)
+		{
+			if (chara->CollisionNumCheck(1))
+			{
+				if (chara->FootCheck())
+				{
+					if (this->timeCnt > 120)
+					{
+						chara->ManualMove(Vec2(5.0f, 0.0f));
+					}
+					else
+					{
+						this->timeCnt++;
+						chara->ManualMove(Vec2(0.0f, 0.0f));
+					}
+				}
+				else
+				{
+					this->timeCnt = 0;
+				}
+			}
+			if (chara->position.x >= 1440)
+			{
+				this->mode = End;
+			}
+		}
 	}
 		break;
 	case End:	//Selectの読み込みと自身の破棄
@@ -210,6 +300,19 @@ void Title::Render2D()
 		Box2D src(0, 0, 1280, 768);
 		this->texLogo.Draw(draw, src);
 	}
+	{
+		Box2D draw(634, 390, 52, 52);
+		draw.OffsetSize();
+		Box2D src(0, 0, 128, 128);
+		this->GierLogo.Rotate(this->gierCnt);
+		this->GierLogo.Draw(draw, src);
+	}
+	{
+		Box2D draw(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)), this->Logo.Scale.x, (this->Logo.Scale.y * (this->flowerVolume / 1.f)));
+		draw.OffsetSize();
+		Box2D src(0.f, 768 - (768 * (this->flowerVolume / 1.f)), 1280.f, 768.f);
+		this->flowerLogo.Draw(draw, src);
+	}
 	//カーソルの表示
 	{
 		//表示位置、大きさは仮ゲームスタート
@@ -217,6 +320,7 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 0, 195, 195);
 		src.OffsetSize();
+		this->texCursor.Rotate(this->gierCnt);
 		texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 256.f, cursorPos[this->cursorNum].y, 64.f, 64.f);
 		draw2.OffsetSize();
@@ -265,6 +369,8 @@ bool Title::Finalize()
 	texClose.Finalize();
 	texPause.Finalize();
 	this->texLogo.Finalize();
+	this->GierLogo.Finalize();
+	this->flowerLogo.Finalize();
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)
@@ -282,6 +388,11 @@ bool Title::Finalize()
 	if(map)
 	{
 		(*map).Kill();
+	}
+	auto Npc = OGge->GetTask<Chara>("Chara");
+	if (Npc)
+	{
+		Npc->Kill();
 	}
 
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
@@ -301,7 +412,6 @@ bool Title::Finalize()
 			}
 			break;
 		case 2:
-		
 			OGge->GameEnd();
 			break;
 		default:
@@ -358,7 +468,6 @@ void Title::Animation::Set(Vec2& start_, Vec2& end_)
 
 Vec2 Title::Animation::Move()
 {
-	//OGge->camera->SetPos(Vec2(this->easing_x.sine.In(this->easing_x.Time(10), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(10), this->StartPos.y, this->EndPos.y, 10)));
 	return Vec2(this->easing_x.sine.In(this->easing_x.Time(10), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(10), this->StartPos.y, this->EndPos.y, 10));
 }
 
@@ -394,7 +503,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 {
 	this->position = pos;
 	this->Image.Create(path);
-	this->CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
+	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);
 	this->taskName = "Chara";
 	__super::Init(this->taskName);
 	__super::SetDrawOrder(1.0f);
@@ -404,6 +513,8 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isAuto = true;
 	this->isCollision = true;
 	this->MoveCnt = 0;
+	this->Radius = Vec2(1.0f, 0.9f);
+	this->isCollisionNow = -1;
 }
 Chara::~Chara()
 {
@@ -411,19 +522,33 @@ Chara::~Chara()
 }
 void Chara::UpDate()
 {
+	if (this->isCollisionNow == 0)
+	{
+		if (this->position.y > 1200.f)
+		{
+			this->isCollisionNow++;
+		}
+	}
 	if (this->isAuto)
 	{
 		this->AutoMove();
 	}
 	else
 	{
-		this->MoveCnt++;
+		if (this->move.x == 0 && this->move.y == 0)
+		{
+			this->MoveCnt++;
+		}
+		else
+		{
+			this->MoveCnt = 0;
+		}
 	}
 	if (this->MoveCnt > 10)
 	{
 		this->isAuto = true;
 	}
-	this->Friction();
+	this->Friction(this->move);
 	this->MoveCheck(this->move);
 }
 void Chara::Render2D()
@@ -443,6 +568,14 @@ void Chara::Render2D()
 	Box2D src(idle[this->AnimCnt / 3] * 550, 0, 550, 550);
 	src.OffsetSize();
 	//左向きなら画像を逆にする
+	if (this->move.x > 0)
+	{
+		this->direction = Direction::RIGHT;
+	}
+	if (this->move.x < 0)
+	{
+		this->direction = Direction::LEFT;
+	}
 	if (direction == Direction::RIGHT) {
 		int k = src.w;
 		src.w = src.x;
@@ -450,26 +583,26 @@ void Chara::Render2D()
 	}
 	this->Image.Draw(draw, src);
 }
-void Chara::Friction()
+void Chara::Friction(Vec2& est)
 {
-	if (this->move.x > 0)
+	if (est.x > 0)
 	{
-		this->move.x = std::min(this->move.x + this->FIN_SPEED, 0.f);
+		est.x = std::max(est.x - this->FIN_SPEED, 0.f);
 	}
 	else
 	{
-		this->move.x = std::max(this->move.x - this->FIN_SPEED, 0.f);
+		est.x = std::min(est.x + this->FIN_SPEED, 0.f);
 	}
-	if (!this->FootCheck() || this->move.y < 0)
+	if (!this->FootCheck() || est.y < 0)
 	{
-		this->move.y = std::min(this->move.y + this->GRAVITY, this->MAX_FALL);
+		est.y = std::min(est.y + this->GRAVITY, this->MAX_FALL);
 	}
 	else
 	{
-		this->move.y = 0.0f;
+		est.y = 0.0f;
 	}
 }
-void Chara::MoveCheck(Vec2& est)
+void Chara::MoveCheck(Vec2 est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)
@@ -490,12 +623,15 @@ void Chara::MoveCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		if (map && this->isCollision)
+		if (this->isCollisionNow != 0)
 		{
-			if (map->MapHitCheck(*this))
+			if (map && this->isCollision)
 			{
-				this->position.x = preX;
-				break;
+				if (map->MapHitCheck(*this))
+				{
+					this->position.x = preX;
+					break;
+				}
 			}
 		}
 	}
@@ -517,24 +653,32 @@ void Chara::MoveCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		if (map && this->isCollision)
+		if (this->isCollisionNow != 0)
 		{
-			if (map->MapHitCheck(*this))
+			if (map && this->isCollision)
 			{
-				this->position.y = preY;
-				break;
+
+				if (map->MapHitCheck(*this))
+				{
+					this->position.y = preY;
+					break;
+				}
 			}
 		}
 	}
 }
 bool Chara::FootCheck()
 {
+	if (this->isCollisionNow == 0)
+	{
+		return false;
+	}
 	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	if (map && this->isCollision)
 	{
-		if (map->MapHitCheck(*this))
+		if (map->MapHitCheck(foot))
 		{
 			return true;
 		}
@@ -543,17 +687,51 @@ bool Chara::FootCheck()
 }
 bool Chara::Jump()
 {
-	return false;
+	this->move.y = this->JUMP_POWER;
+	this->IsCollisionCheck();
+	return true;
 }
 void Chara::AutoMove()
 {
+	if (this->position.x > 1100 || this->position.x < 200)
+	{
+		if (this->direction == Direction::LEFT)
+		{
+			this->direction = Direction::RIGHT;
+		}
+		else
+		{
+			this->direction = Direction::LEFT;
+		}
+	}
+	if (this->direction == Direction::LEFT)
+	{
+		this->move.x = -5.0f;
+	}
+	else
+	{
+		this->move.x = 5.0f;
+	}
+	
 
 }
 void Chara::ManualMove(Vec2& est)
 {
 	this->isAuto = false;
 	this->MoveCnt = 0;
-	this->move += est;
+	this->move = est;
+}
+void Chara::IsCollisionCheck()
+{
+	this->isCollisionNow++;
+}
+bool Chara::CollisionNumCheck(__int8 num)
+{
+	return this->isCollisionNow == num ? true : false;
+}
+void Chara::MoveReset()
+{
+	this->move = { 0,0 };
 }
 Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 {
