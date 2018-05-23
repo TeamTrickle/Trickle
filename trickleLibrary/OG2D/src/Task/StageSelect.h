@@ -17,6 +17,26 @@ class StageSelect : public TaskObject
 	Vec2 stage2Pos;
 	Vec2 toTitlePos;
 
+	enum Mode
+	{
+		Non,
+		from1,
+		from2,
+		from3,
+		from4,
+		End,
+	};
+	Mode mode;
+	Mode preMode;
+	void From1();
+	void From2();
+	void From3();
+	void From4();
+	int timeCnt;
+	void ModeCheck();
+	Easing camera_x;
+	Easing camera_y;
+
 public:
 	StageSelect();
 	virtual ~StageSelect();

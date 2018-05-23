@@ -24,7 +24,7 @@ class Player :public GameObject ,public TaskObject
 	enum State
 	{
 		NORMAL,		//通常
-		LADDER,		//はしご中
+		LADDER,		//はしご中（使ってないらしい
 		BUCKET,		//バケツ所持
 		ANIMATION,	//アニメーション中
 	};
@@ -34,6 +34,7 @@ class Player :public GameObject ,public TaskObject
 		Walk,		//歩き中
 		Jump,		//ジャンプ
 		Ladder,		//はしご
+		Ladder_Ani,	//梯子で降りたり上ったり
 		Fall,		//落下
 	};
 	class Animation
