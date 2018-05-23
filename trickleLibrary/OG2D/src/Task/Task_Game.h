@@ -5,6 +5,9 @@
 //|—š—ğF2018/04/17—«èèŒN@    |//
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
+#include "UI\UI.h"
+
+class UI;
 
 class Game : public TaskObject
 {
@@ -36,4 +39,7 @@ private:
 	Texture fanTex;
 
 	//UI----------------------------------------
+	//std::vector<UI::SP> ui;
+	//std::vector<UI::UIinfo> uiInfo;
+	std::shared_ptr<UImanager> UImng_;
 };

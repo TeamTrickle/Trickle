@@ -4,6 +4,8 @@
 #include <vector>
 
 
+class UImanager;
+
 class UI :public GameObject,public TaskObject {
 	Texture tex;
 	Vec2 pos;		//座標
@@ -12,24 +14,56 @@ class UI :public GameObject,public TaskObject {
 	//Box2D src;		//Draw()の第二引数
 	int num;		//画像分割数
 	int life;		//寿命
-	bool active;	//生死
 	//bool visible;	//可視不可視
 	std::vector<Box2D> srcTable;
 	int appeared;	//初期：-1、一度プレイヤと接触したら0、出たら1
 
-public:
+	int id_;
+
+public:	
+	bool active;	//生死
+
+	struct UIinfo {
+		Vec2 pos;
+		Box2D hit;
+		std::string path;
+		int life;
+		int picNum;
+	};
+
 	UI();
 	~UI();
 	typedef std::shared_ptr<UI> SP;
-	static SP Create(Vec2&, Box2D&, std::string&, int, int,bool = true);
-	
-	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int num = 0);	//座標、ファイルパス、寿命、画像分割数
+	static SP Create(Vec2&, Box2D&, std::string&, int life, int num, int id, UImanager* manager, bool = true);
+	static SP Create(UIinfo& info, int id, UImanager* manager, bool = true);
+
+	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, UImanager* manager, int num = 0);	//座標、ファイルパス、寿命、画像分割数
 	void UpDate();
 	void Move(Vec2 p);		//座標を動かすときに使う
 	void Render2D();
 	bool Finalize();
+	bool CreateNext(UI::UIinfo& info);
+
 
 	//void Appear();
 	//void Vanish();
 	//bool CheckHitPlayer();
+};
+
+class UImanager :public GameObject, public TaskObject {
+public:
+	UImanager();
+	~UImanager();
+
+	bool Initialize(unsigned short& mapNum);
+	void UpDate();
+	bool AddUI(UI* next);
+	bool Finalize();
+
+private:
+	int maxNum;		//表示するUIの数、Initializeで指定、UI増やす時はこれも変えなきゃいけないクソ仕様
+	std::vector<std::shared_ptr<UI>> UIlist_;
+	std::vector<UI::UIinfo> uiInfo;
+
+	int activeID;
 };
