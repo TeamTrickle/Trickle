@@ -72,7 +72,7 @@ class Title:public TaskObject
 	float cursor_a;
 	__int8 cursorNum;
 
-	unsigned __int8 gierCnt;
+	int gierCnt;
 	bool isGierAng;
 	float flowerVolume;
 
@@ -109,11 +109,11 @@ class Chara : public GameObject, public TaskObject
 	};
 	Texture Image;
 	Vec2 move;
-	const float MOVE_SPEED = 5.f;								//移動スピード
-	const float JUMP_POWER = -30.f;								//ジャンプパワー
-	const float MAX_FALL = 100.f;								//落下最大速度
-	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 10;		//重力加速度
-	const float FIN_SPEED = 0.5f;								//摩擦
+	const float MOVE_SPEED;								//移動スピード
+	const float JUMP_POWER;								//ジャンプパワー
+	const float MAX_FALL;								//落下最大速度
+	const float GRAVITY;		//重力加速度
+	const float FIN_SPEED;								//摩擦
 	Direction direction;										//向きを格納する変数
 	std::string taskName;										//名
 	int AnimCnt;

@@ -1,11 +1,14 @@
 #include "TaskObject.h"
-
-bool TaskObject::Init(std::string& name_)
+TaskObject::TaskObject()
 {
-	this->taskName = name_;
+	this->taskName = "";
 	this->KillCount = 0;
 	this->NextTask = true;
 	this->order = 0.0f;
+}
+bool TaskObject::Init(std::string& name_)
+{
+	this->taskName = name_;
 	return true;
 }
 void TaskObject::T_UpDate()

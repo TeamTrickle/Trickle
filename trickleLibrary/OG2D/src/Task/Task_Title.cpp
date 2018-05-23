@@ -25,7 +25,7 @@ bool Title::Initialize()
 {
 	std::cout << "Title初期化" << std::endl;
 	//背景読み込み
-	auto back = Back::Create((std::string)"back.png", 1920 * 2, 1080 * 2);
+	auto back = Back::Create((std::string)"back.png", 1440, 810);
 	//ロゴオブジェクト生成
 	this->Logo.CreateObject(Cube, Vec2(400,250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
@@ -82,10 +82,6 @@ void Title::UpDate()
 	//----------------
 	//テスト
 	//----------------
-	if (OGge->in->key.down(In::SPACE))
-	{
-		this->Kill();
-	}
 	if (OGge->in->key.on(In::A))
 	{
 		this->testObj.position.x -= 10.0f;
@@ -112,11 +108,15 @@ void Title::UpDate()
 		OGge->camera->MoveSize(Vec2(32, 18));
 		OGge->camera->MovePos(Vec2(-16.f, -9.f));
 	}
+	if (OGge->in->key.down(In::SPACE))
+	{
+		this->Kill();
+	}
 	this->cm.move();
 	if (this->isGierAng)
 	{
 		this->gierCnt++;
-		if (this->gierCnt >= 360)
+		if (this->gierCnt > 360)
 		{
 			this->gierCnt = 0;
 		}
@@ -135,9 +135,29 @@ void Title::UpDate()
 				water->SetSituation(Water::Situation::Deleteform);
 				this->cm.DeleteObject();
 				//this->mode = from2;
+				this->timeCnt = 0;
 			}
 			if (water->GetSituation() == Water::Situation::CreaDelete)
 			{
+				if (this->timeCnt < 100)
+				{
+					//OGge->camera->MovePos(Vec2(0, 10));
+				}
+				else
+				{
+					//this->mode = from2;
+				}
+			}
+		}
+		else
+		{
+			if (this->timeCnt < 81)
+			{
+				OGge->camera->MovePos(Vec2(0, 10));
+			}
+			else
+			{
+				this->isGierAng = true;
 				this->mode = from2;
 			}
 		}
@@ -147,14 +167,14 @@ void Title::UpDate()
 	{
 		if (this->timeCnt < 3)
 		{
-			OGge->camera->MovePos(Vec2(0, 30));
+			
 		}
 		//テスト用10フレーム後移動
 		if (this->flowerVolume >= 1.0f)
 		{
 			this->mode = from3;
 			//歯車を回す処理
-			this->isGierAng = true;
+			
 			//カメラの移動値を登録
 			this->cameraPos.Set(OGge->camera->GetPos(), Vec2(0, 200));
 			this->cameraSize.Set(OGge->camera->GetSize(), Vec2(1440, 810));
@@ -225,6 +245,7 @@ void Title::UpDate()
 					chara->ManualMove(Vec2(10.f, 0.0f));
 				}
 				chara->Jump();
+				//this->cm.SetObject(&(*chara));
 				this->mode = from7;
 			}
 				break;
@@ -239,36 +260,45 @@ void Title::UpDate()
 		break;
 	case from7:	//ジャンプからselectまでの移動
 	{
-		if (OGge->camera->GetPos().y < 1340)
-		{
-			OGge->camera->MovePos(Vec2(0.0f, 10.f));
-		}
+		//ジャンプして着地して横移動する行動
+
+		//if (OGge->camera->GetPos().y < 1340)
+		//{
+		//	//OGge->camera->MovePos(Vec2(0.0f, 10.f));
+		//}
+		//auto chara = OGge->GetTask<Chara>("Chara");
+		//if (chara)
+		//{
+		//	if (chara->CollisionNumCheck(1))
+		//	{
+		//		if (chara->FootCheck())
+		//		{
+		//			if (this->timeCnt > 120)
+		//			{
+		//				chara->ManualMove(Vec2(5.0f, 0.0f));
+		//			}
+		//			else
+		//			{
+		//				this->timeCnt++;
+		//				chara->ManualMove(Vec2(0.0f, 0.0f));
+		//			}
+		//		}
+		//		else
+		//		{
+		//			this->timeCnt = 0;
+		//		}
+		//	}
+		//	if (chara->position.x >= 1440)
+		//	{
+		//		this->mode = End;
+		//	}
+		//}
+		
+		//降りたらロードを挟みセレクトへ移行する行動
 		auto chara = OGge->GetTask<Chara>("Chara");
-		if (chara)
+		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
 		{
-			if (chara->CollisionNumCheck(1))
-			{
-				if (chara->FootCheck())
-				{
-					if (this->timeCnt > 120)
-					{
-						chara->ManualMove(Vec2(5.0f, 0.0f));
-					}
-					else
-					{
-						this->timeCnt++;
-						chara->ManualMove(Vec2(0.0f, 0.0f));
-					}
-				}
-				else
-				{
-					this->timeCnt = 0;
-				}
-			}
-			if (chara->position.x >= 1440)
-			{
-				this->mode = End;
-			}
+			this->mode = Mode::End;
 		}
 	}
 		break;
@@ -301,7 +331,7 @@ void Title::Render2D()
 		this->texLogo.Draw(draw, src);
 	}
 	{
-		Box2D draw(634, 390, 52, 52);
+		Box2D draw(634, 380, 52, 52);
 		draw.OffsetSize();
 		Box2D src(0, 0, 128, 128);
 		this->GierLogo.Rotate(this->gierCnt);
@@ -500,6 +530,7 @@ Title::SP Title::Create(bool flag_)
 }
 
 Chara::Chara(std::string& path, Vec2& pos)
+	:MOVE_SPEED(5.f), JUMP_POWER(-5.0f),MAX_FALL(30.f),GRAVITY((9.8f / 60.f / 60.f * 32) * 5),FIN_SPEED(0.5f)
 {
 	this->position = pos;
 	this->Image.Create(path);
