@@ -71,7 +71,7 @@ void EngineSystem::SetIcon(std::string& filepath_)
 void EngineSystem::Update()
 {
 	//カメラと入力状況の更新
-	this->camera->CameraUpdate();
+	
 	this->in->upDate();
 #if(_DEBUG)
 	this->fps->Update();
@@ -109,6 +109,7 @@ void EngineSystem::Task_Render_AF()
 void EngineSystem::TaskGameUpDate()
 {
 	this->Task_UpDate();		//更新処理
+	this->camera->CameraUpdate();
 	this->Task_Render_AF();		//描画処理
 	if (this->CheckAddTask() || this->CheckKillTask())
 	{
@@ -239,7 +240,12 @@ bool EngineSystem::CheckKillTask()
 void EngineSystem::AllTaskDelete()
 {
 	//全削除
-	this->taskobjects.clear();
+	auto id = this->taskobjects.begin();
+	while (id != this->taskobjects.end())
+	{
+		this->taskobjects.erase(id);
+		id = this->taskobjects.begin();	
+	}
 }
 void EngineSystem::SetWindowPos(Vec2& pos)
 {

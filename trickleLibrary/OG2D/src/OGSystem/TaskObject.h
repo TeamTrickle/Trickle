@@ -13,6 +13,7 @@ private:
 	std::string taskName;					//タスクに名をつける
 	float order;							//描画順番
 public:
+	TaskObject();
 	bool Init(std::string&);				//初期化処理
 	void T_UpDate();						//更新処理
 	void T_Render();						//描画処理

@@ -14,8 +14,8 @@ bool FlagUI::Initialize(Vec2& pos,int& target)
 	//画像判定に必要なフラグ
 	flagactive = false;
 	SetDrawOrder(0.1f);
-	image[0].Create((std::string)"Ster.jpg");
-	image[1].Create((std::string)"SterB.jpg");
+	image[0].Create((std::string)"Ster.png");
+	image[1].Create((std::string)"SterB.png");
 	return true;
 }
 void FlagUI::UpDate()

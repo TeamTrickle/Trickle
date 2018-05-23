@@ -31,7 +31,8 @@ Back::~Back()
 
 void Back::Render2D()
 {
-	Box2D draw(0.f, 0.f, this->size.x, this->size.y);
+	Box2D draw(OGge->camera->GetPos(), this->size);
+	draw.OffsetSize();
 	Box2D src(0.f, 0.f, this->backImg.GetTextureSize().x, this->backImg.GetTextureSize().y);
 	this->backImg.Draw(draw, src);
 }

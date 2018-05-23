@@ -300,7 +300,7 @@ bool Water::FootCheck(std::string& objtag,int n)
 	return false;
 }
 
-void Water::MoveWATERCheck(Vec2& est)
+void Water::MoveWATERCheck(Vec2 est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	if (!map)
@@ -376,7 +376,7 @@ void Water::MoveWATERCheck(Vec2& est)
 	}
 }
 
-void Water::MoveGASCheck(Vec2& est)
+void Water::MoveGASCheck(Vec2 est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)
@@ -447,7 +447,7 @@ void Water::MoveGASCheck(Vec2& est)
 	}
 }
 
-void Water::MoveSOILDCheck(Vec2& est)
+void Water::MoveSOILDCheck(Vec2 est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)

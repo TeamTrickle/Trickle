@@ -15,7 +15,7 @@ bool Result::Initialize()
 	//生成例
 	Result_DataInput();
 	Flag_Judge();
-	this->image.Create((std::string)"outlook.png");
+	this->image.Create((std::string)"back.png");
 
 	SetDrawOrder(0.0f);
 	{
@@ -201,6 +201,8 @@ Result::Result()
 	cout << "結果画面処理　生成" << endl;
 	//カメラ座標を元に戻す
 	OGge->camera->SetPos(Vec2(0, 0));
+	//カメラのサイズを元に戻す
+	OGge->camera->SetSize(OGge->window->GetSize());
 	FrameTime = 0;
 	Flag_Judge_Clear();
 }

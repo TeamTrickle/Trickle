@@ -13,6 +13,9 @@
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 
+#include "GameProcessManagement\GameClearCamera.h"
+#include "GameProcessManagement\Timer.h"
+
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
 
@@ -232,10 +235,15 @@ void Game::UpDate()
 			if (OGge->in->key.down(Input::KeyBoard::ENTER))
 			{
 				goal->cleared = true;
-				if (goal->cleared)
-				{
-					this->Kill();
-				}
+			}
+		}
+
+		auto cameraMove = OGge->GetTask<GameClearCamera>("GameClearCamera");
+		if (cameraMove != nullptr)
+		{
+			if (cameraMove->GetCameraMoveFinish())
+			{
+				this->Kill();
 			}
 		}
 	}
@@ -305,6 +313,16 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto gamecamera = OGge->GetTasks<GameClearCamera>("GameClearCamera");
+	for (auto id = (*gamecamera).begin(); id != (*gamecamera).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto timers = OGge->GetTasks<Timer>("Timer");
+	for (auto id = (*timers).begin(); id != (*timers).end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	this->waterTex.Finalize();
@@ -319,6 +337,14 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
+	auto goal = OGge->GetTask<Goal>("Goal");
+	if (goal != nullptr)
+	{
+		if (goal->ClearCheck())
+		{
+			return;
+		}
+	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)
