@@ -157,9 +157,12 @@
     <ClCompile Include="src\Bucket\bucket.cpp" />
     <ClCompile Include="src\CameraManager\CameraManager.cpp" />
     <ClCompile Include="src\Chara\Chara.cpp" />
+    <ClCompile Include="src\GameProcessManagement\ClearUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
+    <ClCompile Include="src\GameProcessManagement\GoalTimeUI.cpp" />
+    <ClCompile Include="src\GameProcessManagement\MissonUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp" />
@@ -204,9 +207,12 @@
     <ClInclude Include="src\Bucket\bucket.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\Chara\Chara.h" />
+    <ClInclude Include="src\GameProcessManagement\ClearUI.h" />
     <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
     <ClInclude Include="src\GameProcessManagement\GameClearCamera.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
+    <ClInclude Include="src\GameProcessManagement\GoalTimeUI.h" />
+    <ClInclude Include="src\GameProcessManagement\MissionUI.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h" />

@@ -120,6 +120,9 @@
     <Filter Include="ソースファイル\Chara">
       <UniqueIdentifier>{52d41689-55b7-4e63-935d-8708d308b3ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\UI\Result">
+      <UniqueIdentifier>{c23ee883-98a7-4ab2-b51b-deb216f13224}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -240,9 +243,6 @@
     <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
-      <Filter>ソースファイル\Task\Result</Filter>
-    </ClCompile>
     <ClCompile Include="src\Player\ResultPlayer.cpp">
       <Filter>ソースファイル\Player</Filter>
     </ClCompile>
@@ -257,6 +257,18 @@
     </ClCompile>
     <ClCompile Include="src\Chara\Chara.cpp">
       <Filter>ソースファイル\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\ClearUI.cpp">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\GoalTimeUI.cpp">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\MissonUI.cpp">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -380,9 +392,6 @@
     <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
-      <Filter>ソースファイル\Task\Result</Filter>
-    </ClInclude>
     <ClInclude Include="src\Player\ResultPlayer.h">
       <Filter>ソースファイル\Player</Filter>
     </ClInclude>
@@ -397,6 +406,18 @@
     </ClInclude>
     <ClInclude Include="src\Chara\Chara.h">
       <Filter>ソースファイル\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\ClearUI.h">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\GoalTimeUI.h">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\MissionUI.h">
+      <Filter>ソースファイル\Task\UI\Result</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -112,7 +112,7 @@ void Kanetuki::toSteam()
 //----------------------------
 Kanetuki::Kanetuki()
 {
-	cout << "‰Á”MŠí ¶¬" << endl;
+	cout << "‰Á”MŠí@¶¬" << endl;
 }
 
 Kanetuki::~Kanetuki()
