@@ -65,6 +65,9 @@ bool Player::Initialize(Vec2& pos)
 }
 void Player::UpDate()
 {
+	++animation.timeCnt;
+	//アニメーションカウントを増やす
+
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -152,6 +155,11 @@ void Player::UpDate()
 				}
 			}
 		}
+		if (this->InputLeft() || this->InputRight())
+		{
+			//NORMALの時、左右ボタンを押すとWALKに変わる
+			this->motion = Motion::Walk;
+		}
 		this->BlockHit();
 		break;
 	case Motion::Jump:
@@ -226,6 +234,12 @@ void Player::UpDate()
 		{
 			this->motion = Motion::Normal;
 		}
+		if (OGge->in->on(In::B1))
+		{
+			//歩いてるときのジャンプ
+			this->motion = Motion::Jump;
+			this->moveCnt = 0;
+		}
 		break;
 	}
 	//重力とかとかの移動処理の計算
@@ -240,19 +254,11 @@ void Player::UpDate()
 		{
 			this->est.x = -this->MOVE_SPEED;
 			this->direction = Direction::LEFT;
-			if (this->motion == Motion::Normal)
-			{
-				this->motion = Motion::Walk;
-			}
 		}
 		if (this->InputRight())
 		{
 			this->est.x = +this->MOVE_SPEED;
 			this->direction = Direction::RIGHT;
-			if (this->motion == Motion::Normal)
-			{
-				this->motion = Motion::Walk;
-			}
 		}
 	}
 	//最終的な移動値を反映させる
@@ -264,17 +270,8 @@ void Player::Render2D()
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
 
-	if (animation.timeCnt < 30) {
-		if (this->NowState() == State::NORMAL || this->NowState() == State::BUCKET)
-		{
-			++animation.timeCnt;
-		}
-	}
-	if (animation.timeCnt >= 30) {
-		animation.timeCnt = 0;
-	}
-
 	Box2D src = this->animation.returnSrc(this->motion);
+	//モションを受けsrcをreturnする
 	src.OffsetSize();
 
 	//左向きなら画像を逆にする
@@ -678,17 +675,28 @@ bool Player::Animation::isMove()
 Box2D Player::Animation::returnSrc(Motion motion) 
 {
 	Motion motion_ = motion;
-	Box2D src;
+
+	Box2D src2(0,0,550,550);	//仮のsrc（後で消すかも）
 	if (motion_ == Motion::Normal) {
-		Box2D src2(this->idle[this->timeCnt / 3] * 550, 0, 550, 550);
-		src = src + src2 ;
+		Box2D src(this->idle[this->timeCnt/3 % 10] * 550, 0, 550, 550);
+		return src ;
 	}
 
 	if (motion_ == Motion::Walk) {
-		Box2D src2(this->walk[this->timeCnt / 3] * 550, 550, 550, 550);
-		src = src + src2;
+		Box2D src(this->walk[this->timeCnt/3 % 9] * 550, 550, 550, 550);
+		return src;
 	}
-	return src;
+
+	if (motion_ == Motion::Jump) {
+		Box2D src(0 * 550, 2 * 550, 550, 550);
+		return src;
+	}
+
+	if (motion_ == Motion::Fall) {
+		Box2D src(1 * 550, 2 * 550, 550, 550);
+		return src;
+	}
+	return src2;
 
 }
 void Player::MoveCheck(Vec2& est, std::string& objname_)

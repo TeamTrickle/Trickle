@@ -23,7 +23,7 @@
     <ProjectGuid>{61186991-858F-4A3C-BB26-186468F21C26}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OG2D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <ProjectName>OG2D</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
