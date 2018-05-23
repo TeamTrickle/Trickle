@@ -1,9 +1,12 @@
 #include "StageSelect.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
+#include "Chara\Chara.h"
+#include "Back\Back.h"
 StageSelect::StageSelect()
 {
-
+	this->mode = Non;
+	this->preMode = Non;
 }
 
 StageSelect::~StageSelect()
@@ -42,7 +45,16 @@ bool StageSelect::Initialize()
 	texStage1.Create((std::string)"stage1.png");
 	texStage2.Create((std::string)"stage2.png");
 	texToTitle.Create((std::string)"totitle.png");
+	//プレイヤーNPCの生成
+	//auto chara = Chara::Create(std::string("player2.png"), Vec2(50, -200));
+	//背景の描画
+	//auto back = Back::Create(std::string("back.png"), Vec2(1920 + 200, 1080));
+	//タグ指定
 	__super::Init((std::string)"select");
+	//描画順指定
+	__super::SetDrawOrder(0.5f);
+	//初期モード設定
+	this->mode = Mode::from1;
 	return true;
 }
 
@@ -75,6 +87,37 @@ void StageSelect::UpDate()
 			*MapNum = 0;	break;
 		}
 		this->Kill();
+	}
+
+	switch (this->mode)
+	{
+	case Mode::from1:	//生成から落下と硬直
+	{
+		this->From1();
+	}
+		break;
+	case Mode::from2:	//キャラとカメラの横移動
+	{
+		this->From2();
+	}
+		break;
+	case Mode::from3:	//決定待ち
+	{
+		this->From3();
+	}
+		break;
+	case Mode::from4:	//決定後処理
+	{
+		this->From4();
+	}
+		break;
+	case Mode::End:		//次へ
+	{
+		this->Kill();
+	}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -176,6 +219,65 @@ void StageSelect::CursorMove() {
 		state = ToTitle;
 	}
 
+}
+
+void StageSelect::From1()
+{
+	//キャラを検索
+	auto chara = OGge->GetTask<Chara>("Chara");
+	//存在した場合
+	if (chara)
+	{
+		//当たり判定を行う番号ならば
+		if (chara->CollisionNumCheck(-1))
+		{
+			//地面に接触しているか
+			if (chara->FootCheck())
+			{
+				//一定カウントを超えたら
+				if (this->timeCnt > 120)
+				{
+					//次へ移動
+					this->mode = Mode::from2;
+				}
+			}
+			else
+			{
+				//していない時は0にしておく
+				this->timeCnt = 0;
+			}
+		}
+	}
+}
+
+void StageSelect::From2()
+{
+	auto chara = OGge->GetTask<Chara>("Chara");
+	if (chara)
+	{
+
+	}
+	//OGge->camera->SetPos(this->camera_x.quad.InOut())
+}
+void StageSelect::From3()
+{
+
+}
+void StageSelect::From4()
+{
+
+}
+void StageSelect::ModeCheck()
+{
+	if (this->preMode != this->mode)
+	{
+		this->timeCnt = 0;
+		this->preMode = this->mode;
+	}
+	else
+	{
+		this->timeCnt++;
+	}
 }
 
 StageSelect::SP StageSelect::Create(bool flag_)

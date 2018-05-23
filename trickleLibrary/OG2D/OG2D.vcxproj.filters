@@ -117,6 +117,9 @@
     <Filter Include="ソースファイル\Back">
       <UniqueIdentifier>{a9725f9c-e94a-4a8c-82f6-0a84daac45e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Chara">
+      <UniqueIdentifier>{52d41689-55b7-4e63-935d-8708d308b3ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -251,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chara\Chara.cpp">
+      <Filter>ソースファイル\Chara</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\GameClearCamera.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chara\Chara.h">
+      <Filter>ソースファイル\Chara</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
