@@ -156,6 +156,7 @@
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\Bucket\bucket.cpp" />
     <ClCompile Include="src\CameraManager\CameraManager.cpp" />
+    <ClCompile Include="src\Chara\Chara.cpp" />
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
+    <ClInclude Include="src\Chara\Chara.h" />
     <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
     <ClInclude Include="src\GameProcessManagement\GameClearCamera.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />

@@ -38,6 +38,7 @@ void CameraManager::move()
 						OGge->camera->GetPos().y + this->Range.y,
 						OGge->camera->GetPos().x + this->Range.x + this->Range.w,
 						OGge->camera->GetPos().y + this->Range.y + this->Range.h };
+	OG::LineHitDraw(&this->RealRange);
 	if (this->target != nullptr)
 	{
 		this->pretarget = { this->target->position,this->target->Scale };
