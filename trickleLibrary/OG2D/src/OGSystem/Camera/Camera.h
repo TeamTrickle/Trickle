@@ -12,6 +12,10 @@ public:
 	void SetPos(Vec2&);					//位置を設定する	
 	void SetSize(Vec2&);				//サイズを設定する
 	void MoveSize(Vec2&);				//サイズを加算する
+	void SetPos_x(float);				//Xのみの位置設定
+	void SetPos_y(float);				//Yのみの位置設定
+	void SetSize_w(float);				//Wigthのみのサイズ設定
+	void SetSize_h(float);				//heightのみのサイズ設定
 	Vec2 GetPos() const;				//位置を返す
 	Vec2 GetSize() const;				//サイズを返す
 private:

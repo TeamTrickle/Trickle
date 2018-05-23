@@ -13,6 +13,9 @@
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 
+#include "GameProcessManagement\GameClearCamera.h"
+#include "GameProcessManagement\Timer.h"
+
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
 
@@ -23,6 +26,7 @@ Game::Game()
 
 Game::~Game()
 {
+	//解放処理と次のsceneの生成
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
@@ -35,12 +39,12 @@ bool Game::Initialize()
 {
 	//switchまではそのまま
 	Vec2 bucketpos[2] = {
-		{ 100,250 },
+		{ 150,250 },
 		{ 400,800 }
 	};
 
 	Vec2 blockpos = Vec2(1536, 100);  //1536,100
-	_waterpos = { 150,100 };
+	_waterpos = { 200,100 };
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 18,6 };
 
@@ -48,6 +52,8 @@ bool Game::Initialize()
 
 	//扇風機画像読み込み
 	this->fanTex.Create((std::string)"fan.png");
+	this->playerTex.Create((std::string)"player2.png");
+	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
 	//マップ初期処理
 	switch (*MapNum)
 	{
@@ -55,104 +61,47 @@ bool Game::Initialize()
 		//txt読み込み消したので削除しています。
 		this->Kill();
 		break;
-	case 1:
-		//map.LoadMap((std::string)"tutorial1.csv", Format::csv);
-		/*walkui.Initialize(Vec2(200, 300), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
-		walkui.SetPlayerPtr(&player);
-		jumpui.Initialize(Vec2(400, 300), Box2D(400, 300, 200, 300), (std::string)"pusha.png", 300, 2);
-		jumpui.SetPlayerPtr(&player);
-		getbucketui.Initialize(Vec2(1200, 200), Box2D(1150, 200, 100, 200), (std::string)"pushb.png", 300, 2);
-		getbucketui.SetPlayerPtr(&player);
-		getwaterui.Initialize(Vec2(100, 200), Box2D(0, 0, 0, 0), (std::string)"arrowdown.png", 300, 1);
-		getwaterui.SetPlayerPtr(&player);
-		spillwaterui.Initialize(Vec2(1600, 200), Box2D(1550, 200, 300, 200), (std::string)"pushx.png", 300, 2);
-		spillwaterui.SetPlayerPtr(&player);*/
-		/*for (int i = 0; i < 1; ++i)
-		{
-			auto w = new Bucket();
-			this->bucket.push_back(w);
-			w->Initialize(bucketpos[i]);
-		}
+	case 1:		//チュートリアル１
+	{
+		//map生成
+		auto mapload = Map::Create((std::string)"tutorial1.csv");
+		//ui生成
+		auto uiwalk = UI::Create(Vec2(200, 300), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
+		auto uijump = UI::Create(Vec2(400, 300), Box2D(400, 300, 200, 300), (std::string)"pusha.png", 300, 2);
+		auto uigetbucket = UI::Create(Vec2(1200, 200), Box2D(1150, 200, 100, 200), (std::string)"pushb.png", 300, 2);
+		auto uigetwater = UI::Create(Vec2(100, 200), Box2D(0, 0, 0, 0), (std::string)"arrowdown.png", 300, 1);
+		auto apillwater = UI::Create(Vec2(1600, 200), Box2D(1550, 200, 300, 200), (std::string)"pushx.png", 300, 2);
+		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto w = new Goal();
-			this->goal.push_back(w);
-			w->Initialize(Vec2(25 * 64, 5 * 64));
-			gameprocess.Set_Goal(w);
-		}*/
-		{
-			//map生成
-			auto mapload = Map::Create((std::string)"tutorial1.csv");
-			//ui生成
-			auto uiwalk = UI::Create(Vec2(200, 300), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
-			auto uijump = UI::Create(Vec2(400, 300), Box2D(400, 300, 200, 300), (std::string)"pusha.png", 300, 2);
-			auto uigetbucket = UI::Create(Vec2(1200, 200), Box2D(1150, 200, 100, 200), (std::string)"pushb.png", 300, 2);
-			auto uigetwater = UI::Create(Vec2(100, 200), Box2D(0, 0, 0, 0), (std::string)"arrowdown.png", 300, 1);
-			auto apillwater = UI::Create(Vec2(1600, 200), Box2D(1550, 200, 300, 200), (std::string)"pushx.png", 300, 2);
-			//バケツ生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto bucket = Bucket::Create(bucketpos[i]);
-			}
-			//ゴール生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto goal = Goal::Create(true, Vec2(25 * 64, 5 * 64));
-			}
+			auto bucket = Bucket::Create(bucketpos[i]);
 		}
-		break;
-	case 2:
-		/*map.LoadMap((std::string)"tutorial2.csv", Format::csv);
+		//ゴール生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto w = new Bucket();
-			this->bucket.push_back(w);
-			w->Initialize(bucketpos[i]);
+			auto goal = Goal::Create(true, Vec2(25 * 64, 5 * 64));
 		}
+	}
+	break;
+	case 2:		//チュートリアル２
+	{
+		//map生成
+		auto mapload = Map::Create((std::string)"tutorial2.csv");
+		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto w = new Goal();
-			this->goal.push_back(w);
-			w->Initialize(Vec2(10 * 64, 10 * 64));
-			gameprocess.Set_Goal(w);
-		}*/
-		{
-			//map生成
-			auto mapload = Map::Create((std::string)"tutorial2.csv");
-			//バケツ生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto bucket = Bucket::Create(bucketpos[i]);
-			}
-			//goal生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto goal = Goal::Create(true, Vec2(10 * 64, 10 * 64));
-			}
+			auto bucket = Bucket::Create(bucketpos[i]);
 		}
-		break;
-	case 3:
-		/*map.LoadMap((std::string)"tutorial3.csv", Format::csv);
-		kanetuki.Create(Vec2(64 * 12, 64 * 10), Vec2(64, 64));
-		kanetuki.SetWaterPool(&water);		*/
-		/*for (int i = 0; i < 1; ++i)
-		{
-			auto w = new Bucket();
-			this->bucket.push_back(w);
-			w->Initialize(Vec2(100,400));
-		}
+		//goal生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto w = new Goal();
-			this->goal.push_back(w);
-			w->Initialize(Vec2(16 * 64, 8 * 64));
-			gameprocess.Set_Goal(w);
-		}*/
+			auto goal = Goal::Create(true, Vec2(10 * 64, 10 * 64));
+		}
+	}
+	break;
+	case 3:		//チュートリアル３
 		//位置変更
 		_waterpos.y += 64 * 4;
-		/*	fan[0].Initialize(Vec2(64, 64 * 2), fanrange[0], Fan::Dir::RIGHT, true);
-		fan[0].SetTexture(&this->fanTex);
-		fan[0].SetWindRange(Vec2(64 * 15, 64));*/
 		{
 			//map生成
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
@@ -177,514 +126,137 @@ bool Game::Initialize()
 			}
 		}
 		break;
-	case 4:
-		/*map.LoadMap((std::string)"tutorial4.csv", Format::csv);
-		kanetuki.Create(Vec2(16 * 64, 18 * 64), Vec2(64, 64));*/
-		/*kanetuki.SetWaterPool(&water);
+	case 4:		//チュートリアル４
+	{
+		//map生成
+		auto mapload = Map::Create((std::string)"tutorial4.csv");
+		//加熱器生成
+		auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64), Vec2(64, 64));
+		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto w = new Bucket();
-			this->bucket.push_back(w);
-			w->Initialize(bucketpos[i]);
+			auto bucket = Bucket::Create(bucketpos[i]);
 		}
+		//製氷機生成
 		for (int i = 0; i < 2; ++i)
 		{
-			seihyouki[i].Create(Vec2(4 * 64, 11 * 64), Vec2(64,64));
-			seihyouki[i].SetWaterPool(&water);
-		}*/
-		{
-			//map生成
-			auto mapload = Map::Create((std::string)"tutorial4.csv");
-			//加熱器生成
-			auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64), Vec2(64, 64));
-			//バケツ生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto bucket = Bucket::Create(bucketpos[i]);
-			}
-			//製氷機生成
-			for (int i = 0; i < 2; ++i)
-			{
-				auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64), Vec2(64, 64));
-			}
+			auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64), Vec2(64, 64));
 		}
-		break;
-	case 5:
-		//map.LoadMap((std::string)"stage1.csv", Format::csv);
-		//kanetuki.Create(Vec2(64 * 18, 64 * 16), Vec2(64 * 2, 64 * 2));
-		//kanetuki.SetWaterPool(&water);
-		//for (int i = 0; i < 2; ++i)
-		//{
-		//	seihyouki[i].Create(Vec2(64 * 5, 64 * 7), Vec2(64, 64));
-		//	seihyouki[i].SetWaterPool(&water);
-		//	//swich[i].Initialize(Vec2(64 * (10 + i * 2), 64 * 14));
-		//	fan[i].Initialize(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
-		//	fan[i].SetTexture(&this->fanTex);
-		//}
+	}
+	break;
+	case 5:		//ステージ１
+	{
+		//map生成
+		auto mapload = Map::Create((std::string)"stage1.csv");
+		//加熱器生成
+		auto kanetuki = Kanetuki::Create(Vec2(64 * 18, 64 * 16), Vec2(64 * 2, 64 * 2));
+		for (int i = 0; i < 2; ++i)
+		{
+			//製氷機生成
+			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7), Vec2(64, 64));
+			//扇風機生成
+			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
+			fan->SetTexture(&this->fanTex);
+		}
+		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
 		{
-			auto w = new Bucket();
-			this->bucket.push_back(w);
-			w->Initialize(bucketpos[i]);
+			auto bucket = Bucket::Create(bucketpos[i]);
 		}*/
-		/*	for (int i = 0; i < 1; ++i)
-		{
-			auto w = new Block();
-			this->block.push_back(w);
-			w->Initialize(blockpos);
-		}
+		//ブロック生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto w = new Goal();
-			this->goal.push_back(w);
-			w->Initialize();
-			gameprocess.Set_Goal(w);
-		}*/
-		{
-			//map生成
-			auto mapload = Map::Create((std::string)"stage1.csv");
-			//加熱器生成
-			auto kanetuki = Kanetuki::Create(Vec2(64 * 18, 64 * 16), Vec2(64 * 2, 64 * 2));
-			for (int i = 0; i < 2; ++i)
-			{
-				//製氷機生成
-				auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7), Vec2(64, 64));
-				//扇風機生成
-				auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
-				fan->SetTexture(&this->fanTex);
-			}
-			//バケツ生成
-			for (int i = 0; i < 2; ++i)
-			{
-				auto bucket = Bucket::Create(bucketpos[i]);
-			}
-			//ブロック生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto block = Block::Create(blockpos);
-			}
-			//ゴール生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto goal = Goal::Create(true);
-			}
+			auto block = Block::Create(blockpos);
 		}
-		break;
+		//ゴール生成
+		for (int i = 0; i < 1; ++i)
+		{
+			auto goal = Goal::Create(true);
+		}
+	}
+	break;
 	case 6:
-		/*map.LoadMap((std::string)"stage2.csv", Format::csv);
-		for (int i = 0; i < 1; ++i)
-		{
-			auto w = new Bucket();
-			this->bucket.push_back(w);
-			w->Initialize(bucketpos[i]);
-		}*/
+		this->Kill();
 		break;
 	default:
 		std::cout << "マップ番号が存在しません" << std::endl;
 		break;
 	}
 	//水初期処理
-	this->waterTex.Create((std::string)"watertest.png");
-	rm->SetTextureData((std::string)"waterTex", &waterTex);
-	//プレイヤー初期処理
-	this->playerTex.Create((std::string)"player2.png");
-	/*player.Initialize();
-	this->player.SetTexture(&this->playerTex);
-	for (int y = 0; y < map.mapSize.y; ++y)
 	{
-		for (int x = 0; x < map.mapSize.x; ++x)
-		{
-			player.AddObject(&map.hitBase[y][x]);
-		}
+		//水画像の読み込み
+		this->waterTex.Create((std::string)"waterTex.png");
+		//リソース管理classへデータを渡す
+		rm->SetTextureData((std::string)"waterTex", &waterTex);
 	}
-	for (int i = 0; i < this->bucket.size(); ++i)
-	{
-		player.AddBucket(this->bucket[i]);
-	}
-	for (int i = 0; i < this->block.size(); ++i)
-	{
-		player.AddBlock(this->block[i]);
-	}*/
-	auto player = Player::Create(Vec2(200, 200));
-	player->SetTexture(&this->playerTex);
+	//水が自動で降ってくる時間の初期化
 	this->timecnt = 0;
-
-	OGge->DebugFunction = true;
-
-	
-	//gameprocess.Initialize();
-	auto gameprocess = GameProcessManagement::Create();
-
-	//水出現処理
-	/*auto w = new Water(_waterpos);
-	w->SetTexture(&this->waterTex);
-	for (int y = 0; y < map.mapSize.y; ++y)
-	{
-		for (int x = 0; x < map.mapSize.x; ++x)
-		{
-			if (map._arr[y][x] > 0)
-			{
-				w->AddGameObject(&map.hitBase[y][x]);
-			}
-		}
-	}
-	for (int i = 0; i < this->water.size(); ++i)
-	{
-		if (this->water[i]->GetSituation() != Water::Situation::Deleteform)
-		{
-			w->AddGameObject(this->water[i]);
-			this->water[i]->AddGameObject(w);
-		}
-	}
-	water.push_back(w);
-	player.AddWater(w);
-	for (int i = 0; i < this->goal.size(); ++i)
-	{
-		goal[i]->AddWater(w);
-	}
-	for (int i = 0; i < 2; ++i)
-	{
-		fan[i].SetWaterPool(w);
-	}*/
+	//水の生成
 	auto water = Water::Create(_waterpos);
+	//画像を渡す
 	water->SetTexture(&this->waterTex);
-	//cm.AddChild(water[water.size() - 1]);
 	switch (*MapNum)
 	{
 	case 3:
-		player->SetPos(Vec2(200, 400));
+		//プレイヤーの位置を変更
+	//	player->SetPos(Vec2(200, 400));
 		break;
 		default:
 			break;
 	}
+	//タスクに名前を登録
 	__super::Init((std::string)"game");
+	//ゲームクリア判定を生成
+	auto gameprocess = GameProcessManagement::Create();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
 void Game::UpDate()
 {
-
-	//std::cout << bucket[0]->GetHold() << bucket[1]->GetHold() << std::endl;
-
-	//gameprocess.UpDate();
-	
 	timecnt++;
 	if (timecnt >= 120)
 	{
 		timecnt = 0;
-		//Water出現処理
-		/*auto w = new Water(_waterpos);
-		w->SetTexture(&this->waterTex);
-		for (int y = 0; y < map.mapSize.y; ++y)
-		{
-			for (int x = 0; x < map.mapSize.x; ++x)
-			{
-				if (map._arr[y][x] > 0)
-				{
-					w->AddGameObject(&map.hitBase[y][x]);
-				}
-			}
-		}
-		for (int i = 0; i < this->water.size(); ++i)
-		{
-			if (this->water[i]->GetSituation() != Water::Situation::Deleteform)
-			{
-				w->AddGameObject(this->water[i]);
-				this->water[i]->AddGameObject(w);
-			}
-		}
-		water.push_back(w);
-		player.AddWater(w);
-		for (int i = 0; i < this->goal.size(); ++i)
-		{
-			this->goal[i]->AddWater(w);
-		}
-		for (int i = 0; i < 2; ++i)
-		{
-			fan[i].SetWaterPool(w);
-		}*/
-		//cm.AddChild(water[water.size() - 1]);
 		auto water = Water::Create(_waterpos);
 		water->SetTexture(&this->waterTex);
 	}
-	
-	
-//-------------------------------------------------------------------------------------------------
-	//if (OGge->in->down(Input::in::B3, 0)) {
-	//	//バケツから水がこぼれる処理
-	//	for (int i = 0; i < this->bucket.size(); ++i) {
-	//		if (bucket[i]->capacity > 0 && bucket[i]->hold) {
-	//			Water* sizuku = bucket[i]->Spill();
-	//			sizuku->SetTexture(&this->waterTex);
-	//			for (int y = 0; y < map.mapSize.y; ++y)
-	//			{
-	//				for (int x = 0; x < map.mapSize.x; ++x)
-	//				{
-	//					if (map._arr[y][x] > 0)
-	//					{
-	//						sizuku->AddGameObject(&map.hitBase[y][x]);
-	//					}
-	//				}
-	//			}
-	//			for (int i = 0; i < this->water.size(); ++i)
-	//			{
-	//				if (this->water[i]->GetSituation() != Water::Situation::Deleteform)
-	//				{
-	//					sizuku->AddGameObject(this->water[i]);
-	//					this->water[i]->AddGameObject(sizuku);
-	//				}
-	//			}
-	//			water.push_back(sizuku);
-	//			player.AddWater(sizuku);
-	//			for (int j = 0; j < this->goal.size(); ++j)
-	//			{
-	//				this->goal[j]->AddWater(sizuku);
-	//			}
-	//			for (int i = 0; i < 2; ++i)
-	//			{
-	//				fan[i].SetWaterPool(sizuku);
-	//			}
-	//			//cm += sizuku;
-	//			//cm.AddChild(water[water.size() - 1]);
-	//		}
-	//	}
-	//}
-//-------------------------------------------------------------------------------------------------
-	//for (int i = 0; i < water.size(); ++i)
-	//{
-	//	for (int j = 0; j < this->bucket.size(); ++j) {
-	//		if (this->bucket[j]->WaterHit(water[i]))
-	//		{
-	//			//水とバケツの判定処理
-	//			if (water[i]->GetSituation() == Water::Situation::Normal && water[i]->GetState() == Water::State::LIQUID && water[i]->invi <= 0)
-	//			{
-	//				float w = water[i]->waterMove();
-	//				if (bucket[j]->capacity < 1.0f)
-	//				{
-	//					bucket[j]->capacity += w;
-	//					water[i]->SetSituation(Water::Situation::CreaDelete);
-	//					water[i]->Finalize();
-	//					player.DeleteWater(water[i]);
-	//					for (int j = 0; j < this->goal.size(); ++j)
-	//					{
-	//						this->goal[j]->DeleteWater(water[i]);
-	//					}
-	//					for (int j = 0; j < 2; ++j)
-	//					{
-	//						fan[j].DeleteWaterPool(water[i]);
-	//					}
-	//					for (int j = 0; j < water.size(); ++j)
-	//					{
-	//						if (i != j)
-	//						{
-	//							water[j]->DeleteGameObject(water[i]);
-	//						}
-	//					}
-	//					delete water[i];
-	//					water[i] = nullptr;
-	//					water.erase(water.begin() + i);
-	//					break;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-	//for (int i = 0; i < water.size(); ++i)
-	//{
-	//	//水の状態で地面の落ちた時に消える時の処理
-	//	if (water[i]->GetSituation() == Water::Situation::CreaDelete)
-	//	{
-	//		//	cm - water[i];
-	//		water[i]->Finalize();
-	//		player.DeleteWater(water[i]);
-	//		for (int j = 0; j < this->goal.size(); ++j)
-	//		{
-	//			this->goal[j]->DeleteWater(water[i]);
-	//		}
-	//		for (int j = 0; j < 2; ++j)
-	//		{
-	//			fan[j].DeleteWaterPool(water[i]);
-	//		}
-	//		for (int j = 0; j < water.size(); ++j)
-	//		{
-	//			if (i != j)
-	//			{
-	//				if (!water[j]->DeleteGameObject(water[i]))
-	//				{
-	//					break;
-	//				}
-	//			}
-	//		}
-	//		delete water[i];
-	//		water[i] = nullptr;
-	//		water.erase(water.begin() + i);
-	//	}
-	//	else
-	//	{
-	//		water[i]->UpDate();
-	//	}
-	//}
-	//player.UpDate();
-	//for (int i = 0; i < this->block.size(); ++i)
-	//{
-	//	//block[i]->UpDate(map, *block[i], player);
-	//	block[i]->PlCheckHit(player, *block[i]);
-	//}
-	//for (int i = 0; i < this->bucket.size(); ++i)
-	//{
-	//	//bucket[i]->UpDate(map, *bucket[i]);
-	//}
-	
-	
-	/*for (int i = 0; i < this->goal.size(); ++i)
-	{
-		this->goal[i]->UpDate();
-	}*/
-	//UI------------------------------------
-	//switch (*MapNum)
-	//{
-	//case 0:
-	//	//ギミックの更新
-	//	kanetuki.UpDate();
-	//	for (int i = 0; i < 2; ++i)
-	//	{
-	//		seihyouki[i].UpDate();
-	//		fan[i].UpDate();
-	//	}
-	//	break;
-	//case 1:
-	///*	walkui.UpDate();
-	//	jumpui.UpDate();
-	//	getbucketui.UpDate();
-	//	getwaterui.UpDate();
-	//	spillwaterui.UpDate();*/
-
-	//	
-	//	break;
-	//case 2:
-	//	break;
-	//case 3:
-	//	/*switchui.UpDate();
-	//	evaporationui.UpDate();*/
-	//	kanetuki.UpDate();
-	//	for (int i = 0; i < 1; ++i)
-	//	{
-	//		this->fan[i].UpDate();
-	//	}
-	//	break;
-	//case 4:
-	//	kanetuki.UpDate();
-	//	seihyouki[0].UpDate();
-	//	break;
-	//case 5:
-	//	//ギミックの更新
-	//	kanetuki.UpDate();
-	//	//実際に動かすのは１つ
-	//	seihyouki[0].UpDate();
-	//	for (int i = 0; i < 2; ++i)
-	//	{
-	//		this->fan[i].UpDate();
-	//	}
-	//	break;
-	//case 6:
-	//	break;
-	//default:
-	//	break;
-	//}
-	//--------------------------------------
-
-
 	//カメラ処理
 	Camera_move();
 
-
-	//nowtask = gameprocess.Goal_Event();
 	if (OGge->in->on(Input::in::D2, 0) && OGge->in->on(In::D1))
 	{
 		this->Kill();
+	}
+
+	{
+		auto goal = OGge->GetTask<Goal>("Goal");
+		if (goal != nullptr)
+		{
+			if (OGge->in->key.down(Input::KeyBoard::ENTER))
+			{
+				goal->cleared = true;
+			}
+		}
+
+		auto cameraMove = OGge->GetTask<GameClearCamera>("GameClearCamera");
+		if (cameraMove != nullptr)
+		{
+			if (cameraMove->GetCameraMoveFinish())
+			{
+				this->Kill();
+			}
+		}
 	}
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
 {
-	//マップチップの描画
 	
-	
-	//プレイヤー描画
-	//player.Render2D();
-	////水描画
-	//for (int i = 0; i < water.size(); ++i)
-	//{
-	//	water[i]->Render2D();
-	//}
-	//UI------------------------------------
-	switch (*MapNum)
-	{
-	case 0:
-		break;
-	case 1:
-	/*	walkui.Render2D();
-		jumpui.Render2D();
-		getbucketui.Render2D();
-		getwaterui.Render2D();
-		spillwaterui.Render2D();*/
-		break;
-	case 2:
-		break;
-	case 3:
-		/*switchui.Render2D();
-		evaporationui.Render2D();*/
-	case 4:
-		break;
-	case 5:
-		break;
-	case 6:
-		break;
-	default:
-		break;
-	}
-	//--------------------------------------
 }
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
 {
 	std::cout << "Game" << std::endl;
-	/*for (int i = 0; i < this->block.size(); ++i)
-	{
-		block[i]->Finalize();
-		delete block[i];
-	}
-	map.Finalize();
-	player.Finalize();*/
-	/*for (int i = 0; i < this->goal.size(); ++i)
-	{
-		this->goal[i]->Finalize();
-		delete this->goal[i];
-	}*/
-	//for (int i = 0; i < bucket.size(); ++i) {
-	//	bucket[i]->Finalize();
-	//}
-	//for (int i = 0; i < bucket.size(); ++i)
-	//{
-	//	this->bucket.pop_back();
-	//}
-	
-	/*for (int i = 0; i < this->bucket.size(); ++i)
-	{
-		bucket[i]->Finalize();
-		delete bucket[i];
-	}
-	for (int i = 0; i < water.size(); ++i)
-	{
-		water[i]->Finalize();
-		delete water[i];
-	}
-	water.clear();*/
-	/*for (int i = 0; i < 2; ++i) {
-		swich[i].Finalize();
-		fan[i].Finalize();
-	}*/
-
 	//各オブジェクトが存在している場合にKillする。
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
@@ -726,7 +298,7 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto players = OGge->GetTasks<Player>("player");
+	auto players = OGge->GetTasks<Player>("Player");
 	for (auto id = (*players).begin(); id != (*players).end(); ++id)
 	{
 		(*id)->Kill();
@@ -741,21 +313,21 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto gamecamera = OGge->GetTasks<GameClearCamera>("GameClearCamera");
+	for (auto id = (*gamecamera).begin(); id != (*gamecamera).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto timers = OGge->GetTasks<Timer>("Timer");
+	for (auto id = (*timers).begin(); id != (*timers).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	rm->DeleteTexture((std::string)"playerTex");
+	rm->DeleteTexture((std::string)"waterTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
-	//UI
-	/*walkui.Finalize();
-	jumpui.Finalize();
-	getbucketui.Finalize();
-	getwaterui.Finalize();
-	spillwaterui.Finalize();*/
-	//switchui.Finalize();
-	//evaporationui.Finalize();
-	//this->water.clear();
-	//this->bucket.clear();
-	//this->block.clear();
-	//this->goal.clear();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -765,7 +337,15 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
-	auto player = OGge->GetTask<Player>("player");
+	auto goal = OGge->GetTask<Goal>("Goal");
+	if (goal != nullptr)
+	{
+		if (goal->ClearCheck())
+		{
+			return;
+		}
+	}
+	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)
 	{

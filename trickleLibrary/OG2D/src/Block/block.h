@@ -1,8 +1,17 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Bucket\bucket.h"
 
 class Block : public GameObject ,public TaskObject{
+
+private:
+	/**
+	 @author Heewon Kim
+	 @brief 当たり判定関連全体的な判定を行います
+	 @return 何かにぶつかったのかの判定
+	*/
+	bool isCollideSomething();
 
 public:
 	explicit Block();
@@ -20,9 +29,6 @@ public:
 	void UpDate();
 	void Render2D();
 	bool Finalize();
-
-	void SetParent(GameObject*);
-	bool HasParent() const;
 
 	//めり込まない処理
 	void CheckMove(Vec2 &e_);
@@ -54,6 +60,5 @@ public:
 	GameObject rightBase;
 
 private:
-	GameObject * parent;
 	Texture tex;
 };

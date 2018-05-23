@@ -17,6 +17,7 @@ public:
 	Objform objform;								//オブジェクトの状態
 	Vec2 position;									//位置
 	Vec2 Scale;										//サイズ
+	Vec2 Radius;									//半径
 	float angle;									//回転度
 	CollisionBox collisionCube;						//矩形当たり判定
 	CollisionCircle collisionBall;					//円当たり判定
@@ -26,15 +27,15 @@ public:
 	GameObject();									//コンストラクタ	
 	GameObject(										//コンストラクタ
 		Objform form, 
-		Vec2& _posi, 
-		Vec2& _Sca, 
+		Vec2 _posi, 
+		Vec2 _Sca, 
 		float _ang
 	);
 	~GameObject();									//デストラクタ
 	void CreateObject(								//GameObjectの情報を登録
 		Objform form,
-		Vec2& _posi,
-		Vec2& _Sca,
+		Vec2 _posi,
+		Vec2 _Sca,
 		float _ang
 	);
 	std::string objectTag;							//タグ名

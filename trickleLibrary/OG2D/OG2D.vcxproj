@@ -23,7 +23,7 @@
     <ProjectGuid>{61186991-858F-4A3C-BB26-186468F21C26}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OG2D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>OG2D</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -102,7 +102,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Windows/include;include;src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -141,6 +141,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Windows/include;include;src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,8 +152,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Back\Back.cpp" />
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\Bucket\bucket.cpp" />
+    <ClCompile Include="src\CameraManager\CameraManager.cpp" />
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
+    <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
@@ -175,13 +180,14 @@
     <ClCompile Include="src\OGSystem\OGsystem.cpp" />
     <ClCompile Include="src\OGSystem\OGTask.cpp" />
     <ClCompile Include="src\OGSystem\Random\Random.cpp" />
+    <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="src\OGSystem\TaskObject.cpp" />
     <ClCompile Include="src\OGSystem\Texture\Texture.cpp" />
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp" />
     <ClCompile Include="src\OGSystem\Window\Window.cpp" />
     <ClCompile Include="src\OGSystem\_OGsystem.cpp" />
     <ClCompile Include="src\Player\Player.cpp" />
-    <ClCompile Include="src\ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="src\Player\ResultPlayer.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Option.cpp" />
@@ -192,8 +198,12 @@
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Back\Back.h" />
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />
+    <ClInclude Include="src\CameraManager\CameraManager.h" />
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
+    <ClInclude Include="src\GameProcessManagement\GameClearCamera.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
@@ -217,13 +227,14 @@
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
     <ClInclude Include="src\OGSystem\Random\Random.h" />
+    <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h" />
     <ClInclude Include="src\OGSystem\TaskObject.h" />
     <ClInclude Include="src\OGSystem\Texture\Texture.h" />
     <ClInclude Include="src\OGSystem\Timer\glTimer.h" />
     <ClInclude Include="src\OGSystem\Window\Window.h" />
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
     <ClInclude Include="src\Player\Player.h" />
-    <ClInclude Include="src\ResourceManager\ResourceManager.h" />
+    <ClInclude Include="src\Player\ResultPlayer.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Option.h" />

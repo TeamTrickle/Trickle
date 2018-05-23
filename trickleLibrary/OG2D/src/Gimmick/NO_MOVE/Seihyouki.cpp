@@ -13,6 +13,7 @@ bool Seihyouki::Initialize(Vec2& pos , Vec2& scale)
 
 	HitGeneration(pos,scale);
 
+	cout << "製氷機　初期化" << endl;
 	return true;
 }
 void Seihyouki::UpDate()
@@ -20,10 +21,16 @@ void Seihyouki::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto water = OGge->GetTask<Water>("Water");
-	if (water->hit(hitBace))
+	auto water = OGge->GetTasks<Water>("water");
+	if (water != nullptr)
 	{
-		toIce();
+		for (int i = 0; i < (*water).size(); ++i)
+		{
+			if ((*water)[i]->hit(hitBace))
+			{
+				toIce();
+			}
+		}
 	}
 }
 
@@ -52,30 +59,33 @@ bool Seihyouki::Finalize()
 }
 void Seihyouki::toIce()
 {
-	auto water = OGge->GetTask<Water>("Water");
-	if (water->GetState() == Water::State::SOLID)
+	auto water = OGge->GetTask<Water>("water");
+	if (water != nullptr)
 	{
-		while (true)
+		if (water->GetState() == Water::State::SOLID)
 		{
-			movetime++;
-			if (movetime >= movetime_ice)
+			while (true)
 			{
-				water->SetState(Water::State::LIQUID);
-				movetime = 0;
-				break;
+				movetime++;
+				if (movetime >= movetime_ice)
+				{
+					water->SetState(Water::State::LIQUID);
+					movetime = 0;
+					break;
+				}
 			}
 		}
-	}
-	if (water->GetState() == Water::State::LIQUID)
-	{
-		while (true)
+		if (water->GetState() == Water::State::LIQUID)
 		{
-			movetime++;
-			if (movetime >= movetime_ice)
+			while (true)
 			{
-				water->SetState(Water::State::SOLID);
-				movetime = 0;
-				break;
+				movetime++;
+				if (movetime >= movetime_ice)
+				{
+					water->SetState(Water::State::SOLID);
+					movetime = 0;
+					break;
+				}
 			}
 		}
 	}
@@ -91,12 +101,13 @@ void Seihyouki::HitGeneration(Vec2& pos, Vec2& scale)
 //----------------------------
 Seihyouki::Seihyouki()
 {
-
+	cout << "製氷機　生成" << endl;
 }
 
 Seihyouki::~Seihyouki()
 {
 	this->Finalize();
+	cout << "製氷機　解放" << endl;
 }
 
 Seihyouki::SP Seihyouki::Create(Vec2& pos,Vec2& scale,bool flag_)

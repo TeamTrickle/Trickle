@@ -34,7 +34,7 @@ private:
 	int Fire_movetime;					//燃やす時間を格納する
 
 	//状態遷移
-	void toSteam();		//水から水蒸気にする
+	void toSteam();						//水から水蒸気にする
 public:
 	void HitGeneration(Vec2& pos, Vec2& scale);	//座標値　当たり判定サイズ
 	//void SetWaterPool(std::vector<Water*> *);

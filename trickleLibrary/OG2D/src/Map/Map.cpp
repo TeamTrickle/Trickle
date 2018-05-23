@@ -1,7 +1,9 @@
 #include "Map.h"
+#include "Player\Player.h"
+#include "Bucket\bucket.h"
 Map::Map()
 {
-	this->chip.resize(30);
+	this->chip.resize(45);
 	this->chipimgname = "mapchip2.png";
 	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
@@ -61,7 +63,19 @@ bool Map::LoadMap(std::string& path_, Format format)
 		for (int x = 0; x < this->mapSize.x; ++x) {
 			std::string  text;
 			std::getline(ss_lt, text, ',');
-			(std::stringstream)text >> this->_arr[y][x];
+			//文字列が数字のみかを検索
+			if (std::all_of(text.cbegin(), text.cend(), isdigit))
+			{
+				//番号をそのまま格納
+				(std::stringstream)text >> this->_arr[y][x];
+			}
+			else
+			{
+				//文字列に応じたオブジェクトを生成する
+				this->ObjectCreateCheck(text,x,y);
+				//その場所の番号は0としておく。
+				this->_arr[y][x] = 0;
+			}
 		}
 	}
 	ifs.close();
@@ -101,29 +115,19 @@ bool Map::LoadMap(std::string& path_, Format format)
 			case 17:
 				this->hitBase[y][x].objectTag = "Net";
 				break;
-				//case 3:
-				//	this->hitBase[y][x].objectTag = "Net";
-				//	break;
-				//case 4:
-				//	this->hitBase[y][x].objectTag = "Net";
-				//	break;
 			case 18:
 			case 19:
+			case 20:
+			case 21:
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
-			case 20:
+			case 22:
 				this->hitBase[y][x].objectTag = "LadderTop";
 				break;
-			case 21:
-			case 22:
+			case 23:
+			case 24:
 				this->hitBase[y][x].objectTag = "Ladder";
 				break;
-				//case 8:
-				//	this->hitBase[y][x].objectTag = "Ladder";
-				//	break;
-				//case 9:
-				//this->hitBase[y][x].objectTag = "Switch";
-				//break;
 			default:
 				break;
 			}
@@ -133,156 +137,19 @@ bool Map::LoadMap(std::string& path_, Format format)
 	return true;
 }
 
-bool Map::LoadMap(std::string& _path)
+void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
 {
-	std::ifstream ifs(this->_FilePath + _path, std::ios::in | std::ios::binary);
-	if (!ifs)
+	if(text == "p")
 	{
-		std::cout << "マップ読み込みエラー" << std::endl;
-		return false;
-	}
-	std::string _s;
-	int _csize = 0;
-	//各値をテキストから格納
-	while (std::getline(ifs, _s))
+		auto player = Player::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		player->SetTexture(rm->GetTextureData((std::string)"playerTex"));
+		return;
+	};
+	if (text == "b")
 	{
-		if (_s.substr(0, 2) == "X ")
-		{
-			std::istringstream _is(_s.substr(2));
-			_is >> this->mapSize.x;
-		}
-		if (_s.substr(0, 2) == "Y ")
-		{
-			std::istringstream _is(_s.substr(2));
-			_is >> this->mapSize.y;
-		}
-		if (_s.substr(0, 2) == "C ")
-		{
-			std::istringstream _is(_s.substr(2));
-			_is >> _csize;
-		}
-		if (_s.substr(0, 2) == "N ")
-		{
-			std::istringstream _is(_s.substr(2));
-			_is >> this->chipimgname;
-		}
-		if (_s.substr(0, 3) == "CX ")
-		{
-			std::istringstream _is(_s.substr(3));
-			_is >> this->chipsize.x;
-		}
-		if (_s.substr(0, 3) == "CY ")
-		{
-			std::istringstream _is(_s.substr(3));
-			_is >> this->chipsize.y;
-		}
-		if (_s.substr(0, 3) == "XS ")
-		{
-			std::istringstream _is(_s.substr(3));
-			_is >> this->DrawSize.x;
-		}
-		if (_s.substr(0, 3) == "YS ")
-		{
-			std::istringstream _is(_s.substr(3));
-			_is >> this->DrawSize.y;
-		}
+		auto bucket = Bucket::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		return;
 	}
-	//使用するマップチップの数
-	this->chip.resize(_csize);
-	//マップ配列の生成
-	this->_arr.resize(this->mapSize.y);
-	this->hitBase.resize(this->mapSize.y);
-	for (int i = 0; i < this->mapSize.y; ++i)
-	{
-		this->_arr[i].resize(this->mapSize.x);
-		this->hitBase[i].resize(this->mapSize.x);
-	}
-	ifs.close();
-	//画像読み込み
-	mapimg.Create(chipimgname);
-	int j = 0;
-	std::ifstream ifs2(this->_FilePath + _path, std::ios::in | std::ios::binary);
-	if (!ifs2)
-	{
-		std::cout << "マップ読み込みエラー" << std::endl;
-		return false;
-	}
-	while (std::getline(ifs2, _s))
-	{
-		if (_s.substr(0, 8) == "MapChip ")
-		{
-			std::istringstream _is(_s.substr(8));
-			for (int i = 0; i < this->mapSize.x; ++i)
-			{
-				//マップ番号を格納
-				_is >> this->_arr[j][i];
-			}
-			++j;
-		}
-	}
-	for (int i = 0; i < _csize; ++i)
-	{
-		//元画像チップの描画範囲の指定
-		int x = (i % 20);
-		int y = (i / 20);
-		this->chip[i] = Box2D(x*32.f, y * 32.f, 32.f, 32.f);
-		this->chip[i].OffsetSize();
-	}
-	for (int y = 0; y < this->mapSize.y; ++y)
-	{
-		for (int x = 0; x < this->mapSize.x; ++x)
-		{
-			//オブジェクトの生成
-			this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
-			switch (this->_arr[y][x])
-			{
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-				//床
-				this->hitBase[y][x].objectTag = "Floor";
-				break;
-			case 14:
-			case 15:
-			case 16:
-			case 17:
-				this->hitBase[y][x].objectTag = "Net";
-				break;
-			//case 3:
-			//	this->hitBase[y][x].objectTag = "Net";
-			//	break;
-			//case 4:
-			//	this->hitBase[y][x].objectTag = "Net";
-			//	break;
-			case 18:
-			case 19:
-				this->hitBase[y][x].objectTag = "Soil";
-				break;
-			case 21:
-			case 22:
-				this->hitBase[y][x].objectTag = "Ladder";
-				break;
-			//case 8:
-			//	this->hitBase[y][x].objectTag = "Ladder";
-			//	break;
-			//case 9:
-				//this->hitBase[y][x].objectTag = "Switch";
-				//break;
-			default:
-				break;
-			}
-		}
-
-	}
-	ifs2.close();
-	__super::Init((std::string)"map");
-	return true;
 }
 
 void Map::UpDate()

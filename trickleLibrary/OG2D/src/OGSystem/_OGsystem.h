@@ -77,4 +77,5 @@ namespace OG {
 	void _Rotate(float _angle, Vec2*);
 	void LineHitDraw(Vec2*);
 	void LineHitDraw(Vec2*, Color&);
+	void LineHitDraw(Box2D*);
 }

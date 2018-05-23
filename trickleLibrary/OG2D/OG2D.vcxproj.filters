@@ -36,14 +36,8 @@
     <Filter Include="ソースファイル\Task\Title">
       <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Back">
-      <UniqueIdentifier>{b2f9d793-2158-4aac-a61b-5e4346de2548}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\CollisionManager">
-      <UniqueIdentifier>{0e039a03-be4f-44d0-b575-13461729a994}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Goal">
       <UniqueIdentifier>{1ad8c3cd-5b64-43d8-802f-a11e154c67c1}</UniqueIdentifier>
@@ -90,9 +84,6 @@
     <Filter Include="ソースファイル\OGSystem\System\Timer">
       <UniqueIdentifier>{b0f1c63f-2af4-468d-891d-f836688630b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\OGSystem\System\Shader">
-      <UniqueIdentifier>{07a5ea8b-eb70-4b10-ba9d-e96be3ec8a4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\GameProcessManager">
       <UniqueIdentifier>{7a158ccb-92ef-49bf-bba4-eb00b469d726}</UniqueIdentifier>
     </Filter>
@@ -117,8 +108,14 @@
     <Filter Include="ソースファイル\OGSystem\System\OG">
       <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\ResourceManager">
-      <UniqueIdentifier>{93ee20bc-893b-439e-b693-016b7b7832ce}</UniqueIdentifier>
+    <Filter Include="ソースファイル\OGSystem\System\ResourceManager">
+      <UniqueIdentifier>{a6a06207-bbbb-436f-9e8e-50db74cd07d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\CameraManager">
+      <UniqueIdentifier>{d2e787fa-356a-4206-b4a2-a949a42836b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Back">
+      <UniqueIdentifier>{a9725f9c-e94a-4a8c-82f6-0a84daac45e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -237,8 +234,23 @@
     <ClCompile Include="src\OGSystem\TaskObject.cpp">
       <Filter>ソースファイル\OGSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\ResourceManager\ResourceManager.cpp">
-      <Filter>ソースファイル\ResourceManager</Filter>
+    <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp">
+      <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\ResultPlayer.cpp">
+      <Filter>ソースファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraManager\CameraManager.cpp">
+      <Filter>ソースファイル\CameraManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Back\Back.cpp">
+      <Filter>ソースファイル\Back</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -359,8 +371,23 @@
     <ClInclude Include="src\Water\water.h">
       <Filter>ソースファイル\Water</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceManager\ResourceManager.h">
-      <Filter>ソースファイル\ResourceManager</Filter>
+    <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h">
+      <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
+      <Filter>ソースファイル\Task\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player\ResultPlayer.h">
+      <Filter>ソースファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraManager\CameraManager.h">
+      <Filter>ソースファイル\CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Back\Back.h">
+      <Filter>ソースファイル\Back</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\GameClearCamera.h">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

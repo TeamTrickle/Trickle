@@ -77,20 +77,23 @@ void Block::UpDate() {
 	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
 	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
 	*/
-	auto p = OGge->GetTask<Player>("player");
-	this->PlCheckHit(*p);
-	if (plhit)
+	auto p = OGge->GetTask<Player>("Player");
+	if (p)
 	{
-		if (p->position.x < this->position.x)
+		//this->PlCheckHit(*p);
+		if (plhit)
 		{
-			//speed.x = 5.0f;はテスト用に設定
-			//speed.x = 5.0f;
-			CheckMove(speed);
-		}
-		if (p->position.x > this->position.x)
-		{
-			//speed.x = -5.0f;
-			CheckMove(speed);
+			if (p->position.x < this->position.x)
+			{
+				//speed.x = 5.0f;はテスト用に設定
+				//speed.x = 5.0f;
+				CheckMove(speed);
+			}
+			if (p->position.x > this->position.x)
+			{
+				//speed.x = -5.0f;
+				CheckMove(speed);
+			}
 		}
 	}
 	gravity.y = 4.0f;
@@ -109,15 +112,6 @@ bool Block::Finalize() {
 	tex.Finalize();
 	return true;
 }
-
-void Block::SetParent(GameObject* o_) {
-	parent = o_;
-}
-
-bool Block::HasParent() const {
-	return parent != nullptr;
-}
-
 
 Vec2 Block::GetMove(Vec2& move)       //moveにプレイヤから受け取る移動量を入れる
 {
@@ -159,7 +153,6 @@ void Block::PlCheckHit(GameObject &p)
 //めり込まない処理
 void Block::CheckMove(Vec2 &e_)
 {
-	auto map = OGge->GetTask<Map>("map");
 	//x軸について
 	while (e_.x != 0.0f)
 	{
@@ -181,7 +174,7 @@ void Block::CheckMove(Vec2 &e_)
 			e_.x = 0.0f;
 		}
 
-		if (map->MapHitCheck(*this))
+		if (isCollideSomething())
 		{
 			backmove.x = position.x - preX;
 			this->position.x = preX;
@@ -209,13 +202,28 @@ void Block::CheckMove(Vec2 &e_)
 			e_.y = 0.0f;
 		}
 
-		if (map->MapHitCheck(*this))
+		if (isCollideSomething())
 		{
 			backmove.y = position.y - preY;
 			this->position.y = preY;
 			break;
 		}
 	}
+}
+
+
+bool Block::isCollideSomething() 
+{
+	auto map = OGge->GetTask<Map>("map");
+	if (!map) {
+		return false;
+	}
+	auto bucket = OGge->GetTask<Bucket>("bucket");
+	if (!bucket) {
+		return false;
+	}
+
+	return map->MapHitCheck(*this) || bucket->hit(*this);
 }
 
 Block::SP Block::Create(Vec2& pos, bool flag_)

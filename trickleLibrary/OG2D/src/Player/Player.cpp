@@ -8,7 +8,6 @@ Player::Player()
 {
 	
 }
-
 Player::~Player()
 {
 	this->Finalize();
@@ -17,11 +16,10 @@ Player::~Player()
 
 	}
 }
-
 bool Player::Initialize()
 {
 	//オブジェクトの初期化
-	GameObject::CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
+	this->CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(80.0f, 80.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -38,16 +36,15 @@ bool Player::Initialize()
 	this->state = State::NORMAL;
 	//自動移動用値の初期化
 	this->animation.Initialize();
-	__super::Init((std::string)"player");
+	__super::Init((std::string)"Player");
 	return true;
 }
-
 bool Player::Initialize(Vec2& pos)
 {
 	this->taskName = "Player";
 	__super::Init(this->taskName);
 	//オブジェクトの初期化
-	GameObject::CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
+	this->CreateObject(Cube, pos, Vec2(80.0f, 80.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -66,7 +63,6 @@ bool Player::Initialize(Vec2& pos)
 	this->animation.Initialize();
 	return true;
 }
-
 void Player::UpDate()
 {
 	switch (this->state)
@@ -125,7 +121,7 @@ void Player::UpDate()
 		if (OGge->in->down(In::B2))
 		{
 			//バケツを持つ
-			if (this->BucketHit() && this->inv == 0) 
+			if (this->BucketHit()) 
 			{
 				this->state = State::BUCKET;
 			}
@@ -225,6 +221,12 @@ void Player::UpDate()
 			}
 		}
 		break;
+	case Walk:
+		if (!this->InputRight() && !this->InputLeft())
+		{
+			this->motion = Motion::Normal;
+		}
+		break;
 	}
 	//重力とかとかの移動処理の計算
 	if (this->state != State::ANIMATION)
@@ -238,23 +240,29 @@ void Player::UpDate()
 		{
 			this->est.x = -this->MOVE_SPEED;
 			this->direction = Direction::LEFT;
+			if (this->motion == Motion::Normal)
+			{
+				this->motion = Motion::Walk;
+			}
 		}
 		if (this->InputRight())
 		{
 			this->est.x = +this->MOVE_SPEED;
 			this->direction = Direction::RIGHT;
+			if (this->motion == Motion::Normal)
+			{
+				this->motion = Motion::Walk;
+			}
 		}
 	}
 	//最終的な移動値を反映させる
 	this->MoveCheck(this->est);
 }
-
 void Player::Render2D()
 {
+
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-
-	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };
 
 	if (animation.timeCnt < 30) {
 		if (this->NowState() == State::NORMAL || this->NowState() == State::BUCKET)
@@ -266,8 +274,9 @@ void Player::Render2D()
 		animation.timeCnt = 0;
 	}
 
-	Box2D src(idle[animation.timeCnt/3] * 550, 0, 550, 550);
+	Box2D src = this->animation.returnSrc(this->motion);
 	src.OffsetSize();
+
 	//左向きなら画像を逆にする
 	if (direction == Direction::RIGHT) {
 		int k = src.w;
@@ -276,7 +285,6 @@ void Player::Render2D()
 	}
 	this->playerimg->Draw(draw, src);
 }
-
 bool Player::Finalize()
 {
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
@@ -285,12 +293,9 @@ bool Player::Finalize()
 	}
 	return true;
 }
-
 Vec2 Player::GetEst() const {
 	return est;
 }
-
-
 bool Player::HeadCheck()
 {
 	GameObject head;
@@ -312,13 +317,15 @@ bool Player::HeadCheck()
 		}
 	}
 	auto block = OGge->GetTask<Block>("block");
-	if (head.hit(*block))
+	if (block)
 	{
-		return true;
+		if (head.hit(*block))
+		{
+			return true;
+		}
 	}
 	return false;
 }
-
 bool Player::HeadCheck(std::string& objname_, int n)
 {
 	GameObject head;
@@ -359,7 +366,6 @@ bool Player::HeadCheck(std::string& objname_, int n)
 	}
 	return false;
 }
-
 bool Player::FootCheck()
 {
 	GameObject foot;
@@ -381,9 +387,12 @@ bool Player::FootCheck()
 		}
 	}
 	auto block = OGge->GetTask<Block>("block");
-	if (foot.hit(*block))
+	if (block) 
 	{
-		return true;
+		if (foot.hit(*block))
+		{
+			return true;
+		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -398,7 +407,6 @@ bool Player::FootCheck()
 	}
 	return false;
 }
-
 bool Player::FootCheck(std::string& objname_,int n)
 {
 	GameObject foot;
@@ -438,8 +446,7 @@ bool Player::FootCheck(std::string& objname_,int n)
 	}
 	return false;
 }
-
-void Player::MoveCheck(Vec2& est)
+void Player::MoveCheck(Vec2 est)
 {
 	while (est.x != 0.f)
 	{
@@ -476,10 +483,13 @@ void Player::MoveCheck(Vec2& est)
 			}
 		}
 		auto block = OGge->GetTask<Block>("block");
-		if (this->hit(*block))
+		if (block)
 		{
-			this->position.x = preX;
-			break;
+			if (this->hit(*block))
+			{
+				this->position.x = preX;
+				break;
+			}
 		}
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -529,10 +539,13 @@ void Player::MoveCheck(Vec2& est)
 			}
 		}
 		auto block = OGge->GetTask<Block>("block");
-		if (this->hit(*block))
+		if (block)
 		{
-			this->position.y = preY;
-			break;
+			if (this->hit(*block))
+			{
+				this->position.y = preY;
+				break;
+			}
 		}
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -548,7 +561,6 @@ void Player::MoveCheck(Vec2& est)
 		}
 	}
 }
-
 void Player::Friction()
 {
 	if (this->motion == Motion::Ladder)
@@ -572,10 +584,13 @@ void Player::Friction()
 		this->est.y = 0.0f;
 	}
 }
-
 bool Player::BucketHit()
 {
-	auto bucket = OGge->GetTasks<Bucket>("bicket");
+	if (this->inv != 0)
+	{
+		return false;
+	}
+	auto bucket = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
 		if (this->hit(*(*id)))
@@ -586,7 +601,6 @@ bool Player::BucketHit()
 	}
 	return false;
 }
-
 void Player::BucketMove()
 {
 	auto buckets = OGge->GetTasks<Bucket>("bucket");
@@ -598,14 +612,12 @@ void Player::BucketMove()
 		}
 	}
 }
-
 void Player::Animation::SetAnimaVec(Vec2& start_, Vec2& end_)
 {
 	this->startVec = start_;
 	this->endVec = end_;
 	this->animationVec = { this->endVec.x - this->startVec.x ,this->endVec.y - this->startVec.y };
 }
-
 bool Player::Animation::Initialize()
 {
 	this->animationVec = { 0.f,0.f };
@@ -614,7 +626,6 @@ bool Player::Animation::Initialize()
 	this->timeCnt = 0;
 	return true;
 }
-
 Vec2 Player::Animation::Move()
 {
 	Vec2 move = { 0.f,0.f };
@@ -656,7 +667,6 @@ Vec2 Player::Animation::Move()
 	}
 	return move;
 }
-
 bool Player::Animation::isMove()
 {
 	if (this->animationVec.x != 0.f || this->animationVec.y != 0.f)
@@ -665,7 +675,22 @@ bool Player::Animation::isMove()
 	}
 	return false;
 }
+Box2D Player::Animation::returnSrc(Motion motion) 
+{
+	Motion motion_ = motion;
+	Box2D src;
+	if (motion_ == Motion::Normal) {
+		Box2D src2(this->idle[this->timeCnt / 3] * 550, 0, 550, 550);
+		src = src + src2 ;
+	}
 
+	if (motion_ == Motion::Walk) {
+		Box2D src2(this->walk[this->timeCnt / 3] * 550, 550, 550, 550);
+		src = src + src2;
+	}
+	return src;
+
+}
 void Player::MoveCheck(Vec2& est, std::string& objname_)
 {
 	while (est.y != 0.f)
@@ -704,7 +729,6 @@ void Player::MoveCheck(Vec2& est, std::string& objname_)
 		}
 	}
 }
-
 bool Player::ObjectHit(std::string& objname_)
 {
 	auto map = OGge->GetTask<Map>("map");
@@ -724,7 +748,6 @@ bool Player::ObjectHit(std::string& objname_)
 	}
 	return false;
 }
-
 bool Player::BlockHit()
 {
 	GameObject left;
@@ -737,37 +760,38 @@ bool Player::BlockHit()
 		if (left.hit(*(*id)))
 		{
 			(*id)->PlCheckHit(left);
-			(*id)->GetMove(this->est);
+			if (this->est.x < 0)
+			{
+				(*id)->GetMove(this->est);
+			}
 		}
 		if (right.hit(*(*id)))
 		{
 			(*id)->PlCheckHit(right);
-			(*id)->GetMove(this->est);
+			if (this->est.x > 0)
+			{
+				(*id)->GetMove(this->est);
+			}
 		}
 	}
 	return false;
 }
-
 void Player::SetTexture(Texture* texture)
 {
 	this->playerimg = texture;
 }
-
 Player::State Player::NowState() const
 {
 	return this->state;
 }
-
 void Player::SetPos(Vec2& pos)
 {
 	this->position = pos;
 }
-
 Vec2 Player::GetPos() const
 {
 	return this->position;
 }
-
 Player::SP Player::Create(Vec2& pos, bool flag)
 {
 	auto to = Player::SP(new Player());

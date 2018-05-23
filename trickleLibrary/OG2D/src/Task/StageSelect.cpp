@@ -1,5 +1,6 @@
 #include "StageSelect.h"
 #include "Task\Task_Game.h"
+#include "Task\Task_Title.h"
 StageSelect::StageSelect()
 {
 
@@ -10,7 +11,14 @@ StageSelect::~StageSelect()
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto nexttask = Game::Create();
+		if (state == State::ToTitle)
+		{
+			auto nexttask = Title::Create();
+		}
+		else
+		{
+			auto nexttask = Game::Create();
+		}
 	}
 }
 
@@ -60,6 +68,8 @@ void StageSelect::UpDate()
 			*MapNum = 5;	break;
 		case Stage2:	//–¢ŽÀ‘•
 			//*MapNum = 6;	break;
+			break;
+		case ToTitle:
 			break;
 		default:
 			*MapNum = 0;	break;

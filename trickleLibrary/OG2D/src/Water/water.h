@@ -56,11 +56,10 @@ public:
 
 	//水量の移動
 	float waterMove();
+	//水量を外部から上書きする
+	void SetWaterVolume(float);
 	//水量のチェック
 	float GetWaterVolume() const;
-	void AddGameObject(GameObject* obj_);								//オブジェクトを登録する
-	bool DeleteGameObject(GameObject* obj_);							//指定オブジェクトを登録から削除する
-	void AllDelete();											//全登録オブジェクトの削除
 	bool IsBucket();
 	//色関連
 	bool SetColor(Color&);
@@ -74,16 +73,16 @@ public:
 	int nowTime;
 	typedef std::shared_ptr<Water> SP;
 	static SP Create(Vec2&, bool = true);
+
+	void SetMaxSize(Vec2&);
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
 	const float MAX_FALL = 30.f;								//落下最大速度
-	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 50;		//重力加速度
+	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;		//重力加速度
 	const float FIN_SPEED = 0.5f;								//摩擦
 	const int RAIN_TIME = 180;
 	Texture* tex;
-	std::vector<GameObject*> mapObj;
-	std::map<State, Box2D> drawRange;
 	State currentState;
 	Situation nowSituation;
 	Vec2 minSize;
@@ -94,12 +93,11 @@ private:
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();
-	void SetMapGameObject(GameObject* mapobj);
-	std::vector<GameObject*> GameObjects;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
-	void MoveWATERCheck(Vec2&);
-	void MoveGASCheck(Vec2&);
-	void MoveSOILDCheck(Vec2&);
+	void MoveWATERCheck(Vec2);
+	void MoveGASCheck(Vec2);
+	void MoveSOILDCheck(Vec2);
 	bool HeadCheck(std::string&,int = 0);
+	
 };

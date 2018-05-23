@@ -31,7 +31,7 @@ class Player :public GameObject ,public TaskObject
 	enum Motion
 	{
 		Normal,		//通常
-		Walk,
+		Walk,		//歩き中
 		Jump,		//ジャンプ
 		Ladder,		//はしご
 		Fall,		//落下
@@ -43,12 +43,14 @@ class Player :public GameObject ,public TaskObject
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
 		int timeCnt;											//アニメーション経過時間
-		//int idle[10];											//Normal状態のアニメーション
+		int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };					//Normal状態のアニメーション
+		int walk[9] = { 0,1,2,3,4,5,6,7,8 };					//Walk状態のアニメーション
 	public:
 		void SetAnimaVec(Vec2& start_, Vec2& end_);				//開始位置と終了位置を登録
 		bool Initialize();										//初期化
 		Vec2 Move();											//移動処理を行い移動値を返す
 		bool isMove();											//移動処理中かどうかを返す
+		Box2D returnSrc(Motion motion);
 	};
 private:
 	const float MOVE_SPEED = 5.f;								//移動スピード
@@ -73,8 +75,8 @@ private:
 	bool FootCheck();											//足元の当たり判定
 	bool HeadCheck(std::string& objname_, int n = 0);			//頭の別オブジェクトへの判定,0 = そのオブジェクト,1 = それ以外のオブジェクト
 	bool FootCheck(std::string& objname_, int n = 0);			//足元の別オブジェクトへの判定
-	void MoveCheck(Vec2& est);									//移動判定処理
-	void MoveCheck(Vec2& est, std::string& objname_);				//梯子状態で使用する移動処理
+	void MoveCheck(Vec2 est);									//移動判定処理
+	void MoveCheck(Vec2& est, std::string& objname_);			//梯子状態で使用する移動処理
 	void Friction();											//重力や摩擦の計算
 	bool BucketHit();											//バケツとの当たり判定
 	void BucketMove();											//所持しているバケツの位置を変える
