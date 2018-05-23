@@ -19,7 +19,7 @@ Player::~Player()
 bool Player::Initialize()
 {
 	//オブジェクトの初期化
-	this->CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(80.0f, 80.f), 0.0f);
+	this->CreateObject(Cube, Vec2(200.f, 200.0f), Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -44,7 +44,7 @@ bool Player::Initialize(Vec2& pos)
 	this->taskName = "Player";
 	__super::Init(this->taskName);
 	//オブジェクトの初期化
-	this->CreateObject(Cube, pos, Vec2(80.0f, 80.f), 0.0f);
+	this->CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
