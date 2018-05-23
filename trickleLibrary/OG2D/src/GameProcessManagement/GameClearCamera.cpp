@@ -80,10 +80,6 @@ void GameClearCamera::CameraMove()
 			}
 		}
 	}
-	if (OGge->in->key.down(Input::KeyBoard::S))
-	{
-		std::cout << cameraPos.x << "   " << cameraPos.y << std::endl;
-	}
 }
 void GameClearCamera::SetCameraSize()
 {

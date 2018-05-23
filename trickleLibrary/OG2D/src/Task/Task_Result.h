@@ -37,6 +37,9 @@ private:
 								//結果の際に必要なポインタ　または　ファイルの読み込む
 	const char* TimeFilePath = "./data/Result/Result.dat";
 	Texture image;
+	const Box2D backSrc = { 0,0,1280,720 };
+	Texture maptile;
+	const Box2D maptileSrc = { 0,0,256,256 };
 	//------------------
 	//固定化されている処理
 	//------------------
