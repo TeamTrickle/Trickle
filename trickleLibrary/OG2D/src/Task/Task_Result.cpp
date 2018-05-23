@@ -94,6 +94,8 @@ bool Result::Finalize()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		image.Finalize();
+		maptile.Finalize();
+
 		auto player = OGge->GetTasks<ResultPlayer>("ResultPlayer");
 		auto ster = OGge->GetTasks<FlagUI>("Ster");
 		auto clear = OGge->GetTasks<ClearUI>("ClearUI");
