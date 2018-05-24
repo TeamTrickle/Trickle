@@ -106,7 +106,7 @@ bool Game::Initialize()
 			//map生成
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
 			//加熱器生成
-			auto kanetuki = Kanetuki::Create(Vec2(64 * 12, 64 * 10), Vec2(64, 64));
+			auto kanetuki = Kanetuki::Create(Vec2(64 * 12, 64 * 10));
 			//バケツ生成
 			for (int i = 0; i < 1; ++i)
 			{
@@ -131,7 +131,7 @@ bool Game::Initialize()
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial4.csv");
 		//加熱器生成
-		auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64), Vec2(64, 64));
+		auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64));
 		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -140,7 +140,7 @@ bool Game::Initialize()
 		//製氷機生成
 		for (int i = 0; i < 2; ++i)
 		{
-			auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64), Vec2(64, 64));
+			auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64));
 		}
 	}
 	break;
@@ -149,15 +149,19 @@ bool Game::Initialize()
 		//map生成
 		auto mapload = Map::Create((std::string)"stage1.csv");
 		//加熱器生成
-		auto kanetuki = Kanetuki::Create(Vec2(64 * 18, 64 * 16), Vec2(64 * 2, 64 * 2));
+		for (int i = 0; i < 2; ++i)
+		{
+			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16));
+		}
 		for (int i = 0; i < 2; ++i)
 		{
 			//製氷機生成
-			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7), Vec2(64, 64));
+			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7));
 			//扇風機生成
-			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
+			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT);
 			fan->SetTexture(&this->fanTex);
 		}
+		auto swith = Switch::Create(Vec2(64 * 18,64 * 13),OGge->GetTask<Player>("player"),true);
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
 		{
