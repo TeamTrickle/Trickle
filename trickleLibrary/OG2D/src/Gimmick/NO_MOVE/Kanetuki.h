@@ -46,5 +46,4 @@ public:
 	static Kanetuki::SP Create(Vec2& pos, bool = true);
 	static Kanetuki::SP Create(Vec2& pos, std::shared_ptr<Switch>& swith, bool = true);
 public:
-	void SetScale(Vec2&);
 };
