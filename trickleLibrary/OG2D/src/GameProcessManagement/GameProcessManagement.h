@@ -42,7 +42,7 @@ public:
 	void File_Writing();				 //フレームを書きこむ
 private:
 	bool gameclear_flag;                 //様々なフラグを格納する
-	//std::vector<GameObject*>goals;     //ゴール判定を取るVector
+	bool pause_flag;					 //ポーズ画面からタイトルへ戻れされる場合の対策
 	Timer::SP timer;                     //タイマーのセットをする
 
 	const char* TimeFilePath = "./data/Result/Result.dat";

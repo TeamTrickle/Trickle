@@ -1,6 +1,5 @@
 #include "GameProcessManagement.h"
 using namespace std;
-
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Goal\Goal.h"
 #include "Task\Task_Result.h"
@@ -16,6 +15,7 @@ bool GameProcessManagement::Initialize()
 	auto gameClearcamera = GameClearCamera::Create();
 
 	gameclear_flag = false;                 //初期値はfalseにしておく
+	pause_flag = false;
 	timer = Timer::Create();
 	timer->Start();							//タイマーをスタートさせる
 
@@ -56,18 +56,18 @@ bool GameProcessManagement::Finalize()
 	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		
+		if (gameclear_flag)
+		{
+			if (!pause_flag)
+			{
+				//順番が違うとリザルト画面の表示ができません
+				auto result = Result::Create();
+				pause_flag = true;
+			}
+		}
 	}
 	return true;
 }
-//void GameProcessManagement::Set_Goal(GameObject* goal)
-//{
-//	if (goal->objectTag != "Goal")           //オブジェクトタグの確認をする
-//	{
-//		return;
-//	}
-//	goals.push_back(goal);                   //push.backをする
-//}
 void GameProcessManagement::Goal_Check()
 {
 	auto goal = OGge->GetTask<Goal>("Goal");

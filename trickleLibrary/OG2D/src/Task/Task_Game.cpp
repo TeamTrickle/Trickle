@@ -30,7 +30,7 @@ Game::~Game()
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto nextTask = Result::Create(true);
+		
 	}
 }
 
