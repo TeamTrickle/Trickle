@@ -12,6 +12,7 @@ private:
 	int KillCount;							//削除するかどうかの判断用
 	std::string taskName;					//タスクに名をつける
 	float order;							//描画順番
+	bool isPause;							//呼ばれる更新分岐
 public:
 	TaskObject();
 	bool Init(std::string&);				//初期化処理
@@ -28,5 +29,7 @@ public:
 	void SetDrawOrder(float);				//描画順を登録する
 	float GetDrawOrder() const;				//描画順を返す
 	std::string GetTaskName() const;		//タスク名を返す
+	bool GetPause() const;
+	void SetPause(const bool);
 private:
 };

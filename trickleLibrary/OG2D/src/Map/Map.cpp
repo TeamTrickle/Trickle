@@ -163,9 +163,12 @@ void Map::Render2D()
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
-			draw.OffsetSize();
-			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+			if (this->_arr[y][x] != 0)
+			{
+				Box2D draw(this->hitBase[y][x].position, this->DrawSize);
+				draw.OffsetSize();
+				mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+			}
 		}
 	}
 }

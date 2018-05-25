@@ -4,11 +4,13 @@
 
 class Chara : public GameObject, public TaskObject
 {
+public:
 	enum Direction						//向きを管理
 	{
 		LEFT,
 		RIGHT,
 	};
+private:
 	Texture Image;
 	Vec2 move;
 	const float MOVE_SPEED;								//移動スピード
@@ -23,6 +25,7 @@ class Chara : public GameObject, public TaskObject
 	bool isCollision;
 	int MoveCnt;
 	__int8 isCollisionNow;
+	bool isAutoOff;
 public:
 	Chara(std::string&, Vec2&);
 	virtual ~Chara();
@@ -39,4 +42,7 @@ public:
 	void IsCollisionCheck();
 	bool CollisionNumCheck(__int8);
 	void MoveReset();
+	void SetDirection(const Direction&);
+	void SetAutoFlag(const bool);
+	Vec2 GetMove() const;
 };

@@ -18,6 +18,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->MoveCnt = 0;
 	this->Radius = Vec2(1.0f, 0.9f);
 	this->isCollisionNow = -1;
+	this->isAutoOff = false;
 }
 Chara::~Chara()
 {
@@ -32,7 +33,7 @@ void Chara::UpDate()
 			this->isCollisionNow++;
 		}
 	}
-	if (this->isAuto)
+	if (this->isAuto && !this->isAutoOff)
 	{
 		this->AutoMove();
 	}
@@ -235,6 +236,18 @@ bool Chara::CollisionNumCheck(__int8 num)
 void Chara::MoveReset()
 {
 	this->move = { 0,0 };
+}
+void Chara::SetDirection(const Direction& set)
+{
+	this->direction = set;
+}
+void Chara::SetAutoFlag(const bool flag)
+{
+	this->isAutoOff = flag;
+}
+Vec2 Chara::GetMove() const
+{
+	return this->move;
 }
 Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 {
