@@ -188,11 +188,12 @@ bool Map::MapHitCheck(GameObject &p)
 			//マップ番号０以外に当たったらTRUEを返す
 			if (this->_arr[y][x] != 0 && 
 				this->_arr[y][x] != 10 && 
+				this->_arr[y][x] != 11 &&
 				this->_arr[y][x] != 12 && 
 				this->_arr[y][x] != 13 &&
+				this->_arr[y][x] != 22 /*&& 
 				this->_arr[y][x] != 21 && 
-				this->_arr[y][x] != 22 && 
-				this->_arr[y][x] != 20) {
+				this->_arr[y][x] != 20*/) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;

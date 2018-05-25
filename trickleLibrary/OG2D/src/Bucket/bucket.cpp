@@ -153,16 +153,27 @@ void Bucket::CheckMove(Vec2 &e_)
 }
 
 bool Bucket::isObjectCollided() {
+	bool hitMap = false;
+	bool hitBlock = false;
 	auto map = OGge->GetTask<Map>("map");
-	if (!map) {
-		return false;
-	}
 	auto block = OGge->GetTask<Block>("block");
-	if (!block)
-		return false;
+	if (map) {
+		hitMap = map->MapHitCheck(*this);
+	}
+	if (block) {
+		hitBlock = block->hit(*this);
+	}
+	return hitMap || hitBlock;
 
-	return map->MapHitCheck(*this) ||
-		block->hit(*this);
+	//if (!map) {
+	//	return false;
+	//}
+	//auto block = OGge->GetTask<Block>("block");
+	//if (!block)
+	//	return false;
+
+	//return map->MapHitCheck(*this) ||
+	//	block->hit(*this);
 }
 
 void Bucket::HoldCheck(bool flag)

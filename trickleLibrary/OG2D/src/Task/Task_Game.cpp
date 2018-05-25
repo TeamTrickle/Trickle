@@ -15,6 +15,7 @@
 
 #include "GameProcessManagement\GameClearCamera.h"
 #include "GameProcessManagement\Timer.h"
+#include "Task\Task_Pause.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -38,6 +39,9 @@ Game::~Game()
 //-------------------------------------------------------------------------------------------------
 bool Game::Initialize()
 {
+	//一時停止タスクの生成
+	auto pause = Pause::Create();
+
 	//switchまではそのまま
 	Vec2 bucketpos[2] = {
 		{ 150,250 },
@@ -51,10 +55,18 @@ bool Game::Initialize()
 
 	std::cout << "Game" << std::endl;
 
+	//UI
+	//ui.resize(5);
+	//for (auto ui_ : ui) { ui_ = nullptr; }
+	//uiInfo.resize(5);
+
 	//扇風機画像読み込み
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player2.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
+	//ui生成
+	UImng_.reset(new UImanager());
+	UImng_->Initialize(*MapNum);
 	//マップ初期処理
 	switch (*MapNum)
 	{
@@ -66,12 +78,23 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial1.csv");
-		//ui生成
-		auto uiwalk = UI::Create(Vec2(200, 300), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
-		auto uijump = UI::Create(Vec2(400, 300), Box2D(400, 300, 200, 300), (std::string)"pusha.png", 300, 2);
-		auto uigetbucket = UI::Create(Vec2(1200, 200), Box2D(1150, 200, 100, 200), (std::string)"pushb.png", 300, 2);
-		auto uigetwater = UI::Create(Vec2(100, 200), Box2D(0, 0, 0, 0), (std::string)"arrowdown.png", 300, 1);
-		auto apillwater = UI::Create(Vec2(1600, 200), Box2D(1550, 200, 300, 200), (std::string)"pushx.png", 300, 2);
+		////ui生成
+		//UImng_->Initialize(*MapNum);
+		//uiInfo[0] = { Vec2(6 * 64, 18 * 64), Box2D(200, 300, 200, 300), (std::string)"walkui.png", 300, 4 };
+		//uiInfo[1] = { Vec2(20 * 64,18 * 64),Box2D(1200,300,200,300),(std::string)"pusha.png",300,2 };
+		//uiInfo[2] = { Vec2(25 * 64,16 * 64),Box2D(1500,200,200,300),(std::string)"pushb.png",300,2 };
+		//uiInfo[3] = { Vec2(25 * 64,16 * 64),Box2D(200,200,1000,300),(std::string)"arrowleft.png",500,2 };
+		//uiInfo[4] = { Vec2(64 * 64,18 * 64),Box2D(200,300,1000,300),(std::string)"arrowright.png",500,2 };
+		//for (int i = 0; i < 5; ++i) {
+		//	ui[i] = UI::Create(uiInfo[i], i, &(*UImng_));
+		//}
+		//ui[0] = UI::Create(Vec2(5*64, 19*64), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
+		//ui[0]->setTexture(std::string("walkui.png"));
+		//auto uiwalk = UI::Create(Vec2(200, 300), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
+		//auto uijump = UI::Create(Vec2(400, 300), Box2D(400, 300, 200, 300), (std::string)"pusha.png", 300, 2);
+		//auto uigetbucket = UI::Create(Vec2(1200, 200), Box2D(1150, 200, 100, 200), (std::string)"pushb.png", 300, 2);
+		//auto uigetwater = UI::Create(Vec2(100, 200), Box2D(0, 0, 0, 0), (std::string)"arrowdown.png", 300, 1);
+		//auto apillwater = UI::Create(Vec2(1600, 200), Box2D(1550, 200, 300, 200), (std::string)"pushx.png", 300, 2);
 		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -206,8 +229,8 @@ bool Game::Initialize()
 		//プレイヤーの位置を変更
 	//	player->SetPos(Vec2(200, 400));
 		break;
-		default:
-			break;
+	default:
+		break;
 	}
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
@@ -227,6 +250,16 @@ void Game::UpDate()
 	}
 	//カメラ処理
 	Camera_move();
+
+	UImng_->UpDate();
+	//for (int i = 0; i < ui.size(); ++i) {
+	//	if (ui[i] != nullptr && !ui[i]->active) {
+	//		if (i < ui.size() - 1) {
+	//			if (ui[i + 1] != nullptr) { ui[i]->Kill(); }
+	//			ui[i + 1] = UI::Create(uiInfo[i + 1], i + 1, &(*UImng_));
+	//		}
+	//	}
+	//}
 
 	if (OGge->in->on(Input::in::D2, 0) && OGge->in->on(In::D1))
 	{
@@ -256,7 +289,7 @@ void Game::UpDate()
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
 {
-	
+
 }
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
