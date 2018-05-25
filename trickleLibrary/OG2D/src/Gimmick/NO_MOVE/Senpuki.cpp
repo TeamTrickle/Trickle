@@ -86,14 +86,7 @@ void Fan::UpDate()
 	this->GetFlag();
 	if (GetSwitchFlag())
 	{
-		auto waters = OGge->GetTasks<Water>("water");
-		if (waters)
-		{
-			for (int i = 0; i < (*waters).size(); ++i)
-			{
-				(*waters)[i]->hit(this->WindHitBase);
-			}
-		}
+		Motion();
 	}
 }
 
@@ -137,12 +130,19 @@ void Fan::SetWindRange(Vec2& b)
 }
 void Fan::Motion()
 {
-	auto water = OGge->GetTask<Water>("water");
+	
+	auto water = OGge->GetTasks<Water>("water");
 	if (water)
 	{
-		if (water->GetState() == Water::State::GAS)
+		for (auto id = (*water).begin(); id != (*water).end(); ++id)
 		{
-			water->MovePos(Vec2(strength, 0));
+			if ((*id)->hit(this->WindHitBase))
+			{
+				if ((*id)->GetState() == Water::State::GAS)
+				{
+					(*id)->MovePos(Vec2(this->strength, 0));
+				}
+			}
 		}
 	}
 }

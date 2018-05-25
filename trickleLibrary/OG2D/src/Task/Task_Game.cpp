@@ -146,7 +146,6 @@ bool Game::Initialize()
 			{
 				auto fan = Fan::Create(Vec2(64, 64 * 2), fanrange[0],(i % 2 == 0)?  Fan::Dir::RIGHT: Fan::Dir::LEFT, true);
 				fan->SetTexture(&this->fanTex);
-				//fan->SetWindRange(Vec2(64 * 15, 64));
 			}
 		}
 		break;
