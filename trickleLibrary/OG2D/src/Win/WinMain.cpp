@@ -52,6 +52,7 @@ bool Initialize()
 //------------------
 bool Finalize()
 {
+	OGge->SetDeleteEngine(true);
 	return true;
 }
 //------------------

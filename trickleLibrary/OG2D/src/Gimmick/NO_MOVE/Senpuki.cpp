@@ -18,13 +18,11 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 	dir = d;
 	if (dir == Fan::Dir::LEFT)
 	{
-		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * 8), pos.y), Vec2(64 * r, 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * r), pos.y), Vec2(64 * r, 64.f), 0.0f);
 	}
 	else
 	{
-		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = 3;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
@@ -46,13 +44,11 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
 	dir = d;
 	if (dir == Fan::Dir::LEFT)
 	{
-		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * 8), pos.y), Vec2(64 * r, 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * r), pos.y), Vec2(64 * r, 64.f), 0.0f);
 	}
 	else
 	{
-		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = 3;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
@@ -88,14 +84,14 @@ void Fan::UpDate()
 	//更新時に行う処理を記述
 	//--------------------
 	this->GetFlag();
-	if (switchflag)
+	if (GetSwitchFlag())
 	{
 		auto waters = OGge->GetTasks<Water>("water");
 		if (waters)
 		{
 			for (int i = 0; i < (*waters).size(); ++i)
 			{
-				if ((*waters)[i]->hit(WindHitBase))
+				if (this->WindHitBase.hit((*waters)))
 				{
 					Motion();
 				}

@@ -28,6 +28,7 @@ Game::~Game()
 {
 	//‰ğ•úˆ—‚ÆŸ‚Ìscene‚Ì¶¬
 	this->Finalize();
+	OGge->ChengeTask();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		
@@ -120,9 +121,9 @@ bool Game::Initialize()
 			//î•—‹@¶¬
 			for (int i = 0; i < 1; ++i)
 			{
-				auto fan = Fan::Create(Vec2(64, 64 * 2), fanrange[0], Fan::Dir::RIGHT, true);
+				auto fan = Fan::Create(Vec2(64, 64 * 2), fanrange[0],(i % 2 == 0)?  Fan::Dir::RIGHT: Fan::Dir::LEFT, true);
 				fan->SetTexture(&this->fanTex);
-				fan->SetWindRange(Vec2(64 * 15, 64));
+				//fan->SetWindRange(Vec2(64 * 15, 64));
 			}
 		}
 		break;
