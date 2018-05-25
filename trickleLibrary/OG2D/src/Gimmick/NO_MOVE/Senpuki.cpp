@@ -91,10 +91,10 @@ void Fan::UpDate()
 		{
 			for (int i = 0; i < (*waters).size(); ++i)
 			{
-				if (this->WindHitBase.hit((*waters)))
-				{
-					Motion();
-				}
+				//if (this->WindHitBase.hit((*waters)))
+				//{
+				//	Motion();
+				//}
 			}
 		}
 	}

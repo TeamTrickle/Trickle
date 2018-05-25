@@ -1,8 +1,8 @@
 #pragma once
 //______________________________//
-//|タイトルタスク               |//
-//|履歴：2018/03/       |//
-//|____________________________|//
+//|ポーズタスク                 |//
+//|履歴：2018/05/23     劉韋君　|//
+//|____________________________ |//
 #include "OGSystem\OGsystem.h"
 #include "Map\Map.h"
 
@@ -18,9 +18,8 @@ class Pause :public TaskObject
 	Vec2 stageselectPos;
 	Vec2 cursorPos;
 	Vec2 transparentbackPos;
-
 	int nextTaskCheck;
-	int sex = 0;
+	int selectPos = 0;
 
 public:
 	Pause();
@@ -29,26 +28,14 @@ public:
 	void UpDate();
 	void Render2D();
 	bool Finalize();
-
 	//☆☆☆☆//
-	//追加変数//
-	//☆☆☆☆//
-	Sound sound;
-
-	//ポーズ処理
-	void Pause_Initialize(/*Vec2& npt_*/);
-	void Pause_move();
 	void Pause_draw();
-	//ポーズ
-	enum Select
-	{
-		ToTitle,
-		Stage,
-		Ruselt,
+	void PauseUpDate();
+	enum Select{
+		ToTitle,Stage,Ruselt,
 	};
 	Select select;
 	bool PauseFlg;
-	void PauseUpDate();
 
 	typedef std::shared_ptr<Pause> SP;
 	static SP Create(bool = true);

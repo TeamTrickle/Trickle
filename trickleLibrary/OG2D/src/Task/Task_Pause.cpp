@@ -6,18 +6,17 @@ Pause::Pause()
 {
 	__super::SetDrawOrder(1.f);
 }
-
+//--------------------------------------------------------------------------------------
 Pause::~Pause()
 {
 	this->Finalize();
 }
-
+//--------------------------------------------------------------------------------------
 bool Pause::Initialize()
 {
+	//ポーズ判定
 	PauseFlg = false;
-
-	transparentbackPos = Vec2(0.0f, 0.0f);
-
+	//画像読み込み
 	texCursor.Create((std::string)"Collision.png");
 	texTitle.Create((std::string)"titleTx.png");
 	texRuselt.Create((std::string)"Ruselt.png");
@@ -26,21 +25,66 @@ bool Pause::Initialize()
 
 	this->nextTaskCheck = 0;
 	__super::Init((std::string)"pause");
-	__super::SetDrawOrder(1.f);
+	__super::SetDrawOrder(1.f);		//画像表示順位
 	std::cout << "ポーズ画面初期化" << std::endl;
 	return true;
 }
-
+//--------------------------------------------------------------------------------------
 void Pause::UpDate()
 {
 	//ポーズへの移動
-	if (OGge->in->key.down(In::G)) { 
+	if (OGge->in->key.down(In::G)) {
 		OGge->SetPause(true);
 			PauseFlg = true;
 	}
 }
-
+//--------------------------------------------------------------------------------------
 void Pause::Render2D()
+{
+	//ポーズ選択しの表示
+	Pause_draw();
+
+}
+//--------------------------------------------------------------------------------------
+bool Pause::Finalize()
+{
+	std::cout << "Pause解放" << std::endl;
+
+	//使用画像の解放
+	texCursor.Finalize();
+	texTitle.Finalize();
+	texRuselt.Finalize();
+	texTransparentBack.Finalize();
+	texStageSelect.Finalize();
+
+	auto gameTask = OGge->GetTask<Game>("game");
+	if (gameTask) gameTask->Kill();
+
+	auto titleTask = OGge->GetTask<Title>("title");
+	if (titleTask) titleTask->Kill();
+
+	if (this->select != Select::Ruselt){
+		auto game = OGge->GetTask<Game>("game");
+		if (game){
+			game->Kill();
+		}
+	}
+	
+	switch (select) {
+	case ToTitle:
+		Title::Create();
+		break;
+	case Stage:
+		StageSelect::Create();
+		break;
+	case Ruselt:
+		break;
+	}
+	return true;
+}
+//--------------------------------------------------------------------------------------
+//ポーズ選択しの表示
+void Pause::Pause_draw()
 {
 	if (PauseFlg == true) {
 		{
@@ -89,143 +133,50 @@ void Pause::Render2D()
 		}
 	}
 }
-
-bool Pause::Finalize()
-{
-	std::cout << "Pause解放" << std::endl;
-
-	//使用画像の解放
-	texCursor.Finalize();
-	texTitle.Finalize();
-	texRuselt.Finalize();
-	texTransparentBack.Finalize();
-	texStageSelect.Finalize();
-
-	//if (this->GetNextTask() && !OGge->GetDeleteEngine())
-	//{
-	//	OGge->ChengeTask();
-	//	switch (sex)
-	//	{
-	//	case Title:
-	//		Title::Create();
-	//		break;
-	//	case StageSelect:
-	//	{
-	//		StageSelect::Create();
-	//	}
-	//	break;
-	//	//case Pause:
-	//	//{
-	//	//	auto option = Option::Create();
-	//	//}
-	//	//break;
-	//	default:
-	//		break;
-	//	}
-	//}
-
-	auto gameTask = OGge->GetTask<Game>("game");
-	if (gameTask) gameTask->Kill();
-
-	auto titleTask = OGge->GetTask<Title>("title");
-	if (titleTask) titleTask->Kill();
-
-	if (this->select != Select::Ruselt)
-	{
-		auto game = OGge->GetTask<Game>("game");
-		if (game)
-		{
-			game->Kill();
-		}
-	}
-	
-	switch (select) {
-	case ToTitle: {
-		Title::Create();
-		
-	}
-				  //Title::Create();
-				  break;
-	case Stage:
-		StageSelect::Create();
-		break;
-	case Ruselt:
-
-		break;
-	}
-	return true;
-}
-
-//void Pause::CursorMove()
-//{
-//	if (cursorPos.y > startPos.y)
-//	{
-//		if (OGge->in->down(In::CU))
-//		{
-//			cursorPos.y -= 100.0f;
-//		}
-//	}
-//	if (cursorPos.y < closePos.y)
-//	{
-//		if (OGge->in->down(In::CD))
-//		{
-//			cursorPos.y += 100.0f;
-//		}
-//	}
-//
-//	if (cursorPos.y == startPos.y)
-//	{
-//		state = Start;
-//	}
-//	if (cursorPos.y == pausePos.y)
-//	{
-//		state = Pause;
-//	}
-//	if (cursorPos.y == closePos.y)
-//	{
-//		state = Close;
-//	}
-//}
-
+//--------------------------------------------------------------------------------------
 Pause::SP Pause::Create(bool flag_)
 {
 	auto to = Pause::SP(new Pause());
 	if (to)
 	{
 		to->me = to;
-		if (flag_)
-		{
+		if (flag_){
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize())
-		{
+		if (!to->Initialize()){
 			to->Kill();
 		}
 		return to;
 	}
 	return nullptr;
 }
-//
-void Pause::PauseUpDate() 
+//--------------------------------------------------------------------------------------
+void Pause::PauseUpDate()
 { 
-	//this->UpDate();
-	std::cout << "Puase" << std::endl;
+	//デバッグ用
+	//std::cout << "Puase" << std::endl;
 	//ポーズ画面の解除
 	if (OGge->in->key.down(In::G)) {
 		OGge->SetPause(false); 
 			PauseFlg = false;
-			//this->Kill();
 	}
-	//矢印の移動
+
+	//選択肢の表示はカメラによって位置が変更
 	auto NowCameraPos = OGge->camera->GetPos();
+	transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
 	titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
 	ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
 	stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
-
-	if (OGge->in->key.down(In::UP))		sex = (sex <= 0) ? sex : --sex;
-	if (OGge->in->key.down(In::DOWN))	sex = (sex >= 2) ? sex : ++sex;
-	cursorPos = Vec2(NowCameraPos.x + 600.0f, NowCameraPos.y + 50.0f + (100.f * sex));
+	//矢印の移動
+	if (OGge->in->key.down(In::UP)) {
+		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
+	}
+	if (OGge->in->key.down(In::DOWN)) {
+		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
+	}
+	cursorPos = Vec2(NowCameraPos.x + 600.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));
 	select = Select::Ruselt;
+	//選択し
 	if (cursorPos.y == titlePos.y)
 	{
 		select = ToTitle;
@@ -234,10 +185,17 @@ void Pause::PauseUpDate()
 	{
 		select = Stage;
 	}
-	//決定
+	if (cursorPos.y ==ruseltPos.y)
+	{
+		select = Ruselt;
+	}
+	//選択しの決定処理
 	if (OGge->in->down(In::B2))
 	{
 		OGge->SetPause(false);
-		this->Kill();
+		PauseFlg = false;
+		if (select != Ruselt) {
+			this->Kill();
+		}
 	}
 }
