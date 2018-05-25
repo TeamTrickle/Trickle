@@ -31,6 +31,7 @@ public:
 	bool Flag_Judge(Achievement, Achievement, Achievement);
 
 	void Flag_Judge_Clear();
+	int GetFrameTime();
 private:
 	int Flag;
 	int FrameTime;				//Œ‹‰Êƒ^ƒCƒ€‚ðŠi”[‚·‚é

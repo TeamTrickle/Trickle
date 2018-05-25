@@ -159,6 +159,7 @@
     <ClCompile Include="src\Chara\Chara.cpp" />
     <ClCompile Include="src\GameProcessManagement\ClearUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
+    <ClCompile Include="src\GameProcessManagement\FrameTime.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\GameProcessManagement\GoalTimeUI.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="src\Chara\Chara.h" />
     <ClInclude Include="src\GameProcessManagement\ClearUI.h" />
     <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
+    <ClInclude Include="src\GameProcessManagement\FrameTime.h" />
     <ClInclude Include="src\GameProcessManagement\GameClearCamera.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\GameProcessManagement\GoalTimeUI.h" />

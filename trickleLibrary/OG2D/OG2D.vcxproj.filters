@@ -276,6 +276,9 @@
     <ClCompile Include="src\Task\Task_Pause.cpp">
       <Filter>ソースファイル\Task\Pause</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FrameTime.cpp">
+      <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="src\Task\Task_Pause.h">
       <Filter>ソースファイル\Task\Pause</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FrameTime.h">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

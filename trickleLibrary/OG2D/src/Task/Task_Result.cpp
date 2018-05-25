@@ -6,7 +6,7 @@
 #include "GameProcessManagement\ClearUI.h"
 #include "GameProcessManagement\GoalTimeUI.h"
 #include "GameProcessManagement\MissionUI.h"
-
+#include "GameProcessManagement\FrameTime.h"
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -39,6 +39,7 @@ bool Result::Initialize()
 		auto clearUI = ClearUI::Create(Vec2(250,320));
 		auto goaltime = GoalTimeUI::Create(Vec2(210,190));
 		auto mission = MissionUI::Create(Vec2((int)windowsize.x / 2 - 200, 30));
+		auto time = FrameTimeUI::Create(Vec2{},0);
 	}
 	std::cout << "Œ‹‰Ê‰æ–Êˆ—@‰Šú‰»" << std::endl;
 	return true;
@@ -101,6 +102,7 @@ bool Result::Finalize()
 		auto clear = OGge->GetTasks<ClearUI>("ClearUI");
 		auto goaltime = OGge->GetTasks<GoalTimeUI>("GoalTimeUI");
 		auto mission = OGge->GetTasks<MissionUI>("MissionUI");
+		auto frametime = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
 
 		for (auto id = (*ster).begin(); id != (*ster).end(); ++id)
 		{
@@ -119,6 +121,10 @@ bool Result::Finalize()
 			(*id)->Kill();
 		}
 		for (auto id = (*mission).begin(); id != (*mission).end(); ++id)
+		{
+			(*id)->Kill();
+		}
+		for (auto id = (*frametime).begin(); id != (*frametime).end(); ++id)
 		{
 			(*id)->Kill();
 		}
@@ -182,6 +188,10 @@ void Result::Flag_Input(Result::Achievement achive)
 int Result::Get_Flag()
 {
 	return Flag;
+}
+int Result::GetFrameTime()
+{
+	return FrameTime;
 }
 void Result::Flag_Judge_Clear()
 {
