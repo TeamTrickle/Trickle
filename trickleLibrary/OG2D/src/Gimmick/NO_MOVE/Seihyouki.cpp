@@ -3,32 +3,74 @@ using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
-bool Seihyouki::Initialize(Vec2& pos , Vec2& scale)
+bool Seihyouki::Initialize(Vec2& pos)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
-	this->taskName = "Seihyouki";			//検索時に使うための名を登録する
+	this->taskName = "Seihyouki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
-	HitGeneration(pos,scale);
-
+	movetime = 0;
+	hitBace.CreateObject(Cube, pos, Vec2(64, 64), 0);
+	this->GetFlag();
 	cout << "製氷機　初期化" << endl;
 	return true;
+}
+bool Seihyouki::Initialize(Vec2& pos ,std::shared_ptr<Switch> &target)
+{
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "Seihyouki";	//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
+
+	movetime = 0;
+	hitBace.CreateObject(Cube, pos, Vec2(64,64), 0);
+	this->SetSwitchFlag(target);
+	cout << "製氷機　初期化" << endl;
+	return true;
+}
+void Seihyouki::GetFlag()
+{
+	if (target != nullptr)
+	{
+		switchflag = target->GetisON();
+	}
+	else
+	{
+		switchflag = true;
+	}
+}
+void Seihyouki::SetSwitchFlag(std::shared_ptr<Switch>&obj)
+{
+	if (obj != nullptr)
+	{
+		target = obj;
+	}
+}
+bool Seihyouki::GetSwitchFlag()
+{
+	return switchflag;
 }
 void Seihyouki::UpDate()
 {
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto water = OGge->GetTasks<Water>("water");
-	if (water != nullptr)
+	this->GetFlag();
+
+	if (GetSwitchFlag())
 	{
-		for (int i = 0; i < (*water).size(); ++i)
+		auto water = OGge->GetTasks<Water>("water");
+		if (water != nullptr)
 		{
-			if ((*water)[i]->hit(hitBace))
+			for (int i = 0; i < (*water).size(); ++i)
 			{
-				toIce();
+				if ((*water)[i]->hit(hitBace))
+				{
+					toIce();
+				}
 			}
 		}
 	}
@@ -39,9 +81,6 @@ void Seihyouki::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
-	Box2D draw(this->position, this->Scale);
-	draw.OffsetSize();
-	
 }
 
 bool Seihyouki::Finalize()
@@ -49,7 +88,6 @@ bool Seihyouki::Finalize()
 	//-----------------------------------------
 	//このオブジェクトが消滅するときに行う処理を記述
 	//-----------------------------------------
-	this->sampleImage.Finalize();
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
@@ -90,11 +128,6 @@ void Seihyouki::toIce()
 		}
 	}
 }
-void Seihyouki::HitGeneration(Vec2& pos, Vec2& scale)
-{
-	movetime = 0;
-	hitBace.CreateObject(Cube, pos, scale, 0);
-}
 //----------------------------
 //ここから下はclass名のみ変更する
 //ほかは変更しないこと
@@ -109,8 +142,7 @@ Seihyouki::~Seihyouki()
 	this->Finalize();
 	cout << "製氷機　解放" << endl;
 }
-
-Seihyouki::SP Seihyouki::Create(Vec2& pos,Vec2& scale,bool flag_)
+Seihyouki::SP Seihyouki::Create(Vec2& pos,bool flag_)
 {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
 	if (to)
@@ -120,7 +152,25 @@ Seihyouki::SP Seihyouki::Create(Vec2& pos,Vec2& scale,bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos , scale))
+		if (!to->Initialize(pos))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
+Seihyouki::SP Seihyouki::Create(Vec2& pos,std::shared_ptr<Switch>&target,bool flag_)
+{
+	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos , target))
 		{
 			to->Kill();
 		}

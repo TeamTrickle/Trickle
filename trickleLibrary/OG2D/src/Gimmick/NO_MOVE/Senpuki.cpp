@@ -4,7 +4,7 @@ using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "Water\water.h"
-bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
+bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
@@ -16,39 +16,77 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, bool activ)
 	objectTag = "Fan";
 	range = r;
 	dir = d;
-	active = activ;
 	if (dir == Fan::Dir::LEFT)
 	{
-		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * 8), pos.y), Vec2(64 * 8, 64), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * r), pos.y), Vec2(64 * r, 64.f), 0.0f);
 	}
 	else
 	{
-		CreateObject(Cube, pos, Vec2(64.0f, 64.0f), 0.0f);
 		strength = 3;
-		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * 16, 64), 0.0f);
-		//this->WindHitBase.CreateObject(Cube, Vec2(0,0), Vec2(0,0), 0.0f);
+		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
-
+	this->GetFlag();
 	std::cout << "扇風機　初期化" << std::endl;
 	return true;
+}
+bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
+{
+	//-----------------------------
+	//生成時に処理する初期化処理を記述
+	//-----------------------------
+	this->taskName = "Senpuki";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
+
+	position = pos;
+	objectTag = "Fan";
+	range = r;
+	dir = d;
+	if (dir == Fan::Dir::LEFT)
+	{
+		strength = -3;
+		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * r), pos.y), Vec2(64 * r, 64.f), 0.0f);
+	}
+	else
+	{
+		strength = 3;
+		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
+	}
+	this->SetSwitchFlag(obj);
+	std::cout << "扇風機　初期化" << std::endl;
+	return true;
+}
+void Fan::GetFlag()
+{
+	if (target != nullptr)
+	{
+		switchflag = target->GetisON();
+	}
+	else
+	{
+		switchflag = true;
+	}
+}
+void Fan::SetSwitchFlag(std::shared_ptr<Switch>&obj)
+{
+	if (obj != nullptr)
+	{
+		this->target = obj;
+	}
+}
+bool Fan::GetSwitchFlag()
+{
+	return switchflag;
 }
 void Fan::UpDate()
 {
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	auto waters = OGge->GetTasks<Water>("water");
-	if (waters)
+	this->GetFlag();
+	if (GetSwitchFlag())
 	{
-		for (int i = 0; i < (*waters).size(); ++i)
-		{
-			if ((*waters)[i]->hit(WindHitBase))
-			{
-				Motion();
-			}
-		}
+		Motion();
 	}
 }
 
@@ -86,44 +124,24 @@ void Fan::SetTexture(Texture* tex)
 {
 	this->image = tex;
 }
-//void Fan::SetWaterPool(Water* w)
-//{
-//	this->water.push_back(w);
-//}
-//bool Fan::DeleteWaterPool(Water* w)
-//{
-//	for (auto id = this->water.begin(); id != this->water.end(); ++id)
-//	{
-//		if ((*id) == w)
-//		{
-//			this->water.erase(id);
-//			return true;
-//		}
-//	}
-//	return false;
-//}
 void Fan::SetWindRange(Vec2& b)
 {
 	this->WindHitBase.Scale = b;
 }
-void Fan::AddSwitch(Switch* swit)
-{
-	switches.push_back(swit);
-}
-void Fan::ChangeState()
-{
-	active = !active;
-}
 void Fan::Motion()
 {
-	auto water = OGge->GetTask<Water>("water");
+	
+	auto water = OGge->GetTasks<Water>("water");
 	if (water)
 	{
-		if (active)
+		for (auto id = (*water).begin(); id != (*water).end(); ++id)
 		{
-			if (water->GetState() == Water::State::GAS)
+			if ((*id)->hit(this->WindHitBase))
 			{
-				water->MovePos(Vec2(strength, 0));
+				if ((*id)->GetState() == Water::State::GAS)
+				{
+					(*id)->MovePos(Vec2(this->strength, 0));
+				}
 			}
 		}
 	}
@@ -141,8 +159,7 @@ Fan::~Fan()
 	this->Finalize();
 	std::cout << "扇風機　解放" << std::endl;
 }
-
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool activ, bool flag_)
+Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool flag_)
 {
 	Fan::SP to = Fan::SP(new Fan());
 	if (to)
@@ -152,7 +169,26 @@ Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool activ, bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos,r,d,activ))
+		if (!to->Initialize(pos, r, d))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
+
+Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&target, bool flag_)
+{
+	Fan::SP to = Fan::SP(new Fan());
+	if (to)
+	{
+		to->me = to;
+		if (flag_)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos,r,d,target))
 		{
 			to->Kill();
 		}

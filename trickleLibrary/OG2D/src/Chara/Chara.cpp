@@ -19,6 +19,10 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->Radius = Vec2(1.0f, 0.9f);
 	this->isCollisionNow = -1;
 	this->isAutoOff = false;
+<<<<<<< HEAD
+=======
+	this->isAutoMode = false;
+>>>>>>> develop
 }
 Chara::~Chara()
 {
@@ -26,40 +30,60 @@ Chara::~Chara()
 }
 void Chara::UpDate()
 {
-	if (this->isCollisionNow == 0)
+	//std::cout << "pos_x:" << this->position.x << "pos_y:" << this->position.y << "move_x:" << this->move.x << "move_y:" << this->move.y << std::endl;
+	//位置に応じて当たり判定の設定を変更する処理
+	//仕様が変わったため不要となりました。
+	/*if (this->isCollisionNow == 0)
 	{
 		if (this->position.y > 1200.f)
 		{
 			this->isCollisionNow++;
 		}
+<<<<<<< HEAD
 	}
+=======
+	}*/
+	//オート機能を切っていない状態でオート動作をするならば
+>>>>>>> develop
 	if (this->isAuto && !this->isAutoOff)
 	{
+		//キャラに登録されているオート移動を行う
+		//ここで実際は外部ファイルより情報を得てオート操作をさせたい
 		this->AutoMove();
 	}
 	else
 	{
+		//そうでない時
+		//移動値がないならカウントを増やす
 		if (this->move.x == 0 && this->move.y == 0)
 		{
-			this->MoveCnt++;
+			if (this->MoveCnt <= 10)
+			{
+				this->MoveCnt++;
+			}
 		}
 		else
 		{
+			//移動している間はカウントを0にしておく
 			this->MoveCnt = 0;
 		}
 	}
+	//カウントが10を超えているならばオート移動へ移行する
 	if (this->MoveCnt > 10)
 	{
 		this->isAuto = true;
 	}
+	//左右移動の減算処理と重力計算
 	this->Friction(this->move);
+	//移動値から実際の移動を行う
 	this->MoveCheck(this->move);
 }
 void Chara::Render2D()
 {
+	//描画位置とサイズを指定
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-
+	//アニメーション用
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };
 
 	if (this->AnimCnt < 30) {
@@ -71,7 +95,8 @@ void Chara::Render2D()
 
 	Box2D src(idle[this->AnimCnt / 3] * 550, 0, 550, 550);
 	src.OffsetSize();
-	//左向きなら画像を逆にする
+	//移動値に合わせて向きを合わせる
+	//おそらくここでやるべきではないので後日修正します
 	if (this->move.x > 0)
 	{
 		this->direction = Direction::RIGHT;
@@ -80,15 +105,18 @@ void Chara::Render2D()
 	{
 		this->direction = Direction::LEFT;
 	}
+	//左向きなら画像を逆にする
 	if (direction == Direction::RIGHT) {
 		int k = src.w;
 		src.w = src.x;
 		src.x = k;
 	}
+	//描画
 	this->Image.Draw(draw, src);
 }
 void Chara::Friction(Vec2& est)
 {
+	//横移動の減算処理
 	if (est.x > 0)
 	{
 		est.x = std::max(est.x - this->FIN_SPEED, 0.f);
@@ -97,12 +125,15 @@ void Chara::Friction(Vec2& est)
 	{
 		est.x = std::min(est.x + this->FIN_SPEED, 0.f);
 	}
+	//足元に地面がない時、または移動値がマイナスの時
 	if (!this->FootCheck() || est.y < 0)
 	{
+		//重力計算
 		est.y = std::min(est.y + this->GRAVITY, this->MAX_FALL);
 	}
 	else
 	{
+		//移動値を0にする
 		est.y = 0.0f;
 	}
 }
@@ -127,6 +158,7 @@ void Chara::MoveCheck(Vec2 est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
+		//当たり判定を行うカウントでありマップが存在しており当たり判定を行う設定の場合
 		if (this->isCollisionNow != 0)
 		{
 			if (map && this->isCollision)
@@ -157,6 +189,7 @@ void Chara::MoveCheck(Vec2 est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
+		//当たり判定を行うカウントでありマップが存在しており当たり判定を行う設定の場合
 		if (this->isCollisionNow != 0)
 		{
 			if (map && this->isCollision)
@@ -173,6 +206,7 @@ void Chara::MoveCheck(Vec2 est)
 }
 bool Chara::FootCheck()
 {
+	//当たり判定を行うカウントでないならfalseを返す
 	if (this->isCollisionNow == 0)
 	{
 		return false;
@@ -197,27 +231,34 @@ bool Chara::Jump()
 }
 void Chara::AutoMove()
 {
-	if (this->position.x > 1100 || this->position.x < 200)
+	if(this->isAutoMode)
 	{
-		if (this->direction == Direction::LEFT)
-		{
-			this->direction = Direction::RIGHT;
-		}
-		else
-		{
-			this->direction = Direction::LEFT;
-		}
-	}
-	if (this->direction == Direction::LEFT)
-	{
-		this->move.x = -5.0f;
+		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(15), this->startPos.x, this->EndPos.x, 15) - this->position.x;
+		this->isAutoMode = this->easing_x.isplay();
+		this->isAutoOff = !this->easing_x.isplay();
 	}
 	else
 	{
-		this->move.x = 5.0f;
+		if (this->position.x > 1100 || this->position.x < 200)
+		{
+			if (this->direction == Direction::LEFT)
+			{
+				this->direction = Direction::RIGHT;
+			}
+			else
+			{
+				this->direction = Direction::LEFT;
+			}
+		}
+		if (this->direction == Direction::LEFT)
+		{
+			this->move.x = -5.0f;
+		}
+		else
+		{
+			this->move.x = 5.0f;
+		}
 	}
-
-
 }
 void Chara::ManualMove(Vec2& est)
 {
@@ -249,6 +290,33 @@ Vec2 Chara::GetMove() const
 {
 	return this->move;
 }
+<<<<<<< HEAD
+=======
+void Chara::SetAutoMode(const bool flag)
+{
+	this->isAutoMode = flag;
+}
+void Chara::Set(const Vec2& start_, const Vec2& end_)
+{
+	//開始位置を登録
+	this->startPos = start_;
+	//終了位置を登録
+	this->EndPos = end_;
+	//終了位置からの移動値に上書き
+	this->EndPos -= this->startPos;
+	this->easing_x.ResetTime();
+	this->SetAutoMode(true);
+	this->SetAutoFlag(false);
+}
+bool Chara::isAutoPlay() const
+{
+	return this->easing_x.isplay();
+}
+Chara::Direction Chara::nowDirection() const
+{
+	return this->direction;
+}
+>>>>>>> develop
 Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 {
 	Chara::SP to = Chara::SP(new Chara(path, pos));

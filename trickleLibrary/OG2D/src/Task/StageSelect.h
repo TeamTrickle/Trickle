@@ -36,7 +36,11 @@ class StageSelect : public TaskObject
 
 	Texture Testdoor;
 
+<<<<<<< HEAD
 	GameObject testObj;
+=======
+	GameObject* gate[3];
+>>>>>>> develop
 
 	Vec2 cursorPos;
 	Vec2 tutorialPos;
@@ -62,6 +66,7 @@ class StageSelect : public TaskObject
 	void From3();
 	void From4();
 	int timeCnt;
+	int nowPos;
 	void ModeCheck();
 	Easing camera_x;
 	Easing camera_y;

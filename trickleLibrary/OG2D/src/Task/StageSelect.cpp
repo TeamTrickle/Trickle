@@ -9,11 +9,19 @@ StageSelect::StageSelect()
 	this->mode = Non;
 	this->preMode = Non;
 	this->timeCnt = 0;
+<<<<<<< HEAD
+=======
+	this->nowPos = -1;
+>>>>>>> develop
 }
 
 StageSelect::~StageSelect()
 {
 	this->Finalize();
+	for (int i = 2; i >= 0; --i)
+	{
+		delete this->gate[i];
+	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		if (state == State::ToTitle)
@@ -65,6 +73,7 @@ bool StageSelect::Initialize()
 	this->mode = Mode::from1;
 	//テスト処理
 	OGge->camera->SetSize(Vec2(1920, 1080));
+<<<<<<< HEAD
 	this->testObj.CreateObject(Cube, Vec2(0, 0), Vec2(128, 128), 0.0f);
 	//停止位置の設定
 	this->Entrance.emplace_back(LEFT, 950 - 100 - chara->Scale.x);
@@ -73,6 +82,15 @@ bool StageSelect::Initialize()
 	this->Entrance.emplace_back(RIGTH, 1250 + 100);
 	this->Entrance.emplace_back(LEFT, 1650 - 100 - chara->Scale.x);
 	this->Entrance.emplace_back(RIGTH, 1650 + 100);
+=======
+	//停止位置の設定
+	for (int i = 1; i <= 3; ++i)
+	{
+		this->gate[i - 1] = new GameObject(Cube, Vec2(400 * i + 450, 640), Vec2(128, 256), 0.0f);
+		this->Entrance.emplace_back(LEFT, gate[i / 2]->position.x - chara->Scale.x);
+		this->Entrance.emplace_back(RIGTH, gate[i / 2]->position.x + gate[i / 2]->Scale.x);
+	}
+>>>>>>> develop
 	return true;
 }
 
@@ -201,13 +219,20 @@ void StageSelect::Render2D()
 		texToTitle.Draw(draw, src);
 	}
 	//ドア
+<<<<<<< HEAD
 	for (int i = 1; i <= 3; ++i)
 	{
 		Box2D draw(400 * i + 450, 640, 128, 256);
+=======
+	for (int i = 0; i < 3; ++i)
+	{
+		Box2D draw(this->gate[i]->position,this->gate[i]->Scale);
+>>>>>>> develop
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, this->Testdoor.GetTextureSize().x, this->Testdoor.GetTextureSize().y);
 		this->Testdoor.Draw(draw, src);
 	}
+<<<<<<< HEAD
 	//テスト
 	{
 		Box2D draw(this->testObj.position, this->testObj.Scale);
@@ -218,6 +243,8 @@ void StageSelect::Render2D()
 	}
 
 
+=======
+>>>>>>> develop
 }
 
 bool StageSelect::Finalize()
@@ -302,6 +329,11 @@ void StageSelect::From1()
 					//次へ移動
 					this->mode = Mode::from2;
 					this->camera_anim.Set(OGge->camera->GetPos(),Vec2(OGge->camera->GetPos().x + 200,OGge->camera->GetPos().y));
+<<<<<<< HEAD
+=======
+					this->nowPos = 0;
+					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
+>>>>>>> develop
 				}
 			}
 			else
@@ -321,7 +353,11 @@ void StageSelect::From2()
 	if (chara)
 	{
 		//強制移動をさせる
+<<<<<<< HEAD
 		chara->ManualMove(Vec2(3.0f, 0.0f));
+=======
+		//chara->ManualMove(Vec2(3.0f, 0.0f));
+>>>>>>> develop
 	}
 	//カメラの位置を送る
 	OGge->camera->SetPos(this->camera_anim.Move());
@@ -339,15 +375,94 @@ void StageSelect::From3()
 	{
 		//キャラクターが動いていない時だけ入力を行う
 		//そうでないならキャラクターの移動を目的地まで移動させる
+<<<<<<< HEAD
 		if (!chara->GetMove().x && !chara->GetMove().y)
 		{
 			
+=======
+		if (!chara->isAutoPlay())
+		{
+			if (OGge->in->down(In::CL))
+			{
+				if (chara->nowDirection() == Chara::Direction::LEFT)
+				{
+					if (this->nowPos > 1)
+					{
+						this->nowPos -= 2;
+					}
+				}
+				else
+				{
+					if (this->nowPos > 0)
+					{
+						this->nowPos -= 1;
+					}
+				}
+				chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
+			}
+			if (OGge->in->down(In::CR))
+			{
+				if (chara->nowDirection() == Chara::Direction::RIGHT)
+				{
+					if (this->nowPos < 4)
+					{
+						this->nowPos += 2;
+					}
+				}
+				else
+				{
+					if (this->nowPos < 5)
+					{
+						this->nowPos += 1;
+					}
+				}
+				chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
+
+			}
+			if (OGge->in->key.down(In::ENTER))
+			{
+				switch (this->nowPos)
+				{
+				case 0:
+				case 1:
+					this->state = State::Tutorial;
+					*MapNum = 1;
+					break;
+				case 2:
+				case 3:
+					this->state = State::Stage1;
+					*MapNum = 5;
+					break;
+				case 4:
+				case 5:
+					this->state = State::Stage2;
+					*MapNum = 6;
+					break;
+				default:
+					this->state = State::ToTitle;
+					break;
+				}
+				chara->Set(chara->position, Vec2(this->gate[this->nowPos / 2]->position.x, chara->position.y));
+				this->mode = Mode::from4;
+			}
+>>>>>>> develop
 		}
 	}
 }
 void StageSelect::From4()
 {
-
+	auto chara = OGge->GetTask<Chara>("Chara");
+	if (chara)
+	{
+		if (!chara->isAutoPlay())
+		{
+			this->mode = Mode::End;
+		}
+	}
+	else
+	{
+		this->mode = Mode::End;
+	}
 }
 void StageSelect::ModeCheck()
 {

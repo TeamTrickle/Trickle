@@ -20,12 +20,25 @@ private:
 	const float FIN_SPEED;								//摩擦
 	Direction direction;										//向きを格納する変数
 	std::string taskName;										//名
+<<<<<<< HEAD
 	int AnimCnt;
 	bool isAuto;
 	bool isCollision;
 	int MoveCnt;
 	__int8 isCollisionNow;
 	bool isAutoOff;
+=======
+	int AnimCnt;			//アニメーションカウント
+	bool isAuto;			//オート状態有無
+	bool isCollision;		//当たり判定有無
+	int MoveCnt;			//移動カウント
+	__int8 isCollisionNow;	//当たり判定状態カウント
+	bool isAutoOff;			//オートモード移行有無
+	bool isAutoMode;		//オートモードでの移動指定有無
+	Vec2 startPos;			//オートモード時の開始地点
+	Vec2 EndPos;			//オートモード時の終了地点
+	Easing easing_x;		//イージング移動値
+>>>>>>> develop
 public:
 	Chara(std::string&, Vec2&);
 	virtual ~Chara();
@@ -44,5 +57,13 @@ public:
 	void MoveReset();
 	void SetDirection(const Direction&);
 	void SetAutoFlag(const bool);
+<<<<<<< HEAD
 	Vec2 GetMove() const;
+=======
+	void SetAutoMode(const bool);
+	Vec2 GetMove() const;
+	void Set(const Vec2&, const Vec2&);
+	bool isAutoPlay() const;
+	Direction nowDirection() const;
+>>>>>>> develop
 };
