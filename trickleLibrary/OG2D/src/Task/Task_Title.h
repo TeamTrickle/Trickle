@@ -56,7 +56,6 @@ class Title:public TaskObject
 	Animation cameraPos;
 	Animation cameraSize;
 
-	GameObject testObj;
 	//Texture test;
 	CameraManager cm;
 	GameObject Logo;

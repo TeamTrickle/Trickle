@@ -4,11 +4,13 @@
 
 class Chara : public GameObject, public TaskObject
 {
+public:
 	enum Direction						//向きを管理
 	{
 		LEFT,
 		RIGHT,
 	};
+private:
 	Texture Image;
 	Vec2 move;
 	const float MOVE_SPEED;								//移動スピード
@@ -18,11 +20,16 @@ class Chara : public GameObject, public TaskObject
 	const float FIN_SPEED;								//摩擦
 	Direction direction;										//向きを格納する変数
 	std::string taskName;										//名
-	int AnimCnt;
-	bool isAuto;
-	bool isCollision;
-	int MoveCnt;
-	__int8 isCollisionNow;
+	int AnimCnt;			//アニメーションカウント
+	bool isAuto;			//オート状態有無
+	bool isCollision;		//当たり判定有無
+	int MoveCnt;			//移動カウント
+	__int8 isCollisionNow;	//当たり判定状態カウント
+	bool isAutoOff;			//オートモード移行有無
+	bool isAutoMode;		//オートモードでの移動指定有無
+	Vec2 startPos;			//オートモード時の開始地点
+	Vec2 EndPos;			//オートモード時の終了地点
+	Easing easing_x;		//イージング移動値
 public:
 	Chara(std::string&, Vec2&);
 	virtual ~Chara();
@@ -39,4 +46,11 @@ public:
 	void IsCollisionCheck();
 	bool CollisionNumCheck(__int8);
 	void MoveReset();
+	void SetDirection(const Direction&);
+	void SetAutoFlag(const bool);
+	void SetAutoMode(const bool);
+	Vec2 GetMove() const;
+	void Set(const Vec2&, const Vec2&);
+	bool isAutoPlay() const;
+	Direction nowDirection() const;
 };

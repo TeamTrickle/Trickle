@@ -5,6 +5,7 @@ TaskObject::TaskObject()
 	this->KillCount = 0;
 	this->NextTask = true;
 	this->order = 0.0f;
+	this->isPause = false;
 }
 bool TaskObject::Init(std::string& name_)
 {
@@ -13,7 +14,14 @@ bool TaskObject::Init(std::string& name_)
 }
 void TaskObject::T_UpDate()
 {
-	UpDate();
+	if (!this->isPause)
+	{
+		UpDate();
+	}
+	else
+	{
+		PauseUpDate();
+	}
 }
 void TaskObject::T_Render()
 {
@@ -70,4 +78,12 @@ void TaskObject::Render2D()
 void TaskObject::PauseUpDate()
 {
 
+}
+void TaskObject::SetPause(const bool flag)
+{
+	this->isPause = flag;
+}
+bool TaskObject::GetPause() const
+{
+	return this->isPause;
 }
