@@ -88,7 +88,6 @@ public:
 		const TaskObject::SP&);
 	bool GetDeleteEngine();		//エンジン終了を返す
 	void SetDeleteEngine(bool);	//エンジン終了登録
-	//template <class T>std::shared_ptr<T> GetTask(const std::string&);
 	//タスク検索(最初の同名のタスクを返す)
 	template <class T> std::shared_ptr<T> GetTask(const std::string& taskName)
 	{
@@ -102,12 +101,21 @@ public:
 				}
 			}
 		}
+		for (auto id = this->addTaskObjects.begin(); id != this->addTaskObjects.end(); ++id)
+		{
+			if ((*id))
+			{
+				if ((*id)->GetTaskName() == taskName)
+				{
+					return std::static_pointer_cast<T>(*id);
+				}
+			}
+		}
 		return nullptr;
 	}
 	template <class T> std::shared_ptr<std::vector<std::shared_ptr<T>>> GetTasks(const std::string& taskName)
 	{
 		std::shared_ptr<std::vector<std::shared_ptr<T>>> w = std::shared_ptr<std::vector<std::shared_ptr<T>>>(new std::vector<std::shared_ptr<T>> ());
-		bool flag = false;
 		for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
 		{
 			if ((*id).second)
@@ -115,13 +123,18 @@ public:
 				if ((*id).second->GetTaskName() == taskName)
 				{
 					w->push_back(std::static_pointer_cast<T>((*id).second));
-					flag = true;
 				}
 			}
 		}
-		if (!flag)
+		for (auto id = this->addTaskObjects.begin(); id != this->addTaskObjects.end(); ++id)
 		{
-			//w = nullptr;
+			if ((*id))
+			{
+				if ((*id)->GetTaskName() == taskName)
+				{
+					w->push_back(std::static_pointer_cast<T>((*id)));
+				}
+			}
 		}
 		return w;
 	}
