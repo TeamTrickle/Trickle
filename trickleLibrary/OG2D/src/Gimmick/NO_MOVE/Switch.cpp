@@ -2,26 +2,32 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-bool Switch::Initialize(Vec2& pos , std::shared_ptr<Player>&target,bool is_on)
+bool Switch::Initialize(Vec2& pos , std::shared_ptr<Player>target,bool is_on)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
 	this->taskName = "Switch";		//検索時に使うための名を登録する
 
+	if (target)
+	{
+		std::cout << "Playerを検知" << std::endl;
+	}
+	else
+	{
+		std::cout << "Player代入失敗" << std::endl;
+	}
+
 	//タグ検索を検知可能にする
 	this->Init(taskName);			//TaskObject内の処理を行う
-
-									//座標の設定
 	//当たり判定の実装
 	CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
-	//オブジェクトタグの追加
-	objectTag = "Switch";
 	//スイッチの切り替えフラグをONにする
 	this->is_on = is_on;
 	//スイッチに対応する
 	SetTarget(target);
 
+	image.Create((std::string)"switch.png");
 	cout << "スイッチ　初期化" << endl;
 	return true;
 }
@@ -55,6 +61,11 @@ void Switch::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
+	Box2D draw(position, Scale);
+	draw.OffsetSize();
+	Box2D src = this->Src;
+	src.OffsetSize();
+	image.Draw(draw, src);
 }
 
 bool Switch::Finalize()
@@ -80,7 +91,7 @@ void Switch::ON_OFF()
 	//trueとfalseの切り替えフラグを切り替える
 	is_on = !is_on;
 }
-void Switch::SetTarget(std::shared_ptr<Player>&target)
+void Switch::SetTarget(Player::SP target)
 {
 	if (target != nullptr)
 	{
@@ -97,7 +108,7 @@ Switch::~Switch()
 	this->Finalize();
 	cout << "スイッチ　解放" << endl;
 }
-Switch::SP Switch::Create(Vec2& pos, std::shared_ptr<Player> &target ,bool is_on ,bool flag_)
+Switch::SP Switch::Create(Vec2& pos, Player::SP target ,bool is_on ,bool flag_)
 {
 	Switch::SP to = Switch::SP(new Switch());
 	if (to)
