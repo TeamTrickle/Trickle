@@ -23,36 +23,36 @@ class Fan : public GameObject, public TaskObject
 	//各自で制作するときに使用するものはここに記述する
 	//-------------------------------------------
 public:
-	std::vector<Switch*> switches;		//自身の稼働にかかわっているスイッチ一覧
 
 	enum Dir
 	{
 		LEFT,
 		RIGHT,
 	};
-	void AddSwitch(Switch* swit);
-	void ChangeState();
 	void SetTexture(Texture*);
 	void SetWindRange(Vec2&);
-
-	//WaterのVector情報のアドレス値を受け取る
-	//void SetWaterPool(Water*);
-	//bool DeleteWaterPool(Water*);
-	void Motion();
 private:
 	//------------------
 	//固定化されている処理
 	//------------------
+	void SetSwitchFlag(std::shared_ptr<Switch>&);
+	bool GetSwitchFlag();
+	void GetFlag();
+	void Motion();
 public:
+	std::shared_ptr<Switch> target;
 	std::string taskName;
+	bool switchflag;
 	virtual ~Fan();
 	typedef std::shared_ptr<Fan> SP;
-	static Fan::SP Create( Vec2 pos, float r, Fan::Dir d, bool activ,bool = true);
+	static Fan::SP Create(Vec2 pos, float r, Fan::Dir d, bool = true);
+	static Fan::SP Create( Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>& target,bool = true);
 	//-------------
 	//変更しないこと
 	//-------------
 	Fan();
-	bool Initialize(Vec2 pos, float r, Dir d, bool activ);
+	bool Initialize(Vec2 pos, float r, Dir d);
+	bool Initialize(Vec2 pos, float r, Dir d,std::shared_ptr<Switch>&target);
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
@@ -61,9 +61,7 @@ private:
 	Texture* image;
 	float range;
 	float movePos;
-	bool active;
 	int strength;
-	//std::vector<Water*>water;
 	GameObject WindHitBase;
 };
 

@@ -123,6 +123,9 @@
     <Filter Include="ソースファイル\Task\UI\Result">
       <UniqueIdentifier>{c23ee883-98a7-4ab2-b51b-deb216f13224}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\Pause">
+      <UniqueIdentifier>{38b8f658-e385-41c3-a075-3e78047634f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -269,6 +272,12 @@
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\MissonUI.cpp">
       <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Pause.cpp">
+      <Filter>ソースファイル\Task\Pause</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameProcessManagement\FrameTime.cpp">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +427,12 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\MissionUI.h">
       <Filter>ソースファイル\Task\UI\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Pause.h">
+      <Filter>ソースファイル\Task\Pause</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameProcessManagement\FrameTime.h">
+      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

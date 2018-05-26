@@ -7,6 +7,7 @@
 #include "OGSystem\Texture\Texture.h"
 #include "OGSystem\OGsystem.h"
 #include <cctype>
+#include <algorithm>
 enum Format
 {
 	csv,

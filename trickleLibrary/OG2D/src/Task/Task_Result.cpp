@@ -6,7 +6,7 @@
 #include "GameProcessManagement\ClearUI.h"
 #include "GameProcessManagement\GoalTimeUI.h"
 #include "GameProcessManagement\MissionUI.h"
-
+#include "GameProcessManagement\FrameTime.h"
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -33,12 +33,17 @@ bool Result::Initialize()
 			auto ster = FlagUI::Create(Vec2(((int)windowsize.x / 2 - 200 ) + 100 * (i + 1), 130), 1 << 0);
 		}
 	}
-	
+	//フレームタイムの桁数を計算する
+	this->outputdigit = this->GetDigitTime();
 	{
 		Vec2 windowsize = OGge->window->GetSize();
 		auto clearUI = ClearUI::Create(Vec2(250,320));
 		auto goaltime = GoalTimeUI::Create(Vec2(210,190));
 		auto mission = MissionUI::Create(Vec2((int)windowsize.x / 2 - 200, 30));
+		for (int i = 0; i < outputdigit; ++i)
+		{
+			auto time = FrameTimeUI::Create(Vec2(635 + i * 64, 210), i, FrameTime);
+		}
 	}
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
@@ -101,6 +106,7 @@ bool Result::Finalize()
 		auto clear = OGge->GetTasks<ClearUI>("ClearUI");
 		auto goaltime = OGge->GetTasks<GoalTimeUI>("GoalTimeUI");
 		auto mission = OGge->GetTasks<MissionUI>("MissionUI");
+		auto frametime = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
 
 		for (auto id = (*ster).begin(); id != (*ster).end(); ++id)
 		{
@@ -119,6 +125,10 @@ bool Result::Finalize()
 			(*id)->Kill();
 		}
 		for (auto id = (*mission).begin(); id != (*mission).end(); ++id)
+		{
+			(*id)->Kill();
+		}
+		for (auto id = (*frametime).begin(); id != (*frametime).end(); ++id)
 		{
 			(*id)->Kill();
 		}
@@ -175,6 +185,17 @@ bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2
 	}
 	return false;
 }
+int Result::GetDigitTime()
+{
+	int value = this->FrameTime;
+	int Count = 0;
+	while (value != 0)
+	{
+		value /= 10;	//10を割っていき数字の桁数を計算する
+		++Count;
+	}
+	return Count;
+}
 void Result::Flag_Input(Result::Achievement achive)
 {
 	Flag |= achive;
@@ -182,6 +203,10 @@ void Result::Flag_Input(Result::Achievement achive)
 int Result::Get_Flag()
 {
 	return Flag;
+}
+int Result::GetFrameTime()
+{
+	return FrameTime;
 }
 void Result::Flag_Judge_Clear()
 {

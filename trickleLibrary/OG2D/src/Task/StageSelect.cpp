@@ -67,11 +67,11 @@ void StageSelect::UpDate()
 		switch (state) {
 		case Tutorial:
 			*MapNum = 3;	
-			if (OGge->in->on(In::SL))
+			if (OGge->in->on(In::SL))	//キーボードB
 			{
 				*MapNum = 1;
 			}
-			if (OGge->in->on(In::SR))
+			if (OGge->in->on(In::SR))	//キーボードN
 			{
 				*MapNum = 2;
 			}
