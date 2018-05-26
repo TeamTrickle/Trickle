@@ -4,25 +4,26 @@
 Chara::Chara(std::string& path, Vec2& pos)
 	:MOVE_SPEED(5.f), JUMP_POWER(-5.0f), MAX_FALL(30.f), GRAVITY((9.8f / 60.f / 60.f * 32) * 5), FIN_SPEED(0.5f)
 {
-	this->position = pos;
-	this->Image.Create(path);
-	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);
-	this->taskName = "Chara";
-	__super::Init(this->taskName);
-	__super::SetDrawOrder(1.0f);
-	this->objectTag = this->taskName;
-	this->direction = Direction::LEFT;
-	this->AnimCnt = 0;
-	this->isAuto = true;
-	this->isCollision = true;
-	this->MoveCnt = 0;
-	this->Radius = Vec2(1.0f, 0.9f);
-	this->isCollisionNow = -1;
-	this->isAutoOff = false;
-	this->isAutoMode = false;
+	this->position = pos;	//位置設定
+	this->Image.Create(path);	//画像設定
+	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);	//オブジェクト生成
+	this->taskName = "Chara";	//タスク名決定
+	__super::Init(this->taskName);	//タスク名をオブジェクトにも反映
+	__super::SetDrawOrder(1.0f);	//描画順を登録
+	this->objectTag = this->taskName;	//タグを登録
+	this->direction = Direction::LEFT;	//向きを設定
+	this->AnimCnt = 0;					//アニメーションカウントを初期化
+	this->isAuto = true;				//オート移動設定を初期化
+	this->isCollision = true;			//当たり判定設定初期化
+	this->MoveCnt = 0;					//移動カウント初期化
+	this->Radius = Vec2(1.0f, 0.9f);	//当たり判定を制限
+	this->isCollisionNow = -1;			//当たり判定カウントを初期化
+	this->isAutoOff = false;			//オート移動チェックを初期化
+	this->isAutoMode = false;			//オートモードを初期化
 }
 Chara::~Chara()
 {
+	//画像の解放
 	this->Image.Finalize();
 }
 void Chara::UpDate()
@@ -50,6 +51,7 @@ void Chara::UpDate()
 		//移動値がないならカウントを増やす
 		if (this->move.x == 0 && this->move.y == 0)
 		{
+			//10は超えないように制限しておく
 			if (this->MoveCnt <= 10)
 			{
 				this->MoveCnt++;
@@ -204,6 +206,7 @@ bool Chara::FootCheck()
 	{
 		return false;
 	}
+	//足元判定を生成
 	GameObject foot;
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
@@ -218,12 +221,15 @@ bool Chara::FootCheck()
 }
 bool Chara::Jump()
 {
+	//ジャンプ値を移動値にいれる
 	this->move.y = this->JUMP_POWER;
+	//カウントを増やす(当たり判定を消すもしくは復活させる)
 	this->IsCollisionCheck();
 	return true;
 }
 void Chara::AutoMove()
 {
+	//オートモードがtrueなら設定してある移動を行う
 	if(this->isAutoMode)
 	{
 		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(15), this->startPos.x, this->EndPos.x, 15) - this->position.x;
@@ -232,6 +238,7 @@ void Chara::AutoMove()
 	}
 	else
 	{
+		//そうでなければ元々用意されている移動を行う
 		if (this->position.x > 1100 || this->position.x < 200)
 		{
 			if (this->direction == Direction::LEFT)
@@ -255,36 +262,44 @@ void Chara::AutoMove()
 }
 void Chara::ManualMove(Vec2& est)
 {
+	//手動移動値をそのまま入れる
 	this->isAuto = false;
 	this->MoveCnt = 0;
 	this->move = est;
 }
 void Chara::IsCollisionCheck()
 {
+	//カウントを増やす
 	this->isCollisionNow++;
 }
 bool Chara::CollisionNumCheck(__int8 num)
 {
+	//同じかを比べてその結果を返す
 	return this->isCollisionNow == num ? true : false;
 }
 void Chara::MoveReset()
 {
+	//0,0に初期化
 	this->move = { 0,0 };
 }
 void Chara::SetDirection(const Direction& set)
 {
+	//向きを上書き
 	this->direction = set;
 }
 void Chara::SetAutoFlag(const bool flag)
 {
+	//オートモードの設定を上書き
 	this->isAutoOff = flag;
 }
 Vec2 Chara::GetMove() const
 {
+	//移動値を返す
 	return this->move;
 }
 void Chara::SetAutoMode(const bool flag)
 {
+	//オートモード設定を上書き
 	this->isAutoMode = flag;
 }
 void Chara::Set(const Vec2& start_, const Vec2& end_)
@@ -301,10 +316,12 @@ void Chara::Set(const Vec2& start_, const Vec2& end_)
 }
 bool Chara::isAutoPlay() const
 {
+	//イージングの移動を行っているかを返す
 	return this->easing_x.isplay();
 }
 Chara::Direction Chara::nowDirection() const
 {
+	//向きを返す
 	return this->direction;
 }
 Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)

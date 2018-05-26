@@ -45,8 +45,8 @@ class Title:public TaskObject
 
 	Texture texLogo;
 
+	//Vec2 startPos;
 	Vec2 startPos;
-	Vec2 pausePos;
 	Vec2 closePos;
 	Vec2 cursorPos[3];
 
