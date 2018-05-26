@@ -22,6 +22,8 @@ class Switch : public GameObject, public TaskObject
 public:
 	bool GetisON();
 private:
+	Texture image;
+	const Box2D Src = { 0,0,256,256 };
 	std::shared_ptr<Player>target;
 	bool is_on;
 	//------------------
@@ -30,17 +32,17 @@ private:
 private:
 	bool CheckHit();
 	void ON_OFF();
-	void SetTarget(std::shared_ptr<Player> &target);
+	void SetTarget(Player::SP target);
 public:
 	std::string taskName;
 	virtual ~Switch();
 	typedef std::shared_ptr<Switch> SP;
-	static Switch::SP Create(Vec2& pos,std::shared_ptr<Player> &target,bool is_on,bool = true);
+	static Switch::SP Create(Vec2& pos,Player::SP target,bool is_on,bool = true);
 	Switch();
 	//-------------
 	//•ÏX‚µ‚È‚¢‚±‚Æ
 	//-------------
-	bool Initialize(Vec2& pos, std::shared_ptr<Player>&target,bool is_on);	//‰Šú‰»ˆ—
+	bool Initialize(Vec2& pos, Player::SP target,bool is_on);	//‰Šú‰»ˆ—
 	void UpDate();				//XVˆ—
 	void Render2D();			//•`‰æˆ—
 	bool Finalize();			//‰ğ•úˆ—

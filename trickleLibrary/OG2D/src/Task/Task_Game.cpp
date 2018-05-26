@@ -184,7 +184,7 @@ bool Game::Initialize()
 			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT);
 			fan->SetTexture(&this->fanTex);
 		}
-		auto swith = Switch::Create(Vec2(64 * 18,64 * 13),OGge->GetTask<Player>("player"),true);
+		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14),OGge->GetTask<Player>("Player"), true);
 		//ƒoƒPƒc¶¬
 		/*for (int i = 0; i < 2; ++i)
 		{
