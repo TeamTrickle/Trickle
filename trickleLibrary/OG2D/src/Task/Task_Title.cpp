@@ -31,13 +31,13 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400,250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	startPos = Vec2(720.f - 128.f,624.f + 30.f);
-	pausePos = Vec2(720.f - 128.f,624.f + 129.f + 30.f);
+	//startPos = Vec2(720.f - 128.f,624.f + 30.f);
+	startPos = Vec2(720.f - 128.f,624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f,624.f + 258.f + 30.f);
 	//配列管理を行う
+	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
-	this->cursorPos[1] = { this->pausePos.x - 30.f - 64.f,this->pausePos.y };
-	this->cursorPos[2] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
+	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//画像読み込み
 	texCursor.Create((std::string)"gear.png");
 	texStart.Create((std::string)"start.png");
@@ -238,9 +238,9 @@ void Title::UpDate()
 			}
 				break;
 			case 1:
+				OGge->GameEnd();
 				break;
 			case 2:
-				OGge->GameEnd();
 				break;
 			}
 		}
@@ -346,11 +346,11 @@ void Title::Render2D()
 	}
 	//ゲームスタート
 	{
-		Box2D draw(this->startPos.x, this->startPos.y, 256.f, 64.f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 256, 64);
-		src.OffsetSize();
-		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		//Box2D draw(this->startPos.x, this->startPos.y, 256.f, 64.f);
+		//draw.OffsetSize();
+		//Box2D src(0, 0, 256, 64);
+		//src.OffsetSize();
+		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 	//終了
 	{
@@ -362,11 +362,11 @@ void Title::Render2D()
 	}
 	//設定
 	{
-		Box2D draw(pausePos.x, pausePos.y, 256.f, 64.f);
+		Box2D draw(startPos.x, startPos.y, 256.f, 64.f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 256, 64);
 		src.OffsetSize();
-		texPause.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 }
 
@@ -417,12 +417,6 @@ bool Title::Finalize()
 		}
 		break;
 		case 1:
-		
-			{
-				auto option = Option::Create();
-			}
-			break;
-		case 2:
 			OGge->GameEnd();
 			break;
 		default:
@@ -443,13 +437,13 @@ void Title::CursorMove()
 	{
 		this->cursorNum++;
 	}
-	if (this->cursorNum > 2)
+	if (this->cursorNum > 1)
 	{
 		this->cursorNum = 0;
 	}
 	if (this->cursorNum < 0)
 	{
-		this->cursorNum = 2;
+		this->cursorNum = 1;
 	}
 }
 
