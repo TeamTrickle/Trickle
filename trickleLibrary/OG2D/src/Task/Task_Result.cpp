@@ -33,13 +33,17 @@ bool Result::Initialize()
 			auto ster = FlagUI::Create(Vec2(((int)windowsize.x / 2 - 200 ) + 100 * (i + 1), 130), 1 << 0);
 		}
 	}
-	
+	//フレームタイムの桁数を計算する
+	this->outputdigit = this->GetDigitTime();
 	{
 		Vec2 windowsize = OGge->window->GetSize();
 		auto clearUI = ClearUI::Create(Vec2(250,320));
 		auto goaltime = GoalTimeUI::Create(Vec2(210,190));
 		auto mission = MissionUI::Create(Vec2((int)windowsize.x / 2 - 200, 30));
-		auto time = FrameTimeUI::Create(Vec2{},0);
+		for (int i = 0; i < outputdigit; ++i)
+		{
+			auto time = FrameTimeUI::Create(Vec2(635 + i * 64, 210), i, FrameTime);
+		}
 	}
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
@@ -180,6 +184,17 @@ bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2
 		return true;
 	}
 	return false;
+}
+int Result::GetDigitTime()
+{
+	int value = this->FrameTime;
+	int Count = 0;
+	while (value != 0)
+	{
+		value /= 10;	//10を割っていき数字の桁数を計算する
+		++Count;
+	}
+	return Count;
 }
 void Result::Flag_Input(Result::Achievement achive)
 {

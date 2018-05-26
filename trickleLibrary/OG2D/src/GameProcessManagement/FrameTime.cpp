@@ -1,29 +1,21 @@
 #include "FrameTime.h"
 
 #include "Task\Task_Result.h"
-bool FrameTimeUI::Initialize(Vec2& pos,int digitselect)
+bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 {
 	std::cout << "フレームタイムUI　初期化" << std::endl;
 	this->taskName = "FrameTimeUI";
-	this->getframetime = this->GetResultFrameTime();
+	this->getframetime = resulttime;
 
 	this->DigitNumberReset();
 	this->SetFrameTime();
-	this->SetVector();
 	image.Create((std::string)"../font/math.png");
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
 	this->SetDrawOrder(0.1f);
 	this->digitSelectnumber = digitselect;
+	this->SetVector();
+	this->active = false;
 	return true;
-}
-int FrameTimeUI::GetResultFrameTime()
-{
-	auto result = OGge->GetTask<Result>("Result");
-	if (result)
-	{
-		return result->GetFrameTime();
-	}
-	return 0;
 }
 void FrameTimeUI::SetVector()
 {
@@ -40,11 +32,7 @@ void FrameTimeUI::SetVector()
 }
 void FrameTimeUI::SetFrameTime()
 {
-	auto result = OGge->GetTask<Result>("Result");
-	if (result)
-	{
-		this->digitnumberLength = SetDigitNumber();
-	}
+	this->digitnumberLength = SetDigitNumber();
 }
 int FrameTimeUI::SetDigitNumber()
 {
@@ -61,18 +49,18 @@ void FrameTimeUI::DigitNumberReset()
 {
 	this->digitnumberLength = 0;
 }
-int FrameTimeUI::TargetTime()
+void FrameTimeUI::TargetTime()
 {
 	int Count = 0;
 	for (auto it = frametime.begin(); it != frametime.end(); ++it)
 	{
 		if (Count == digitSelectnumber)
 		{
-			return *it;
+			this->digitSelectnumber =  *it;
+			return;
 		}
 		++Count;
 	}
-	return 0;
 }
 int FrameTimeUI::GetDigitNumber()
 {
@@ -85,7 +73,11 @@ bool FrameTimeUI::Finalize()
 }
 void FrameTimeUI::UpDate()
 {
-	digitSelectnumber = TargetTime();
+	if (!active)
+	{
+		TargetTime();
+		active = true;
+	}
 }
 void FrameTimeUI::Render2D()
 {
@@ -106,7 +98,7 @@ FrameTimeUI::~FrameTimeUI()
 {
 	std::cout << "フレームタイムUI　解放" << std::endl;
 }
-FrameTimeUI::SP FrameTimeUI::Create(Vec2& pos,int digitselect,bool flag)
+FrameTimeUI::SP FrameTimeUI::Create(Vec2& pos,int digitselect,int& resulttime,bool flag)
 {
 	FrameTimeUI::SP to = FrameTimeUI::SP(new FrameTimeUI());
 	if (to)
@@ -116,7 +108,7 @@ FrameTimeUI::SP FrameTimeUI::Create(Vec2& pos,int digitselect,bool flag)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos,digitselect))
+		if (!to->Initialize(pos,digitselect,resulttime))
 		{
 			to->Kill();
 		}
