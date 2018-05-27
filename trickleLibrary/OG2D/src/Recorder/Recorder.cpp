@@ -40,11 +40,22 @@ bool Recorder::Initialize(const std::string& fName) {
 	return true;
 }
 
+void Recorder::WriteRecord(const std::string& msg) {
+	inputQueue.push(msg);
+}
+
 void Recorder::Recorde() {
 	Time localTimer;
 	gameTimer = &localTimer;
 	localTimer.Start();
 	while (localTimer.isplay()) {
-		printLog(std::to_string(localTimer.GetTime()));
+		if (!inputQueue.empty()) {
+			auto act = inputQueue.front();
+			auto curTime = std::to_string(localTimer.GetTime());
+			auto msg = curTime + " / " + act + "\n";
+			fileWriter << msg.c_str();
+			printLog(msg);
+			inputQueue.pop();
+		}
 	}
 }

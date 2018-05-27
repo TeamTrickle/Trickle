@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <thread>
+#include <queue>
 #include "OGSystem\Timer\glTimer.h"
 
 /**
@@ -30,10 +31,17 @@ public:
 	 */
 	void Destroy();
 
+	/**
+	 *	@brief	行動を記録します
+	 *	@param	記録されるメッセージ
+	 */
+	void WriteRecord(const std::string&);
+
 private:
-	bool				isLogging = false;
-	Time*				gameTimer;
-	std::string			fileName = "save.txt";
-	std::ofstream		fileWriter;
-	std::thread			recThread;
+	bool							isLogging = false;
+	Time*							gameTimer;
+	std::string						fileName = "save.txt";
+	std::ofstream					fileWriter;
+	std::thread						recThread;
+	std::queue<std::string>			inputQueue;
 };
