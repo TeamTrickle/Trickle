@@ -20,14 +20,6 @@ private:
 	const float FIN_SPEED;								//摩擦
 	Direction direction;										//向きを格納する変数
 	std::string taskName;										//名
-<<<<<<< HEAD
-	int AnimCnt;
-	bool isAuto;
-	bool isCollision;
-	int MoveCnt;
-	__int8 isCollisionNow;
-	bool isAutoOff;
-=======
 	int AnimCnt;			//アニメーションカウント
 	bool isAuto;			//オート状態有無
 	bool isCollision;		//当たり判定有無
@@ -38,36 +30,11 @@ private:
 	Vec2 startPos;			//オートモード時の開始地点
 	Vec2 EndPos;			//オートモード時の終了地点
 	Easing easing_x;		//イージング移動値
->>>>>>> develop
 public:
 	Chara(std::string&, Vec2&);	//コンストラクタ
 	virtual ~Chara();			//デストラクタ
 	typedef std::shared_ptr<Chara> SP;
 	static SP Create(std::string&, Vec2&, bool = true);
-<<<<<<< HEAD
-	void UpDate();
-	void Render2D();
-	void Friction(Vec2&);
-	void MoveCheck(Vec2);
-	bool FootCheck();
-	bool Jump();
-	void AutoMove();
-	void ManualMove(Vec2&);
-	void IsCollisionCheck();
-	bool CollisionNumCheck(__int8);
-	void MoveReset();
-	void SetDirection(const Direction&);
-	void SetAutoFlag(const bool);
-<<<<<<< HEAD
-	Vec2 GetMove() const;
-=======
-	void SetAutoMode(const bool);
-	Vec2 GetMove() const;
-	void Set(const Vec2&, const Vec2&);
-	bool isAutoPlay() const;
-	Direction nowDirection() const;
->>>>>>> develop
-=======
 	void UpDate();		//更新処理
 	void Render2D();	//描画処理
 	void Friction(Vec2&);	//重力処理
@@ -86,5 +53,4 @@ public:
 	void Set(const Vec2&, const Vec2&);		//開始位置と終了位置を登録する
 	bool isAutoPlay() const;				//オート移動を行っているかを返す
 	Direction nowDirection() const;			//現在の向きを返す
->>>>>>> develop
 };

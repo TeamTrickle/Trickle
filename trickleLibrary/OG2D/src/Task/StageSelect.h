@@ -36,11 +36,7 @@ class StageSelect : public TaskObject
 
 	Texture Testdoor;
 
-<<<<<<< HEAD
-	GameObject testObj;
-=======
 	GameObject* gate[3];
->>>>>>> develop
 
 	Vec2 cursorPos;
 	Vec2 tutorialPos;

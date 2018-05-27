@@ -4,27 +4,6 @@
 Chara::Chara(std::string& path, Vec2& pos)
 	:MOVE_SPEED(5.f), JUMP_POWER(-5.0f), MAX_FALL(30.f), GRAVITY((9.8f / 60.f / 60.f * 32) * 5), FIN_SPEED(0.5f)
 {
-<<<<<<< HEAD
-	this->position = pos;
-	this->Image.Create(path);
-	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);
-	this->taskName = "Chara";
-	__super::Init(this->taskName);
-	__super::SetDrawOrder(1.0f);
-	this->objectTag = this->taskName;
-	this->direction = Direction::LEFT;
-	this->AnimCnt = 0;
-	this->isAuto = true;
-	this->isCollision = true;
-	this->MoveCnt = 0;
-	this->Radius = Vec2(1.0f, 0.9f);
-	this->isCollisionNow = -1;
-	this->isAutoOff = false;
-<<<<<<< HEAD
-=======
-	this->isAutoMode = false;
->>>>>>> develop
-=======
 	this->position = pos;	//位置設定
 	this->Image.Create(path);	//画像設定
 	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);	//オブジェクト生成
@@ -41,7 +20,6 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isCollisionNow = -1;			//当たり判定カウントを初期化
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
->>>>>>> develop
 }
 Chara::~Chara()
 {
@@ -59,12 +37,8 @@ void Chara::UpDate()
 		{
 			this->isCollisionNow++;
 		}
-<<<<<<< HEAD
-	}
-=======
 	}*/
 	//オート機能を切っていない状態でオート動作をするならば
->>>>>>> develop
 	if (this->isAuto && !this->isAutoOff)
 	{
 		//キャラに登録されているオート移動を行う
@@ -323,8 +297,6 @@ Vec2 Chara::GetMove() const
 	//移動値を返す
 	return this->move;
 }
-<<<<<<< HEAD
-=======
 void Chara::SetAutoMode(const bool flag)
 {
 	//オートモード設定を上書き
@@ -352,7 +324,6 @@ Chara::Direction Chara::nowDirection() const
 	//向きを返す
 	return this->direction;
 }
->>>>>>> develop
 Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 {
 	Chara::SP to = Chara::SP(new Chara(path, pos));
