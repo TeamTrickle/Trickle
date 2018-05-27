@@ -30,7 +30,6 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 	this->GetFlag();
 	std::string filePath = "fan.png";
 	image.Create(filePath);
-	this->SetDrawOrder(1.0f);
 	std::cout << "扇風機　初期化" << std::endl;
 	return true;
 }
@@ -48,7 +47,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
 	if (dir == Fan::Dir::LEFT)
 	{
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * r), pos.y), Vec2(64 * r, 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(pos.x, pos.y), Vec2(64 * r, 64.f), 0.0f);
 	}
 	else
 	{
@@ -178,7 +177,7 @@ void Fan::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
-	Box2D draw(this->WindHitBase.position, this->WindHitBase.Scale);
+	Box2D draw(this->WindHitBase.position, Vec2(64,64));
 	draw.OffsetSize();
 	Box2D src = this->Src;
 	this->animetion.AnimetionSrc(src,GetSwitchFlag());
