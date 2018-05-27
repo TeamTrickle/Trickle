@@ -126,6 +126,9 @@
     <Filter Include="ソースファイル\OGSystem\System\OG">
       <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Recorder">
+      <UniqueIdentifier>{c86f3fd4-a747-4ad6-bce2-7b99aae72497}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -278,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\FrameTime.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Recorder\Recorder.cpp">
+      <Filter>ソースファイル\Recorder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -433,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\FrameTime.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Recorder\Recorder.h">
+      <Filter>ソースファイル\Recorder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
