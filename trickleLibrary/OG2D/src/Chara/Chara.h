@@ -10,6 +10,13 @@ public:
 		LEFT,
 		RIGHT,
 	};
+	enum Motion							//アニメーションのための状態
+	{
+		Normal,		//通常
+		Walk,		//歩き中
+		Jump_M,		//ジャンプ(関数と名前が被ったのでここで変えました）
+		Fall,		//落下
+	};
 private:
 	Texture Image;		//使用画像
 	Vec2 move;			//移動値
@@ -21,6 +28,7 @@ private:
 	Direction direction;										//向きを格納する変数
 	std::string taskName;										//名
 	int AnimCnt;			//アニメーションカウント
+	Motion motion;
 	bool isAuto;			//オート状態有無
 	bool isCollision;		//当たり判定有無
 	int MoveCnt;			//移動カウント
@@ -53,4 +61,7 @@ public:
 	void Set(const Vec2&, const Vec2&);		//開始位置と終了位置を登録する
 	bool isAutoPlay() const;				//オート移動を行っているかを返す
 	Direction nowDirection() const;			//現在の向きを返す
+	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };	//Normal状態のアニメーション
+	int walk[9] = { 0,1,2,3,4,5,6,7,8 };	//Walk状態のアニメーション
+	Box2D returnSrc(Motion motion);							//motionによってsrcを返す
 };

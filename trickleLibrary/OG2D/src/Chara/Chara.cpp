@@ -13,6 +13,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->objectTag = this->taskName;	//タグを登録
 	this->direction = Direction::LEFT;	//向きを設定
 	this->AnimCnt = 0;					//アニメーションカウントを初期化
+	this->motion = Motion::Normal;
 	this->isAuto = true;				//オート移動設定を初期化
 	this->isCollision = true;			//当たり判定設定初期化
 	this->MoveCnt = 0;					//移動カウント初期化
@@ -38,6 +39,7 @@ void Chara::UpDate()
 			this->isCollisionNow++;
 		}
 	}*/
+	++AnimCnt;				//アニメーションカウントを増やす
 	//オート機能を切っていない状態でオート動作をするならば
 	if (this->isAuto && !this->isAutoOff)
 	{
@@ -78,17 +80,8 @@ void Chara::Render2D()
 	//描画位置とサイズを指定
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-	//アニメーション用
-	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };
 
-	if (this->AnimCnt < 30) {
-		this->AnimCnt++;
-	}
-	if (this->AnimCnt >= 30) {
-		this->AnimCnt = 0;
-	}
-
-	Box2D src(idle[this->AnimCnt / 3] * 550, 0, 550, 550);
+	Box2D src = this->returnSrc(this->motion);
 	src.OffsetSize();
 	//移動値に合わせて向きを合わせる
 	//おそらくここでやるべきではないので後日修正します
@@ -337,4 +330,30 @@ Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 		return to;
 	}
 	return nullptr;
+}
+Box2D Chara::returnSrc(Motion motion)
+{
+	Motion motion_ = motion;
+
+	Box2D src2(0, 0, 550, 550);	//仮のsrc（後で消すかも）
+	if (motion_ == Motion::Normal) {
+		Box2D src(this->idle[this->AnimCnt / 3 % 10] * 550, 0, 550, 550);
+		return src;
+	}
+
+	if (motion_ == Motion::Walk) {
+		Box2D src(this->walk[this->AnimCnt / 3 % 9] * 550, 550, 550, 550);
+		return src;
+	}
+
+	if (motion_ == Motion::Jump_M) {
+		Box2D src(0 * 550, 2 * 550, 550, 550);
+		return src;
+	}
+
+	if (motion_ == Motion::Fall) {
+		Box2D src(1 * 550, 2 * 550, 550, 550);
+		return src;
+	}
+	return src2;
 }
