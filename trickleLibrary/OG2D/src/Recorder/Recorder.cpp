@@ -17,7 +17,7 @@ Recorder* Recorder::Create(const std::string& fName, const bool& isLogging = fal
 }
 
 void Recorder::Destroy() {
-	gameTimer.Stop();
+	gameTimer->Stop();
 	if (recThread.joinable())
 		recThread.join();
 	fileWriter.close();
@@ -41,8 +41,10 @@ bool Recorder::Initialize(const std::string& fName) {
 }
 
 void Recorder::Recorde() {
-	gameTimer.Start();
-	while (gameTimer.isplay()) {
-		printLog(std::to_string(gameTimer.GetTime()));
+	Time localTimer;
+	gameTimer = &localTimer;
+	localTimer.Start();
+	while (localTimer.isplay()) {
+		printLog(std::to_string(localTimer.GetTime()));
 	}
 }

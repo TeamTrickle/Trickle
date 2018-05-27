@@ -32,7 +32,7 @@ public:
 
 private:
 	bool				isLogging = false;
-	Time				gameTimer;
+	Time*				gameTimer;
 	std::string			fileName = "save.txt";
 	std::ofstream		fileWriter;
 	std::thread			recThread;
