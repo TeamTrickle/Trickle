@@ -29,7 +29,6 @@ public:
 		LEFT,
 		RIGHT,
 	};
-	void SetTexture(Texture*);
 	void SetWindRange(Vec2&);
 private:
 	//------------------
@@ -58,10 +57,20 @@ public:
 	bool Finalize();		//解放処理
 private:
 	Dir dir;
-	Texture* image;
+	Texture image;
+	const Box2D Src = { 0,0,768 / 3,256 };
 	float range;
 	float movePos;
 	int strength;
+	struct Animetion
+	{
+		int animetionframe;
+		int speed;
+		void AnimetionMove(bool flag);				//アニメーションフレームを動かす
+		void AnimetionReset();						//アニメーションの数値をリセットする
+		void AnimetionSrc(Box2D& src,bool flag);	//アニメーションフレームを描画に影響させる
+	};
+	Animetion animetion;
 	GameObject WindHitBase;
 };
 
