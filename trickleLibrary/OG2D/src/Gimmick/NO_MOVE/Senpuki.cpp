@@ -109,7 +109,7 @@ void Fan::Animetion::AnimetionMove(bool flag)
 	{
 		if (animetionframe >= 300)
 		{
-			animetionframe--;
+			animetionframe -= 10;
 		}
 		else if(animetionframe > 0)
 		{
@@ -134,6 +134,7 @@ void Fan::UpDate()
 	}
 	else
 	{
+		animetion.AnimetionMove(GetSwitchFlag());
 		animetion.AnimetionReset();
 	}
 }
