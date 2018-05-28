@@ -31,13 +31,13 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400,250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	startPos = Vec2(720.f - 128.f,624.f + 30.f);
-	pausePos = Vec2(720.f - 128.f,624.f + 129.f + 30.f);
+	//startPos = Vec2(720.f - 128.f,624.f + 30.f);
+	startPos = Vec2(720.f - 128.f,624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f,624.f + 258.f + 30.f);
 	//配列管理を行う
+	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
-	this->cursorPos[1] = { this->pausePos.x - 30.f - 64.f,this->pausePos.y };
-	this->cursorPos[2] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
+	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//画像読み込み
 	texCursor.Create((std::string)"gear.png");
 	texStart.Create((std::string)"start.png");
@@ -63,16 +63,15 @@ bool Title::Initialize()
 	__super::Init((std::string)"title");
 	//描画順の決定
 	__super::SetDrawOrder(0.5f);
-
-	//-----------------------
-	//テスト
-	//-----------------------
-	this->testObj.CreateObject(Cube, Vec2(400.f, 0.f), Vec2(64, 64), 0.0f);
+	//カメラの中心のターゲットを登録
 	this->cm.SetObject(&(*water));
+	//カメラのサイズと位置を調整
 	OGge->camera->SetSize(Vec2(960 / 2, 540 / 2));
 	OGge->camera->SetPos(Vec2(500 - (480 / 2), 0));
+	//カメラの画面外設定
 	this->cm.SetSize(Box2D(Vec2(0, 0), OGge->window->GetSize() * 2));
 	//this->cm.SetRange(Box2D(100.f, 100.f, OGge->window->GetSize().x - 200.f, OGge->window->GetSize().y - 800.f));//今は意味をなさない
+	//開始時のモード設定
 	this->mode = Mode::from1;
 	return true;
 }
@@ -83,22 +82,6 @@ void Title::UpDate()
 	//----------------
 	//テスト
 	//----------------
-	if (OGge->in->key.on(In::A))
-	{
-		this->testObj.position.x -= 10.0f;
-	}
-	if (OGge->in->key.on(In::D))
-	{
-		this->testObj.position.x += 10.0f;
-	}
-	if (OGge->in->key.on(In::W))
-	{
-		this->testObj.position.y -= 10.0f;
-	}
-	if (OGge->in->key.on(In::S))
-	{
-		this->testObj.position.y += 10.0f;
-	}
 	if (OGge->in->key.on(In::Q))
 	{
 		OGge->camera->MoveSize(Vec2(-32, -18));
@@ -113,10 +96,14 @@ void Title::UpDate()
 	{
 		this->Kill();
 	}
+	//カメラの自動移動
 	this->cm.move();
+	//ギアを回す場合
 	if (this->isGierAng)
 	{
+		//値を増やす
 		this->gierCnt++;
+		//360度を超えたら0度に戻す
 		if (this->gierCnt > 360)
 		{
 			this->gierCnt = 0;
@@ -208,7 +195,7 @@ void Title::UpDate()
 		if (this->tex_a >= 1.0f)
 		{
 			this->mode = from5;
-			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 500));
+			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
 		}
 	}
 		break;
@@ -251,9 +238,9 @@ void Title::UpDate()
 			}
 				break;
 			case 1:
+				OGge->GameEnd();
 				break;
 			case 2:
-				OGge->GameEnd();
 				break;
 			}
 		}
@@ -359,11 +346,11 @@ void Title::Render2D()
 	}
 	//ゲームスタート
 	{
-		Box2D draw(this->startPos.x, this->startPos.y, 256.f, 64.f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 256, 64);
-		src.OffsetSize();
-		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		//Box2D draw(this->startPos.x, this->startPos.y, 256.f, 64.f);
+		//draw.OffsetSize();
+		//Box2D src(0, 0, 256, 64);
+		//src.OffsetSize();
+		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 	//終了
 	{
@@ -375,18 +362,11 @@ void Title::Render2D()
 	}
 	//設定
 	{
-		Box2D draw(pausePos.x, pausePos.y, 256.f, 64.f);
+		Box2D draw(startPos.x, startPos.y, 256.f, 64.f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 256, 64);
 		src.OffsetSize();
-		texPause.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-	}
-	//テスト
-	{
-		Box2D draw(this->testObj.position, this->testObj.Scale);
-		draw.OffsetSize();
-		Box2D src(0, 0, 256, 256);
-		this->waterTex.Draw(draw, src);
+		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 }
 
@@ -437,12 +417,6 @@ bool Title::Finalize()
 		}
 		break;
 		case 1:
-		
-			{
-				auto option = Option::Create();
-			}
-			break;
-		case 2:
 			OGge->GameEnd();
 			break;
 		default:
@@ -463,13 +437,13 @@ void Title::CursorMove()
 	{
 		this->cursorNum++;
 	}
-	if (this->cursorNum > 2)
+	if (this->cursorNum > 1)
 	{
 		this->cursorNum = 0;
 	}
 	if (this->cursorNum < 0)
 	{
-		this->cursorNum = 2;
+		this->cursorNum = 1;
 	}
 }
 

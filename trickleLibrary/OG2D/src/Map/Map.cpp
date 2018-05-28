@@ -163,9 +163,12 @@ void Map::Render2D()
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-			Box2D draw(this->hitBase[y][x].position, this->DrawSize);
-			draw.OffsetSize();
-			mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+			if (this->_arr[y][x] != 0)
+			{
+				Box2D draw(this->hitBase[y][x].position, this->DrawSize);
+				draw.OffsetSize();
+				mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+			}
 		}
 	}
 }
@@ -188,12 +191,11 @@ bool Map::MapHitCheck(GameObject &p)
 			//マップ番号０以外に当たったらTRUEを返す
 			if (this->_arr[y][x] != 0 && 
 				this->_arr[y][x] != 10 && 
-				this->_arr[y][x] != 11 &&
 				this->_arr[y][x] != 12 && 
 				this->_arr[y][x] != 13 &&
-				this->_arr[y][x] != 22 /*&& 
 				this->_arr[y][x] != 21 && 
-				this->_arr[y][x] != 20*/) {
+				this->_arr[y][x] != 22 && 
+				this->_arr[y][x] != 20) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;

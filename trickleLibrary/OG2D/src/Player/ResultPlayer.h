@@ -7,7 +7,8 @@ class ResultPlayer : public GameObject , public TaskObject
 	std::string filePath;
 	Vec2 moveVec;
 	void Move();
-	const Box2D Src = { Vec2(0, 0), Vec2(532,519) };
+	const Box2D Src = { Vec2(0, 0), Vec2(550, 550) };
+	int animetionframe;
 public:
 	typedef std::shared_ptr<ResultPlayer> SP;
 	ResultPlayer();

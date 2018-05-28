@@ -32,10 +32,12 @@ public:
 
 	void Flag_Judge_Clear();
 	int GetFrameTime();
+	int GetDigitTime();
 private:
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
-								//結果の際に必要なポインタ　または　ファイルの読み込む
+	int outputdigit;			//タイムUIに出力したい桁数
+	//結果の際に必要なポインタ　または　ファイルの読み込む
 	const char* TimeFilePath = "./data/Result/Result.dat";
 	Texture image;
 	const Box2D backSrc = { 0,0,1280,720 };

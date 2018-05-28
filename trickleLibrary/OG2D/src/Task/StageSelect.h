@@ -1,9 +1,32 @@
 #pragma once
 
 #include "OGSystem\OGsystem.h"
+#include "Object\Object.h"
 
 class StageSelect : public TaskObject
 {
+	class Animation
+	{
+		Easing easing_x;
+		Easing easing_y;
+		Vec2 StartPos;
+		Vec2 EndPos;
+	public:
+		Vec2 Move();
+		Animation();
+		void Set(Vec2&, Vec2&);
+		bool isPlay() const;
+	};
+
+	//ì¸ÇËå˚ÇÃâEë§ç∂ë§ÇîªíËÇ≥ÇπÇÈóp
+	enum Direction
+	{
+		LEFT,
+		RIGTH,
+	};
+
+	Animation camera_anim;
+
 	Texture texBack;
 	Texture texCursor;
 	Texture texTutorial;
@@ -11,11 +34,17 @@ class StageSelect : public TaskObject
 	Texture texStage2;
 	Texture texToTitle;
 
+	Texture Testdoor;
+
+	GameObject* gate[3];
+
 	Vec2 cursorPos;
 	Vec2 tutorialPos;
 	Vec2 stage1Pos;
 	Vec2 stage2Pos;
 	Vec2 toTitlePos;
+
+	std::vector<std::pair<Direction, float>> Entrance;
 
 	enum Mode
 	{
@@ -33,6 +62,7 @@ class StageSelect : public TaskObject
 	void From3();
 	void From4();
 	int timeCnt;
+	int nowPos;
 	void ModeCheck();
 	Easing camera_x;
 	Easing camera_y;
