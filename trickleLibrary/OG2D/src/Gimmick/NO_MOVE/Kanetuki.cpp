@@ -12,13 +12,13 @@ bool Kanetuki::Initialize(Vec2& pos)
 	this->taskName = "Kanetuki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
-	Fire_movetime = 0;
-	hitBace.CreateObject(Cube, pos, Vec2(64, 64), 0);
+	Fire_MovetimeReset();
+	CreateObject(Cube, pos, Vec2(64, 64), 0);
 	this->GetFlag();
 	cout << "加熱器　初期化" << endl;
 	return true;
 }
-bool Kanetuki::Initialize(Vec2& pos,std::shared_ptr<Switch>& target)
+bool Kanetuki::Initialize(Vec2& pos, std::shared_ptr<Switch>& target)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
@@ -26,12 +26,16 @@ bool Kanetuki::Initialize(Vec2& pos,std::shared_ptr<Switch>& target)
 	this->taskName = "Kanetuki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
-	Fire_movetime = 0;
-	hitBace.CreateObject(Cube, pos,Vec2(64,64), 0);
+	Fire_MovetimeReset();
+	CreateObject(Cube, pos, Vec2(64, 64), 0);
 	this->SetSwitchFlag(target);
 
 	cout << "加熱器　初期化" << endl;
 	return true;
+}
+void Kanetuki::Fire_MovetimeReset()
+{
+	Fire_movetime = 0;
 }
 void Kanetuki::GetFlag()
 {
@@ -88,48 +92,33 @@ bool Kanetuki::GetSwitchFlag()
 }
 void Kanetuki::toSteam()
 {
-	auto water = OGge->GetTasks<Water>("water");
-	if (water != nullptr)
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		for (int i = 0; i < (*water).size(); ++i)
-		{
-			if ((*water)[i]->hit(hitBace))
+		//水との当たり判定
+		if ((*id)->hit(*this))
+		{	//　個体　⇒　液体
+			if ((*id)->GetState() == Water::State::SOLID)
 			{
-				if ((*water)[i]->GetState() == Water::State::SOLID)
+				Fire_movetime++;
+				//一定の時間が経ったら・・・
+				if (Fire_movetime >= Fire_time_SOLID)
 				{
-					while (true)
-					{
-						bool flag = false;
-						Fire_movetime++;
-						if (Fire_movetime >= Fire_time_SOLID)
-						{
-							(*water)[i]->SetState(Water::State::LIQUID);
-							Fire_movetime = 0;
-							flag = true;
-						}
-						if (flag)
-						{
-							break;
-						}
-					}
+					//液体にする
+					(*id)->SetState(Water::State::LIQUID);
+					Fire_MovetimeReset();
 				}
-				if ((*water)[i]->GetState() == Water::State::LIQUID)
+			}
+			//液体　⇒　水蒸気
+			if ((*id)->GetState() == Water::State::LIQUID)
+			{
+				Fire_movetime++;
+				//一定の時間が経ったら・・・
+				if (Fire_movetime >= Fire_time_LIQUID)
 				{
-					while (true)
-					{
-						bool flag = false;
-						Fire_movetime++;
-						if (Fire_movetime >= Fire_time_LIQUID)
-						{
-							(*water)[i]->SetState(Water::State::GAS);
-							Fire_movetime = 0;
-							flag = true;
-						}
-						if (flag)
-						{
-							break;
-						}
-					}
+					//水蒸気にする
+					(*id)->SetState(Water::State::GAS);
+					Fire_MovetimeReset();
 				}
 			}
 		}
@@ -169,7 +158,7 @@ Kanetuki::SP Kanetuki::Create(Vec2& pos, bool flag_)
 	return nullptr;
 }
 
-Kanetuki::SP Kanetuki::Create(Vec2& pos,std::shared_ptr<Switch>& target,bool flag_)
+Kanetuki::SP Kanetuki::Create(Vec2& pos, std::shared_ptr<Switch>& target, bool flag_)
 {
 	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
 	if (to)
@@ -179,7 +168,7 @@ Kanetuki::SP Kanetuki::Create(Vec2& pos,std::shared_ptr<Switch>& target,bool fla
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos,target))
+		if (!to->Initialize(pos, target))
 		{
 			to->Kill();
 		}
