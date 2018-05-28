@@ -162,11 +162,17 @@ void Pause::PauseUpDate()
 	}
 
 	//選択肢の表示はカメラによって位置が変更
-	auto NowCameraPos = OGge->camera->GetPos();
+	//auto NowCameraPos = OGge->camera->GetPos();
+	//transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
+	//titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
+	//ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
+	//stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
+	auto NowCameraPos = OGge->window->GetPos();
 	transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
 	titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
 	ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
 	stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
+
 	//矢印の移動
 	if (OGge->in->key.down(In::UP)) {
 		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
