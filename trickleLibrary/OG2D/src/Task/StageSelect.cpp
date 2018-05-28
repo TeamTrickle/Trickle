@@ -74,8 +74,8 @@ bool StageSelect::Initialize()
 	for (int i = 1; i <= 3; ++i)
 	{
 		this->gate[i - 1] = new GameObject(Cube, Vec2(400 * i + 450, 640), Vec2(128, 256), 0.0f);
-		this->Entrance.emplace_back(LEFT, gate[i / 2]->position.x - chara->Scale.x);
-		this->Entrance.emplace_back(RIGTH, gate[i / 2]->position.x + gate[i / 2]->Scale.x);
+		this->Entrance.emplace_back(LEFT, gate[i - 1]->position.x - chara->Scale.x);
+		this->Entrance.emplace_back(RIGTH, gate[i - 1]->position.x + gate[i - 1]->Scale.x);
 	}
 	return true;
 }

@@ -3,7 +3,7 @@
 
 Chara::Chara(std::string& path, Vec2& pos)
 	:MOVE_SPEED(5.f), JUMP_POWER(-5.0f), MAX_FALL(30.f), GRAVITY((9.8f / 60.f / 60.f * 32) * 5), FIN_SPEED(0.5f)
-{
+{							   
 	this->position = pos;	//位置設定
 	this->Image.Create(path);	//画像設定
 	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);	//オブジェクト生成
@@ -52,7 +52,7 @@ void Chara::UpDate()
 		//そうでない時
 		//移動値がないならカウントを増やす
 		if (this->move.x == 0 && this->move.y == 0)
-		{
+		{	
 			//10は超えないように制限しておく
 			if (this->MoveCnt <= 10)
 			{
@@ -64,7 +64,20 @@ void Chara::UpDate()
 			//移動している間はカウントを0にしておく
 			this->MoveCnt = 0;
 		}
+		//if (this->move.x == 0) { this->motion = Motion::Normal; }
+		//if (this->move.x != 0) { this->motion = Motion::Walk; }
+		
 	}
+	if (this->move.x == 0)
+	{
+		this->motion = Normal;
+	}
+	else
+	{
+		this->motion = Walk;
+	}
+	if (this->move.y > 0) { this->motion = Motion::Fall; }
+	if (this->move.y < 0) { this->motion = Motion::Jump_M; }
 	//カウントが10を超えているならばオート移動へ移行する
 	if (this->MoveCnt > 10)
 	{
