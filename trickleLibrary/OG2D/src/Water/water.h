@@ -52,7 +52,7 @@ public:
 
 	void SetSituation(const Situation&);
 	Situation GetSituation() const;
-	//Vec2 MoveSolid(Vec2&);									//•X‚ğ‰Ÿ‚µo‚·ˆ—(–¢À‘•)
+	Vec2 MoveSolid(const Vec2&);									//•X‚ğ‰Ÿ‚µo‚·ˆ—(–¢À‘•)
 
 	//…—Ê‚ÌˆÚ“®
 	float waterMove();
@@ -93,6 +93,7 @@ private:
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();
+	unsigned int id;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
 	void MoveWATERCheck(Vec2);
