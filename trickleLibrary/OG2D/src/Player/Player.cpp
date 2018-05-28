@@ -240,6 +240,7 @@ void Player::UpDate()
 			this->motion = Motion::Jump;
 			this->moveCnt = 0;
 		}
+		this->BlockHit();
 		break;
 	}
 	//d—Í‚Æ‚©‚Æ‚©‚ÌˆÚ“®ˆ—‚ÌŒvZ
@@ -779,6 +780,24 @@ bool Player::BlockHit()
 			if (this->est.x > 0)
 			{
 				(*id)->GetMove(this->est);
+			}
+		}
+	}
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
+	{
+		if (this->est.x < 0)
+		{
+			if (left.hit(*(*id)))
+			{
+				(*id)->MoveSolid(this->est);
+			}
+		}
+		if (this->est.x > 0)
+		{
+			if (right.hit(*(*id)))
+			{
+				(*id)->MoveSolid(this->est);
 			}
 		}
 	}
