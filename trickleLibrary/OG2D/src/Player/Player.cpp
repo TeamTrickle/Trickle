@@ -3,7 +3,7 @@
 #include "Water\water.h"
 #include "Map\Map.h"
 #include "Block\block.h"
-
+#include "Gimmick\NO_MOVE\Switch.h"
 Player::Player()
 {
 	
@@ -161,6 +161,10 @@ void Player::UpDate()
 			this->motion = Motion::Walk;
 		}
 		this->BlockHit();
+		if (OGge->in->key.down(Input::KeyBoard::S))
+		{
+			this->SwitchCheck();
+		}
 		break;
 	case Motion::Jump:
 		//飛び出したときに初期値を入れる
@@ -239,6 +243,10 @@ void Player::UpDate()
 			//歩いてるときのジャンプ
 			this->motion = Motion::Jump;
 			this->moveCnt = 0;
+		}
+		if (OGge->in->key.down(Input::KeyBoard::S))
+		{
+			this->SwitchCheck();
 		}
 		break;
 	}
@@ -755,6 +763,17 @@ bool Player::ObjectHit(std::string& objname_)
 		}
 	}
 	return false;
+}
+void Player::SwitchCheck()
+{
+	auto switchs = OGge->GetTasks<Switch>("Switch");
+	for (auto id = switchs->begin(); id != switchs->end(); ++id)
+	{
+		if ((*id)->hit(*this))
+		{
+			(*id)->ON_OFF();
+		}
+	}
 }
 bool Player::BlockHit()
 {

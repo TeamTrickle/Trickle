@@ -2,33 +2,15 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-bool Switch::Initialize(Vec2& pos , Player::SP target,bool is_on)
+bool Switch::Initialize(Vec2& pos)
 {
-	//-----------------------------
-	//生成時に処理する初期化処理を記述
-	//-----------------------------
-	this->taskName = "Switch";		//検索時に使うための名を登録する
-
-	if (target)
-	{
-		std::cout << "Playerを検知" << std::endl;
-	}
-	else
-	{
-		std::cout << "Player代入失敗" << std::endl;
-	}
-
+	taskName = "Switch";
 	//タグ検索を検知可能にする
 	this->Init(taskName);			//TaskObject内の処理を行う
-	//当たり判定の実装
+									//当たり判定の実装
 	CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
-	//スイッチの切り替えフラグをONにする
-	this->is_on = is_on;
-	//スイッチに対応する
-	SetTarget(target);
-
 	image.Create((std::string)"switch.png");
-	cout << "スイッチ　初期化" << endl;
+	cout << "通常スイッチ　初期化" << endl;
 	return true;
 }
 bool Switch::Initialize(Vec2& pos, Switch::SP target)
@@ -41,7 +23,7 @@ bool Switch::Initialize(Vec2& pos, Switch::SP target)
 	{
 		cout << "スイッチ代入失敗" << endl;
 	}
-
+	taskName = "Switch";
 	//タグ検索を検知可能にする
 	this->Init(taskName);			//TaskObject内の処理を行う
 	//当たり判定の実装
@@ -57,29 +39,11 @@ void Switch::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	if (this->CheckHit())
-	{
-		if (OGge->in->key.down(Input::KeyBoard::S))
-		{
-			this->ON_OFF();
-		}
-	}
 	//このスイッチのフラグと対象に反転させる
 	if (targetswitch != nullptr)
 	{
 		this->TargetSwitchChenge();
 	}
-}
-bool Switch::CheckHit()
-{
-	if (this->target != nullptr)
-	{
-		if (this->target->hit(*this))
-		{
-			return true;
-		}
-	}
-	return false;
 }
 void Switch::Render2D()
 {
@@ -122,13 +86,6 @@ void Switch::ON_OFF()
 	//trueとfalseの切り替えフラグを切り替える
 	is_on = !is_on;
 }
-void Switch::SetTarget(Player::SP target)
-{
-	if (target != nullptr)
-	{
-		this->target = target;
-	}
-}
 void Switch::SetTarget(Switch::SP target)
 {
 	if (target != nullptr)
@@ -154,24 +111,6 @@ Switch::~Switch()
 	this->Finalize();
 	cout << "スイッチ　解放" << endl;
 }
-Switch::SP Switch::Create(Vec2& pos, Player::SP target ,bool is_on ,bool flag_)
-{
-	Switch::SP to = Switch::SP(new Switch());
-	if (to)
-	{
-		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize(pos,target,is_on))
-		{
-			to->Kill();
-		}
-		return to;
-	}
-	return nullptr;
-}
 Switch::SP Switch::Create(Vec2& pos, Switch::SP target,bool flag)
 {
 	Switch::SP to = Switch::SP(new Switch());
@@ -183,6 +122,24 @@ Switch::SP Switch::Create(Vec2& pos, Switch::SP target,bool flag)
 			OGge->SetTaskObject(to);
 		}
 		if (!to->Initialize(pos, target))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
+Switch::SP Switch::Create(Vec2& pos, bool flag)
+{
+	Switch::SP to = Switch::SP(new Switch());
+	if (to)
+	{
+		to->me = to;
+		if (flag)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos))
 		{
 			to->Kill();
 		}

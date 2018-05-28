@@ -182,7 +182,8 @@ bool Game::Initialize()
 			//扇風機生成
 			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT);
 		}
-		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14),OGge->GetTask<Player>("Player"), true);
+		//スイッチの生成
+		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
 		{

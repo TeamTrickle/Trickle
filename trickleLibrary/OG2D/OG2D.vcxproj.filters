@@ -18,9 +18,6 @@
     <Filter Include="ソースファイル\Object">
       <UniqueIdentifier>{b4d7e6a7-3b66-41dd-8ed1-9e6e86d05c2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Task">
-      <UniqueIdentifier>{ed08a23c-71f3-4d2f-8c22-2ef6fd05f24b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\OGSystem\System">
       <UniqueIdentifier>{ce522aeb-86e0-425e-856c-b067ec14c6da}</UniqueIdentifier>
     </Filter>
@@ -29,12 +26,6 @@
     </Filter>
     <Filter Include="ソースファイル\Player">
       <UniqueIdentifier>{4ea31ccc-6e54-4ead-a513-1797ac966399}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Task\Game">
-      <UniqueIdentifier>{afd73d1e-8853-4042-84f7-fa4b38c1f097}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Task\Title">
-      <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Water">
       <UniqueIdentifier>{0696ac02-3dbc-4abb-9594-5c17b95d6683}</UniqueIdentifier>
@@ -90,20 +81,8 @@
     <Filter Include="ソースファイル\OGSystem\System\Easing">
       <UniqueIdentifier>{29be51b7-4dbe-4f28-a121-cac4cd17db15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Task\Option">
-      <UniqueIdentifier>{15fb48ad-aba7-4595-a64e-590f92bee760}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Task\Result">
-      <UniqueIdentifier>{6efcaf64-f223-4c5d-8313-138097076e7d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\OGSystem\System\Random">
       <UniqueIdentifier>{1e49fbb4-0709-4e02-bb94-4922449ddaaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Task\StageSelect">
-      <UniqueIdentifier>{d62b9534-5856-4b17-88fe-d86f28d56ad2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Task\UI">
-      <UniqueIdentifier>{ed486ab6-cbaa-43d5-8a3f-8fa2f40002ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\OGSystem\System\OG">
       <UniqueIdentifier>{1fdc3c70-53db-4d93-b9d6-4726065105aa}</UniqueIdentifier>
@@ -120,10 +99,31 @@
     <Filter Include="ソースファイル\Chara">
       <UniqueIdentifier>{52d41689-55b7-4e63-935d-8708d308b3ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Task\UI\Result">
+    <Filter Include="ソースファイル\Water\Task">
+      <UniqueIdentifier>{ed08a23c-71f3-4d2f-8c22-2ef6fd05f24b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\Game">
+      <UniqueIdentifier>{afd73d1e-8853-4042-84f7-fa4b38c1f097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\Title">
+      <UniqueIdentifier>{ff2dbdfc-7dbf-469b-addd-424b0cef6b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\Option">
+      <UniqueIdentifier>{15fb48ad-aba7-4595-a64e-590f92bee760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\Result">
+      <UniqueIdentifier>{6efcaf64-f223-4c5d-8313-138097076e7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\StageSelect">
+      <UniqueIdentifier>{d62b9534-5856-4b17-88fe-d86f28d56ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\UI">
+      <UniqueIdentifier>{ed486ab6-cbaa-43d5-8a3f-8fa2f40002ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Water\Task\UI\Result">
       <UniqueIdentifier>{c23ee883-98a7-4ab2-b51b-deb216f13224}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Task\Pause">
+    <Filter Include="ソースファイル\Water\Task\Pause">
       <UniqueIdentifier>{38b8f658-e385-41c3-a075-3e78047634f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -183,7 +183,7 @@
       <Filter>ソースファイル\Block</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_Game.cpp">
-      <Filter>ソースファイル\Task\Game</Filter>
+      <Filter>ソースファイル\Water\Task\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Block\block.cpp" />
     <ClCompile Include="src\OGSystem\Audio\SoundManager.cpp">
@@ -199,10 +199,10 @@
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_Option.cpp">
-      <Filter>ソースファイル\Task\Option</Filter>
+      <Filter>ソースファイル\Water\Task\Option</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_Result.cpp">
-      <Filter>ソースファイル\Task\Result</Filter>
+      <Filter>ソースファイル\Water\Task\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
@@ -220,16 +220,16 @@
       <Filter>ソースファイル\Player</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\StageSelect.cpp">
-      <Filter>ソースファイル\Task\StageSelect</Filter>
+      <Filter>ソースファイル\Water\Task\StageSelect</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_Title.cpp">
-      <Filter>ソースファイル\Task\Title</Filter>
+      <Filter>ソースファイル\Water\Task\Title</Filter>
     </ClCompile>
     <ClCompile Include="src\Win\WinMain.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\UI.cpp">
-      <Filter>ソースファイル\Task\UI</Filter>
+      <Filter>ソースファイル\Water\Task\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\OGSystem\_OGsystem.cpp">
       <Filter>ソースファイル\OGSystem\System\OG</Filter>
@@ -262,19 +262,19 @@
       <Filter>ソースファイル\Chara</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\ClearUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\GoalTimeUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\MissonUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_Pause.cpp">
-      <Filter>ソースファイル\Task\Pause</Filter>
+      <Filter>ソースファイル\Water\Task\Pause</Filter>
     </ClCompile>
     <ClCompile Include="src\GameProcessManagement\FrameTime.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
@@ -336,10 +336,10 @@
       <Filter>ソースファイル\Block</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_Game.h">
-      <Filter>ソースファイル\Task\Game</Filter>
+      <Filter>ソースファイル\Water\Task\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_Title.h">
-      <Filter>ソースファイル\Task\Title</Filter>
+      <Filter>ソースファイル\Water\Task\Title</Filter>
     </ClInclude>
     <ClInclude Include="src\Block\block.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -360,10 +360,10 @@
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_Option.h">
-      <Filter>ソースファイル\Task\Option</Filter>
+      <Filter>ソースファイル\Water\Task\Option</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_Result.h">
-      <Filter>ソースファイル\Task\Result</Filter>
+      <Filter>ソースファイル\Water\Task\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
@@ -378,10 +378,10 @@
       <Filter>ソースファイル\OGSystem\System\Random</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\StageSelect.h">
-      <Filter>ソースファイル\Task\StageSelect</Filter>
+      <Filter>ソースファイル\Water\Task\StageSelect</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\UI.h">
-      <Filter>ソースファイル\Task\UI</Filter>
+      <Filter>ソースファイル\Water\Task\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\_OGsystem.h">
       <Filter>ソースファイル\OGSystem\System\OG</Filter>
@@ -417,19 +417,19 @@
       <Filter>ソースファイル\Chara</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\FlagUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\ClearUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\GoalTimeUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\MissionUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
+      <Filter>ソースファイル\Water\Task\UI\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_Pause.h">
-      <Filter>ソースファイル\Task\Pause</Filter>
+      <Filter>ソースファイル\Water\Task\Pause</Filter>
     </ClInclude>
     <ClInclude Include="src\GameProcessManagement\FrameTime.h">
       <Filter>ソースファイル\GameProcessManager</Filter>
