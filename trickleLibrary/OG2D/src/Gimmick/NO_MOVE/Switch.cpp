@@ -28,6 +28,11 @@ bool Switch::Initialize(Vec2& pos , Player::SP target,bool is_on)
 	SetTarget(target);
 
 	image.Create((std::string)"switch.png");
+	//サウンド生成
+	sound.create(soundname, false);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
+
 	cout << "スイッチ　初期化" << endl;
 	return true;
 }
@@ -119,6 +124,8 @@ bool Switch::GetisON()
 }
 void Switch::ON_OFF()
 {
+	//切り替え時サウンドを生成
+	sound.play();
 	//trueとfalseの切り替えフラグを切り替える
 	is_on = !is_on;
 }
@@ -147,6 +154,7 @@ void Switch::TargetSwitchChenge()
 Switch::Switch()
 {
 	cout << "スイッチ　生成" << endl;
+	soundname = "switch.wav";
 }
 
 Switch::~Switch()

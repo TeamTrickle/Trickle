@@ -42,6 +42,8 @@ Water::Water(Vec2 pos)
 		++id;
 	}
 	this->id = i;
+	//サウンドのファイル名設定
+	soundname = "water-drop3.wav";
 }
 
 Water::~Water() 
@@ -53,6 +55,11 @@ Water::~Water()
 bool Water::Initialize() 
 {
 	__super::Init((std::string)"water");
+	soundplay = true;
+	sound.create(soundname, false);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
+
 	return true;
 }
 
@@ -77,9 +84,15 @@ void Water::UpDate()
 			break;
 		case Water::Situation::Deleteform:
 			this->nowSituation = Water::UpDeleteform();
+			if (soundplay)
+			{
+				sound.play();
+				soundplay = false;   //連続して再生されることを防ぐ
+			}
 			break;
 		case Water::Situation::CreaDelete:
 			this->Kill();
+			soundplay = true;
 			break;
 		}
 		break;

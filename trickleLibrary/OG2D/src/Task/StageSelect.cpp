@@ -10,6 +10,7 @@ StageSelect::StageSelect()
 	this->preMode = Non;
 	this->timeCnt = 0;
 	this->nowPos = -1;
+	this->soundname = "title.wav";      //サウンドのファイル名格納
 }
 
 StageSelect::~StageSelect()
@@ -62,6 +63,12 @@ bool StageSelect::Initialize()
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.1f);
+	//サウンドの生成
+	sound.create(soundname, true);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
+
+	sound.play();
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定

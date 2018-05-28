@@ -15,6 +15,7 @@ Title::Title()
 	this->cursorNum = 0;
 	this->isGierAng = false;
 	this->flowerVolume = 0.f;
+	this->soundname = "title.wav";     //サウンドのファイル名	
 }
 
 Title::~Title()
@@ -46,6 +47,10 @@ bool Title::Initialize()
 	this->texLogo.Create((std::string)"logo.png");
 	this->GierLogo.Create((std::string)"gearofi.png");
 	this->flowerLogo.Create((std::string)"flower.png");
+	//サウンドの生成
+	sound.create(soundname, true);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
 
 	//カメラ位置の移動
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
@@ -160,6 +165,9 @@ void Title::UpDate()
 		//テスト用10フレーム後移動
 		if (this->flowerVolume >= 1.0f)
 		{
+			//花が咲いた時点でサウンドの再生を始める
+			sound.play();
+
 			this->mode = from3;
 			//歯車を回す処理
 			

@@ -22,7 +22,8 @@
 
 Game::Game()
 {
-
+	gamesoundname = "title.wav";
+	tutorialsoundname = "tutorial.wav";
 }
 
 Game::~Game()
@@ -78,6 +79,12 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial1.csv");
+		//チュートリアルのサウンドに使用
+		sound.create(tutorialsoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
 		////ui生成
 		//UImng_->Initialize(*MapNum);
 		//uiInfo[0] = { Vec2(6 * 64, 18 * 64), Box2D(200, 300, 200, 300), (std::string)"walkui.png", 300, 4 };
@@ -111,6 +118,12 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial2.csv");
+		//チュートリアルのサウンドに使用
+		sound.create(tutorialsoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
 		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -129,6 +142,11 @@ bool Game::Initialize()
 		{
 			//map生成
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
+			//チュートリアルのサウンドに使用
+			sound.create(tutorialsoundname, true);
+			sound.volume(1.0f);
+			OGge->soundManager->SetSound(&sound);
+			sound.play();
 			//加熱器生成
 			auto kanetuki = Kanetuki::Create(Vec2(64 * 12, 64 * 10));
 			//バケツ生成
@@ -152,6 +170,11 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial4.csv");
+		//チュートリアルのサウンドに使用
+		sound.create(tutorialsoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64));
 		//バケツ生成
@@ -170,6 +193,13 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"stage1.csv");
+
+		//ゲームのサウンドに使用
+		sound.create(gamesoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
 		//加熱器生成
 		for (int i = 0; i < 2; ++i)
 		{

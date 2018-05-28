@@ -75,6 +75,10 @@ public:
 	static SP Create(Vec2&, bool = true);
 
 	void SetMaxSize(Vec2&);
+	//サウンドの生成
+	Sound sound;
+	bool soundplay;
+
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
@@ -101,4 +105,5 @@ private:
 	void MoveSOILDCheck(Vec2);
 	bool HeadCheck(std::string&,int = 0);
 	
+	std::string soundname;      //サウンドのファイル名格納
 };

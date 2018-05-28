@@ -45,6 +45,8 @@ class Title:public TaskObject
 
 	Texture texLogo;
 
+	std::string soundname;
+
 	//Vec2 startPos;
 	Vec2 startPos;
 	Vec2 closePos;
@@ -94,6 +96,7 @@ public:
 		Close        //ƒQ[ƒ€‚ğ•Â‚¶‚é
 	};
 	State state;
+	Sound sound;
 
 	typedef std::shared_ptr<Title> SP;
 	static SP Create(bool = true);

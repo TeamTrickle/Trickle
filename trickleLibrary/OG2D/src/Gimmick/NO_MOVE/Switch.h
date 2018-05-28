@@ -26,6 +26,9 @@ private:
 	const Box2D Src = { 0,0,256,256 };
 	std::shared_ptr<Player>target;
 	std::shared_ptr<Switch>targetswitch;
+
+	std::string soundname;      //サウンドのファイル名格納
+
 	bool is_on;
 	//------------------
 	//固定化されている処理
@@ -49,6 +52,7 @@ public:
 	bool Initialize(Vec2& pos, Player::SP target,bool is_on);	//初期化処理
 	bool Initialize(Vec2& pos, Switch::SP target);
 
+	Sound sound;
 	
 private:
 	bool CheckHit();

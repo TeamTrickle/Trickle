@@ -36,6 +36,8 @@ class StageSelect : public TaskObject
 
 	Texture Testdoor;
 
+	std::string soundname;     //サウンドのファイル名格納
+
 	GameObject* gate[3];
 
 	Vec2 cursorPos;
@@ -85,6 +87,8 @@ public:
 		ToTitle,
 	};
 	State state;
+	Sound sound;
+
 	typedef std::shared_ptr<StageSelect> SP;
 	static SP Create(bool = true);
 };
