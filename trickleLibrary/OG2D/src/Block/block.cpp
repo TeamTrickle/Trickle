@@ -38,7 +38,7 @@ bool Block::Initialize(Vec2& pos) {
 
 	};*/
 
-	tex.Create((std::string)"Collision.png");
+	tex.Create((std::string)"block.png");
 	__super::Init((std::string)"block");
 	return true;
 }
@@ -103,7 +103,7 @@ void Block::UpDate() {
 void Block::Render2D() {
 	Box2D draw(this->position, this->Scale);
 	draw.OffsetSize();
-	Box2D src(0, 0, 128, 128);
+	Box2D src(0, 0, 256, 256);
 	src.OffsetSize();
 	tex.Draw(draw, src);
 }
