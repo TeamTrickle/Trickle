@@ -56,8 +56,9 @@ bool GameProcessManagement::Finalize()
 	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
+		//ゴールをしている
 		if (gameclear_flag)
-		{
+		{//ポーズ処理を行っていない
 			if (!pause_flag)
 			{
 				//順番が違うとリザルト画面の表示ができません
@@ -72,7 +73,7 @@ void GameProcessManagement::Goal_Check()
 {
 	auto goal = OGge->GetTask<Goal>("Goal");
 	if (goal != nullptr)
-	{
+	{//ゴールがクリアになった
 		if (goal->cleared)
 		{
 			if (!gameclear_flag)
@@ -80,14 +81,17 @@ void GameProcessManagement::Goal_Check()
 				timer->Pause();
 			}
 			gameclear_flag = true;
+			//クリアしたらこの関数はここで終了するようにする
 			return;
 		}
+		//タイマーを動かす処理
 		timer->Frame_Set();
 		gameclear_flag = false;
 	}	
 }
 void GameProcessManagement::Goal_Event()
 {
+	//ゴールをしたら・・・
 	if (gameclear_flag)						//ゲームフラグがtrueになったら・・・
 	{
 		timer->Stop();						//タイマーの時間を元に戻す
