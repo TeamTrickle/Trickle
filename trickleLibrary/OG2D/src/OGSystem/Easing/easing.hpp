@@ -8,6 +8,10 @@ private:
 	bool toplay = false;
 public:
 	Easing() { cnt = 0; this->toplay = true; };
+	void Init() {
+		cnt = 0;
+		toplay = true;
+	}
 	//イージング用カウンタ
 	float Time(float duration)
 	{

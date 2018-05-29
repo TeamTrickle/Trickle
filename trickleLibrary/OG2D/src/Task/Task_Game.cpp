@@ -79,29 +79,14 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial1.csv");
+		//水の位置
+		_waterpos.x = 64 * 7;
+		_waterpos.y = 64 * 15;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
 		sound.volume(1.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
-
-		////ui生成
-		//UImng_->Initialize(*MapNum);
-		//uiInfo[0] = { Vec2(6 * 64, 18 * 64), Box2D(200, 300, 200, 300), (std::string)"walkui.png", 300, 4 };
-		//uiInfo[1] = { Vec2(20 * 64,18 * 64),Box2D(1200,300,200,300),(std::string)"pusha.png",300,2 };
-		//uiInfo[2] = { Vec2(25 * 64,16 * 64),Box2D(1500,200,200,300),(std::string)"pushb.png",300,2 };
-		//uiInfo[3] = { Vec2(25 * 64,16 * 64),Box2D(200,200,1000,300),(std::string)"arrowleft.png",500,2 };
-		//uiInfo[4] = { Vec2(64 * 64,18 * 64),Box2D(200,300,1000,300),(std::string)"arrowright.png",500,2 };
-		//for (int i = 0; i < 5; ++i) {
-		//	ui[i] = UI::Create(uiInfo[i], i, &(*UImng_));
-		//}
-		//ui[0] = UI::Create(Vec2(5*64, 19*64), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
-		//ui[0]->setTexture(std::string("walkui.png"));
-		//auto uiwalk = UI::Create(Vec2(200, 300), Box2D(100, 300, 200, 300), (std::string)"walkui.png", 300, 4);
-		//auto uijump = UI::Create(Vec2(400, 300), Box2D(400, 300, 200, 300), (std::string)"pusha.png", 300, 2);
-		//auto uigetbucket = UI::Create(Vec2(1200, 200), Box2D(1150, 200, 100, 200), (std::string)"pushb.png", 300, 2);
-		//auto uigetwater = UI::Create(Vec2(100, 200), Box2D(0, 0, 0, 0), (std::string)"arrowdown.png", 300, 1);
-		//auto apillwater = UI::Create(Vec2(1600, 200), Box2D(1550, 200, 300, 200), (std::string)"pushx.png", 300, 2);
 		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -118,6 +103,8 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial2.csv");
+		//水の位置(勘)
+		_waterpos.x = 64 * 8;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
 		sound.volume(1.0f);
@@ -170,6 +157,8 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial4.csv");
+		//水の位置(勘)
+		_waterpos.x = 64 * 12;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
 		sound.volume(1.0f);

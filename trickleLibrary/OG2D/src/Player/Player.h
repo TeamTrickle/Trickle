@@ -21,12 +21,14 @@ class Player :public GameObject ,public TaskObject
 		"Soil",
 		"Net"
 	};*/
+public:
 	enum State
 	{
 		NORMAL,		//通常
 		BUCKET,		//バケツ所持
 		ANIMATION,	//アニメーション中
 	};
+private:
 	enum Motion
 	{
 		Normal,		//通常

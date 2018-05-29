@@ -2,7 +2,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include <vector>
-
+#include "Bucket\bucket.h"
 
 class UImanager;
 
@@ -15,13 +15,20 @@ class UI :public GameObject,public TaskObject {
 	int num;		//画像分割数
 	int life;		//寿命
 	//bool visible;	//可視不可視
+	Box2D draw;
 	std::vector<Box2D> srcTable;
-	int appeared;	//初期：-1、一度プレイヤと接触したら0、出たら1
-
+	Vec2 maxWH;		//最大描画範囲
+	Vec2 nowWH;		//現在の描画範囲
+	Vec2 endPos;	//最大表示時の左上の座標
+	Easing easeW;
+	Easing easeH;
 	int id_;
 
 public:	
 	bool active;	//生死
+	int appeared;	//初期：-1、一度プレイヤと接触したら0、出たら1
+	std::function<bool()> appear;
+	std::function<bool()> vanish;
 
 	struct UIinfo {
 		Vec2 pos;
@@ -29,6 +36,7 @@ public:
 		std::string path;
 		int life;
 		int picNum;
+		std::function<bool()> vanish;
 	};
 
 	UI();
@@ -37,7 +45,7 @@ public:
 	static SP Create(Vec2&, Box2D&, std::string&, int life, int num, int id, UImanager* manager, bool = true);
 	static SP Create(UIinfo& info, int id, UImanager* manager, bool = true);
 
-	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, UImanager* manager, int num = 0);	//座標、ファイルパス、寿命、画像分割数
+	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, UImanager* manager, std::function<bool()> func, int num = 0);	//座標、ファイルパス、寿命、画像分割数
 	void UpDate();
 	void Move(Vec2 p);		//座標を動かすときに使う
 	void Render2D();
@@ -67,3 +75,17 @@ private:
 
 	int activeID;
 };
+
+
+//UIの出現、消滅条件に使う関数を定義しておくだけのクラス
+class UIfunc {
+public:
+	UIfunc() {};
+	bool getBucket();
+	bool getWater();
+	bool Hit(GameObject& me);
+	bool NoHit(GameObject& me);
+	bool playerPos();
+	bool spoilWater();
+};
+extern std::unique_ptr<UIfunc> uifunc;
