@@ -202,21 +202,19 @@ bool Game::Initialize()
 
 		//スイッチの生成
 		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
-		//扇風機用のスイッチ
-		auto fanswith = Switch::Create(Vec2(64 * 16,64 * 14), swith);
-		//加熱器用のスイッチ
-		auto Fireswith = Switch::Create(Vec2(64 * 14, 64 * 14), swith);
 		for (int i = 0; i < 2; ++i)
 		{
 			//製氷機生成
 			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7));
-			//扇風機生成
-			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT,fanswith);
 		}
+		//スイッチを対象にした扇風機の生成
+		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, swith);
+		///fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
+		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, fan1);
 		//加熱器生成
 		for (int i = 0; i < 2; ++i)
 		{
-			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16),Fireswith);
+			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16), swith);
 		}
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
