@@ -44,6 +44,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
 
 	//î•—‹@‚Ì•`‰æÀ•W
 	position = pos;
+	dir = d;
 	range = r;
 
 	if (dir == Fan::Dir::LEFT)
