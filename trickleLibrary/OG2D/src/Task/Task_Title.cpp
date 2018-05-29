@@ -29,12 +29,12 @@ bool Title::Initialize()
 	//背景読み込み
 	auto back = Back::Create((std::string)"back.png", 1440, 810);
 	//ロゴオブジェクト生成
-	this->Logo.CreateObject(Cube, Vec2(400,250), Vec2(640, 384), 0.0f);
+	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
 	//startPos = Vec2(720.f - 128.f,624.f + 30.f);
-	startPos = Vec2(720.f - 128.f,624.f + 129.f + 30.f);
-	closePos = Vec2(720.f - 128.f,624.f + 258.f + 30.f);
+	startPos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
+	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
 	//配列管理を行う
 	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
@@ -48,10 +48,9 @@ bool Title::Initialize()
 	this->GierLogo.Create((std::string)"gearofi.png");
 	this->flowerLogo.Create((std::string)"flower.png");
 	//サウンドの生成
-	sound.create(soundname, true);
-	sound.volume(1.0f);
-	OGge->soundManager->SetSound(&sound);
-
+	sound = new Sound();
+	sound->create(soundname, true);
+	rm->SetSoundData((std::string)"titleBGM", sound);
 	//カメラ位置の移動
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
 	//水読み込みと生成
@@ -155,22 +154,21 @@ void Title::UpDate()
 			}
 		}
 	}
-		break;
+	break;
 	case from2:	//花咲き開始から終了まで
 	{
 		if (this->timeCnt < 3)
 		{
-			
+
 		}
 		//テスト用10フレーム後移動
 		if (this->flowerVolume >= 1.0f)
 		{
 			//花が咲いた時点でサウンドの再生を始める
-			sound.play();
-
+			sound->play();
 			this->mode = from3;
 			//歯車を回す処理
-			
+
 			//カメラの移動値を登録
 			this->cameraPos.Set(OGge->camera->GetPos(), Vec2(0, 200));
 			this->cameraSize.Set(OGge->camera->GetSize(), Vec2(1440, 810));
@@ -183,7 +181,7 @@ void Title::UpDate()
 			}
 		}
 	}
-		break;
+	break;
 	case from3:	//カメラサイズ移動開始から終了まで
 	{
 		//移動を行う
@@ -196,7 +194,7 @@ void Title::UpDate()
 			this->mode = from4;
 		}
 	}
-		break;
+	break;
 	case from4:	//文字出現
 	{
 		this->tex_a += 0.01f;
@@ -206,7 +204,7 @@ void Title::UpDate()
 			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
 		}
 	}
-		break;
+	break;
 	case from5:	//矢印とプレイヤー出現
 	{
 		auto Npc = OGge->GetTask<Chara>("Chara");
@@ -220,7 +218,7 @@ void Title::UpDate()
 			this->mode = from6;
 		}
 	}
-		break;
+	break;
 	case from6:	//決定待ち状態
 	{
 		CursorMove();
@@ -244,7 +242,7 @@ void Title::UpDate()
 				//this->cm.SetObject(&(*chara));
 				this->mode = from7;
 			}
-				break;
+			break;
 			case 1:
 				OGge->GameEnd();
 				break;
@@ -253,7 +251,7 @@ void Title::UpDate()
 			}
 		}
 	}
-		break;
+	break;
 	case from7:	//ジャンプからselectまでの移動
 	{
 		//ジャンプして着地して横移動する行動
@@ -289,7 +287,7 @@ void Title::UpDate()
 		//		this->mode = End;
 		//	}
 		//}
-		
+
 		//降りたらロードを挟みセレクトへ移行する行動
 		auto chara = OGge->GetTask<Chara>("Chara");
 		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
@@ -297,12 +295,12 @@ void Title::UpDate()
 			this->mode = Mode::End;
 		}
 	}
-		break;
+	break;
 	case End:	//Selectの読み込みと自身の破棄
 	{
 		this->Kill();
 	}
-		break;
+	break;
 	default:
 		break;
 	}
@@ -404,7 +402,7 @@ bool Title::Finalize()
 		(*id)->Kill();
 	}
 	auto map = OGge->GetTask<Map>("map");
-	if(map)
+	if (map)
 	{
 		(*map).Kill();
 	}
@@ -431,7 +429,7 @@ bool Title::Finalize()
 			break;
 		}
 	}
-	
+
 	return true;
 }
 

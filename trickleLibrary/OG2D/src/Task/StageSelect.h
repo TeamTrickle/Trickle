@@ -87,7 +87,7 @@ public:
 		ToTitle,
 	};
 	State state;
-	Sound sound;
+	Sound* sound;
 
 	typedef std::shared_ptr<StageSelect> SP;
 	static SP Create(bool = true);

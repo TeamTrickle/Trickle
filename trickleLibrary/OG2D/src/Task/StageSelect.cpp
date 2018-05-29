@@ -52,7 +52,7 @@ bool StageSelect::Initialize()
 	texTutorial.Create((std::string)"tutorial.png");
 	texStage1.Create((std::string)"stage1.png");
 	texStage2.Create((std::string)"stage2.png");
-	texToTitle.Create((std::string)"totitle.png"); 
+	texToTitle.Create((std::string)"totitle.png");
 	this->Testdoor.Create((std::string)"testResource.png");
 	//プレイヤーNPCの生成
 	auto chara = Chara::Create(std::string("player2.png"), Vec2(10, -200));
@@ -64,11 +64,12 @@ bool StageSelect::Initialize()
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.1f);
 	//サウンドの生成
-	sound.create(soundname, true);
+	/*sound.create(soundname, true);
 	sound.volume(1.0f);
 	OGge->soundManager->SetSound(&sound);
 
-	sound.play();
+	sound.play();*/
+	//sound = rm->GetSoundData(std::string(""));
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定
@@ -95,7 +96,7 @@ void StageSelect::UpDate()
 	{
 		switch (state) {
 		case Tutorial:
-			*MapNum = 3;	
+			*MapNum = 3;
 			if (OGge->in->on(In::SL))
 			{
 				*MapNum = 1;
@@ -108,7 +109,7 @@ void StageSelect::UpDate()
 		case Stage1:
 			*MapNum = 5;	break;
 		case Stage2:	//未実装
-			//*MapNum = 6;	break;
+						//*MapNum = 6;	break;
 			break;
 		case ToTitle:
 			break;
@@ -124,27 +125,27 @@ void StageSelect::UpDate()
 	{
 		this->From1();
 	}
-		break;
+	break;
 	case Mode::from2:	//キャラとカメラの横移動
 	{
 		this->From2();
 	}
-		break;
+	break;
 	case Mode::from3:	//決定待ち
 	{
 		this->From3();
 	}
-		break;
+	break;
 	case Mode::from4:	//決定後処理
 	{
 		this->From4();
 	}
-		break;
+	break;
 	case Mode::End:		//次へ
 	{
 		this->Kill();
 	}
-		break;
+	break;
 	default:
 		break;
 	}
@@ -196,7 +197,7 @@ void StageSelect::Render2D()
 	//ドア
 	for (int i = 0; i < 3; ++i)
 	{
-		Box2D draw(this->gate[i]->position,this->gate[i]->Scale);
+		Box2D draw(this->gate[i]->position, this->gate[i]->Scale);
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, this->Testdoor.GetTextureSize().x, this->Testdoor.GetTextureSize().y);
 		this->Testdoor.Draw(draw, src);
@@ -212,6 +213,8 @@ bool StageSelect::Finalize()
 	texStage2.Finalize();
 	texToTitle.Finalize();
 	this->Testdoor.Finalize();
+	delete rm->GetSoundData((std::string)"titleBGM");
+	rm->DeleteSound((std::string)"titleBGM");
 	//このオブジェクト内で生成したものを削除する
 	auto chara = OGge->GetTasks<Chara>("Chara");
 	for (auto id = (*chara).begin(); id != (*chara).end(); ++id)
@@ -284,7 +287,7 @@ void StageSelect::From1()
 				{
 					//次へ移動
 					this->mode = Mode::from2;
-					this->camera_anim.Set(OGge->camera->GetPos(),Vec2(OGge->camera->GetPos().x + 200,OGge->camera->GetPos().y));
+					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetPos().x + 200, OGge->camera->GetPos().y));
 					this->nowPos = 0;
 					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
 				}

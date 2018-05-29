@@ -6,7 +6,7 @@
 #include "OGSystem\OGsystem.h"
 #include "CameraManager\CameraManager.h"
 
-class Title:public TaskObject
+class Title :public TaskObject
 {
 	class Animation
 	{
@@ -21,7 +21,7 @@ class Title:public TaskObject
 		bool isPlay() const;
 	};
 
-	
+
 
 	enum Mode
 	{
@@ -96,7 +96,7 @@ public:
 		Close        //ƒQ[ƒ€‚ğ•Â‚¶‚é
 	};
 	State state;
-	Sound sound;
+	Sound* sound;
 
 	typedef std::shared_ptr<Title> SP;
 	static SP Create(bool = true);

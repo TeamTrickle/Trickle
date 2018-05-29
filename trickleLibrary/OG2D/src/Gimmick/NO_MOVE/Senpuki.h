@@ -30,6 +30,9 @@ public:
 		RIGHT,
 	};
 	void SetWindRange(Vec2&);
+	//サウンド周りの情報
+	bool startflag;
+	Sound sound;
 private:
 	//------------------
 	//固定化されている処理
@@ -45,13 +48,13 @@ public:
 	virtual ~Fan();
 	typedef std::shared_ptr<Fan> SP;
 	static Fan::SP Create(Vec2 pos, float r, Fan::Dir d, bool = true);
-	static Fan::SP Create( Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>& target,bool = true);
+	static Fan::SP Create(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>& target, bool = true);
 	//-------------
 	//変更しないこと
 	//-------------
 	Fan();
 	bool Initialize(Vec2 pos, float r, Dir d);
-	bool Initialize(Vec2 pos, float r, Dir d,std::shared_ptr<Switch>&target);
+	bool Initialize(Vec2 pos, float r, Dir d, std::shared_ptr<Switch>&target);
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
@@ -62,13 +65,14 @@ private:
 	float range;
 	float movePos;
 	int strength;
+	std::string soundname;      //サウンドのファイル名格納
 	struct Animetion
 	{
 		int animetionframe;
 		int speed;
 		void AnimetionMove(bool flag);				//アニメーションフレームを動かす
 		void AnimetionReset();						//アニメーションの数値をリセットする
-		void AnimetionSrc(Box2D& src,bool flag);	//アニメーションフレームを描画に影響させる
+		void AnimetionSrc(Box2D& src, bool flag);	//アニメーションフレームを描画に影響させる
 	};
 	Animetion animetion;
 	GameObject WindHitBase;

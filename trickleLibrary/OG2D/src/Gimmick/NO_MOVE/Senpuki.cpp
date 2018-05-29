@@ -34,7 +34,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 	std::cout << "扇風機　初期化" << std::endl;
 	return true;
 }
-bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
+bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>&obj)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
@@ -42,7 +42,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
 	this->taskName = "Senpuki";			//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
-	//扇風機の描画座標
+									//扇風機の描画座標
 	position = pos;
 	dir = d;
 	range = r;
@@ -62,6 +62,12 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
 	this->SetSwitchFlag(obj);
 	std::string filePath = "fan.png";
 	image.Create(filePath);
+
+	//サウンドの生成
+	this->startflag = false;
+	sound.create(soundname, true);
+	sound.volume(0.8f);
+
 	std::cout << "扇風機　初期化" << std::endl;
 	return true;
 }
@@ -75,6 +81,7 @@ void Fan::GetFlag()
 	if (target != nullptr)
 	{
 		switchflag = target->GetisON();
+
 	}
 	else
 	{
@@ -113,7 +120,7 @@ void Fan::Animetion::AnimetionMove(bool flag)
 		{
 			animetionframe -= 10;
 		}
-		else if(animetionframe > 0)
+		else if (animetionframe > 0)
 		{
 			animetionframe -= speed;
 		}
@@ -138,6 +145,24 @@ void Fan::UpDate()
 	{
 		animetion.AnimetionMove(GetSwitchFlag());
 		animetion.AnimetionReset();
+	}
+
+	//サウンドの再生について
+	if (switchflag)
+	{
+		if (startflag)
+		{
+			sound.play();
+			startflag = false;
+		}
+	}
+	if (switchflag == false)
+	{
+		if (sound.isplay() == true)
+		{
+			sound.stop();
+		}
+		startflag = true;
 	}
 }
 void Fan::Animetion::AnimetionSrc(Box2D& src, bool flag)
@@ -183,7 +208,7 @@ void Fan::Render2D()
 	Box2D draw(position, Vec2(64, 64));
 	draw.OffsetSize();
 	Box2D src = this->Src;
-	this->animetion.AnimetionSrc(src,GetSwitchFlag());
+	this->animetion.AnimetionSrc(src, GetSwitchFlag());
 	src.OffsetSize();
 	if (this->dir == Fan::Dir::LEFT)
 	{
@@ -191,7 +216,7 @@ void Fan::Render2D()
 		src.w = src.x;
 		src.x = k;
 	}
-	
+
 	this->image.Draw(draw, src);
 }
 
@@ -204,7 +229,7 @@ bool Fan::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		
+
 	}
 	return true;
 }
@@ -236,6 +261,7 @@ void Fan::Motion()
 Fan::Fan()
 {
 	std::cout << "扇風機　生成" << std::endl;
+	soundname = "wind1.wav";
 }
 Fan::~Fan()
 {
@@ -261,7 +287,7 @@ Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool flag_)
 	return nullptr;
 }
 
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&target, bool flag_)
+Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>&target, bool flag_)
 {
 	Fan::SP to = Fan::SP(new Fan());
 	if (to)
@@ -271,7 +297,7 @@ Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&target
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos,r,d,target))
+		if (!to->Initialize(pos, r, d, target))
 		{
 			to->Kill();
 		}
