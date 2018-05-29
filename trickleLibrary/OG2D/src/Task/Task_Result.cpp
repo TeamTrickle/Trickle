@@ -124,11 +124,11 @@ bool Result::Finalize()
 		{
 			(*id)->Kill();
 		}
-		for (auto id = (*mission).begin(); id != (*mission).end(); ++id)
+		for (auto id = (*frametime).begin(); id != (*frametime).end(); ++id)
 		{
 			(*id)->Kill();
 		}
-		for (auto id = (*frametime).begin(); id != (*frametime).end(); ++id)
+		for (auto id = (*mission).begin(); id != (*mission).end(); ++id)
 		{
 			(*id)->Kill();
 		}
