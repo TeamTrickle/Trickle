@@ -15,6 +15,15 @@ bool Kanetuki::Initialize(Vec2& pos)
 	Fire_MovetimeReset();
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
 	this->GetFlag();
+
+	//サウンドに関する情報
+	startflag = false;
+	nowplay = false;
+	//サウンドの生成
+	sound.create(soundname, true);
+	//サウンドの生成　　着火
+	soundstart.create(startsoundname, false);
+
 	cout << "加熱器　初期化" << endl;
 	return true;
 }
