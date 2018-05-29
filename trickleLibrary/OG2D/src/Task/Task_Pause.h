@@ -31,8 +31,8 @@ public:
 	//™™™™//
 	void Pause_draw();
 	void PauseUpDate();
-	enum Select{
-		ToTitle,Stage,Ruselt,
+	enum Select {
+		ToTitle, Stage, Ruselt,
 	};
 	Select select;
 	bool PauseFlg;

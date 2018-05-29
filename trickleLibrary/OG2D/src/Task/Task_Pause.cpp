@@ -37,6 +37,7 @@ void Pause::UpDate()
 		OGge->SetPause(true);
 		PauseFlg = true;
 	}
+
 }
 //--------------------------------------------------------------------------------------
 void Pause::Render2D()
@@ -72,6 +73,7 @@ bool Pause::Finalize()
 
 	switch (select) {
 	case ToTitle:
+		//Game::Create();	//ゲーム戻ったらバグでるので、タイトル画面に戻る暫定
 		Title::Create();
 		break;
 	case Stage:
@@ -90,7 +92,7 @@ void Pause::Pause_draw()
 		{
 			//背景
 			{
-				Box2D draw(transparentbackPos.x, transparentbackPos.y, 1280.0f, 720.0f);
+				Box2D draw(transparentbackPos.x, transparentbackPos.y, 1280.0f*2.0f, 720.0f*2.0f);
 				draw.OffsetSize();
 				Box2D src(0, 0, 1280, 720);
 				src.OffsetSize();
@@ -162,16 +164,16 @@ void Pause::PauseUpDate()
 	}
 
 	//選択肢の表示はカメラによって位置が変更
-	//auto NowCameraPos = OGge->camera->GetPos();
-	//transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
-	//titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
-	//ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
-	//stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
-	auto NowCameraPos = OGge->window->GetPos();
-	transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
-	titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
-	ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
-	stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
+	auto NowCameraPos = OGge->camera->GetPos();
+	auto NowCameraSize = OGge->camera->GetSize();
+	auto map = OGge->GetTask<Map>("map");
+	float keisan = NowCameraSize.x / 2;
+	float NewPos = keisan + NowCameraPos.x;
+	transparentbackPos = Vec2(0,0);
+	titlePos = Vec2(NewPos + 600.0f, NowCameraPos.y + 50.0f);
+	ruseltPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 250.0f);
+	stageselectPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 150.0f);
+
 	//矢印の移動
 	if (OGge->in->key.down(In::UP)) {
 		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
@@ -179,7 +181,7 @@ void Pause::PauseUpDate()
 	if (OGge->in->key.down(In::DOWN)) {
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
 	}
-	cursorPos = Vec2(NowCameraPos.x + 600.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));
+	cursorPos = Vec2(NewPos + 500.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));
 	select = Select::Ruselt;
 	//選択し
 	if (cursorPos.y == titlePos.y)
@@ -203,4 +205,21 @@ void Pause::PauseUpDate()
 			this->Kill();
 		}
 	}
+
+
+	//カメラ移動処理(未完成)
+		if (OGge->in->key.on(In::A)){
+			OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
+		}
+		if (OGge->in->key.on(In::D)){
+			OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
+		}
+		if (OGge->in->key.on(In::W)) {
+			OGge->camera->MovePos(Vec2(0.0f,-5.0f));
+		}
+		if (OGge->in->key.on(In::S)) {
+			OGge->camera->MovePos(Vec2(0.0f, 5.0f));
+		}
+
+
 }
