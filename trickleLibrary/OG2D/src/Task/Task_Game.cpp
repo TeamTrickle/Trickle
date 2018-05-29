@@ -16,6 +16,7 @@
 #include "GameProcessManagement\GameClearCamera.h"
 #include "GameProcessManagement\Timer.h"
 #include "Task\Task_Pause.h"
+#include "Task\StageSelect.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -24,6 +25,7 @@ Game::Game()
 {
 	gamesoundname = "title.wav";
 	tutorialsoundname = "tutorial.wav";
+	this->ResetKillCount();
 }
 
 Game::~Game()
@@ -33,7 +35,12 @@ Game::~Game()
 	OGge->ChengeTask();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		
+		//次にチュートリアルを控えているものは次のチュートリアルへ移動
+		if (*MapNum <= 4)
+		{
+			//チュートリアル終了でセレクトに戻る
+			auto next = StageSelect::Create();
+		}
 	}
 }
 
@@ -49,10 +56,10 @@ bool Game::Initialize()
 		{ 400,800 }
 	};
 
-	Vec2 blockpos = Vec2(1536, 100);  //1536,100
+	Vec2 blockpos = Vec2(1536, 70);  //1536,100
 	_waterpos = { 200,100 };
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
-	float fanrange[2] = { 18,6 };
+	float fanrange[2] = { 16,7 };
 
 	std::cout << "Game" << std::endl;
 
@@ -191,21 +198,19 @@ bool Game::Initialize()
 
 		//スイッチの生成
 		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
-		//扇風機用のスイッチ
-		auto fanswith = Switch::Create(Vec2(64 * 16,64 * 14), swith);
-		//加熱器用のスイッチ
-		auto Fireswith = Switch::Create(Vec2(64 * 14, 64 * 14), swith);
 		for (int i = 0; i < 2; ++i)
 		{
 			//製氷機生成
 			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7));
-			//扇風機生成
-			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT,fanswith);
 		}
+		//スイッチを対象にした扇風機の生成
+		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, swith);
+		///fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
+		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, fan1);
 		//加熱器生成
 		for (int i = 0; i < 2; ++i)
 		{
-			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16),Fireswith);
+			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16), swith);
 		}
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
@@ -379,6 +384,11 @@ bool Game::Finalize()
 	}
 	auto timers = OGge->GetTasks<Timer>("Timer");
 	for (auto id = (*timers).begin(); id != (*timers).end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto pauses = OGge->GetTasks<Pause>("pause");
+	for (auto id = pauses->begin(); id != pauses->end(); ++id)
 	{
 		(*id)->Kill();
 	}

@@ -49,6 +49,7 @@ bool Player::Initialize(Vec2& pos)
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
+	//this->position = { 19 * 64 + 32,13 * 64 };
 	//テクスチャの読み込み
 	//各変数の初期化
 	this->CheckJump = true;
@@ -89,22 +90,40 @@ void Player::UpDate()
 		this->BucketMove();
 		if (OGge->in->down(In::B2))
 		{
-			//元に戻す
-			this->state = State::NORMAL;
-			//持っている判定を元に戻す
-			auto bucket = OGge->GetTasks<Bucket>("bucket");
-			for (auto id = bucket->begin(); id != bucket->end(); ++id)
+			if (this->hold)
 			{
-				(*id)->HoldCheck(false);
-				this->hold = false;
+				//元に戻す
+				this->state = State::NORMAL;
+				//持っている判定を元に戻す
+				auto bucket = OGge->GetTasks<Bucket>("bucket");
+				for (auto id = bucket->begin(); id != bucket->end(); ++id)
+				{
+					if ((*id)->GetHold())
+					{
+						(*id)->HoldCheck(false);
+						this->hold = false;
+					}
+				}
+				auto waters = OGge->GetTasks<Water>("water");
+				for (auto id = waters->begin(); id != waters->end(); ++id)
+				{
+					if ((*id)->GetHold())
+					{
+						if (this->direction == Direction::LEFT)
+						{
+							(*id)->position.x -= this->Scale.x;
+						}
+						else
+						{
+							(*id)->position.x += this->Scale.x;
+						}
+						(*id)->HoldCheck(false);
+						(*id)->ResetMove();
+						this->hold = false;
+					}
+				}
+				this->inv = 10;
 			}
-			auto waters = OGge->GetTasks<Water>("water");
-			for (auto id = waters->begin(); id != waters->end(); ++id)
-			{
-				(*id)->HoldCheck(false);
-				this->hold = false;
-			}
-			this->inv = 10;
 		}
 		break;
 	case State::NORMAL:
@@ -173,7 +192,7 @@ void Player::UpDate()
 			this->motion = Motion::Walk;
 		}
 		this->BlockHit();
-		if (OGge->in->key.down(Input::KeyBoard::S))
+		if (OGge->in->down(In::B2))
 		{
 			animation.timeCnt = 0;
 			this->motion = Motion::Switch_M;
@@ -260,16 +279,17 @@ void Player::UpDate()
 			this->motion = Motion::Jump;
 			this->moveCnt = 0;
 		}
-		if (OGge->in->key.down(Input::KeyBoard::S))
-		{
-			this->SwitchCheck();
-		}
 		if (OGge->in->down(In::B2))
 		{
 			//バケツを持つ
 			if (this->BucketHit())
 			{
 				this->state = State::BUCKET;
+			}
+			else
+			{
+				//もしバケツをとれないならばスイッチの判定を行う
+				this->SwitchCheck();
 			}
 		}
 		this->BlockHit();
@@ -411,7 +431,8 @@ bool Player::FootCheck()
 		{
 			if (map->hitBase[y][x].objectTag == "Floor" ||
 				map->hitBase[y][x].objectTag == "Net" ||
-				map->hitBase[y][x].objectTag == "Soil")
+				map->hitBase[y][x].objectTag == "Soil" || 
+				map->_arr[y][x] == 24)
 			{
 				if (foot.hit(map->hitBase[y][x]))
 				{
@@ -508,7 +529,8 @@ void Player::MoveCheck(Vec2 est)
 				if (this->hit(map->hitBase[y][x]))
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
-						map->hitBase[y][x].objectTag == "Net")
+						map->hitBase[y][x].objectTag == "Net" || 
+						map->_arr[y][x] == 24)
 					{
 						this->position.x = preX;
 						break;
@@ -528,12 +550,18 @@ void Player::MoveCheck(Vec2 est)
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 		{
-			if (this->hit(*(*id)))
+			//氷であり
+			if ((*id)->objectTag == "SOLID")
 			{
-				if ((*id)->objectTag == "SOLID")
+				//所持状態でないときのみ
+				if (!(*id)->GetHold())
 				{
-					this->position.x = preX;
-					break;
+					//当たり判定を行う
+					if (this->hit(*(*id)))
+					{
+						this->position.x = preX;
+						break;
+					}
 				}
 			}
 		}
@@ -564,7 +592,8 @@ void Player::MoveCheck(Vec2 est)
 				if (this->hit(map->hitBase[y][x]))
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
-						map->hitBase[y][x].objectTag == "Net")
+						map->hitBase[y][x].objectTag == "Net" ||
+						map->_arr[y][x] == 24)
 					{
 						this->position.y = preY;
 						break;
@@ -584,12 +613,18 @@ void Player::MoveCheck(Vec2 est)
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 		{
-			if (this->hit(*(*id)))
+			//氷であり
+			if ((*id)->objectTag == "SOLID")
 			{
-				if ((*id)->objectTag == "SOLID")
+				//所持状態でないときのみ
+				if (!(*id)->GetHold())
 				{
-					this->position.y = preY;
-					break;
+					//当たり判定を行う
+					if (this->hit(*(*id)))
+					{
+						this->position.y = preY;
+						break;
+					}
 				}
 			}
 		}
@@ -639,14 +674,24 @@ bool Player::BucketHit()
 			return true;
 		}
 	}
+	GameObject left;
+	left.CreateObject(Objform::Cube, Vec2(this->position.x - 3.0f, this->position.y), Vec2(3.0f, this->Scale.y), 0.0f);
+	GameObject right;
+	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(3.0f, this->Scale.y), 0.0f);
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
-		if (this->hit(*(*id)))
+		if (!(*id)->GetHold())
 		{
-			(*id)->HoldCheck(true);
-			this->hold = true;
-			return true;
+			if ((*id)->GetState() == Water::State::SOLID)
+			{
+				if (left.hit(*(*id)) || right.hit(*(*id)))
+				{
+					(*id)->HoldCheck(true);
+					this->hold = true;
+					return true;
+				}
+			}
 		}
 	}
 	return false;

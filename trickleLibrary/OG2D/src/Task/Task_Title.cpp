@@ -16,6 +16,7 @@ Title::Title()
 	this->isGierAng = false;
 	this->flowerVolume = 0.f;
 	this->soundname = "title.wav";     //サウンドのファイル名	
+	this->sound = nullptr;
 }
 
 Title::~Title()
@@ -86,16 +87,6 @@ void Title::UpDate()
 	//----------------
 	//テスト
 	//----------------
-	if (OGge->in->key.on(In::Q))
-	{
-		OGge->camera->MoveSize(Vec2(-32, -18));
-		OGge->camera->MovePos(Vec2(16.f, 9.f));
-	}
-	if (OGge->in->key.on(In::E))
-	{
-		OGge->camera->MoveSize(Vec2(32, 18));
-		OGge->camera->MovePos(Vec2(-16.f, -9.f));
-	}
 	if (OGge->in->key.down(In::SPACE))
 	{
 		this->Kill();
@@ -427,6 +418,14 @@ bool Title::Finalize()
 			break;
 		default:
 			break;
+		}
+	}
+	else
+	{
+		if (this->sound)
+		{
+			delete this->sound;
+			this->sound = nullptr;
 		}
 	}
 

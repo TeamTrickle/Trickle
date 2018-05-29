@@ -62,17 +62,7 @@ void Seihyouki::UpDate()
 
 	if (GetSwitchFlag())
 	{
-		auto water = OGge->GetTasks<Water>("water");
-		if (water != nullptr)
-		{
-			for (int i = 0; i < (*water).size(); ++i)
-			{
-				if ((*water)[i]->hit(hitBace))
-				{
-					toIce();
-				}
-			}
-		}
+		toIce();
 	}
 }
 
@@ -97,32 +87,35 @@ bool Seihyouki::Finalize()
 }
 void Seihyouki::toIce()
 {
-	auto water = OGge->GetTask<Water>("water");
-	if (water != nullptr)
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		if (water->GetState() == Water::State::SOLID)
+		if ((*id)->hit(hitBace))
 		{
-			while (true)
+			if ((*id)->GetState() == Water::State::SOLID)
 			{
-				movetime++;
-				if (movetime >= movetime_ice)
+				while (true)
 				{
-					water->SetState(Water::State::LIQUID);
-					movetime = 0;
-					break;
+					movetime++;
+					if (movetime >= movetime_ice)
+					{
+						(*id)->SetState(Water::State::LIQUID);
+						movetime = 0;
+						break;
+					}
 				}
 			}
-		}
-		if (water->GetState() == Water::State::LIQUID)
-		{
-			while (true)
+			if ((*id)->GetState() == Water::State::LIQUID)
 			{
-				movetime++;
-				if (movetime >= movetime_ice)
+				while (true)
 				{
-					water->SetState(Water::State::SOLID);
-					movetime = 0;
-					break;
+					movetime++;
+					if (movetime >= movetime_ice)
+					{
+						(*id)->SetState(Water::State::SOLID);
+						movetime = 0;
+						break;
+					}
 				}
 			}
 		}

@@ -5,6 +5,8 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 {
 	std::cout << "フレームタイムUI　初期化" << std::endl;
 	this->taskName = "FrameTimeUI";
+	this->Init(taskName);
+
 	this->getframetime = resulttime;
 
 	this->DigitNumberReset();
@@ -81,14 +83,12 @@ void FrameTimeUI::UpDate()
 }
 void FrameTimeUI::Render2D()
 {
-	{
-		Box2D draw(position, Scale);
-		draw.OffsetSize();
-		Box2D src = this->Src;
-		src.x = src.w * digitSelectnumber;
-		src.OffsetSize();
-		image.Draw(draw, src);
-	}
+	Box2D draw(position, Scale);
+	draw.OffsetSize();
+	Box2D src = this->Src;
+	src.x = src.w * digitSelectnumber;
+	src.OffsetSize();
+	image.Draw(draw, src);
 }
 FrameTimeUI::FrameTimeUI()
 {
@@ -96,6 +96,7 @@ FrameTimeUI::FrameTimeUI()
 }
 FrameTimeUI::~FrameTimeUI()
 {
+	this->Finalize();
 	std::cout << "フレームタイムUI　解放" << std::endl;
 }
 FrameTimeUI::SP FrameTimeUI::Create(Vec2& pos,int digitselect,int& resulttime,bool flag)

@@ -32,7 +32,7 @@ bool Block::Initialize(Vec2& pos) {
 	plhitL = false;
 	plhitR = false;
 
-	GameObject::CreateObject(Objform::Cube, pos, Vec2(128.f, 128.f), 0.f);       //オブジェクトの生成
+	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f);       //オブジェクトの生成
 	GameObject::objectTag = "Block";
 	/*GameObject::CollisionProcess = [&](const GameObject& o_) {
 

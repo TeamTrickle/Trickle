@@ -24,6 +24,7 @@ bool Goal::Initialize()
 bool Goal::Initialize(Vec2& pos) {
 	cleared = false;
 	this->objectTag = "Goal";
+	__super::Init(this->objectTag);
 	//テクスチャの読み込み
 	tex.Create((std::string)"goal.png");
 	//オブジェクトの生成
