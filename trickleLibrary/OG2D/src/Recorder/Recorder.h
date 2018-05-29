@@ -2,20 +2,35 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 #include <thread>
 #include <queue>
+#include "OGSystem\OGsystem.h"
 #include "OGSystem\Timer\glTimer.h"
+#include "OGSystem\Input\Input.h"
 
 /**
  *	@brief  プレイヤーの行動をファイルとして記録します
  *	@author	Heewon Kim (nabicore@icloud.com)
  */
 class Recorder {
+private:
+
+	enum KeyState {
+		Idle,
+		PRESS,
+		RELEASE
+	};
+	typedef std::pair<Input::in, KeyState> WatchKey;
+
 	explicit Recorder() {}
 	virtual ~Recorder() {}
 	bool Initialize(const std::string&);
+	bool isKeyListenable() const;
+	bool isAlreadyRecorded(const WatchKey&, const KeyState&) const;
 	void printLog(const std::string&);
 	void Recorde();
+	void RecordeButton();
 
 public:
 	/**
@@ -37,11 +52,26 @@ public:
 	 */
 	void WriteRecord(const std::string&);
 
+	/**
+	 *	@brief	キー入力記録を許可します
+	 *	@param	OGge->in
+	 */
+	void ActivateKeyRecord(Input*);
+
+	/**
+	 *	@brief	キー入力を記録するキーをしていします。
+	 *	@param	キー
+	 */
+	void AddKeyInputWatchList(const Input::in&);
+	void operator>>(const Input::in&);
+
 private:
 	bool							isLogging = false;
 	Time*							gameTimer;
+	Input*							inputListener;
 	std::string						fileName = "save.txt";
 	std::ofstream					fileWriter;
 	std::thread						recThread;
 	std::queue<std::string>			inputQueue;
+	std::vector<WatchKey>			watchKeys;
 };

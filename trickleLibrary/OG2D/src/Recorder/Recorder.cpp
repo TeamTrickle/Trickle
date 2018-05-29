@@ -30,6 +30,12 @@ void Recorder::Destroy() {
 	delete this;
 }
 
+bool Recorder::isKeyListenable() const {
+	return
+		inputListener &&
+		!watchKeys.empty();
+}
+
 bool Recorder::Initialize(const std::string& fName) {
 	fileName = fName;
 	fileWriter.open(fName, std::ios::binary | std::ios::out);
@@ -40,8 +46,24 @@ bool Recorder::Initialize(const std::string& fName) {
 	return true;
 }
 
+bool Recorder::isAlreadyRecorded(const WatchKey& key, const KeyState& status) const {
+	return key.second == status;
+}
+
 void Recorder::WriteRecord(const std::string& msg) {
 	inputQueue.push(msg);
+}
+
+void Recorder::ActivateKeyRecord(Input* in) {
+	inputListener = in;
+}
+
+void Recorder::AddKeyInputWatchList(const Input::in& key) {
+	watchKeys.push_back(WatchKey::pair(key, KeyState::Idle));
+}
+
+void Recorder::operator>>(const Input::in& key) {
+	AddKeyInputWatchList(key);
 }
 
 void Recorder::Recorde() {
@@ -50,12 +72,30 @@ void Recorder::Recorde() {
 	localTimer.Start();
 	while (localTimer.isplay()) {
 		if (!inputQueue.empty()) {
-			auto act = inputQueue.front();
-			auto curTime = std::to_string(localTimer.GetTime());
-			auto msg = curTime + " / " + act + "\n";
-			fileWriter << msg.c_str();
+			std::string act = inputQueue.front();
+			std::string curTime = std::to_string(localTimer.GetTime());
+			std::string msg = curTime + " / " + act;
+			fileWriter << msg.c_str() << std::endl;
 			printLog(msg);
 			inputQueue.pop();
+		}
+		if (isKeyListenable())
+			RecordeButton();
+	}
+}
+
+void Recorder::RecordeButton() {
+	for (auto& k : watchKeys) {
+		bool isRecordable = false;
+		if (inputListener->down(k.first) && !isAlreadyRecorded(k, KeyState::PRESS))		{ isRecordable = true;	k.second = KeyState::PRESS; }
+		if (inputListener->up(k.first)	 && !isAlreadyRecorded(k, KeyState::RELEASE))	{ isRecordable = true;	k.second = KeyState::RELEASE; }
+		if (isRecordable) {
+			std::string curTime = std::to_string(gameTimer->GetTime());
+			std::string button  = std::to_string(k.first);
+			std::string status	= std::to_string(k.second);
+			std::string msg = curTime + "/" + button + "/" + status;
+			fileWriter << msg.c_str() << std::endl;
+			printLog(msg);
 		}
 	}
 }
