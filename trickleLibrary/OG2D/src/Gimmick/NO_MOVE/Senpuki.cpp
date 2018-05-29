@@ -12,13 +12,14 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 	this->taskName = "Senpuki";			//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 
-	position = pos;
 	range = r;
 	dir = d;
+	//î•—‹@‚Ì•`‰æÀ•W
+	position = pos;
 	if (dir == Fan::Dir::LEFT)
 	{
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(pos.x - (64 * r), pos.y), Vec2(64 * r, 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
 	}
 	else
 	{
@@ -41,13 +42,14 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
 	this->taskName = "Senpuki";			//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 
+	//î•—‹@‚Ì•`‰æÀ•W
 	position = pos;
 	range = r;
-	dir = d;
+
 	if (dir == Fan::Dir::LEFT)
 	{
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(pos.x, pos.y), Vec2(64 * r, 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x, 64.f), 0.0f);
 	}
 	else
 	{
@@ -177,7 +179,7 @@ void Fan::Render2D()
 	//--------------------
 	//•`‰æŽž‚És‚¤ˆ—‚ð‹Lq
 	//--------------------
-	Box2D draw(this->WindHitBase.position, Vec2(64,64));
+	Box2D draw(position, Vec2(64, 64));
 	draw.OffsetSize();
 	Box2D src = this->Src;
 	this->animetion.AnimetionSrc(src,GetSwitchFlag());

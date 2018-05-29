@@ -51,7 +51,7 @@ bool Game::Initialize()
 
 	Vec2 blockpos = Vec2(1536, 100);  //1536,100
 	_waterpos = { 200,100 };
-	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * (20 + 6),64 * 10) };
+	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 18,6 };
 
 	std::cout << "Game" << std::endl;
@@ -212,7 +212,8 @@ bool Game::Initialize()
 			//扇風機生成
 			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT);
 		}
-		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14),OGge->GetTask<Player>("Player"), true);
+		//スイッチの生成
+		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
 		{

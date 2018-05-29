@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "Player\Player.h"
 #include "Bucket\bucket.h"
+#include "Gimmick\NO_MOVE\Switch.h"
 Map::Map()
 {
 	this->chip.resize(45);

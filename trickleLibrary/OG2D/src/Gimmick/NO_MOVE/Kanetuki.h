@@ -13,7 +13,6 @@ class Kanetuki : public GameObject, public TaskObject
 public:
 	std::shared_ptr<Switch> target;
 private:
-	GameObject hitBace;
 	bool switchflag;
 	//------------------
 	//ŒÅ’è‰»‚³‚ê‚Ä‚¢‚éˆ—
@@ -32,8 +31,8 @@ private:
 	bool Finalize();		//‰ğ•úˆ—
 	void GetFlag();
 private:
-	const int Fire_time_LIQUID = 70;	//‰Á”M‚·‚éŠÔ ‰t‘Ì
-	const int Fire_time_SOLID = 40;	    //‰Á”M‚·‚éŠÔ ŒÂ‘Ì
+	const int Fire_time_LIQUID = 30;	//‰Á”M‚·‚éŠÔ ‰t‘Ì
+	const int Fire_time_SOLID = 20;	    //‰Á”M‚·‚éŠÔ ŒÂ‘Ì
 	int Fire_movetime;					//”R‚â‚·ŠÔ‚ğŠi”[‚·‚é
 
 	//ó‘Ô‘JˆÚ
@@ -41,6 +40,7 @@ private:
 	//w’èƒXƒCƒbƒ`‚Ìƒtƒ‰ƒO‚ğ‘ã“ü‚·‚é
 	void SetSwitchFlag(std::shared_ptr<Switch>&);
 	bool GetSwitchFlag();
+	void Fire_MovetimeReset();
 public:
 	virtual ~Kanetuki();
 	static Kanetuki::SP Create(Vec2& pos, bool = true);
