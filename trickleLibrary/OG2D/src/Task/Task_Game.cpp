@@ -200,20 +200,24 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
-		//加熱器生成
-		for (int i = 0; i < 2; ++i)
-		{
-			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16));
-		}
+		//スイッチの生成
+		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
+		//扇風機用のスイッチ
+		auto fanswith = Switch::Create(Vec2(64 * 16,64 * 14), swith);
+		//加熱器用のスイッチ
+		auto Fireswith = Switch::Create(Vec2(64 * 14, 64 * 14), swith);
 		for (int i = 0; i < 2; ++i)
 		{
 			//製氷機生成
 			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7));
 			//扇風機生成
-			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT);
+			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT,fanswith);
 		}
-		//スイッチの生成
-		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
+		//加熱器生成
+		for (int i = 0; i < 2; ++i)
+		{
+			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16),Fireswith);
+		}
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
 		{
