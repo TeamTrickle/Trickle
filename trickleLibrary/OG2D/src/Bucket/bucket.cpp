@@ -8,6 +8,9 @@ Bucket::Bucket() {
 Bucket::Bucket(Vec2& pos) {
 	this->position = pos;
 	this->invi = 0;
+	//サウンドのファイル名
+	putsoundname = "bucket-put1.wav";
+	dropsoundname = "spoil.wav";
 }
 
 Bucket::~Bucket() {
@@ -26,6 +29,19 @@ bool Bucket::Initialize(Vec2& pos)
 	this->capacity = 0;
 	this->CreateObject(Objform::Cube, pos, Vec2(64.f, 64.f), 0.f);
 	this->objectTag = "Bucket";
+	//サウンドを連続して呼ばないためのフラッグ
+	putsoundplay = true;
+
+	//サウンドの生成　水をこぼす音
+	soundD.create(dropsoundname, false);
+	soundD.volume(1.0f);
+	OGge->soundManager->SetSound(&soundD);
+
+	//サウンドの生成 バケツを置く音
+	soundP.create(putsoundname, false);
+	soundP.volume(1.0f);
+	OGge->soundManager->SetSound(&soundP);
+
 
 	tex.Create((std::string)"bucket.png");
 	__super::Init((std::string)"bucket");
@@ -39,11 +55,16 @@ void Bucket::UpDate() {
 	}
 	if (hold)
 	{
+		//サウンドを再生するのを許可
+		putsoundplay = true;
 		gravity.y = 0.0f;
 	}
 	gravity.y += 5.0f;
 	if (this->BucketWaterCreate())	//バケツから水を出す処理
 	{
+		//水をこぼす音の再生
+		soundD.play();
+
 		auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2), this->position.y));
 		water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
 		this->capacity = 0.f;
@@ -159,6 +180,14 @@ bool Bucket::isObjectCollided() {
 	auto block = OGge->GetTask<Block>("block");
 	if (map) {
 		hitMap = map->MapHitCheck(*this);
+		if (hitMap == true)
+		{
+			if (putsoundplay)    //サウンドを一回再生したかどうかの判断
+			{
+				soundP.play();
+				putsoundplay = false;
+			}
+		}
 	}
 	if (block) {
 		hitBlock = block->hit(*this);

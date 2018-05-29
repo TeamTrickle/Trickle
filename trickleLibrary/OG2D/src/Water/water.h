@@ -52,7 +52,7 @@ public:
 
 	void SetSituation(const Situation&);
 	Situation GetSituation() const;
-	//Vec2 MoveSolid(Vec2&);									//氷を押し出す処理(未実装)
+	Vec2 MoveSolid(const Vec2&);									//氷を押し出す処理(未実装)
 
 	//水量の移動
 	float waterMove();
@@ -75,6 +75,14 @@ public:
 	static SP Create(Vec2&, bool = true);
 
 	void SetMaxSize(Vec2&);
+	//サウンドの生成
+	Sound sound;
+	bool soundplay;
+
+	
+	bool GetHold() const;
+	void HoldCheck(bool);
+
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
@@ -90,9 +98,11 @@ private:
 	Vec2 move;
 	Color color;
 	int setTime;
+	bool hold;
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();
+	unsigned int id;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
 	void MoveWATERCheck(Vec2);
@@ -100,4 +110,5 @@ private:
 	void MoveSOILDCheck(Vec2);
 	bool HeadCheck(std::string&,int = 0);
 	
+	std::string soundname;      //サウンドのファイル名格納
 };

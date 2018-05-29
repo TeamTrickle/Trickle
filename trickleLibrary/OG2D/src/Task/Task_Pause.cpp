@@ -35,7 +35,7 @@ void Pause::UpDate()
 	//ポーズへの移動
 	if (OGge->in->key.down(In::G)) {
 		OGge->SetPause(true);
-			PauseFlg = true;
+		PauseFlg = true;
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -63,13 +63,13 @@ bool Pause::Finalize()
 	auto titleTask = OGge->GetTask<Title>("title");
 	if (titleTask) titleTask->Kill();
 
-	if (this->select != Select::Ruselt){
+	if (this->select != Select::Ruselt) {
 		auto game = OGge->GetTask<Game>("game");
-		if (game){
+		if (game) {
 			game->Kill();
 		}
 	}
-	
+
 	switch (select) {
 	case ToTitle:
 		Title::Create();
@@ -140,10 +140,10 @@ Pause::SP Pause::Create(bool flag_)
 	if (to)
 	{
 		to->me = to;
-		if (flag_){
+		if (flag_) {
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize()){
+		if (!to->Initialize()) {
 			to->Kill();
 		}
 		return to;
@@ -152,17 +152,22 @@ Pause::SP Pause::Create(bool flag_)
 }
 //--------------------------------------------------------------------------------------
 void Pause::PauseUpDate()
-{ 
+{
 	//デバッグ用
 	//std::cout << "Puase" << std::endl;
 	//ポーズ画面の解除
 	if (OGge->in->key.down(In::G)) {
-		OGge->SetPause(false); 
-			PauseFlg = false;
+		OGge->SetPause(false);
+		PauseFlg = false;
 	}
 
 	//選択肢の表示はカメラによって位置が変更
-	auto NowCameraPos = OGge->camera->GetPos();
+	//auto NowCameraPos = OGge->camera->GetPos();
+	//transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
+	//titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
+	//ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
+	//stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
+	auto NowCameraPos = OGge->window->GetPos();
 	transparentbackPos = Vec2(NowCameraPos.x, NowCameraPos.y);
 	titlePos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 50.0f);
 	ruseltPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 250.0f);
@@ -185,7 +190,7 @@ void Pause::PauseUpDate()
 	{
 		select = Stage;
 	}
-	if (cursorPos.y ==ruseltPos.y)
+	if (cursorPos.y == ruseltPos.y)
 	{
 		select = Ruselt;
 	}

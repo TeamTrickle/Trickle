@@ -13,7 +13,8 @@ class Goal : public GameObject, public TaskObject
 public:
 	bool Initialize(Vec2&);
 	bool cleared;
-	
+	bool goal_anim;
+	int animCnt;
 	//void AddWater();
 	//bool DeleteWater();
 	bool ClearCheck();

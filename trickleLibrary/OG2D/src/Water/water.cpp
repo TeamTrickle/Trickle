@@ -20,6 +20,9 @@ Water::Water(Vec2 pos)
 	//初期ステータスの設定
 	this->nowSituation = Water::Situation::Newfrom;
 	this->currentState = Water::State::LIQUID;
+	//テスト
+	//this->nowSituation = Water::Situation::Normal;
+	//this->currentState = Water::State::SOLID;
 	//初期保持水量
 	this->volume = 0.5;
 	this->invi = 0;
@@ -29,6 +32,18 @@ Water::Water(Vec2 pos)
 	this->nowTime = 0;
 	//現在カラーを設定
 	this->color = { 0,0,0,0 };
+	//IDを設定
+	auto waters = OGge->GetTasks<Water>("water");
+	int i = 0;
+	auto id = waters->begin();
+	while (id != waters->end())
+	{
+		++i;
+		++id;
+	}
+	this->id = i;
+	//サウンドのファイル名設定
+	soundname = "water-drop3.wav";
 }
 
 Water::~Water() 
@@ -40,6 +55,11 @@ Water::~Water()
 bool Water::Initialize() 
 {
 	__super::Init((std::string)"water");
+	soundplay = true;
+	sound.create(soundname, false);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
+
 	return true;
 }
 
@@ -64,9 +84,15 @@ void Water::UpDate()
 			break;
 		case Water::Situation::Deleteform:
 			this->nowSituation = Water::UpDeleteform();
+			if (soundplay)
+			{
+				sound.play();
+				soundplay = false;   //連続して再生されることを防ぐ
+			}
 			break;
 		case Water::Situation::CreaDelete:
 			this->Kill();
+			soundplay = true;
 			break;
 		}
 		break;
@@ -250,11 +276,11 @@ void Water::Friction()
 {
 	if (this->move.x > 0)
 	{
-		this->move.x = std::min(this->move.x + this->FIN_SPEED, 0.f);
+		this->move.x = std::max(this->move.x - this->FIN_SPEED, 0.f);
 	}
 	else
 	{
-		this->move.x = std::max(this->move.x - this->FIN_SPEED, 0.f);
+		this->move.x = std::min(this->move.x + this->FIN_SPEED, 0.f);
 	}
 	if (!this->FootCheck(std::string("Floor")) || !this->FootCheck(std::string("SOLID")) || this->move.y < 0)
 	{
@@ -450,6 +476,7 @@ void Water::MoveGASCheck(Vec2 est)
 void Water::MoveSOILDCheck(Vec2 est)
 {
 	auto map = OGge->GetTask<Map>("map");
+	auto waters = OGge->GetTasks<Water>("water");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -474,10 +501,23 @@ void Water::MoveSOILDCheck(Vec2 est)
 			{
 				if (map->hitBase[y][x].objectTag == "Floor" || 
 					map->hitBase[y][x].objectTag == "Soil" || 
-					map->hitBase[y][x].objectTag == "Net" || 
-					map->hitBase[y][x].objectTag == "SOLID")
+					map->hitBase[y][x].objectTag == "Net")
 				{
 					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.x = preX;
+						break;
+					}
+				}
+			}
+		}
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if (this->id != (*id)->id)
+			{
+				if ((*id)->objectTag == "SOLID")
+				{
+					if (this->hit(*(*id)))
 					{
 						this->position.x = preX;
 						break;
@@ -510,10 +550,23 @@ void Water::MoveSOILDCheck(Vec2 est)
 			{
 				if (map->hitBase[y][x].objectTag == "Floor" ||
 					map->hitBase[y][x].objectTag == "Soil" ||
-					map->hitBase[y][x].objectTag == "Net" ||
-					map->hitBase[y][x].objectTag == "SOLID")
+					map->hitBase[y][x].objectTag == "Net")
 				{
 					if (this->hit(map->hitBase[y][x]))
+					{
+						this->position.y = preY;
+						break;
+					}
+				}
+			}
+		}
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if (this->id != (*id)->id)
+			{
+				if ((*id)->objectTag == "SOLID")
+				{
+					if (this->hit(*(*id)))
 					{
 						this->position.y = preY;
 						break;
@@ -589,6 +642,31 @@ void Water::SetMaxSize(Vec2& max)
 void Water::SetWaterVolume(float value)
 {
 	this->volume = value;
+}
+
+Vec2 Water::MoveSolid(const Vec2& est)
+{
+	this->move.x = est.x;
+	//this->MoveSOILDCheck(this->move);
+	return this->move;
+}
+
+void Water::HoldCheck(bool flag)
+{
+	if (flag)
+	{
+		if (this->GetState() == State::SOLID)
+		{
+			this->hold = true;
+			return;
+		}
+	}
+	this->hold = false;
+}
+
+bool Water::GetHold() const
+{
+	return this->hold;
 }
 
 Water::SP Water::Create(Vec2& pos, bool flag_)

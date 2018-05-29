@@ -1,28 +1,47 @@
 #include "Switch.h"
 using namespace std;
 
-//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-bool Switch::Initialize(Vec2& pos , std::shared_ptr<Player>&target,bool is_on)
+bool Switch::Initialize(Vec2& pos)
 {
-	//-----------------------------
-	//生成時に処理する初期化処理を記述
-	//-----------------------------
-	this->taskName = "Switch";		//検索時に使うための名を登録する
+	taskName = "Switch";
+	//タグ検索を検知可能にする
+	this->Init(taskName);			//TaskObject内の処理を行う
+									//当たり判定の実装
+	CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
+	image.Create((std::string)"switch.png");
+	//サウンド生成
+	sound.create(soundname, false);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
+
+	cout << "通常スイッチ　初期化" << endl;
+	return true;
+}
+bool Switch::Initialize(Vec2& pos, Switch::SP target)
+{
+	taskName = "Switch";
+	if (target)
+	{
+		cout << "スイッチを検知" << endl;
+	}
+	else
+	{
+		cout << "スイッチ代入失敗" << endl;
+	}
 
 	//タグ検索を検知可能にする
 	this->Init(taskName);			//TaskObject内の処理を行う
-
-									//座標の設定
 	//当たり判定の実装
 	CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
-	//オブジェクトタグの追加
-	objectTag = "Switch";
-	//スイッチの切り替えフラグをONにする
-	this->is_on = is_on;
-	//スイッチに対応する
+	//ターゲットを代入する
 	SetTarget(target);
+	image.Create((std::string)"switch.png");
+	//サウンド生成
+	sound.create(soundname, false);
+	sound.volume(1.0f);
+	OGge->soundManager->SetSound(&sound);
 
-	cout << "スイッチ　初期化" << endl;
+	cout << "ターゲットスイッチ　初期化" << endl;
 	return true;
 }
 void Switch::UpDate()
@@ -30,31 +49,28 @@ void Switch::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	if (this->CheckHit())
+	//このスイッチのフラグと対象に反転させる
+	if (targetswitch != nullptr)
 	{
-		if (OGge->in->key.down(Input::KeyBoard::S))
-		{
-			std::cout << "反応しました" << std::endl;
-			this->ON_OFF();
-		}
+		this->TargetSwitchChenge();
 	}
-}
-bool Switch::CheckHit()
-{
-	if (this->target != nullptr)
-	{
-		if (this->target->hit(*this))
-		{
-			return true;
-		}
-	}
-	return false;
 }
 void Switch::Render2D()
 {
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
+	Box2D draw(position, Scale);
+	draw.OffsetSize();
+	Box2D src = this->Src;
+	src.OffsetSize();
+	if (this->GetisON())
+	{
+		int temp = src.x;
+		src.x = src.w;
+		src.w = temp;
+	}
+	image.Draw(draw, src);
 }
 
 bool Switch::Finalize()
@@ -77,19 +93,30 @@ bool Switch::GetisON()
 }
 void Switch::ON_OFF()
 {
+	//切り替え時サウンドを生成
+	sound.play();
 	//trueとfalseの切り替えフラグを切り替える
 	is_on = !is_on;
 }
-void Switch::SetTarget(std::shared_ptr<Player>&target)
+void Switch::SetTarget(Switch::SP target)
 {
 	if (target != nullptr)
 	{
-		this->target = target;
+		this->targetswitch = target;
+		this->is_on = !this->targetswitch->GetisON();
 	}
+}
+void Switch::TargetSwitchChenge()
+{
+	if (targetswitch != nullptr)
+	{
+		this->is_on = !this->targetswitch->GetisON();
+	}		
 }
 Switch::Switch()
 {
 	cout << "スイッチ　生成" << endl;
+	soundname = "switch.wav";
 }
 
 Switch::~Switch()
@@ -97,17 +124,35 @@ Switch::~Switch()
 	this->Finalize();
 	cout << "スイッチ　解放" << endl;
 }
-Switch::SP Switch::Create(Vec2& pos, std::shared_ptr<Player> &target ,bool is_on ,bool flag_)
+Switch::SP Switch::Create(Vec2& pos,bool flag)
 {
 	Switch::SP to = Switch::SP(new Switch());
 	if (to)
 	{
 		to->me = to;
-		if (flag_)
+		if (flag)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos,target,is_on))
+		if (!to->Initialize(pos))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
+Switch::SP Switch::Create(Vec2& pos, Switch::SP target,bool flag)
+{
+	Switch::SP to = Switch::SP(new Switch());
+	if (to)
+	{
+		to->me = to;
+		if (flag)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos, target))
 		{
 			to->Kill();
 		}

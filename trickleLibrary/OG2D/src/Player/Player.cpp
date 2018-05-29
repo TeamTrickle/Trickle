@@ -3,10 +3,11 @@
 #include "Water\water.h"
 #include "Map\Map.h"
 #include "Block\block.h"
+#include "Gimmick\NO_MOVE\Switch.h"
 
 Player::Player()
 {
-	
+	this->hold = false;
 }
 Player::~Player()
 {
@@ -73,6 +74,7 @@ void Player::UpDate()
 	case State::ANIMATION:
 		if (this->animation.isMove())
 		{
+			//this->motion = Motion::Walk;
 			//移動処理
 			this->position += this->animation.Move();
 		}
@@ -94,6 +96,13 @@ void Player::UpDate()
 			for (auto id = bucket->begin(); id != bucket->end(); ++id)
 			{
 				(*id)->HoldCheck(false);
+				this->hold = false;
+			}
+			auto waters = OGge->GetTasks<Water>("water");
+			for (auto id = waters->begin(); id != waters->end(); ++id)
+			{
+				(*id)->HoldCheck(false);
+				this->hold = false;
 			}
 			this->inv = 10;
 		}
@@ -117,9 +126,12 @@ void Player::UpDate()
 		}
 		if (OGge->in->on(In::B1))
 		{
-			//落下していない時のみジャンプが有効
-			this->motion = Motion::Jump;
-			this->moveCnt = 0;
+			if (this->FootCheck())
+			{
+				//落下していない時のみジャンプが有効
+				this->motion = Motion::Jump;
+				this->moveCnt = 0;
+			}
 		}
 		if (OGge->in->down(In::B2))
 		{
@@ -161,6 +173,12 @@ void Player::UpDate()
 			this->motion = Motion::Walk;
 		}
 		this->BlockHit();
+		if (OGge->in->key.down(Input::KeyBoard::S))
+		{
+			animation.timeCnt = 0;
+			this->motion = Motion::Switch_M;
+			this->SwitchCheck();
+		}
 		break;
 	case Motion::Jump:
 		//飛び出したときに初期値を入れる
@@ -198,7 +216,8 @@ void Player::UpDate()
 				this->moveCnt = 0;
 			}
 			if (this->InputUp())
-			{
+			{	
+				++this->animation.ladderCnt;
 				Vec2 e = { 0.f,-5.0f };
 				this->MoveCheck(e, (std::string)"Floor");
 				if (this->HeadCheck((std::string)"Ladder", 1))
@@ -214,6 +233,7 @@ void Player::UpDate()
 			}
 			if (this->InputDown())
 			{
+				++this->animation.ladderCnt;
 				Vec2 e = { 0.f,5.0f };
 				this->MoveCheck(e, (std::string)"Floor");
 				if (this->FootCheck((std::string)"Ladder", 1))
@@ -228,7 +248,7 @@ void Player::UpDate()
 				
 			}
 		}
-		break;
+		break; 
 	case Walk:
 		if (!this->InputRight() && !this->InputLeft())
 		{
@@ -240,7 +260,24 @@ void Player::UpDate()
 			this->motion = Motion::Jump;
 			this->moveCnt = 0;
 		}
+		if (OGge->in->key.down(Input::KeyBoard::S))
+		{
+			this->SwitchCheck();
+		}
+		if (OGge->in->down(In::B2))
+		{
+			//バケツを持つ
+			if (this->BucketHit())
+			{
+				this->state = State::BUCKET;
+			}
+		}
+		this->BlockHit();
 		break;
+	case Switch_M:
+		if (animation.timeCnt > 29) {
+			this->motion = Motion::Normal;
+		}
 	}
 	//重力とかとかの移動処理の計算
 	if (this->state != State::ANIMATION)
@@ -270,7 +307,7 @@ void Player::Render2D()
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
 
-	Box2D src = this->animation.returnSrc(this->motion);
+	Box2D src = this->animation.returnSrc(this->motion, this->state);
 	//モションを受けsrcをreturnする
 	src.OffsetSize();
 
@@ -587,21 +624,57 @@ bool Player::BucketHit()
 	{
 		return false;
 	}
+	//すでに持っているならば動かない
+	if (this->hold)
+	{
+		return false;
+	}
 	auto bucket = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
 		if (this->hit(*(*id)))
 		{
 			(*id)->HoldCheck(true);
+			this->hold = true;
+			return true;
+		}
+	}
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if (this->hit(*(*id)))
+		{
+			(*id)->HoldCheck(true);
+			this->hold = true;
 			return true;
 		}
 	}
 	return false;
 }
+void Player::SwitchCheck()
+{
+	auto switchs = OGge->GetTasks<Switch>("Switch");
+	for (auto id = switchs->begin(); id != switchs->end(); ++id)
+	{
+		if ((*id)->hit(*this))
+		{
+			(*id)->ON_OFF(); 
+			(*id)->GetisON();
+		}
+	}
+}
 void Player::BucketMove()
 {
 	auto buckets = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*buckets).begin(); id != (*buckets).end(); ++id)
+	{
+		if ((*id)->GetHold())
+		{
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y };
+		}
+	}
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
 		if ((*id)->GetHold())
 		{
@@ -621,6 +694,7 @@ bool Player::Animation::Initialize()
 	this->startVec = { 0.f,0.f };
 	this->endVec = { 0.f,0.f };
 	this->timeCnt = 0;
+	this->ladderCnt = 0;
 	return true;
 }
 Vec2 Player::Animation::Move()
@@ -672,31 +746,75 @@ bool Player::Animation::isMove()
 	}
 	return false;
 }
-Box2D Player::Animation::returnSrc(Motion motion) 
+Box2D Player::Animation::returnSrc(Motion motion, State state) 
 {
-	Motion motion_ = motion;
+	Box2D src(0,0,550,550);	//基本のsrc（後で消すかも）
+	if (state == Normal) {
+		switch (motion) {
+		case Motion::Normal:
+			src = Box2D(this->idle[this->timeCnt / 3 % 10] * 550, 0, 550, 550);
+			return src;
+			break;
 
-	Box2D src2(0,0,550,550);	//仮のsrc（後で消すかも）
-	if (motion_ == Motion::Normal) {
-		Box2D src(this->idle[this->timeCnt/3 % 10] * 550, 0, 550, 550);
-		return src ;
-	}
+		case Motion::Walk:
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * 550, 550, 550, 550);
+			return src;
+			break;
 
-	if (motion_ == Motion::Walk) {
-		Box2D src(this->walk[this->timeCnt/3 % 9] * 550, 550, 550, 550);
-		return src;
-	}
+		case Motion::Jump:
+			src = Box2D(0 * 550, 2 * 550, 550, 550);
+			return src;
+			break;
 
-	if (motion_ == Motion::Jump) {
-		Box2D src(0 * 550, 2 * 550, 550, 550);
-		return src;
-	}
+		case Motion::Fall:
+			src = Box2D(1 * 550, 2 * 550, 550, 550);
+			return src;
+			break;
+		
+		case Motion::Ladder:
+			src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * 550, 3 * 550, 550, 550);
+			break;
 
-	if (motion_ == Motion::Fall) {
-		Box2D src(1 * 550, 2 * 550, 550, 550);
-		return src;
+		case Motion::Switch_M:
+			auto switchs = OGge->GetTasks<Switch>("Switch");
+			bool tempS;
+			for (auto id = switchs->begin(); id != switchs->end(); ++id)
+			{
+				tempS = (*id)->GetisON();
+			}
+			if (tempS) {
+				src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	
+			}
+			else {
+				src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	//後で修正
+			}
+			break;
+		}
 	}
-	return src2;
+	if (state == BUCKET) {
+		switch (motion) {
+		case Motion::Normal:
+			src = Box2D(this->idle[this->timeCnt / 3 % 10] * 550, 4*550, 550, 550);
+			return src;
+			break;
+
+		case Motion::Walk:
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * 550, 5 * 550, 550, 550);
+			return src;
+			break;
+
+		case Motion::Jump:
+			src = Box2D(0 * 550, 7 * 550, 550, 550);
+			return src;
+			break;
+
+		case Motion::Fall:
+			src = Box2D(1 * 550, 7 * 550, 550, 550);
+			return src;
+			break;
+		}
+	}
+	return src;
 
 }
 void Player::MoveCheck(Vec2& est, std::string& objname_)
@@ -779,6 +897,27 @@ bool Player::BlockHit()
 			if (this->est.x > 0)
 			{
 				(*id)->GetMove(this->est);
+			}
+		}
+	}
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
+	{
+		if ((*id)->GetState() == Water::State::SOLID)
+		{
+			if (this->est.x < 0)
+			{
+				if (left.hit(*(*id)))
+				{
+					(*id)->MoveSolid(this->est);
+				}
+			}
+			if (this->est.x > 0)
+			{
+				if (right.hit(*(*id)))
+				{
+					(*id)->MoveSolid(this->est);
+				}
 			}
 		}
 	}

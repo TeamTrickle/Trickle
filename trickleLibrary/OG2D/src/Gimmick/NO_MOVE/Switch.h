@@ -12,8 +12,6 @@
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-
-#include "Player\Player.h"
 class Switch : public GameObject, public TaskObject
 {
 	//-------------------------------------------
@@ -22,26 +20,38 @@ class Switch : public GameObject, public TaskObject
 public:
 	bool GetisON();
 private:
-	std::shared_ptr<Player>target;
+	Texture image;
+	const Box2D Src = { 0,0,256,256 };
+	std::shared_ptr<Switch>targetswitch;
+
+	std::string soundname;      //サウンドのファイル名格納
+
 	bool is_on;
 	//------------------
 	//固定化されている処理
 	//------------------
 private:
-	bool CheckHit();
-	void ON_OFF();
-	void SetTarget(std::shared_ptr<Player> &target);
+	void UpDate();				//更新処理
+	void Render2D();			//描画処理
+	bool Finalize();			//解放処理
 public:
 	std::string taskName;
 	virtual ~Switch();
 	typedef std::shared_ptr<Switch> SP;
-	static Switch::SP Create(Vec2& pos,std::shared_ptr<Player> &target,bool is_on,bool = true);
+	//通常時
+	//あるスイッチとフラグを切り替えるスイッチを生成する場合
+	static Switch::SP Create(Vec2& pos, bool = true);
+	static Switch::SP Create(Vec2& pos, Switch::SP target,bool = true);
 	Switch();
 	//-------------
 	//変更しないこと
 	//-------------
-	bool Initialize(Vec2& pos, std::shared_ptr<Player>&target,bool is_on);	//初期化処理
-	void UpDate();				//更新処理
-	void Render2D();			//描画処理
-	bool Finalize();			//解放処理
+	bool Initialize(Vec2& pos, Switch::SP target);
+	bool Initialize(Vec2& pos);
+
+	Sound sound;
+	void ON_OFF();
+private:	
+	void TargetSwitchChenge();			//ターゲットのスイッチとフラグを入れ替える
+	void SetTarget(Switch::SP target);
 };

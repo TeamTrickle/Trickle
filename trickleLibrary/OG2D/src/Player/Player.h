@@ -24,7 +24,6 @@ class Player :public GameObject ,public TaskObject
 	enum State
 	{
 		NORMAL,		//通常
-		LADDER,		//はしご中（使ってないらしい
 		BUCKET,		//バケツ所持
 		ANIMATION,	//アニメーション中
 	};
@@ -34,8 +33,8 @@ class Player :public GameObject ,public TaskObject
 		Walk,		//歩き中
 		Jump,		//ジャンプ
 		Ladder,		//はしご
-		Ladder_Ani,	//梯子で降りたり上ったり
 		Fall,		//落下
+		Switch_M,		//スイッチ
 	};
 	class Animation
 	{
@@ -44,14 +43,17 @@ class Player :public GameObject ,public TaskObject
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
 		int timeCnt;											//アニメーション経過時間
+		int ladderCnt;											//梯子アニメーションのカウント
 		int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };					//Normal状態のアニメーション
 		int walk[9] = { 0,1,2,3,4,5,6,7,8 };					//Walk状態のアニメーション
+		int ladder[2] = { 0,1 };								//ladder_ani状態のアニメーション
+		int switch_a[6] = { 0,1,2,3,4,4 };
 	public:
 		void SetAnimaVec(Vec2& start_, Vec2& end_);				//開始位置と終了位置を登録
 		bool Initialize();										//初期化
 		Vec2 Move();											//移動処理を行い移動値を返す
 		bool isMove();											//移動処理中かどうかを返す
-		Box2D returnSrc(Motion motion);
+		Box2D returnSrc(Motion motion, State state);			//motionによってsrcを返す
 	};
 private:
 	const float MOVE_SPEED = 5.f;								//移動スピード
@@ -71,6 +73,7 @@ private:
 	Animation animation;										//アニメーションの移動処理
 	int inv;													//無敵時間
 	std::string taskName;
+	bool hold;
 private:
 	bool HeadCheck();											//頭の当たり判定
 	bool FootCheck();											//足元の当たり判定
@@ -83,6 +86,7 @@ private:
 	void BucketMove();											//所持しているバケツの位置を変える
 	bool BlockHit();											//ブロックとの当たり判定
 	bool ObjectHit(std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
+	void SwitchCheck();											//スイッチとの当たり判定
 public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);

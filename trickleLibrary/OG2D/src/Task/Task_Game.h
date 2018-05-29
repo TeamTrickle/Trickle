@@ -24,6 +24,8 @@ public:
 	//’Ç‰Á•Ï”//
 	//™™™™//
 	int timecnt;
+
+	Sound sound;
 private:
 	//---------------------------------------------------------------------
 	//ƒƒ“ƒo[ŠÖ”
@@ -37,6 +39,9 @@ private:
 	Texture waterTex;
 	Texture playerTex;
 	Texture fanTex;
+
+	std::string gamesoundname;
+	std::string tutorialsoundname;
 
 	//UI----------------------------------------
 	//std::vector<UI::SP> ui;

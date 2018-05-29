@@ -3,7 +3,7 @@ bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 {
 	this->taskName = "ResultPlayer";
 	this->Init(taskName);
-	std::string filePath = "idle.png";
+	std::string filePath = "walk.png";
 	image.Create(filePath);
 	this->CreateObject(Cube, pos, Vec2(64, 64), 0);
 	this->moveVec = speed;

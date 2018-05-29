@@ -22,7 +22,8 @@
 
 Game::Game()
 {
-
+	gamesoundname = "title.wav";
+	tutorialsoundname = "tutorial.wav";
 }
 
 Game::~Game()
@@ -78,6 +79,12 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial1.csv");
+		//チュートリアルのサウンドに使用
+		sound.create(tutorialsoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
 		////ui生成
 		//UImng_->Initialize(*MapNum);
 		//uiInfo[0] = { Vec2(6 * 64, 18 * 64), Box2D(200, 300, 200, 300), (std::string)"walkui.png", 300, 4 };
@@ -111,6 +118,12 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial2.csv");
+		//チュートリアルのサウンドに使用
+		sound.create(tutorialsoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
 		//バケツ生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -129,6 +142,11 @@ bool Game::Initialize()
 		{
 			//map生成
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
+			//チュートリアルのサウンドに使用
+			sound.create(tutorialsoundname, true);
+			sound.volume(1.0f);
+			OGge->soundManager->SetSound(&sound);
+			sound.play();
 			//加熱器生成
 			auto kanetuki = Kanetuki::Create(Vec2(64 * 12, 64 * 10));
 			//バケツ生成
@@ -145,7 +163,6 @@ bool Game::Initialize()
 			for (int i = 0; i < 1; ++i)
 			{
 				auto fan = Fan::Create(Vec2(64, 64 * 2), fanrange[0],(i % 2 == 0)?  Fan::Dir::RIGHT: Fan::Dir::LEFT, true);
-				fan->SetTexture(&this->fanTex);
 			}
 		}
 		break;
@@ -153,6 +170,11 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial4.csv");
+		//チュートリアルのサウンドに使用
+		sound.create(tutorialsoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64));
 		//バケツ生成
@@ -171,20 +193,29 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"stage1.csv");
-		//加熱器生成
-		for (int i = 0; i < 2; ++i)
-		{
-			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16));
-		}
+
+		//ゲームのサウンドに使用
+		sound.create(gamesoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
+		//スイッチの生成
+		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
 		for (int i = 0; i < 2; ++i)
 		{
 			//製氷機生成
 			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7));
-			//扇風機生成
-			auto fan = Fan::Create(fanpos[i], fanrange[i], (i == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT);
-			fan->SetTexture(&this->fanTex);
 		}
-		auto swith = Switch::Create(Vec2(64 * 18,64 * 13),OGge->GetTask<Player>("player"),true);
+		//スイッチを対象にした扇風機の生成
+		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, swith);
+		///fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
+		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, fan1);
+		//加熱器生成
+		for (int i = 0; i < 2; ++i)
+		{
+			auto kanetuki = Kanetuki::Create(Vec2(64 * (18 + i), 64 * 16), swith);
+		}
 		//バケツ生成
 		/*for (int i = 0; i < 2; ++i)
 		{

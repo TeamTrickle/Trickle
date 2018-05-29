@@ -158,7 +158,7 @@ void Audio::Source::Looping(const bool loop_) const
 }
 bool Audio::Source::isPlay() const
 {
-	std::cout << "isPlay()" << std::endl;
+	//std::cout << "isPlay()" << std::endl;
 	//Œ»Ý‚Ìó‘Ô‚ð•Ô‚·
 	ALint state;
 	alGetSourcei(this->id_, AL_SOURCE_STATE, &state);
