@@ -2,30 +2,20 @@
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
+#include "Gimmick\NO_MOVE\Switch.h"
 #include "Water\water.h"
-void Fan::DataInput()
-{
-	this->taskName = "Senpuki";			//検索時に使うための名を登録する
-	__super::Init(taskName);			//TaskObject内の処理を行う
-
-	//アニメーションのリセットをする
-	animetion.AnimetionReset();
-
-	//画像関連の描画パス
-	std::string filePath = "fan.png";
-	image.Create(filePath);
-}
-//常時稼働　扇風機
 bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
+	this->taskName = "Senpuki";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
+
 	range = r;
 	dir = d;
 	//扇風機の描画座標
 	position = pos;
-
 	if (dir == Fan::Dir::LEFT)
 	{
 		strength = -3;
@@ -36,92 +26,49 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 		strength = 3;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
-	this->DataInput();
+	animetion.AnimetionReset();
 
-	std::cout << "常時起動扇風機　初期化" << std::endl;
+	this->GetFlag();
+	std::string filePath = "fan.png";
+	image.Create(filePath);
+	std::cout << "扇風機　初期化" << std::endl;
 	return true;
 }
-//反転フラグあり　扇風機
-bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Fan> target)
+bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>&obj)
 {
 	//-----------------------------
 	//生成時に処理する初期化処理を記述
 	//-----------------------------
-	range = r;
-	dir = d;
-	//扇風機の描画座標
+	this->taskName = "Senpuki";			//検索時に使うための名を登録する
+	__super::Init(taskName);		//TaskObject内の処理を行う
+
+									//扇風機の描画座標
 	position = pos;
+	dir = d;
+	range = r;
 
 	if (dir == Fan::Dir::LEFT)
 	{
 		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x, 64.f), 0.0f);
 	}
 	else
 	{
 		strength = 3;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
-	this->DataInput();
+	animetion.AnimetionReset();
 
-	this->SetFanTarget(target);
-	std::cout << "反転フラグ扇風機　初期化" << std::endl;
-	return true;
-}
-//スイッチあり　扇風機
-bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&obj)
-{
-	//-----------------------------
-	//生成時に処理する初期化処理を記述
-	//-----------------------------
-	range = r;
-	dir = d;
-	//扇風機の描画座標
-	position = pos;
+	this->SetSwitchFlag(obj);
+	std::string filePath = "fan.png";
+	image.Create(filePath);
 
-	if (dir == Fan::Dir::LEFT)
-	{
-		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
-	}
-	else
-	{
-		strength = 3;
-		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
-	}
-	this->DataInput();
+	//サウンドの生成
+	this->startflag = false;
+	sound.create(soundname, true);
+	sound.volume(0.8f);
 
-	this->SetSwitchTarget(obj);
-	std::cout << "スイッチあり扇風機　初期化" << std::endl;
-	return true;
-}
-//スイッチあり　反転フラグあり
-bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan> fantarget, std::shared_ptr<Switch>& switchtarget)
-{
-	//-----------------------------
-	//生成時に処理する初期化処理を記述
-	//-----------------------------
-	range = r;
-	dir = d;
-	//扇風機の描画座標
-	position = pos;
-
-	if (dir == Fan::Dir::LEFT)
-	{
-		strength = -3;
-		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
-	}
-	else
-	{
-		strength = 3;
-		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
-	}
-	this->DataInput();
-
-	this->SetFanTarget(fantarget);
-	this->SetSwitchTarget(switchtarget);
-
-	std::cout << "スイッチあり扇風機　初期化" << std::endl;
+	std::cout << "扇風機　初期化" << std::endl;
 	return true;
 }
 void Fan::Animetion::AnimetionReset()
@@ -129,45 +76,23 @@ void Fan::Animetion::AnimetionReset()
 	this->animetionframe = 0;
 	this->speed = 0;
 }
-void Fan::SetFlag()
+void Fan::GetFlag()
 {
-	//お互いのフラグを管理している場合
-	if (target != nullptr && fantarget != nullptr)
+	if (target != nullptr)
 	{
-		//スイッチのフラグを格納する
-		switchflag = !target->GetisON();
-		//ターゲットのスイッチからフラグを格納する
-		fanflag = !fantarget->GetSwitchFlag();
-	}
-	//スイッチからフラグを取り出す
-	else if (target != nullptr)
-	{
-		//スイッチのフラグを代入する
 		switchflag = target->GetisON();
-	}
-	//ある扇風機からフラグを取り出す（反転）
-	else if (fantarget != nullptr)
-	{
-		switchflag = !fantarget->GetSwitchFlag();
+
 	}
 	else
 	{
-		//スイッチがない場合は常時稼働する
 		switchflag = true;
 	}
 }
-void Fan::SetSwitchTarget(std::shared_ptr<Switch>&obj)
+void Fan::SetSwitchFlag(std::shared_ptr<Switch>&obj)
 {
 	if (obj != nullptr)
 	{
 		this->target = obj;
-	}
-}
-void Fan::SetFanTarget(std::shared_ptr<Fan> &obj)
-{
-	if (obj != nullptr)
-	{
-		this->fantarget = obj;
 	}
 }
 bool Fan::GetSwitchFlag()
@@ -180,7 +105,6 @@ void Fan::Animetion::AnimetionMove(bool flag)
 	//扇風機が稼働している
 	if (flag)
 	{
-		//扇風機を動かす(アニメーション)
 		if (animetionframe <= 300)
 		{
 			animetionframe++;
@@ -192,12 +116,11 @@ void Fan::Animetion::AnimetionMove(bool flag)
 	}
 	else
 	{
-		//扇風機を遅くする（アニメーション）
 		if (animetionframe >= 300)
 		{
-			animetionframe -= 5;
+			animetionframe -= 10;
 		}
-		else if(animetionframe > 0)
+		else if (animetionframe > 0)
 		{
 			animetionframe -= speed;
 		}
@@ -212,27 +135,34 @@ void Fan::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	this->SetFlag();
-	//アニメーションを動かす処理
-	animetion.AnimetionMove(GetSwitchFlag());
-	//お互いのフラグを扱っている場合
-	if (target != nullptr && this->fantarget != nullptr)
+	this->GetFlag();
+	if (GetSwitchFlag())
 	{
-		//お互いがtrueのときのみ起動させる
-		if (GetSwitchFlag() && this->fanflag)
-		{
-			Motion();
-		}
-	}
-	//trueなら扇風機が起動する
-	else if (GetSwitchFlag())
-	{
+		animetion.AnimetionMove(GetSwitchFlag());
 		Motion();
 	}
 	else
 	{
-		//値をリセットする
+		animetion.AnimetionMove(GetSwitchFlag());
 		animetion.AnimetionReset();
+	}
+
+	//サウンドの再生について
+	if (switchflag)
+	{
+		if (startflag)
+		{
+			sound.play();
+			startflag = false;
+		}
+	}
+	if (switchflag == false)
+	{
+		if (sound.isplay() == true)
+		{
+			sound.stop();
+		}
+		startflag = true;
 	}
 }
 void Fan::Animetion::AnimetionSrc(Box2D& src, bool flag)
@@ -278,19 +208,16 @@ void Fan::Render2D()
 	Box2D draw(position, Vec2(64, 64));
 	draw.OffsetSize();
 	Box2D src = this->Src;
-	this->animetion.AnimetionSrc(src,GetSwitchFlag());
+	this->animetion.AnimetionSrc(src, GetSwitchFlag());
 	src.OffsetSize();
-
-	//画像の反転処理
 	if (this->dir == Fan::Dir::LEFT)
 	{
-		int temp = src.w;
+		int k = src.w;
 		src.w = src.x;
-		src.x = temp;
+		src.x = k;
 	}
-	
+
 	this->image.Draw(draw, src);
-	this->WindHitBase.LineDraw();
 }
 
 bool Fan::Finalize()
@@ -302,7 +229,7 @@ bool Fan::Finalize()
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		
+
 	}
 	return true;
 }
@@ -334,13 +261,13 @@ void Fan::Motion()
 Fan::Fan()
 {
 	std::cout << "扇風機　生成" << std::endl;
+	soundname = "wind1.wav";
 }
 Fan::~Fan()
 {
 	this->Finalize();
 	std::cout << "扇風機　解放" << std::endl;
 }
-//常時稼働
 Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool flag_)
 {
 	Fan::SP to = Fan::SP(new Fan());
@@ -359,27 +286,8 @@ Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, bool flag_)
 	}
 	return nullptr;
 }
-//スイッチあり
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d,std::shared_ptr<Switch>&target, bool flag_)
-{
-	Fan::SP to = Fan::SP(new Fan());
-	if (to)
-	{
-		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize(pos,r,d,target))
-		{
-			to->Kill();
-		}
-		return to;
-	}
-	return nullptr;
-}
-//扇風機の反転フラグあり
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan>& target, bool flag_)
+
+Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>&target, bool flag_)
 {
 	Fan::SP to = Fan::SP(new Fan());
 	if (to)
@@ -390,25 +298,6 @@ Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan>& target,
 			OGge->SetTaskObject(to);
 		}
 		if (!to->Initialize(pos, r, d, target))
-		{
-			to->Kill();
-		}
-		return to;
-	}
-	return nullptr;
-}
-//スイッチあり　扇風機の反転フラグあり
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan>& fantarget, std::shared_ptr<Switch>& switchtarget, bool flag_)
-{
-	Fan::SP to = Fan::SP(new Fan());
-	if (to)
-	{
-		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize(pos, r, d, fantarget,switchtarget))
 		{
 			to->Kill();
 		}

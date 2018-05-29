@@ -31,6 +31,14 @@ bool Kanetuki::Initialize(Vec2& pos, std::shared_ptr<Switch>& target)
 	this->SetSwitchFlag(target);
 
 	cout << "加熱器　初期化" << endl;
+	//サウンドに関する情報
+	startflag = false;
+	nowplay = false;
+	//サウンドの生成
+	sound.create(soundname, true);
+	//サウンドの生成　　着火
+	soundstart.create(startsoundname, false);
+
 	return true;
 }
 void Kanetuki::Fire_MovetimeReset()
@@ -57,6 +65,34 @@ void Kanetuki::UpDate()
 	if (this->GetSwitchFlag())
 	{
 		this->toSteam();
+	}
+
+	//サウンド関係
+	//炎の音声再生
+	this->nowplay = sound.isplay();
+	if (switchflag)
+	{
+		if (startflag)
+		{
+			sound.play();
+		}
+	}
+	//着火の音声再生
+	if (switchflag)
+	{
+		if (startflag)
+		{
+			soundstart.play();
+			startflag = false;
+		}
+	}
+	if (switchflag == false)
+	{
+		if (nowplay)
+		{
+			sound.stop();
+		}
+		startflag = true;
 	}
 }
 
@@ -131,6 +167,9 @@ void Kanetuki::toSteam()
 Kanetuki::Kanetuki()
 {
 	cout << "加熱器　生成" << endl;
+	//サウンドファイル名	
+	startsoundname = "fire1.wav";
+	soundname = "fire2.wav";
 }
 
 Kanetuki::~Kanetuki()

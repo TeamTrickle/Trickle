@@ -79,6 +79,10 @@ public:
 	Sound sound;
 	bool soundplay;
 
+	
+	bool GetHold() const;
+	void HoldCheck(bool);
+
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
 	const float JUMP_POWER = -20.f;								//ジャンプパワー
@@ -94,6 +98,7 @@ private:
 	Vec2 move;
 	Color color;
 	int setTime;
+	bool hold;
 	Situation UpNewform();
 	Situation UpDeleteform();
 	Situation UpNormal();

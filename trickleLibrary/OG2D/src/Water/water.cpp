@@ -651,6 +651,24 @@ Vec2 Water::MoveSolid(const Vec2& est)
 	return this->move;
 }
 
+void Water::HoldCheck(bool flag)
+{
+	if (flag)
+	{
+		if (this->GetState() == State::SOLID)
+		{
+			this->hold = true;
+			return;
+		}
+	}
+	this->hold = false;
+}
+
+bool Water::GetHold() const
+{
+	return this->hold;
+}
+
 Water::SP Water::Create(Vec2& pos, bool flag_)
 {
 	auto to = Water::SP(new Water(pos));
