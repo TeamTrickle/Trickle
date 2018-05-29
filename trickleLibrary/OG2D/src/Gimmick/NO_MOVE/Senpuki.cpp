@@ -67,7 +67,7 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan> target)
 	else
 	{
 		strength = 5;
-		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r - 8.f, 64.f), 0.0f);
+		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r + 16.f, 64.f), 0.0f);
 	}
 	this->DataInput();
 

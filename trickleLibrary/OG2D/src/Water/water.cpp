@@ -1,5 +1,6 @@
 #include "water.h"
 #include "Map\Map.h"
+#include "Block\block.h"
 
 
 Water::Water(Vec2 pos)
@@ -45,6 +46,7 @@ Water::Water(Vec2 pos)
 	//サウンドのファイル名設定
 	soundname = "water-drop3.wav";
 	this->hold = false;
+	this->Radius = { 0.5f,0.9f };
 }
 
 Water::~Water() 
@@ -66,11 +68,6 @@ bool Water::Initialize()
 
 void Water::UpDate()
 {
-	if (this->currentState == State::GAS)
-	{
-		std::cout << "x:" << this->move.x << "y:" << this->move.y << std::endl;
-	}
-	
 	if (this->invi > 0)
 	{
 		this->invi--;
@@ -129,8 +126,8 @@ void Water::UpDate()
 			}
 			else
 			{
-				this->Friction();
 				this->MoveGASCheck(move);
+				this->Friction();
 			}
 			break;
 		case Water::Situation::Rainfrom:
@@ -169,11 +166,6 @@ Water::Situation Water::UpNewform()
 Water::Situation Water::UpDeleteform()
 {
 	Water::Situation now = this->nowSituation;
-	/*this->setTime++;
-	this->Scale.x -= 2;
-	this->Scale.y -= 2;
-	this->position.y += 2;
-	this->position.x++;*/
 	++this->nowTime;
 	if (this->nowTime >= 72)
 	{
@@ -299,7 +291,9 @@ void Water::Friction()
 bool Water::FootCheck(std::string& objtag,int n)
 {
 	GameObject foot;
-	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y + 0.1f), Vec2(this->Scale.x, 0.9f), 0.0f);
+	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
+	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f) + 0.1f), Vec2(this->Scale.x - x_, 0.9f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	if (!map)
 	{
@@ -311,21 +305,20 @@ bool Water::FootCheck(std::string& objtag,int n)
 		{
 			if (foot.hit(map->hitBase[y][x]))
 			{
-				if (n == 0)
+				
+				if (map->hitBase[y][x].objectTag == objtag)
 				{
-					if (map->hitBase[y][x].objectTag == objtag)
-					{
-						return true;
-					}
-				}
-				else
-				{
-					if (map->hitBase[y][x].objectTag != objtag)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
+		}
+	}
+	auto blocks = OGge->GetTasks<Block>("block");
+	for (auto id = blocks->begin(); id != blocks->end(); ++id)
+	{
+		if (foot.hit(*(*id)))
+		{
+			return true;
 		}
 	}
 	return false;
@@ -585,7 +578,10 @@ void Water::MoveSOILDCheck(Vec2 est)
 bool Water::HeadCheck(std::string& objtag,int n)
 {
 	GameObject head;
-	head.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
+	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
+	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
+
+	head.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + (y_ / 2.f) - 1.0f), Vec2(this->Scale.x - x_, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	for (int y = 0; y < map->mapSize.y; ++y)
 	{
@@ -593,22 +589,20 @@ bool Water::HeadCheck(std::string& objtag,int n)
 		{
 			if (head.hit(map->hitBase[y][x]))
 			{
-				if (n == 0)
+				if (map->hitBase[y][x].objectTag == objtag || 
+					map->_arr[y][x] == 24)
 				{
-					if (map->hitBase[y][x].objectTag == objtag || 
-						map->_arr[y][x] == 24)
-					{
-						return true;
-					}
-				}
-				else
-				{
-					if (map->hitBase[y][x].objectTag != objtag)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
+		}
+	}
+	auto blocks = OGge->GetTasks<Block>("block");
+	for (auto id = blocks->begin(); id != blocks->end(); ++id)
+	{
+		if (head.hit(*(*id)))
+		{
+			return true;
 		}
 	}
 	return false;
@@ -690,11 +684,11 @@ void Water::CheckState()
 		case State::GAS:
 			this->Scale = this->maxSize;
 			this->objectTag = "GAS";
-			this->Radius = { 0.7f,1.0f };
+			this->Radius = { 0.5f,0.8f };
 			this->nowSituation = Situation::Normal;
 			break;
 		case State::LIQUID:
-			this->Radius = { 0.7f,0.9f };
+			this->Radius = { 0.5f,0.9f };
 			this->objectTag = "LIQUID";
 			break;
 		case State::SOLID:

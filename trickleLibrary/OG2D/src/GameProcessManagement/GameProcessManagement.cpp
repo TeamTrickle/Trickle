@@ -62,8 +62,12 @@ bool GameProcessManagement::Finalize()
 			if (!pause_flag)
 			{
 				//順番が違うとリザルト画面の表示ができません
-				auto result = Result::Create();
-				pause_flag = true;
+				//チュートリアルでは表示しない
+				if (*MapNum == 5 || *MapNum == 6)
+				{
+					auto result = Result::Create();
+					pause_flag = true;
+				}
 			}
 		}
 	}

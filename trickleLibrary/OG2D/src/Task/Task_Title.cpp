@@ -87,16 +87,6 @@ void Title::UpDate()
 	//----------------
 	//ƒeƒXƒg
 	//----------------
-	if (OGge->in->key.on(In::Q))
-	{
-		OGge->camera->MoveSize(Vec2(-32, -18));
-		OGge->camera->MovePos(Vec2(16.f, 9.f));
-	}
-	if (OGge->in->key.on(In::E))
-	{
-		OGge->camera->MoveSize(Vec2(32, 18));
-		OGge->camera->MovePos(Vec2(-16.f, -9.f));
-	}
 	if (OGge->in->key.down(In::SPACE))
 	{
 		this->Kill();
@@ -432,8 +422,11 @@ bool Title::Finalize()
 	}
 	else
 	{
-		delete this->sound;
-		this->sound = nullptr;
+		if (this->sound)
+		{
+			delete this->sound;
+			this->sound = nullptr;
+		}
 	}
 
 	return true;

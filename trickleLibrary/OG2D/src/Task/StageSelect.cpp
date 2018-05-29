@@ -64,12 +64,6 @@ bool StageSelect::Initialize()
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.1f);
 	//サウンドの生成
-	/*sound.create(soundname, true);
-	sound.volume(1.0f);
-	OGge->soundManager->SetSound(&sound);
-
-	sound.play();*/
-	//sound = rm->GetSoundData(std::string(""));
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定
@@ -90,34 +84,34 @@ bool StageSelect::Initialize()
 
 void StageSelect::UpDate()
 {
-	CursorMove();
+	//CursorMove();
 
-	if (OGge->in->down(In::B2))
-	{
-		switch (state) {
-		case Tutorial:
-			*MapNum = 3;
-			if (OGge->in->on(In::SL))
-			{
-				*MapNum = 1;
-			}
-			if (OGge->in->on(In::SR))
-			{
-				*MapNum = 2;
-			}
-			break;
-		case Stage1:
-			*MapNum = 5;	break;
-		case Stage2:	//未実装
-						//*MapNum = 6;	break;
-			break;
-		case ToTitle:
-			break;
-		default:
-			*MapNum = 0;	break;
-		}
-		this->Kill();
-	}
+	//if (OGge->in->down(In::B2))
+	//{
+	//	switch (state) {
+	//	case Tutorial:
+	//		*MapNum = 3;
+	//		if (OGge->in->on(In::SL))
+	//		{
+	//			*MapNum = 1;
+	//		}
+	//		if (OGge->in->on(In::SR))
+	//		{
+	//			*MapNum = 2;
+	//		}
+	//		break;
+	//	case Stage1:
+	//		*MapNum = 5;	break;
+	//	case Stage2:	//未実装
+	//					//*MapNum = 6;	break;
+	//		break;
+	//	case ToTitle:
+	//		break;
+	//	default:
+	//		*MapNum = 0;	break;
+	//	}
+	//	this->Kill();
+	//}
 
 	switch (this->mode)
 	{
@@ -155,45 +149,45 @@ void StageSelect::UpDate()
 void StageSelect::Render2D()
 {
 	//カーソル
-	{
-		Box2D draw(cursorPos.x, cursorPos.y, 64.0f, 64.0f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 128, 128);
-		src.OffsetSize();
-		texCursor.Draw(draw, src);
-	}
-	//チュートリアル
-	{
-		Box2D draw(tutorialPos.x, tutorialPos.y, 256.0f, 64.0f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 1280, 256);
-		src.OffsetSize();
-		texTutorial.Draw(draw, src);
-	}
-	//ステージ１
-	{
-		Box2D draw(stage1Pos.x, stage1Pos.y, 256.0f, 64.0f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 1280, 256);
-		src.OffsetSize();
-		texStage1.Draw(draw, src);
-	}
+	//{
+	//	Box2D draw(cursorPos.x, cursorPos.y, 64.0f, 64.0f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 128, 128);
+	//	src.OffsetSize();
+	//	texCursor.Draw(draw, src);
+	//}
+	////チュートリアル
+	//{
+	//	Box2D draw(tutorialPos.x, tutorialPos.y, 256.0f, 64.0f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 1280, 256);
+	//	src.OffsetSize();
+	//	texTutorial.Draw(draw, src);
+	//}
+	////ステージ１
+	//{
+	//	Box2D draw(stage1Pos.x, stage1Pos.y, 256.0f, 64.0f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 1280, 256);
+	//	src.OffsetSize();
+	//	texStage1.Draw(draw, src);
+	//}
 	//ステージ２
-	{
+	//{
 		/*Box2D draw(stage2Pos.x, stage2Pos.y, 256.0f, 64.0f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 256);
 		src.OffsetSize();
 		texStage2.Draw(draw, src);*/
-	}
+	//}
 	//タイトルに戻る
-	{
+	/*{
 		Box2D draw(toTitlePos.x, toTitlePos.y, 256.0f, 64.0f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 256);
 		src.OffsetSize();
 		texToTitle.Draw(draw, src);
-	}
+	}*/
 	//ドア
 	for (int i = 0; i < 3; ++i)
 	{
@@ -366,7 +360,7 @@ void StageSelect::From3()
 				chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
 
 			}
-			if (OGge->in->key.down(In::ENTER))
+			if (OGge->in->down(In::B2))
 			{
 				switch (this->nowPos)
 				{

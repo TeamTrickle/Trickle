@@ -33,7 +33,7 @@ bool Pause::Initialize()
 void Pause::UpDate()
 {
 	//ポーズへの移動
-	if (OGge->in->key.down(In::G)) {
+	if (OGge->in->down(In::D2)) {
 		OGge->SetPause(true);
 		PauseFlg = true;
 	}
@@ -156,7 +156,7 @@ void Pause::PauseUpDate()
 	//デバッグ用
 	//std::cout << "Puase" << std::endl;
 	//ポーズ画面の解除
-	if (OGge->in->key.down(In::G)) {
+	if (OGge->in->down(In::D2)) {
 		OGge->SetPause(false);
 		PauseFlg = false;
 	}
@@ -174,10 +174,10 @@ void Pause::PauseUpDate()
 	stageselectPos = Vec2(NowCameraPos.x + 700.0f, NowCameraPos.y + 150.0f);
 
 	//矢印の移動
-	if (OGge->in->key.down(In::UP)) {
+	if (OGge->in->down(In::CU)) {
 		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
 	}
-	if (OGge->in->key.down(In::DOWN)) {
+	if (OGge->in->down(In::CD)) {
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
 	}
 	cursorPos = Vec2(NowCameraPos.x + 600.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));

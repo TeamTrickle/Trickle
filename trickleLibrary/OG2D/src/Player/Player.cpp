@@ -192,7 +192,7 @@ void Player::UpDate()
 			this->motion = Motion::Walk;
 		}
 		this->BlockHit();
-		if (OGge->in->key.down(Input::KeyBoard::S))
+		if (OGge->in->down(In::B2))
 		{
 			animation.timeCnt = 0;
 			this->motion = Motion::Switch_M;
@@ -279,16 +279,17 @@ void Player::UpDate()
 			this->motion = Motion::Jump;
 			this->moveCnt = 0;
 		}
-		if (OGge->in->key.down(Input::KeyBoard::S))
-		{
-			this->SwitchCheck();
-		}
 		if (OGge->in->down(In::B2))
 		{
 			//バケツを持つ
 			if (this->BucketHit())
 			{
 				this->state = State::BUCKET;
+			}
+			else
+			{
+				//もしバケツをとれないならばスイッチの判定を行う
+				this->SwitchCheck();
 			}
 		}
 		this->BlockHit();

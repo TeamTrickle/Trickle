@@ -210,11 +210,18 @@ void EngineSystem::TaskKillCheck()
 	auto id = this->taskobjects.begin();
 	while (id != this->taskobjects.end())
 	{
-		if (id->second->GetKillCount() > 0)
+		if (id->second)
 		{
-			this->taskobjects.erase(id);
-			this->TaskApplication();
-			id = this->taskobjects.begin();
+			if (id->second->GetKillCount() > 0)
+			{
+				this->taskobjects.erase(id);
+				this->TaskApplication();
+				id = this->taskobjects.begin();
+			}
+			else
+			{
+				++id;
+			}
 		}
 		else
 		{
@@ -261,6 +268,12 @@ bool EngineSystem::GetDeleteEngine()
 {
 	//エンジン終了を返す
 	return this->DeleteEngine;
+}
+void EngineSystem::DeleteTasks()
+{
+	this->TaskApplication();	//登録予定のタスクを登録する
+	this->TaskKillCheck();		//削除予定のタスクを削除する
+	this->ConfigDrawOrder();	//タスクの集合体の変更後に描画順を設定する
 }
 //template <class T> std::shared_ptr<T> EngineSystem::GetTask(const std::string& taskName)
 //{

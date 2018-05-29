@@ -88,6 +88,7 @@ public:
 		const TaskObject::SP&);
 	bool GetDeleteEngine();		//エンジン終了を返す
 	void SetDeleteEngine(bool);	//エンジン終了登録
+	void DeleteTasks();			//現状登録されているもので削除処理を実行する
 	//タスク検索(最初の同名のタスクを返す)
 	template <class T> std::shared_ptr<T> GetTask(const std::string& taskName)
 	{
