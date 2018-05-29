@@ -72,6 +72,8 @@ void GameClearCamera::CameraMove()
 				//カメラのサイズを合わせる
 				OGge->camera->SetSize(goal->Scale);
 				moveCnt++;
+				//カメラ調整が終わったら花が咲くアニメーションのカウントを増やす
+				goal->goal_anim = true;
 				if (moveCnt >= 90)
 				{
 					this->cameraMovefinish = true;

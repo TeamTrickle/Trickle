@@ -10,6 +10,8 @@ bool Goal::Initialize()
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
 	cleared = false;
+	goal_anim = false;
+	animCnt = 0;
 	this->objectTag = "Goal";
 	//テクスチャの読み込み
 	tex.Create((std::string)"goal.png");
@@ -26,6 +28,8 @@ bool Goal::Initialize(Vec2& pos) {
 	tex.Create((std::string)"goal.png");
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, Vec2(64, 64), 0.f);
+
+	
 	return true;
 }
 
@@ -49,11 +53,17 @@ void Goal::Render2D()
 	draw.OffsetSize();
 	Box2D src;
 	if (this->cleared) {
-		src = Box2D(64, 0, 64, 64);
+		if (this->goal_anim && animCnt < 69) {
+			//拡大が終わったらアニメーション
+			//(7カット*１０フレーム)-1になったら止める
+			animCnt++;
+		}
+		src = Box2D(64*(animCnt / 10), 64, 64, 64);
 	}
 	else {
 		src = Box2D(0, 0, 64, 64);
 	}
+	
 	src.OffsetSize();
 	tex.Draw(draw, src);
 }
