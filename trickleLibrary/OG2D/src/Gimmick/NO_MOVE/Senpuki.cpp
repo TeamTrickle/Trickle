@@ -34,12 +34,12 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d)
 
 	if (dir == Fan::Dir::LEFT)
 	{
-		strength = -3;
+		strength = -5;
 		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
 	}
 	else
 	{
-		strength = 3;
+		strength = 5;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
 	this->DataInput();
@@ -61,13 +61,13 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan> target)
 
 	if (dir == Fan::Dir::LEFT)
 	{
-		strength = -3;
+		strength = -5;
 		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
 	}
 	else
 	{
-		strength = 3;
-		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
+		strength = 5;
+		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r - 8.f, 64.f), 0.0f);
 	}
 	this->DataInput();
 
@@ -89,12 +89,12 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Switch>&obj)
 
 	if (dir == Fan::Dir::LEFT)
 	{
-		strength = -3;
+		strength = -5;
 		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
 	}
 	else
 	{
-		strength = 3;
+		strength = 5;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
 	this->DataInput();
@@ -116,12 +116,12 @@ bool Fan::Initialize(Vec2 pos, float r, Fan::Dir d, std::shared_ptr<Fan> fantarg
 
 	if (dir == Fan::Dir::LEFT)
 	{
-		strength = -3;
+		strength = -5;
 		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + pos.x - (pos.x - 64), 64.f), 0.0f);
 	}
 	else
 	{
-		strength = 3;
+		strength = 5;
 		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
 	}
 	this->DataInput();
@@ -344,7 +344,7 @@ void Fan::Motion()
 			{
 				if ((*id)->GetState() == Water::State::GAS)
 				{
-					(*id)->MovePos(Vec2(this->strength, 0));
+					(*id)->MovePos_x(this->strength);
 				}
 			}
 		}

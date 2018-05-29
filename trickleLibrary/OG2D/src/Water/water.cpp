@@ -14,15 +14,15 @@ Water::Water(Vec2 pos)
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, this->minSize, 0.f);
 	//デバッグ用位置調整
-	//this->position = { 28 * 64 + 32, 12 * 64 };
-	//テクスチャの読み込み
-	//tex.Create("watertest.png");
+	//this->position = { 28 * 64 + 32, 12 * 64 };//ゴール位置
+	//this->position = { 19 * 64 + 32,13 * 64 };//加熱器上
 	//初期ステータスの設定
 	this->nowSituation = Water::Situation::Newfrom;
 	this->currentState = Water::State::LIQUID;
+	this->preState = Water::State::LIQUID;
 	//テスト
-	//this->nowSituation = Water::Situation::Normal;
-	//this->currentState = Water::State::SOLID;
+	/*this->nowSituation = Water::Situation::Normal;
+	this->currentState = Water::State::SOLID;*/
 	//初期保持水量
 	this->volume = 0.5;
 	this->invi = 0;
@@ -44,6 +44,7 @@ Water::Water(Vec2 pos)
 	this->id = i;
 	//サウンドのファイル名設定
 	soundname = "water-drop3.wav";
+	this->hold = false;
 }
 
 Water::~Water() 
@@ -65,10 +66,16 @@ bool Water::Initialize()
 
 void Water::UpDate()
 {
+	if (this->currentState == State::GAS)
+	{
+		std::cout << "x:" << this->move.x << "y:" << this->move.y << std::endl;
+	}
+	
 	if (this->invi > 0)
 	{
 		this->invi--;
 	}
+	this->CheckState();
 	switch (this->currentState) {
 	case Water::State::LIQUID:
 		this->objectTag = "Water";
@@ -100,16 +107,15 @@ void Water::UpDate()
 		switch (this->nowSituation)
 		{
 		case Water::Situation::Normal:
-			this->objectTag = "GAS";
 			//水蒸気処理
-			this->Scale = this->maxSize;
 			if (!this->HeadCheck((std::string)"Floor"))
 			{
-				this->move.y -= 3.0f;
+				this->move.y = -3.0f;
 				this->nowTime = 0;
 			}
 			else
 			{
+				this->move.y = 0;
 				if (this->GetMove().x == 0 && this->GetMove().y == 0)
 				{
 					this->nowTime++;
@@ -123,6 +129,7 @@ void Water::UpDate()
 			}
 			else
 			{
+				this->Friction();
 				this->MoveGASCheck(move);
 			}
 			break;
@@ -132,20 +139,15 @@ void Water::UpDate()
 			this->Scale = this->minSize;
 			this->setTime = 0;
 			break;
-		case Water::Situation::Newfrom:
-			this->nowSituation = Water::Situation::Normal;
-			break;
-		case Water::Situation::Deleteform:
-			this->nowSituation = Water::Situation::Normal;
-			break;
 		}
 		break;
 	case Water::State::SOLID:
-		this->objectTag = "SOLID";
 		//氷処理
-		this->Scale = this->maxSize;
-		this->Friction();
-		this->MoveSOILDCheck(move);
+		if (!this->hold)
+		{
+			this->Friction();
+			this->MoveSOILDCheck(move);
+		}
 		break;
 	}
 }
@@ -282,13 +284,16 @@ void Water::Friction()
 	{
 		this->move.x = std::min(this->move.x + this->FIN_SPEED, 0.f);
 	}
-	if (!this->FootCheck(std::string("Floor")) || !this->FootCheck(std::string("SOLID")) || this->move.y < 0)
+	if (this->currentState != State::GAS)
 	{
-		this->move.y = std::min(this->move.y + this->GRAVITY, this->MAX_FALL);
-	}
-	else
-	{
-		this->move.y = 0.0f;
+		if (!this->FootCheck(std::string("Floor")) || !this->FootCheck(std::string("SOLID")) || this->move.y < 0)
+		{
+			this->move.y = std::min(this->move.y + this->GRAVITY, this->MAX_FALL);
+		}
+		else
+		{
+			this->move.y = 0.0f;
+		}
 	}
 }
 bool Water::FootCheck(std::string& objtag,int n)
@@ -590,7 +595,8 @@ bool Water::HeadCheck(std::string& objtag,int n)
 			{
 				if (n == 0)
 				{
-					if (map->hitBase[y][x].objectTag == objtag)
+					if (map->hitBase[y][x].objectTag == objtag || 
+						map->_arr[y][x] == 24)
 					{
 						return true;
 					}
@@ -621,7 +627,7 @@ Color Water::GetColor() const
 
 void Water::MovePos(Vec2& est)
 {
-	this->move += est;
+	this->move = est;
 }
 
 Vec2 Water::GetMove() const
@@ -667,6 +673,43 @@ void Water::HoldCheck(bool flag)
 bool Water::GetHold() const
 {
 	return this->hold;
+}
+
+void Water::ResetMove()
+{
+	this->move = { 0,0 };
+}
+
+void Water::CheckState()
+{
+	if (this->preState != this->currentState)
+	{
+		this->preState = this->currentState;
+		switch (this->currentState)
+		{
+		case State::GAS:
+			this->Scale = this->maxSize;
+			this->objectTag = "GAS";
+			this->Radius = { 0.7f,1.0f };
+			this->nowSituation = Situation::Normal;
+			break;
+		case State::LIQUID:
+			this->Radius = { 0.7f,0.9f };
+			this->objectTag = "LIQUID";
+			break;
+		case State::SOLID:
+			this->Scale = this->maxSize;
+			this->objectTag = "SOLID";
+			this->Radius = { 1.0f,1.0f };
+			this->nowSituation = Situation::Normal;
+			break;
+		}
+	}
+}
+
+void Water::MovePos_x(float est)
+{
+	this->move.x = est;
 }
 
 Water::SP Water::Create(Vec2& pos, bool flag_)

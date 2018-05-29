@@ -22,7 +22,7 @@
 
 Game::Game()
 {
-	gamesoundname = "game.wav";
+	gamesoundname = "title.wav";
 	tutorialsoundname = "tutorial.wav";
 }
 
@@ -52,7 +52,7 @@ bool Game::Initialize()
 	Vec2 blockpos = Vec2(1536, 100);  //1536,100
 	_waterpos = { 200,100 };
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
-	float fanrange[2] = { 18,6 };
+	float fanrange[2] = { 16,6 };
 
 	std::cout << "Game" << std::endl;
 

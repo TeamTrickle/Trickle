@@ -16,6 +16,7 @@ Title::Title()
 	this->isGierAng = false;
 	this->flowerVolume = 0.f;
 	this->soundname = "title.wav";     //サウンドのファイル名	
+	this->sound = nullptr;
 }
 
 Title::~Title()
@@ -428,6 +429,11 @@ bool Title::Finalize()
 		default:
 			break;
 		}
+	}
+	else
+	{
+		delete this->sound;
+		this->sound = nullptr;
 	}
 
 	return true;

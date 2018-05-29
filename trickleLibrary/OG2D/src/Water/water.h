@@ -48,6 +48,7 @@ public:
 	void SetState(const State&);
 	State GetState() const;
 	void MovePos(Vec2&);
+	void MovePos_x(float);
 	Vec2 GetMove() const;
 
 	void SetSituation(const Situation&);
@@ -82,6 +83,7 @@ public:
 	
 	bool GetHold() const;
 	void HoldCheck(bool);
+	void ResetMove();
 
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
@@ -92,6 +94,7 @@ private:
 	const int RAIN_TIME = 180;
 	Texture* tex;
 	State currentState;
+	State preState;
 	Situation nowSituation;
 	Vec2 minSize;
 	Vec2 maxSize;
@@ -109,6 +112,7 @@ private:
 	void MoveGASCheck(Vec2);
 	void MoveSOILDCheck(Vec2);
 	bool HeadCheck(std::string&,int = 0);
+	void CheckState();
 	
 	std::string soundname;      //サウンドのファイル名格納
 };
