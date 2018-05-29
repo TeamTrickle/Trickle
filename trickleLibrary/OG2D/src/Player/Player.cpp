@@ -794,7 +794,7 @@ bool Player::Animation::isMove()
 Box2D Player::Animation::returnSrc(Motion motion, State state) 
 {
 	Box2D src(0,0,550,550);	//äÓñ{ÇÃsrcÅiå„Ç≈è¡Ç∑Ç©Ç‡Åj
-	if (state == Normal) {
+//	if (state == Normal) {
 		switch (motion) {
 		case Motion::Normal:
 			src = Box2D(this->idle[this->timeCnt / 3 % 10] * 550, 0, 550, 550);
@@ -815,27 +815,27 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 			src = Box2D(1 * 550, 2 * 550, 550, 550);
 			return src;
 			break;
-		
-		case Motion::Ladder:
-			src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * 550, 3 * 550, 550, 550);
-			break;
+		//
+		//case Motion::Ladder:
+		//	src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * 550, 3 * 550, 550, 550);
+		//	break;
 
-		case Motion::Switch_M:
-			auto switchs = OGge->GetTasks<Switch>("Switch");
-			bool tempS;
-			for (auto id = switchs->begin(); id != switchs->end(); ++id)
-			{
-				tempS = (*id)->GetisON();
-			}
-			if (tempS) {
-				src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	
-			}
-			else {
-				src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	//å„Ç≈èCê≥
-			}
-			break;
-		}
-	}
+		//case Motion::Switch_M:
+		//	auto switchs = OGge->GetTasks<Switch>("Switch");
+		//	bool tempS;
+		//	for (auto id = switchs->begin(); id != switchs->end(); ++id)
+		//	{
+		//		tempS = (*id)->GetisON();
+		//	}
+		//	if (tempS) {
+		//		src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	
+		//	}
+		//	else {
+		//		src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	//å„Ç≈èCê≥
+		//	}
+		//	break;
+		//}
+	}/*
 	if (state == BUCKET) {
 		switch (motion) {
 		case Motion::Normal:
@@ -858,7 +858,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 			return src;
 			break;
 		}
-	}
+	}*/
 	return src;
 
 }
