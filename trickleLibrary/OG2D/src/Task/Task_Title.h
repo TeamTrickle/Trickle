@@ -45,8 +45,10 @@ class Title:public TaskObject
 
 	Texture texLogo;
 
+	std::string soundname;
+
+	//Vec2 startPos;
 	Vec2 startPos;
-	Vec2 pausePos;
 	Vec2 closePos;
 	Vec2 cursorPos[3];
 
@@ -56,7 +58,6 @@ class Title:public TaskObject
 	Animation cameraPos;
 	Animation cameraSize;
 
-	GameObject testObj;
 	//Texture test;
 	CameraManager cm;
 	GameObject Logo;
@@ -95,6 +96,7 @@ public:
 		Close        //ÉQÅ[ÉÄÇï¬Ç∂ÇÈ
 	};
 	State state;
+	Sound sound;
 
 	typedef std::shared_ptr<Title> SP;
 	static SP Create(bool = true);

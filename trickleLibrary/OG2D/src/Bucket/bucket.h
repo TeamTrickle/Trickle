@@ -47,6 +47,15 @@ public:
 	Vec2 gravity;			//重力
 	bool hold;				//プレイヤがバケツを持っているかの判断
 	int invi;				//無敵時間(水との判定を行わない時間)
+
+	//サウンドの生成について
+	Sound soundP;
+	Sound soundD;
+	bool putsoundplay;
+
+
 private:
 	Texture tex;
+	std::string putsoundname;     //バケツを置く音
+	std::string dropsoundname;    //水をこぼす音
 };

@@ -51,7 +51,7 @@ class Player :public GameObject ,public TaskObject
 		bool Initialize();										//初期化
 		Vec2 Move();											//移動処理を行い移動値を返す
 		bool isMove();											//移動処理中かどうかを返す
-		Box2D returnSrc(Motion motion);
+		Box2D returnSrc(Motion motion);							//motionによってsrcを返す
 	};
 private:
 	const float MOVE_SPEED = 5.f;								//移動スピード
