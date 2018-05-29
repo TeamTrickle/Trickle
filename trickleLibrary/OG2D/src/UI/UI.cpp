@@ -4,11 +4,11 @@
 UI::UI() {}
 
 UI::~UI() {
-	//tex.Finalize();
+	tex.Finalize();
 }
 
 //座標、ファイルパス、画像分割数
-bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, int id, UImanager* manager, std::function<bool()> func, int num) {
+bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, int id, std::function<bool()> func, int num) {
 	this->pos = Vec2(renderPos.x + 128.0f / 2.0f, renderPos.y + 128.0f / 2.0f);
 	endPos = renderPos;
 	tex.Create(path);
@@ -108,14 +108,6 @@ void UI::UpDate() {
 	if (nowWH.x == 0 && nowWH.y == 0) {
 		active = false;
 	}
-	////寿命で死ぬ
-	//if (counter >= life) {
-	//	active = false;
-	//	//auto next = new UI();
-	//	//next->Initialize()
-	//	//manager->AddUI(new UI());
-	//	//this->Kill();
-	//}
 }
 
 void UI::Move(Vec2 pos) {
@@ -124,7 +116,6 @@ void UI::Move(Vec2 pos) {
 
 void UI::Render2D() {
 	GameObject::LineDraw();
-	//if (!active || appeared == 1) { return; }
 	if (!active) { return; }
 	draw = Box2D(pos.x, pos.y, nowWH.x, nowWH.y);
 	draw.OffsetSize();
@@ -142,21 +133,7 @@ bool UI::CreateNext(UIinfo& info) {
 	return false;
 }
 
-//void UI::Appear() {
-//	if (isCollided) {
-//		active = true;
-//	}
-//}
-//void UI::Vanish() {
-//	if (!isCollided) {
-//		active = false;
-//	}
-//}
-//bool UI::CheckHitPlayer() {
-//	return false;
-//}
-
-UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, int id, UImanager* manager, bool flag_)
+UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, int id, bool flag_)
 {
 	auto to = UI::SP(new UI());
 	if (to)
@@ -166,7 +143,7 @@ UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, 
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, coll, path, life, id, manager,nullptr, num))
+		if (!to->Initialize(pos, coll, path, life, id, nullptr, num))
 		{
 			to->Kill();
 		}
@@ -175,7 +152,7 @@ UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, 
 	return nullptr;
 }
 
-UI::SP UI::Create(UIinfo& info, int id, UImanager* manager, bool flag_)
+UI::SP UI::Create(UIinfo& info, int id,  bool flag_)
 {
 	Vec2 pos = info.pos;
 	Box2D hit = info.hit;
@@ -192,7 +169,7 @@ UI::SP UI::Create(UIinfo& info, int id, UImanager* manager, bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, hit, path, life, id, manager, func, picNum))
+		if (!to->Initialize(pos, hit, path, life, id, func, picNum))
 		{
 			to->Kill();
 		}
@@ -205,16 +182,11 @@ UI::SP UI::Create(UIinfo& info, int id, UImanager* manager, bool flag_)
 UImanager::UImanager(){}
 UImanager::~UImanager(){
 	uiInfo.clear();
-	//if (!UIlist_.empty()) {
-	//	for (auto ui : UIlist_) {
-
-	//	}
-	//}
 }
 
 bool UImanager::Initialize(unsigned short& mapNum) {
 	switch (*MapNum) {
-	case 1:
+	case 1:		//チュートリアル１
 		maxNum = 8;
 		UIlist_.resize(maxNum);
 		uiInfo.resize(maxNum);
@@ -226,13 +198,14 @@ bool UImanager::Initialize(unsigned short& mapNum) {
 		uiInfo[5] = { Vec2(6 * 64,18 * 64),Box2D(6 * 64,16 * 64,13 * 64,600),(std::string)"arrowright.png",500,2,nullptr };
 		uiInfo[6] = { Vec2(28 * 64,16 * 64),Box2D(20 * 64,16 * 64,8 * 64,400),(std::string)"arrowdown.png",500,2,std::bind(&UIfunc::playerPos, *uifunc) };
 		uiInfo[7] = { Vec2(29 * 64,16 * 64),Box2D(28 * 64,16 * 64,300,300),(std::string)"pushx.png",500,2, std::bind(&UIfunc::spoilWater, *uifunc)};
-		//for (int i = 0; i < maxNum; ++i) {
-		//	UIlist_.push_back(UI::Create(uiInfo[i], i, this));
-		//}
-		UIlist_[0] = UI::Create(uiInfo[0], 0, this);
+		UIlist_[0] = UI::Create(uiInfo[0], 0);
 		activeID = 0;
 		break;
-	case 3:
+	case 3:		//チュートリアル３
+		maxNum = 3;
+		UIlist_.resize(maxNum);
+		uiInfo.resize(maxNum);
+		uiInfo[0] = {};
 		break;
 	default:
 		break;
@@ -240,7 +213,6 @@ bool UImanager::Initialize(unsigned short& mapNum) {
 	return true;
 }
 void UImanager::UpDate() {
-	//if (activeID >= maxNum - 1) { return; }
 	if (UIlist_.size() == 0) { return; }
 	if (UIlist_[activeID] == nullptr) { return; }
 	if (!UIlist_[activeID]->active && UIlist_[activeID]->appeared == 1) {
@@ -249,22 +221,9 @@ void UImanager::UpDate() {
 		UIlist_[activeID] = nullptr;
 		if (activeID < maxNum - 1) {
 			activeID++;
-			UIlist_[activeID] = UI::Create(uiInfo[activeID], activeID, this);
-		}
-		else {
-			//UIlist_[activeID]->Kill();
-			//UIlist_[activeID].reset();
-			Finalize();
+			UIlist_[activeID] = UI::Create(uiInfo[activeID], activeID);
 		}
 	}
-}
-bool UImanager::AddUI(UI* next) {
-	//UIlist_.push_back(next);
-	//return true;
-	return false;
-}
-bool UImanager::Finalize() {
-	return true;
 }
 
 

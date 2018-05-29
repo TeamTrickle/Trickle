@@ -11,10 +11,8 @@ class UI :public GameObject,public TaskObject {
 	Vec2 pos;		//座標
 	int counter;	//時間はかる。
 	int index;		//描画するsrc
-	//Box2D src;		//Draw()の第二引数
 	int num;		//画像分割数
 	int life;		//寿命
-	//bool visible;	//可視不可視
 	Box2D draw;
 	std::vector<Box2D> srcTable;
 	Vec2 maxWH;		//最大描画範囲
@@ -42,20 +40,15 @@ public:
 	UI();
 	~UI();
 	typedef std::shared_ptr<UI> SP;
-	static SP Create(Vec2&, Box2D&, std::string&, int life, int num, int id, UImanager* manager, bool = true);
-	static SP Create(UIinfo& info, int id, UImanager* manager, bool = true);
+	static SP Create(Vec2&, Box2D&, std::string&, int life, int num, int id, bool = true);
+	static SP Create(UIinfo& info, int id, bool = true);
 
-	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, UImanager* manager, std::function<bool()> func, int num = 0);	//座標、ファイルパス、寿命、画像分割数
+	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, std::function<bool()> func, int num = 0);	//座標、ファイルパス、寿命、画像分割数
 	void UpDate();
 	void Move(Vec2 p);		//座標を動かすときに使う
 	void Render2D();
 	bool Finalize();
 	bool CreateNext(UI::UIinfo& info);
-
-
-	//void Appear();
-	//void Vanish();
-	//bool CheckHitPlayer();
 };
 
 class UImanager :public GameObject, public TaskObject {
@@ -65,8 +58,6 @@ public:
 
 	bool Initialize(unsigned short& mapNum);
 	void UpDate();
-	bool AddUI(UI* next);
-	bool Finalize();
 
 private:
 	int maxNum;		//表示するUIの数、Initializeで指定、UI増やす時はこれも変えなきゃいけないクソ仕様
