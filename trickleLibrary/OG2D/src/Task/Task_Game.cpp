@@ -22,7 +22,7 @@
 
 Game::Game()
 {
-	gamesoundname = "title.wav";
+	gamesoundname = "game.wav";
 	tutorialsoundname = "tutorial.wav";
 }
 
