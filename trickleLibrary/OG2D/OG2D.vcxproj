@@ -194,12 +194,14 @@
     <ClCompile Include="src\Player\Player.cpp" />
     <ClCompile Include="src\Player\ResultPlayer.cpp" />
     <ClCompile Include="src\Recorder\Recorder.cpp" />
+    <ClCompile Include="src\Recorder\RecPlayer.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Option.cpp" />
     <ClCompile Include="src\Task\Task_Pause.cpp" />
     <ClCompile Include="src\Task\Task_Result.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
+    <ClCompile Include="src\Task\Task_TitleMovement.cpp" />
     <ClCompile Include="src\UI\UI.cpp" />
     <ClCompile Include="src\Water\water.cpp" />
     <ClCompile Include="src\Win\WinMain.cpp" />
@@ -248,12 +250,14 @@
     <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Player\ResultPlayer.h" />
     <ClInclude Include="src\Recorder\Recorder.h" />
+    <ClInclude Include="src\Recorder\RecPlayer.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Option.h" />
     <ClInclude Include="src\Task\Task_Pause.h" />
     <ClInclude Include="src\Task\Task_Result.h" />
     <ClInclude Include="src\Task\Task_Title.h" />
+    <ClInclude Include="src\Task\Task_TitleMovement.h" />
     <ClInclude Include="src\UI\UI.h" />
     <ClInclude Include="src\Water\water.h" />
   </ItemGroup>
