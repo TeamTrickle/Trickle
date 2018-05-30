@@ -180,6 +180,22 @@ bool Bucket::isObjectCollided() {
 	auto block = OGge->GetTask<Block>("block");
 	if (map) {
 		hitMap = map->MapHitCheck(*this);
+		/*if (hitMap == false)
+		{
+			for (int y = 0; y < map->mapSize.y; ++y)
+			{
+				for (int x = 0; x < map->mapSize.x; ++x)
+				{
+
+					{
+						if (map->_arr[y][x] != 23 && map->_arr[y][x] != 24)
+						{
+							hitMap = map->hitBase[y][x].hit(*this);
+						}
+					}
+				}
+			}
+		}*/
 		if (hitMap == true)
 		{
 			if (putsoundplay)    //ƒTƒEƒ“ƒh‚ğˆê‰ñÄ¶‚µ‚½‚©‚Ç‚¤‚©‚Ì”»’f

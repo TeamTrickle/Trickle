@@ -23,6 +23,8 @@ bool Goal::Initialize()
 }
 bool Goal::Initialize(Vec2& pos) {
 	cleared = false;
+	goal_anim = false;
+	animCnt = 0;
 	this->objectTag = "Goal";
 	__super::Init(this->objectTag);
 	//テクスチャの読み込み
@@ -67,6 +69,7 @@ void Goal::Render2D()
 	
 	src.OffsetSize();
 	tex.Draw(draw, src);
+	this->LineDraw();
 }
 
 bool Goal::Finalize()
@@ -74,11 +77,11 @@ bool Goal::Finalize()
 	//-----------------------------------------
 	//このオブジェクトが消滅するときに行う処理を記述
 	//-----------------------------------------
-	
+	tex.Finalize();
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		tex.Finalize();
+		
 	}
 	return true;
 }

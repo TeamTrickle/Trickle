@@ -115,7 +115,6 @@ void UI::Move(Vec2 pos) {
 }
 
 void UI::Render2D() {
-	GameObject::LineDraw();
 	if (!active) { return; }
 	draw = Box2D(pos.x, pos.y, nowWH.x, nowWH.y);
 	draw.OffsetSize();
@@ -202,10 +201,10 @@ bool UImanager::Initialize(unsigned short& mapNum) {
 		activeID = 0;
 		break;
 	case 3:		//チュートリアル３
-		maxNum = 3;
-		UIlist_.resize(maxNum);
-		uiInfo.resize(maxNum);
-		uiInfo[0] = {};
+		//maxNum = 3;
+		//UIlist_.resize(maxNum);
+		//uiInfo.resize(maxNum);
+		//uiInfo[0] = {};
 		break;
 	default:
 		break;

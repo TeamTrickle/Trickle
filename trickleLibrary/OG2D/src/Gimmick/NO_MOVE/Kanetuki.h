@@ -31,8 +31,8 @@ private:
 	bool Finalize();		//‰ğ•úˆ—
 	void GetFlag();
 private:
-	const int Fire_time_LIQUID = 30;	//‰Á”M‚·‚éŠÔ ‰t‘Ì
-	const int Fire_time_SOLID = 20;	    //‰Á”M‚·‚éŠÔ ŒÂ‘Ì
+	const int Fire_time_LIQUID = 10;	//‰Á”M‚·‚éŠÔ ‰t‘Ì
+	const int Fire_time_SOLID = 5;	    //‰Á”M‚·‚éŠÔ ŒÂ‘Ì
 	int Fire_movetime;					//”R‚â‚·ŠÔ‚ğŠi”[‚·‚é
 										//ƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹–¼‚ÌŠi”[
 	std::string startsoundname;

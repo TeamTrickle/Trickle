@@ -110,6 +110,7 @@ void Kanetuki::Render2D()
 	//--------------------
 	//•`‰æŽž‚És‚¤ˆ—‚ð‹Lq
 	//--------------------
+	this->LineDraw();
 }
 bool Kanetuki::Finalize()
 {
@@ -167,6 +168,9 @@ void Kanetuki::toSteam()
 				}
 			}
 		}
+		//else {
+		//	Fire_movetime = 0;
+		//}
 	}
 }
 //----------------------------

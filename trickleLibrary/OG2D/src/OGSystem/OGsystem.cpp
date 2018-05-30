@@ -214,6 +214,10 @@ void EngineSystem::TaskKillCheck()
 		{
 			if (id->second->GetKillCount() > 0)
 			{
+				if (id->second->GetTaskName() == "Goal")
+				{
+					int a = 0;
+				}
 				this->taskobjects.erase(id);
 				this->TaskApplication();
 				id = this->taskobjects.begin();

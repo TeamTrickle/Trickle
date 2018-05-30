@@ -2,6 +2,7 @@
 #include "Player\Player.h"
 #include "Bucket\bucket.h"
 #include "Gimmick\NO_MOVE\Switch.h"
+#include "Goal\Goal.h"
 Map::Map()
 {
 	this->chip.resize(45);
@@ -152,6 +153,10 @@ void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
 		auto bucket = Bucket::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
 		return;
 	}
+	if (text == "g")
+	{
+		auto goal = Goal::Create(true, Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+	}
 }
 
 void Map::UpDate()
@@ -197,7 +202,8 @@ bool Map::MapHitCheck(GameObject &p)
 				this->_arr[y][x] != 13 &&
 				this->_arr[y][x] != 21 && 
 				this->_arr[y][x] != 22 && 
-				this->_arr[y][x] != 20) {
+				this->_arr[y][x] != 20 && 
+				this->_arr[y][x] != 23) {
 				if (this->hitBase[y][x].hit(p))
 				{
 					return true;
