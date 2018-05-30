@@ -202,10 +202,10 @@ bool UImanager::Initialize(unsigned short& mapNum) {
 		activeID = 0;
 		break;
 	case 3:		//チュートリアル３
-		maxNum = 3;
-		UIlist_.resize(maxNum);
-		uiInfo.resize(maxNum);
-		uiInfo[0] = {};
+		//maxNum = 3;
+		//UIlist_.resize(maxNum);
+		//uiInfo.resize(maxNum);
+		//uiInfo[0] = {};
 		break;
 	default:
 		break;

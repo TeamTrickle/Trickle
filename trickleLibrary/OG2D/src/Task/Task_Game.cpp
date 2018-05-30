@@ -36,7 +36,11 @@ Game::~Game()
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		//次にチュートリアルを控えているものは次のチュートリアルへ移動
-		if (*MapNum <= 4)
+		if (*MapNum < 4) {
+			*MapNum++;
+			auto next = Game::Create();
+		}
+		else if (*MapNum == 4)
 		{
 			//チュートリアル終了でセレクトに戻る
 			auto next = StageSelect::Create();
@@ -50,18 +54,18 @@ bool Game::Initialize()
 	//一時停止タスクの生成
 	auto pause = Pause::Create();
 
-	//switchまではそのまま
-	Vec2 bucketpos[2] = {
-		{ 150,250 },
-		{ 400,800 }
-	};
+	////switchまではそのまま
+	//Vec2 bucketpos[2] = {
+	//	{ 150,250 },
+	//	{ 400,800 }
+	//};
 
 	Vec2 blockpos = Vec2(1536, 70);  //1536,100
 	_waterpos = { 200,100 };
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 16,7 };
 
-	std::cout << "Game" << std::endl;
+	std::cout << "Game初期化" << std::endl;
 
 	//UI
 	//ui.resize(5);
@@ -94,11 +98,11 @@ bool Game::Initialize()
 		sound.volume(1.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
-		//バケツ生成
-		for (int i = 0; i < 1; ++i)
-		{
-			auto bucket = Bucket::Create(bucketpos[i]);
-		}
+		////バケツ生成
+		//for (int i = 0; i < 1; ++i)
+		//{
+		//	auto bucket = Bucket::Create(bucketpos[i]);
+		//}
 		//ゴール生成
 		for (int i = 0; i < 1; ++i)
 		{
@@ -118,21 +122,22 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
-		//バケツ生成
-		for (int i = 0; i < 1; ++i)
-		{
-			auto bucket = Bucket::Create(bucketpos[i]);
-		}
+		////バケツ生成
+		//for (int i = 0; i < 1; ++i)
+		//{
+		//	auto bucket = Bucket::Create(bucketpos[i]);
+		//}
 		//goal生成
 		for (int i = 0; i < 1; ++i)
 		{
-			auto goal = Goal::Create(true, Vec2(10 * 64, 10 * 64));
+			auto goal = Goal::Create(true, Vec2(20 * 64, 21 * 64));
 		}
 	}
 	break;
 	case 3:		//チュートリアル３
 		//位置変更
-		_waterpos.y += 64 * 4;
+		_waterpos.x = 6 * 64;
+		_waterpos.y = 64 * 16;
 		{
 			//map生成
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
@@ -151,7 +156,7 @@ bool Game::Initialize()
 			//goal生成
 			for (int i = 0; i < 1; ++i)
 			{
-				auto goal = Goal::Create(true, Vec2(16 * 64, 8 * 64));
+				auto goal = Goal::Create(true, Vec2(31 * 64, 20 * 64));
 			}
 			//扇風機生成
 			for (int i = 0; i < 1; ++i)
@@ -164,8 +169,9 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial4.csv");
-		//水の位置(勘)
-		_waterpos.x = 64 * 12;
+		//水の位置
+		_waterpos.x = 64 * 5;
+		_waterpos.y = 64 * 2;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
 		sound.volume(1.0f);
@@ -173,15 +179,20 @@ bool Game::Initialize()
 		sound.play();
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(16 * 64, 18 * 64));
-		//バケツ生成
-		for (int i = 0; i < 1; ++i)
-		{
-			auto bucket = Bucket::Create(bucketpos[i]);
-		}
+		////バケツ生成
+		//for (int i = 0; i < 1; ++i)
+		//{
+		//	auto bucket = Bucket::Create(bucketpos[i]);
+		//}
 		//製氷機生成
 		for (int i = 0; i < 2; ++i)
 		{
 			auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64));
+		}
+		//goal生成
+		for (int i = 0; i < 1; ++i)
+		{
+			auto goal = Goal::Create(true, Vec2(18 * 64, 20 * 64));
 		}
 	}
 	break;
@@ -277,15 +288,8 @@ void Game::UpDate()
 	//カメラ処理
 	Camera_move();
 
+	//UI
 	UImng_->UpDate();
-	//for (int i = 0; i < ui.size(); ++i) {
-	//	if (ui[i] != nullptr && !ui[i]->active) {
-	//		if (i < ui.size() - 1) {
-	//			if (ui[i + 1] != nullptr) { ui[i]->Kill(); }
-	//			ui[i + 1] = UI::Create(uiInfo[i + 1], i + 1, &(*UImng_));
-	//		}
-	//	}
-	//}
 
 	if (OGge->in->on(Input::in::D2, 0) && OGge->in->on(In::D1))
 	{
@@ -320,7 +324,7 @@ void Game::Render2D()
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
 {
-	std::cout << "Game" << std::endl;
+	std::cout << "Game解放" << std::endl;
 	//各オブジェクトが存在している場合にKillする。
 	auto map = OGge->GetTask<Map>("map");
 	if (map)

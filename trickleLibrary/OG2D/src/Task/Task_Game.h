@@ -44,7 +44,5 @@ private:
 	std::string tutorialsoundname;
 
 	//UI----------------------------------------
-	//std::vector<UI::SP> ui;
-	//std::vector<UI::UIinfo> uiInfo;
 	std::shared_ptr<UImanager> UImng_;
 };
