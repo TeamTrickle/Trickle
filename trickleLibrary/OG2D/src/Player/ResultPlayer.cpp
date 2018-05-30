@@ -19,14 +19,10 @@ bool ResultPlayer::Finalize()
 void ResultPlayer::UpDate()
 {
 	Move();
-	if (OGge->in->key.down(Input::KeyBoard::S))
-	{
-		std::cout << position.x << "   " << position.y << std::endl;
-	}
 }
 void ResultPlayer::Move()
 {
-	Vec2 windowsize = OGge->window->GetSize();
+	Vec2 windowsize = OGge->camera->GetSize();
 	if(position.x <= windowsize.x)
 	{
 		position.x += moveVec.x;
