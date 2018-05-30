@@ -5,6 +5,7 @@
 #include "Map\Map.h"
 #include "Back\Back.h"
 #include "Chara\Chara.h"
+#include "Load\LoadLogo.h"
 Title::Title()
 {
 	this->mode = Non;
@@ -23,6 +24,9 @@ Title::Title()
 
 Title::~Title()
 {
+	//ロードの生成を行い強制描画を行う
+	auto load = Load::Create();
+	load->Draw();
 	this->Finalize();
 }
 

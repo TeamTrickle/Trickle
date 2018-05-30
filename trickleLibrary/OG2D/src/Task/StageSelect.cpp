@@ -4,6 +4,7 @@
 #include "Chara\Chara.h"
 #include "Back\Back.h"
 #include "Map\Map.h"
+#include "Load\LoadLogo.h"
 StageSelect::StageSelect()
 {
 	this->mode = Non;
@@ -78,6 +79,12 @@ bool StageSelect::Initialize()
 		this->gate[i - 1] = new GameObject(Cube, Vec2(400 * i + 450, 640), Vec2(128, 256), 0.0f);
 		this->Entrance.emplace_back(LEFT, gate[i - 1]->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate[i - 1]->position.x + gate[i - 1]->Scale.x);
+	}
+	//“Ç‚İ‚İI—¹‚Åƒ[ƒh‰æ–Ê‚ğ”jŠü
+	auto load = OGge->GetTasks<Load>("load");
+	for (auto id = load->begin(); id != load->end(); ++id)
+	{
+		(*id)->Kill();
 	}
 	return true;
 }

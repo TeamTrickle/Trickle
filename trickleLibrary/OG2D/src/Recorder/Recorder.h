@@ -1,9 +1,11 @@
 #pragma once
-#include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 #include <thread>
 #include <queue>
+#include "RecDef.h"
+#include "OGSystem\OGsystem.h"
 #include "OGSystem\Timer\glTimer.h"
 
 /**
@@ -11,11 +13,16 @@
  *	@author	Heewon Kim (nabicore@icloud.com)
  */
 class Recorder {
+private:
+
 	explicit Recorder() {}
 	virtual ~Recorder() {}
 	bool Initialize(const std::string&);
-	void printLog(const std::string&);
+	bool isKeyListenable() const;
+	inline void printLog(const std::string&);
+	bool isAlreadyRecorded(const RecDef::WatchKey&, const RecDef::KeyState&) const;
 	void Recorde();
+	void RecordeButton();
 
 public:
 	/**
@@ -37,11 +44,26 @@ public:
 	 */
 	void WriteRecord(const std::string&);
 
+	/**
+	 *	@brief	キー入力記録を許可します
+	 *	@param	OGge->in
+	 */
+	void ActivateKeyRecord(Input*);
+
+	/**
+	 *	@brief	キー入力を記録するキーをしていします。
+	 *	@param	キー
+	 */
+	void AddKeyInputWatchList(const Input::in&);
+	void operator>>(const Input::in&);
+
 private:
 	bool							isLogging = false;
 	Time*							gameTimer;
+	Input*							inputListener;
 	std::string						fileName = "save.txt";
 	std::ofstream					fileWriter;
 	std::thread						recThread;
 	std::queue<std::string>			inputQueue;
+	std::vector<RecDef::WatchKey>	watchKeys;
 };

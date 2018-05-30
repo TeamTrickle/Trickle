@@ -129,6 +129,12 @@
     <Filter Include="ソースファイル\Recorder">
       <UniqueIdentifier>{c86f3fd4-a747-4ad6-bce2-7b99aae72497}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\TitleMovement">
+      <UniqueIdentifier>{8193f3f2-1366-4811-b917-53e24a3180ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\LoadLogo">
+      <UniqueIdentifier>{157c2ade-473a-48f4-aa6f-ae5a7600f5b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -284,6 +290,15 @@
     </ClCompile>
     <ClCompile Include="src\Recorder\Recorder.cpp">
       <Filter>ソースファイル\Recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_TitleMovement.cpp">
+      <Filter>ソースファイル\Task\TitleMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Recorder\RecPlayer.cpp">
+      <Filter>ソースファイル\Recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Load\LoadLogo.cpp">
+      <Filter>ソースファイル\LoadLogo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +457,18 @@
     </ClInclude>
     <ClInclude Include="src\Recorder\Recorder.h">
       <Filter>ソースファイル\Recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_TitleMovement.h">
+      <Filter>ソースファイル\Task\TitleMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Recorder\RecPlayer.h">
+      <Filter>ソースファイル\Recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Recorder\RecDef.h">
+      <Filter>ソースファイル\Recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Load\LoadLogo.h">
+      <Filter>ソースファイル\LoadLogo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
