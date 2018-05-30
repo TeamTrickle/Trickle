@@ -19,8 +19,10 @@ bool RecPlayer::Initialize(const std::string& fName) {
 	fileName = fName;
 
 	std::ifstream fileReader(fileName, std::ios::in | std::ios::binary);
-	if (!fileReader.is_open())
+	if (!fileReader.is_open()) {
+		printLog("RecPlayer Error - No such file");
 		return false;
+	}
 
 	printLog("=== File open : " + fileName + " ===");
 
@@ -48,6 +50,14 @@ bool RecPlayer::Initialize(const std::string& fName) {
 	return true;
 }
 
+bool RecPlayer::isPlayable() const {
+	return timer.isplay();
+}
+
+bool RecPlayer::isEventExist(const KeyState& s) {
+	return events.find(s) != events.end();
+}
+
 std::vector<std::string> RecPlayer::Split(const std::string& fullStr, const char& keyword)
 {
 	std::vector<std::string> ret;
@@ -60,6 +70,8 @@ std::vector<std::string> RecPlayer::Split(const std::string& fullStr, const char
 		}
 		buf += c;
 	}
+	if (!buf.empty())
+		ret.push_back(buf);
 	return ret;
 }
 
@@ -69,15 +81,18 @@ void RecPlayer::Destroy() {
 
 void RecPlayer::Play() {
 	if (!isEnded()) {
-		float curTime = timer.GetTime();
-		auto curActivity = recData.front();
-		if (curTime <= curActivity.first) {
-			printLog("Read from file - " + 
-				std::to_string(int(curActivity.first)) + " / " +
-				std::to_string(int(curActivity.second.first)) + " / " +
-				std::to_string(int(curActivity.second.second)));
-			events[curActivity.second]();
-			recData.pop();
+		if (isPlayable()) {
+			float curTime = timer.GetTime();
+			auto curActivity = recData.front();
+			if (curTime >= curActivity.first) {
+				printLog("Read from file - " +
+					std::to_string(int(curActivity.first)) + " / " +
+					std::to_string(int(curActivity.second.first)) + " / " +
+					std::to_string(int(curActivity.second.second)));
+				if (isEventExist(curActivity.second))
+					events[curActivity.second]();
+				recData.pop();
+			}
 		}
 	}
 	else if (isRepeat) {
@@ -97,4 +112,14 @@ bool RecPlayer::isEnded() const {
 
 void RecPlayer::SetRepeat(const bool& r) {
 	isRepeat = r;
+}
+
+void RecPlayer::SetPause() {
+	if (timer.isplay())
+		timer.Pause();
+}
+
+void RecPlayer::SetPlay() {
+	if (!timer.isplay())
+		timer.Pause();
 }

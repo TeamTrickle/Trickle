@@ -23,6 +23,8 @@ private:
 	virtual ~RecPlayer() {}
 	inline void printLog(const std::string&);
 	bool Initialize(const std::string&);
+	bool isPlayable() const;
+	bool isEventExist(const KeyState&);
 	std::vector<std::string> Split(const std::string&, const char&);
 
 public:
@@ -65,9 +67,13 @@ public:
 	 */
 	void SetRepeat(const bool&);
 
+	void SetPause();
+	void SetPlay();
+
 private:
 	bool											isDbgMode = false;
 	bool											isRepeat = false;
+	bool											isPlaying = true;
 	Time											timer;
 	std::string										fileName;
 	std::queue<KeyEventTimeline>					recData;
