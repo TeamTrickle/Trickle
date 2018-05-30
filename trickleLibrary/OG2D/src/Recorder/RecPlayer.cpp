@@ -22,6 +22,8 @@ bool RecPlayer::Initialize(const std::string& fName) {
 	if (!fileReader.is_open())
 		return false;
 
+	printLog("=== File open : " + fileName + " ===");
+
 	std::string buf;
 	while (!fileReader.eof()) {
 		fileReader >> buf;
@@ -34,9 +36,11 @@ bool RecPlayer::Initialize(const std::string& fName) {
 			Input::in key = (Input::in)std::stoi(commands[1]);
 			RecDef::KeyState state = (RecDef::KeyState)std::stoi(commands[2]);
 			recData.push(KeyEventTimeline::pair(time, RecDef::WatchKey::pair(key, state)));
+			printLog("Read Successful - " + buf);
 		}
 	}
 	fileReader.close();
+	printLog("=== File closed ===");
 	timer.Start();
 
 	return true;

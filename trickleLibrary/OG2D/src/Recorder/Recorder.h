@@ -19,7 +19,7 @@ private:
 	virtual ~Recorder() {}
 	bool Initialize(const std::string&);
 	bool isKeyListenable() const;
-	void printLog(const std::string&);
+	inline void printLog(const std::string&);
 	bool isAlreadyRecorded(const RecDef::WatchKey&, const RecDef::KeyState&) const;
 	void Recorde();
 	void RecordeButton();

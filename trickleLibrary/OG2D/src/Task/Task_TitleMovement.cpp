@@ -3,7 +3,6 @@
 #include "Chara\Chara.h"
 #include "Map\Map.h"
 
-
 TitleMovement::TitleMovement() {
 
 }

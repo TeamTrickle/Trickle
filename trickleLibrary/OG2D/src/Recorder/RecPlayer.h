@@ -20,7 +20,7 @@ private:
 
 	explicit RecPlayer() {}
 	virtual ~RecPlayer() {}
-	void printLog(const std::string&);
+	inline void printLog(const std::string&);
 	bool Initialize(const std::string&);
 	std::vector<std::string> Split(const std::string&, const char&);
 
