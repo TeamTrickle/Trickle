@@ -21,21 +21,6 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isCollisionNow = -1;			//当たり判定カウントを初期化
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
-
-	this->player = RecPlayer::Create("PlayerAct.txt", true);
-	this->player->SetPause();
-	this->player->SetRepeat(true);
-	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
-		this->move.x = -5.0f;
-		this->direction = Direction::LEFT;
-	});
-	this->player->AddKeyEvent(Input::in::CR, RecDef::KeyState::PRESS, [&]() {
-		this->move.x = 5.0f;
-		this->direction = Direction::RIGHT;
-	});
-	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
-		this->AutoJump();
-	});
 }
 Chara::~Chara()
 {
@@ -280,8 +265,11 @@ void Chara::AutoMove()
 		{
 			this->move.x = 5.0f;
 		}*/
-		player->SetPlay();
-		player->Play();
+
+		if (player) {
+			player->SetPlay();
+			player->Play();
+		}
 	}
 }
 void Chara::ManualMove(Vec2& est)
@@ -361,6 +349,23 @@ Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 		return to;
 	}
 	return nullptr;
+}
+void Chara::SetReplayEnable()
+{
+	this->player = RecPlayer::Create("PlayerAct.txt", true);
+	this->player->SetPause();
+	this->player->SetRepeat(true);
+	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
+		this->move.x = -5.0f;
+		this->direction = Direction::LEFT;
+	});
+	this->player->AddKeyEvent(Input::in::CR, RecDef::KeyState::PRESS, [&]() {
+		this->move.x = 5.0f;
+		this->direction = Direction::RIGHT;
+	});
+	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
+		this->AutoJump();
+	});
 }
 bool Chara::AutoJump()
 {

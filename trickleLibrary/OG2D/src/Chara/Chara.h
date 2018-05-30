@@ -45,6 +45,7 @@ public:
 	virtual ~Chara();			//デストラクタ
 	typedef std::shared_ptr<Chara> SP;
 	static SP Create(std::string&, Vec2&, bool = true);
+	void SetReplayEnable();
 	void UpDate();		//更新処理
 	void Render2D();	//描画処理
 	void Friction(Vec2&);	//重力処理
