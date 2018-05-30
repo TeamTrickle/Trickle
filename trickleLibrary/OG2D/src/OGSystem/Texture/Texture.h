@@ -5,7 +5,7 @@ class Texture {
 public:
 	Texture();							//コンストラクタ
 	~Texture();							//デストラクタ	
-	bool Create(std::string&);			//画像データの生成
+	bool Create(const std::string&);			//画像データの生成
 	void Draw(							//描画処理
 		Box2D&, 
 		Box2D&,

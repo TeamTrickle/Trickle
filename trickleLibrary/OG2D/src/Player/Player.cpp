@@ -123,10 +123,13 @@ void Player::UpDate()
 					}
 				}
 				this->inv = 10;
+				this->position.y += 64.f;
+				this->Scale.y -= 64.f;
 			}
 		}
 		break;
 	case State::NORMAL:
+		
 		break;
 	}
 	if (this->inv > 0)
@@ -134,198 +137,216 @@ void Player::UpDate()
 		this->inv--;
 	}
 	//各状態での処理と別状態への移行
-	switch (this->motion)
+	if (this->state != State::ANIMATION)
 	{
-	case Motion::Normal:
-		if (!this->FootCheck())
+		switch (this->motion)
 		{
-			//地面がない場合に落下処理に移行
-			this->motion = Motion::Fall;
-			break;
-		}
-		if (OGge->in->on(In::B1))
-		{
-			if (this->FootCheck())
+		case Motion::Normal:
+			if (!this->FootCheck())
 			{
-				//落下していない時のみジャンプが有効
-				this->motion = Motion::Jump;
-				this->moveCnt = 0;
+				//地面がない場合に落下処理に移行
+				this->motion = Motion::Fall;
+				break;
 			}
-		}
-		if (OGge->in->down(In::B2))
-		{
-			//バケツを持つ
-			if (this->BucketHit()) 
-			{
-				this->state = State::BUCKET;
-			}
-		}
-		if (this->state != State::BUCKET) {
-			if (this->InputDown())
-			{
-				if (this->FootCheck((std::string)"Ladder"))
-				{
-					//梯子状態に移行
-					this->motion = Motion::Ladder;
-					//アニメーション状態に移行
-					this->state = State::ANIMATION;
-					//カウントリセット
-					this->moveCnt = 0;
-					//移動値をすべてリセット
-					this->est = { 0.f,0.f };
-				}
-			}
-			if (this->InputUp())
-			{
-				if (this->ObjectHit((std::string)"Ladder"))
-				{
-					this->motion = Motion::Ladder;
-					this->state = State::ANIMATION;
-					this->moveCnt = 0;
-					this->est = { 0.f,0.f };
-				}
-			}
-		}
-		if (this->InputLeft() || this->InputRight())
-		{
-			//NORMALの時、左右ボタンを押すとWALKに変わる
-			this->motion = Motion::Walk;
-		}
-		this->BlockHit();
-		if (OGge->in->down(In::B2))
-		{
-			animation.timeCnt = 0;
-			this->motion = Motion::Switch_M;
-			this->SwitchCheck();
-		}
-		break;
-	case Motion::Jump:
-		//飛び出したときに初期値を入れる
-		if (this->moveCnt == 0)
-		{
-			this->est.y = Player::JUMP_POWER;
-			this->moveCnt++;
-		}
-		//落下し始めたらFallに移動
-		if (this->est.y >= 0.f)
-		{
-			this->motion = Fall;
-		}
-		//頭が当たったら上昇をやめて落下に移動
-		if (this->HeadCheck())
-		{
-			this->est.y = 0.f;
-			this->motion = Fall;
-		}
-		break;
-	case Motion::Fall:
-		//地面についたら通常に戻る
-		if (this->FootCheck()) 
-		{
-			this->motion = Motion::Normal;
-		}
-		break;
-	case Motion::Ladder:	//梯子処理
-		//アニメーション中以外
-		if (this->state != State::ANIMATION) 
-		{
 			if (OGge->in->on(In::B1))
 			{
+				if (this->FootCheck())
+				{
+					//落下していない時のみジャンプが有効
+					this->motion = Motion::Jump;
+					this->moveCnt = 0;
+				}
+			}
+			if (OGge->in->down(In::B2))
+			{
+				//バケツを持つ
+				if (this->BucketHit())
+				{
+					this->state = State::BUCKET;
+				}
+			}
+			if (this->state != State::BUCKET) {
+				if (this->InputDown())
+				{
+					if (this->FootCheck((std::string)"Ladder"))
+					{
+						//梯子状態に移行
+						this->motion = Motion::Ladder;
+						//アニメーション状態に移行
+						this->state = State::ANIMATION;
+						//カウントリセット
+						this->moveCnt = 0;
+						//移動値をすべてリセット
+						this->est = { 0.f,0.f };
+						return;
+					}
+				}
+				if (this->InputUp())
+				{
+					if (this->ObjectHit((std::string)"Ladder"))
+					{
+						this->motion = Motion::Ladder;
+						this->state = State::ANIMATION;
+						this->moveCnt = 0;
+						this->est = { 0.f,0.f };
+						return;
+					}
+				}
+			}
+			if (this->InputLeft() || this->InputRight())
+			{
+				//NORMALの時、左右ボタンを押すとWALKに変わる
+				this->motion = Motion::Walk;
+			}
+			this->BlockHit();
+			if (OGge->in->down(In::B2))
+			{
+				animation.timeCnt = 0;
+				this->motion = Motion::Switch_M;
+				this->SwitchCheck();
+			}
+			break;
+		case Motion::Jump:
+			//飛び出したときに初期値を入れる
+			if (this->moveCnt == 0)
+			{
+				this->est.y = Player::JUMP_POWER;
+				this->moveCnt++;
+			}
+			//落下し始めたらFallに移動
+			if (this->est.y >= 0.f)
+			{
+				this->motion = Fall;
+			}
+			//頭が当たったら上昇をやめて落下に移動
+			if (this->HeadCheck())
+			{
+				this->est.y = 0.f;
+				this->motion = Fall;
+			}
+			break;
+		case Motion::Fall:
+			//地面についたら通常に戻る
+			if (this->FootCheck())
+			{
+				this->motion = Motion::Normal;
+			}
+			break;
+		case Motion::Ladder:	//梯子処理
+								//アニメーション中以外
+			if (this->state != State::ANIMATION)
+			{
+				if (OGge->in->on(In::B1))
+				{
+					if (this->LadderJumpCheck())
+					{
+						this->motion = Motion::Jump;
+						this->moveCnt = 0;
+					}
+				}
+				if (this->InputUp())
+				{
+					++this->animation.ladderCnt;
+					Vec2 e = { 0.f,-5.0f };
+					this->MoveCheck(e, (std::string)"Floor");
+					if (this->HeadCheck((std::string)"Ladder", 1))
+					{
+						this->motion = Motion::Normal;
+						//アニメーション状態に移行
+						this->state = State::ANIMATION;
+						//カウントリセット
+						this->moveCnt = 0;
+						//移動値をすべてリセット
+						this->est = { 0.f,0.f };
+					}
+				}
+				if (this->InputDown())
+				{
+					++this->animation.ladderCnt;
+					Vec2 e = { 0.f,5.0f };
+					this->MoveCheck(e, (std::string)"Floor");
+					if (this->FootCheck((std::string)"Ladder", 1))
+					{
+						this->motion = Motion::Normal;
+					}
+					else
+					{
+						//重力処理を行わないのでここで終了
+						return;
+					}
+
+				}
+			}
+			break;
+		case Walk:
+			if (!this->InputRight() && !this->InputLeft())
+			{
+				this->motion = Motion::Normal;
+			}
+			if (OGge->in->on(In::B1))
+			{
+				//歩いてるときのジャンプ
 				this->motion = Motion::Jump;
 				this->moveCnt = 0;
 			}
-			if (this->InputUp())
-			{	
-				++this->animation.ladderCnt;
-				Vec2 e = { 0.f,-5.0f };
-				this->MoveCheck(e, (std::string)"Floor");
-				if (this->HeadCheck((std::string)"Ladder", 1))
-				{
-					this->motion = Motion::Normal;
-					//アニメーション状態に移行
-					this->state = State::ANIMATION;
-					//カウントリセット
-					this->moveCnt = 0;
-					//移動値をすべてリセット
-					this->est = { 0.f,0.f };
-				}
-			}
-			if (this->InputDown())
+			if (OGge->in->down(In::B2))
 			{
-				++this->animation.ladderCnt;
-				Vec2 e = { 0.f,5.0f };
-				this->MoveCheck(e, (std::string)"Floor");
-				if (this->FootCheck((std::string)"Ladder", 1))
+				//バケツを持つ
+				if (this->BucketHit())
 				{
-					this->motion = Motion::Normal;
+					this->state = State::BUCKET;
 				}
 				else
 				{
-					//重力処理を行わないのでここで終了
-					return;
+					//もしバケツをとれないならばスイッチの判定を行う
+					this->SwitchCheck();
 				}
-				
+			}
+			this->BlockHit();
+			break;
+		case Switch_M:
+			if (animation.timeCnt > 29) {
+				this->motion = Motion::Normal;
 			}
 		}
-		break; 
-	case Walk:
-		if (!this->InputRight() && !this->InputLeft())
+		this->Friction();
+		if (this->motion != Motion::Ladder)
 		{
-			this->motion = Motion::Normal;
-		}
-		if (OGge->in->on(In::B1))
-		{
-			//歩いてるときのジャンプ
-			this->motion = Motion::Jump;
-			this->moveCnt = 0;
-		}
-		if (OGge->in->down(In::B2))
-		{
-			//バケツを持つ
-			if (this->BucketHit())
+			if (this->InputLeft())
 			{
-				this->state = State::BUCKET;
+				this->est.x = -this->MOVE_SPEED;
+				this->direction = Direction::LEFT;
 			}
-			else
+			if (this->InputRight())
 			{
-				//もしバケツをとれないならばスイッチの判定を行う
-				this->SwitchCheck();
+				this->est.x = +this->MOVE_SPEED;
+				this->direction = Direction::RIGHT;
 			}
-		}
-		this->BlockHit();
-		break;
-	case Switch_M:
-		if (animation.timeCnt > 29) {
-			this->motion = Motion::Normal;
 		}
 	}
 	//重力とかとかの移動処理の計算
-	if (this->state != State::ANIMATION)
+	/*if (this->state != State::ANIMATION)
 	{
-		this->Friction();
-	}
+	
+	}*/
 	//はしご中以外は左右移動ができる
-	if (this->motion != Motion::Ladder)
-	{
-		if (this->InputLeft())
-		{
-			this->est.x = -this->MOVE_SPEED;
-			this->direction = Direction::LEFT;
-		}
-		if (this->InputRight())
-		{
-			this->est.x = +this->MOVE_SPEED;
-			this->direction = Direction::RIGHT;
-		}
-	}
+	
 	//最終的な移動値を反映させる
 	this->MoveCheck(this->est);
 }
 void Player::Render2D()
 {
-
-	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
-	draw.OffsetSize();
+	Box2D draw;
+	if (this->hold)
+	{
+		draw = { this->position.x,this->position.y + 64.f,this->Scale.x, this->Scale.y  - 64.f};
+		draw.OffsetSize();
+	}
+	else
+	{
+		draw = { this->position.x, this->position.y, this->Scale.x, this->Scale.y };
+		draw.OffsetSize();
+	}
 
 	Box2D src = this->animation.returnSrc(this->motion, this->state);
 	//モションを受けsrcをreturnする
@@ -671,6 +692,8 @@ bool Player::BucketHit()
 		{
 			(*id)->HoldCheck(true);
 			this->hold = true;
+			this->position.y -= 64.f;
+			this->Scale.y += 64.f;
 			return true;
 		}
 	}
@@ -689,6 +712,8 @@ bool Player::BucketHit()
 				{
 					(*id)->HoldCheck(true);
 					this->hold = true;
+					this->position.y -= 64.f;
+					this->Scale.y += 64.f;
 					return true;
 				}
 			}
@@ -715,7 +740,7 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y };
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y  + 64.f};
 		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
@@ -723,7 +748,7 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y };
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y  + 64.f};
 		}
 	}
 }
@@ -983,6 +1008,27 @@ void Player::SetPos(Vec2& pos)
 Vec2 Player::GetPos() const
 {
 	return this->position;
+}
+bool Player::LadderJumpCheck()
+{
+	auto map = OGge->GetTask<Map>("map");
+	if (map)
+	{
+		for (int y = 0; y < map->mapSize.y;++y)
+		{
+			for (int x = 0; x < map->mapSize.x; ++x)
+			{
+				if (map->_arr[y][x] == 24)
+				{
+					if (this->hit(map->hitBase[y][x]))
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+	return true;
 }
 Player::SP Player::Create(Vec2& pos, bool flag)
 {

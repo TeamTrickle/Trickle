@@ -17,6 +17,8 @@
 #include "GameProcessManagement\Timer.h"
 #include "Task\Task_Pause.h"
 #include "Task\StageSelect.h"
+#include "Back\Back.h"
+#include "Task_Title.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -25,7 +27,7 @@ Game::Game()
 {
 	gamesoundname = "title.wav";
 	tutorialsoundname = "tutorial.wav";
-	this->ResetKillCount();
+	//this->ResetKillCount();
 }
 
 Game::~Game()
@@ -33,13 +35,26 @@ Game::~Game()
 	//解放処理と次のsceneの生成
 	this->Finalize();
 	OGge->ChengeTask();
+	//OGge->DeleteTasks();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		//次にチュートリアルを控えているものは次のチュートリアルへ移動
-		if (*MapNum <= 4)
+		if (OGge->in->on(In::D1) && OGge->in->on(In::D2))
 		{
-			//チュートリアル終了でセレクトに戻る
-			auto next = StageSelect::Create();
+			auto next = Title::Create();
+		}
+		else
+		{
+			if (*MapNum < 4)
+			{
+				*MapNum++;
+				auto next = Game::Create();
+			}
+			//次にチュートリアルを控えているものは次のチュートリアルへ移動
+			else if (*MapNum == 4)
+			{
+				//チュートリアル終了でセレクトに戻る
+				auto next = StageSelect::Create();
+			}
 		}
 	}
 }
@@ -47,8 +62,9 @@ Game::~Game()
 //-------------------------------------------------------------------------------------------------
 bool Game::Initialize()
 {
+	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
 	//一時停止タスクの生成
-	auto pause = Pause::Create();
+	//auto pause = Pause::Create();
 
 	//switchまではそのまま
 	Vec2 bucketpos[2] = {
@@ -243,6 +259,7 @@ bool Game::Initialize()
 		//リソース管理classへデータを渡す
 		rm->SetTextureData((std::string)"waterTex", &waterTex);
 	}
+	
 	//水が自動で降ってくる時間の初期化
 	this->timecnt = 0;
 	//水の生成
@@ -287,7 +304,7 @@ void Game::UpDate()
 	//	}
 	//}
 
-	if (OGge->in->on(Input::in::D2, 0) && OGge->in->on(In::D1))
+	if (OGge->in->on(In::D1) && OGge->in->on(In::D2))
 	{
 		this->Kill();
 	}
@@ -296,7 +313,7 @@ void Game::UpDate()
 		auto goal = OGge->GetTask<Goal>("Goal");
 		if (goal != nullptr)
 		{
-			if (OGge->in->key.down(Input::KeyBoard::ENTER))
+			if (OGge->in->key.down(Input::KeyBoard::Q))
 			{
 				goal->cleared = true;
 			}
@@ -387,8 +404,18 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto pauses = OGge->GetTasks<Pause>("pause");
+	/*auto pauses = OGge->GetTasks<Pause>("pause");
 	for (auto id = pauses->begin(); id != pauses->end(); ++id)
+	{
+		(*id)->Kill();
+	}*/
+	auto back = OGge->GetTask<Back>("back");
+	if (back)
+	{
+		back->Kill();
+	}
+	auto switches = OGge->GetTasks<Switch>("Switch");
+	for (auto id = switches->begin(); id != switches->end(); ++id)
 	{
 		(*id)->Kill();
 	}

@@ -17,6 +17,8 @@ Title::Title()
 	this->flowerVolume = 0.f;
 	this->soundname = "title.wav";     //サウンドのファイル名	
 	this->sound = nullptr;
+	//タグ設定
+	__super::Init((std::string)"title");
 }
 
 Title::~Title()
@@ -64,8 +66,7 @@ bool Title::Initialize()
 	auto map = Map::Create((std::string)"title.csv");
 	//矢印の位置で使用する
 	this->nextTaskCheck = 0;
-	//タグ設定
-	__super::Init((std::string)"title");
+	
 	//描画順の決定
 	__super::SetDrawOrder(0.5f);
 	//カメラの中心のターゲットを登録

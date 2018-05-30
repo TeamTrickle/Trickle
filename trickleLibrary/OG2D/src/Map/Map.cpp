@@ -8,6 +8,7 @@ Map::Map()
 	this->chipimgname = "mapchip2.png";
 	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
+	__super::Init((std::string)"map");
 }
 
 Map::~Map()
@@ -134,7 +135,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 			}
 		}
 	}
-	__super::Init((std::string)"map");
+	
 	return true;
 }
 

@@ -4,7 +4,7 @@
 //--------------------------------------------------
 //@:Textureclass									
 //--------------------------------------------------
-bool Texture::Create(std::string& path)
+bool Texture::Create(const std::string& path)
 {
 	//GLuint id;
 	//テクスチャを1つだけ生成する

@@ -89,6 +89,7 @@ private:
 	bool BlockHit();											//ブロックとの当たり判定
 	bool ObjectHit(std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
 	void SwitchCheck();											//スイッチとの当たり判定
+	bool LadderJumpCheck();										//梯子中にジャンプを行う際の当たり判定
 public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);

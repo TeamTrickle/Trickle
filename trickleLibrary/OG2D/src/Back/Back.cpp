@@ -1,6 +1,6 @@
 #include "Back.h"
 
-Back::Back(std::string& path, Vec2& size_)
+Back::Back(const std::string& path, Vec2& size_)
 {
 	this->backImg.Create(path);
 	this->size = size_;
@@ -8,7 +8,7 @@ Back::Back(std::string& path, Vec2& size_)
 	__super::SetDrawOrder(0.0f);
 }
 
-Back::Back(std::string& path, float size_x, float size_y)
+Back::Back(const std::string& path, float size_x, float size_y)
 {
 	this->backImg.Create(path);
 	this->size = { size_x,size_y };
@@ -16,7 +16,7 @@ Back::Back(std::string& path, float size_x, float size_y)
 	__super::SetDrawOrder(0.0f);
 }
 
-Back::Back(std::string& path, int size_x, int size_y)
+Back::Back(const std::string& path, int size_x, int size_y)
 {
 	this->backImg.Create(path);
 	this->size = { size_x,size_y };
@@ -37,7 +37,7 @@ void Back::Render2D()
 	this->backImg.Draw(draw, src);
 }
 
-Back::SP Back::Create(std::string& path, Vec2& size_, bool flag)
+Back::SP Back::Create(const std::string& path, Vec2& size_, bool flag)
 {
 	Back::SP to = Back::SP(new Back(path, size_));
 	if (to)
@@ -52,7 +52,7 @@ Back::SP Back::Create(std::string& path, Vec2& size_, bool flag)
 	return nullptr;
 }
 
-Back::SP Back::Create(std::string& path, float x, float y, bool flag)
+Back::SP Back::Create(const std::string& path, float x, float y, bool flag)
 {
 	Back::SP to = Back::SP(new Back(path, x, y));
 	if (to)
@@ -67,7 +67,7 @@ Back::SP Back::Create(std::string& path, float x, float y, bool flag)
 	return nullptr;
 }
 
-Back::SP Back::Create(std::string& path, int x, int y, bool flag)
+Back::SP Back::Create(const std::string& path, int x, int y, bool flag)
 {
 	Back::SP to = Back::SP(new Back(path, x, y));
 	if (to)

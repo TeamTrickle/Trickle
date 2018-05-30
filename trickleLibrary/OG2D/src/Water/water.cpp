@@ -47,6 +47,7 @@ Water::Water(Vec2 pos)
 	soundname = "water-drop3.wav";
 	this->hold = false;
 	this->Radius = { 0.5f,0.9f };
+	__super::Init((std::string)"water");
 }
 
 Water::~Water() 
@@ -57,7 +58,7 @@ Water::~Water()
 
 bool Water::Initialize() 
 {
-	__super::Init((std::string)"water");
+	
 	soundplay = true;
 	sound.create(soundname, false);
 	sound.volume(1.0f);
@@ -135,6 +136,7 @@ void Water::UpDate()
 			this->currentState = State::LIQUID;
 			this->Scale = this->minSize;
 			this->setTime = 0;
+			this->position.y += this->maxSize.x / 2;
 			break;
 		}
 		break;
