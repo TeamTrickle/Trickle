@@ -16,6 +16,7 @@
 class RecPlayer {
 private:
 
+	typedef RecDef::WatchKey KeyState;
 	typedef std::pair<float, RecDef::WatchKey> KeyEventTimeline;
 
 	explicit RecPlayer() {}
@@ -47,9 +48,10 @@ public:
 	/**
 	 *	@brief	キーを押せばやる行動を指定します
 	 *	@param	キー
+	 *	@param	キーを押したのか離したのか
 	 *	@param	このキーを押したとき行わっれる動作を記述したvoid型関数
 	 */
-	void AddKeyEvent(const Input::in&, const std::function<void()>&);
+	void AddKeyEvent(const Input::in&, const RecDef::KeyState& state, const std::function<void()>&);
 
 	/**
 	 *	@brief	まだプレイする記録が残っているか
@@ -62,5 +64,5 @@ private:
 	Time											timer;
 	std::string										fileName;
 	std::queue<KeyEventTimeline>					recData;
-	std::map<Input::in, std::function<void()>>		events;
+	std::map<KeyState, std::function<void()>>		events;
 };

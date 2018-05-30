@@ -74,14 +74,16 @@ void RecPlayer::Play() {
 				std::to_string(int(curActivity.first)) + " / " +
 				std::to_string(int(curActivity.second.first)) + " / " +
 				std::to_string(int(curActivity.second.second)) + " / ");
-			events[curActivity.second.first]();
+			events[curActivity.second]();
 			recData.pop();
 		}
 	}
 }
 
-void RecPlayer::AddKeyEvent(const Input::in& key, const std::function<void()>& e) {
-	events[key] = e;
+void RecPlayer::AddKeyEvent(const Input::in& key,
+							const RecDef::KeyState& state,
+							const std::function<void()>& e) {
+	events[KeyState::pair(key, state)] = e;
 }
 
 bool RecPlayer::isEnded() const {
