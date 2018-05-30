@@ -79,4 +79,5 @@ private:
 	std::queue<KeyEventTimeline>					recData;
 	std::queue<KeyEventTimeline>					backupData;
 	std::map<KeyState, std::function<void()>>		events;
+	std::map<Input::in, RecDef::KeyState>			playerKeyState;
 };

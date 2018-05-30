@@ -89,9 +89,18 @@ void RecPlayer::Play() {
 					std::to_string(float(curActivity.first)) + " / " +
 					std::to_string(int(curActivity.second.first)) + " / " +
 					std::to_string(int(curActivity.second.second)));
-				if (isEventExist(curActivity.second))
+				if (isEventExist(curActivity.second)) {
 					events[curActivity.second]();
+				}
+				playerKeyState[curActivity.second.first] = curActivity.second.second;
 				recData.pop();
+			}
+			for (auto& keyEvent : playerKeyState) {
+				if (keyEvent.second == RecDef::KeyState::PRESS) {
+					auto pressingKey = KeyState::pair(keyEvent.first, RecDef::KeyState::PRESS);
+					if (isEventExist(pressingKey))
+					events[pressingKey]();
+				}
 			}
 		}
 	}
@@ -99,6 +108,7 @@ void RecPlayer::Play() {
 		recData = backupData;
 		timer.Stop();
 		timer.Start();
+		printLog("RecPlayer --- Repeat!");
 	}
 }
 
@@ -106,6 +116,7 @@ void RecPlayer::AddKeyEvent(const Input::in& key,
 							const RecDef::KeyState& state,
 							const std::function<void()>& e) {
 	events[KeyState::pair(key, state)] = e;
+	playerKeyState[key] = RecDef::KeyState::Idle;
 }
 
 bool RecPlayer::isEnded() const {
