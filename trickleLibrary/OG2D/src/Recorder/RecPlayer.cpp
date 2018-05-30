@@ -75,7 +75,7 @@ void RecPlayer::Play() {
 			printLog("Read from file - " + 
 				std::to_string(int(curActivity.first)) + " / " +
 				std::to_string(int(curActivity.second.first)) + " / " +
-				std::to_string(int(curActivity.second.second)) + " / ");
+				std::to_string(int(curActivity.second.second)));
 			events[curActivity.second]();
 			recData.pop();
 		}
