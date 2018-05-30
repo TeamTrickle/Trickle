@@ -170,7 +170,6 @@
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp" />
     <ClCompile Include="src\Goal\Goal.cpp" />
-    <ClCompile Include="src\Load\LoadLogo.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
     <ClCompile Include="src\Object\Object.cpp" />
     <ClCompile Include="src\OGSystem\Audio\Audio.cpp" />
@@ -224,7 +223,6 @@
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h" />
     <ClInclude Include="src\Goal\Goal.h" />
-    <ClInclude Include="src\Load\LoadLogo.h" />
     <ClInclude Include="src\Map\Map.h" />
     <ClInclude Include="src\Object\Object.h" />
     <ClInclude Include="src\OGSystem\Audio\Audio.h" />

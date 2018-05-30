@@ -129,9 +129,6 @@
     <Filter Include="ソースファイル\Recorder">
       <UniqueIdentifier>{c86f3fd4-a747-4ad6-bce2-7b99aae72497}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\LoadLogo">
-      <UniqueIdentifier>{94e30c90-9505-4ff1-9a77-da95004a3638}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -287,9 +284,6 @@
     </ClCompile>
     <ClCompile Include="src\Recorder\Recorder.cpp">
       <Filter>ソースファイル\Recorder</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Load\LoadLogo.cpp">
-      <Filter>ソースファイル\LoadLogo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,9 +442,6 @@
     </ClInclude>
     <ClInclude Include="src\Recorder\Recorder.h">
       <Filter>ソースファイル\Recorder</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Load\LoadLogo.h">
-      <Filter>ソースファイル\LoadLogo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
