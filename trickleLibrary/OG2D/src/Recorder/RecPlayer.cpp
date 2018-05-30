@@ -7,11 +7,11 @@ void RecPlayer::printLog(const std::string& logmsg) {
 
 RecPlayer* RecPlayer::Create(const std::string& fName, const bool& dbgFlag = false) {
 	auto ret = new RecPlayer();
+	ret->isDbgMode = dbgFlag;
 	if (!ret->Initialize(fName)) {
 		delete ret;
 		return nullptr;
 	}
-	ret->isDbgMode = dbgFlag;
 	return ret;
 }
 

@@ -8,11 +8,11 @@ void Recorder::printLog(const std::string& logmsg) {
 
 Recorder* Recorder::Create(const std::string& fName, const bool& isLogging = false) {
 	auto ret = new Recorder();
+	ret->isLogging = isLogging;
 	if (!ret->Initialize(fName)) {
 		delete ret;
 		return nullptr;
 	}
-	ret->isLogging = isLogging;
 	return ret;
 }
 
