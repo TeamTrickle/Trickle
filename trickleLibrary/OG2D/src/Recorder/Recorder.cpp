@@ -38,7 +38,7 @@ bool Recorder::isKeyListenable() const {
 
 bool Recorder::Initialize(const std::string& fName) {
 	fileName = fName;
-	fileWriter.open(fName, std::ios::binary | std::ios::out);
+	fileWriter.open(fName, std::ios::out | std::ios::binary);
 	if (!fileWriter.is_open()) {
 		return false;
 	}

@@ -18,7 +18,7 @@ RecPlayer* RecPlayer::Create(const std::string& fName, const bool& dbgFlag = fal
 bool RecPlayer::Initialize(const std::string& fName) {
 	fileName = fName;
 
-	std::ifstream fileReader(fileName);
+	std::ifstream fileReader(fileName, std::ios::in | std::ios::binary);
 	if (!fileReader.is_open())
 		return false;
 
