@@ -5,9 +5,20 @@ bool MissionUI::Initialize(Vec2& pos)
 	this->Init(taskName);
 	std::cout << "ミッションUI　初期化" << std::endl;
 
+	//Easing設定
+	easingX.Init();
+	easingX.ResetTime();
+
 	CreateObject(Cube, pos, Vec2(512, 64), 0);
-	this->SetDrawOrder(0.1f);
+	//easing用に値を保存しておく
+	this->PrePos = position;
+
+
+	//画像の読み込み
 	image.Create((std::string)"MissionUI.png");
+	this->SetDrawOrder(0.1f);
+
+
 	return true;
 }
 bool MissionUI::Finalize()
@@ -15,9 +26,14 @@ bool MissionUI::Finalize()
 	image.Finalize();
 	return true;
 }
+void MissionUI::EasingMove()
+{
+	position.x = easingX.quint.Out(10,0,this->PrePos.x,easingX.Time(10));
+}
 void MissionUI::UpDate()
 {
-
+	std::cout << position.x << std::endl;
+	this->EasingMove();
 }
 void MissionUI::Render2D()
 {
