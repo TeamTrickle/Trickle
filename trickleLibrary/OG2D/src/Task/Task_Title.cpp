@@ -198,6 +198,7 @@ void Title::UpDate()
 		{
 			this->mode = from5;
 			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+			Npc->SetReplayEnable();
 		}
 	}
 	break;
