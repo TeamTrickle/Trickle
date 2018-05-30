@@ -26,7 +26,9 @@ Chara::~Chara()
 {
 	//‰æ‘œ‚Ì‰ð•ú
 	this->Image.Finalize();
-	this->player->Destroy();
+	if (player) {
+		this->player->Destroy();
+	}
 }
 void Chara::UpDate()
 {
