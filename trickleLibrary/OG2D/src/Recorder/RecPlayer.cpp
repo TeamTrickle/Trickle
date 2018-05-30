@@ -86,7 +86,7 @@ void RecPlayer::Play() {
 			auto curActivity = recData.front();
 			if (curTime >= curActivity.first) {
 				printLog("Read from file - " +
-					std::to_string(int(curActivity.first)) + " / " +
+					std::to_string(float(curActivity.first)) + " / " +
 					std::to_string(int(curActivity.second.first)) + " / " +
 					std::to_string(int(curActivity.second.second)));
 				if (isEventExist(curActivity.second))
