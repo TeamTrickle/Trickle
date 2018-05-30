@@ -1,6 +1,7 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Recorder\RecPlayer.h"
 
 class Chara : public GameObject, public TaskObject
 {
@@ -38,6 +39,7 @@ private:
 	Vec2 startPos;			//オートモード時の開始地点
 	Vec2 EndPos;			//オートモード時の終了地点
 	Easing easing_x;		//イージング移動値
+	RecPlayer* player;
 public:
 	Chara(std::string&, Vec2&);	//コンストラクタ
 	virtual ~Chara();			//デストラクタ
@@ -49,6 +51,7 @@ public:
 	void MoveCheck(Vec2);	//移動処理
 	bool FootCheck();		//足元チェック
 	bool Jump();			//ジャンプを行う
+	bool AutoJump();
 	void AutoMove();		//オート移動
 	void ManualMove(Vec2&);	//手動移動
 	void IsCollisionCheck();	//当たり判定カウントを増やす
