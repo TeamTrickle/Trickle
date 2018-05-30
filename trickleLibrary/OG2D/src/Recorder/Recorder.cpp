@@ -1,5 +1,5 @@
 #include "Recorder.h"
-
+using namespace RecDef;
 
 void Recorder::printLog(const std::string& logmsg) {
 	if (isLogging)

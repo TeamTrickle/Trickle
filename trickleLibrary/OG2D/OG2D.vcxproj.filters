@@ -458,5 +458,8 @@
     <ClInclude Include="src\Recorder\RecPlayer.h">
       <Filter>ソースファイル\Recorder</Filter>
     </ClInclude>
+    <ClInclude Include="src\Recorder\RecDef.h">
+      <Filter>ソースファイル\Recorder</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

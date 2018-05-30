@@ -249,6 +249,7 @@
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
     <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Player\ResultPlayer.h" />
+    <ClInclude Include="src\Recorder\RecDef.h" />
     <ClInclude Include="src\Recorder\Recorder.h" />
     <ClInclude Include="src\Recorder\RecPlayer.h" />
     <ClInclude Include="src\Task\StageSelect.h" />

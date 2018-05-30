@@ -1,13 +1,12 @@
 #pragma once
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
 #include <thread>
 #include <queue>
+#include "RecDef.h"
 #include "OGSystem\OGsystem.h"
 #include "OGSystem\Timer\glTimer.h"
-#include "OGSystem\Input\Input.h"
 
 /**
  *	@brief  プレイヤーの行動をファイルとして記録します
@@ -16,19 +15,12 @@
 class Recorder {
 private:
 
-	enum KeyState {
-		Idle,
-		PRESS,
-		RELEASE
-	};
-	typedef std::pair<Input::in, KeyState> WatchKey;
-
 	explicit Recorder() {}
 	virtual ~Recorder() {}
 	bool Initialize(const std::string&);
 	bool isKeyListenable() const;
-	bool isAlreadyRecorded(const WatchKey&, const KeyState&) const;
 	void printLog(const std::string&);
+	bool isAlreadyRecorded(const RecDef::WatchKey&, const RecDef::KeyState&) const;
 	void Recorde();
 	void RecordeButton();
 
@@ -73,5 +65,5 @@ private:
 	std::ofstream					fileWriter;
 	std::thread						recThread;
 	std::queue<std::string>			inputQueue;
-	std::vector<WatchKey>			watchKeys;
+	std::vector<RecDef::WatchKey>	watchKeys;
 };
