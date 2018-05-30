@@ -41,6 +41,8 @@ bool RecPlayer::Initialize(const std::string& fName) {
 	}
 	fileReader.close();
 	printLog("=== File closed ===");
+
+	backupData = recData;
 	timer.Start();
 
 	return true;
@@ -78,6 +80,9 @@ void RecPlayer::Play() {
 			recData.pop();
 		}
 	}
+	else if (isRepeat) {
+		recData = backupData;
+	}
 }
 
 void RecPlayer::AddKeyEvent(const Input::in& key,
@@ -88,4 +93,8 @@ void RecPlayer::AddKeyEvent(const Input::in& key,
 
 bool RecPlayer::isEnded() const {
 	return recData.empty();
+}
+
+void RecPlayer::SetRepeat(const bool& r) {
+	isRepeat = r;
 }

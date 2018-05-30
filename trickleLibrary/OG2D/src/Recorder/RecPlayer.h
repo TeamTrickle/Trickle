@@ -59,10 +59,18 @@ public:
 	 */
 	bool isEnded() const;
 
+	/**
+	 *	@brief	リプレイを反復するかを選択
+	 *	@param	bool値
+	 */
+	void SetRepeat(const bool&);
+
 private:
 	bool											isDbgMode = false;
+	bool											isRepeat = false;
 	Time											timer;
 	std::string										fileName;
 	std::queue<KeyEventTimeline>					recData;
+	std::queue<KeyEventTimeline>					backupData;
 	std::map<KeyState, std::function<void()>>		events;
 };
