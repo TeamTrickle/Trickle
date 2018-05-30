@@ -24,6 +24,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 
 	this->player = RecPlayer::Create("PlayerAct.txt", true);
 	this->player->SetPause();
+	this->player->SetRepeat(true);
 	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
 		this->move.x = -5.0f;
 		this->direction = Direction::LEFT;

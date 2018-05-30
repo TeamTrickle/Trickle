@@ -97,6 +97,8 @@ void RecPlayer::Play() {
 	}
 	else if (isRepeat) {
 		recData = backupData;
+		timer.Stop();
+		timer.Start();
 	}
 }
 
