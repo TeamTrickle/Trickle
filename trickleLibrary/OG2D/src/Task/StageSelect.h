@@ -13,10 +13,12 @@ class StageSelect : public TaskObject
 		Vec2 EndPos;
 	public:
 		Vec2 Move();
+		Vec2 Move(const float time);
 		Animation();
 		void Set(Vec2&, Vec2&);
 		bool isPlay() const;
 	};
+
 
 	//入り口の右側左側を判定させる用
 	enum Direction
@@ -38,7 +40,7 @@ class StageSelect : public TaskObject
 
 	std::string soundname;     //サウンドのファイル名格納
 
-	GameObject* gate[3];
+	//Gate* gate[3];
 
 	Vec2 cursorPos;
 	Vec2 tutorialPos;

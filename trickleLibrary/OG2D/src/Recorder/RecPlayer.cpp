@@ -76,7 +76,11 @@ std::vector<std::string> RecPlayer::Split(const std::string& fullStr, const char
 }
 
 void RecPlayer::Destroy() {
-	delete this;
+	try {
+		delete this;
+	}
+
+	catch (std::exception) {}
 }
 
 void RecPlayer::Play() {

@@ -49,11 +49,6 @@ bool GameProcessManagement::Finalize()
 	{
 		timer->Kill();
 	}
-	/*auto goal = OGge->GetTask<Goal>("Goal");
-	if (goal != nullptr)
-	{
-		goal->Kill();
-	}*/
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		//ƒS[ƒ‹‚ğ‚µ‚Ä‚¢‚é

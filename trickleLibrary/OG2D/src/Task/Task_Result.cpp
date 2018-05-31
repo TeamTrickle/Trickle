@@ -1,6 +1,6 @@
 #include "Task_Result.h"
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
-#include "Task_Title.h"
+#include "Task\StageSelect.h"
 #include "GameProcessManagement\FlagUI.h"
 #include "Player\ResultPlayer.h"
 #include "GameProcessManagement\ClearUI.h"
@@ -23,26 +23,30 @@ bool Result::Initialize()
 
 	SetDrawOrder(0.0f);
 	{
-		Vec2 windowsize = OGge->window->GetSize();
-		auto player = ResultPlayer::Create(Vec2(0, (int)windowsize.y - 50 - 64),Vec2(3,0));
+		Vec2 camerasize = OGge->camera->GetSize();
+		auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64),Vec2(3,0));
 	}
 	{
-		Vec2 windowsize = OGge->window->GetSize();
+		Vec2 camerasize = OGge->camera->GetSize();
 		for (int i = 0; i < 3; ++i)
 		{
-			auto ster = FlagUI::Create(Vec2(((int)windowsize.x / 2 - 200 ) + 100 * (i + 1), 130), 1 << 0);
+			auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200 ) + 100 * (i + 1), 130), 1 << 0);
 		}
 	}
 	//フレームタイムの桁数を計算する
 	this->outputdigit = this->GetDigitTime();
 	{
+		Vec2 camerasize = OGge->camera->GetSize();
 		Vec2 windowsize = OGge->window->GetSize();
-		auto clearUI = ClearUI::Create(Vec2(250,320));
-		auto goaltime = GoalTimeUI::Create(Vec2(210,190));
-		auto mission = MissionUI::Create(Vec2((int)windowsize.x / 2 - 200, 30));
+		//カメラのサイズとウィンドウにおけるアスペクト比の計算
+		Vec2 aspect = Vec2(camerasize.x / windowsize.x,camerasize.y / windowsize.y);
+
+		auto clearUI = ClearUI::Create(Vec2(250 * aspect.x,320 *  aspect.y));
+		auto goaltime = GoalTimeUI::Create(Vec2(210 * aspect.x ,190 * aspect.y));
+		auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200 )* aspect.x, 30.f * aspect.y));
 		for (int i = 0; i < outputdigit; ++i)
 		{
-			auto time = FrameTimeUI::Create(Vec2(635 + i * 64, 210), i, FrameTime);
+			auto time = FrameTimeUI::Create(Vec2(goaltime->position.x * aspect.x + 20 + i * 64, 200 * aspect.y) , i , FrameTime);
 		}
 	}
 	std::cout << "結果画面処理　初期化" << std::endl;
@@ -65,9 +69,9 @@ void Result::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
-	Vec2 windowsize = OGge->window->GetSize();
+	Vec2 camerasize = OGge->camera->GetSize();
 	{
-		Box2D draw(Vec2(0, 0), windowsize);
+		Box2D draw(Vec2(0, 0), camerasize);
 		draw.OffsetSize();
 		Box2D src = this->backSrc;
 		src.OffsetSize();
@@ -75,11 +79,11 @@ void Result::Render2D()
 	}
 	{
 		int count = 0;
-		for (int y = windowsize.y - 50; y <= windowsize.y; y += 64)
+		for (int y = camerasize.y - 50; y <= camerasize.y; y += 64)
 		{
-			for (int x = 0; x <= windowsize.x / 64; ++x)
+			for (int x = 0; x <= camerasize.x / 64; ++x)
 			{
-				Box2D draw(Vec2(x * 64, (int)windowsize.y - 50 + count * 64), Vec2(64, 64));
+				Box2D draw(Vec2(x * 64, (int)camerasize.y - 50 + count * 64), Vec2(64, 64));
 				draw.OffsetSize();
 				Box2D src = this->maptileSrc;
 				src.OffsetSize();
@@ -132,7 +136,7 @@ bool Result::Finalize()
 		{
 			(*id)->Kill();
 		}
-		auto title = Title::Create();
+		auto stageselect = StageSelect::Create();
 	}
 	return true;
 }
@@ -276,7 +280,7 @@ Result::Result()
 	//カメラ座標を元に戻す
 	OGge->camera->SetPos(Vec2(0, 0));
 	//カメラのサイズを元に戻す
-	OGge->camera->SetSize(OGge->window->GetSize());
+	OGge->camera->SetSize(Vec2(1920,1080));
 	FrameTime = 0;
 	Flag_Judge_Clear();
 }

@@ -21,40 +21,17 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isCollisionNow = -1;			//当たり判定カウントを初期化
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
-
-	this->player = RecPlayer::Create("PlayerAct.txt", true);
-	this->player->SetPause();
-	this->player->SetRepeat(true);
-	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
-		this->move.x = -5.0f;
-		this->direction = Direction::LEFT;
-	});
-	this->player->AddKeyEvent(Input::in::CR, RecDef::KeyState::PRESS, [&]() {
-		this->move.x = 5.0f;
-		this->direction = Direction::RIGHT;
-	});
-	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
-		this->AutoJump();
-	});
 }
 Chara::~Chara()
 {
 	//画像の解放
 	this->Image.Finalize();
-	this->player->Destroy();
+	if (player) {
+		this->player->Destroy();
+	}
 }
 void Chara::UpDate()
 {
-	//std::cout << "pos_x:" << this->position.x << "pos_y:" << this->position.y << "move_x:" << this->move.x << "move_y:" << this->move.y << std::endl;
-	//位置に応じて当たり判定の設定を変更する処理
-	//仕様が変わったため不要となりました。
-	/*if (this->isCollisionNow == 0)
-	{
-		if (this->position.y > 1200.f)
-		{
-			this->isCollisionNow++;
-		}
-	}*/
 	++AnimCnt;				//アニメーションカウントを増やす
 	//オート機能を切っていない状態でオート動作をするならば
 	if (this->isAuto && !this->isAutoOff)
@@ -254,7 +231,7 @@ void Chara::AutoMove()
 	//オートモードがtrueなら設定してある移動を行う
 	if(this->isAutoMode)
 	{
-		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(15), this->startPos.x, this->EndPos.x, 15) - this->position.x;
+		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(this->time), this->startPos.x, this->EndPos.x, this->time) - this->position.x;
 		this->isAutoMode = this->easing_x.isplay();
 		this->isAutoOff = !this->easing_x.isplay();
 	}
@@ -280,8 +257,11 @@ void Chara::AutoMove()
 		{
 			this->move.x = 5.0f;
 		}*/
-		player->SetPlay();
-		player->Play();
+
+		if (player) {
+			player->SetPlay();
+			player->Play();
+		}
 	}
 }
 void Chara::ManualMove(Vec2& est)
@@ -326,12 +306,14 @@ void Chara::SetAutoMode(const bool flag)
 	//オートモード設定を上書き
 	this->isAutoMode = flag;
 }
-void Chara::Set(const Vec2& start_, const Vec2& end_)
+void Chara::Set(const Vec2& start_, const Vec2& end_,const float time_)
 {
 	//開始位置を登録
 	this->startPos = start_;
 	//終了位置を登録
 	this->EndPos = end_;
+	//移動時間を登録
+	this->time = time_;
 	//終了位置からの移動値に上書き
 	this->EndPos -= this->startPos;
 	this->easing_x.ResetTime();
@@ -361,6 +343,23 @@ Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 		return to;
 	}
 	return nullptr;
+}
+void Chara::SetReplayEnable()
+{
+	this->player = RecPlayer::Create("PlayerAct.txt", true);
+	this->player->SetPause();
+	this->player->SetRepeat(true);
+	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
+		this->move.x = -5.0f;
+		this->direction = Direction::LEFT;
+	});
+	this->player->AddKeyEvent(Input::in::CR, RecDef::KeyState::PRESS, [&]() {
+		this->move.x = 5.0f;
+		this->direction = Direction::RIGHT;
+	});
+	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
+		this->AutoJump();
+	});
 }
 bool Chara::AutoJump()
 {
