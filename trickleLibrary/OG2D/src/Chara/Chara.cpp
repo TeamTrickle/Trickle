@@ -21,6 +21,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isCollisionNow = -1;			//当たり判定カウントを初期化
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
+	this->Restriction_x = nullptr;
 }
 Chara::~Chara()
 {
@@ -28,6 +29,10 @@ Chara::~Chara()
 	this->Image.Finalize();
 	if (player) {
 		this->player->Destroy();
+	}
+	if (this->Restriction_x)
+	{
+		delete this->Restriction_x;
 	}
 }
 void Chara::UpDate()
@@ -86,9 +91,27 @@ void Chara::Render2D()
 	//描画位置とサイズを指定
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-
 	Box2D src = this->returnSrc(this->motion);
 	src.OffsetSize();
+	if (this->Restriction_x)
+	{
+		if (this->direction == Direction::LEFT)
+		{
+			if (draw.x < *this->Restriction_x)
+			{
+				draw.x = *this->Restriction_x;
+				src.x += 550 - (550 * ((draw.w - draw.x) / this->Scale.x));
+			}
+		}
+		else
+		{
+			if (draw.w > *this->Restriction_x)
+			{
+				draw.w = *this->Restriction_x;
+				src.x += 550 - (550 * ((draw.w - draw.x) / this->Scale.x));
+			}
+		}
+	}
 	//移動値に合わせて向きを合わせる
 	//おそらくここでやるべきではないので後日修正します
 	if (this->move.x > 0)
@@ -238,26 +261,6 @@ void Chara::AutoMove()
 	else
 	{
 		//そうでなければ元々用意されている移動を行う
-		/*if (this->position.x > 1100 || this->position.x < 200)
-		{
-			if (this->direction == Direction::LEFT)
-			{
-				this->direction = Direction::RIGHT;
-			}
-			else
-			{
-				this->direction = Direction::LEFT;
-			}
-		}
-		if (this->direction == Direction::LEFT)
-		{
-			this->move.x = -5.0f;
-		}
-		else
-		{
-			this->move.x = 5.0f;
-		}*/
-
 		if (player) {
 			player->SetPlay();
 			player->Play();
@@ -366,6 +369,14 @@ bool Chara::AutoJump()
 	//ジャンプ値を移動値にいれる
 	this->move.y = this->JUMP_POWER;
 	return true;
+}
+void Chara::SetRestriction(const float x_)
+{
+	if (this->Restriction_x)
+	{
+		delete this->Restriction_x;
+	}
+	this->Restriction_x = new float(x_);
 }
 Box2D Chara::returnSrc(Motion motion)
 {

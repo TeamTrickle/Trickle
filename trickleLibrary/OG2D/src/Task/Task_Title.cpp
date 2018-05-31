@@ -24,9 +24,12 @@ Title::Title()
 
 Title::~Title()
 {
-	//解放を行う前にロードの画像を強制描画させる
-	auto load = Load::Create();
-	load->Draw();
+	//ロードの生成を行い強制描画を行う
+	if (!OGge->GetDeleteEngine())
+	{
+		auto load = Load::Create();
+		load->Draw();
+	}
 	this->Finalize();
 }
 
