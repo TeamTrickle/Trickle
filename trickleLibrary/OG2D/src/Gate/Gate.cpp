@@ -4,7 +4,10 @@
 Gate::Gate(const Vec2& pos)
 {
 	//オブジェクトを生成
-	this->CreateObject(Cube, pos, Vec2(128, 256), 0.0f);
+	this->CreateObject(Cube, pos, Vec2(192, 384), 0.0f);
+	//ドア位置を登録
+	this->door_x = this->position.x + 38;
+	this->door_w = this->position.x + this->Scale.x - 38;
 	//タグを指定、スーパークラスに登録
 	this->objectTag = "gate";
 	__super::Init(this->objectTag);
@@ -96,6 +99,16 @@ bool Gate::ToClose()
 		return true;
 	}
 	return false;
+}
+
+float Gate::Get_Door_x() const
+{
+	return this->door_x;
+}
+
+float Gate::Get_Door_w() const
+{
+	return this->door_w;
 }
 
 Gate::SP Gate::Create(const Vec2& pos, bool flag)
