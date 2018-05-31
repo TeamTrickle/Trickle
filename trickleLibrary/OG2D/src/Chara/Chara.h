@@ -40,6 +40,7 @@ private:
 	Vec2 EndPos;			//オートモード時の終了地点
 	Easing easing_x;		//イージング移動値
 	RecPlayer* player = nullptr;
+	float time;
 public:
 	Chara(std::string&, Vec2&);	//コンストラクタ
 	virtual ~Chara();			//デストラクタ
@@ -62,7 +63,7 @@ public:
 	void SetAutoFlag(const bool);			//オート移動を行うかを設定
 	void SetAutoMode(const bool);			//オート処理を任意のものかを設定
 	Vec2 GetMove() const;					//移動値を返す
-	void Set(const Vec2&, const Vec2&);		//開始位置と終了位置を登録する
+	void Set(const Vec2&, const Vec2&,const float = 15.f);		//開始位置と終了位置を登録する
 	bool isAutoPlay() const;				//オート移動を行っているかを返す
 	Direction nowDirection() const;			//現在の向きを返す
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };	//Normal状態のアニメーション

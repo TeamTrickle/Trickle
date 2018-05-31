@@ -165,6 +165,7 @@
     <ClCompile Include="src\GameProcessManagement\GoalTimeUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\MissonUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\Timer.cpp" />
+    <ClCompile Include="src\Gate\Gate.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="src\GameProcessManagement\GoalTimeUI.h" />
     <ClInclude Include="src\GameProcessManagement\MissionUI.h" />
     <ClInclude Include="src\GameProcessManagement\Timer.h" />
+    <ClInclude Include="src\Gate\Gate.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h" />
