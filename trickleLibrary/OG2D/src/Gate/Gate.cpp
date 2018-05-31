@@ -3,10 +3,20 @@
 
 Gate::Gate(const Vec2& pos)
 {
+	//オブジェクトを生成
 	this->CreateObject(Cube, pos, Vec2(128, 256), 0.0f);
+	//タグを指定、スーパークラスに登録
 	this->objectTag = "gate";
 	__super::Init(this->objectTag);
+	//画像データ初期化
 	this->image = nullptr;
+	//初期扉状態を登録
+	this->isOpen = false;
+	this->preIsOpen = false;
+	//アニメーション用カウント初期化
+	this->AnimCnt = 20;
+	this->Sense = 10;
+	//他のゲートの数に応じてIDを振りあてる
 	auto gates = OGge->GetTasks<Gate>("gate");
 	auto id = gates->begin();
 	unsigned __int8 i = 0;
@@ -25,7 +35,14 @@ Gate::~Gate()
 
 void Gate::UpDate()
 {
-
+	if (this->isOpen != this->preIsOpen)
+	{
+		this->AnimCnt++;
+		if (this->AnimCnt > 20)
+		{
+			this->preIsOpen = this->isOpen;
+		}
+	}
 }
 
 void Gate::Render2D()
@@ -33,8 +50,17 @@ void Gate::Render2D()
 	if (this->image)
 	{
 		this->draw = { this->position, this->Scale };
-		draw.OffsetSize();
-		this->src = { 0,0,256,512 };
+		this->draw.OffsetSize();
+		if (this->isOpen)
+		{
+			this->src = { 256 * (this->AnimCnt / this->Sense),0,256,512 };
+			this->src.OffsetSize();
+		}
+		else
+		{
+			this->src = { 256 * (2 - (this->AnimCnt / this->Sense)),0,256,512 };
+			this->src.OffsetSize();
+		}
 		this->image->Draw(this->draw, this->src);
 	}
 }
@@ -47,6 +73,29 @@ void Gate::SetTexture(Texture* tex)
 unsigned __int8 Gate::GetID() const
 {
 	return this->ID;
+}
+
+bool Gate::ToOpen()
+{
+	if (!this->isOpen)
+	{
+		this->isOpen = true;
+		this->AnimCnt = 0;
+		return true;
+	}
+	return false;
+}
+
+bool Gate::ToClose()
+{
+
+	if (this->isOpen)
+	{
+		this->isOpen = false;
+		this->AnimCnt = 0;
+		return true;
+	}
+	return false;
 }
 
 Gate::SP Gate::Create(const Vec2& pos, bool flag)

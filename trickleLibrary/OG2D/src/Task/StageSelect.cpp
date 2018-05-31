@@ -233,6 +233,14 @@ void StageSelect::From1()
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetPos().x + 100, OGge->camera->GetPos().y));
 					this->nowPos = 0;
 					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
+					auto gates = OGge->GetTasks<Gate>("gate");
+					for (auto id = gates->begin(); id != gates->end(); ++id)
+					{
+						if (this->nowPos / 2 == (*id)->GetID())
+						{
+							(*id)->ToOpen();
+						}
+					}
 				}
 			}
 			else
@@ -266,10 +274,18 @@ void StageSelect::From3()
 		{
 			if (OGge->in->down(In::CL))
 			{
+				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::LEFT)
 				{
 					if (this->nowPos > 1)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos -= 2;
 						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y),10.f);
 					}
@@ -278,18 +294,39 @@ void StageSelect::From3()
 				{
 					if (this->nowPos > 0)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos -= 1;
 						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 5.f);
 					}
 				}
-			
+				for (auto id = gates->begin(); id != gates->end(); ++id)
+				{
+					if (this->nowPos / 2 == (*id)->GetID())
+					{
+						(*id)->ToOpen();
+					}
+				}
 			}
 			if (OGge->in->down(In::CR))
 			{
+				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::RIGHT)
 				{
 					if (this->nowPos < 4)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos += 2;
 						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
 					}
@@ -298,11 +335,24 @@ void StageSelect::From3()
 				{
 					if (this->nowPos < 5)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos += 1;
 						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 5.f);
 					}
 				}
-			
+				for (auto id = gates->begin(); id != gates->end(); ++id)
+				{
+					if (this->nowPos / 2 == (*id)->GetID())
+					{
+						(*id)->ToOpen();
+					}
+				}
 			}
 			if (OGge->in->down(In::B2))
 			{

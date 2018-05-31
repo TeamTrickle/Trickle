@@ -7,6 +7,10 @@ class Gate : public GameObject, public TaskObject
 	Box2D draw;
 	Box2D src;
 	unsigned __int8 ID;
+	bool isOpen;
+	bool preIsOpen;
+	int AnimCnt;
+	int Sense;
 public:
 	Gate(const Vec2&);
 	virtual ~Gate();
@@ -17,4 +21,6 @@ public:
 	static SP Create(const float, const float, bool = true);
 	void SetTexture(Texture*);
 	unsigned __int8 GetID() const;
+	bool ToOpen();
+	bool ToClose();
 };
