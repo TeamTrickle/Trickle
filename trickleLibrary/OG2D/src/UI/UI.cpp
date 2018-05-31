@@ -34,11 +34,19 @@ bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, i
 }
 
 void UI::UpDate() {
-	//プレイヤが範囲内に入ったら
 	auto player = OGge->GetTask<Player>("Player");
-	if (hit(*player) && appeared == -1) {
-		active = true;
-		appeared = 0;
+	//出現条件
+	if (appear != nullptr) {
+		if (appear() && appeared == -1) {
+			active = true;
+			appeared = 0;
+		}
+	}
+	else {
+		if (hit(*player) && appeared == -1) {
+			active = true;
+			appeared = 0;
+		}
 	}
 	if (!active) { return; }
 	counter++;
@@ -49,12 +57,13 @@ void UI::UpDate() {
 	if (index >= num) {
 		index = 0;
 	}
+	//消滅条件
 	if (vanish != nullptr) {
 		if (vanish() && appeared == 0) {
 			appeared = 1;
 		}
 	}
-	else {
+	else {	//特に指定しない場合はプレイヤ範囲外で消滅
 		if (!this->hit(*player) && appeared == 0) {
 			appeared = 1;
 		}
@@ -110,6 +119,7 @@ void UI::UpDate() {
 	}
 }
 
+//現在未使用
 void UI::Move(Vec2 pos) {
 	this->pos = Vec2(pos.x - 20, pos.y - 140);
 }
@@ -123,15 +133,10 @@ void UI::Render2D() {
 
 bool UI::Finalize() {
 	tex.Finalize();
-	return false;
+	return true;
 }
 
-bool UI::CreateNext(UIinfo& info) {
-
-
-	return false;
-}
-
+//使ってない
 UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, int id, bool flag_)
 {
 	auto to = UI::SP(new UI());
@@ -151,7 +156,8 @@ UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, 
 	return nullptr;
 }
 
-UI::SP UI::Create(UIinfo& info, int id,  bool flag_)
+//UIinfo：Createの引数をまとめたもの
+UI::SP UI::Create(UIinfo& info, int id, bool flag_)
 {
 	Vec2 pos = info.pos;
 	Box2D hit = info.hit;
@@ -178,8 +184,8 @@ UI::SP UI::Create(UIinfo& info, int id,  bool flag_)
 }
 
 
-UImanager::UImanager(){}
-UImanager::~UImanager(){
+UImanager::UImanager() {}
+UImanager::~UImanager() {
 	uiInfo.clear();
 }
 
@@ -189,22 +195,25 @@ bool UImanager::Initialize(unsigned short& mapNum) {
 		maxNum = 8;
 		UIlist_.resize(maxNum);
 		uiInfo.resize(maxNum);
-		uiInfo[0] = { Vec2(6 * 64, 18 * 64), Box2D(5 * 64,18 * 64,400,300), (std::string)"walkui.png", 150, 4, nullptr };
-		uiInfo[1] = { Vec2(20 * 64,18 * 64),Box2D(19 * 64,18 * 64,264,300),(std::string)"pusha.png",150,2, nullptr };
-		uiInfo[2] = { Vec2(25 * 64,16 * 64),Box2D(25 * 64,16 * 64,200,300),(std::string)"pushb.png",100,2, std::bind(&UIfunc::getBucket, *uifunc) };
-		uiInfo[3] = { Vec2(25 * 64,16 * 64),Box2D(8 * 64,16 * 64,23 * 64,600),(std::string)"arrowleft.png",500,2, nullptr };
-		uiInfo[4] = { Vec2(6 * 64,18 * 64),Box2D(5 * 64,18 * 64,3 * 64,300),(std::string)"arrowdown.png",500,2, std::bind(&UIfunc::getWater, *uifunc) };
-		uiInfo[5] = { Vec2(6 * 64,18 * 64),Box2D(6 * 64,16 * 64,13 * 64,600),(std::string)"arrowright.png",500,2,nullptr };
-		uiInfo[6] = { Vec2(28 * 64,16 * 64),Box2D(20 * 64,16 * 64,8 * 64,400),(std::string)"arrowdown.png",500,2,std::bind(&UIfunc::playerPos, *uifunc) };
-		uiInfo[7] = { Vec2(29 * 64,16 * 64),Box2D(28 * 64,16 * 64,300,300),(std::string)"pushx.png",500,2, std::bind(&UIfunc::spoilWater, *uifunc)};
+		uiInfo[0] = { Vec2(6 * 64, 18 * 64), Box2D(5 * 64,18 * 64,400,300), (std::string)"walkui.png", 150, 4, nullptr, nullptr };
+		uiInfo[1] = { Vec2(20 * 64,18 * 64),Box2D(19 * 64,18 * 64,264,300),(std::string)"pusha.png",150,2, nullptr, nullptr };
+		uiInfo[2] = { Vec2(25 * 64,16 * 64),Box2D(25 * 64,16 * 64,200,300),(std::string)"pushb.png",100,2, nullptr, std::bind(&UIfunc::getBucket, *uifunc) };
+		uiInfo[3] = { Vec2(25 * 64,16 * 64),Box2D(8 * 64,16 * 64,23 * 64,600),(std::string)"arrowleft.png",500,2, nullptr, nullptr };
+		uiInfo[4] = { Vec2(6 * 64,18 * 64),Box2D(5 * 64,18 * 64,3 * 64,300),(std::string)"arrowdown.png",500,2, nullptr, std::bind(&UIfunc::getWater, *uifunc) };
+		uiInfo[5] = { Vec2(6 * 64,18 * 64),Box2D(6 * 64,16 * 64,13 * 64,600),(std::string)"arrowright.png",500,2,nullptr,nullptr };
+		uiInfo[6] = { Vec2(28 * 64,16 * 64),Box2D(20 * 64,16 * 64,8 * 64,400),(std::string)"arrowdown.png",500,2,nullptr,std::bind(&UIfunc::playerPos, *uifunc) };
+		uiInfo[7] = { Vec2(29 * 64,16 * 64),Box2D(28 * 64,16 * 64,300,300),(std::string)"pushx.png",500,2, nullptr, std::bind(&UIfunc::spoilWater, *uifunc) };
 		UIlist_[0] = UI::Create(uiInfo[0], 0);
 		activeID = 0;
 		break;
 	case 3:		//チュートリアル３
-		//maxNum = 3;
-		//UIlist_.resize(maxNum);
-		//uiInfo.resize(maxNum);
-		//uiInfo[0] = {};
+		maxNum = 2;
+		UIlist_.resize(maxNum);
+		uiInfo.resize(maxNum);
+		uiInfo[0] = { Vec2(17 * 64,14 * 64),Box2D(17 * 64,15 * 64,64,128),(std::string)"pushb.png",500,2,nullptr,std::bind(&UIfunc::getBucket,*uifunc) };
+		uiInfo[1] = { Vec2(21 * 64 + 32,14 * 64),Box2D(21 * 64,15 * 64,128,128),(std::string)"pushx.png",500,2,std::bind(&UIfunc::getWater,*uifunc),std::bind(&UIfunc::spoilWater,*uifunc) };
+		UIlist_[0] = UI::Create(uiInfo[0], 0);
+		activeID = 0;
 		break;
 	default:
 		break;
