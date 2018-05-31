@@ -5,6 +5,7 @@
 #include "Map\Map.h"
 #include "Back\Back.h"
 #include "Chara\Chara.h"
+#include "Load\LoadLogo.h"
 Title::Title()
 {
 	this->mode = Non;
@@ -23,6 +24,12 @@ Title::Title()
 
 Title::~Title()
 {
+	//ロードの生成を行い強制描画を行う
+	if (!OGge->GetDeleteEngine())
+	{
+		auto load = Load::Create();
+		load->Draw();
+	}
 	this->Finalize();
 }
 
@@ -194,6 +201,7 @@ void Title::UpDate()
 		{
 			this->mode = from5;
 			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+			Npc->SetReplayEnable();
 		}
 	}
 	break;

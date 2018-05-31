@@ -1,6 +1,7 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Recorder\RecPlayer.h"
 
 class Chara : public GameObject, public TaskObject
 {
@@ -38,17 +39,22 @@ private:
 	Vec2 startPos;			//オートモード時の開始地点
 	Vec2 EndPos;			//オートモード時の終了地点
 	Easing easing_x;		//イージング移動値
+	RecPlayer* player = nullptr;
+	float time;
+	float* Restriction_x;	//描画の制限をかけるx座標
 public:
 	Chara(std::string&, Vec2&);	//コンストラクタ
 	virtual ~Chara();			//デストラクタ
 	typedef std::shared_ptr<Chara> SP;
 	static SP Create(std::string&, Vec2&, bool = true);
+	void SetReplayEnable();
 	void UpDate();		//更新処理
 	void Render2D();	//描画処理
 	void Friction(Vec2&);	//重力処理
 	void MoveCheck(Vec2);	//移動処理
 	bool FootCheck();		//足元チェック
 	bool Jump();			//ジャンプを行う
+	bool AutoJump();
 	void AutoMove();		//オート移動
 	void ManualMove(Vec2&);	//手動移動
 	void IsCollisionCheck();	//当たり判定カウントを増やす
@@ -58,7 +64,8 @@ public:
 	void SetAutoFlag(const bool);			//オート移動を行うかを設定
 	void SetAutoMode(const bool);			//オート処理を任意のものかを設定
 	Vec2 GetMove() const;					//移動値を返す
-	void Set(const Vec2&, const Vec2&);		//開始位置と終了位置を登録する
+	void Set(const Vec2&, const Vec2&,const float = 15.f);		//開始位置と終了位置を登録する
+	void SetRestriction(const float);			//描画の制限を設定する
 	bool isAutoPlay() const;				//オート移動を行っているかを返す
 	Direction nowDirection() const;			//現在の向きを返す
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };	//Normal状態のアニメーション

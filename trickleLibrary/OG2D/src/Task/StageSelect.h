@@ -13,6 +13,7 @@ class StageSelect : public TaskObject
 		Vec2 EndPos;
 	public:
 		Vec2 Move();
+		Vec2 Move(const float time);
 		Animation();
 		void Set(Vec2&, Vec2&);
 		bool isPlay() const;
@@ -27,24 +28,9 @@ class StageSelect : public TaskObject
 
 	Animation camera_anim;
 
-	Texture texBack;
-	Texture texCursor;
-	Texture texTutorial;
-	Texture texStage1;
-	Texture texStage2;
-	Texture texToTitle;
-
 	Texture Testdoor;
 
 	std::string soundname;     //サウンドのファイル名格納
-
-	GameObject* gate[3];
-
-	Vec2 cursorPos;
-	Vec2 tutorialPos;
-	Vec2 stage1Pos;
-	Vec2 stage2Pos;
-	Vec2 toTitlePos;
 
 	std::vector<std::pair<Direction, float>> Entrance;
 
@@ -63,9 +49,11 @@ class StageSelect : public TaskObject
 	void From2();
 	void From3();
 	void From4();
+
 	int timeCnt;
 	int nowPos;
 	void ModeCheck();
+	bool CheckTime(int);
 	Easing camera_x;
 	Easing camera_y;
 
@@ -76,8 +64,6 @@ public:
 	void UpDate();
 	void Render2D();
 	bool Finalize();
-
-	void CursorMove();
 
 	enum State
 	{

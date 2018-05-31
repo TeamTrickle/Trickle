@@ -21,24 +21,22 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isCollisionNow = -1;			//当たり判定カウントを初期化
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
+	this->Restriction_x = nullptr;
 }
 Chara::~Chara()
 {
 	//画像の解放
 	this->Image.Finalize();
+	if (player) {
+		this->player->Destroy();
+	}
+	if (this->Restriction_x)
+	{
+		delete this->Restriction_x;
+	}
 }
 void Chara::UpDate()
 {
-	//std::cout << "pos_x:" << this->position.x << "pos_y:" << this->position.y << "move_x:" << this->move.x << "move_y:" << this->move.y << std::endl;
-	//位置に応じて当たり判定の設定を変更する処理
-	//仕様が変わったため不要となりました。
-	/*if (this->isCollisionNow == 0)
-	{
-		if (this->position.y > 1200.f)
-		{
-			this->isCollisionNow++;
-		}
-	}*/
 	++AnimCnt;				//アニメーションカウントを増やす
 	//オート機能を切っていない状態でオート動作をするならば
 	if (this->isAuto && !this->isAutoOff)
@@ -93,9 +91,27 @@ void Chara::Render2D()
 	//描画位置とサイズを指定
 	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
 	draw.OffsetSize();
-
 	Box2D src = this->returnSrc(this->motion);
 	src.OffsetSize();
+	if (this->Restriction_x)
+	{
+		if (this->direction == Direction::LEFT)
+		{
+			if (draw.x < *this->Restriction_x)
+			{
+				draw.x = *this->Restriction_x;
+				src.x += 550 - (550 * ((draw.w - draw.x) / this->Scale.x));
+			}
+		}
+		else
+		{
+			if (draw.w > *this->Restriction_x)
+			{
+				draw.w = *this->Restriction_x;
+				src.x += 550 - (550 * ((draw.w - draw.x) / this->Scale.x));
+			}
+		}
+	}
 	//移動値に合わせて向きを合わせる
 	//おそらくここでやるべきではないので後日修正します
 	if (this->move.x > 0)
@@ -238,31 +254,16 @@ void Chara::AutoMove()
 	//オートモードがtrueなら設定してある移動を行う
 	if(this->isAutoMode)
 	{
-		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(15), this->startPos.x, this->EndPos.x, 15) - this->position.x;
+		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(this->time), this->startPos.x, this->EndPos.x, this->time) - this->position.x;
 		this->isAutoMode = this->easing_x.isplay();
 		this->isAutoOff = !this->easing_x.isplay();
 	}
 	else
 	{
 		//そうでなければ元々用意されている移動を行う
-		if (this->position.x > 1100 || this->position.x < 200)
-		{
-			if (this->direction == Direction::LEFT)
-			{
-				this->direction = Direction::RIGHT;
-			}
-			else
-			{
-				this->direction = Direction::LEFT;
-			}
-		}
-		if (this->direction == Direction::LEFT)
-		{
-			this->move.x = -5.0f;
-		}
-		else
-		{
-			this->move.x = 5.0f;
+		if (player) {
+			player->SetPlay();
+			player->Play();
 		}
 	}
 }
@@ -308,12 +309,14 @@ void Chara::SetAutoMode(const bool flag)
 	//オートモード設定を上書き
 	this->isAutoMode = flag;
 }
-void Chara::Set(const Vec2& start_, const Vec2& end_)
+void Chara::Set(const Vec2& start_, const Vec2& end_,const float time_)
 {
 	//開始位置を登録
 	this->startPos = start_;
 	//終了位置を登録
 	this->EndPos = end_;
+	//移動時間を登録
+	this->time = time_;
 	//終了位置からの移動値に上書き
 	this->EndPos -= this->startPos;
 	this->easing_x.ResetTime();
@@ -343,6 +346,37 @@ Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 		return to;
 	}
 	return nullptr;
+}
+void Chara::SetReplayEnable()
+{
+	this->player = RecPlayer::Create("PlayerAct.txt", true);
+	this->player->SetPause();
+	this->player->SetRepeat(true);
+	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
+		this->move.x = -5.0f;
+		this->direction = Direction::LEFT;
+	});
+	this->player->AddKeyEvent(Input::in::CR, RecDef::KeyState::PRESS, [&]() {
+		this->move.x = 5.0f;
+		this->direction = Direction::RIGHT;
+	});
+	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
+		this->AutoJump();
+	});
+}
+bool Chara::AutoJump()
+{
+	//ジャンプ値を移動値にいれる
+	this->move.y = this->JUMP_POWER;
+	return true;
+}
+void Chara::SetRestriction(const float x_)
+{
+	if (this->Restriction_x)
+	{
+		delete this->Restriction_x;
+	}
+	this->Restriction_x = new float(x_);
 }
 Box2D Chara::returnSrc(Motion motion)
 {

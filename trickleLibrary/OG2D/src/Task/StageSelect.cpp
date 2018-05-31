@@ -4,6 +4,9 @@
 #include "Chara\Chara.h"
 #include "Back\Back.h"
 #include "Map\Map.h"
+#include "Load\LoadLogo.h"
+#include "Gate\Gate.h"
+
 StageSelect::StageSelect()
 {
 	this->mode = Non;
@@ -16,10 +19,6 @@ StageSelect::StageSelect()
 StageSelect::~StageSelect()
 {
 	this->Finalize();
-	for (int i = 2; i >= 0; --i)
-	{
-		delete this->gate[i];
-	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		if (state == State::ToTitle)
@@ -35,27 +34,10 @@ StageSelect::~StageSelect()
 
 bool StageSelect::Initialize()
 {
-	cursorPos.x = 600.0f;
-	cursorPos.y = 100.0f;
-
-	tutorialPos = Vec2(700.0f, 100.0f);
-	stage1Pos = Vec2(700.0f, 200.0f);
-	stage2Pos = Vec2(700.0f, 300.0f);
-	toTitlePos = Vec2(700.0f, 400.0f);
-
-	Vec2 kari = toTitlePos;
-	toTitlePos = stage2Pos;
-	stage2Pos = kari;
 	//画像の読み込み
-	texBack.Create((std::string)"back.png");
-	texCursor.Create((std::string)"Collision.png");
-	texTutorial.Create((std::string)"tutorial.png");
-	texStage1.Create((std::string)"stage1.png");
-	texStage2.Create((std::string)"stage2.png");
-	texToTitle.Create((std::string)"totitle.png");
-	this->Testdoor.Create((std::string)"testResource.png");
+	this->Testdoor.Create((std::string)"door.png");
 	//プレイヤーNPCの生成
-	auto chara = Chara::Create(std::string("player2.png"), Vec2(10, -200));
+	auto chara = Chara::Create(std::string("player2.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
 	chara->SetAutoFlag(true);
 	//背景の描画
@@ -72,47 +54,26 @@ bool StageSelect::Initialize()
 	this->mode = Mode::from1;
 	//テスト処理
 	OGge->camera->SetSize(Vec2(1920, 1080));
+	OGge->camera->SetPos(Vec2(100, 0));
 	//停止位置の設定
 	for (int i = 1; i <= 3; ++i)
 	{
-		this->gate[i - 1] = new GameObject(Cube, Vec2(400 * i + 450, 640), Vec2(128, 256), 0.0f);
-		this->Entrance.emplace_back(LEFT, gate[i - 1]->position.x - chara->Scale.x);
-		this->Entrance.emplace_back(RIGTH, gate[i - 1]->position.x + gate[i - 1]->Scale.x);
+		auto gate = Gate::Create((400.f * i) + 450.f, 640.f);
+		gate->SetTexture(&this->Testdoor);
+		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
+		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
+	}
+	//読み込み終了でロード画面を破棄
+	auto load = OGge->GetTasks<Load>("load");
+	for (auto id = load->begin(); id != load->end(); ++id)
+	{
+		(*id)->Kill();
 	}
 	return true;
 }
 
 void StageSelect::UpDate()
 {
-	//CursorMove();
-
-	//if (OGge->in->down(In::B2))
-	//{
-	//	switch (state) {
-	//	case Tutorial:
-	//		*MapNum = 3;
-	//		if (OGge->in->on(In::SL))
-	//		{
-	//			*MapNum = 1;
-	//		}
-	//		if (OGge->in->on(In::SR))
-	//		{
-	//			*MapNum = 2;
-	//		}
-	//		break;
-	//	case Stage1:
-	//		*MapNum = 5;	break;
-	//	case Stage2:	//未実装
-	//					//*MapNum = 6;	break;
-	//		break;
-	//	case ToTitle:
-	//		break;
-	//	default:
-	//		*MapNum = 0;	break;
-	//	}
-	//	this->Kill();
-	//}
-
 	switch (this->mode)
 	{
 	case Mode::from1:	//生成から落下と硬直
@@ -148,64 +109,11 @@ void StageSelect::UpDate()
 
 void StageSelect::Render2D()
 {
-	//カーソル
-	//{
-	//	Box2D draw(cursorPos.x, cursorPos.y, 64.0f, 64.0f);
-	//	draw.OffsetSize();
-	//	Box2D src(0, 0, 128, 128);
-	//	src.OffsetSize();
-	//	texCursor.Draw(draw, src);
-	//}
-	////チュートリアル
-	//{
-	//	Box2D draw(tutorialPos.x, tutorialPos.y, 256.0f, 64.0f);
-	//	draw.OffsetSize();
-	//	Box2D src(0, 0, 1280, 256);
-	//	src.OffsetSize();
-	//	texTutorial.Draw(draw, src);
-	//}
-	////ステージ１
-	//{
-	//	Box2D draw(stage1Pos.x, stage1Pos.y, 256.0f, 64.0f);
-	//	draw.OffsetSize();
-	//	Box2D src(0, 0, 1280, 256);
-	//	src.OffsetSize();
-	//	texStage1.Draw(draw, src);
-	//}
-	//ステージ２
-	//{
-		/*Box2D draw(stage2Pos.x, stage2Pos.y, 256.0f, 64.0f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 1280, 256);
-		src.OffsetSize();
-		texStage2.Draw(draw, src);*/
-	//}
-	//タイトルに戻る
-	/*{
-		Box2D draw(toTitlePos.x, toTitlePos.y, 256.0f, 64.0f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 1280, 256);
-		src.OffsetSize();
-		texToTitle.Draw(draw, src);
-	}*/
-	//ドア
-	for (int i = 0; i < 3; ++i)
-	{
-		Box2D draw(this->gate[i]->position, this->gate[i]->Scale);
-		draw.OffsetSize();
-		Box2D src(0.f, 0.f, this->Testdoor.GetTextureSize().x, this->Testdoor.GetTextureSize().y);
-		this->Testdoor.Draw(draw, src);
-	}
+	
 }
 
 bool StageSelect::Finalize()
 {
-	texBack.Finalize();
-	texCursor.Finalize();
-	texTutorial.Finalize();
-	texStage1.Finalize();
-	texStage2.Finalize();
-	texToTitle.Finalize();
 	this->Testdoor.Finalize();
 	delete rm->GetSoundData((std::string)"titleBGM");
 	rm->DeleteSound((std::string)"titleBGM");
@@ -225,42 +133,12 @@ bool StageSelect::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto gates = OGge->GetTasks<Gate>("gate");
+	for (auto id = gates->begin(); id != gates->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	return true;
-}
-
-void StageSelect::CursorMove() {
-	if (cursorPos.y > tutorialPos.y)
-	{
-		if (OGge->in->down(In::CU))
-		{
-			cursorPos.y -= 100.0f;
-		}
-	}
-	if (cursorPos.y < toTitlePos.y)
-	{
-		if (OGge->in->down(In::CD))
-		{
-			cursorPos.y += 100.0f;
-		}
-	}
-
-	if (cursorPos.y == tutorialPos.y)
-	{
-		state = Tutorial;
-	}
-	if (cursorPos.y == stage1Pos.y)
-	{
-		state = Stage1;
-	}
-	if (cursorPos.y == stage2Pos.y)
-	{
-		state = Stage2;
-	}
-	if (cursorPos.y == toTitlePos.y)
-	{
-		state = ToTitle;
-	}
-
 }
 
 void StageSelect::From1()
@@ -277,13 +155,21 @@ void StageSelect::From1()
 			if (chara->FootCheck())
 			{
 				//一定カウントを超えたら
-				if (this->timeCnt > 60)
+				if (this->CheckTime(30))
 				{
 					//次へ移動
 					this->mode = Mode::from2;
-					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetPos().x + 200, OGge->camera->GetPos().y));
+					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetPos().x + 100, OGge->camera->GetPos().y));
 					this->nowPos = 0;
-					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
+					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
+					auto gates = OGge->GetTasks<Gate>("gate");
+					for (auto id = gates->begin(); id != gates->end(); ++id)
+					{
+						if (this->nowPos / 2 == (*id)->GetID())
+						{
+							(*id)->ToOpen();
+						}
+					}
 				}
 			}
 			else
@@ -297,16 +183,8 @@ void StageSelect::From1()
 
 void StageSelect::From2()
 {
-	//キャラの情報を取得
-	auto chara = OGge->GetTask<Chara>("Chara");
-	//存在している場合
-	if (chara)
-	{
-		//強制移動をさせる
-		//chara->ManualMove(Vec2(3.0f, 0.0f));
-	}
 	//カメラの位置を送る
-	OGge->camera->SetPos(this->camera_anim.Move());
+	OGge->camera->SetPos(this->camera_anim.Move(10.f));
 	//移動が終了したら
 	if (!this->camera_anim.isPlay())
 	{
@@ -323,43 +201,91 @@ void StageSelect::From3()
 		//そうでないならキャラクターの移動を目的地まで移動させる
 		if (!chara->isAutoPlay())
 		{
+			//Left入力
 			if (OGge->in->down(In::CL))
 			{
+				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::LEFT)
 				{
 					if (this->nowPos > 1)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos -= 2;
+						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y),10.f);
 					}
 				}
 				else
 				{
 					if (this->nowPos > 0)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos -= 1;
+						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 5.f);
 					}
 				}
-				chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
+				for (auto id = gates->begin(); id != gates->end(); ++id)
+				{
+					if (this->nowPos / 2 == (*id)->GetID())
+					{
+						(*id)->ToOpen();
+					}
+				}
 			}
+			//right入力
 			if (OGge->in->down(In::CR))
 			{
+				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::RIGHT)
 				{
 					if (this->nowPos < 4)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos += 2;
+						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
 					}
 				}
 				else
 				{
 					if (this->nowPos < 5)
 					{
+						for (auto id = gates->begin(); id != gates->end(); ++id)
+						{
+							if (this->nowPos / 2 == (*id)->GetID())
+							{
+								(*id)->ToClose();
+							}
+						}
 						this->nowPos += 1;
+						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 5.f);
 					}
 				}
-				chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y));
-
+				for (auto id = gates->begin(); id != gates->end(); ++id)
+				{
+					if (this->nowPos / 2 == (*id)->GetID())
+					{
+						(*id)->ToOpen();
+					}
+				}
 			}
+			//決定入力
 			if (OGge->in->down(In::B2))
 			{
 				switch (this->nowPos)
@@ -383,7 +309,23 @@ void StageSelect::From3()
 					this->state = State::ToTitle;
 					break;
 				}
-				chara->Set(chara->position, Vec2(this->gate[this->nowPos / 2]->position.x, chara->position.y));
+				auto gates = OGge->GetTasks<Gate>("gate");
+				for (auto id = gates->begin(); id != gates->end(); ++id)
+				{
+					if (this->nowPos / 2 == (*id)->GetID())
+					{
+						if (chara->nowDirection() == Chara::Direction::LEFT)
+						{
+							chara->Set(chara->position, Vec2((*id)->position.x - chara->Scale.x, chara->position.y), 10.0f);
+							chara->SetRestriction((*id)->Get_Door_x());
+						}
+						else
+						{
+							chara->Set(chara->position, Vec2((*id)->position.x + (*id)->Scale.x, chara->position.y), 10.0f);
+							chara->SetRestriction((*id)->Get_Door_w());
+						}
+					}
+				}
 				this->mode = Mode::from4;
 			}
 		}
@@ -434,6 +376,11 @@ Vec2 StageSelect::Animation::Move()
 	return Vec2(this->easing_x.sine.In(this->easing_x.Time(10), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(10), this->StartPos.y, this->EndPos.y, 10));
 }
 
+Vec2 StageSelect::Animation::Move(const float time)
+{
+	return Vec2(this->easing_x.sine.In(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
+}
+
 bool StageSelect::Animation::isPlay() const
 {
 	if (this->easing_x.isplay() || this->easing_y.isplay())
@@ -442,6 +389,12 @@ bool StageSelect::Animation::isPlay() const
 	}
 	return false;
 }
+
+bool StageSelect::CheckTime(int t)
+{
+	return this->timeCnt > t ? true : false;
+}
+
 
 StageSelect::SP StageSelect::Create(bool flag_)
 {
