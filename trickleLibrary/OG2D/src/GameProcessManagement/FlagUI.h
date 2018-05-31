@@ -6,15 +6,21 @@
 class FlagUI : public GameObject, public TaskObject
 {
 public:
-
-public:
 	void FalgJudge(int);
 private:
-	Texture image[2];
 	int Resultflag;
 	int targetflag;
 	bool flagactive;
 	void SetResultflag();
+
+	//EasingŠÖ˜A
+	Vec2 PrePos;
+	Easing easingX;
+	void EasingMove();
+	bool EasingEnd();
+
+	//‰æ‘œŠÖ˜A
+	Texture image[2];
 	const Box2D Src = Box2D(0, 0, 322, 322);
 public:
 	std::string taskName;
