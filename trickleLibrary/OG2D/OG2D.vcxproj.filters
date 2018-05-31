@@ -135,6 +135,9 @@
     <Filter Include="ソースファイル\LoadLogo">
       <UniqueIdentifier>{157c2ade-473a-48f4-aa6f-ae5a7600f5b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Gate">
+      <UniqueIdentifier>{6c15f4a3-458d-4cca-810d-9ec9d16f02cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -299,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="src\Load\LoadLogo.cpp">
       <Filter>ソースファイル\LoadLogo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gate\Gate.cpp">
+      <Filter>ソースファイル\Gate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +475,9 @@
     </ClInclude>
     <ClInclude Include="src\Load\LoadLogo.h">
       <Filter>ソースファイル\LoadLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gate\Gate.h">
+      <Filter>ソースファイル\Gate</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
