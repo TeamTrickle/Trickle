@@ -8,19 +8,18 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	this->Init(taskName);
 
 	//数字の桁数を計算する
-	this->getframetime = resulttime;			//リザルトから取得したタイムを代入する
-	this->DigitNumberReset();					//桁数の初期化
-	this->SetFrameTime();						//桁数の計算
+	this->goaltime.Inputtime = resulttime;		//リザルトから取得したタイムを代入する
 	this->digitSelectnumber = digitselect;		//数字を割り当てるための変数
-	this->SetVector();							//数字桁数を取得したものを1桁ずつVectorに格納する
-
+	this->goaltime.InitTime();
 	//基本の情報
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
-	this->active = false;
 	
 	//画像関連
 	image.Create((std::string)"../font/math.png");
 	this->SetDrawOrder(0.1f);
+		//大きさ変更モーション
+	this->ResetMoveCnt(this->ScaleanimetionCnt);
+	this->Scaleanimeflag = false;
 
 	//Easing関連
 	easingX.ResetTime();
@@ -28,57 +27,13 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	this->PrePos = position;
 	this->easingEnd = false;
 
+	//ドラムロール関連
+	this->ResetMoveCnt();
+	this->ResetDramRollisPlay();
+	this->randomSelectnumber = 0;
+
 	std::cout << "フレームタイムUI　初期化" << std::endl;
 	return true;
-}
-void FrameTimeUI::SetVector()
-{
-	int value = this->getframetime;
-	for (int i = digitnumberLength; i > 0; --i)
-	{
-		value = this->getframetime % (int)pow(N, i);
-		if (i != 1)
-		{
-			value = value / (int)pow(N, i - 1);
-		}
-		frametime.push_back(value);
-	}
-}
-void FrameTimeUI::SetFrameTime()
-{
-	this->digitnumberLength = SetDigitNumber();
-}
-int FrameTimeUI::SetDigitNumber()
-{
-	int value = this->getframetime;
-	int Count = 0;
-	while (value != 0)
-	{
-		value /= N;
-		++Count;
-	}
-	return Count;
-}
-void FrameTimeUI::DigitNumberReset()
-{
-	this->digitnumberLength = 0;
-}
-void FrameTimeUI::TargetTime()
-{
-	int Count = 0;
-	for (auto it = frametime.begin(); it != frametime.end(); ++it)
-	{
-		if (Count == digitSelectnumber)
-		{
-			this->digitSelectnumber =  *it;
-			return;
-		}
-		++Count;
-	}
-}
-int FrameTimeUI::GetDigitNumber()
-{
-	return this->digitnumberLength;
 }
 bool FrameTimeUI::Finalize()
 {
@@ -87,11 +42,6 @@ bool FrameTimeUI::Finalize()
 }
 void FrameTimeUI::UpDate()
 {
-	if (!active)
-	{
-		TargetTime();
-		active = true;
-	}
 	if (easingX.isplay())
 	{
 		position.x = easingX.linear.In(10, 0, this->PrePos.x, easingX.Time(10));
@@ -99,6 +49,10 @@ void FrameTimeUI::UpDate()
 	else
 	{
 		this->easingEnd = true;
+	}
+	if (!this->GetDramRollIsPlay())
+	{
+		this->DramRoll(300);
 	}
 }
 bool FrameTimeUI::GetEasingEnd()
@@ -108,11 +62,183 @@ bool FrameTimeUI::GetEasingEnd()
 void FrameTimeUI::Render2D()
 {
 	Box2D draw(position, Scale);
+	if (this->GetDramRollIsPlay())
+	{
+		if (!this->Scaleanimeflag)
+		{
+			if (!this->MoveCntJudge(this->ScaleanimetionCnt,6))
+			{
+				draw.w *= 1.5f;
+				draw.h *= 1.5f;
+			}
+			else
+			{
+				this->Scaleanimeflag = true;
+			}
+		}
+		else
+		{
+			draw.w = Scale.x;
+			draw.h = Scale.y;
+		}
+	}
 	draw.OffsetSize();
 	Box2D src = this->Src;
-	src.x = src.w * digitSelectnumber;
+	if (this->GetDramRollIsPlay())
+	{
+		src.x = src.w * this->goaltime.outputtime[this->digitSelectnumber];
+	}
+	else
+	{
+		src.x = src.w * this->randomSelectnumber;
+	}
 	src.OffsetSize();
 	image.Draw(draw, src);
+}
+std::string FrameTimeUI::Time::Set_toString(int& targettime)
+{
+	std::string value;
+	std::ostringstream ss;
+	ss << targettime;
+	value += ss.str();
+	return value;
+}
+void FrameTimeUI::Time::SetDigitLength(std::string& target)
+{
+	digit = target.size();
+}
+int FrameTimeUI::Time::toSecond()
+{
+	int value = 0;
+	value = this->Inputtime;
+	if (value / 60 >= 60 && this->GetMinutes() == 59)
+	{
+		value = 59;
+	}
+	else
+	{
+		value %= 60;
+	}
+	return value;
+}
+int FrameTimeUI::Time::toMinutes()
+{
+	int value = 0;
+	value = this->Inputtime;
+	if (value / 60 >= 60)
+	{
+		value = 59;
+	}
+	else
+	{
+		value /= 60;
+	}
+	return value;
+}
+void FrameTimeUI::Time::InitTime()
+{
+	this->minutes = this->toMinutes();
+	this->second = this->toSecond();
+}
+int FrameTimeUI::Time::toInt(std::string& to_int, int loop)
+{
+	int value;
+	value = std::stoi(to_int.substr(0 + loop, 1 + loop));
+	return value;
+}
+int FrameTimeUI::Time::GetMinutes()
+{
+	return this->minutes;
+}
+int FrameTimeUI::Time::GetSecond()
+{
+	return this->second;
+}
+void FrameTimeUI::ResetMoveCnt()
+{
+	this->moveCnt = 0;
+}
+void FrameTimeUI::ResetMoveCnt(int& moveCnt)
+{
+	moveCnt = 0;
+}
+void FrameTimeUI::ResetDramRollisPlay()
+{
+	this->dramrollisPlay = false;
+}
+void FrameTimeUI::Time::SetTime()
+{
+	std::string min;
+
+	//分を文字列にする
+	min = this->Set_toString(this->minutes);
+	//数字の桁数を数える
+	this->SetDigitLength(min);
+
+
+	//判定文 1桁だった場合・・・
+	if (this->digit == 1)
+	{
+		//確定で０が入る
+		this->outputtime[0] = 0;
+		this->outputtime[1] = this->GetMinutes();
+	}
+	else
+	{
+		for (int i = 0; i < (int)this->digit; ++i)
+		{
+			outputtime[i] = this->toInt(min, i);
+		}
+	}
+
+	min = this->Set_toString(this->second);
+	this->SetDigitLength(min);
+
+	if (this->digit == 1)
+	{
+		this->outputtime[2] = 0;
+		this->outputtime[3] = this->GetSecond();
+	}
+	else
+	{
+		for (int i = 0; i < (int)this->digit; ++i)
+		{
+			this->outputtime[i + 2] = this->toInt(min, i);
+		}
+	}
+}
+int FrameTimeUI::Random()
+{
+	return random::GetRand(0, 9);
+}
+bool FrameTimeUI::MoveCntJudge(int& moveCnt ,int time)
+{
+	//アニメーションカウントを増加させる
+	++moveCnt;
+	if (moveCnt >= time)
+	{
+		this->ResetMoveCnt(moveCnt);
+		return true;
+	}
+	return false;
+}
+void FrameTimeUI::DramRoll(int time)
+{
+	//引数の時間を超えたらtrue
+	if (MoveCntJudge(this->moveCnt,time))
+	{
+		this->goaltime.SetTime();
+		this->dramrollisPlay = true;
+	}
+	else
+	{
+		this->randomSelectnumber = this->Random();
+		this->dramrollisPlay = false;
+	}
+}
+bool FrameTimeUI::GetDramRollIsPlay()
+{
+	return this->dramrollisPlay;
 }
 FrameTimeUI::FrameTimeUI()
 {

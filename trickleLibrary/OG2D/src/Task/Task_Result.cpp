@@ -192,17 +192,6 @@ bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2
 	}
 	return false;
 }
-int Result::GetDigitTime()
-{
-	int value = this->FrameTime;
-	int Count = 0;
-	while (value != 0)
-	{
-		value /= 10;	//10を割っていき数字の桁数を計算する
-		++Count;
-	}
-	return Count;
-}
 void Result::Flag_Input(Result::Achievement achive)
 {
 	Flag |= achive;
@@ -296,9 +285,8 @@ void Result::UI_Create()
 		//Playerが一定のところまで歩いたら・・・
 		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
 		{
-			this->outputdigit = this->GetDigitTime();
 			auto goaltime = GoalTimeUI::Create(Vec2(210 * aspect.x, 190 * aspect.y));
-			for (int i = 0; i < outputdigit; ++i)
+			for (int i = 0; i < 4; ++i)
 			{
 				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x * aspect.x + 20 + i * 64, 200 * aspect.y), i, FrameTime);
 			}
