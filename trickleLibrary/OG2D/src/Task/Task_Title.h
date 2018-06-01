@@ -47,18 +47,15 @@ class Title :public TaskObject
 
 	std::string soundname;
 
-	//Vec2 startPos;
 	Vec2 startPos;
 	Vec2 closePos;
 	Vec2 cursorPos[3];
 
-	//Texture back;
 	Texture waterTex;
 
 	Animation cameraPos;
 	Animation cameraSize;
 
-	//Texture test;
 	CameraManager cm;
 	GameObject Logo;
 
@@ -76,6 +73,9 @@ class Title :public TaskObject
 	int gierCnt;
 	bool isGierAng;
 	float flowerVolume;
+	bool isSkip;
+
+	void SkipMove();
 
 public:
 	Title();
@@ -84,7 +84,8 @@ public:
 	void UpDate();
 	void Render2D();
 	bool Finalize();
-
+	void Skip();
+	void BackTitleSkip();
 	int timeCnt;
 
 	void CursorMove();

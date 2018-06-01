@@ -39,6 +39,7 @@ private:
 	Vec2 startPos;			//オートモード時の開始地点
 	Vec2 EndPos;			//オートモード時の終了地点
 	Easing easing_x;		//イージング移動値
+	Easing easing_y;		
 	RecPlayer* player = nullptr;
 	float time;
 	float* Restriction_x;	//描画の制限をかけるx座標

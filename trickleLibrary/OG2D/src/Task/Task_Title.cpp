@@ -16,6 +16,7 @@ Title::Title()
 	this->cursorNum = 0;
 	this->isGierAng = false;
 	this->flowerVolume = 0.f;
+	this->isSkip = false;
 	this->soundname = "title.wav";     //サウンドのファイル名	
 	this->sound = nullptr;
 	//タグ設定
@@ -42,11 +43,9 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	//startPos = Vec2(720.f - 128.f,624.f + 30.f);
 	startPos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
 	//配列管理を行う
-	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//画像読み込み
@@ -83,7 +82,6 @@ bool Title::Initialize()
 	OGge->camera->SetPos(Vec2(500 - (480 / 2), 0));
 	//カメラの画面外設定
 	this->cm.SetSize(Box2D(Vec2(0, 0), OGge->window->GetSize() * 2));
-	//this->cm.SetRange(Box2D(100.f, 100.f, OGge->window->GetSize().x - 200.f, OGge->window->GetSize().y - 800.f));//今は意味をなさない
 	//開始時のモード設定
 	this->mode = Mode::from1;
 	return true;
@@ -91,13 +89,13 @@ bool Title::Initialize()
 
 void Title::UpDate()
 {
-	//std::cout << "x:" << this->testObj.position.x << "y:" << this->testObj.position.y << std::endl;
-	//----------------
-	//テスト
-	//----------------
 	if (OGge->in->key.down(In::SPACE))
 	{
 		this->Kill();
+	}
+	if (OGge->in->key.down(In::ENTER))
+	{
+		this->Skip();
 	}
 	//カメラの自動移動
 	this->cm.move();
@@ -127,17 +125,6 @@ void Title::UpDate()
 				this->cm.DeleteObject();
 				//this->mode = from2;
 				this->timeCnt = 0;
-			}
-			if (water->GetSituation() == Water::Situation::CreaDelete)
-			{
-				if (this->timeCnt < 100)
-				{
-					//OGge->camera->MovePos(Vec2(0, 10));
-				}
-				else
-				{
-					//this->mode = from2;
-				}
 			}
 		}
 		else
@@ -254,40 +241,6 @@ void Title::UpDate()
 	break;
 	case from7:	//ジャンプからselectまでの移動
 	{
-		//ジャンプして着地して横移動する行動
-
-		//if (OGge->camera->GetPos().y < 1340)
-		//{
-		//	//OGge->camera->MovePos(Vec2(0.0f, 10.f));
-		//}
-		//auto chara = OGge->GetTask<Chara>("Chara");
-		//if (chara)
-		//{
-		//	if (chara->CollisionNumCheck(1))
-		//	{
-		//		if (chara->FootCheck())
-		//		{
-		//			if (this->timeCnt > 120)
-		//			{
-		//				chara->ManualMove(Vec2(5.0f, 0.0f));
-		//			}
-		//			else
-		//			{
-		//				this->timeCnt++;
-		//				chara->ManualMove(Vec2(0.0f, 0.0f));
-		//			}
-		//		}
-		//		else
-		//		{
-		//			this->timeCnt = 0;
-		//		}
-		//	}
-		//	if (chara->position.x >= 1440)
-		//	{
-		//		this->mode = End;
-		//	}
-		//}
-
 		//降りたらロードを挟みセレクトへ移行する行動
 		auto chara = OGge->GetTask<Chara>("Chara");
 		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
@@ -349,14 +302,6 @@ void Title::Render2D()
 		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 256.f, cursorPos[this->cursorNum].y, 64.f, 64.f);
 		draw2.OffsetSize();
 		texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-	}
-	//ゲームスタート
-	{
-		//Box2D draw(this->startPos.x, this->startPos.y, 256.f, 64.f);
-		//draw.OffsetSize();
-		//Box2D src(0, 0, 256, 64);
-		//src.OffsetSize();
-		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 	//終了
 	{
@@ -431,6 +376,7 @@ bool Title::Finalize()
 	}
 	else
 	{
+		//次を生成しない場合Soundデータを解放する
 		if (this->sound)
 		{
 			delete this->sound;
@@ -492,11 +438,58 @@ Vec2 Title::Animation::Move()
 
 bool Title::Animation::isPlay() const
 {
-	if (this->easing_x.isplay() || this->easing_y.isplay())
+	return this->easing_x.isplay() || this->easing_y.isplay();
+}
+
+void Title::Skip()
+{
+	if (this->mode < Mode::from6)
 	{
-		return true;
+		this->SkipMove();
 	}
-	return false;
+}
+
+void Title::BackTitleSkip()
+{
+	this->mode = Mode::from5;
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	this->cm.DeleteObject();
+	OGge->camera->SetPos(Vec2(0, 200));
+	OGge->camera->SetSize(Vec2(1440, 810));
+	this->flowerVolume = 1.0f;
+	this->tex_a = 1.0f;
+	auto npc2 = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+	npc2->SetReplayEnable();
+	this->sound->play();
+}
+
+void Title::SkipMove()
+{
+	this->mode = Mode::from6;
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	this->cm.DeleteObject();
+	OGge->camera->SetPos(Vec2(0, 200));
+	OGge->camera->SetSize(Vec2(1440, 810));
+	this->flowerVolume = 1.0f;
+	this->tex_a = 1.0f;
+	this->cursor_a = 1.0f;
+	auto npc = OGge->GetTask<Chara>("Chara");
+	if (npc)
+	{
+		npc->Kill();
+	}
+	auto npc2 = Chara::Create((std::string)"player2.png", Vec2(790, 639));
+	npc2->SetReplayEnable();
+	this->sound->play();
+	this->isSkip = false;
 }
 
 Title::SP Title::Create(bool flag_)
