@@ -271,8 +271,9 @@ void Chara::AutoMove()
 	if(this->isAutoMode)
 	{
 		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(this->time), this->startPos.x, this->EndPos.x, this->time) - this->position.x;
-		this->isAutoMode = this->easing_x.isplay();
-		this->isAutoOff = !this->easing_x.isplay();
+		this->move.y = this->easing_y.quad.InOut(this->easing_y.Time(this->time), this->startPos.y, this->EndPos.y, this->time) - this->position.y;
+		this->isAutoMode = this->easing_x.isplay() || this->easing_y.isplay();
+		this->isAutoOff = !this->easing_x.isplay() || !this->easing_y.isplay();
 	}
 	else
 	{
@@ -336,13 +337,14 @@ void Chara::Set(const Vec2& start_, const Vec2& end_,const float time_)
 	//終了位置からの移動値に上書き
 	this->EndPos -= this->startPos;
 	this->easing_x.ResetTime();
+	this->easing_y.ResetTime();
 	this->SetAutoMode(true);
 	this->SetAutoFlag(false);
 }
 bool Chara::isAutoPlay() const
 {
 	//イージングの移動を行っているかを返す
-	return this->easing_x.isplay();
+	return this->easing_x.isplay() || this->easing_y.isplay();
 }
 Chara::Direction Chara::nowDirection() const
 {

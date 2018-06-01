@@ -5,6 +5,7 @@
 
 class StageSelect : public TaskObject
 {
+	//アニメーション用class
 	class Animation
 	{
 		Easing easing_x;
@@ -28,12 +29,12 @@ class StageSelect : public TaskObject
 
 	Animation camera_anim;
 
-	Texture Testdoor;
+	Texture Testdoor;		//ドアの画像
 
 	std::string soundname;     //サウンドのファイル名格納
 
-	std::vector<std::pair<Direction, float>> Entrance;
-
+	std::vector<std::pair<Direction, float>> Entrance;	//扉に対しての向きとその座標
+	//各処理管理
 	enum Mode
 	{
 		Non,
@@ -45,6 +46,7 @@ class StageSelect : public TaskObject
 	};
 	Mode mode;
 	Mode preMode;
+	//各処理関数
 	void From1();
 	void From2();
 	void From3();
@@ -54,6 +56,7 @@ class StageSelect : public TaskObject
 	int nowPos;
 	void ModeCheck();
 	bool CheckTime(int);
+	void GateClose();
 	Easing camera_x;
 	Easing camera_y;
 

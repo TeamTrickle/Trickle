@@ -24,6 +24,7 @@ StageSelect::~StageSelect()
 		if (state == State::ToTitle)
 		{
 			auto nexttask = Title::Create();
+			nexttask->BackTitleSkip();
 		}
 		else
 		{
@@ -62,6 +63,17 @@ bool StageSelect::Initialize()
 		gate->SetTexture(&this->Testdoor);
 		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
+	}
+	for (int y = 0; y < map->mapSize.y; ++y)
+	{
+		for (int x = 0; x < map->mapSize.x; ++x)
+		{
+			if (map->_arr[y][x] == 23)
+			{
+				//梯子位置(x座標)の検索
+				this->Entrance.emplace_back(LEFT, map->hitBase[y][x].position.x - chara->Scale.x);
+			}
+		}
 	}
 	//読み込み終了でロード画面を破棄
 	auto load = OGge->GetTasks<Load>("load");
@@ -114,7 +126,9 @@ void StageSelect::Render2D()
 
 bool StageSelect::Finalize()
 {
+	//画像の解放
 	this->Testdoor.Finalize();
+	//サウンドの解放
 	delete rm->GetSoundData((std::string)"titleBGM");
 	rm->DeleteSound((std::string)"titleBGM");
 	//このオブジェクト内で生成したものを削除する
@@ -138,6 +152,8 @@ bool StageSelect::Finalize()
 	{
 		(*id)->Kill();
 	}
+	//扉情報すべて削除
+	this->Entrance.clear();
 	return true;
 }
 
@@ -249,7 +265,7 @@ void StageSelect::From3()
 				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::RIGHT)
 				{
-					if (this->nowPos < 4)
+					if (this->nowPos < 6)
 					{
 						for (auto id = gates->begin(); id != gates->end(); ++id)
 						{
@@ -305,6 +321,10 @@ void StageSelect::From3()
 					this->state = State::Stage2;
 					*MapNum = 6;
 					break;
+				case 6:
+					//梯子を上る
+					this->state = State::ToTitle;
+					break;
 				default:
 					this->state = State::ToTitle;
 					break;
@@ -318,12 +338,19 @@ void StageSelect::From3()
 						{
 							chara->Set(chara->position, Vec2((*id)->position.x - chara->Scale.x, chara->position.y), 10.0f);
 							chara->SetRestriction((*id)->Get_Door_x());
+							break;
 						}
 						else
 						{
 							chara->Set(chara->position, Vec2((*id)->position.x + (*id)->Scale.x, chara->position.y), 10.0f);
 							chara->SetRestriction((*id)->Get_Door_w());
+							break;
 						}
+					}
+					else
+					{
+						//ドアの横にいない時(梯子の時)
+						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second + chara->Scale.x, chara->position.y), 5.f);
 					}
 				}
 				this->mode = Mode::from4;
@@ -334,16 +361,23 @@ void StageSelect::From3()
 void StageSelect::From4()
 {
 	auto chara = OGge->GetTask<Chara>("Chara");
+	
 	if (chara)
 	{
 		if (!chara->isAutoPlay())
 		{
-			this->mode = Mode::End;
+			if (this->nowPos == 6)
+			{
+				this->nowPos += 1;
+				chara->Set(chara->position, Vec2(chara->position.x, -200.f), 30.f);
+				return;
+			}
+			this->GateClose();
 		}
 	}
 	else
 	{
-		this->mode = Mode::End;
+		this->GateClose();
 	}
 }
 void StageSelect::ModeCheck()
@@ -356,6 +390,25 @@ void StageSelect::ModeCheck()
 	else
 	{
 		this->timeCnt++;
+	}
+}
+
+void StageSelect::GateClose()
+{
+	auto gates = OGge->GetTasks<Gate>("gate");
+	for (auto id = gates->begin(); id != gates->end(); ++id)
+	{
+		if (this->nowPos / 2 == (*id)->GetID())
+		{
+			if ((*id)->ToClose())
+			{
+				this->timeCnt = 0;
+			}
+		}
+	}
+	if (this->timeCnt > 40)
+	{
+		this->mode = Mode::End;
 	}
 }
 
