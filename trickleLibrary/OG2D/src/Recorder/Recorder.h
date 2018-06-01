@@ -57,6 +57,11 @@ public:
 	void AddKeyInputWatchList(const Input::in&);
 	void operator>>(const Input::in&);
 
+	/**
+	 *	@brief	‹L˜^‚ðŠJŽn‚µ‚Ü‚·
+	 */
+	void RecordStart();
+
 private:
 	bool							isLogging = false;
 	Time*							gameTimer;

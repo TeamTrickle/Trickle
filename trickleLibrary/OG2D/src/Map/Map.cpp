@@ -113,6 +113,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 				this->hitBase[y][x].objectTag = "Floor";
 				break;
 			case 14:
+				this->hitBase[y][x].Scale.y = 20.0f;		//‰¼ˆ—Aã•ûŒü‹à–Ô‚Ì‚İ“–‚½‚è”»’è‚Ì‚‚³‚ğ20‚É§ŒÀ
 			case 15:
 			case 16:
 			case 17:

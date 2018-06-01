@@ -1,5 +1,6 @@
 #include "OGSystem\OGTask.h"
 #include "Task\Task_Title.h"
+#include "Task\Task_TitleMovement.h"
 void OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ

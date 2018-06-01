@@ -79,11 +79,6 @@ bool Game::Initialize()
 
 	std::cout << "Game初期化" << std::endl;
 
-	//UI
-	//ui.resize(5);
-	//for (auto ui_ : ui) { ui_ = nullptr; }
-	//uiInfo.resize(5);
-
 	//扇風機画像読み込み
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player2.png");
@@ -124,11 +119,6 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
-		//goal生成
-		for (int i = 0; i < 1; ++i)
-		{
-			//auto goal = Goal::Create(true, Vec2(20 * 64, 21 * 64));
-		}
 	}
 	break;
 	case 3:		//チュートリアル３
@@ -143,20 +133,15 @@ bool Game::Initialize()
 			sound.volume(1.0f);
 			OGge->soundManager->SetSound(&sound);
 			sound.play();
-			//加熱器生成
-			for (int i = 0; i < 2; ++i) {
-				auto kanetuki = Kanetuki::Create(Vec2(64 * (21 + i), 64 * 17));
-			}
-			////goal生成
+			////加熱器生成
+			//for (int i = 0; i < 2; ++i) {
+			//	auto kanetuki = Kanetuki::Create(Vec2(64 * (21 + i), 64 * 17));
+			//}
+			////扇風機生成
 			//for (int i = 0; i < 1; ++i)
 			//{
-			//	auto goal = Goal::Create(true, Vec2(31 * 64, 20 * 64));
+			//	auto fan = Fan::Create(Vec2(64 * 14, 64 * 7), 13, (i % 2 == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
 			//}
-			//扇風機生成
-			for (int i = 0; i < 1; ++i)
-			{
-				auto fan = Fan::Create(Vec2(64 * 14, 64 * 7), 13, (i % 2 == 0) ? Fan::Dir::RIGHT : Fan::Dir::LEFT, true);
-			}
 		}
 		break;
 	case 4:		//チュートリアル４
@@ -171,17 +156,12 @@ bool Game::Initialize()
 		sound.volume(1.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
-		//加熱器生成
-		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64));
-		//製氷機生成
-		for (int i = 0; i < 2; ++i)
-		{
-			auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64));
-		}
-		////goal生成
-		//for (int i = 0; i < 1; ++i)
+		////加熱器生成
+		//auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64));
+		////製氷機生成
+		//for (int i = 0; i < 2; ++i)
 		//{
-		//	auto goal = Goal::Create(true, Vec2(18 * 64, 20 * 64));
+		//	auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64));
 		//}
 	}
 	break;
@@ -196,31 +176,29 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
-		//スイッチの生成
-		auto swith = Switch::Create(Vec2(64 * 18, 64 * 14));
-		for (int i = 0; i < 2; ++i)
-		{
-			//製氷機生成
-			auto seihyouki = Seihyouki::Create(Vec2(64 * 5, 64 * 7));
-		}
 		//スイッチを対象にした扇風機の生成
-		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, swith);
-		///fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
-		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, fan1);
+		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, false);
+		//fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
+		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, true);
 		//加熱器生成
-		for (int i = 0; i < 2; ++i)
-		{
-			auto kanetuki = Kanetuki::Create(Vec2(64 * (19 + i), 64 * 15), swith);
-		}
+		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32));		//ToDo:位置を変えるのではなく判定範囲を広げること
+		auto kanetuki2 = Kanetuki::Create(Vec2(64 * 20, 64 * 15 - 32));
+		//製氷機生成
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7));
+		auto seihyouki2 = Seihyouki::Create(Vec2(64 * 7, 64 * 7));
+
+		//スイッチの生成
+		//扇風機用
+		{auto swith = Switch::Create(Vec2(64 * 18, 64 * 8), std::vector<std::shared_ptr<GameObject>>{ fan1, fan2 }, Switch::TargetType::Fan); }
+		//加熱器用
+		{auto swith = Switch::Create(Vec2(64 * 17, 64 * 14), std::vector<std::shared_ptr<GameObject>>{ kanetuki1, kanetuki2 }, Switch::TargetType::Heater); }
+		//製氷機用
+		{auto swith = Switch::Create(Vec2(64 * 5, 64 * 5), std::vector<std::shared_ptr<GameObject>>{ seihyouki1, seihyouki2 }, Switch::TargetType::IceMachine); }
+
 		//ブロック生成
 		for (int i = 0; i < 1; ++i)
 		{
 			auto block = Block::Create(blockpos);
-		}
-		//ゴール生成
-		for (int i = 0; i < 1; ++i)
-		{
-			auto goal = Goal::Create(true);
 		}
 	}
 	break;

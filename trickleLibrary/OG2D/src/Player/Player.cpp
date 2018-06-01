@@ -728,8 +728,8 @@ void Player::SwitchCheck()
 	{
 		if ((*id)->hit(*this))
 		{
-			(*id)->ON_OFF(); 
-			(*id)->GetisON();
+			(*id)->ChangeON_OFF(); 
+			//(*id)->isON();	//‚±‚êˆÓ–¡‚ ‚éH–ß‚è’lbool 5.31
 		}
 	}
 }

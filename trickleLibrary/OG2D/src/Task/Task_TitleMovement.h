@@ -23,6 +23,7 @@ public:
 	static SP Create(bool = true);
 
 private:
+	Sound*				bgm;
 	CameraManager		cm;
-	GameObject			logo;
+	Texture				logo;
 };

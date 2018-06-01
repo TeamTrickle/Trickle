@@ -2,6 +2,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Recorder\RecPlayer.h"
+#include "Recorder\Recorder.h"
 
 class Chara : public GameObject, public TaskObject
 {
@@ -41,6 +42,7 @@ private:
 	Easing easing_x;		//イージング移動値
 	Easing easing_y;		
 	RecPlayer* player = nullptr;
+	Recorder* recorder = nullptr;
 	float time;
 	float* Restriction_x;	//描画の制限をかけるx座標
 public:
@@ -49,6 +51,7 @@ public:
 	typedef std::shared_ptr<Chara> SP;
 	static SP Create(std::string&, Vec2&, bool = true);
 	void SetReplayEnable();
+	void SetRecordEnable();
 	void UpDate();		//更新処理
 	void Render2D();	//描画処理
 	void Friction(Vec2&);	//重力処理

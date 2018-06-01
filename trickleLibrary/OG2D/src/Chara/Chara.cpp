@@ -30,6 +30,9 @@ Chara::~Chara()
 	if (player) {
 		this->player->Destroy();
 	}
+	if (recorder) {
+		this->recorder->Destroy();
+	}
 	if (this->Restriction_x)
 	{
 		delete this->Restriction_x;
@@ -44,6 +47,19 @@ void Chara::UpDate()
 		//キャラに登録されているオート移動を行う
 		//ここで実際は外部ファイルより情報を得てオート操作をさせたい
 		this->AutoMove();
+	}
+	else if (recorder) {
+		if (OGge->in->on(Input::in::CL)) {
+			this->move.x = -5.0f;
+			this->direction = Direction::LEFT;
+		}
+		if (OGge->in->on(Input::in::CR)) {
+			this->move.x = 5.0f;
+			this->direction = Direction::RIGHT;
+		}
+		if (OGge->in->on(Input::in::B1)) {
+			this->AutoJump();
+		}
 	}
 	else
 	{
@@ -351,7 +367,7 @@ Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 }
 void Chara::SetReplayEnable()
 {
-	this->player = RecPlayer::Create("PlayerAct.txt", true);
+	this->player = RecPlayer::Create("TitleMovement.txt", true);
 	this->player->SetPause();
 	this->player->SetRepeat(true);
 	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
@@ -365,6 +381,17 @@ void Chara::SetReplayEnable()
 	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
 		this->AutoJump();
 	});
+}
+void Chara::SetRecordEnable()
+{
+	this->isAuto = false;
+	this->isAutoOff = true;
+	recorder = Recorder::Create("TitleMovement.txt", true);
+	recorder->ActivateKeyRecord(OGge->in);
+	(*recorder) >> Input::in::CL;
+	(*recorder) >> Input::in::CR;
+	(*recorder) >> Input::in::B1;
+	recorder->RecordStart();
 }
 bool Chara::AutoJump()
 {

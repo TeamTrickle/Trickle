@@ -34,6 +34,7 @@ public:
 		std::string path;
 		int life;
 		int picNum;
+		std::function<bool()> appear;
 		std::function<bool()> vanish;
 	};
 
@@ -48,7 +49,6 @@ public:
 	void Move(Vec2 p);		//À•W‚ğ“®‚©‚·‚Æ‚«‚Ég‚¤
 	void Render2D();
 	bool Finalize();
-	bool CreateNext(UI::UIinfo& info);
 };
 
 class UImanager :public GameObject, public TaskObject {
