@@ -22,8 +22,16 @@ public:
 		Flag2 = 1 << 1,		//フラグ2
 		Flag3 = 1 << 2,		//フラグ3
 		Flag4 = 1 << 3,		//フラグ4
+		Master = 0x0F,		//全てのフラグ
+	};
+	enum CreateFlag
+	{
+		Timeui =  1 << 0,	//タイムUIの表示
+		Starui =  1 << 1,	//☆の表示
+		Clearui = 1 << 2,	//クリアUIの表示
 	};
 	void Flag_Input(Achievement);
+	
 	int Get_Flag();
 	//フラグのチェック
 	bool Flag_Judge();
@@ -33,7 +41,20 @@ public:
 	void Flag_Judge_Clear();
 	int GetFrameTime();
 	int GetDigitTime();
+
+	void UI_Think();
+	void UI_Create();					//フラグによって生成させる
 private:
+	struct CreateTask
+	{
+		int createflag;						//生成したフラグ
+		int nextflag;						//次に生成するフラグ
+		void SetCreateFlag(CreateFlag);
+		void SetNextFlag(CreateFlag);
+		void ResetCreateFlag();
+		void ResetNextFlag();
+	};
+	CreateTask createtask;
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
 	int outputdigit;			//タイムUIに出力したい桁数
@@ -46,6 +67,7 @@ private:
 	//------------------
 	//固定化されている処理
 	//------------------
+
 public:
 	std::string taskName;
 	virtual ~Result();

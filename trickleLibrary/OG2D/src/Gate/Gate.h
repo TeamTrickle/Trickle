@@ -11,6 +11,8 @@ class Gate : public GameObject, public TaskObject
 	bool preIsOpen;
 	int AnimCnt;
 	int Sense;
+	float door_x;
+	float door_w;
 public:
 	Gate(const Vec2&);
 	virtual ~Gate();
@@ -23,4 +25,6 @@ public:
 	unsigned __int8 GetID() const;
 	bool ToOpen();
 	bool ToClose();
+	float Get_Door_x() const;
+	float Get_Door_w() const;
 };

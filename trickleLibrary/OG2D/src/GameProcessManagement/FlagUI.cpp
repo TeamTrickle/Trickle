@@ -3,19 +3,29 @@
 
 bool FlagUI::Initialize(Vec2& pos,int& target)
 {
-	std::cout << "ミッション達成エフェクト　初期化" << std::endl;
+	//タスク関連
 	this->taskName = "Ster";
 	this->Init(taskName);
+
+	//基本の情報
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
 	//フラグ代入を格納する
 	Resultflag = 0;
 	//ターゲットフラグの設定
 	targetflag = target;
-	//画像判定に必要なフラグ
-	flagactive = false;
+
+	//Easing関連
+	easingX.ResetTime();
+	easingX.Init();
+	this->PrePos = position;
+
+	//画像関連
+	flagactive = false;			//画像を変更する際に判定を比較する
 	SetDrawOrder(0.1f);
 	image[0].Create((std::string)"Ster.png");
 	image[1].Create((std::string)"SterB.png");
+
+	std::cout << "ミッション達成エフェクト　初期化" << std::endl;
 	return true;
 }
 void FlagUI::UpDate()
@@ -23,6 +33,15 @@ void FlagUI::UpDate()
 	//フラグを代入する
 	this->SetResultflag();
 	this->FalgJudge(targetflag);
+	this->EasingMove();
+}
+void FlagUI::EasingMove()
+{
+	position.x = this->easingX.back.Out(15, 0, this->PrePos.x, easingX.Time(15));
+}
+bool FlagUI::EasingEnd()
+{
+	return !easingX.isplay();
 }
 void FlagUI::Render2D()
 {

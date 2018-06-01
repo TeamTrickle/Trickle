@@ -24,4 +24,5 @@ public:
 	typedef std::shared_ptr<MissionUI> SP;
 	static MissionUI::SP Create(Vec2& pos, bool = true);
 	virtual ~MissionUI();
+
 };

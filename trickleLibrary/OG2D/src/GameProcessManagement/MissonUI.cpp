@@ -28,11 +28,13 @@ bool MissionUI::Finalize()
 }
 void MissionUI::EasingMove()
 {
-	position.x = easingX.quint.Out(10,0,this->PrePos.x,easingX.Time(10));
+	if(easingX.isplay())
+	{
+		position.x = easingX.quint.Out(10, 0, this->PrePos.x, easingX.Time(10));
+	}
 }
 void MissionUI::UpDate()
 {
-	std::cout << position.x << std::endl;
 	this->EasingMove();
 }
 void MissionUI::Render2D()

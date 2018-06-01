@@ -1,13 +1,25 @@
 #include "GoalTimeUI.h"
 bool GoalTimeUI::Initialize(Vec2& pos)
 {
+	//タスク関連
 	this->taskName = "GoalTimeUI";
 	this->Init(taskName);
-	std::cout << "ゴールタイムUI　初期化" << std::endl;
 
+	//基本の情報
 	CreateObject(Cube, pos, Vec2(448, 90), 0);
-	this->SetDrawOrder(0.1f);
+	
+
+	//画像関連
 	image.Create((std::string)"TimeUI.png");
+	this->SetDrawOrder(0.1f);
+
+	//Easing関連
+	this->PrePos = position;
+	this->easingX.ResetTime();
+	this->easingX.Init();
+	this->easingEnd = false;
+
+	std::cout << "ゴールタイムUI　初期化" << std::endl;
 	return true;
 }
 bool GoalTimeUI::Finalize()
@@ -17,7 +29,14 @@ bool GoalTimeUI::Finalize()
 }
 void GoalTimeUI::UpDate()
 {
-
+	if (easingX.isplay())
+	{
+		position.x = easingX.linear.In(10, 0, this->PrePos.x, easingX.Time(10));
+	}
+	else
+	{
+		easingEnd = true;
+	}
 }
 void GoalTimeUI::Render2D()
 {
@@ -26,6 +45,10 @@ void GoalTimeUI::Render2D()
 	Box2D src = this->Src;
 	src.OffsetSize();
 	image.Draw(draw,src);
+}
+bool GoalTimeUI::GetEasingEnd()
+{
+	return easingEnd;
 }
 GoalTimeUI::GoalTimeUI()
 {

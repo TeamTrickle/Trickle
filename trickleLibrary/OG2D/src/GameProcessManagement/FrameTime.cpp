@@ -3,20 +3,32 @@
 #include "Task\Task_Result.h"
 bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 {
-	std::cout << "フレームタイムUI　初期化" << std::endl;
+	//タスク関連
 	this->taskName = "FrameTimeUI";
 	this->Init(taskName);
 
-	this->getframetime = resulttime;
+	//数字の桁数を計算する
+	this->getframetime = resulttime;			//リザルトから取得したタイムを代入する
+	this->DigitNumberReset();					//桁数の初期化
+	this->SetFrameTime();						//桁数の計算
+	this->digitSelectnumber = digitselect;		//数字を割り当てるための変数
+	this->SetVector();							//数字桁数を取得したものを1桁ずつVectorに格納する
 
-	this->DigitNumberReset();
-	this->SetFrameTime();
-	image.Create((std::string)"../font/math.png");
+	//基本の情報
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
-	this->SetDrawOrder(0.1f);
-	this->digitSelectnumber = digitselect;
-	this->SetVector();
 	this->active = false;
+	
+	//画像関連
+	image.Create((std::string)"../font/math.png");
+	this->SetDrawOrder(0.1f);
+
+	//Easing関連
+	easingX.ResetTime();
+	easingX.Init();
+	this->PrePos = position;
+	this->easingEnd = false;
+
+	std::cout << "フレームタイムUI　初期化" << std::endl;
 	return true;
 }
 void FrameTimeUI::SetVector()
@@ -80,6 +92,18 @@ void FrameTimeUI::UpDate()
 		TargetTime();
 		active = true;
 	}
+	if (easingX.isplay())
+	{
+		position.x = easingX.linear.In(10, 0, this->PrePos.x, easingX.Time(10));
+	}
+	else
+	{
+		this->easingEnd = true;
+	}
+}
+bool FrameTimeUI::GetEasingEnd()
+{
+	return this->easingEnd;
 }
 void FrameTimeUI::Render2D()
 {
