@@ -42,7 +42,6 @@ bool Recorder::Initialize(const std::string& fName) {
 	if (!fileWriter.is_open()) {
 		return false;
 	}
-	recThread = std::thread(&Recorder::Recorde, this);
 	return true;
 }
 
@@ -64,6 +63,10 @@ void Recorder::AddKeyInputWatchList(const Input::in& key) {
 
 void Recorder::operator>>(const Input::in& key) {
 	AddKeyInputWatchList(key);
+}
+
+void Recorder::RecordStart() {
+	recThread = std::thread(&Recorder::Recorde, this);
 }
 
 void Recorder::Recorde() {
