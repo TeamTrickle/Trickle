@@ -22,32 +22,29 @@ bool Result::Initialize()
 	this->maptile.Create((std::string)"tile.jpg");
 
 	SetDrawOrder(0.0f);
-	{
-		Vec2 camerasize = OGge->camera->GetSize();
-		auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64),Vec2(3,0));
-	}
-	{
-		Vec2 camerasize = OGge->camera->GetSize();
-		for (int i = 0; i < 3; ++i)
-		{
-			auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200 ) + 100 * (i + 1), 130), 1 << 0);
-		}
-	}
-	//フレームタイムの桁数を計算する
-	this->outputdigit = this->GetDigitTime();
-	{
-		Vec2 camerasize = OGge->camera->GetSize();
-		Vec2 windowsize = OGge->window->GetSize();
-		//カメラのサイズとウィンドウにおけるアスペクト比の計算
-		Vec2 aspect = Vec2(camerasize.x / windowsize.x,camerasize.y / windowsize.y);
 
-		auto clearUI = ClearUI::Create(Vec2(250 * aspect.x,320 *  aspect.y));
-		auto goaltime = GoalTimeUI::Create(Vec2(210 * aspect.x ,190 * aspect.y));
-		auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200 )* aspect.x, 30.f * aspect.y));
-		for (int i = 0; i < outputdigit; ++i)
-		{
-			auto time = FrameTimeUI::Create(Vec2(goaltime->position.x * aspect.x + 20 + i * 64, 200 * aspect.y) , i , FrameTime);
-		}
+	Vec2 camerasize = OGge->camera->GetSize();
+	Vec2 windowsize = OGge->window->GetSize();
+	//カメラのサイズとウィンドウにおけるアスペクト比の計算
+	Vec2 aspect = Vec2(camerasize.x / windowsize.x, camerasize.y / windowsize.y);
+
+	//生成フラグをリセットする
+	this->createtask.ResetCreateFlag();
+	this->createtask.ResetNextFlag();
+	this->createtask.SetNextFlag(CreateFlag::Timeui);
+
+	//リザルト画面に表示にする
+	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64), Vec2(3, 0));
+	auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200)* aspect.x, 30.f * aspect.y));
+
+	
+	{
+		
+	}
+	
+	{
+		
+		//auto clearUI = ClearUI::Create(Vec2(250 * aspect.x, 320 * aspect.y));
 	}
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
@@ -59,6 +56,12 @@ void Result::UpDate()
 	//更新時に行う処理を記述
 	//--------------------
 	//タイトルシーンへ遷移
+	
+	//条件をまずチェックする
+	this->UI_Think();
+	//フラグによってCreateする
+	this->UI_Create();
+
 	if (OGge->in->down(In::B2))
 	{
 		Kill();
@@ -147,7 +150,7 @@ bool Result::Flag_Judge()
 	{
 		//フラグ１を持っている
 		active = true;
-		std::cout << "Goal" << std::endl;
+		std::cout << "Goalした" << std::endl;
 	}
 	if ((Flag & Result::Flag2) == Result::Flag2)
 	{
@@ -167,7 +170,7 @@ bool Result::Flag_Judge()
 		std::cout << "普通にゴールをした" << std::endl;
 		active = true;
 	}
-	if (Flag & 0x0F)
+	if ((Flag & Master) == Result::Master)
 	{
 		std::cout << "マスタークリア" << std::endl;
 	}
@@ -215,6 +218,118 @@ int Result::GetFrameTime()
 void Result::Flag_Judge_Clear()
 {
 	Flag &= ~Flag;
+}
+void Result::CreateTask::ResetCreateFlag()
+{
+	this->createflag &= ~this->createflag;
+}
+void Result::CreateTask::ResetNextFlag()
+{
+	this->nextflag &= ~this->nextflag;
+}
+void Result::CreateTask::SetCreateFlag(CreateFlag flag)
+{
+	this->createflag |= flag;
+}
+void Result::CreateTask::SetNextFlag(CreateFlag flag)
+{
+	this->nextflag |= flag;
+}
+void Result::UI_Think()
+{
+	switch (this->createtask.nextflag)
+	{
+	case 1 << 0:
+		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Timeui)
+		{
+			auto player = OGge->GetTask<ResultPlayer>("ResultPlayer");
+			if (player != nullptr)
+			{
+				if (player->GetTimeUIFlag())
+				{
+					this->createtask.SetCreateFlag(CreateFlag::Timeui);
+				}
+			}
+		}
+		break;
+	case 1 << 1:
+		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Starui)
+		{
+			bool active = false;
+			auto frametimeUI = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
+			auto goaltimeUI = OGge->GetTask<GoalTimeUI>("GoalTimeUI");
+			if (goaltimeUI != nullptr)
+			{
+				if (goaltimeUI->GetEasingEnd())
+				{
+					active = true;
+				}
+			}
+			else
+			{
+				std::cout << "来ていません" << std::endl;
+			}
+			for (auto id = (*frametimeUI).begin(); id != (*frametimeUI).end(); ++id)
+			{
+				if ((*id)->GetEasingEnd() && active)
+				{
+					this->createtask.SetCreateFlag(CreateFlag::Starui);
+				}
+			}
+		}
+		break;
+	case 1 << 2:
+		break;
+	}
+}
+void Result::UI_Create()
+{
+	///注意！！　ここはフラグをセットして1フレームのみ動かす関数です。
+	Vec2 camerasize = OGge->camera->GetSize();
+	Vec2 windowsize = OGge->window->GetSize();
+	//カメラのサイズとウィンドウにおけるアスペクト比の計算
+	Vec2 aspect = Vec2(camerasize.x / windowsize.x, camerasize.y / windowsize.y);
+
+	switch (this->createtask.createflag)
+	{
+	case 1 << 0:
+		//Playerが一定のところまで歩いたら・・・
+		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
+		{
+			this->outputdigit = this->GetDigitTime();
+			auto goaltime = GoalTimeUI::Create(Vec2(210 * aspect.x, 190 * aspect.y));
+			for (int i = 0; i < outputdigit; ++i)
+			{
+				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x * aspect.x + 20 + i * 64, 200 * aspect.y), i, FrameTime);
+			}
+			//生成するフラグをリセットする
+			this->createtask.ResetCreateFlag();
+			this->createtask.ResetNextFlag();
+			//次に生成するタスク
+			this->createtask.SetNextFlag(CreateFlag::Starui);
+		}
+		break;
+	case 1 << 1:
+		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
+		{
+			int selectflag[3] = {Flag4,Flag3,Flag2};
+			for (int i = 0; i < 3; ++i)
+			{
+				auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200) + 100 * (i + 1), 130), selectflag[i]);
+			}
+			//フラグのリセット
+			this->createtask.ResetCreateFlag();
+			this->createtask.ResetNextFlag();
+			//次に生成するタスク
+			this->createtask.SetNextFlag(CreateFlag::Clearui);
+		}
+		break;
+	case 1 << 2:
+		break;
+	default:
+		break;
+	}
+	
 }
 void Result::Result_DataInput()
 {
