@@ -34,23 +34,29 @@ bool ResultPlayer::Finalize()
 void ResultPlayer::Think()
 {
 	Vec2 camerasize = OGge->camera->GetSize();
+	Vec2 windowsize = OGge->window->GetSize();
+
+	auto clearui = OGge->GetTask<ClearUI>("ClearUI");
 
 	ResultPlayer::State nm = this->animetion.motion;
 	switch (nm)
 	{
 	case ResultPlayer::Normal:
-		
 		break;
 	case ResultPlayer::Walk:
 		if(this->position.x >= camerasize.x * 25 / 100)
 		{
 			this->walkstop = true;		//リザルト画面への情報フラグ
-			nm = Normal;
+			nm = Stop;
 		}
 		break;
 	case ResultPlayer::Smail:
 		break;
 	case ResultPlayer::Stop:
+		if (clearui != nullptr)
+		{
+			nm = Walk;
+		}
 		break;
 	default:
 		break;
@@ -81,6 +87,12 @@ void ResultPlayer::UpDate()
 
 void ResultPlayer::Move()
 {
+	auto clearui = OGge->GetTask<ClearUI>("ClearUI");
+	if (clearui != nullptr)
+	{
+		this->moveVec.x = 8;
+	}
+
 	Vec2 camerasize = OGge->camera->GetSize();
 	if(position.x <= camerasize.x)
 	{
