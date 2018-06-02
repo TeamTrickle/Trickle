@@ -22,8 +22,8 @@ Water::Water(Vec2 pos)
 	this->currentState = Water::State::LIQUID;
 	this->preState = Water::State::LIQUID;
 	//ƒeƒXƒg
-	/*this->nowSituation = Water::Situation::Normal;
-	this->currentState = Water::State::SOLID;*/
+	//this->nowSituation = Water::Situation::Normal;
+	//this->currentState = Water::State::GAS;
 	//‰Šú•ÛŽ…—Ê
 	this->volume = 0.5;
 	this->invi = 0;
@@ -123,7 +123,8 @@ void Water::UpDate()
 			if (this->RAIN_TIME < this->nowTime)
 			{
 				this->nowSituation = Situation::Rainfrom;
-				this->position.x += this->maxSize.x / 2;
+				//this->position.x += this->maxSize.x / 2;
+				this->nowTime = 0;
 			}
 			else
 			{
@@ -132,11 +133,24 @@ void Water::UpDate()
 			}
 			break;
 		case Water::Situation::Rainfrom:
-			this->nowSituation = Situation::Newfrom;
-			this->currentState = State::LIQUID;
-			this->Scale = this->minSize;
-			this->setTime = 0;
-			this->position.y += this->maxSize.x / 2;
+			if (this->nowTime < 10)
+			{
+				if (this->nowTime % 3 == 0)
+				{
+					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
+					water->SetMaxSize(Vec2(32, 32));
+					water->SetTexture(rm->GetTextureData(std::string("waterTex")));
+				}
+				this->nowTime++;
+			}
+			else
+			{
+				this->nowTime++;
+				if (this->nowTime > 40)
+				{
+					this->Kill();
+				}
+			}
 			break;
 		}
 		break;
