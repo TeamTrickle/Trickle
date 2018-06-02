@@ -17,7 +17,6 @@ private:
 	Vec2 PrePos;
 	Easing easingX;
 	void EasingMove();
-	bool EasingEnd();
 
 	//画像関連
 	Texture image[2];
@@ -35,4 +34,7 @@ public:
 	void UpDate();					//更新処理
 	void Render2D();				//描画処理
 	bool Finalize();				//解放処理
+
+	//リザルトタスクで使用する関数
+	bool EasingEnd();				//easingの演出が終了しているか？を判定します
 };

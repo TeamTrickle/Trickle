@@ -1,6 +1,7 @@
 #include "ResultPlayer.h"
 
 #include "GameProcessManagement\ClearUI.h"
+
 bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 {
 	//タスク登録
@@ -20,7 +21,7 @@ bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 	this->SetDrawOrder(1.0f);
 
 	//リザルト画面に関連する関数
-	this->ResetTimeUIFlag();
+	this->ResetWalkStop();
 
 	std::cout << "リザルト時プレイヤ　初期化" << std::endl;
 	return true;
@@ -33,30 +34,23 @@ bool ResultPlayer::Finalize()
 void ResultPlayer::Think()
 {
 	Vec2 camerasize = OGge->camera->GetSize();
-	
 
 	ResultPlayer::State nm = this->animetion.motion;
 	switch (nm)
 	{
 	case ResultPlayer::Normal:
-		if (this->animetion.SmailChangeCheck())
-		{
-			//nm = Smail;
-		}
+		
 		break;
 	case ResultPlayer::Walk:
-		//喜ぶモーションが終了した
-		if (this->animetion.smailflag)
+		if(this->position.x >= camerasize.x * 25 / 100)
 		{
-
-		}
-		else if(this->position.x >= camerasize.x * 25 / 100)
-		{
-			this->TimeUIFlag = true;		//リザルト画面への情報フラグ
+			this->walkstop = true;		//リザルト画面への情報フラグ
 			nm = Normal;
 		}
 		break;
 	case ResultPlayer::Smail:
+		break;
+	case ResultPlayer::Stop:
 		break;
 	default:
 		break;
@@ -148,7 +142,6 @@ bool ResultPlayer::Animetion::SmailChangeCheck()
 	//喜ぶモーションに切り替えても良いか？ ☆の演出が終了したら・・・
 	if (toSmailCnt >= 300)
 	{
-		this->ResetAnimetionCnt();
 		return true;
 	}
 	return false;
@@ -168,13 +161,13 @@ void ResultPlayer::Animetion::SmailMotion()
 		}
 	}
 }
-void ResultPlayer::ResetTimeUIFlag()
+void ResultPlayer::ResetWalkStop()
 {
-	this->TimeUIFlag = false;
+	this->walkstop = false;
 }
-bool ResultPlayer::GetTimeUIFlag()
+bool ResultPlayer::GetResetWalkStop()
 {
-	return this->TimeUIFlag;
+	return this->walkstop;
 }
 ResultPlayer::ResultPlayer()
 {

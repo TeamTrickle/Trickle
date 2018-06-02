@@ -9,6 +9,7 @@ public:
 		Normal,	//何もしない
 		Walk,	//歩くモーション
 		Smail,	//喜ぶモーション
+		Stop,	//ストップ中
 	};
 private:
 	struct Animetion
@@ -38,8 +39,8 @@ private:
 	const Box2D Src = { Vec2(0, 0), Vec2(550, 550) };
 
 	//リザルト画面へのフラグ関数
-	bool TimeUIFlag;
-	void ResetTimeUIFlag();
+	bool walkstop;
+	void ResetWalkStop();
 	
 
 public:
@@ -55,5 +56,5 @@ public:
 	static ResultPlayer::SP Create(Vec2 pos,Vec2 speed = Vec2(1,0) ,bool = true);
 
 	//リザルト画面に関連するフラグ関数
-	bool GetTimeUIFlag();
+	bool GetResetWalkStop();
 };

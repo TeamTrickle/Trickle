@@ -26,6 +26,7 @@ public:
 	};
 	enum CreateFlag
 	{
+		NON = 0,			//全てを生成した
 		Timeui =  1 << 0,	//タイムUIの表示
 		Starui =  1 << 1,	//☆の表示
 		Clearui = 1 << 2,	//クリアUIの表示

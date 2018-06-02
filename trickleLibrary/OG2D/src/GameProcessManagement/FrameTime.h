@@ -67,7 +67,6 @@ class FrameTimeUI : public GameObject, public TaskObject
 	Easing easingX;				//X座標のEasing
 	Vec2 PrePos;				//保存しておく座標値
 	bool easingEnd;				//Easingが終了したかを返す
-	
 
 public:
 	static FrameTimeUI::SP Create(Vec2& pos,int digitSelect,int& resulttime,bool = true);
@@ -80,4 +79,7 @@ public:
 
 	//ドラムロール関連
 	bool GetDramRollIsPlay();
+
+	//リザルト関係に使用する関数
+	bool GetIsPlay();		//演出が終了したか？を判定します
 };

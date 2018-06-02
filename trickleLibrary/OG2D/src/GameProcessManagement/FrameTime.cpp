@@ -275,6 +275,21 @@ bool FrameTimeUI::GetDramRollIsPlay()
 {
 	return this->dramrollisPlay;
 }
+bool FrameTimeUI::GetIsPlay()
+{
+	auto frametimeUI = OGge->GetTasks<FrameTimeUI>(this->taskName);
+	int count = 0;
+	for (auto id = (*frametimeUI).begin(); id != (*frametimeUI).end(); ++id)
+	{
+		//演出が最後まで終了したフラグがtrueになっているか？
+		if ((*id)->Scaleanimeflag)
+		{
+			//カウントする
+			++count;
+		}
+	}
+	return count == 5 ? true : false;
+}
 FrameTimeUI::FrameTimeUI()
 {
 	std::cout << "フレームタイムUI　生成" << std::endl;

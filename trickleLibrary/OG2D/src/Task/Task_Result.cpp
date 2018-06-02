@@ -37,15 +37,6 @@ bool Result::Initialize()
 	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64), Vec2(3, 0));
 	auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200)* aspect.x, 30.f * aspect.y));
 
-	
-	{
-		
-	}
-	
-	{
-		
-		//auto clearUI = ClearUI::Create(Vec2(250 * aspect.x, 320 * aspect.y));
-	}
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
 }
@@ -234,7 +225,8 @@ void Result::UI_Think()
 			auto player = OGge->GetTask<ResultPlayer>("ResultPlayer");
 			if (player != nullptr)
 			{
-				if (player->GetTimeUIFlag())
+				//Playerが止まったら・・・
+				if (player->GetResetWalkStop())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Timeui);
 				}
@@ -244,23 +236,11 @@ void Result::UI_Think()
 	case 1 << 1:
 		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Starui)
 		{
-			bool active = false;
 			auto frametimeUI = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
-			auto goaltimeUI = OGge->GetTask<GoalTimeUI>("GoalTimeUI");
-			if (goaltimeUI != nullptr)
-			{
-				if (goaltimeUI->GetEasingEnd())
-				{
-					active = true;
-				}
-			}
-			else
-			{
-				std::cout << "来ていません" << std::endl;
-			}
 			for (auto id = (*frametimeUI).begin(); id != (*frametimeUI).end(); ++id)
 			{
-				if ((*id)->GetEasingEnd() && active)
+				//タイムUIの演出が終了したら・・・
+				if ((*id)->GetIsPlay())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Starui);
 				}
@@ -268,6 +248,20 @@ void Result::UI_Think()
 		}
 		break;
 	case 1 << 2:
+		//仮条件
+		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Clearui)
+		{
+			auto sters = OGge->GetTasks<FlagUI>("Ster");
+			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+			{
+				if ((*id)->EasingEnd())
+				{
+					this->createtask.SetCreateFlag(CreateFlag::Clearui);
+				}
+			}
+		}
+		break;
+	default:
 		break;
 	}
 }
@@ -285,10 +279,10 @@ void Result::UI_Create()
 		//Playerが一定のところまで歩いたら・・・
 		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
 		{
-			auto goaltime = GoalTimeUI::Create(Vec2(210 * aspect.x, 190 * aspect.y));
+			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x / 100 * 15, camerasize.y / 100 * 30));
 			for (int i = 0; i < 5; ++i)
 			{
-				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x * aspect.x + 20 + i * 64, 200 * aspect.y), i, FrameTime);
+				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x + goaltime->Scale.x + (20 + i * 64), goaltime->position.y + 20), i, FrameTime);
 			}
 			//生成するフラグをリセットする
 			this->createtask.ResetCreateFlag();
@@ -303,7 +297,7 @@ void Result::UI_Create()
 			int selectflag[3] = {Flag4,Flag3,Flag2};
 			for (int i = 0; i < 3; ++i)
 			{
-				auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200) + 100 * (i + 1), 130), selectflag[i]);
+				auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200) + 100 * (i + 1) , 130), selectflag[i]);
 			}
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
@@ -313,6 +307,15 @@ void Result::UI_Create()
 		}
 		break;
 	case 1 << 2:
+		if ((this->createtask.createflag & CreateFlag::Clearui) == CreateFlag::Clearui)
+		{
+			auto clearui = ClearUI::Create(Vec2((int)camerasize.x - camerasize.x / 3, camerasize.y / 2));
+			//フラグのリセット
+			this->createtask.ResetCreateFlag();
+			this->createtask.ResetNextFlag();
+			//次に生成するタスク
+			this->createtask.SetNextFlag(CreateFlag::NON);
+		}
 		break;
 	default:
 		break;
