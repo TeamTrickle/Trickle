@@ -473,11 +473,11 @@ float Input::axis(const int index, const int padNum) const
 	case In::AXIS::AXIS_LEFT_Y:
 		if (this->key.on(KeyBoard::W))
 		{
-			ang -= 1.0f;
+			ang += 1.0f;
 		}
 		if (this->key.on(KeyBoard::S))
 		{
-			ang += 1.0f;
+			ang -= 1.0f;
 		}
 		break;
 	case In::AXIS::AXIS_RIGHT_X:
@@ -493,11 +493,11 @@ float Input::axis(const int index, const int padNum) const
 	case In::AXIS::AXIS_RIGHT_Y:
 		if (this->key.on(KeyBoard::I))
 		{
-			ang -= 1.0f;
+			ang += 1.0f;
 		}
 		if (this->key.on(KeyBoard::K))
 		{
-			ang += 1.0f;
+			ang -= 1.0f;
 		}
 		break;
 	default:
