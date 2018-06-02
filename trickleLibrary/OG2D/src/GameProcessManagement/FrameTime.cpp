@@ -17,9 +17,18 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	//画像関連
 	image.Create((std::string)"../font/math.png");
 	this->SetDrawOrder(0.1f);
-		//大きさ変更モーション
+	//大きさ変更モーション
 	this->ResetMoveCnt(this->ScaleanimetionCnt);
-	this->Scaleanimeflag = false;
+	//大きさを変更させるモーション
+	if (this->goaltime.CoronnumberJudge(this->digitSelectnumber))
+	{
+		this->Scaleanimeflag = true;
+	}
+	else
+	{
+		this->Scaleanimeflag = false;
+	}
+	
 
 	//Easing関連
 	easingX.ResetTime();
@@ -31,6 +40,7 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	this->ResetMoveCnt();
 	this->ResetDramRollisPlay();
 	this->randomSelectnumber = 0;
+	this->dramrollisPlay = false;
 
 	std::cout << "フレームタイムUI　初期化" << std::endl;
 	return true;
@@ -50,9 +60,15 @@ void FrameTimeUI::UpDate()
 	{
 		this->easingEnd = true;
 	}
-	if (!this->GetDramRollIsPlay())
+	//コロン描画番号以外はドラムロールを行う
+	if (!this->goaltime.CoronnumberJudge(this->digitSelectnumber))
 	{
 		this->DramRoll(300);
+	}
+	else
+	{
+		//データ代入のみ行う
+		this->goaltime.SetCoron();
 	}
 }
 bool FrameTimeUI::GetEasingEnd()
@@ -66,7 +82,7 @@ void FrameTimeUI::Render2D()
 	{
 		if (!this->Scaleanimeflag)
 		{
-			if (!this->MoveCntJudge(this->ScaleanimetionCnt,6))
+			if (!this->MoveCntJudge(this->ScaleanimetionCnt, 6))
 			{
 				draw.w *= 1.5f;
 				draw.h *= 1.5f;
@@ -91,6 +107,10 @@ void FrameTimeUI::Render2D()
 	else
 	{
 		src.x = src.w * this->randomSelectnumber;
+	}
+	if (this->goaltime.CoronnumberJudge(this->digitSelectnumber))
+	{
+		src.x = src.w * this->goaltime.outputtime[this->digitSelectnumber];
 	}
 	src.OffsetSize();
 	image.Draw(draw, src);
@@ -146,6 +166,10 @@ int FrameTimeUI::Time::toInt(std::string& to_int, int loop)
 	value = std::stoi(to_int.substr(0 + loop, 1 + loop));
 	return value;
 }
+void FrameTimeUI::Time::SetCoron()
+{
+	this->outputtime[this->CoronData] = this->Coronnumber;
+}
 int FrameTimeUI::Time::GetMinutes()
 {
 	return this->minutes;
@@ -153,6 +177,10 @@ int FrameTimeUI::Time::GetMinutes()
 int FrameTimeUI::Time::GetSecond()
 {
 	return this->second;
+}
+bool FrameTimeUI::Time::CoronnumberJudge(int& number)
+{
+	return number == this->CoronData ? true : false;
 }
 void FrameTimeUI::ResetMoveCnt()
 {
@@ -191,19 +219,22 @@ void FrameTimeUI::Time::SetTime()
 		}
 	}
 
+	//コロンをここで代入する
+	this->outputtime[this->CoronData] = this->Coronnumber;
+
 	min = this->Set_toString(this->second);
 	this->SetDigitLength(min);
 
 	if (this->digit == 1)
 	{
-		this->outputtime[2] = 0;
-		this->outputtime[3] = this->GetSecond();
+		this->outputtime[3] = 0;
+		this->outputtime[4] = this->GetSecond();
 	}
 	else
 	{
 		for (int i = 0; i < (int)this->digit; ++i)
 		{
-			this->outputtime[i + 2] = this->toInt(min, i);
+			this->outputtime[i + 3] = this->toInt(min, i);
 		}
 	}
 }
@@ -224,16 +255,20 @@ bool FrameTimeUI::MoveCntJudge(int& moveCnt ,int time)
 }
 void FrameTimeUI::DramRoll(int time)
 {
-	//引数の時間を超えたらtrue
-	if (MoveCntJudge(this->moveCnt,time))
+	//ドラムロールをまだ行っていないか？
+	if (!this->GetDramRollIsPlay())
 	{
-		this->goaltime.SetTime();
-		this->dramrollisPlay = true;
-	}
-	else
-	{
-		this->randomSelectnumber = this->Random();
-		this->dramrollisPlay = false;
+		//引数の時間を超えたらtrue
+		if (MoveCntJudge(this->moveCnt, time))
+		{
+			this->goaltime.SetTime();
+			this->dramrollisPlay = true;
+		}
+		else
+		{
+			this->randomSelectnumber = this->Random();
+			this->dramrollisPlay = false;
+		}
 	}
 }
 bool FrameTimeUI::GetDramRollIsPlay()

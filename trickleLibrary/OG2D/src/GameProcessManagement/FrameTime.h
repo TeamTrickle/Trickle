@@ -17,28 +17,34 @@ class FrameTimeUI : public GameObject, public TaskObject
 	const Box2D Src = { 0,0,64,128 };
 	int digitSelectnumber;				//この数字によって描画に変化が起きる
 	int randomSelectnumber;				//ドラムロール中はこちらで描画する
+
 	//画像関連　大きさ
 	int  ScaleanimetionCnt;				//一瞬だけ大きさを変えるアニメーションカウント
 	bool Scaleanimeflag;				//大きさ変化させたフラグ
+	
+
 
 	//基本の情報
 	struct Time
 	{
-		int outputtime[4];				//ゴールタイムの格納
+		int outputtime[5];				//ゴールタイムの格納
 		int Inputtime;					//配列へ入れるためのタイム
+		const int Coronnumber = 10;		//Coronが描画される番号
+		const int CoronData = 2;		//Coronが格納される配列ID
 
 		void InitTime();							//時間を設定
 		void SetTime();								//配列に代入する
 		int GetMinutes();							//分を返す
 		int GetSecond();							//秒を返す
-
+		bool CoronnumberJudge(int&);				//コロンの番号かどうか判定する
+		void SetCoron();							//描画先にコロン番号を代入する
 	private:
 		int minutes;					//分
 		int second;						//秒
 		size_t digit;					//数字の桁数
 		std::string tostringtime;		//数字の桁数を計算するのに必要
 
-		std::string Set_toString(int&);				//引数の数字をStringとして代入する
+		std::string Set_toString(int&);		//引数の数字をStringとして代入する
 		void SetDigitLength(std::string&);			//数字の桁数を出力する
 		int toInt(std::string&, int loop);			//string型　⇒　Int型にして一文字だけ取り出して配列に送る　
 		int toSecond();								//秒の計算

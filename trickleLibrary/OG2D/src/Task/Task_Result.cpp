@@ -286,7 +286,7 @@ void Result::UI_Create()
 		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
 		{
 			auto goaltime = GoalTimeUI::Create(Vec2(210 * aspect.x, 190 * aspect.y));
-			for (int i = 0; i < 4; ++i)
+			for (int i = 0; i < 5; ++i)
 			{
 				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x * aspect.x + 20 + i * 64, 200 * aspect.y), i, FrameTime);
 			}
