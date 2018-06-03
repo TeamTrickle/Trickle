@@ -135,12 +135,12 @@ bool Game::Initialize()
 			sound.play();
 
 			//加熱器生成
-			auto kanetuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 17), false);
-			auto kanetuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 17), false);
+			auto kanetuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 17), Vec2(64 * 2, 64), false);
+			//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 17), false);
 			//扇風機生成
 			auto fan = Fan::Create(Vec2(64 * 14, 64 * 7), 13, Fan::Dir::RIGHT, true);
 			//加熱器用スイッチ生成
-			auto swich = Switch::Create(Vec2(64 * 18, 64 * 16), std::vector<std::shared_ptr<GameObject>>{kanetuki1, kanetuki2}, Switch::TargetType::Heater);
+			auto swich = Switch::Create(Vec2(64 * 18, 64 * 16), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
 		}
 		break;
 	case 4:		//チュートリアル４
@@ -156,9 +156,9 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 		//加熱器生成
-		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64), false);
+		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64), Vec2(64, 64), false);
 		//製氷機生成
-		auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 11 * 64));
+		auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 10 * 64), Vec2(64 * 2, 64));
 		//製氷機用スイッチ生成
 		auto iceSwitch = Switch::Create(Vec2(64 * 7, 64 * 8), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//加熱器用スイッチ生成
@@ -181,19 +181,19 @@ bool Game::Initialize()
 		//fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
 		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, true);
 		//加熱器生成
-		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), false);		//ToDo:位置を変えるのではなく判定範囲を広げること
-		auto kanetuki2 = Kanetuki::Create(Vec2(64 * 20, 64 * 15 - 32), false);
+		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), false);		//ToDo:位置を変えるのではなく判定範囲を広げること
+		//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 20, 64 * 15 - 32), false);
 		//製氷機生成
-		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7));
-		auto seihyouki2 = Seihyouki::Create(Vec2(64 * 7, 64 * 7));
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64));
+		//auto seihyouki2 = Seihyouki::Create(Vec2(64 * 7, 64 * 7));
 
 		//スイッチの生成
 		//扇風機用
 		{auto swith = Switch::Create(Vec2(64 * 18, 64 * 8), std::vector<std::shared_ptr<GameObject>>{ fan1, fan2 }, Switch::TargetType::Fan); }
 		//加熱器用
-		{auto swith = Switch::Create(Vec2(64 * 17, 64 * 14), std::vector<std::shared_ptr<GameObject>>{ kanetuki1, kanetuki2 }, Switch::TargetType::Heater); }
+		{auto swith = Switch::Create(Vec2(64 * 17, 64 * 14), std::vector<std::shared_ptr<GameObject>>{ kanetuki1/*, kanetuki2*/ }, Switch::TargetType::Heater); }
 		//製氷機用
-		{auto swith = Switch::Create(Vec2(64 * 5, 64 * 5), std::vector<std::shared_ptr<GameObject>>{ seihyouki1, seihyouki2 }, Switch::TargetType::IceMachine); }
+		{auto swith = Switch::Create(Vec2(64 * 5, 64 * 5), std::vector<std::shared_ptr<GameObject>>{ seihyouki1/*, seihyouki2*/ }, Switch::TargetType::IceMachine); }
 
 		//ブロック生成
 		for (int i = 0; i < 1; ++i)
@@ -224,29 +224,29 @@ bool Game::Initialize()
 		auto fan4 = Fan::Create(fanpos[3], 8, Fan::Dir::RIGHT, true);
 		auto fan5 = Fan::Create(fanpos[4], 4.5f, Fan::Dir::LEFT, false);
 		//加熱器
-		auto kanetsuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 21 - 20), false);
-		auto kanetsuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 21 - 20), false);
-		auto kanetsuki3 = Kanetuki::Create(Vec2(64 * 23, 64 * 21 - 20), false);
-		auto kanetsuki4 = Kanetuki::Create(Vec2(64 * 18, 64 * 29 + 32), true);
-		auto kanetsuki5 = Kanetuki::Create(Vec2(64 * 19, 64 * 29 + 32), true);
-		auto kanetsuki6 = Kanetuki::Create(Vec2(64 * 20, 64 * 29 + 32), true);
-		auto kanetsuki7 = Kanetuki::Create(Vec2(64 * 21, 64 * 29 + 32), true);
-		auto kanetsuki8 = Kanetuki::Create(Vec2(64 * 22, 64 * 29 + 32), true);
-		auto kanetsuki9 = Kanetuki::Create(Vec2(64 * 33, 64 * 32 - 20), true);
-		auto kanetsuki10 = Kanetuki::Create(Vec2(64 * 34, 64 * 32 - 20), true);
+		auto kanetsuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 21 - 20), Vec2(64 * 3, 84), false);
+		//auto kanetsuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 21 - 20), false);
+		//auto kanetsuki3 = Kanetuki::Create(Vec2(64 * 23, 64 * 21 - 20), false);
+		auto kanetsuki4 = Kanetuki::Create(Vec2(64 * 18, 64 * 29), Vec2(64 * 5, 64 + 32), true);
+		//auto kanetsuki5 = Kanetuki::Create(Vec2(64 * 19, 64 * 29 + 32), true);
+		//auto kanetsuki6 = Kanetuki::Create(Vec2(64 * 20, 64 * 29 + 32), true);
+		//auto kanetsuki7 = Kanetuki::Create(Vec2(64 * 21, 64 * 29 + 32), true);
+		//auto kanetsuki8 = Kanetuki::Create(Vec2(64 * 22, 64 * 29 + 32), true);
+		auto kanetsuki9 = Kanetuki::Create(Vec2(64 * 33, 64 * 32 - 20), Vec2(64 * 2, 84) , true);
+		//auto kanetsuki10 = Kanetuki::Create(Vec2(64 * 34, 64 * 32 - 20), true);
 		//製氷機
-		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12));
-		auto seihyouki2 = Seihyouki::Create(Vec2(64 * 10, 64 * 12));
-		auto seihyouki3 = Seihyouki::Create(Vec2(64 * 9, 64 * 22));
-		auto seihyouki4 = Seihyouki::Create(Vec2(64 * 10, 64 * 22));
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12), Vec2(64 * 2, 64));
+		//auto seihyouki2 = Seihyouki::Create(Vec2(64 * 10, 64 * 12));
+		auto seihyouki3 = Seihyouki::Create(Vec2(64 * 9, 64 * 22), Vec2(64 * 2, 64));
+		//auto seihyouki4 = Seihyouki::Create(Vec2(64 * 10, 64 * 22));
 		//扇風機スイッチ
 		auto fanSwitch1 = Switch::Create(Vec2(64 * 19, 64 * 12), std::vector<std::shared_ptr<GameObject>>{fan2, fan3}, Switch::TargetType::Fan);
 		auto fanSwitch2 = Switch::Create(Vec2(64 * 31, 64 * 31), std::vector<std::shared_ptr<GameObject>>{fan4, fan5}, Switch::TargetType::Fan);
 		//加熱器スイッチ
-		auto heaterSwitch1 = Switch::Create(Vec2(64 * 20, 64 * 20), std::vector<std::shared_ptr<GameObject>>{kanetsuki1, kanetsuki2, kanetsuki3}, Switch::TargetType::Heater);
+		auto heaterSwitch1 = Switch::Create(Vec2(64 * 20, 64 * 20), std::vector<std::shared_ptr<GameObject>>{kanetsuki1/*, kanetsuki2, kanetsuki3*/}, Switch::TargetType::Heater);
 	//	auto heaterSwitch2 = Switch::Create(Vec2(64 * 35, 64 * 31), std::vector<std::shared_ptr<GameObject>>{kanetsuki5, kanetsuki6, kanetsuki7}, Switch::TargetType::Heater);
 		//製氷機スイッチ
-		auto iceSwitch = Switch::Create(Vec2(64 * 12, 64 * 20), std::vector<std::shared_ptr<GameObject>>{seihyouki1, seihyouki2, seihyouki3, seihyouki4}, Switch::TargetType::IceMachine);
+		auto iceSwitch = Switch::Create(Vec2(64 * 12, 64 * 20), std::vector<std::shared_ptr<GameObject>>{seihyouki1, /*seihyouki2,*/ seihyouki3/*, seihyouki4*/}, Switch::TargetType::IceMachine);
 		//ブロック
 		auto block = Block::Create(Vec2(64 * 20, 64 * 29));
 		auto block2 = Block::Create(Vec2(64 * 33, 64 * 10));
