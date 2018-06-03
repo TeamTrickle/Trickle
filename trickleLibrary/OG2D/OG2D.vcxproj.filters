@@ -130,13 +130,13 @@
       <UniqueIdentifier>{c86f3fd4-a747-4ad6-bce2-7b99aae72497}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Task\TitleMovement">
-      <UniqueIdentifier>{8193f3f2-1366-4811-b917-53e24a3180ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\LoadLogo">
-      <UniqueIdentifier>{157c2ade-473a-48f4-aa6f-ae5a7600f5b5}</UniqueIdentifier>
+      <UniqueIdentifier>{ad3c6b88-f52b-4935-9503-cbe669410ed3}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Gate">
-      <UniqueIdentifier>{6c15f4a3-458d-4cca-810d-9ec9d16f02cf}</UniqueIdentifier>
+      <UniqueIdentifier>{460e39c7-745e-4e7c-82d7-867e8bd3f608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\LoadLogo">
+      <UniqueIdentifier>{9552b153-db7f-4b3f-b4d3-c82aed0eccf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -297,14 +297,14 @@
     <ClCompile Include="src\Task\Task_TitleMovement.cpp">
       <Filter>ソースファイル\Task\TitleMovement</Filter>
     </ClCompile>
-    <ClCompile Include="src\Recorder\RecPlayer.cpp">
-      <Filter>ソースファイル\Recorder</Filter>
+    <ClCompile Include="src\Gate\Gate.cpp">
+      <Filter>ソースファイル\Gate</Filter>
     </ClCompile>
     <ClCompile Include="src\Load\LoadLogo.cpp">
       <Filter>ソースファイル\LoadLogo</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gate\Gate.cpp">
-      <Filter>ソースファイル\Gate</Filter>
+    <ClCompile Include="src\Recorder\RecPlayer.cpp">
+      <Filter>ソースファイル\Recorder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -467,17 +467,17 @@
     <ClInclude Include="src\Task\Task_TitleMovement.h">
       <Filter>ソースファイル\Task\TitleMovement</Filter>
     </ClInclude>
-    <ClInclude Include="src\Recorder\RecPlayer.h">
-      <Filter>ソースファイル\Recorder</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Recorder\RecDef.h">
-      <Filter>ソースファイル\Recorder</Filter>
+    <ClInclude Include="src\Gate\Gate.h">
+      <Filter>ソースファイル\Gate</Filter>
     </ClInclude>
     <ClInclude Include="src\Load\LoadLogo.h">
       <Filter>ソースファイル\LoadLogo</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gate\Gate.h">
-      <Filter>ソースファイル\Gate</Filter>
+    <ClInclude Include="src\Recorder\RecDef.h">
+      <Filter>ソースファイル\Recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Recorder\RecPlayer.h">
+      <Filter>ソースファイル\Recorder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
