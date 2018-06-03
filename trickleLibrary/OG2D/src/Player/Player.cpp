@@ -75,7 +75,6 @@ void Player::UpDate()
 	case State::ANIMATION:
 		if (this->animation.isMove())
 		{
-			//this->motion = Motion::Walk;
 			//移動処理
 			this->position += this->animation.Move();
 		}
@@ -83,6 +82,7 @@ void Player::UpDate()
 		{
 			//通常に戻す
 			this->state = State::NORMAL;
+			this->motion = Motion::Ladder;
 		}
 		break;
 	case State::BUCKET:
@@ -171,7 +171,7 @@ void Player::UpDate()
 					if (this->FootCheck((std::string)"Ladder"))
 					{
 						//梯子状態に移行
-						this->motion = Motion::Ladder;
+						//this->motion = Motion::Ladder;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
 						//カウントリセット
@@ -185,7 +185,7 @@ void Player::UpDate()
 				{
 					if (this->ObjectHit((std::string)"Ladder"))
 					{
-						this->motion = Motion::Ladder;
+						//this->motion = Motion::Ladder;
 						this->state = State::ANIMATION;
 						this->moveCnt = 0;
 						this->est = { 0.f,0.f };
@@ -202,7 +202,6 @@ void Player::UpDate()
 			if (OGge->in->down(In::B2))
 			{
 				animation.timeCnt = 0;
-				this->motion = Motion::Switch_M;
 				this->SwitchCheck();
 			}
 			break;
@@ -349,7 +348,7 @@ void Player::Render2D()
 	}
 
 	Box2D src = this->animation.returnSrc(this->motion, this->state);
-	//モションを受けsrcをreturnする
+	//モ-ションを受けsrcをreturnする
 	src.OffsetSize();
 
 	//左向きなら画像を逆にする
@@ -728,6 +727,7 @@ void Player::SwitchCheck()
 	{
 		if ((*id)->hit(*this))
 		{
+			this->motion = Motion::Switch_M;
 			(*id)->ChangeON_OFF(); 
 			//(*id)->isON();	//これ意味ある？戻り値bool 5.31
 		}
@@ -769,9 +769,11 @@ bool Player::Animation::Initialize()
 }
 Vec2 Player::Animation::Move()
 {
+	auto player = OGge->GetTask<Player>("Player");
 	Vec2 move = { 0.f,0.f };
 	if (this->animationVec.x != 0.f)
 	{
+		player->motion = Motion::Walk;
 		if (this->animationVec.x >= 1.0f)
 		{
 			move.x += 1.0f;
@@ -788,8 +790,9 @@ Vec2 Player::Animation::Move()
 			this->animationVec.x = 0.f;
 		}
 	}
-	if (this->animationVec.y != 0.f)
+	else if (this->animationVec.y != 0.f)
 	{
+		player->motion = Motion::Ladder;
 		if (this->animationVec.y >= 1.0f)
 		{
 			move.y += 1.0f;
@@ -818,72 +821,76 @@ bool Player::Animation::isMove()
 }
 Box2D Player::Animation::returnSrc(Motion motion, State state) 
 {
-	Box2D src(0,0,550,550);	//基本のsrc（後で消すかも）
-//	if (state == Normal) {
+	Box2D src(0,0, this->srcX, this->srcY);	//基本のsrc（後で消すかも）
+	if (state == Normal) {
 		switch (motion) {
 		case Motion::Normal:
-			src = Box2D(this->idle[this->timeCnt / 3 % 10] * 550, 0, 550, 550);
-			return src;
+			src = Box2D(this->idle[this->timeCnt / 3 % 10] * this->srcX, 0, this->srcX, this->srcY);
 			break;
 
 		case Motion::Walk:
-			src = Box2D(this->walk[this->timeCnt / 3 % 9] * 550, 550, 550, 550);
-			return src;
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, this->srcY, this->srcX, this->srcY);
 			break;
 
 		case Motion::Jump:
-			src = Box2D(0 * 550, 2 * 550, 550, 550);
-			return src;
+			src = Box2D(0 * this->srcX, 2 * this->srcY, this->srcX, this->srcY);
 			break;
 
 		case Motion::Fall:
-			src = Box2D(1 * 550, 2 * 550, 550, 550);
-			return src;
+			src = Box2D(1 * this->srcX, 2 *  this->srcY, this->srcX,  this->srcY);
 			break;
-		//
-		//case Motion::Ladder:
-		//	src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * 550, 3 * 550, 550, 550);
-		//	break;
+		
+		case Motion::Ladder:
+			src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * this->srcX, 3 *  this->srcY, this->srcX,  this->srcY);
+			break;
 
-		//case Motion::Switch_M:
-		//	auto switchs = OGge->GetTasks<Switch>("Switch");
-		//	bool tempS;
-		//	for (auto id = switchs->begin(); id != switchs->end(); ++id)
-		//	{
-		//		tempS = (*id)->GetisON();
-		//	}
-		//	if (tempS) {
-		//		src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	
-		//	}
-		//	else {
-		//		src = Box2D(this->switch_a[this->timeCnt / 5 % 6] * 550, 8 * 550, 550, 550);	//後で修正
-		//	}
-		//	break;
-		//}
-	}/*
+		case Motion::Switch_M:
+			auto switchs = OGge->GetTasks<Switch>("Switch");
+			for (auto id = switchs->begin(); id != switchs->end(); ++id)
+			{
+				if ((*id)->isON()) {
+					src = Box2D(this->switch_2[this->timeCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+				}
+				else {
+					src = Box2D(this->switch_1[this->timeCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+				}
+			}
+			break;
+		/*case Motion::Block_M:
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
+			break;*/
+		}
+	}
+	if (state == ANIMATION)
+	{
+		switch (motion) {
+		case Motion::Walk:
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, this->srcY, this->srcX, this->srcY);
+			break;
+		case Motion::Ladder:
+			src = Box2D(0 * this->srcX, 3 * this->srcY, this->srcX, this->srcY);
+			break;
+		}
+	}
 	if (state == BUCKET) {
 		switch (motion) {
 		case Motion::Normal:
-			src = Box2D(this->idle[this->timeCnt / 3 % 10] * 550, 4*550, 550, 550);
-			return src;
+			src = Box2D(this->idle[this->timeCnt / 3 % 10] * this->srcX, 4* this->srcY, this->srcX,  this->srcY);
 			break;
 
 		case Motion::Walk:
-			src = Box2D(this->walk[this->timeCnt / 3 % 9] * 550, 5 * 550, 550, 550);
-			return src;
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 5 *  this->srcY, this->srcX,  this->srcY);
 			break;
 
 		case Motion::Jump:
-			src = Box2D(0 * 550, 7 * 550, 550, 550);
-			return src;
+			src = Box2D(0 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
 			break;
 
 		case Motion::Fall:
-			src = Box2D(1 * 550, 7 * 550, 550, 550);
-			return src;
+			src = Box2D(1 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
 			break;
 		}
-	}*/
+	}
 	return src;
 
 }
