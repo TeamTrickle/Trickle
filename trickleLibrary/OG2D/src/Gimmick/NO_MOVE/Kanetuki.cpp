@@ -7,8 +7,8 @@ using namespace std;
 
 Kanetuki::Kanetuki()
 	:
-	maxChangeTimeLiquid(5),
-	maxChangeTimeSolid(8)
+	maxChangeTimeLiquid(3),
+	maxChangeTimeSolid(50)
 {
 	cout << "加熱器　生成" << endl;
 	//サウンドファイル名	
@@ -22,13 +22,13 @@ Kanetuki::~Kanetuki()
 }
 
 
-bool Kanetuki::Initialize(Vec2& pos) {
+bool Kanetuki::Initialize(Vec2& pos, bool active) {
 	this->taskName = "Kanetuki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
 	changeStateCnt = 0;
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
-	active = false;
+	this->active = active;
 
 	//サウンドに関する情報
 	startflag = false;
@@ -92,6 +92,7 @@ void Kanetuki::toSteam() {
 			if ((*id)->GetState() == Water::State::SOLID)
 			{
 				changeStateCnt++;
+				cout << changeStateCnt++ << endl;
 				//一定の時間が経ったら・・・
 				if (changeStateCnt >= maxChangeTimeSolid)
 				{
@@ -118,7 +119,7 @@ void Kanetuki::toSteam() {
 void Kanetuki::changeActive() {
 	this->active = !this->active;
 }
-Kanetuki::SP Kanetuki::Create(Vec2& pos, bool flag_) {
+Kanetuki::SP Kanetuki::Create(Vec2& pos, bool active, bool flag_) {
 	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
 	if (to)
 	{
@@ -127,7 +128,7 @@ Kanetuki::SP Kanetuki::Create(Vec2& pos, bool flag_) {
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos))
+		if (!to->Initialize(pos, active))
 		{
 			to->Kill();
 		}
