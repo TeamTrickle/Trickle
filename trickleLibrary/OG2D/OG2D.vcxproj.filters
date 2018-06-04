@@ -138,6 +138,9 @@
     <Filter Include="ソースファイル\LoadLogo">
       <UniqueIdentifier>{9552b153-db7f-4b3f-b4d3-c82aed0eccf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Effect">
+      <UniqueIdentifier>{608f77d8-0587-4269-9ec0-676cd8ff2058}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -305,6 +308,9 @@
     </ClCompile>
     <ClCompile Include="src\Recorder\RecPlayer.cpp">
       <Filter>ソースファイル\Recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect\SterEffect.cpp">
+      <Filter>ソースファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -478,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="src\Recorder\RecPlayer.h">
       <Filter>ソースファイル\Recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Effect\SterEffect.h">
+      <Filter>ソースファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 	this->animetion.Reset();
 
 	//‰æ‘œŠÖ˜A
-	std::string filePath = "walk.png";
+	std::string filePath = "player.png";
 	image.Create(filePath);
 	this->SetDrawOrder(1.0f);
 

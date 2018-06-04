@@ -157,6 +157,7 @@
     <ClCompile Include="src\Bucket\bucket.cpp" />
     <ClCompile Include="src\CameraManager\CameraManager.cpp" />
     <ClCompile Include="src\Chara\Chara.cpp" />
+    <ClCompile Include="src\Effect\SterEffect.cpp" />
     <ClCompile Include="src\GameProcessManagement\ClearUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\FrameTime.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\Bucket\bucket.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\Chara\Chara.h" />
+    <ClInclude Include="src\Effect\SterEffect.h" />
     <ClInclude Include="src\GameProcessManagement\ClearUI.h" />
     <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
     <ClInclude Include="src\GameProcessManagement\FrameTime.h" />
