@@ -57,11 +57,12 @@ public:
 	bool Finalize();
 	//マップとの当たり判定
 	bool MapHitCheck(GameObject &p);
-	bool HitCheck(const GameObject &p, const int id);
+	bool HitCheck(GameObject &p, const int id);
 private:
 	//ファイルパス
 	const std::string _FilePath = "./data/map/";
 	std::string chipimgname;
 private:
 	void ObjectCreateCheck(std::string&,int,int);
+	
 };

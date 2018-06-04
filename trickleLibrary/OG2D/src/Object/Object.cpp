@@ -6,8 +6,9 @@ GameObject::GameObject() {
 	this->objform = Objform::Non;
 	this->mass = 0.f;
 	this->Radius = { 1.0f,1.0f };
+	this->isCheck = false;
 }
-GameObject::GameObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
+GameObject::GameObject(const Objform& form,const Vec2& _posi,const  Vec2& _Sca,const float _ang)
 {
 	//各値をセットする
 	this->objform = form;
@@ -23,12 +24,13 @@ GameObject::GameObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 		break;
 	}
 	this->angle = _ang;
+	this->CheckON();
 }
 GameObject::~GameObject()
 {
 
 }
-void GameObject::CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang) 
+void GameObject::CreateObject(const Objform& form, const Vec2& _posi, const  Vec2& _Sca, const float _ang)
 {
 	//各値をセットする
 	this->objform = form;
@@ -44,9 +46,14 @@ void GameObject::CreateObject(Objform form, Vec2 _posi, Vec2 _Sca, float _ang)
 		break;
 	}
 	this->angle = _ang;
+	this->CheckON();
 }
 bool GameObject::hit(GameObject& o)
 {
+	if (!this->isCheck || !o.isCheck)
+	{
+		return false;
+	}
 	switch (this->objform)
 	{
 	case Objform::Cube:			//自分が矩形の時
@@ -169,4 +176,27 @@ void GameObject::LineDraw()
 	case Objform::Non:
 		break;
 	}
+}
+
+void GameObject::CheckON()
+{
+	this->isCheck = true;
+}
+
+bool GameObject::IsObjectDistanceCheck(const Vec2& pos, const Vec2& size)
+{
+	if (this->position.x - this->Scale.x < pos.x + size.x &&
+		this->position.y - this->Scale.y < pos.y + size.y &&
+		this->position.x + (this->Scale.x * 2) > pos.x &&
+		this->position.y + (this->Scale.y * 2) > pos.y)
+	{
+		return true;
+	}
+	return false;
+}
+
+void GameObject::LineDistanceDraw()
+{
+	Box2D d(this->position.x - this->Scale.x, this->position.y - this->Scale.y, this->position.x + (this->Scale.x * 2), this->position.y + (this->Scale.y * 2));
+	OG::LineHitDraw(&d);
 }

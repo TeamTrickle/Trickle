@@ -286,16 +286,21 @@ bool Map::MapHitCheck(GameObject &p)
 	return false;
 }
 
-bool Map::HitCheck(const GameObject &p, const int id)
+bool Map::HitCheck(GameObject &p, const int id)
 {
 	for (int y = 0; y < this->mapSize.y; ++y)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-			
-			/*if (this->hitBase[y][x].IDCheck(id))
+		/*	if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
 			{
-				return true;
+				if (this->hitBase[y][x].IDCheck(id))
+				{
+					if (this->hitBase[y][x].hit(p))
+					{
+						return true;
+					}
+				}
 			}*/
 		}
 	}

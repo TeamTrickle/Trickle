@@ -13,6 +13,7 @@ enum Objform
 };
 class GameObject
 {
+	bool isCheck;
 public:
 	Objform objform;								//オブジェクトの状態
 	Vec2 position;									//位置
@@ -26,19 +27,22 @@ public:
 	bool hit(GameObject& o);						//GameObject同士の当たり判定
 	GameObject();									//コンストラクタ	
 	GameObject(										//コンストラクタ
-		Objform form, 
-		Vec2 _posi, 
-		Vec2 _Sca, 
-		float _ang
+		const Objform& form, 
+		const Vec2& _posi, 
+		const Vec2& _Sca, 
+		float _ang = 0.0f
 	);
 	~GameObject();									//デストラクタ
 	void CreateObject(								//GameObjectの情報を登録
-		Objform form,
-		Vec2 _posi,
-		Vec2 _Sca,
-		float _ang
+		const Objform& form,
+		const Vec2& _posi,
+		const Vec2& _Sca,
+		const float _ang = 0.0f
 	);
 	std::string objectTag;							//タグ名
 	void LineDraw();								//当たり判定をラインを引いて確認用
+	void CheckON();									//当たり判定を起動する
+	bool IsObjectDistanceCheck(const Vec2& pos, const Vec2& size);	//当たり判定を行う範囲内かどうかを返します。
+	void LineDistanceDraw();
 private:
 };
