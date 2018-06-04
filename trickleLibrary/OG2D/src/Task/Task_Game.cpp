@@ -81,7 +81,7 @@ bool Game::Initialize()
 
 	//î•—‹@‰æ‘œ“Ç‚İ‚İ
 	this->fanTex.Create((std::string)"fan.png");
-	this->playerTex.Create((std::string)"player2.png");
+	this->playerTex.Create((std::string)"player.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
 	//ui¶¬
 	UImng_.reset(new UImanager());

@@ -175,9 +175,10 @@ public:
 		void upDate();						//入力状況の更新
 		void Initialize();					//初期化処理
 		void Reset();						//入力状況のリセット
-	private:
 		bool registAxisButton(				//スティックの範囲外処理
 			const float axis_threshold_);
+	private:
+		
 		int id_;							//ゲームパッド複数個に対応させるために１つ１つにidを振り分ける
 		int button_num;						//ゲームパッドのボタン数
 		int axis_num;						//ゲームパッドのスティック数
@@ -272,6 +273,7 @@ public:
 	bool down(const int in_, const int padNum = 0) const;	//押したとき
 	bool up(const int in_, const int padNum = 0) const;		//あげたとき
 	float axis(const int in_, const int padNum = 0) const;
+	void registAxis(const float regist);
 	void upDate();						//入力情報更新
 private:
 	void ResetInputData();				//入力状態をリセット
