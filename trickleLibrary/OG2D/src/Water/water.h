@@ -84,6 +84,7 @@ public:
 	bool GetHold() const;
 	void HoldCheck(bool);
 	void ResetMove();
+	bool SolidMelt();
 
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
@@ -108,6 +109,8 @@ private:
 	unsigned int id;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
+	bool FootSolidCheck();
+	bool HeadSolidCheck();
 	void MoveWATERCheck(Vec2);
 	void MoveGASCheck(Vec2);
 	void MoveSOILDCheck(Vec2);
