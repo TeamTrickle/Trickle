@@ -52,11 +52,13 @@ bool Map::LoadMap(std::string& path_, Format format)
 	(std::stringstream)text >> this->mapSize.y;
 	//_arrをmapyのサイズ分にサイズを変更する(配列化)
 	this->_arr.resize(this->mapSize.y);
+	this->ID.resize(this->mapSize.y);
 	this->hitBase.resize(this->mapSize.y);
 	//_arr[]をmapxのサイズ分にサイズを変更する(二次配列化)
 	for (int i = 0; i < this->mapSize.y; ++i)
 	{
 		this->_arr[i].resize(this->mapSize.x);
+		this->ID.resize(this->mapSize.x);
 		this->hitBase[i].resize(this->mapSize.x);
 	}
 	for (int y = 0; y < this->mapSize.y; ++y) {
@@ -70,7 +72,10 @@ bool Map::LoadMap(std::string& path_, Format format)
 			if (std::all_of(text.cbegin(), text.cend(), isdigit))
 			{
 				//番号をそのまま格納
+				int num = 0;
 				(std::stringstream)text >> this->_arr[y][x];
+				(std::stringstream)text >> num;
+				//this->hitBase[y][x].Setarr(num);
 			}
 			else
 			{
@@ -78,6 +83,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 				this->ObjectCreateCheck(text,x,y);
 				//その場所の番号は0としておく。
 				this->_arr[y][x] = 0;
+				//this->hitBase[y][x].Setarr(0);
 			}
 		}
 	}
@@ -97,7 +103,10 @@ bool Map::LoadMap(std::string& path_, Format format)
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//オブジェクトの生成
-			this->hitBase[y][x].CreateObject(Objform::Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
+			if (_arr[y][x] != 0)
+			{
+				this->hitBase[y][x].CreateObject(Objform::Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), DrawSize, 0.f);
+			}
 			switch (this->_arr[y][x])
 			{
 			case 1:
@@ -111,30 +120,86 @@ bool Map::LoadMap(std::string& path_, Format format)
 			case 9:
 				//床
 				this->hitBase[y][x].objectTag = "Floor";
+				//*this->ID[y][x] = new int(0);
 				break;
 			case 14:
 				this->hitBase[y][x].Scale.y = 20.0f;		//仮処理、上方向金網のみ当たり判定の高さを20に制限
 			case 15:
 			case 16:
 			case 17:
+				//this->ID[y][x] = new int(1);
 				this->hitBase[y][x].objectTag = "Net";
 				break;
 			case 18:
 			case 19:
 			case 20:
 			case 21:
+				//this->ID[y][x] = new int(0);
 				this->hitBase[y][x].objectTag = "Soil";
 				break;
 			case 22:
 				this->hitBase[y][x].objectTag = "LadderTop";
 				break;
 			case 23:
+				this->hitBase[y][x].objectTag = "Ladder";
 			case 24:
 				this->hitBase[y][x].objectTag = "Ladder";
+				//this->ID[y][x] = new int(0);
 				break;
 			default:
 				break;
 			}
+			
+			/*if (this->ID[y][x])
+			{
+				this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), this->DrawSize, 0.0f);
+			}*/
+			//switch (this->hitBase[y][x].Getarr())
+			//{
+			//case 1:
+			//case 2:
+			//case 3:
+			//case 4:
+			//case 5:
+			//case 6:
+			//case 7:
+			//case 8:
+			//case 9:
+			//	//床
+			//	this->hitBase[y][x].objectTag = "Floor";
+			//	this->hitBase[y][x].SetID(0);
+			//	break;
+			//case 14:
+			//	this->hitBase[y][x].Scale.y = 20.0f;		//仮処理、上方向金網のみ当たり判定の高さを20に制限
+			//case 15:
+			//case 16:
+			//case 17:
+			//	this->hitBase[y][x].SetID(1);
+			//	this->hitBase[y][x].objectTag = "Net";
+			//	break;
+			//case 18:
+			//case 19:
+			//case 20:
+			//case 21:
+			//	this->hitBase[y][x].SetID(0);
+			//	this->hitBase[y][x].objectTag = "Soil";
+			//	break;
+			//case 22:
+			//	this->hitBase[y][x].objectTag = "LadderTop";
+			//	break;
+			//case 23:
+			//	this->hitBase[y][x].objectTag = "Ladder";
+			//case 24:
+			//	this->hitBase[y][x].objectTag = "Ladder";
+			//	this->hitBase[y][x].SetID(0);
+			//	break;
+			//default:
+			//	break;
+			//}
+			/*if (this->hitBase[y][x].GetID())
+			{
+				this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), this->DrawSize, 0.0f);
+			}*/
 		}
 	}
 	
@@ -175,8 +240,14 @@ void Map::Render2D()
 			{
 				Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 				draw.OffsetSize();
-				mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
+				this->mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
 			}
+			/*if (this->hitBase[y][x].Getarr() != 0)
+			{
+				Box2D draw(this->hitBase[y][x].position, this->DrawSize);
+				draw.OffsetSize();
+				this->mapimg.Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
+			}*/
 		}
 	}
 }
@@ -185,8 +256,8 @@ bool Map::Finalize()
 {
 	this->_arr.clear();
 	this->hitBase.clear();
-	//this->chip.clear();
-	mapimg.Finalize();
+	this->chip.clear();
+	this->mapimg.Finalize();
 	return true;
 }
 
@@ -215,6 +286,22 @@ bool Map::MapHitCheck(GameObject &p)
 	return false;
 }
 
+bool Map::HitCheck(const GameObject &p, const int id)
+{
+	for (int y = 0; y < this->mapSize.y; ++y)
+	{
+		for (int x = 0; x < this->mapSize.x; ++x)
+		{
+			
+			/*if (this->hitBase[y][x].IDCheck(id))
+			{
+				return true;
+			}*/
+		}
+	}
+	return false;
+}
+
 Map::SP Map::Create(std::string& path, Format format, bool flag_)
 {
 	auto to = Map::SP(new Map());
@@ -232,4 +319,55 @@ Map::SP Map::Create(std::string& path, Format format, bool flag_)
 		return to;
 	}
 	return nullptr;
+}
+
+Map::Base::Base()
+{
+	this->arr = 0;
+	this->ID = nullptr;
+}
+Map::Base::~Base()
+{
+	if (this->ID)
+	{
+		delete this->ID;
+		this->ID = nullptr;
+	}
+}
+
+bool Map::Base::IDCheck(const int id)
+{
+	if (this->ID)
+	{
+		return *this->ID <= id ? true : false;
+	}
+	return false;
+}
+
+bool Map::Base::ChipCheck(const int chip)
+{
+	return this->arr == chip ? true : false;
+}
+void Map::Base::Setarr(const int _arr)
+{
+	this->arr = _arr;
+}
+void Map::Base::SetID(const int id)
+{
+	if (!this->ID)
+	{
+		this->ID = new int(id);
+	}
+	else
+	{
+		*this->ID = id;
+	}
+}
+int Map::Base::Getarr() const
+{
+	return this->arr;
+}
+int* Map::Base::GetID() const
+{
+	return this->ID;
 }

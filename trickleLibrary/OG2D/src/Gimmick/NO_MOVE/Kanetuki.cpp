@@ -102,8 +102,9 @@ void Kanetuki::toSteam() {
 					//Texture watertex;
 					//auto game = OGge->GetTask<Game>("game");
 					//water->SetTexture(&game->getWaterTex());
-					(*id)->SetState(Water::State::LIQUID);
-					(*id)->SetSituation(Water::Situation::Newfrom);
+					//(*id)->SetState(Water::State::LIQUID);
+					//(*id)->SetSituation(Water::Situation::Newfrom);
+					(*id)->SolidMelt();
 //					(*id)->Kill();
 					changeStateCnt = 0;
 				}

@@ -109,6 +109,7 @@ public:
 	State NowState() const;										//現在のStateを返す
 	void SetPos(Vec2&);											//プレイヤーの位置を設定する
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
+	bool ReleaseHold();
 	//入力処理簡略化
 	bool InputLeft() {
 		return OGge->in->on(Input::CL);
