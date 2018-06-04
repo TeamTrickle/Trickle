@@ -1,6 +1,6 @@
 #include "FlagUI.h"
 
-
+#include "Effect\SterEffect.h"
 bool FlagUI::Initialize(Vec2& pos,int& target)
 {
 	//タスク関連
@@ -24,6 +24,9 @@ bool FlagUI::Initialize(Vec2& pos,int& target)
 	SetDrawOrder(0.1f);
 	image[0].Create((std::string)"Ster.png");
 	image[1].Create((std::string)"SterB.png");
+
+	//エフェクト関連
+	this->effectEnd = false;
 
 	std::cout << "ミッション達成エフェクト　初期化" << std::endl;
 	return true;
@@ -49,7 +52,8 @@ void FlagUI::Render2D()
 	draw.OffsetSize();
 	Box2D src = this->Src;
 	src.OffsetSize();
-	if (flagactive)
+	
+	if (flagactive && effectEnd)
 	{
 		image[0].Draw(draw, src);
 	}
@@ -79,6 +83,18 @@ void FlagUI::FalgJudge(int judge)
 	{
 		flagactive = true;
 	}
+}
+bool FlagUI::GetFlag()
+{
+	return this->flagactive;
+}
+void FlagUI::SetEffectEnd()
+{
+	this->effectEnd = true;
+}
+bool FlagUI::GetEffectEnd()
+{
+	return this->effectEnd;
 }
 FlagUI::FlagUI()
 {

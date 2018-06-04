@@ -21,6 +21,7 @@ private:
 	//画像関連
 	Texture image[2];
 	const Box2D Src = Box2D(0, 0, 322, 322);
+	bool effectEnd;
 public:
 	std::string taskName;
 	virtual ~FlagUI();
@@ -37,4 +38,9 @@ public:
 
 	//リザルトタスクで使用する関数
 	bool EasingEnd();				//easingの演出が終了しているか？を判定します
+	bool GetEffectEnd();			//エフェクト演出が終わったかを判定します
+
+	//エフェクトに必要な関数
+	bool GetFlag();					//フラグを返す
+	void SetEffectEnd();			//エフェクトが終了したらエフェクトの方で変更させる
 };
