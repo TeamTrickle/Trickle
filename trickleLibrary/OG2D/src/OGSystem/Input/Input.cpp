@@ -518,3 +518,10 @@ void Input::ResetInputData()
 	ResetKeyBoard(this->key);
 	ResetMouse(this->mouse);
 }
+void Input::registAxis(const float regist)
+{
+	for (auto id = this->pad.begin(); id != this->pad.end(); ++id)
+	{
+		id->registAxisButton(regist);
+	}
+}
