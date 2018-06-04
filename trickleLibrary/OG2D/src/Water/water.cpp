@@ -22,8 +22,8 @@ Water::Water(Vec2 pos)
 	this->currentState = Water::State::LIQUID;
 	this->preState = Water::State::LIQUID;
 	//ƒeƒXƒg
-	this->nowSituation = Water::Situation::Normal;
-	this->currentState = Water::State::SOLID;
+	//this->nowSituation = Water::Situation::Normal;
+	//this->currentState = Water::State::SOLID;
 	//‰Šú•ÛŽ…—Ê
 	this->volume = 0.5;
 	this->invi = 0;
