@@ -25,6 +25,7 @@ private:
 	bool Initialize(const std::string&);
 	bool isPlayable() const;
 	bool isEventExist(const KeyState&);
+	void Reset();
 	std::vector<std::string> Split(const std::string&, const char&);
 
 public:
@@ -67,6 +68,12 @@ public:
 	 */
 	void SetRepeat(const bool&);
 
+	/**
+	 @brief		Ä¶‚ª‚P‰ñI‚í‚é‚ÆŠÖ”‚ğŒÄ‚Ô
+	 @param		ŒÄ‚Î‚ê‚éboolŒ^‚ğ•Ô‚·ŠÖ”Atrue‚ªŒÄ‚Î‚ê‚é‘O‚Ü‚ÅŒJ‚è•Ô‚·
+	 */
+	void SetEndCallback(const std::function<bool()>&);
+
 	void SetPause();
 	void SetPlay();
 
@@ -80,4 +87,5 @@ private:
 	std::queue<KeyEventTimeline>					backupData;
 	std::map<KeyState, std::function<void()>>		events;
 	std::map<Input::in, RecDef::KeyState>			playerKeyState;
+	std::function<bool()>							endCallback;
 };
