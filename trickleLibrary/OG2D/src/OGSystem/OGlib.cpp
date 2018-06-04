@@ -47,6 +47,7 @@ Vec2 Vec2::operator*(float n) { return Vec2(x*n, y*n); }
 void Vec2::operator+=(Vec2& v) { x += v.x; y += v.y; }
 void Vec2::operator*=(float n) { x *= n; y *= n; }
 void Vec2::operator-=(Vec2& v) { x -= v.x; y -= v.y; }
+bool Vec2::operator==(Vec2& v) { return this->x == v.x && this->y == v.y; }
 
 Mat4::Mat4(float ex, float ey, float ez, float ew)
 {

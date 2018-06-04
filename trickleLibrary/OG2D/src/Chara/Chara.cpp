@@ -381,6 +381,24 @@ void Chara::SetReplayEnable()
 	this->player->AddKeyEvent(Input::in::B1, RecDef::KeyState::PRESS, [&]() {
 		this->AutoJump();
 	});
+	this->player->SetEndCallback([&]() -> bool {
+		float judgeDirection = 790.f - this->position.x;
+		if (abs(judgeDirection) > 5.f) {
+			if (judgeDirection > 0) {
+				this->move.x = 5.f;
+				this->direction = Direction::RIGHT;
+				return false;
+			}
+			if (judgeDirection < 0) {
+				this->move.x = -5.f;
+				this->direction = Direction::LEFT;
+				return false;
+			}
+		}
+		this->move.x = judgeDirection;
+		this->direction = (judgeDirection < 0) ? Direction::LEFT : Direction::RIGHT;
+		return true;
+	});
 }
 void Chara::SetRecordEnable()
 {

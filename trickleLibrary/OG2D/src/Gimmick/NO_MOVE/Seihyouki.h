@@ -12,7 +12,7 @@ class Seihyouki : public GameObject, public TaskObject
 	GameObject hitBase;			//水との当たり判定用	なぜ加熱器はないのに製氷機にはあるのか……後に描画もこのクラスで行うことを考えて一応残す
 	bool active;				//稼働中かどうか
 
-	bool Initialize(Vec2&);		//初期化処理
+	bool Initialize(Vec2& , Vec2 range);		//初期化処理
 	void UpDate();				//更新処理
 	void Render2D();			//描画処理
 	bool Finalize();			//解放処理
@@ -22,7 +22,7 @@ class Seihyouki : public GameObject, public TaskObject
 
 public:
 	typedef std::shared_ptr<Seihyouki> SP;
-	static Seihyouki::SP Create(Vec2& pos, bool flag = true);
+	static Seihyouki::SP Create(Vec2& pos, Vec2 range, bool flag = true);
 
 	void changeActive();				//自身の稼働状態を反転させる
 };

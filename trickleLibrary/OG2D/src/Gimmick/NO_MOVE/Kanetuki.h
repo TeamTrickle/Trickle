@@ -15,7 +15,7 @@ class Kanetuki : public GameObject, public TaskObject {
 	std::string soundname;
 
 
-	bool Initialize(Vec2&);		//‰Šú‰»ˆ—
+	bool Initialize(Vec2&, Vec2 range, bool active);		//‰Šú‰»ˆ—
 	void UpDate();				//XVˆ—
 	void Render2D();			//•`‰æˆ—
 	bool Finalize();			//‰ğ•úˆ—
@@ -26,7 +26,7 @@ class Kanetuki : public GameObject, public TaskObject {
 public:
 	~Kanetuki();
 	typedef std::shared_ptr<Kanetuki> SP;
-	static Kanetuki::SP Create(Vec2& pos, bool flag = true);
+	static Kanetuki::SP Create(Vec2& pos, Vec2 range, bool active, bool flag = true);
 
 	void changeActive();				//©g‚Ì‰Ò“­ó‘Ô‚ğ”½“]‚³‚¹‚é
 

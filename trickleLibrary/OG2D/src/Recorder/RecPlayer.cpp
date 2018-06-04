@@ -58,6 +58,13 @@ bool RecPlayer::isEventExist(const KeyState& s) {
 	return events.find(s) != events.end();
 }
 
+void RecPlayer::Reset() {
+	recData = backupData;
+	timer.Stop();
+	timer.Start();
+	printLog("RecPlayer --- Repeat!");
+}
+
 std::vector<std::string> RecPlayer::Split(const std::string& fullStr, const char& keyword)
 {
 	std::vector<std::string> ret;
@@ -109,10 +116,16 @@ void RecPlayer::Play() {
 		}
 	}
 	else if (isRepeat) {
-		recData = backupData;
-		timer.Stop();
-		timer.Start();
-		printLog("RecPlayer --- Repeat!");
+		// Callbackä÷êîÇ™ë∂ç›Ç∑ÇÈèÍçá
+		if (endCallback) {
+			if (endCallback()) {
+				Reset();
+			}
+		}
+		// Ç»Ç¢Ç∆ÇΩÇæåJÇËï‘Ç∑
+		else {
+			Reset();
+		}
 	}
 }
 
@@ -129,6 +142,10 @@ bool RecPlayer::isEnded() const {
 
 void RecPlayer::SetRepeat(const bool& r) {
 	isRepeat = r;
+}
+
+void RecPlayer::SetEndCallback(const std::function<bool()>& cb) {
+	endCallback = cb;
 }
 
 void RecPlayer::SetPause() {

@@ -11,12 +11,12 @@ Seihyouki::Seihyouki()
 {}
 
 
-bool Seihyouki::Initialize(Vec2& pos) {
+bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
 	this->taskName = "Seihyouki";	//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 
 	changeStateCnt = 0;
-	hitBase.CreateObject(Cube, pos, Vec2(64, 64), 0);
+	hitBase.CreateObject(Cube, pos, range, 0);
 	this->active = false;
 	cout << "»•X‹@@‰Šú‰»" << endl;
 	return true;
@@ -56,7 +56,7 @@ void Seihyouki::toIce() {
 void Seihyouki::changeActive() {
 	this->active = !this->active;
 }
-Seihyouki::SP Seihyouki::Create(Vec2& pos, bool flag_) {
+Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, bool flag_) {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
 	if (to)
 	{
@@ -65,7 +65,7 @@ Seihyouki::SP Seihyouki::Create(Vec2& pos, bool flag_) {
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos))
+		if (!to->Initialize(pos, range))
 		{
 			to->Kill();
 		}

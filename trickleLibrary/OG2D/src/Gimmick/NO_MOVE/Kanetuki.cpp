@@ -3,12 +3,13 @@ using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
+#include "Task\Task_Game.h"
 
 
 Kanetuki::Kanetuki()
 	:
-	maxChangeTimeLiquid(5),
-	maxChangeTimeSolid(8)
+	maxChangeTimeLiquid(8),
+	maxChangeTimeSolid(90)
 {
 	cout << "加熱器　生成" << endl;
 	//サウンドファイル名	
@@ -22,13 +23,13 @@ Kanetuki::~Kanetuki()
 }
 
 
-bool Kanetuki::Initialize(Vec2& pos) {
+bool Kanetuki::Initialize(Vec2& pos, Vec2 range, bool active) {
 	this->taskName = "Kanetuki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
 	changeStateCnt = 0;
-	CreateObject(Cube, pos, Vec2(64, 64), 0);
-	active = false;
+	CreateObject(Cube, pos, range, 0);
+	this->active = active;
 
 	//サウンドに関する情報
 	startflag = false;
@@ -89,14 +90,21 @@ void Kanetuki::toSteam() {
 		//水との当たり判定
 		if ((*id)->hit(*this))
 		{	//　個体　⇒　液体
-			if ((*id)->GetState() == Water::State::SOLID)
+			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation()!=Water::Situation::Newfrom)
 			{
 				changeStateCnt++;
+				cout << changeStateCnt++ << endl;
 				//一定の時間が経ったら・・・
 				if (changeStateCnt >= maxChangeTimeSolid)
 				{
 					//液体にする
+					//auto water = Water::Create((*id)->position);
+					//Texture watertex;
+					//auto game = OGge->GetTask<Game>("game");
+					//water->SetTexture(&game->getWaterTex());
 					(*id)->SetState(Water::State::LIQUID);
+					(*id)->SetSituation(Water::Situation::Newfrom);
+//					(*id)->Kill();
 					changeStateCnt = 0;
 				}
 			}
@@ -104,6 +112,7 @@ void Kanetuki::toSteam() {
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
 				changeStateCnt++;
+				cout << changeStateCnt << endl;
 				//一定の時間が経ったら・・・
 				if (changeStateCnt >= maxChangeTimeLiquid)
 				{
@@ -118,7 +127,7 @@ void Kanetuki::toSteam() {
 void Kanetuki::changeActive() {
 	this->active = !this->active;
 }
-Kanetuki::SP Kanetuki::Create(Vec2& pos, bool flag_) {
+Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2 range, bool active, bool flag_) {
 	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
 	if (to)
 	{
@@ -127,7 +136,7 @@ Kanetuki::SP Kanetuki::Create(Vec2& pos, bool flag_) {
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos))
+		if (!to->Initialize(pos, range, active))
 		{
 			to->Kill();
 		}

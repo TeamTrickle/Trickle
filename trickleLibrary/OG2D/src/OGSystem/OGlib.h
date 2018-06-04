@@ -44,6 +44,7 @@ public:
 	void operator+=(Vec2&);
 	void operator*=(float);
 	void operator-=(Vec2&);
+	bool operator==(Vec2&);
 };
 class Mat4 {
 public:
