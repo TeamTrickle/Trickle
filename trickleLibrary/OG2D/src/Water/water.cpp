@@ -23,7 +23,7 @@ Water::Water(Vec2 pos)
 	this->preState = Water::State::LIQUID;
 	//ƒeƒXƒg
 	//this->nowSituation = Water::Situation::Normal;
-	//this->currentState = Water::State::GAS;
+	//this->currentState = Water::State::SOLID;
 	//‰Šú•ÛŽ…—Ê
 	this->volume = 0.5;
 	this->invi = 0;
@@ -709,6 +709,21 @@ void Water::CheckState()
 			break;
 		case State::SOLID:
 			this->Scale = this->maxSize;
+			auto waters = OGge->GetTasks<Water>("water");
+			for (auto id = waters->begin(); id != waters->end(); ++id)
+			{
+				if (this->id != (*id)->id)
+				{
+					if ((*id)->GetState() == State::SOLID)
+					{
+						if (this->hit(*(*id)))
+						{
+							(*id)->SetSituation(Situation::Normal);
+							(*id)->SetState(State::LIQUID);
+						}
+					}
+				}
+			}
 			this->objectTag = "SOLID";
 			this->Radius = { 1.0f,1.0f };
 			this->nowSituation = Situation::Normal;
