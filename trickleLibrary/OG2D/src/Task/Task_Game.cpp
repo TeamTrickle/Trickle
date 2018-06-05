@@ -453,8 +453,8 @@ void Game::Camera_move()
 		float PlayerCenter_x = NowCameraSize.x / 2.0f;
 		float PlayerCenter_y = NowCameraSize.y / 2.0f;
 		//カメラ座標を求める
-		float camera_x = float(player->position.x) - PlayerCenter_x;
-		float camera_y = float(player->position.y) - PlayerCenter_y;
+		float camera_x = float(player->GetPos().x) - PlayerCenter_x;
+		float camera_y = float(player->GetPos().y) - PlayerCenter_y;
 		//カメラの座標を更新
 		NowCameraPos.x = camera_x;
 		NowCameraPos.y = camera_y;
@@ -463,7 +463,7 @@ void Game::Camera_move()
 		//左右のスクロール範囲の設定(サイズの10分の1)
 		float Boundary = NowCameraSize.x / 10.0f;
 		//現在スクロール値とプレイヤーの座標の差を修正
-		Vec2 NowPlayerPos = { player->position.x - NowCameraPos.x,player->position.y - NowCameraPos.y };
+		Vec2 NowPlayerPos = { player->GetPos().x - NowCameraPos.x,player->GetPos().y - NowCameraPos.y };
 		//x座標
 		if (NowPlayerPos.x < Boundary) {
 			NowCameraPos.x = NowPlayerPos.x - Boundary;
@@ -482,13 +482,13 @@ void Game::Camera_move()
 		if (NowCameraPos.x < 0) {
 			NowCameraPos.x = 0;
 		}
-		if (NowCameraPos.x + NowCameraSize.x > (map->mapSize.x - 1) * map->DrawSize.x) {
+		if (NowCameraPos.x + NowCameraSize.x >(map->mapSize.x - 1) * map->DrawSize.x) {
 			NowCameraPos.x = ((map->mapSize.x - 1)* map->DrawSize.x) - NowCameraSize.x;
 		}
 		if (NowCameraPos.y < 0) {
 			NowCameraPos.y = 0;
 		}
-		if (NowCameraPos.y + NowCameraSize.y > (map->mapSize.y)* map->DrawSize.y) {
+		if (NowCameraPos.y + NowCameraSize.y >(map->mapSize.y)* map->DrawSize.y) {
 			NowCameraPos.y = ((map->mapSize.y)* map->DrawSize.y) - NowCameraSize.y;
 		}
 

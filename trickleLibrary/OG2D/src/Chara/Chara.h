@@ -18,6 +18,7 @@ public:
 		Walk,		//歩き中
 		Jump_M,		//ジャンプ(関数と名前が被ったのでここで変えました）
 		Fall,		//落下
+		Ladder,		//梯子
 	};
 private:
 	Texture Image;		//使用画像
@@ -45,6 +46,8 @@ private:
 	Recorder* recorder = nullptr;
 	float time;
 	float* Restriction_x;	//描画の制限をかけるx座標
+	int srcX = 586;
+	int srcY = 575;			//プレイヤ画像の元々のサイズ
 public:
 	Chara(std::string&, Vec2&);	//コンストラクタ
 	virtual ~Chara();			//デストラクタ
@@ -74,5 +77,6 @@ public:
 	Direction nowDirection() const;			//現在の向きを返す
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };	//Normal状態のアニメーション
 	int walk[9] = { 0,1,2,3,4,5,6,7,8 };	//Walk状態のアニメーション
-	Box2D returnSrc(Motion motion);							//motionによってsrcを返す
+	int ladder[2] = { 0,1 };				//ladder_ani状態のアニメーション
+	Box2D returnSrc(Motion motion);			//motionによってsrcを返す
 };
