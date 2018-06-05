@@ -89,42 +89,7 @@ void Player::UpDate()
 		this->BucketMove();
 		if (OGge->in->down(In::B2))
 		{
-			if (this->hold)
-			{
-				//Œ³‚É–ß‚·
-				this->state = State::NORMAL;
-				//Ž‚Á‚Ä‚¢‚é”»’è‚ðŒ³‚É–ß‚·
-				auto bucket = OGge->GetTasks<Bucket>("bucket");
-				for (auto id = bucket->begin(); id != bucket->end(); ++id)
-				{
-					if ((*id)->GetHold())
-					{
-						(*id)->HoldCheck(false);
-						this->hold = false;
-					}
-				}
-				auto waters = OGge->GetTasks<Water>("water");
-				for (auto id = waters->begin(); id != waters->end(); ++id)
-				{
-					if ((*id)->GetHold())
-					{
-						if (this->direction == Direction::LEFT)
-						{
-							(*id)->position.x -= this->Scale.x;
-						}
-						else
-						{
-							(*id)->position.x += this->Scale.x;
-						}
-						(*id)->HoldCheck(false);
-						(*id)->ResetMove();
-						this->hold = false;
-					}
-				}
-				this->inv = 10;
-				this->position.y += 64.f;
-				this->Scale.y -= 64.f;
-			}
+			this->ReleaseHold();
 		}
 		break;
 	case State::NORMAL:
@@ -789,17 +754,17 @@ Vec2 Player::Animation::Move()
 	{
 		if (this->animationVec.y > 0.f)
 		{
-			move.y += this->animationVec.y;
+			move.y += animationVec.y;
 			player->motion = Motion::Ladder;
 			this->animationVec.y = 0.f;
 		}
 		else if (this->animationVec.y < 0.f)
 		{
-			move.y += this->animationVec.y;
+			move.y += animationVec.y;
 			player->motion = Motion::Normal;
 			this->animationVec.y = 0.f;
 		}
-		else 
+		else
 		{
 			player->motion = Motion::Ladder;
 		}
@@ -834,6 +799,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 		case Motion::Fall:
 			src = Box2D(1 * this->srcX, 2 *  this->srcY, this->srcX,  this->srcY);
 			break;
+		
 		case Motion::Ladder:
 			src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * this->srcX, 3 *  this->srcY, this->srcX,  this->srcY);
 			break;
@@ -852,6 +818,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 				}
 			}
 			break;
+		
 		}
 	}
 	if (state == ANIMATION)
@@ -1008,6 +975,50 @@ void Player::SetPos(Vec2& pos)
 Vec2 Player::GetPos() const
 {
 	return this->position;
+}
+bool Player::ReleaseHold()
+{
+	if (this->hold)
+	{
+		//Œ³‚É–ß‚·
+		this->state = State::NORMAL;
+		//Ž‚Á‚Ä‚¢‚é”»’è‚ðŒ³‚É–ß‚·
+		auto bucket = OGge->GetTasks<Bucket>("bucket");
+		for (auto id = bucket->begin(); id != bucket->end(); ++id)
+		{
+			if ((*id)->GetHold())
+			{
+				(*id)->HoldCheck(false);
+				this->hold = false;
+			}
+		}
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if ((*id)->GetHold())
+			{
+				if (OGge->in->down(In::B2))
+				{
+					if (this->direction == Direction::LEFT)
+					{
+						(*id)->position.x -= this->Scale.x;
+					}
+					else
+					{
+						(*id)->position.x += this->Scale.x;
+					}
+				}
+				(*id)->HoldCheck(false);
+				(*id)->ResetMove();
+				this->hold = false;
+			}
+		}
+		this->inv = 10;
+		this->position.y += 64.f;
+		this->Scale.y -= 64.f;
+		return true;
+	}
+	return false;
 }
 bool Player::LadderJumpCheck()
 {
