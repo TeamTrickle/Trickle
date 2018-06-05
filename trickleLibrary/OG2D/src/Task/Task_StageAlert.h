@@ -1,5 +1,7 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
+#include <queue>
+#include <functional>
 
 
 /**
@@ -10,12 +12,19 @@
 
 class StageAlert : public TaskObject {
 private:
+	typedef struct _Animation {
+		Box2D					draw;
+		Box2D					src;
+		std::function<bool()>	action;
+	}Animation;
 	typedef std::pair<std::string, bool> Achievement;
 
 	bool Initialize();
 	virtual void UpDate() override;
 	virtual void Render2D() override;
 	void Finalize();
+
+	inline bool isAnimPlaying() const;
 
 public:
 	explicit StageAlert() {}
@@ -29,6 +38,11 @@ public:
 	 */
 	bool SetStageData(const std::string&);
 
+	/**
+	 @brief			転換するアニメーションを流します
+	 */
+	void AnimPlay();
+
 	typedef std::shared_ptr<StageAlert> SP;
 	static SP Create(bool = true);
 
@@ -39,6 +53,9 @@ private:
 	std::string					stageName;
 	bool						isClear = false;
 	Achievement					achievements[MAX_ACHIEVEMENT];
+	std::queue<Animation>		anis_origin;
+	std::queue<Animation>		anis;
+	Animation*					playingAnime;
 
 	Texture						background;
 	Texture						star;

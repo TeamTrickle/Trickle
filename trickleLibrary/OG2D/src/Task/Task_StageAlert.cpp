@@ -6,6 +6,11 @@ StageAlert::~StageAlert() {
 	this->Finalize();
 }
 
+void StageAlert::AnimPlay() {
+	playingAnime = &anis.front();
+	anis = anis_origin;
+}
+
 StageAlert::SP StageAlert::Create(bool flag_)
 {
 	auto to = StageAlert::SP(new StageAlert());
@@ -30,13 +35,28 @@ bool StageAlert::Initialize() {
 	mission.Create((std::string)"stagealert_mission.png");
 	clearFlag.Create((std::string)"stagealert_clearflag.png");
 
+	// Œ³‰æ‘œ‰Šú‰»
+	Animation seq1{
+		Box2D(50, 50, 100, 100),
+		Box2D(50, 50, 100, 100),
+		[&]() -> bool {
+			return true;
+		}
+	};
+	anis_origin.push(seq1);
+
 	__super::Init((std::string)"stagealert");
 	__super::SetDrawOrder(0.8f);
 	return true;
 }
 
 void StageAlert::UpDate() {
-	
+	if (isAnimPlaying()) {
+		if (!playingAnime && playingAnime->action()) {
+			anis.pop();
+			playingAnime = &anis.front();
+		}
+	}
 }
 
 void StageAlert::Render2D() {
@@ -48,6 +68,10 @@ void StageAlert::Finalize() {
 	star.Finalize();
 	mission.Finalize();
 	clearFlag.Finalize();
+}
+
+inline bool StageAlert::isAnimPlaying() const {
+	return !anis.empty();
 }
 
 
