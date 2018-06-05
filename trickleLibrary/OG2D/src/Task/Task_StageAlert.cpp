@@ -7,8 +7,8 @@ StageAlert::~StageAlert() {
 }
 
 void StageAlert::AnimPlay() {
-	playingAnime = &anis.front();
 	anis = anis_origin;
+	playingAnime = &anis.front();
 }
 
 StageAlert::SP StageAlert::Create(bool flag_)
@@ -34,27 +34,43 @@ bool StageAlert::Initialize() {
 	star.Create((std::string)"stagealert_star.png");
 	mission.Create((std::string)"stagealert_mission.png");
 	clearFlag.Create((std::string)"stagealert_clearflag.png");
-
-	// Œ³‰æ‘œ‰Šú‰»
+	
+	auto bgSize = background.GetTextureSize();
+	
 	Animation seq1{
-		Box2D(50, 50, 100, 100),
-		Box2D(50, 50, 100, 100),
+		Box2D(50, 50, (int)bgSize.x + 50, (int)bgSize.y + 50),
+		Box2D(0, 0, (int)bgSize.x, (int)bgSize.y),
 		[&]() -> bool {
-			return true;
+			if (!seq1.ease.isplay()) {
+				std::cout << "seq1 I—¹" << std::endl;
+				return true;
+			}
+			seq1.draw.w = 
+				seq1.ease.bounce.In(seq1.ease.Time(3.f),
+									0.f,
+									bgSize.x,
+									3.f);
+			return false;
 		}
 	};
 	anis_origin.push(seq1);
 
 	__super::Init((std::string)"stagealert");
 	__super::SetDrawOrder(0.8f);
+	std::cout << "stagealert ¶¬" << std::endl;
 	return true;
 }
 
 void StageAlert::UpDate() {
-	if (isAnimPlaying()) {
-		if (!playingAnime && playingAnime->action()) {
+	if (isAnimPlayable()) {
+		if (!playingAnime || playingAnime->action()) {
 			anis.pop();
-			playingAnime = &anis.front();
+			if (isAnimPlayable()) {
+				playingAnime = &anis.front();
+			}
+			else {
+				playingAnime = nullptr;
+			}
 		}
 	}
 }
@@ -70,8 +86,13 @@ void StageAlert::Finalize() {
 	clearFlag.Finalize();
 }
 
-inline bool StageAlert::isAnimPlaying() const {
+inline bool StageAlert::isAnimPlayable() const {
 	return !anis.empty();
+}
+
+inline Box2D StageAlert::GetFixedCameraCoord(const Box2D& origin) const {
+	Vec2 camPos = OGge->camera->GetPos();
+	return Box2D(origin.x + camPos.x, origin.y + camPos.y, origin.w, origin.h);
 }
 
 

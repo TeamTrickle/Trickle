@@ -212,6 +212,10 @@ void StageSelect::From2()
 	//ˆÚ“®‚ªI—¹‚µ‚½‚ç
 	if (!this->camera_anim.isPlay())
 	{
+		auto board = OGge->GetTask<StageAlert>("stagealert");
+		if (board) {
+			board->AnimPlay();
+		}
 		//ŽŸ‚ÖˆÚ“®
 		this->mode = Mode::from3;
 	}
@@ -364,11 +368,6 @@ void StageSelect::From3()
 				this->mode = Mode::from4;
 			}
 		}
-	}
-
-	auto board = OGge->GetTask<StageAlert>("stagealert");
-	if (board) {
-
 	}
 }
 void StageSelect::From4()

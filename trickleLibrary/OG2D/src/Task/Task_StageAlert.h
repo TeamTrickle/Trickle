@@ -16,6 +16,7 @@ private:
 		Box2D					draw;
 		Box2D					src;
 		std::function<bool()>	action;
+		Easing					ease;
 	}Animation;
 	typedef std::pair<std::string, bool> Achievement;
 
@@ -24,7 +25,8 @@ private:
 	virtual void Render2D() override;
 	void Finalize();
 
-	inline bool isAnimPlaying() const;
+	inline bool isAnimPlayable() const;
+	inline Box2D GetFixedCameraCoord(const Box2D&) const;
 
 public:
 	explicit StageAlert() {}
