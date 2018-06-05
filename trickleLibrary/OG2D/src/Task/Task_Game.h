@@ -39,6 +39,7 @@ private:
 	Texture waterTex;
 	Texture playerTex;
 	Texture fanTex;
+	Texture fireice;
 
 	std::string gamesoundname;
 	std::string tutorialsoundname;

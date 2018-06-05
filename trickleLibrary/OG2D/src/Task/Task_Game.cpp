@@ -83,6 +83,8 @@ bool Game::Initialize()
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
+	this->fireice.Create((std::string)"fireice.png");
+	rm->SetTextureData((std::string)"fireIce", &this->fireice);
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -181,7 +183,7 @@ bool Game::Initialize()
 		//fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
 		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, true);
 		//加熱器生成
-		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), false);		//ToDo:位置を変えるのではなく判定範囲を広げること
+		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), false);
 		//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 20, 64 * 15 - 32), false);
 		//製氷機生成
 		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64));

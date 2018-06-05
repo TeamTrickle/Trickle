@@ -16,9 +16,12 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
 	changeStateCnt = 0;
-	hitBase.CreateObject(Cube, pos, range, 0);
+	CreateObject(Cube, pos, range, 0);
 	this->active = false;
 	cout << "製氷機　初期化" << endl;
+	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
+
+	this->animCnt = 0;
 	return true;
 }
 void Seihyouki::UpDate() {
@@ -28,7 +31,28 @@ void Seihyouki::UpDate() {
 }
 void Seihyouki::Render2D() {
 	//デバッグ用
-	if(active) hitBase.LineDraw();
+	
+	if (active) {
+		LineDraw();
+		++animCnt;
+		Box2D draw, src;
+		if (Scale.x > 64) {
+			Box2D draw = { position.x, position.y, Scale.x, Scale.y };
+			draw.OffsetSize();
+
+			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+			src.OffsetSize();
+		}
+		else {
+			Box2D draw = { position.x, position.y, Scale.x, Scale.y };
+			draw.OffsetSize();
+
+			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+			src.OffsetSize();
+		}
+
+		this->coldImg->Draw(draw, src);
+	}
 }
 bool Seihyouki::Finalize() {
 	//画像をこっちで読み込むならTextureのFinalize()を呼ぶこと
@@ -55,6 +79,10 @@ void Seihyouki::toIce() {
 }
 void Seihyouki::changeActive() {
 	this->active = !this->active;
+}
+void Seihyouki::SetTexture(Texture* tex)
+{
+	this->coldImg = tex;
 }
 Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, bool flag_) {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());

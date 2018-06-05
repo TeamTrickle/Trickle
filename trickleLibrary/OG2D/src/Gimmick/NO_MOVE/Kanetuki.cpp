@@ -39,7 +39,25 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, bool active) {
 	//サウンドの生成　　着火
 	soundstart.create(startsoundname, false);
 
+	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
+	this->animCnt = 0;
+
+	draw.clear();
+	int i = Scale.x;
+	this->hotNum = 0;
+	for (int i = Scale.x; i <= 0; i -= 64)
+	{
+		++hotNum;
+	}
+	draw.resize(hotNum);
+	for (int i = 0; i < hotNum; ++i)
+	{
+		draw.push_back(Box2D(position.x*i, position.y, Scale.x, Scale.y));
+		draw[i].OffsetSize();
+	}
+
 	cout << "加熱器　初期化" << endl;
+
 	return true;
 }
 void Kanetuki::UpDate() {
@@ -76,8 +94,19 @@ void Kanetuki::UpDate() {
 
 }
 void Kanetuki::Render2D() {
-	//デバッグ用
-	if(active) this->LineDraw();
+	
+	if (active) {
+		LineDraw();			//デバッグ用
+		++animCnt;
+		Box2D src;
+
+		src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
+		src.OffsetSize();
+
+		for (auto draw_ : draw) {
+			this->hotImg->Draw(draw_, src);
+		}
+	}
 }
 bool Kanetuki::Finalize() {
 	//画像をこっちで読み込むならTextureのFinalize()を呼ぶこと
@@ -127,6 +156,10 @@ void Kanetuki::toSteam() {
 }
 void Kanetuki::changeActive() {
 	this->active = !this->active;
+}
+void Kanetuki::SetTexture(Texture* tex)
+{
+	this->hotImg = tex;
 }
 Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2 range, bool active, bool flag_) {
 	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());

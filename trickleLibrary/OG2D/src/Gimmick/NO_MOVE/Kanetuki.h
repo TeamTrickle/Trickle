@@ -2,6 +2,7 @@
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include <vector>
 
 
 class Kanetuki : public GameObject, public TaskObject {
@@ -13,7 +14,11 @@ class Kanetuki : public GameObject, public TaskObject {
 	bool active;					//稼働中かどうか
 	std::string startsoundname;
 	std::string soundname;
+	Texture* hotImg;			//画像データ
+	int animCnt;				//アニメーションカウント
+	int hotNum;				//横幅によって増える画像の数
 
+	std::vector<Box2D> draw;
 
 	bool Initialize(Vec2&, Vec2 range, bool active);		//初期化処理
 	void UpDate();				//更新処理
@@ -34,6 +39,7 @@ public:
 	Sound sound;
 	bool startflag;       //サウンドを再生していいかのフラッグ
 	bool nowplay;
+	void SetTexture(Texture*);
 
 };
 
