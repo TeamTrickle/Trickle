@@ -1,6 +1,7 @@
 #include "StageSelect.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
+#include "Task\Task_StageAlert.h"
 #include "Chara\Chara.h"
 #include "Back\Back.h"
 #include "Map\Map.h"
@@ -46,6 +47,8 @@ bool StageSelect::Initialize()
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.1f);
+	//ステージ概要表示用案内板
+	auto board = StageAlert::Create();
 	//サウンドの生成
 	//タグ指定
 	__super::Init((std::string)"select");
@@ -149,6 +152,11 @@ bool StageSelect::Finalize()
 	}
 	auto gates = OGge->GetTasks<Gate>("gate");
 	for (auto id = gates->begin(); id != gates->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto alert = OGge->GetTasks<StageAlert>("stagealert");
+	for (auto id = alert->begin(); id != alert->end(); ++id)
 	{
 		(*id)->Kill();
 	}
@@ -356,6 +364,11 @@ void StageSelect::From3()
 				this->mode = Mode::from4;
 			}
 		}
+	}
+
+	auto board = OGge->GetTask<StageAlert>("stagealert");
+	if (board) {
+
 	}
 }
 void StageSelect::From4()
