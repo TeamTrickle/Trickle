@@ -754,13 +754,13 @@ Vec2 Player::Animation::Move()
 	{
 		if (this->animationVec.y > 0.f)
 		{
-			move.y += animationVec.y;
+			move.y += this->animationVec.y;
 			player->motion = Motion::Ladder;
 			this->animationVec.y = 0.f;
 		}
 		else if (this->animationVec.y < 0.f)
 		{
-			move.y += animationVec.y;
+			move.y += this->animationVec.y;
 			player->motion = Motion::Normal;
 			this->animationVec.y = 0.f;
 		}

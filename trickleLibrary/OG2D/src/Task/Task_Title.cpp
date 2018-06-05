@@ -187,7 +187,7 @@ void Title::UpDate()
 		if (this->tex_a >= 1.0f)
 		{
 			this->mode = from5;
-			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+			auto Npc = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 			Npc->SetReplayEnable();
 		}
 	}
@@ -462,7 +462,7 @@ void Title::BackTitleSkip()
 	OGge->camera->SetSize(Vec2(1440, 810));
 	this->flowerVolume = 1.0f;
 	this->tex_a = 1.0f;
-	auto npc2 = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+	auto npc2 = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 	npc2->SetReplayEnable();
 	this->sound->play();
 }
@@ -486,7 +486,7 @@ void Title::SkipMove()
 	{
 		npc->Kill();
 	}
-	auto npc2 = Chara::Create((std::string)"player2.png", Vec2(790, 639));
+	auto npc2 = Chara::Create((std::string)"player.png", Vec2(790, 639));
 	npc2->SetReplayEnable();
 	this->sound->play();
 	this->isSkip = false;
