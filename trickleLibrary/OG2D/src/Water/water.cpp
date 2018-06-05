@@ -411,12 +411,15 @@ void Water::MoveWATERCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -444,12 +447,15 @@ void Water::MoveWATERCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -484,10 +490,13 @@ void Water::MoveGASCheck(Vec2 est)
 			{
 				if (map->hitBase[y][x].objectTag == "Floor")
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -515,12 +524,15 @@ void Water::MoveGASCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor")
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -554,14 +566,17 @@ void Water::MoveSOILDCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" || 
-					map->hitBase[y][x].objectTag == "Soil" || 
-					map->hitBase[y][x].objectTag == "Net")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "Soil" ||
+						map->hitBase[y][x].objectTag == "Net")
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -572,10 +587,13 @@ void Water::MoveSOILDCheck(Vec2 est)
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (this->hit(*(*id)))
+					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(*(*id)))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -603,14 +621,17 @@ void Water::MoveSOILDCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" ||
-					map->hitBase[y][x].objectTag == "Soil" ||
-					map->hitBase[y][x].objectTag == "Net")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "Soil" ||
+						map->hitBase[y][x].objectTag == "Net")
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -621,10 +642,13 @@ void Water::MoveSOILDCheck(Vec2 est)
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (this->hit(*(*id)))
+					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(*(*id)))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
