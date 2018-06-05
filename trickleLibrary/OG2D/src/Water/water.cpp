@@ -62,11 +62,8 @@ Water::~Water()
 
 bool Water::Initialize() 
 {
-	
 	soundplay = true;
 	sound.create(soundname, false);
-	sound.volume(1.0f);
-	OGge->soundManager->SetSound(&sound);
 
 	return true;
 }
@@ -95,6 +92,8 @@ void Water::UpDate()
 			this->nowSituation = Water::UpDeleteform();
 			if (soundplay)
 			{
+				volControl.Play(this->position, 1000.0f, 1.0f,sound);
+
 				sound.play();
 				soundplay = false;   //˜A‘±‚µ‚ÄÄ¶‚³‚ê‚é‚±‚Æ‚ğ–h‚®
 			}

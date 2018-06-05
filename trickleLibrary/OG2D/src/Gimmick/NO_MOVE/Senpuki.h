@@ -15,6 +15,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include "Switch.h"
+#include "VolumeControl\volumeControl.h"
 
 class Switch;
 
@@ -28,6 +29,7 @@ public:
 	//サウンド周りの情報
 	bool startflag;
 	Sound sound;
+	VolumeControl volControl;
 
 	typedef std::shared_ptr<Fan> SP;
 	//座標、風の範囲(マス数)、向き、スイッチがオフ(初期状態)で稼働しているならtrue

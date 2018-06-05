@@ -49,6 +49,7 @@ void Kanetuki::UpDate() {
 	//ƒTƒEƒ“ƒhŠÖŒW
 	//‰Š‚Ì‰¹ºÄ¶
 	this->nowplay = sound.isplay();
+	volControl.Play(this->position, 700.0f, 1.0f,sound);
 	if (active)
 	{
 		if (startflag)

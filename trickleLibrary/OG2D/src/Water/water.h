@@ -11,6 +11,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include <algorithm>
+#include "VolumeControl\volumeControl.h"
 
 class Water : public GameObject,public TaskObject {
 
@@ -77,9 +78,10 @@ public:
 
 	void SetMaxSize(Vec2&);
 	//ÉTÉEÉìÉhÇÃê∂ê¨
-	Sound sound;
 	bool soundplay;
-
+	Sound sound;
+	VolumeControl volControl;
+	
 	
 	bool GetHold() const;
 	void HoldCheck(bool);
