@@ -95,6 +95,7 @@ private:
 	void SwitchCheck();											//スイッチとの当たり判定
 	bool LadderJumpCheck();										//梯子中にジャンプを行う際の当たり判定
 	bool PutCheck();											//置く動作を行えるかの判定
+	bool HeadSolidCheck();										//頭上氷判定
 public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);

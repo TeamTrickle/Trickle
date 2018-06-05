@@ -165,6 +165,10 @@ void Player::UpDate()
 				animation.timeCnt = 0;
 				this->SwitchCheck();
 			}
+			if (this->HeadSolidCheck())
+			{
+				this->state = State::BUCKET;
+			}
 			break;
 		case Motion::Jump:
 			//”ò‚Ño‚µ‚½‚Æ‚«‚É‰Šú’l‚ğ“ü‚ê‚é
@@ -262,6 +266,10 @@ void Player::UpDate()
 				}
 			}
 			this->TohaveObjectHit();
+			if (this->HeadSolidCheck())
+			{
+				this->state = State::BUCKET;
+			}
 			break;
 		case Switch_M:
 			if (animation.timeCnt > 29) {
@@ -394,6 +402,35 @@ bool Player::HeadCheck(std::string& objname_, int n)
 						this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - 1.0f));
 						return true;
 					}
+				}
+			}
+		}
+	}
+	return false;
+}
+bool Player::HeadSolidCheck()
+{
+	if (this->hold)
+	{
+		return false;
+	}
+	GameObject head;
+	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if ((*id)->objectTag == "SOLID")
+		{
+			if (head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (head.hit(*(*id)))
+				{
+					(*id)->HoldCheck(true);
+					this->hold = true;
+					this->position.y -= 64.f;
+					this->Scale.y += 64.f;
+					return true;
+					return true;
 				}
 			}
 		}
