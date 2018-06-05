@@ -2,6 +2,7 @@
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "VolumeControl\volumeControl.h"
 
 
 class Kanetuki : public GameObject, public TaskObject {
@@ -32,6 +33,8 @@ public:
 
 	Sound soundstart;
 	Sound sound;
+	VolumeControl volControl;
+	
 	bool startflag;       //サウンドを再生していいかのフラッグ
 	bool nowplay;
 

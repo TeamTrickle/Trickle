@@ -1,7 +1,7 @@
 #include "water.h"
 #include "Map\Map.h"
 #include "Block\block.h"
-
+#include "Player\Player.h"
 
 Water::Water(Vec2 pos)
 {
@@ -23,7 +23,7 @@ Water::Water(Vec2 pos)
 	this->preState = Water::State::LIQUID;
 	//テスト
 	//this->nowSituation = Water::Situation::Normal;
-	//this->currentState = Water::State::GAS;
+	//this->currentState = Water::State::SOLID;
 	//初期保持水量
 	this->volume = 0.5;
 	this->invi = 0;
@@ -39,7 +39,11 @@ Water::Water(Vec2 pos)
 	auto id = waters->begin();
 	while (id != waters->end())
 	{
-		++i;
+		if ((*id)->id == i)
+		{
+			++i;
+			id = waters->begin();
+		}
 		++id;
 	}
 	this->id = i;
@@ -58,11 +62,8 @@ Water::~Water()
 
 bool Water::Initialize() 
 {
-	
 	soundplay = true;
 	sound.create(soundname, false);
-	sound.volume(1.0f);
-	OGge->soundManager->SetSound(&sound);
 
 	return true;
 }
@@ -91,6 +92,8 @@ void Water::UpDate()
 			this->nowSituation = Water::UpDeleteform();
 			if (soundplay)
 			{
+				volControl.Play(this->position, 1000.0f, 1.0f,sound);
+
 				sound.play();
 				soundplay = false;   //連続して再生されることを防ぐ
 			}
@@ -160,6 +163,10 @@ void Water::UpDate()
 		{
 			this->Friction();
 			this->MoveSOILDCheck(move);
+			if (this->HeadSolidCheck())
+			{
+				this->SetState(State::LIQUID);
+			}
 		}
 		break;
 	}
@@ -294,7 +301,7 @@ void Water::Friction()
 	}
 	if (this->currentState != State::GAS)
 	{
-		if (!this->FootCheck(std::string("Floor")) || !this->FootCheck(std::string("SOLID")) || this->move.y < 0)
+		if (!this->FootCheck(std::string("Floor")) || !this->FootSolidCheck() || this->move.y < 0)
 		{
 			this->move.y = std::min(this->move.y + this->GRAVITY, this->MAX_FALL);
 		}
@@ -335,6 +342,40 @@ bool Water::FootCheck(std::string& objtag,int n)
 		if (foot.hit(*(*id)))
 		{
 			return true;
+		}
+	}
+	if (this->currentState == State::SOLID)
+	{
+		auto buckets = OGge->GetTasks<Bucket>("bucket");
+		for (auto id = buckets->begin(); id != buckets->end(); ++id)
+		{
+			if (foot.hit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Water::FootSolidCheck()
+{
+	GameObject foot;
+	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
+	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f) + 0.1f), Vec2(this->Scale.x - x_, 0.9f), 0.0f);
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if (this->id != (*id)->id)
+		{
+			if ((*id)->objectTag == "SOLID")
+			{
+				if (foot.hit(*(*id)))
+				{
+					return true;
+				}
+			}
 		}
 	}
 	return false;
@@ -624,6 +665,29 @@ bool Water::HeadCheck(std::string& objtag,int n)
 	return false;
 }
 
+bool Water::HeadSolidCheck()
+{
+	GameObject head;
+	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
+	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
+	head.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + (y_ / 2.f) - 3.0f), Vec2(this->Scale.x - x_, 3.0f), 0.0f);
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if (this->id != (*id)->id)
+		{
+			if ((*id)->objectTag == "SOLID")
+			{
+				if (head.hit(*(*id)))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 bool Water::SetColor(Color& color)
 {
 	this->color = color;
@@ -709,6 +773,21 @@ void Water::CheckState()
 			break;
 		case State::SOLID:
 			this->Scale = this->maxSize;
+			auto waters = OGge->GetTasks<Water>("water");
+			for (auto id = waters->begin(); id != waters->end(); ++id)
+			{
+				if (this->id != (*id)->id)
+				{
+					if ((*id)->GetState() == State::SOLID)
+					{
+						if (this->hit(*(*id)))
+						{
+							(*id)->SetSituation(Situation::Normal);
+							(*id)->SetState(State::LIQUID);
+						}
+					}
+				}
+			}
 			this->objectTag = "SOLID";
 			this->Radius = { 1.0f,1.0f };
 			this->nowSituation = Situation::Normal;
@@ -720,6 +799,21 @@ void Water::CheckState()
 void Water::MovePos_x(float est)
 {
 	this->move.x = est;
+}
+
+bool Water::SolidMelt()
+{
+	if (this->currentState == State::SOLID)
+	{
+		auto player = OGge->GetTask<Player>("Player");
+		if (player)
+		{
+			player->ReleaseHold();
+		}
+		this->SetState(State::LIQUID);
+		this->SetSituation(Situation::Newfrom);
+	}
+	return false;
 }
 
 Water::SP Water::Create(Vec2& pos, bool flag_)

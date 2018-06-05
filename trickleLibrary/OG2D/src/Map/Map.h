@@ -15,15 +15,31 @@ enum Format
 
 class Map : public TaskObject
 {
+	class Base : public GameObject
+	{
+		int arr;
+		int* ID;
+	public:
+		Base();
+		virtual ~Base();
+		bool IDCheck(const int);
+		bool ChipCheck(const int);
+		void SetID(const int);
+		void Setarr(const int);
+		int Getarr() const;
+		int* GetID() const;
+	};
 public:
 	//描画するマップチップの数
 	Vec2 mapSize;
 	//描画マップ配列
 	std::vector<std::vector<int>> _arr;
+	std::vector<std::vector<int*>> ID;
 	//元画像の画像位置
 	std::vector<Box2D> chip;
 	//オブジェクト情報
 	std::vector<std::vector<GameObject>> hitBase;
+	//std::vector<std::vector<Base>> hitBase;
 	//使用画像情報
 	Texture mapimg;
 	//元画像の縦横サイズ
@@ -38,14 +54,15 @@ public:
 	bool LoadMap(std::string& _path, Format format);
 	void UpDate();
 	void Render2D();
-	//void MapUpdate();
 	bool Finalize();
 	//マップとの当たり判定
 	bool MapHitCheck(GameObject &p);
+	bool HitCheck(GameObject &p, const int id);
 private:
 	//ファイルパス
 	const std::string _FilePath = "./data/map/";
 	std::string chipimgname;
 private:
 	void ObjectCreateCheck(std::string&,int,int);
+	
 };

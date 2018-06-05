@@ -11,6 +11,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include <algorithm>
+#include "VolumeControl\volumeControl.h"
 
 class Water : public GameObject,public TaskObject {
 
@@ -77,13 +78,15 @@ public:
 
 	void SetMaxSize(Vec2&);
 	//サウンドの生成
-	Sound sound;
 	bool soundplay;
-
+	Sound sound;
+	VolumeControl volControl;
+	
 	
 	bool GetHold() const;
 	void HoldCheck(bool);
 	void ResetMove();
+	bool SolidMelt();
 
 private:
 	const float MOVE_SPEED = 15.f;								//移動スピード
@@ -108,6 +111,8 @@ private:
 	unsigned int id;
 	void Friction();
 	bool FootCheck(std::string&,int = 0);
+	bool FootSolidCheck();
+	bool HeadSolidCheck();
 	void MoveWATERCheck(Vec2);
 	void MoveGASCheck(Vec2);
 	void MoveSOILDCheck(Vec2);

@@ -38,7 +38,7 @@ bool StageSelect::Initialize()
 	//‰æ‘œ‚Ì“Ç‚İ‚İ
 	this->Testdoor.Create((std::string)"door.png");
 	//ƒvƒŒƒCƒ„[NPC‚Ì¶¬
-	auto chara = Chara::Create(std::string("player2.png"), Vec2(400, -200));
+	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
 	chara->SetAutoFlag(true);
 	//”wŒi‚Ì•`‰æ

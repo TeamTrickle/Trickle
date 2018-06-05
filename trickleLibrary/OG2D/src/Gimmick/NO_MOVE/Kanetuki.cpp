@@ -49,6 +49,7 @@ void Kanetuki::UpDate() {
 	//ƒTƒEƒ“ƒhŠÖŒW
 	//‰Š‚Ì‰¹ºÄ¶
 	this->nowplay = sound.isplay();
+	volControl.Play(this->position, 700.0f, 1.0f,sound);
 	if (active)
 	{
 		if (startflag)
@@ -102,8 +103,9 @@ void Kanetuki::toSteam() {
 					//Texture watertex;
 					//auto game = OGge->GetTask<Game>("game");
 					//water->SetTexture(&game->getWaterTex());
-					(*id)->SetState(Water::State::LIQUID);
-					(*id)->SetSituation(Water::Situation::Newfrom);
+					//(*id)->SetState(Water::State::LIQUID);
+					//(*id)->SetSituation(Water::Situation::Newfrom);
+					(*id)->SolidMelt();
 //					(*id)->Kill();
 					changeStateCnt = 0;
 				}

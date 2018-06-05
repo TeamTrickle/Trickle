@@ -82,7 +82,6 @@ void Player::UpDate()
 		{
 			//通常に戻す
 			this->state = State::NORMAL;
-			this->motion = Motion::Ladder;
 		}
 		break;
 	case State::BUCKET:
@@ -90,42 +89,7 @@ void Player::UpDate()
 		this->BucketMove();
 		if (OGge->in->down(In::B2))
 		{
-			if (this->hold)
-			{
-				//元に戻す
-				this->state = State::NORMAL;
-				//持っている判定を元に戻す
-				auto bucket = OGge->GetTasks<Bucket>("bucket");
-				for (auto id = bucket->begin(); id != bucket->end(); ++id)
-				{
-					if ((*id)->GetHold())
-					{
-						(*id)->HoldCheck(false);
-						this->hold = false;
-					}
-				}
-				auto waters = OGge->GetTasks<Water>("water");
-				for (auto id = waters->begin(); id != waters->end(); ++id)
-				{
-					if ((*id)->GetHold())
-					{
-						if (this->direction == Direction::LEFT)
-						{
-							(*id)->position.x -= this->Scale.x;
-						}
-						else
-						{
-							(*id)->position.x += this->Scale.x;
-						}
-						(*id)->HoldCheck(false);
-						(*id)->ResetMove();
-						this->hold = false;
-					}
-				}
-				this->inv = 10;
-				this->position.y += 64.f;
-				this->Scale.y -= 64.f;
-			}
+			this->ReleaseHold();
 		}
 		break;
 	case State::NORMAL:
@@ -170,8 +134,6 @@ void Player::UpDate()
 				{
 					if (this->FootCheck((std::string)"Ladder"))
 					{
-						//梯子状態に移行
-						//this->motion = Motion::Ladder;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
 						//カウントリセット
@@ -185,7 +147,6 @@ void Player::UpDate()
 				{
 					if (this->ObjectHit((std::string)"Ladder"))
 					{
-						//this->motion = Motion::Ladder;
 						this->state = State::ANIMATION;
 						this->moveCnt = 0;
 						this->est = { 0.f,0.f };
@@ -250,7 +211,6 @@ void Player::UpDate()
 					this->MoveCheck(e, (std::string)"Floor");
 					if (this->HeadCheck((std::string)"Ladder", 1))
 					{
-						this->motion = Motion::Normal;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
 						//カウントリセット
@@ -790,23 +750,23 @@ Vec2 Player::Animation::Move()
 			this->animationVec.x = 0.f;
 		}
 	}
-	else if (this->animationVec.y != 0.f)
+	if (this->animationVec.x == 0.f)
 	{
-		player->motion = Motion::Ladder;
-		if (this->animationVec.y >= 1.0f)
+		if (this->animationVec.y > 0.f)
 		{
-			move.y += 1.0f;
-			this->animationVec.y -= 1.0f;
+			move.y += this->animationVec.y;
+			player->motion = Motion::Ladder;
+			this->animationVec.y = 0.f;
 		}
-		else if (this->animationVec.y <= -1.0f)
+		else if (this->animationVec.y < 0.f)
 		{
-			move.y -= 1.0f;
-			this->animationVec.y += 1.0f;
+			move.y += this->animationVec.y;
+			player->motion = Motion::Normal;
+			this->animationVec.y = 0.f;
 		}
 		else
 		{
-			move.y += this->animationVec.y;
-			this->animationVec.y = 0.f;
+			player->motion = Motion::Ladder;
 		}
 	}
 	return move;
@@ -843,7 +803,9 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 		case Motion::Ladder:
 			src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * this->srcX, 3 *  this->srcY, this->srcX,  this->srcY);
 			break;
-
+		case Motion::Block_M:
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
+			break;
 		case Motion::Switch_M:
 			auto switchs = OGge->GetTasks<Switch>("Switch");
 			for (auto id = switchs->begin(); id != switchs->end(); ++id)
@@ -856,9 +818,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 				}
 			}
 			break;
-		/*case Motion::Block_M:
-			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
-			break;*/
+		
 		}
 	}
 	if (state == ANIMATION)
@@ -1014,7 +974,55 @@ void Player::SetPos(Vec2& pos)
 }
 Vec2 Player::GetPos() const
 {
+	if (this->hold)
+	{
+		return Vec2(this->position.x, this->position.y + 64);
+	}
 	return this->position;
+}
+bool Player::ReleaseHold()
+{
+	if (this->hold)
+	{
+		//元に戻す
+		this->state = State::NORMAL;
+		//持っている判定を元に戻す
+		auto bucket = OGge->GetTasks<Bucket>("bucket");
+		for (auto id = bucket->begin(); id != bucket->end(); ++id)
+		{
+			if ((*id)->GetHold())
+			{
+				(*id)->HoldCheck(false);
+				this->hold = false;
+			}
+		}
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if ((*id)->GetHold())
+			{
+				if (OGge->in->down(In::B2))
+				{
+					if (this->direction == Direction::LEFT)
+					{
+						(*id)->position.x -= this->Scale.x;
+					}
+					else
+					{
+						(*id)->position.x += this->Scale.x;
+					}
+				}
+				(*id)->HoldCheck(false);
+				(*id)->ResetMove();
+				this->hold = false;
+			}
+		}
+		this->inv = 10;
+		this->position.y += 64.f;
+		this->Scale.y -= 64.f;
+		return true;
+	}
+	return false;
 }
 bool Player::LadderJumpCheck()
 {
