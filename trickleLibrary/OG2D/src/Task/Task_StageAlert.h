@@ -13,7 +13,6 @@ private:
 	typedef std::pair<std::string, bool> Achievement;
 
 	bool Initialize();
-	std::string GetSaveFilePath(const std::string&) const;
 	virtual void UpDate() override;
 	virtual void Render2D() override;
 	void Finalize();
@@ -38,5 +37,11 @@ private:
 
 private:
 	std::string					stageName;
+	bool						isClear = false;
 	Achievement					achievements[MAX_ACHIEVEMENT];
+
+	Texture						background;
+	Texture						star;
+	Texture						mission;
+	Texture						clearFlag;
 };

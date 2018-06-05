@@ -1,4 +1,5 @@
 #include "Task_StageAlert.h"
+#include "StageFileSys.h"
 #include <fstream>
 
 StageAlert::~StageAlert() {
@@ -23,19 +24,19 @@ StageAlert::SP StageAlert::Create(bool flag_)
 }
 
 bool StageAlert::Initialize() {
+	// ƒŠƒ\[ƒX‰Šú‰»
+	background.Create((std::string)"stagealert_background.png");
+	star.Create((std::string)"stagealert_star.png");
+	mission.Create((std::string)"stagealert_mission.png");
+	clearFlag.Create((std::string)"stagealert_clearflag.png");
+
 	__super::Init((std::string)"stagealert");
 	__super::SetDrawOrder(0.8f);
-}
-
-std::string StageAlert::GetSaveFilePath(const std::string& original) const {
-	auto pathBeforeExtIdx = original.find('.');
-	std::string ret = original.substr(0, pathBeforeExtIdx);
-	ret += "_save.txt";
-	return ret;
+	return true;
 }
 
 void StageAlert::UpDate() {
-
+	
 }
 
 void StageAlert::Render2D() {
@@ -43,7 +44,10 @@ void StageAlert::Render2D() {
 }
 
 void StageAlert::Finalize() {
-
+	background.Finalize();
+	star.Finalize();
+	mission.Finalize();
+	clearFlag.Finalize();
 }
 
 
@@ -52,10 +56,11 @@ bool StageAlert::SetStageData(const std::string& fPath) {
 	std::ifstream file(fPath, std::ios::in);
 	if (file.is_open()) {
 		file >> stageName;
-		std::ifstream saveFile(GetSaveFilePath(fPath), std::ios::in);
+		std::ifstream saveFile(Stage::GetSaveFilePath(fPath), std::ios::in);
+		isClear = saveFile.is_open();
 		for (auto& a : achievements) {
 			file >> a.first;
-			if (saveFile.is_open()) {
+			if (isClear) {
 				std::string buf;
 				saveFile >> buf;
 				a.second = (stoi(buf) != 0) ? true : false;
