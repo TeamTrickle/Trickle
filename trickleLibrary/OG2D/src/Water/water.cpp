@@ -345,12 +345,15 @@ bool Water::FootCheck(std::string& objtag,int n)
 			return true;
 		}
 	}
-	auto buckets = OGge->GetTasks<Bucket>("bucket");
-	for (auto id = buckets->begin(); id != buckets->end(); ++id)
+	if (this->currentState == State::SOLID)
 	{
-		if (foot.hit(*(*id)))
+		auto buckets = OGge->GetTasks<Bucket>("bucket");
+		for (auto id = buckets->begin(); id != buckets->end(); ++id)
 		{
-			return true;
+			if (foot.hit(*(*id)))
+			{
+				return true;
+			}
 		}
 	}
 	return false;

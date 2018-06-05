@@ -157,6 +157,7 @@
     <ClCompile Include="src\Bucket\bucket.cpp" />
     <ClCompile Include="src\CameraManager\CameraManager.cpp" />
     <ClCompile Include="src\Chara\Chara.cpp" />
+    <ClCompile Include="src\Effect\Effect.cpp" />
     <ClCompile Include="src\GameProcessManagement\ClearUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\FlagUI.cpp" />
     <ClCompile Include="src\GameProcessManagement\FrameTime.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="src\OGSystem\Timer\glTimer.cpp" />
     <ClCompile Include="src\OGSystem\Window\Window.cpp" />
     <ClCompile Include="src\OGSystem\_OGsystem.cpp" />
+    <ClCompile Include="src\Paint\Paint.cpp" />
     <ClCompile Include="src\Player\Player.cpp" />
     <ClCompile Include="src\Player\ResultPlayer.cpp" />
     <ClCompile Include="src\Recorder\Recorder.cpp" />
@@ -214,6 +216,7 @@
     <ClInclude Include="src\Bucket\bucket.h" />
     <ClInclude Include="src\CameraManager\CameraManager.h" />
     <ClInclude Include="src\Chara\Chara.h" />
+    <ClInclude Include="src\Effect\Effect.h" />
     <ClInclude Include="src\GameProcessManagement\ClearUI.h" />
     <ClInclude Include="src\GameProcessManagement\FlagUI.h" />
     <ClInclude Include="src\GameProcessManagement\FrameTime.h" />
@@ -251,6 +254,7 @@
     <ClInclude Include="src\OGSystem\Timer\glTimer.h" />
     <ClInclude Include="src\OGSystem\Window\Window.h" />
     <ClInclude Include="src\OGSystem\_OGsystem.h" />
+    <ClInclude Include="src\Paint\Paint.h" />
     <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Player\ResultPlayer.h" />
     <ClInclude Include="src\Recorder\RecDef.h" />

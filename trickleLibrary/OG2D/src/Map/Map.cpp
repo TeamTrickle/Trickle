@@ -68,6 +68,14 @@ bool Map::LoadMap(std::string& path_, Format format)
 		for (int x = 0; x < this->mapSize.x; ++x) {
 			std::string  text;
 			std::getline(ss_lt, text, ',');
+			if (text == "\r")
+			{
+				continue;
+			}
+			if (text.find("\r") != std::string::npos)
+			{
+				text.erase(text.find("\r"));
+			}
 			//•¶š—ñ‚ª”š‚Ì‚İ‚©‚ğŒŸõ
 			if (std::all_of(text.cbegin(), text.cend(), isdigit))
 			{
