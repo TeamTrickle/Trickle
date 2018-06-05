@@ -56,15 +56,15 @@ void Goal::Render2D()
 	draw.OffsetSize();
 	Box2D src;
 	if (this->cleared) {
-		if (this->goal_anim && animCnt < 69) {
+		if (this->goal_anim && animCnt < 99) {
 			//Šg‘å‚ªI‚í‚Á‚½‚çƒAƒjƒ[ƒVƒ‡ƒ“
-			//(7ƒJƒbƒg*‚P‚OƒtƒŒ[ƒ€)-1‚É‚È‚Á‚½‚çŽ~‚ß‚é
+			//(10ƒJƒbƒg*‚P‚OƒtƒŒ[ƒ€)-1‚É‚È‚Á‚½‚çŽ~‚ß‚é
 			animCnt++;
 		}
-		src = Box2D(64*(animCnt / 10), 64, 64, 64);
+		src = Box2D(256*(animCnt / 10), 284, 256, 284);
 	}
 	else {
-		src = Box2D(0, 0, 64, 64);
+		src = Box2D(0, 0, 256, 256);
 	}
 	
 	src.OffsetSize();

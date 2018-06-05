@@ -36,7 +36,7 @@ private:
 	void Move();
 	void Think();
 	void Motion();
-	const Box2D Src = { Vec2(0, 0), Vec2(550, 550) };
+	const Box2D Src = { Vec2(0, 575), Vec2(586, 575) };
 
 	//リザルト画面へのフラグ関数
 	bool walkstop;

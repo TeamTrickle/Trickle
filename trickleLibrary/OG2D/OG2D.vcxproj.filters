@@ -138,11 +138,8 @@
     <Filter Include="ソースファイル\LoadLogo">
       <UniqueIdentifier>{9552b153-db7f-4b3f-b4d3-c82aed0eccf4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Paint">
-      <UniqueIdentifier>{f981a643-034e-468c-81c2-5c45be547e3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Effect">
-      <UniqueIdentifier>{71487686-7f22-4f7d-8758-b8bdaa438725}</UniqueIdentifier>
+      <UniqueIdentifier>{608f77d8-0587-4269-9ec0-676cd8ff2058}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -312,10 +309,7 @@
     <ClCompile Include="src\Recorder\RecPlayer.cpp">
       <Filter>ソースファイル\Recorder</Filter>
     </ClCompile>
-    <ClCompile Include="src\Paint\Paint.cpp">
-      <Filter>ソースファイル\Paint</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Effect\Effect.cpp">
+    <ClCompile Include="src\Effect\SterEffect.cpp">
       <Filter>ソースファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>
@@ -491,10 +485,7 @@
     <ClInclude Include="src\Recorder\RecPlayer.h">
       <Filter>ソースファイル\Recorder</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paint\Paint.h">
-      <Filter>ソースファイル\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Effect\Effect.h">
+    <ClInclude Include="src\Effect\SterEffect.h">
       <Filter>ソースファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>

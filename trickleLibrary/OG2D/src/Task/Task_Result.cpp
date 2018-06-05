@@ -7,6 +7,8 @@
 #include "GameProcessManagement\GoalTimeUI.h"
 #include "GameProcessManagement\MissionUI.h"
 #include "GameProcessManagement\FrameTime.h"
+
+#include "Effect\SterEffect.h"
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -36,7 +38,6 @@ bool Result::Initialize()
 	//リザルト画面に表示にする
 	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64), Vec2(3, 0));
 	auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200)* aspect.x, 30.f * aspect.y));
-
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
 }
@@ -248,13 +249,27 @@ void Result::UI_Think()
 		}
 		break;
 	case 1 << 2:
+		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Effect)
+		{
+			auto sters = OGge->GetTasks<FlagUI>("Ster");
+			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+			{
+				if ((*id)->EasingEnd())
+				{
+					this->createtask.SetCreateFlag(CreateFlag::Effect);
+				}
+			}
+
+		}
+		break;
+	case 1 << 3:
 		//仮条件
 		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Clearui)
 		{
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
 			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
 			{
-				if ((*id)->EasingEnd())
+				if ((*id)->GetEffectEnd())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Clearui);
 				}
@@ -294,6 +309,7 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
+			bool easingflag = false;
 			int selectflag[3] = {Flag4,Flag3,Flag2};
 			for (int i = 0; i < 3; ++i)
 			{
@@ -303,10 +319,25 @@ void Result::UI_Create()
 			this->createtask.ResetCreateFlag();
 			this->createtask.ResetNextFlag();
 			//次に生成するタスク
-			this->createtask.SetNextFlag(CreateFlag::Clearui);
+			this->createtask.SetNextFlag(CreateFlag::Effect);
 		}
 		break;
 	case 1 << 2:
+		if ((this->createtask.createflag & CreateFlag::Effect) == CreateFlag::Effect)
+		{
+			auto sters = OGge->GetTasks<FlagUI>("Ster");
+			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+			{
+				auto stereffect = SterEffect::Create((*id));
+			}
+			//生成するフラグをリセットする
+			this->createtask.ResetCreateFlag();
+			this->createtask.ResetNextFlag();
+			//次に生成するタスク
+			this->createtask.SetNextFlag(CreateFlag::Clearui);
+		}
+		break;
+	case 1 << 3:
 		if ((this->createtask.createflag & CreateFlag::Clearui) == CreateFlag::Clearui)
 		{
 			auto clearui = ClearUI::Create(Vec2((int)camerasize.x - camerasize.x / 3, camerasize.y / 2));
