@@ -12,11 +12,6 @@ private:
 	Texture image;
 	const Box2D Src = {0,0,227,90};
 
-	//Easing用変数
-	Easing easingX;
-	Vec2 PrePos;		//Easing用に保存しておく座標値
-	bool easingEnd;
-
 	//拡大機能
 	float Volume;
 
@@ -27,6 +22,7 @@ private:
 	void Render2D();
 	GoalTimeUI();
 
+	//拡大機能関連
 	void MoveVolume();
 	void ResetVolume();
 public:
@@ -34,6 +30,4 @@ public:
 	static GoalTimeUI::SP Create(Vec2& pos, bool = true);
 	virtual ~GoalTimeUI();
 
-	//リザルトで使用する関数
-	bool GetEasingEnd();
 };

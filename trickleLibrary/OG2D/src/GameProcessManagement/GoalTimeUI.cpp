@@ -14,12 +14,6 @@ bool GoalTimeUI::Initialize(Vec2& pos)
 	this->SetDrawOrder(0.1f);
 	this->ResetVolume();
 
-	//Easing関連
-	this->PrePos = position;
-	this->easingX.ResetTime();
-	this->easingX.Init();
-	this->easingEnd = false;
-
 	std::cout << "ゴールタイムUI　初期化" << std::endl;
 	return true;
 }
@@ -52,10 +46,6 @@ void GoalTimeUI::Render2D()
 	src.y = src.y * (src.y * this->Volume);
 	src.OffsetSize();
 	image.Draw(draw,src);
-}
-bool GoalTimeUI::GetEasingEnd()
-{
-	return easingEnd;
 }
 GoalTimeUI::GoalTimeUI()
 {
