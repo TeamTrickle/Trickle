@@ -4,6 +4,7 @@
 //|—š—ğF2018/03/20       
 //|—š—ğF2018/03/23		   
 //|____________________________
+#include "ResourceManager\ResourceManager.h"
 #include "Camera\Camera.h"
 #include "Window\Window.h"
 #include "FPS\FPS.h"
@@ -16,7 +17,6 @@
 #include "Easing\easing.hpp"
 #include "Audio\StreamingSound.h"
 #include "Random\Random.h"
-#include "ResourceManager\ResourceManager.h"
 #include "TaskObject.h"
 
 class OrderCheck
