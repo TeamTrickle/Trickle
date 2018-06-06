@@ -144,6 +144,9 @@
     <Filter Include="ソースファイル\volumeControl">
       <UniqueIdentifier>{e3751e79-378a-4a46-8f29-4d057e8b11d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Paint">
+      <UniqueIdentifier>{848715e8-54c7-4038-aa37-758e7282c09f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -317,6 +320,12 @@
     </ClCompile>
     <ClCompile Include="src\VolumeControl\volumeControl.cpp">
       <Filter>ソースファイル\volumeControl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paint\Paint.cpp">
+      <Filter>ソースファイル\Paint</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect\Effect.cpp">
+      <Filter>ソースファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +505,12 @@
     </ClInclude>
     <ClInclude Include="src\VolumeControl\volumeControl.h">
       <Filter>ソースファイル\volumeControl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paint\Paint.h">
+      <Filter>ソースファイル\Paint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Effect\Effect.h">
+      <Filter>ソースファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

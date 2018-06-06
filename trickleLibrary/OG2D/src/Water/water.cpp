@@ -2,7 +2,7 @@
 #include "Map\Map.h"
 #include "Block\block.h"
 #include "Player\Player.h"
-
+//#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
 {
 	//タグ設定
@@ -22,8 +22,8 @@ Water::Water(Vec2 pos)
 	this->currentState = Water::State::LIQUID;
 	this->preState = Water::State::LIQUID;
 	//テスト
-	//this->nowSituation = Water::Situation::Normal;
-	//this->currentState = Water::State::SOLID;
+	/*this->nowSituation = Water::Situation::Normal;
+	this->currentState = Water::State::SOLID;*/
 	//初期保持水量
 	this->volume = 0.5;
 	this->invi = 0;
@@ -32,7 +32,7 @@ Water::Water(Vec2 pos)
 	//経過時間初期化
 	this->nowTime = 0;
 	//現在カラーを設定
-	this->color = { 0,0,0,0 };
+	this->color = Paint::PaintColor::Normal;
 	//IDを設定
 	auto waters = OGge->GetTasks<Water>("water");
 	int i = 0;
@@ -142,7 +142,7 @@ void Water::UpDate()
 				{
 					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
 					water->SetMaxSize(Vec2(32, 32));
-					water->SetTexture(rm->GetTextureData(std::string("waterTex")));
+					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
 				}
 				this->nowTime++;
 			}
@@ -235,7 +235,7 @@ void Water::Render2D()
 		src.x = (this->nowTime / 6) * 256;
 	}
 	src.OffsetSize();
-	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f - this->color.alpha });
+	this->tex->Draw(draw, src);
 }
 
 bool Water::Finalize()
@@ -712,13 +712,28 @@ bool Water::HeadSolidCheck()
 	return false;
 }
 
-bool Water::SetColor(Color& color)
+bool Water::SetColor(const Paint::PaintColor& color)
 {
 	this->color = color;
+	switch (this->color)
+	{
+	case Paint::PaintColor::Red:
+		this->SetTexture(rm->GetTextureData((std::string)"waterRed"));
+		break;
+	case Paint::PaintColor::Blue:
+		this->SetTexture(rm->GetTextureData((std::string)"waterBlue"));
+		break;
+	case Paint::PaintColor::Purple:
+		this->SetTexture(rm->GetTextureData((std::string)"waterPurple"));
+		break;
+	default:
+		this->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+		break;
+	}
 	return true;
 }
 
-Color Water::GetColor() const
+Paint::PaintColor Water::GetColor() const
 {
 	return this->color;
 }

@@ -3,6 +3,7 @@
 #include "Bucket\bucket.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "Goal\Goal.h"
+#include "Paint\Paint.h"
 Map::Map()
 {
 	this->chip.resize(45);
@@ -230,6 +231,18 @@ void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
 	if (text == "g")
 	{
 		auto goal = Goal::Create(true, Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+	}
+	if (text == "paintred")
+	{
+		auto paintred = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Red);
+	}
+	if (text == "paintblue")
+	{
+		auto paintblue = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Blue);
+	}
+	if (text == "paintpurple")
+	{
+		auto paintpurple = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Purple);
 	}
 }
 

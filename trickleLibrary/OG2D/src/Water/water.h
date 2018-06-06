@@ -12,6 +12,7 @@
 #include "Object\Object.h"
 #include <algorithm>
 #include "VolumeControl\volumeControl.h"
+#include "Paint\Paint.h"
 
 class Water : public GameObject,public TaskObject {
 
@@ -64,8 +65,8 @@ public:
 	float GetWaterVolume() const;
 	bool IsBucket();
 	//êFä÷òA
-	bool SetColor(Color&);
-	Color GetColor() const;
+	bool SetColor(const Paint::PaintColor&);
+	Paint::PaintColor GetColor() const;
 	bool active;
 	//êÖó 
 	float volume;
@@ -102,7 +103,7 @@ private:
 	Vec2 minSize;
 	Vec2 maxSize;
 	Vec2 move;
-	Color color;
+	Paint::PaintColor color;
 	int setTime;
 	bool hold;
 	Situation UpNewform();

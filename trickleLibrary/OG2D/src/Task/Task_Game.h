@@ -37,6 +37,9 @@ private:
 	Vec2 _waterpos;
 
 	Texture waterTex;
+	Texture waterRed;
+	Texture waterBlue;
+	Texture waterPurple;
 	Texture playerTex;
 	Texture fanTex;
 
