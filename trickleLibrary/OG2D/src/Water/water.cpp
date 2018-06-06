@@ -54,13 +54,13 @@ Water::Water(Vec2 pos)
 	__super::Init((std::string)"water");
 }
 
-Water::~Water() 
+Water::~Water()
 {
-	
+
 }
 
 
-bool Water::Initialize() 
+bool Water::Initialize()
 {
 	soundplay = true;
 	sound.create(soundname, false);
@@ -92,7 +92,7 @@ void Water::UpDate()
 			this->nowSituation = Water::UpDeleteform();
 			if (soundplay)
 			{
-				volControl.Play(this->position, 1000.0f, 1.0f,sound);
+				volControl.Play(&this->position, 1000.0f, 1.0f, sound);
 
 				sound.play();
 				soundplay = false;   //˜A‘±‚µ‚ÄÄ¶‚³‚ê‚é‚±‚Æ‚ğ–h‚®
@@ -311,7 +311,7 @@ void Water::Friction()
 		}
 	}
 }
-bool Water::FootCheck(std::string& objtag,int n)
+bool Water::FootCheck(std::string& objtag, int n)
 {
 	GameObject foot;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
@@ -328,7 +328,7 @@ bool Water::FootCheck(std::string& objtag,int n)
 		{
 			if (foot.hit(map->hitBase[y][x]))
 			{
-				
+
 				if (map->hitBase[y][x].objectTag == objtag)
 				{
 					return true;
@@ -656,7 +656,7 @@ void Water::MoveSOILDCheck(Vec2 est)
 	}
 }
 
-bool Water::HeadCheck(std::string& objtag,int n)
+bool Water::HeadCheck(std::string& objtag, int n)
 {
 	GameObject head;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
@@ -670,7 +670,7 @@ bool Water::HeadCheck(std::string& objtag,int n)
 		{
 			if (head.hit(map->hitBase[y][x]))
 			{
-				if (map->hitBase[y][x].objectTag == objtag || 
+				if (map->hitBase[y][x].objectTag == objtag ||
 					map->_arr[y][x] == 24)
 				{
 					return true;

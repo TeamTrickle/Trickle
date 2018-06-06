@@ -52,15 +52,14 @@ void Fan::UpDate() {
 	if (active_) {
 		SendWind();
 	}
-	
+
 	//アニメーションを動かす処理
 	animetion.AnimetionMove(this->active_);
 
 	//サウンドの再生について
 	if (active_)
 	{
-		volControl.Play(this->position, 1000.0f, 0.6f,sound);
-		std::cout << sound.getVolume() << std::endl;
+		volControl.Play(&this->position, 1000.0f, 0.6f, sound);
 		if (startflag)
 		{
 			sound.play();
