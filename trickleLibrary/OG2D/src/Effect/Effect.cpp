@@ -22,12 +22,6 @@ Effect::~Effect()
 
 void Effect::UpDate()
 {
-	std::cout 
-		<< "X:" 
-		<< (this->animCnt / this->one_time) % (unsigned int)(this->image->GetTextureSize().x / this->oneSize.x) 
-		<< "Y:" 
-		<< (this->animCnt / this->one_time) / (unsigned int)(this->image->GetTextureSize().y / this->oneSize.y)
-		<< std::endl;
 	this->animCnt++;
 	if (!(this->anim.startPos == this->anim.endPos))
 	{

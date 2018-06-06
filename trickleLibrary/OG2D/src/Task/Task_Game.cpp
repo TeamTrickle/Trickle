@@ -325,6 +325,7 @@ void Game::UpDate()
 		{
 			auto effect = Effect::Create(player->position, Vec2(64, 64), Vec2(64, 64), 13, 60, 5);
 			effect->SetTexture(rm->GetTextureData((std::string)"Effect"));
+			effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 200));
 		}
 	}
 
