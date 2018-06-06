@@ -17,6 +17,8 @@ private:
 	Vec2 PrePos;		//Easing用に保存しておく座標値
 	bool easingEnd;
 
+	//拡大機能
+	float Volume;
 
 private:
 	bool Initialize(Vec2&);
@@ -24,6 +26,9 @@ private:
 	void UpDate();
 	void Render2D();
 	GoalTimeUI();
+
+	void MoveVolume();
+	void ResetVolume();
 public:
 	typedef std::shared_ptr<GoalTimeUI> SP;
 	static GoalTimeUI::SP Create(Vec2& pos, bool = true);

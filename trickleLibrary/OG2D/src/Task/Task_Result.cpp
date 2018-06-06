@@ -37,7 +37,7 @@ bool Result::Initialize()
 
 	//リザルト画面に表示にする
 	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64), Vec2(3, 0));
-	auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200)* aspect.x, 30.f * aspect.y));
+	auto mission = MissionUI::Create();
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
 }

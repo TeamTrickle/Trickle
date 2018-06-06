@@ -12,6 +12,7 @@ bool GoalTimeUI::Initialize(Vec2& pos)
 	//画像関連
 	image.Create((std::string)"TimeUI.png");
 	this->SetDrawOrder(0.1f);
+	this->ResetVolume();
 
 	//Easing関連
 	this->PrePos = position;
@@ -22,6 +23,10 @@ bool GoalTimeUI::Initialize(Vec2& pos)
 	std::cout << "ゴールタイムUI　初期化" << std::endl;
 	return true;
 }
+void GoalTimeUI::ResetVolume()
+{
+	this->Volume = 0;
+}
 bool GoalTimeUI::Finalize()
 {
 	image.Finalize();
@@ -29,20 +34,22 @@ bool GoalTimeUI::Finalize()
 }
 void GoalTimeUI::UpDate()
 {
-	if (easingX.isplay())
+	this->MoveVolume();
+}
+void GoalTimeUI::MoveVolume()
+{
+	this->Volume += 0.02f;
+	if (this->Volume >= 1.0f)
 	{
-		position.x = easingX.linear.In(10, 0, this->PrePos.x, easingX.Time(10));
-	}
-	else
-	{
-		easingEnd = true;
+		this->Volume = 1.0f;
 	}
 }
 void GoalTimeUI::Render2D()
 {
-	Box2D draw(position, Scale);
+	Box2D draw(position.x , (position.y + Scale.y) - (Scale.y * (this->Volume / 1.0f)), Scale.x , Scale.y * (this->Volume / 1.0f));
 	draw.OffsetSize();
 	Box2D src = this->Src;
+	src.y = src.y * (src.y * this->Volume);
 	src.OffsetSize();
 	image.Draw(draw,src);
 }
