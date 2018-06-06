@@ -83,6 +83,8 @@ bool Game::Initialize()
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
+	this->PaintTex.Create("paintTest.png");
+	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
 	//ui¶¬
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
