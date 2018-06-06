@@ -43,6 +43,7 @@ private:
 	Texture playerTex;
 	Texture fanTex;
 	Texture PaintTex;
+	Texture EffectTest;
 
 	std::string gamesoundname;
 	std::string tutorialsoundname;

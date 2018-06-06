@@ -19,6 +19,7 @@
 #include "Task\StageSelect.h"
 #include "Back\Back.h"
 #include "Task_Title.h"
+#include "Effect\Effect.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -85,6 +86,8 @@ bool Game::Initialize()
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
 	this->PaintTex.Create("paintTest.png");
 	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
+	this->EffectTest.Create("EffectTest.png");
+	rm->SetTextureData((std::string)"Effect", &this->EffectTest);
 	//ui¶¬
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -315,6 +318,16 @@ void Game::UpDate()
 		this->Kill();
 	}
 
+	if (OGge->in->key.down(In::E))
+	{
+		auto player = OGge->GetTask<Player>("Player");
+		if (player)
+		{
+			auto effect = Effect::Create(player->position, Vec2(64, 64), Vec2(64, 64), 13, 60, 5);
+			effect->SetTexture(rm->GetTextureData((std::string)"Effect"));
+		}
+	}
+
 	{
 		auto goal = OGge->GetTask<Goal>("Goal");
 		if (goal != nullptr)
@@ -430,6 +443,11 @@ bool Game::Finalize()
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
+	this->EffectTest.Finalize();
+	this->waterBlue.Finalize();
+	this->waterPurple.Finalize();
+	this->waterRed.Finalize();
+	this->PaintTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
