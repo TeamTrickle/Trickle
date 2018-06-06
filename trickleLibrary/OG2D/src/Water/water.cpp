@@ -2,7 +2,7 @@
 #include "Map\Map.h"
 #include "Block\block.h"
 #include "Player\Player.h"
-
+//#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
 {
 	//タグ設定
@@ -22,8 +22,8 @@ Water::Water(Vec2 pos)
 	this->currentState = Water::State::LIQUID;
 	this->preState = Water::State::LIQUID;
 	//テスト
-	//this->nowSituation = Water::Situation::Normal;
-	//this->currentState = Water::State::SOLID;
+	/*this->nowSituation = Water::Situation::Normal;
+	this->currentState = Water::State::SOLID;*/
 	//初期保持水量
 	this->volume = 0.5;
 	this->invi = 0;
@@ -32,7 +32,7 @@ Water::Water(Vec2 pos)
 	//経過時間初期化
 	this->nowTime = 0;
 	//現在カラーを設定
-	this->color = { 0,0,0,0 };
+	this->color = Paint::PaintColor::Normal;
 	//IDを設定
 	auto waters = OGge->GetTasks<Water>("water");
 	int i = 0;
@@ -54,13 +54,13 @@ Water::Water(Vec2 pos)
 	__super::Init((std::string)"water");
 }
 
-Water::~Water() 
+Water::~Water()
 {
-	
+
 }
 
 
-bool Water::Initialize() 
+bool Water::Initialize()
 {
 	soundplay = true;
 	sound.create(soundname, false);
@@ -92,7 +92,7 @@ void Water::UpDate()
 			this->nowSituation = Water::UpDeleteform();
 			if (soundplay)
 			{
-				volControl.Play(this->position, 1000.0f, 1.0f,sound);
+				volControl.Play(&this->position, 1000.0f, 1.0f, sound);
 
 				sound.play();
 				soundplay = false;   //連続して再生されることを防ぐ
@@ -142,7 +142,7 @@ void Water::UpDate()
 				{
 					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
 					water->SetMaxSize(Vec2(32, 32));
-					water->SetTexture(rm->GetTextureData(std::string("waterTex")));
+					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
 				}
 				this->nowTime++;
 			}
@@ -235,7 +235,7 @@ void Water::Render2D()
 		src.x = (this->nowTime / 6) * 256;
 	}
 	src.OffsetSize();
-	this->tex->Draw(draw, src, Color{ 1.f - color.red,1.f - this->color.green,1.f - this->color.blue,1.f - this->color.alpha });
+	this->tex->Draw(draw, src);
 }
 
 bool Water::Finalize()
@@ -311,7 +311,7 @@ void Water::Friction()
 		}
 	}
 }
-bool Water::FootCheck(std::string& objtag,int n)
+bool Water::FootCheck(std::string& objtag, int n)
 {
 	GameObject foot;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
@@ -328,7 +328,7 @@ bool Water::FootCheck(std::string& objtag,int n)
 		{
 			if (foot.hit(map->hitBase[y][x]))
 			{
-				
+
 				if (map->hitBase[y][x].objectTag == objtag)
 				{
 					return true;
@@ -411,12 +411,15 @@ void Water::MoveWATERCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -444,12 +447,15 @@ void Water::MoveWATERCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -484,10 +490,13 @@ void Water::MoveGASCheck(Vec2 est)
 			{
 				if (map->hitBase[y][x].objectTag == "Floor")
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -515,12 +524,15 @@ void Water::MoveGASCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor")
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -554,14 +566,17 @@ void Water::MoveSOILDCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" || 
-					map->hitBase[y][x].objectTag == "Soil" || 
-					map->hitBase[y][x].objectTag == "Net")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "Soil" ||
+						map->hitBase[y][x].objectTag == "Net")
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -572,10 +587,13 @@ void Water::MoveSOILDCheck(Vec2 est)
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (this->hit(*(*id)))
+					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						this->position.x = preX;
-						break;
+						if (this->hit(*(*id)))
+						{
+							this->position.x = preX;
+							break;
+						}
 					}
 				}
 			}
@@ -603,14 +621,17 @@ void Water::MoveSOILDCheck(Vec2 est)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->hitBase[y][x].objectTag == "Floor" ||
-					map->hitBase[y][x].objectTag == "Soil" ||
-					map->hitBase[y][x].objectTag == "Net")
+				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 				{
-					if (this->hit(map->hitBase[y][x]))
+					if (map->hitBase[y][x].objectTag == "Floor" ||
+						map->hitBase[y][x].objectTag == "Soil" ||
+						map->hitBase[y][x].objectTag == "Net")
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(map->hitBase[y][x]))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -621,10 +642,13 @@ void Water::MoveSOILDCheck(Vec2 est)
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (this->hit(*(*id)))
+					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						this->position.y = preY;
-						break;
+						if (this->hit(*(*id)))
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
 				}
 			}
@@ -632,7 +656,7 @@ void Water::MoveSOILDCheck(Vec2 est)
 	}
 }
 
-bool Water::HeadCheck(std::string& objtag,int n)
+bool Water::HeadCheck(std::string& objtag, int n)
 {
 	GameObject head;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
@@ -646,7 +670,7 @@ bool Water::HeadCheck(std::string& objtag,int n)
 		{
 			if (head.hit(map->hitBase[y][x]))
 			{
-				if (map->hitBase[y][x].objectTag == objtag || 
+				if (map->hitBase[y][x].objectTag == objtag ||
 					map->_arr[y][x] == 24)
 				{
 					return true;
@@ -688,13 +712,28 @@ bool Water::HeadSolidCheck()
 	return false;
 }
 
-bool Water::SetColor(Color& color)
+bool Water::SetColor(const Paint::PaintColor& color)
 {
 	this->color = color;
+	switch (this->color)
+	{
+	case Paint::PaintColor::Red:
+		this->SetTexture(rm->GetTextureData((std::string)"waterRed"));
+		break;
+	case Paint::PaintColor::Blue:
+		this->SetTexture(rm->GetTextureData((std::string)"waterBlue"));
+		break;
+	case Paint::PaintColor::Purple:
+		this->SetTexture(rm->GetTextureData((std::string)"waterPurple"));
+		break;
+	default:
+		this->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+		break;
+	}
 	return true;
 }
 
-Color Water::GetColor() const
+Paint::PaintColor Water::GetColor() const
 {
 	return this->color;
 }

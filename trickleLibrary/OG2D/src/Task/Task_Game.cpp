@@ -83,6 +83,8 @@ bool Game::Initialize()
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
+	this->PaintTex.Create("paintTest.png");
+	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -260,9 +262,15 @@ bool Game::Initialize()
 	//水初期処理
 	{
 		//水画像の読み込み
-		this->waterTex.Create((std::string)"waterTex.png");
+		this->waterTex.Create("waterTex.png");
+		this->waterRed.Create("WaterRed.png");
+		this->waterBlue.Create("WaterBlue.png");
+		this->waterPurple.Create("WaterPurple.png");
 		//リソース管理classへデータを渡す
-		rm->SetTextureData((std::string)"waterTex", &waterTex);
+		rm->SetTextureData((std::string)"waterTex", &this->waterTex);
+		rm->SetTextureData((std::string)"waterRed", &this->waterRed);
+		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
+		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
 
 	//水が自動で降ってくる時間の初期化

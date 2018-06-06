@@ -7,7 +7,7 @@ private:
 		BUFFER_NUM = 2,
 		SLEEP_TIME_MS = 250
 	};
-	std::shared_ptr<Audio::Source> source_;
+	std::shared_ptr<Source> source_;
 	bool pause_;
 	// 再生用のスレッドとの連携
 	struct Param {
@@ -33,8 +33,8 @@ public:
 	bool isPlaying();
 	float GetTime() const;
 	void debugUpdata();
-	void createSound(std::string& path, bool loop = false);
+	void createSound(const std::string& path, bool loop = false);
 private:
-	static void queueStream(Audio::StreamWav& stream, Audio::Source &source, Audio::Buffer& buffer, std::vector<char>& sound_buffer);
-	static void streamProc(const std::string& path, const bool loop, std::shared_ptr<Audio::Source>& source, std::shared_ptr<Param>& param);
+	static void queueStream(StreamWav& stream, Source &source, Buffer& buffer, std::vector<char>& sound_buffer);
+	static void streamProc(const std::string& path, const bool loop, std::shared_ptr<Source>& source, std::shared_ptr<Param>& param);
 };

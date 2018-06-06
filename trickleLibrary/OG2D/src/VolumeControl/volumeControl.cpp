@@ -7,11 +7,11 @@ VolumeControl::VolumeControl()
 	this->distance = 0.0f;
 	this->playerPos = nullptr;
 	this->soundPos = Vec2(0, 0);
-	std::cout << "ボリューム調節クラス生成" << std::endl;
+	//std::cout << "ボリューム調節クラス生成" << std::endl;
 }
 VolumeControl::~VolumeControl()
 {
-	std::cout << "ボリューム調節クラス解放" << std::endl;
+	//std::cout << "ボリューム調節クラス解放" << std::endl;
 	if (this->playerPos)
 	{
 		delete this->playerPos;
@@ -20,10 +20,10 @@ VolumeControl::~VolumeControl()
 
 
 //距離を求める
-float VolumeControl::GetDistance(Vec2 soundpos)
+float VolumeControl::GetDistance(Vec2* soundpos)
 {
 	Vec2 hypotenuse;      //距離を求める為の数値を格納　hypotenuseは斜辺の意
-	soundPos = soundpos;       //デバックで値を見やすくしたかった。不要なら削除予定
+	soundPos = *soundpos;       //デバックで値を見やすくしたかった。不要なら削除予定
 	if (this->playerPos)       //プレイヤが存在していたら
 	{
 		//x軸
@@ -52,61 +52,16 @@ float VolumeControl::GetDistance(Vec2 soundpos)
 	//デバック用
 	//std::cout << sqrt(hypotenuse.x*hypotenuse.x + hypotenuse.y*hypotenuse.y) << std::endl;
 
-	distance= sqrt(hypotenuse.x*hypotenuse.x + hypotenuse.y*hypotenuse.y);        //直線距離を求める
+	distance = sqrt(hypotenuse.x*hypotenuse.x + hypotenuse.y*hypotenuse.y);        //直線距離を求める
 	return distance;
 }
 
 //距離に応じたボリュームを設定するための数値(0~1)を取得
 float VolumeControl::VolSet()
 {
-	////距離が離れるほど音量を小さく
-	//if (distance < 200)
-	//{
-	//	return 1.0f;     //最大音量	
-	//}
-	//else if (distance < 300)
-	//{
-	//	return 0.9f;
-	//}
-	//else if (distance < 400)
-	//{
-	//	return 0.8f;
-	//}
-	//else if (distance < 500)
-	//{
-	//	return 0.7f;
-	//}
-	//else if (distance < 600)
-	//{
-	//	return 0.6f;
-	//}
-	//else if (distance < 700)
-	//{
-	//	return 0.5f;
-	//}
-	//else if (distance < 800)
-	//{
-	//	return 0.4f;
-	//}
-	//else if (distance < 900)
-	//{
-	//	return 0.3f;
-	//}
-	//else if (distance < 1000)
-	//{
-	//	return 0.2f;
-	//}
-	////else if (distance < 1000)
-	////{
-	////	return 0.1f;
-	////}
-	//else
-	//{
-	//	return 0.0f;
-	//}
 	float changeVolDis;
 	changeVolDis = this->maxdis / 10.0f;    //音量を十段階切り替え
-	//距離が離れるほど音量を小さく
+											//距離が離れるほど音量を小さく
 	if (distance < changeVolDis*2.0f)
 	{
 		return 1.0f*maxvol;     //最大音量	
@@ -156,6 +111,10 @@ float VolumeControl::VolSet()
 void VolumeControl::GetPlPos()
 {
 	auto player = OGge->GetTask<Player>("Player");
+	if (playerPos)
+	{
+		delete this->playerPos;
+	}
 	if (player)         //プレイヤが存在していたら	
 	{
 		this->playerPos = new Vec2(player->position);
@@ -164,7 +123,7 @@ void VolumeControl::GetPlPos()
 }
 
 
-void VolumeControl::Play(Vec2 pos,float maxDis,float maxVol,Sound& sound)    //最大音量を指定
+void VolumeControl::Play(Vec2* pos, float maxDis, float maxVol, Sound& sound)    //最大音量を指定
 {
 	maxdis = maxDis;
 	maxvol = maxVol;
