@@ -6,6 +6,7 @@
 #include "Back\Back.h"
 #include "Chara\Chara.h"
 #include "Load\LoadLogo.h"
+#include "Effect\Effect.h"
 Title::Title()
 {
 	this->mode = Non;
@@ -49,13 +50,14 @@ bool Title::Initialize()
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//画像読み込み
-	texCursor.Create((std::string)"gear.png");
-	texStart.Create((std::string)"start.png");
-	texClose.Create((std::string)"close.png");
-	texPause.Create((std::string)"pause.png");
-	this->texLogo.Create((std::string)"logo.png");
-	this->GierLogo.Create((std::string)"gearofi.png");
-	this->flowerLogo.Create((std::string)"flower.png");
+	texCursor.Create("gear.png");
+	texStart.Create("start.png");
+	texClose.Create("close.png");
+	texPause.Create("pause.png");
+	this->texLogo.Create("logo.png");
+	this->GierLogo.Create("gearofi.png");
+	this->flowerLogo.Create("flower.png");
+	this->texEffect.Create("testEffect01.png");
 	//サウンドの生成
 	sound = new Sound();
 	sound->create(soundname, true);
@@ -137,16 +139,16 @@ void Title::UpDate()
 			{
 				this->isGierAng = true;
 				this->mode = from2;
+				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 64.f), Vec2(256, 32), Vec2(256, 32), 1, 100, 100, "titleEffect");
+				effect->Color_a(1.0f);
+				effect->SetTexture(&this->texEffect);
+				effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 300), 10);
 			}
 		}
 	}
 	break;
 	case from2:	//花咲き開始から終了まで
 	{
-		if (this->timeCnt < 3)
-		{
-
-		}
 		//テスト用10フレーム後移動
 		if (this->flowerVolume >= 1.0f)
 		{
@@ -333,6 +335,7 @@ bool Title::Finalize()
 	this->texLogo.Finalize();
 	this->GierLogo.Finalize();
 	this->flowerLogo.Finalize();
+	this->texEffect.Finalize();
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)

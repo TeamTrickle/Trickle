@@ -42,6 +42,7 @@ void Effect::Render2D()
 	this->src.OffsetSize();
 	this->color.alpha = this->alpha;
 	this->image->Draw(this->draw, this->src, this->color);
+	
 }
 
 Effect::SP Effect::Create(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag, const bool flag)
