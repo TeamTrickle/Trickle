@@ -441,6 +441,8 @@ bool Game::Finalize()
 	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
+	rm->DeleteTexture((std::string)"Effect");
+	rm->DeleteTexture((std::string)"paintTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
