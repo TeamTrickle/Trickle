@@ -275,8 +275,8 @@ public:
 	float axis(const int in_, const int padNum = 0) const;
 	void registAxis(const float regist);
 	void upDate();						//入力情報更新
-private:
 	void ResetInputData();				//入力状態をリセット
+private:
 	int inputData[256];					//入力データ
 	std::vector<Input::GamePad> initGamePad();//ゲームパッド初期化
 	KeyBoard initkeyBoard();			//キーボード初期化

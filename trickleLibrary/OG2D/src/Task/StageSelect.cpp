@@ -218,7 +218,7 @@ void StageSelect::From3()
 		if (!chara->isAutoPlay())
 		{
 			//Left“ü—Í
-			if (OGge->in->down(In::CL))
+			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
 				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::LEFT)
@@ -260,7 +260,7 @@ void StageSelect::From3()
 				}
 			}
 			//right“ü—Í
-			if (OGge->in->down(In::CR))
+			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 			{
 				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::RIGHT)
