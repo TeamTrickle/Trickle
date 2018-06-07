@@ -20,13 +20,14 @@ private:
 		void Reset();					//アニメーションのリセット
 		void ResetAnimetionCnt();		//アニメーションカウントをリセット
 		void MotionChenge(State);		//アニメーションを変更する
+		void AnimetionMove();			//アニメーションカウントをカウントします
 		State motion;					//モーション
 
 		//モーションに関する変数
-		int toSmailCnt = 0;				//喜ぶモーションにするまでの時間を格納する
-		bool SmailChangeCheck();		//喜ぶモーションに切り替えて良いかを返す
-		bool smailflag;					//喜ぶフラグ
-		void SmailMotion();				//喜びモーションを入れる
+		const int toSmailCnt = 200;				//喜ぶモーションにするまでの時間を格納する
+
+		//喜ぶモーションが終了したか返す
+		bool  SmailMotionIsPlay();
 	};
 
 	Texture image;
@@ -38,9 +39,11 @@ private:
 	void Motion();
 	const Box2D Src = { Vec2(0, 575), Vec2(586, 575) };
 
+
 	//リザルト画面へのフラグ関数
 	bool walkstop;
 	void ResetWalkStop();
+	
 	
 
 public:

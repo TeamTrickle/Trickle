@@ -1,6 +1,7 @@
 #include "ResultPlayer.h"
 
 #include "GameProcessManagement\ClearUI.h"
+#include "Effect\SterEffect.h"
 
 bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 {
@@ -37,25 +38,40 @@ void ResultPlayer::Think()
 	Vec2 windowsize = OGge->window->GetSize();
 
 	auto clearui = OGge->GetTask<ClearUI>("ClearUI");
+	auto sterEffect = OGge->GetTasks<SterEffect>("SterEffect");
 
 	ResultPlayer::State nm = this->animetion.motion;
 	switch (nm)
 	{
 	case ResultPlayer::Normal:
+
 		break;
 	case ResultPlayer::Walk:
-		if(this->position.x >= camerasize.x * 25 / 100)
+		if (!this->animetion.SmailMotionIsPlay())
 		{
-			this->walkstop = true;		//リザルト画面への情報フラグ
-			nm = Stop;
+			if (this->position.x >= camerasize.x * 25 / 100)
+			{
+				this->walkstop = true;		//リザルト画面への情報フラグ
+				nm = Stop;
+			}
 		}
 		break;
 	case ResultPlayer::Smail:
-		break;
-	case ResultPlayer::Stop:
-		if (clearui != nullptr)
+		//アニメーションカウントが一定時間まで経過したら・・・
+		if (this->animetion.SmailMotionIsPlay())
 		{
 			nm = Walk;
+		}
+		break;
+	case ResultPlayer::Stop:
+		//クリアUIが表示された場合歩きだす（拡大までが終了したら）
+		if (clearui != nullptr)
+		{
+			if (clearui->GetVolumeFlag())
+			{
+				this->animetion.ResetAnimetionCnt();
+				nm = Smail;
+			}
 		}
 		break;
 	default:
@@ -74,6 +90,8 @@ void ResultPlayer::Motion()
 		this->Move();
 		break;
 	case ResultPlayer::Smail:
+		//特になし
+		this->animetion.AnimetionMove();
 		break;
 	default:
 		break;
@@ -83,6 +101,8 @@ void ResultPlayer::UpDate()
 {
 	Think();
 	Motion();
+
+	std::cout << position.y << std::endl;
 }
 
 void ResultPlayer::Move()
@@ -94,9 +114,11 @@ void ResultPlayer::Move()
 	}
 
 	Vec2 camerasize = OGge->camera->GetSize();
+
+	//Playerが解放されるまで
 	if(position.x <= camerasize.x)
 	{
-		this->animetion.animetionCnt++;
+		this->animetion.AnimetionMove();
 		position.x += moveVec.x;
 	}
 	else
@@ -121,11 +143,18 @@ void ResultPlayer::Animetion::Reset()
 {
 	this->animetionCnt = 0;
 	this->motion = Walk;
-	this->smailflag = false;
 }
 void ResultPlayer::Animetion::ResetAnimetionCnt()
 {
 	this->animetionCnt = 0;
+}
+bool ResultPlayer::Animetion::SmailMotionIsPlay()
+{
+	return this->animetionCnt >= this->toSmailCnt ? true : false;
+}
+void ResultPlayer::Animetion::AnimetionMove()
+{
+	this->animetionCnt++;
 }
 Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
 {
@@ -139,7 +168,16 @@ Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
 		src.x = this->animetionCnt / 3 % 9 * src.w;
 		break;
 	case ResultPlayer::Smail:
-		src.x = 0;
+		if (animetionCnt % 60 >= 30)
+		{
+			src.x = 5 * src.h;
+			src.y = 5 * src.w;
+		}
+		else
+		{
+			src.x = 0;
+			src.y = 0;
+		}
 		break;
 	}
 	return src;
@@ -147,31 +185,6 @@ Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
 void ResultPlayer::Animetion::MotionChenge(State state)
 {
 	this->motion = state;
-}
-bool ResultPlayer::Animetion::SmailChangeCheck()
-{
-	this->toSmailCnt++;
-	//喜ぶモーションに切り替えても良いか？ ☆の演出が終了したら・・・
-	if (toSmailCnt >= 300)
-	{
-		return true;
-	}
-	return false;
-}
-void ResultPlayer::Animetion::SmailMotion()
-{
-	//クリアが表示され拡大がされたあとにフラグを返す方法が一番良い
-	auto clearUI = OGge->GetTask<ClearUI>("ClearUI");
-	if (clearUI != nullptr)
-	{
-		//拡大がされたら・・・喜ぶモーションカウンタを回す
-		this->animetionCnt++;
-		if (animetionCnt >= 500)
-		{
-			this->ResetAnimetionCnt();
-			this->smailflag = true;
-		}
-	}
 }
 void ResultPlayer::ResetWalkStop()
 {
