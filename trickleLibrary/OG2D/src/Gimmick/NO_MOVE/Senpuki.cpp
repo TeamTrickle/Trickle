@@ -22,9 +22,8 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	image.Create(filePath);
 
 	//サウンドの生成
-	this->startflag = false;
+	this->startflag = true;
 	sound.create(soundname, true);
-	sound.volume(0.8f);
 
 	range = r;
 	dir = d;
@@ -53,13 +52,14 @@ void Fan::UpDate() {
 	if (active_) {
 		SendWind();
 	}
-	
+
 	//アニメーションを動かす処理
 	animetion.AnimetionMove(this->active_);
 
 	//サウンドの再生について
 	if (active_)
 	{
+		volControl.Play(&this->position, 1000.0f, 0.6f, sound);
 		if (startflag)
 		{
 			sound.play();

@@ -37,9 +37,17 @@ private:
 	Vec2 _waterpos;
 
 	Texture waterTex;
+	Texture waterRed;
+	Texture waterBlue;
+	Texture waterPurple;
 	Texture playerTex;
 	Texture fanTex;
+<<<<<<< HEAD
 	Texture fireice;
+=======
+	Texture PaintTex;
+	Texture EffectTest;
+>>>>>>> origin/develop
 
 	std::string gamesoundname;
 	std::string tutorialsoundname;

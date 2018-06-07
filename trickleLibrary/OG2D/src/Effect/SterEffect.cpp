@@ -113,7 +113,7 @@ void SterEffect::MoveEasing()
 	{
 		//‰E‚©‚ç¶
 		this->position.x = easingX.cubic.Out(10, -camerasize.x + this->target->position.x, camerasize.x, easingX.Time(10));
-		//‰º‚©‚çã
+		//ã‚©‚ç‰º
 		this->position.y = easingY.cubic.Out(15, 120 + this->target->position.y, -120, easingY.Time(15));
 	}
 	else

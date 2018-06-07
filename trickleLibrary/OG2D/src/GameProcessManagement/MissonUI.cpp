@@ -1,17 +1,16 @@
 #include "MissionUI.h"
-bool MissionUI::Initialize(Vec2& pos)
+bool MissionUI::Initialize()
 {
 	this->taskName = "MissionUI";
 	this->Init(taskName);
 	std::cout << "ミッションUI　初期化" << std::endl;
 
 	//Easing設定
-	easingX.Init();
-	easingX.ResetTime();
+	easingY.Init();
+	easingY.ResetTime();
 
-	CreateObject(Cube, pos, Vec2(512, 64), 0);
-	//easing用に値を保存しておく
-	this->PrePos = position;
+	Vec2 camerasize = OGge->camera->GetSize();
+	CreateObject(Cube, Vec2((int)camerasize.x / 2 - 200,0), Vec2(512, 64), 0);
 
 
 	//画像の読み込み
@@ -28,9 +27,12 @@ bool MissionUI::Finalize()
 }
 void MissionUI::EasingMove()
 {
-	if(easingX.isplay())
+	Vec2 camerasize = OGge->camera->GetSize();
+
+	if(easingY.isplay())
 	{
-		position.x = easingX.quint.Out(10, 0, this->PrePos.x, easingX.Time(10));
+		//上から下
+		position.y = easingY.quint.Out(10, camerasize.y / 100 * 80  , -camerasize.y / 100 * 80 + 30 , easingY.Time(10));
 	}
 }
 void MissionUI::UpDate()
@@ -54,7 +56,7 @@ MissionUI::~MissionUI()
 	this->Finalize();
 	std::cout << "ミッションUI　解放" << std::endl;
 }
-MissionUI::SP MissionUI::Create(Vec2& pos, bool flag)
+MissionUI::SP MissionUI::Create(bool flag)
 {
 	MissionUI::SP to = MissionUI::SP(new MissionUI());
 	if (to)
@@ -64,7 +66,7 @@ MissionUI::SP MissionUI::Create(Vec2& pos, bool flag)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos))
+		if (!to->Initialize())
 		{
 			to->Kill();
 		}

@@ -3,6 +3,7 @@
 #include "Bucket\bucket.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "Goal\Goal.h"
+#include "Paint\Paint.h"
 Map::Map()
 {
 	this->chip.resize(45);
@@ -68,6 +69,14 @@ bool Map::LoadMap(std::string& path_, Format format)
 		for (int x = 0; x < this->mapSize.x; ++x) {
 			std::string  text;
 			std::getline(ss_lt, text, ',');
+			if (text == "\r")
+			{
+				continue;
+			}
+			if (text.find("\r") != std::string::npos)
+			{
+				text.erase(text.find("\r"));
+			}
 			//•¶Žš—ñ‚ª”Žš‚Ì‚Ý‚©‚ðŒŸõ
 			if (std::all_of(text.cbegin(), text.cend(), isdigit))
 			{
@@ -222,6 +231,25 @@ void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
 	if (text == "g")
 	{
 		auto goal = Goal::Create(true, Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		return;
+	}
+	if (text == "paintred")
+	{
+		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Red);
+		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		return;
+	}
+	if (text == "paintblue")
+	{
+		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Blue);
+		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		return;
+	}
+	if (text == "paintpurple")
+	{
+		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Purple);
+		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		return;
 	}
 }
 

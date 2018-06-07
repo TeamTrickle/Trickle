@@ -1,14 +1,25 @@
 #include "ClearUI.h"
 bool ClearUI::Initialize(Vec2& pos)
 {
+	//タスク関連
 	this->taskName = "ClearUI";
 	this->Init(taskName);
-	std::cout << "クリアUI　初期化" << std::endl;
 
+	//基本の情報
 	CreateObject(Cube, pos, Vec2(512, 96), 0);
+
+	//画像関連
 	this->SetDrawOrder(0.1f);
 	image.Create((std::string)"ClearUI.png");
+	this->ResetVolume();
+
+
+	std::cout << "クリアUI　初期化" << std::endl;
 	return true;
+}
+void ClearUI::ResetVolume()
+{
+	this->Volume = 0;
 }
 bool ClearUI::Finalize()
 {
@@ -17,13 +28,23 @@ bool ClearUI::Finalize()
 }
 void ClearUI::UpDate()
 {
-
+	this->MoveVolume();
+}
+void ClearUI::MoveVolume()
+{
+	this->Volume += 0.02f;
+	if (this->Volume >= 1.0f)
+	{
+		this->Volume = 1.0f;
+	}
 }
 void ClearUI::Render2D()
 {
-	Box2D draw(position, Scale);
+	Box2D draw((this->position.x + this->Scale.x) - (this->Scale.x * (this->Volume / 1.0f)), (this->position.y + this->Scale.y) - (this->Scale.y * (this->Volume /1.0f)),this->Scale.x * (this->Volume * (this->Volume / 1.0f)) , this->Scale.y * (this->Volume * (this->Volume / 1.0f)));
 	draw.OffsetSize();
 	Box2D src = this->Src;
+	src.x = src.x * (src.x * (this->Volume / 1.f));
+	src.y = src.y * (src.y * (this->Volume / 1.f));
 	src.OffsetSize();
 	image.Draw(draw, src);
 }

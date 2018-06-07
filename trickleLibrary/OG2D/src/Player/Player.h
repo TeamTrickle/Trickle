@@ -90,10 +90,12 @@ private:
 	void Friction();											//重力や摩擦の計算
 	bool BucketHit();											//バケツとの当たり判定
 	void BucketMove();											//所持しているバケツの位置を変える
-	bool BlockHit();											//ブロックとの当たり判定
+	bool TohaveObjectHit();											//ブロックとの当たり判定
 	bool ObjectHit(std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
 	void SwitchCheck();											//スイッチとの当たり判定
 	bool LadderJumpCheck();										//梯子中にジャンプを行う際の当たり判定
+	bool PutCheck();											//置く動作を行えるかの判定
+	bool HeadSolidCheck();										//頭上氷判定
 public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);
@@ -111,16 +113,12 @@ public:
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
 	bool ReleaseHold();
 	//入力処理簡略化
-	bool InputLeft() {
-		return OGge->in->on(Input::CL);
-	}
-	bool InputRight() {
-		return OGge->in->on(Input::CR);
-	}
-	bool InputDown() {
-		return OGge->in->on(Input::CD);
-	}
-	bool InputUp() {
-		return OGge->in->on(Input::CU);
-	}
+	bool InputLeft();
+	bool InputRight();
+	bool InputDown();
+	bool InputUp();
+	float AxisLX();
+	float AxisLY();
+	float AxisRX();
+	float AxisRY();
 };

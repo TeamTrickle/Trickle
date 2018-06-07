@@ -56,6 +56,7 @@ void Kanetuki::UpDate() {
 	//サウンド関係
 	//炎の音声再生
 	this->nowplay = sound.isplay();
+	volControl.Play(&this->position, 700.0f, 1.0f, sound);
 	if (active)
 	{
 		//if(ここに加熱器の方向をもらう) {
@@ -87,9 +88,9 @@ void Kanetuki::UpDate() {
 
 }
 void Kanetuki::Render2D() {
+<<<<<<< HEAD
 	
 	if (active) {
-		LineDraw();			//デバッグ用
 		++animCnt;
 
 		for (int i = 0; i < hotNum; ++i)
@@ -104,6 +105,10 @@ void Kanetuki::Render2D() {
 			this->hotImg->Draw(draw_, src);
 		}
 	}
+=======
+	//デバッグ用
+	if (active) this->LineDraw();
+>>>>>>> origin/develop
 }
 bool Kanetuki::Finalize() {
 	//画像をこっちで読み込むならTextureのFinalize()を呼ぶこと
@@ -116,7 +121,7 @@ void Kanetuki::toSteam() {
 		//水との当たり判定
 		if ((*id)->hit(*this))
 		{	//　個体　⇒　液体
-			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation()!=Water::Situation::Newfrom)
+			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() != Water::Situation::Newfrom)
 			{
 				changeStateCnt++;
 				cout << changeStateCnt++ << endl;
@@ -131,7 +136,7 @@ void Kanetuki::toSteam() {
 					//(*id)->SetState(Water::State::LIQUID);
 					//(*id)->SetSituation(Water::Situation::Newfrom);
 					(*id)->SolidMelt();
-//					(*id)->Kill();
+					//					(*id)->Kill();
 					changeStateCnt = 0;
 				}
 			}
