@@ -50,5 +50,6 @@ public:
 	static SterEffect::SP Create(std::shared_ptr<GameObject>,bool = true);
 	bool Initialize(std::shared_ptr<GameObject>);
 
+	///リザルト時・喜ぶモーションにするときに使用します。
 	bool EasingIsPleyed();
 };

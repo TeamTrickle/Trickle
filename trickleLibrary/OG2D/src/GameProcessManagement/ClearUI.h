@@ -14,6 +14,7 @@ private:
 
 	//拡大機能変数
 	float Volume;
+	bool  Volumefinish;
 
 private:
 	//タスク関連
@@ -25,6 +26,8 @@ private:
 
 	//拡大機能
 	void ResetVolume();
+	void ResetVolumeFlag();
+	void SetVolumeFlag(bool);
 	void MoveVolume();
 public:
 	virtual ~ClearUI();
@@ -32,5 +35,5 @@ public:
 	static ClearUI::SP Create(Vec2& pos, bool = true);
 
 	//リザルトで使用する関数
-
+	bool GetVolumeFlag();
 };
