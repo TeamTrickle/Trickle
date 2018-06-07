@@ -162,7 +162,6 @@ void Player::UpDate()
 			this->TohaveObjectHit();
 			if (OGge->in->down(In::B2))
 			{
-				animation.timeCnt = 0;
 				this->SwitchCheck();
 			}
 			if (this->HeadSolidCheck())
@@ -746,7 +745,8 @@ void Player::SwitchCheck()
 		if ((*id)->hit(*this))
 		{
 			this->motion = Motion::Switch_M;
-			(*id)->ChangeON_OFF(); 
+			(*id)->ChangeON_OFF();
+			animation.timeCnt = 0;
 			//(*id)->isON();	//‚±‚êˆÓ–¡‚ ‚éH–ß‚è’lbool 5.31
 		}
 	}

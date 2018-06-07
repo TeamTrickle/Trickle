@@ -24,6 +24,7 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
 	this->animCnt = 0;
 	this->coldNum = 0;
 	draw.clear();
+
 	return true;
 }
 void Seihyouki::UpDate() {
@@ -35,19 +36,17 @@ void Seihyouki::UpDate() {
 		toIce();
 	}
 }
+
 void Seihyouki::Render2D() {
 	//デバッグ用
 	
 	if (active) {
 		LineDraw();
 		++animCnt;
-
-		for (int i = 0; i < coldNum; ++i)
-		{
+		for (int i = 0; i < coldNum; ++i) {
 			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
 			draw[i].OffsetSize();
 		}
-
 		Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
 		src.OffsetSize();
 

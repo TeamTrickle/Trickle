@@ -84,15 +84,12 @@ bool Game::Initialize()
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
-<<<<<<< HEAD
 	this->fireice.Create((std::string)"fireice.png");
 	rm->SetTextureData((std::string)"fireIce", &this->fireice);
-=======
 	this->PaintTex.Create("paintTest.png");
 	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
 	this->EffectTest.Create("EffectTest.png");
 	rm->SetTextureData((std::string)"Effect", &this->EffectTest);
->>>>>>> origin/develop
 	//ui¶¬
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);

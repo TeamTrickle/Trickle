@@ -16,6 +16,7 @@ class Seihyouki : public GameObject, public TaskObject
 	int coldNum;				//‰¡•‚É‚æ‚Á‚Ä‘‚¦‚é‰æ‘œ‚Ì”
 	std::vector<Box2D> draw;	//•X‚Ì‰æ‘œ
 
+
 	bool Initialize(Vec2& , Vec2 range);		//‰Šú‰»ˆ—
 	void UpDate();				//XVˆ—
 	void Render2D();			//•`‰æˆ—
