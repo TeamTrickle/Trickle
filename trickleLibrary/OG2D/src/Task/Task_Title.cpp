@@ -93,7 +93,7 @@ void Title::UpDate()
 	{
 		this->Kill();
 	}
-	if (OGge->in->key.down(In::ENTER))
+	if (OGge->in->key.down(In::ENTER) || OGge->in->down(In::B2))
 	{
 		this->Skip();
 	}
@@ -389,11 +389,11 @@ bool Title::Finalize()
 
 void Title::CursorMove()
 {
-	if (OGge->in->down(In::CU))
+	if (OGge->in->down(In::CU) || OGge->in->down(In::LU))
 	{
 		this->cursorNum--;
 	}
-	if (OGge->in->down(In::CD))
+	if (OGge->in->down(In::CD) || OGge->in->down(In::LD))
 	{
 		this->cursorNum++;
 	}
@@ -490,6 +490,7 @@ void Title::SkipMove()
 	npc2->SetReplayEnable();
 	this->sound->play();
 	this->isSkip = false;
+	OGge->in->ResetInputData();
 }
 
 Title::SP Title::Create(bool flag_)

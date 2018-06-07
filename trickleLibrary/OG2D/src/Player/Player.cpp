@@ -112,7 +112,7 @@ void Player::UpDate()
 				this->motion = Motion::Fall;
 				break;
 			}
-			if (OGge->in->on(In::B1))
+			if (OGge->in->down(In::B1))
 			{
 				if (this->FootCheck())
 				{
@@ -154,7 +154,7 @@ void Player::UpDate()
 					}
 				}
 			}
-			if (this->InputLeft() || this->InputRight())
+			if (this->InputLeft() || this->InputRight() || this->AxisLX() != 0)
 			{
 				//NORMALの時、左右ボタンを押すとWALKに変わる
 				this->motion = Motion::Walk;
@@ -200,7 +200,7 @@ void Player::UpDate()
 								//アニメーション中以外
 			if (this->state != State::ANIMATION)
 			{
-				if (OGge->in->on(In::B1))
+				if (OGge->in->down(In::B1))
 				{
 					if (this->LadderJumpCheck())
 					{
@@ -242,7 +242,7 @@ void Player::UpDate()
 			}
 			break;
 		case Walk:
-			if (!this->InputRight() && !this->InputLeft())
+			if (!this->InputRight() && !this->InputLeft() && this->AxisLX() == 0)
 			{
 				this->motion = Motion::Normal;
 			}
@@ -284,10 +284,22 @@ void Player::UpDate()
 				this->est.x = -this->MOVE_SPEED;
 				this->direction = Direction::LEFT;
 			}
-			if (this->InputRight())
+			else if (this->InputRight())
 			{
 				this->est.x = +this->MOVE_SPEED;
 				this->direction = Direction::RIGHT;
+			}
+			else
+			{
+				this->est.x = this->AxisLX() * this->MOVE_SPEED;
+				if (this->AxisLX() > 0)
+				{
+					this->direction = Direction::RIGHT;
+				}
+				if (this->AxisLX() < 0)
+				{
+					this->direction = Direction::LEFT;
+				}
 			}
 		}
 	}
@@ -1127,6 +1139,38 @@ bool Player::PutCheck()
 		}
 	}
 	return true;
+}
+bool Player::InputLeft() {
+	return OGge->in->on(Input::CL);
+}
+bool Player::InputRight() {
+	return OGge->in->on(Input::CR);
+}
+bool Player::InputDown() {
+	return OGge->in->on(Input::CD) || OGge->in->on(In::LD);
+}
+bool Player::InputUp() {
+	return OGge->in->on(Input::CU) || OGge->in->on(In::LU);
+}
+float Player::AxisLX()
+{
+	if (OGge->in->axis(In::AXIS_LEFT_X) > 0.3f || OGge->in->axis(In::AXIS_LEFT_X) < -0.3f)
+	{
+		return OGge->in->axis(In::AXIS_LEFT_X);
+	}
+	return 0.0f;
+}
+float Player::AxisLY()
+{
+	return OGge->in->axis(In::AXIS_LEFT_Y);
+}
+float Player::AxisRX()
+{
+	return OGge->in->axis(In::AXIS_RIGHT_X);
+}
+float Player::AxisRY()
+{
+	return OGge->in->axis(In::AXIS_RIGHT_Y);
 }
 Player::SP Player::Create(Vec2& pos, bool flag)
 {

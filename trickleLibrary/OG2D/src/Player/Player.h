@@ -113,16 +113,12 @@ public:
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
 	bool ReleaseHold();
 	//入力処理簡略化
-	bool InputLeft() {
-		return OGge->in->on(Input::CL);
-	}
-	bool InputRight() {
-		return OGge->in->on(Input::CR);
-	}
-	bool InputDown() {
-		return OGge->in->on(Input::CD);
-	}
-	bool InputUp() {
-		return OGge->in->on(Input::CU);
-	}
+	bool InputLeft();
+	bool InputRight();
+	bool InputDown();
+	bool InputUp();
+	float AxisLX();
+	float AxisLY();
+	float AxisRX();
+	float AxisRY();
 };
