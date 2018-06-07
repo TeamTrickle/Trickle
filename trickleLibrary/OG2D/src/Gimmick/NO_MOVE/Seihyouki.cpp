@@ -22,10 +22,16 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 
 	this->animCnt = 0;
+	this->coldNum = 0;
+	draw.clear();
 	return true;
 }
 void Seihyouki::UpDate() {
 	if (active) {
+		//if(‚±‚±‚É»•X‹@‚Ì•ûŒü‚ð‚à‚ç‚¤) {
+		this->coldNum = Scale.x / 64;
+		draw.resize(coldNum);
+		//}
 		toIce();
 	}
 }
@@ -35,23 +41,19 @@ void Seihyouki::Render2D() {
 	if (active) {
 		LineDraw();
 		++animCnt;
-		Box2D draw, src;
-		if (Scale.x > 64) {
-			Box2D draw = { position.x, position.y, Scale.x, Scale.y };
-			draw.OffsetSize();
 
-			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
-			src.OffsetSize();
-		}
-		else {
-			Box2D draw = { position.x, position.y, Scale.x, Scale.y };
-			draw.OffsetSize();
-
-			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
-			src.OffsetSize();
+		for (int i = 0; i < coldNum; ++i)
+		{
+			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+			draw[i].OffsetSize();
 		}
 
-		this->coldImg->Draw(draw, src);
+		Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+		src.OffsetSize();
+
+		for (auto draw_ : draw) {
+			this->coldImg->Draw(draw_, src);
+		}
 	}
 }
 bool Seihyouki::Finalize() {

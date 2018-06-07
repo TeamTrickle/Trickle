@@ -17,8 +17,7 @@ class Kanetuki : public GameObject, public TaskObject {
 	Texture* hotImg;			//画像データ
 	int animCnt;				//アニメーションカウント
 	int hotNum;				//横幅によって増える画像の数
-
-	std::vector<Box2D> draw;
+	std::vector<Box2D> draw;//炎の画像
 
 	bool Initialize(Vec2&, Vec2 range, bool active);		//初期化処理
 	void UpDate();				//更新処理

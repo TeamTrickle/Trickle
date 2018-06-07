@@ -41,20 +41,9 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, bool active) {
 
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 	this->animCnt = 0;
+	this->hotNum = 0;
 
 	draw.clear();
-	int i = Scale.x;
-	this->hotNum = 0;
-	for (int i = Scale.x; i <= 0; i -= 64)
-	{
-		++hotNum;
-	}
-	draw.resize(hotNum);
-	for (int i = 0; i < hotNum; ++i)
-	{
-		draw.push_back(Box2D(position.x*i, position.y, Scale.x, Scale.y));
-		draw[i].OffsetSize();
-	}
 
 	cout << "加熱器　初期化" << endl;
 
@@ -69,6 +58,10 @@ void Kanetuki::UpDate() {
 	this->nowplay = sound.isplay();
 	if (active)
 	{
+		//if(ここに加熱器の方向をもらう) {
+		this->hotNum = Scale.x / 64;
+		draw.resize(hotNum);
+		//}
 		if (startflag)
 		{
 			sound.play();
@@ -98,9 +91,13 @@ void Kanetuki::Render2D() {
 	if (active) {
 		LineDraw();			//デバッグ用
 		++animCnt;
-		Box2D src;
 
-		src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
+		for (int i = 0; i < hotNum; ++i)
+		{
+			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+			draw[i].OffsetSize();
+		}
+		Box2D src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
 		src.OffsetSize();
 
 		for (auto draw_ : draw) {
