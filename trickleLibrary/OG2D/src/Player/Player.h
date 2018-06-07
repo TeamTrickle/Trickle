@@ -46,7 +46,8 @@ private:
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
 		int timeCnt;											//アニメーション経過時間
-		int ladderCnt;											//梯子アニメーションのカウント
+		int animCnt;											//一部アニメーションのカウント
+		Motion animMo;											//ギミックによって変わるモーション
 		int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };					//Normal状態のアニメーション
 		int walk[9] = { 0,1,2,3,4,5,6,7,8 };					//Walk状態のアニメーション
 		int ladder[2] = { 0,1 };								//ladder_ani状態のアニメーション
@@ -55,7 +56,7 @@ private:
 	public:
 		void SetAnimaVec(Vec2& start_, Vec2& end_);				//開始位置と終了位置を登録
 		bool Initialize();										//初期化
-		Vec2 Move();											//移動処理を行い移動値を返す
+		Vec2 Move(Motion motion_);								//移動処理を行い移動値を返す
 		bool isMove();											//移動処理中かどうかを返す
 		Box2D returnSrc(Motion motion, State state);			//motionによってsrcを返す
 	private:
