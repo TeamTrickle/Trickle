@@ -40,6 +40,8 @@ class Title :public TaskObject
 	Texture texClose;
 	Texture texPause;
 
+	Texture texEffect;
+
 	Texture GierLogo;
 	Texture flowerLogo;
 
