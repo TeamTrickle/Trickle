@@ -214,7 +214,7 @@ void StageSelect::From2()
 	{
 		auto board = OGge->GetTask<StageAlert>("stagealert");
 		if (board) {
-			board->AnimPlay();
+			//board->AnimPlay();
 		}
 		//ŽŸ‚ÖˆÚ“®
 		this->mode = Mode::from3;

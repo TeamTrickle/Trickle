@@ -28,32 +28,21 @@ StageAlert::SP StageAlert::Create(bool flag_)
 	return nullptr;
 }
 
+#define TEXTURE_SIZE(X) (int)X.GetTextureSize()
 bool StageAlert::Initialize() {
 	// リソース初期化
 	background.Create((std::string)"stagealert_background.png");
 	star.Create((std::string)"stagealert_star.png");
 	mission.Create((std::string)"stagealert_mission.png");
 	clearFlag.Create((std::string)"stagealert_clearflag.png");
-	
-	auto bgSize = background.GetTextureSize();
-	
-	Animation seq1{
-		Box2D(50, 50, (int)bgSize.x + 50, (int)bgSize.y + 50),
-		Box2D(0, 0, (int)bgSize.x, (int)bgSize.y),
-		[&]() -> bool {
-			if (!seq1.ease.isplay()) {
-				std::cout << "seq1 終了" << std::endl;
-				return true;
-			}
-			seq1.draw.w = 
-				seq1.ease.bounce.In(seq1.ease.Time(3.f),
-									0.f,
-									bgSize.x,
-									3.f);
-			return false;
-		}
-	};
-	anis_origin.push(seq1);
+
+	draws.insert({ &background, Box2D(500, 50,	TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y) });
+	srcs.insert ({ &background, Box2D(0, 0,		TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y) });
+
+	previewer = MapPreviewer::Create(true, 
+		Box2D(550, 150, TEXTURE_SIZE(background).x - 50, TEXTURE_SIZE(background).y - 50), 
+		"stageinfo_test.jpg");
+	(*previewer).setVisible(true);
 
 	__super::Init((std::string)"stagealert");
 	__super::SetDrawOrder(0.8f);
@@ -76,7 +65,13 @@ void StageAlert::UpDate() {
 }
 
 void StageAlert::Render2D() {
-
+	for (auto& d : draws) {
+		Box2D draw = d.second;
+		draw.OffsetSize();
+		Box2D src = srcs[d.first];
+		src.OffsetSize();
+		(d.first)->Draw(draw, src);
+	}
 }
 
 void StageAlert::Finalize() {
@@ -84,6 +79,7 @@ void StageAlert::Finalize() {
 	star.Finalize();
 	mission.Finalize();
 	clearFlag.Finalize();
+	(*previewer).Kill();
 }
 
 inline bool StageAlert::isAnimPlayable() const {

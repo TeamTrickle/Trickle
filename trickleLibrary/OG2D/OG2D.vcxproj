@@ -198,6 +198,7 @@
     <ClCompile Include="src\Player\ResultPlayer.cpp" />
     <ClCompile Include="src\Recorder\Recorder.cpp" />
     <ClCompile Include="src\Recorder\RecPlayer.cpp" />
+    <ClCompile Include="src\Task\MapPreviewer.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Option.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="src\Recorder\Recorder.h" />
     <ClInclude Include="src\Recorder\RecPlayer.h" />
     <ClInclude Include="src\StageFileSys.h" />
+    <ClInclude Include="src\Task\MapPreviewer.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Option.h" />

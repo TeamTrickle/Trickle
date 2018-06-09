@@ -1,5 +1,6 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
+#include "MapPreviewer.h"
 #include <queue>
 #include <functional>
 
@@ -52,15 +53,18 @@ private:
 	const static int MAX_ACHIEVEMENT = 3;
 
 private:
-	std::string					stageName;
-	bool						isClear = false;
-	Achievement					achievements[MAX_ACHIEVEMENT];
-	std::queue<Animation>		anis_origin;
-	std::queue<Animation>		anis;
-	Animation*					playingAnime;
+	std::string							stageName;
+	bool								isClear = false;
+	Achievement							achievements[MAX_ACHIEVEMENT];
+	std::queue<Animation>				anis_origin;
+	std::queue<Animation>				anis;
+	Animation*							playingAnime;
+	std::map<Texture*, Box2D>			draws;
+	std::map<Texture*, Box2D>			srcs;
 
-	Texture						background;
-	Texture						star;
-	Texture						mission;
-	Texture						clearFlag;
+	Texture								background;
+	Texture								star;
+	Texture								mission;
+	Texture								clearFlag;
+	MapPreviewer::SP					previewer;
 };

@@ -318,6 +318,9 @@
     <ClCompile Include="src\Task\Task_StageAlert.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
+    <ClCompile Include="src\Task\MapPreviewer.cpp">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -499,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="src\StageFileSys.h">
       <Filter>ソースファイル\Task\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\MapPreviewer.h">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
