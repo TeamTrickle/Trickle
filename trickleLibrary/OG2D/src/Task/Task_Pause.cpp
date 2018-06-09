@@ -17,8 +17,8 @@ bool Pause::Initialize()
 {
 	//画像読み込み
 	texCursor.Create((std::string)"Collision.png");
-	texTitle.Create((std::string)"titleTx.png");
-	texRuselt.Create((std::string)"Ruselt.png");
+	texRestart.Create((std::string)"restart.png");
+	texReturn.Create((std::string)"return.png");
 	texStageSelect.Create((std::string)"StageSelect.png");
 	texTransparentBack.Create((std::string)"TransparentBack.png");
 
@@ -46,15 +46,15 @@ bool Pause::Finalize()
 
 	//使用画像の解放
 	texCursor.Finalize();
-	texTitle.Finalize();
-	texRuselt.Finalize();
+	texRestart.Finalize();
+	texReturn.Finalize();
 	texTransparentBack.Finalize();
 	texStageSelect.Finalize();
 
 	OGge->SetPause(false);
 
 	switch (select) {
-	case ToTitle:
+	case Restart:
 		{
 			auto game = OGge->GetTask<Game>("game");
 			game->Finalize();
@@ -70,7 +70,7 @@ bool Pause::Finalize()
 		}
 		StageSelect::Create();
 		break;
-	case Ruselt:
+	case Return:
 		break;
 	}
 	return true;
@@ -98,21 +98,21 @@ void Pause::Pause_draw()
 				src.OffsetSize();
 				texCursor.Draw(draw, src);
 			}
-			//Title
+			//restart
 			{
-				Box2D draw(titlePos.x, titlePos.y, 256.0f, 64.0f);
+				Box2D draw(RestartPos.x, RestartPos.y, 256.0f, 64.0f);
 				draw.OffsetSize();
 				Box2D src(0, 0, 256, 64);
 				src.OffsetSize();
-				texTitle.Draw(draw, src);
+				texRestart.Draw(draw, src);
 			}
-			//ruselt
+			//Return
 			{
-				Box2D draw(ruseltPos.x, ruseltPos.y, 256.0f, 64.0f);
+				Box2D draw(ReturnPos.x, ReturnPos.y, 256.0f, 64.0f);
 				draw.OffsetSize();
 				Box2D src(0, 0, 256, 64);
 				src.OffsetSize();
-				texRuselt.Draw(draw, src);
+				texReturn.Draw(draw, src);
 			}
 			//stageselect
 			{
@@ -154,8 +154,9 @@ void Pause::PauseUpDate()
 	float NewPos = keisan + NowCameraPos.x;
 	transparentbackPos = Vec2(0, 0);
 
-	titlePos = Vec2(NewPos + 600.0f, NowCameraPos.y + 50.0f);
-	ruseltPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 250.0f);
+	//選択し位置
+	RestartPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 50.0f);
+	ReturnPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 250.0f);
 	stageselectPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 150.0f);
 
 	//矢印の移動
@@ -166,56 +167,47 @@ void Pause::PauseUpDate()
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
 	}
 	cursorPos = Vec2(NewPos + 500.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));
-	select = Select::Ruselt;
+	select = Select::Return;
 	//選択し
-	if (cursorPos.y == titlePos.y)
+	if (cursorPos.y == RestartPos.y)
 	{
-		select = ToTitle;
+		select = Restart;
 	}
 	if (cursorPos.y == stageselectPos.y)
 	{
 		select = Stage;
 	}
-	if (cursorPos.y == ruseltPos.y)
+	if (cursorPos.y == ReturnPos.y)
 	{
-		select = Ruselt;
+		select = Return;
 	}
 	//選択しの決定処理
-	if (OGge->in->down(In::B2))
-	{
+	if (OGge->in->down(In::B2)){
 		OGge->SetPause(false);
-		if (select != Ruselt) {
+		if (select != Return) {
 			this->Kill();
 		}
 	}
 
-	//画面外処理
-	if (NowCameraPos.x < 0) {
-		NowCameraPos.x = 0;
-	}
-	if (NowCameraPos.x + NowCameraSize.x > map->mapSize.x * map->DrawSize.x) {
-		NowCameraPos.x = (map->mapSize.x * map->DrawSize.x) - NowCameraSize.x;
-	}
-	if (NowCameraPos.y < 0) {
-		NowCameraPos.y = 0;
-	}
-	if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
-		NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
-	}
-
-	//カメラ移動処理(未完成)
+	//カメラ移動処理
 		if (OGge->in->key.on(In::A)){
-			OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
+			if (NowCameraPos.x > 0) {
+				OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
+			}
 		}
 		if (OGge->in->key.on(In::D)){
-			OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
+			if (NowCameraPos.x + NowCameraSize.x<map->mapSize.x * map->DrawSize.x) {
+				OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
+			}
 		}
 		if (OGge->in->key.on(In::W)) {
-			OGge->camera->MovePos(Vec2(0.0f,-5.0f));
+			if (NowCameraPos.y > 0) {
+				OGge->camera->MovePos(Vec2(0.0f, -5.0f));
+			}
 		}
 		if (OGge->in->key.on(In::S)) {
-			OGge->camera->MovePos(Vec2(0.0f, 5.0f));
+			if (NowCameraPos.y + NowCameraSize.y < map->mapSize.y * map->DrawSize.y) {
+				OGge->camera->MovePos(Vec2(0.0f, 5.0f));
+			}
 		}
-
-
 }

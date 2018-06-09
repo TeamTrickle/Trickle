@@ -9,12 +9,12 @@
 class Pause :public TaskObject
 {
 	Texture texCursor;
-	Texture texTitle;
-	Texture texRuselt;
+	Texture texRestart;
+	Texture texReturn;
 	Texture texStageSelect;
 	Texture texTransparentBack;
-	Vec2 titlePos;
-	Vec2 ruseltPos;
+	Vec2 RestartPos;
+	Vec2 ReturnPos;
 	Vec2 stageselectPos;
 	Vec2 cursorPos;
 	Vec2 transparentbackPos;
@@ -32,7 +32,7 @@ public:
 	void Pause_draw();
 	void PauseUpDate();
 	enum Select {
-		ToTitle, Stage, Ruselt,
+		Restart, Stage, Return,
 	};
 	Select select;
 

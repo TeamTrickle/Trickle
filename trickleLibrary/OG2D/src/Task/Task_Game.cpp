@@ -63,7 +63,7 @@ Game::~Game()
 bool Game::Initialize()
 {
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
-	//一時停止タスクの生成
+	//Pauseタスクの生成
 	auto pause = Pause::Create();
 
 	////switchまではそのまま
@@ -310,8 +310,7 @@ void Game::UpDate()
 	Camera_move();
 
 	// Pause処理
-	if (OGge->in->key.down(In::G))
-	{
+	if (OGge->in->key.down(In::D2)){
 		OGge->SetPause(true);
 	}
 
