@@ -57,7 +57,7 @@ bool Title::Initialize()
 	this->texLogo.Create("logo.png");
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
-	this->texEffect.Create("testEffect01.png");
+	this->texEffect.Create("Effect02.png");
 	//ƒTƒEƒ“ƒh‚Ì¶¬
 	sound = new Sound();
 	sound->create(soundname, true);
@@ -139,10 +139,20 @@ void Title::UpDate()
 			{
 				this->isGierAng = true;
 				this->mode = from2;
-				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 64.f), Vec2(256, 32), Vec2(256, 32), 1, 100, 100, "titleEffect");
-				effect->Color_a(1.0f);
+				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 100, 100, "titleEffect");
 				effect->SetTexture(&this->texEffect);
-				effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 300), 10);
+				effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 500), 15);
+				effect->SetMode(Effect::Mode::Flash);
+				for (int i = 0; i < 10; ++i)
+				{
+					float rand = random::GetRand(this->Logo.position.x, this->Logo.position.x + 182.f);
+					auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 100, 100, "titleEffect");
+					effect_r->SetTexture(&this->texEffect);
+					effect_r->Set(effect_r->position, Vec2(effect_r->position.x, effect_r->position.y - 500), 15);
+					effect_r->SetMode(Effect::Mode::Flash);
+					float rand_a = random::GetRand(0.0f, 1.0f);
+					effect_r->Color_a(rand_a);
+				}
 			}
 		}
 	}
@@ -283,7 +293,7 @@ void Title::Render2D()
 		Box2D draw(634, 380, 52, 52);
 		draw.OffsetSize();
 		Box2D src(0, 0, 128, 128);
-		this->GierLogo.Rotate(this->gierCnt);
+		this->GierLogo.Rotate((float)this->gierCnt);
 		this->GierLogo.Draw(draw, src);
 	}
 	{
@@ -299,7 +309,7 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 0, 195, 195);
 		src.OffsetSize();
-		this->texCursor.Rotate(this->gierCnt);
+		this->texCursor.Rotate((float)this->gierCnt);
 		texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 256.f, cursorPos[this->cursorNum].y, 64.f, 64.f);
 		draw2.OffsetSize();

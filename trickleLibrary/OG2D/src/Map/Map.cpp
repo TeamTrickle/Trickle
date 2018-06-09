@@ -52,15 +52,15 @@ bool Map::LoadMap(std::string& path_, Format format)
 	std::getline(_is, text, ',');
 	(std::stringstream)text >> this->mapSize.y;
 	//_arrをmapyのサイズ分にサイズを変更する(配列化)
-	this->_arr.resize(this->mapSize.y);
-	this->ID.resize(this->mapSize.y);
-	this->hitBase.resize(this->mapSize.y);
+	this->_arr.resize((int)this->mapSize.y);
+	this->ID.resize((int)this->mapSize.y);
+	this->hitBase.resize((int)this->mapSize.y);
 	//_arr[]をmapxのサイズ分にサイズを変更する(二次配列化)
 	for (int i = 0; i < this->mapSize.y; ++i)
 	{
-		this->_arr[i].resize(this->mapSize.x);
-		this->ID.resize(this->mapSize.x);
-		this->hitBase[i].resize(this->mapSize.x);
+		this->_arr[i].resize((int)this->mapSize.x);
+		this->ID.resize((int)this->mapSize.x);
+		this->hitBase[i].resize((int)this->mapSize.x);
 	}
 	for (int y = 0; y < this->mapSize.y; ++y) {
 		std::string lineText;

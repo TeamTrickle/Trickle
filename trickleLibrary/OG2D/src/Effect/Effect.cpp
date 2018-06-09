@@ -12,6 +12,8 @@ Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const 
 	this->oneSize = srcSize;
 	this->alpha = 1.0f;
 	this->color = { 1.0f,1.0f,1.0f,this->alpha };
+	this->flag = false;
+	this->mode = Mode::Normal;
 	__super::Init(this->objectTag);
 	__super::SetDrawOrder(1.0f);
 }
@@ -32,6 +34,34 @@ void Effect::UpDate()
 	{
 		this->Kill();
 	}
+	switch (this->mode)
+	{
+	case Mode::Normal:
+		break;
+	case Mode::Flash:
+		if (this->flag)
+		{
+			this->alpha += 0.01f;
+		}
+		else
+		{
+			this->alpha -= 0.01f;
+		}
+		if (this->alpha > 1.0f)
+		{
+			this->flag = false;
+		}
+		if (this->alpha < 0.0f)
+		{
+			this->flag = true;
+		}
+		break;
+	case Mode::Decrease:
+		this->alpha = 1.0f - ((float)this->animCnt / (float)this->time);
+		break;
+	default:
+		break;
+	}
 }
 
 void Effect::Render2D()
@@ -43,6 +73,11 @@ void Effect::Render2D()
 	this->color.alpha = this->alpha;
 	this->image->Draw(this->draw, this->src, this->color);
 	
+}
+
+void Effect::SetMode(const Mode& mode)
+{
+	this->mode = mode;
 }
 
 Effect::SP Effect::Create(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag, const bool flag)

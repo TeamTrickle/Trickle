@@ -12,7 +12,7 @@ private:
 	 @return ‰½‚©‚É‚Ô‚Â‚©‚Á‚½‚Ì‚©‚Ì”»’è
 	*/
 	bool isCollideSomething();
-
+	bool footCheck();
 public:
 	explicit Block();
 	explicit Block(Vec2& pos);
@@ -25,6 +25,8 @@ public:
 	//float speed;
 	Vec2 speed;
 	Vec2 gravity;
+	GameObject foot;
+	unsigned __int8 Cnt;
 	bool Initialize(Vec2&);
 	void UpDate();
 	void Render2D();

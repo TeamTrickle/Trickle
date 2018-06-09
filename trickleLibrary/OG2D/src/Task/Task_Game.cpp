@@ -89,6 +89,8 @@ bool Game::Initialize()
 	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
 	this->EffectTest.Create("EffectTest.png");
 	rm->SetTextureData((std::string)"Effect", &this->EffectTest);
+	this->Effectsond.Create("sandsmoke.png");
+	rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
 	//ui¶¬
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -449,6 +451,7 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
 	rm->DeleteTexture((std::string)"paintTex");
+	rm->DeleteTexture((std::string)"sandsmoke");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -457,6 +460,7 @@ bool Game::Finalize()
 	this->waterPurple.Finalize();
 	this->waterRed.Finalize();
 	this->PaintTex.Finalize();
+	this->Effectsond.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
