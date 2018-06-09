@@ -12,6 +12,7 @@
 class MapPreviewer : public TaskObject {
 private:
 	bool Initialize(const Box2D&, const std::string&);
+	bool isShootable(const Vec2&) const;
 
 public:
 	explicit MapPreviewer() {}
@@ -40,6 +41,7 @@ private:
 	Vec2					thumbSize;
 	Vec2					pointPos;
 	float					camSpeed = 5.f;
+	int						curMoveIdx = 0;
 
-	const static std::array<Vec2, 4> CamMoveSeq;
+	static std::array<Vec2, 4> CamMoveSeq;
 };

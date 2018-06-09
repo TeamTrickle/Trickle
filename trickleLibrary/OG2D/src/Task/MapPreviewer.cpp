@@ -1,11 +1,11 @@
 #include "MapPreviewer.h"
 #include <iostream>
 
-const std::array<Vec2, 4> MapPreviewer::CamMoveSeq = {
+std::array<Vec2, 4> MapPreviewer::CamMoveSeq = {
 	Vec2(1, 0),
-	Vec2(0, -1),
+	Vec2(0, 1),
 	Vec2(-1, 0),
-	Vec2(0, 1)
+	Vec2(0, -1)
 };
 
 MapPreviewer::~MapPreviewer() {
@@ -43,7 +43,16 @@ bool MapPreviewer::Initialize(const Box2D& size, const std::string& mapFile) {
 
 void MapPreviewer::UpDate() {
 	if (visible) {
-		
+		Vec2 est = pointPos + (CamMoveSeq[curMoveIdx] * camSpeed);
+		if (isShootable(est)) {
+			pointPos = est;
+		}
+		else {
+			++curMoveIdx;
+			if (curMoveIdx >= CamMoveSeq.size()) {
+				curMoveIdx = 0;
+			}
+		}
 	}
 }
 
@@ -60,6 +69,16 @@ void MapPreviewer::Render2D() {
 		src.OffsetSize();
 		mapThumbnail.Draw(draw, src);
 	}
+}
+
+bool MapPreviewer::isShootable(const Vec2& v) const {
+	std::cout << std::to_string(v.x) << "/"
+		<< std::to_string(v.y) << std::endl;
+	return
+		v.x >= 0 &&
+		v.y >= 0 &&
+		v.x + windowSize.w < thumbSize.x &&
+		v.y + windowSize.h < thumbSize.y;
 }
 
 void MapPreviewer::replaceThumbnail(const std::string& filePath) {
