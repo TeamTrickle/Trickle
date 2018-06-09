@@ -35,7 +35,6 @@ Game::~Game()
 {
 	//解放処理と次のsceneの生成
 	this->Finalize();
-	OGge->ChengeTask();
 	//OGge->DeleteTasks();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
@@ -64,8 +63,8 @@ Game::~Game()
 bool Game::Initialize()
 {
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
-	//一時停止タスクの生成
-	//auto pause = Pause::Create();
+	//Pauseタスクの生成
+	auto pause = Pause::Create();
 
 	////switchまではそのまま
 	//Vec2 bucketpos[2] = {
@@ -311,6 +310,11 @@ void Game::UpDate()
 	}
 	//カメラ処理
 	Camera_move();
+
+	// Pause処理
+	if (OGge->in->key.down(In::D2)){
+		OGge->SetPause(true);
+	}
 
 	//UI
 	UImng_->UpDate();
