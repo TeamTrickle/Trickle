@@ -35,7 +35,6 @@ public:
 		ToTitle, Stage, Ruselt,
 	};
 	Select select;
-	bool PauseFlg;
 
 	typedef std::shared_ptr<Pause> SP;
 	static SP Create(bool = true);

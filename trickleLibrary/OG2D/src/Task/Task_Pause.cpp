@@ -10,12 +10,11 @@ Pause::Pause()
 Pause::~Pause()
 {
 	this->Finalize();
+
 }
 //--------------------------------------------------------------------------------------
 bool Pause::Initialize()
 {
-	//ポーズ判定
-	PauseFlg = false;
 	//画像読み込み
 	texCursor.Create((std::string)"Collision.png");
 	texTitle.Create((std::string)"titleTx.png");
@@ -32,12 +31,6 @@ bool Pause::Initialize()
 //--------------------------------------------------------------------------------------
 void Pause::UpDate()
 {
-	//ポーズへの移動
-	if (OGge->in->key.down(In::G)) {
-		OGge->SetPause(true);
-		PauseFlg = true;
-	}
-
 }
 //--------------------------------------------------------------------------------------
 void Pause::Render2D()
@@ -58,23 +51,16 @@ bool Pause::Finalize()
 	texTransparentBack.Finalize();
 	texStageSelect.Finalize();
 
-	auto gameTask = OGge->GetTask<Game>("game");
-	if (gameTask) gameTask->Kill();
-
-	auto titleTask = OGge->GetTask<Title>("title");
-	//if (titleTask) titleTask->Kill();
-
-	if (this->select != Select::Ruselt) {
-		auto game = OGge->GetTask<Game>("game");
-		if (game) {
-			game->Kill();
-		}
+	OGge->SetPause(false);
+	auto game = OGge->GetTasks<Game>("game");
+	for (auto& g : (*game)) {
+		g->Kill();
 	}
 
 	switch (select) {
 	case ToTitle:
-		Title::Create();
-		break;
+		Game::Create();
+	break;
 	case Stage:
 		StageSelect::Create();
 		break;
@@ -87,7 +73,7 @@ bool Pause::Finalize()
 //ポーズ選択しの表示
 void Pause::Pause_draw()
 {
-	if (PauseFlg == true) {
+	if (OGge->GetPause()) {
 		{
 			//背景
 			{
@@ -154,14 +140,6 @@ Pause::SP Pause::Create(bool flag_)
 //--------------------------------------------------------------------------------------
 void Pause::PauseUpDate()
 {
-	//デバッグ用
-	//std::cout << "Puase" << std::endl;
-	//ポーズ画面の解除
-	if (OGge->in->key.down(In::G)) {
-		OGge->SetPause(false);
-		PauseFlg = false;
-	}
-
 	//選択肢の表示はカメラによって位置が変更
 	auto NowCameraPos = OGge->camera->GetPos();
 	auto NowCameraSize = OGge->camera->GetSize();
@@ -169,6 +147,7 @@ void Pause::PauseUpDate()
 	float keisan = NowCameraSize.x / 2;
 	float NewPos = keisan + NowCameraPos.x;
 	transparentbackPos = Vec2(0, 0);
+
 	titlePos = Vec2(NewPos + 600.0f, NowCameraPos.y + 50.0f);
 	ruseltPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 250.0f);
 	stageselectPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 150.0f);
@@ -199,25 +178,9 @@ void Pause::PauseUpDate()
 	if (OGge->in->down(In::B2))
 	{
 		OGge->SetPause(false);
-		PauseFlg = false;
 		if (select != Ruselt) {
 			this->Kill();
 		}
-	}
-
-
-	//カメラ移動処理
-	if (OGge->in->key.on(In::A)) {
-		OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
-	}
-	if (OGge->in->key.on(In::D)) {
-		OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
-	}
-	if (OGge->in->key.on(In::W)) {
-		OGge->camera->MovePos(Vec2(0.0f, -5.0f));
-	}
-	if (OGge->in->key.on(In::S)) {
-		OGge->camera->MovePos(Vec2(0.0f, 5.0f));
 	}
 
 	//画面外処理
@@ -233,5 +196,20 @@ void Pause::PauseUpDate()
 	if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
 		NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
 	}
+
+	//カメラ移動処理(未完成)
+		if (OGge->in->key.on(In::A)){
+			OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
+		}
+		if (OGge->in->key.on(In::D)){
+			OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
+		}
+		if (OGge->in->key.on(In::W)) {
+			OGge->camera->MovePos(Vec2(0.0f,-5.0f));
+		}
+		if (OGge->in->key.on(In::S)) {
+			OGge->camera->MovePos(Vec2(0.0f, 5.0f));
+		}
+
 
 }
