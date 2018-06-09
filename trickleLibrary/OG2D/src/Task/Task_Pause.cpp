@@ -52,16 +52,22 @@ bool Pause::Finalize()
 	texStageSelect.Finalize();
 
 	OGge->SetPause(false);
-	auto game = OGge->GetTasks<Game>("game");
-	for (auto& g : (*game)) {
-		g->Kill();
-	}
 
 	switch (select) {
 	case ToTitle:
-		Game::Create();
+		{
+			auto game = OGge->GetTask<Game>("game");
+			game->Finalize();
+			game->Initialize();
+		}
 	break;
 	case Stage:
+		{
+			auto game = OGge->GetTasks<Game>("game");
+			for (auto& g : (*game)) {
+				g->Kill();
+			}
+		}
 		StageSelect::Create();
 		break;
 	case Ruselt:
