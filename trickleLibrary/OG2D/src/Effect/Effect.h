@@ -13,6 +13,13 @@ class Effect : public TaskObject , public GameObject
 		Vec2 startPos;
 		Vec2 endPos;
 	};
+public:
+	enum Mode
+	{
+		Normal,
+		Flash,
+		Decrease,
+	};
 private:
 	Texture* image;
 	Box2D draw;
@@ -25,6 +32,8 @@ private:
 	float alpha;
 	Vec2 oneSize;
 	Color color;
+	Mode mode;
+	bool flag;
 public:
 	explicit Effect(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag);
 	virtual ~Effect();
@@ -33,6 +42,7 @@ public:
 	void Set(const Vec2& start_, const Vec2& end_,const float time_ = 10.f);
 	void SetTexture(Texture*);
 	void Color_a(const float a);
+	void SetMode(const Mode&);
 	typedef std::shared_ptr<Effect> SP;
 	//位置、サイズ、元サイズ、枚数、表示時間、1枚あたりの時間
 	static SP Create(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime = 10, const std::string& tag = "", const bool = true);

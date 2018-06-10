@@ -27,7 +27,7 @@ Window::Window(int wi, int he, char* name, bool screen,Vec2& pos)
 		glfwTerminate();
 		return;
 	}
-	glfwSetWindowPos(this->window, this->position.x, this->position.y);
+	glfwSetWindowPos(this->window, (int)this->position.x, (int)this->position.y);
 }
 Window::~Window()
 {
@@ -52,7 +52,7 @@ bool Window::createWindow(int wi, int he, char* name, bool screen,Vec2& pos)
 		glfwTerminate();
 		return false;
 	}
-	glfwSetWindowPos(this->window, this->position.x, this->position.y);
+	glfwSetWindowPos(this->window, (int)this->position.x, (int)this->position.y);
 	return true;
 }
 void Window::setIcon(std::string& path_)

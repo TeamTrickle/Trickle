@@ -81,6 +81,8 @@ bool StageSelect::Initialize()
 	{
 		(*id)->Kill();
 	}
+
+	std::cout << "StageSelect ¶¬Š®—¹" << std::endl;
 	return true;
 }
 

@@ -1,0 +1,13 @@
+diff a/trickleLibrary/OG2D/src/Gimmick/NO_MOVE/Kanetuki.cpp b/trickleLibrary/OG2D/src/Gimmick/NO_MOVE/Kanetuki.cpp	(rejected hunks)
+@@ -41,9 +41,10 @@
+ 
+ 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
+ 	this->animCnt = 0;
+-	this->hotNum = 0;
+ 
+ 	draw.clear();
++	int i = Scale.x;
++	this->hotNum = 0;
+ 
+ 	cout << "���M��@������" << endl;
+ 

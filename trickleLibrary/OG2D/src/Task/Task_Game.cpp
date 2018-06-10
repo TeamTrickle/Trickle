@@ -35,7 +35,6 @@ Game::~Game()
 {
 	//解放処理と次のsceneの生成
 	this->Finalize();
-	OGge->ChengeTask();
 	//OGge->DeleteTasks();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
@@ -64,8 +63,8 @@ Game::~Game()
 bool Game::Initialize()
 {
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
-	//一時停止タスクの生成
-	//auto pause = Pause::Create();
+	//Pauseタスクの生成
+	auto pause = Pause::Create();
 
 	////switchまではそのまま
 	//Vec2 bucketpos[2] = {
@@ -84,10 +83,14 @@ bool Game::Initialize()
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player.png");
 	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
+	this->fireice.Create((std::string)"fireice.png");
+	rm->SetTextureData((std::string)"fireIce", &this->fireice);
 	this->PaintTex.Create("paintTest.png");
 	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
 	this->EffectTest.Create("EffectTest.png");
 	rm->SetTextureData((std::string)"Effect", &this->EffectTest);
+	this->Effectsond.Create("sandsmoke.png");
+	rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -186,7 +189,7 @@ bool Game::Initialize()
 		//fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
 		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, true);
 		//加熱器生成
-		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), false);		//ToDo:位置を変えるのではなく判定範囲を広げること
+		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), false);
 		//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 20, 64 * 15 - 32), false);
 		//製氷機生成
 		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64));
@@ -309,6 +312,11 @@ void Game::UpDate()
 	}
 	//カメラ処理
 	Camera_move();
+
+	// Pause処理
+	if (OGge->in->key.down(In::D2)){
+		OGge->SetPause(true);
+	}
 
 	//UI
 	UImng_->UpDate();
@@ -439,10 +447,19 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
 	rm->DeleteTexture((std::string)"paintTex");
+	rm->DeleteTexture((std::string)"sandsmoke");
+	rm->DeleteTexture((std::string)"waterRed");
+	rm->DeleteTexture((std::string)"waterBlue");
+	rm->DeleteTexture((std::string)"waterPurple");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -451,6 +468,7 @@ bool Game::Finalize()
 	this->waterPurple.Finalize();
 	this->waterRed.Finalize();
 	this->PaintTex.Finalize();
+	this->Effectsond.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------

@@ -76,7 +76,7 @@ void Player::UpDate()
 		if (this->animation.isMove())
 		{
 			//移動処理
-			this->position += this->animation.Move();
+			this->position += this->animation.Move(this->animation.animMo);
 		}
 		else
 		{
@@ -128,12 +128,17 @@ void Player::UpDate()
 				{
 					this->state = State::BUCKET;
 				}
+				if (this->ObjectHit((std::string)"Switch")) { //Switchが宣言されてなくて入れない
+					this->animation.animCnt = 0;	//動くアニメーションが実装されたら消してください
+					this->SwitchCheck();
+				}
 			}
 			if (this->state != State::BUCKET) {
 				if (this->InputDown())
 				{
 					if (this->FootCheck((std::string)"Ladder"))
 					{
+						this->animation.animMo = Motion::Ladder;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
 						//カウントリセット
@@ -147,6 +152,7 @@ void Player::UpDate()
 				{
 					if (this->ObjectHit((std::string)"Ladder"))
 					{
+						this->animation.animMo = Motion::Ladder;
 						this->state = State::ANIMATION;
 						this->moveCnt = 0;
 						this->est = { 0.f,0.f };
@@ -160,11 +166,6 @@ void Player::UpDate()
 				this->motion = Motion::Walk;
 			}
 			this->TohaveObjectHit();
-			if (OGge->in->down(In::B2))
-			{
-				animation.timeCnt = 0;
-				this->SwitchCheck();
-			}
 			if (this->HeadSolidCheck())
 			{
 				this->state = State::BUCKET;
@@ -210,11 +211,12 @@ void Player::UpDate()
 				}
 				if (this->InputUp())
 				{
-					++this->animation.ladderCnt;
+					++this->animation.animCnt;
 					Vec2 e = { 0.f,-5.0f };
 					this->MoveCheck(e, (std::string)"Floor");
 					if (this->HeadCheck((std::string)"Ladder", 1))
 					{
+						this->animation.animMo = Motion::Ladder;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
 						//カウントリセット
@@ -225,7 +227,7 @@ void Player::UpDate()
 				}
 				if (this->InputDown())
 				{
-					++this->animation.ladderCnt;
+					++this->animation.animCnt;
 					Vec2 e = { 0.f,5.0f };
 					this->MoveCheck(e, (std::string)"Floor");
 					if (this->FootCheck((std::string)"Ladder", 1))
@@ -262,19 +264,37 @@ void Player::UpDate()
 				else
 				{
 					//もしバケツをとれないならばスイッチの判定を行う
+					this->animation.animCnt = 0;	//動くアニメーションが実装されたら消す（仮）
 					this->SwitchCheck();
 				}
 			}
-			this->TohaveObjectHit();
+			if (this->TohaveObjectHit()) {
+				this->motion = Motion::Block_M;
+			}
 			if (this->HeadSolidCheck())
 			{
 				this->state = State::BUCKET;
 			}
 			break;
 		case Switch_M:
-			if (animation.timeCnt > 29) {
+			++this->animation.animCnt;
+			if (this->animation.animCnt > 29) {
 				this->motion = Motion::Normal;
 			}
+			break;
+		case Block_M:
+			if (!this->TohaveObjectHit()) {
+				if (this->InputRight() && this->direction == Direction::LEFT) {
+					this->motion = Motion::Walk;
+				}
+				if (this->InputLeft() && this->direction == Direction::RIGHT) {
+					this->motion = Motion::Walk;
+				}
+				if (!this->InputRight() && !this->InputLeft()) {
+					this->motion = Motion::Normal;
+				}
+			}
+			break;
 		}
 		this->Friction();
 		if (this->motion != Motion::Ladder)
@@ -745,9 +765,13 @@ void Player::SwitchCheck()
 	{
 		if ((*id)->hit(*this))
 		{
-			this->motion = Motion::Switch_M;
-			(*id)->ChangeON_OFF(); 
-			//(*id)->isON();	//これ意味ある？戻り値bool 5.31
+			this->motion = Motion::Switch_M; //スイッチまで動くアニメーションが実装されたら消してください
+			(*id)->ChangeON_OFF();
+			this->animation.animMo = Motion::Switch_M;
+			this->state = State::ANIMATION;
+			this->moveCnt = 0;
+			this->est = { 0.f,0.f };
+			return;
 		}
 	}
 }
@@ -782,10 +806,11 @@ bool Player::Animation::Initialize()
 	this->startVec = { 0.f,0.f };
 	this->endVec = { 0.f,0.f };
 	this->timeCnt = 0;
-	this->ladderCnt = 0;
+	this->animCnt = 0;
+	this->animMo = Normal;
 	return true;
 }
-Vec2 Player::Animation::Move()
+Vec2 Player::Animation::Move(Motion motion_)
 {
 	auto player = OGge->GetTask<Player>("Player");
 	Vec2 move = { 0.f,0.f };
@@ -813,7 +838,7 @@ Vec2 Player::Animation::Move()
 		if (this->animationVec.y > 0.f)
 		{
 			move.y += this->animationVec.y;
-			player->motion = Motion::Ladder;
+			player->motion = motion_;
 			this->animationVec.y = 0.f;
 		}
 		else if (this->animationVec.y < 0.f)
@@ -824,9 +849,10 @@ Vec2 Player::Animation::Move()
 		}
 		else
 		{
-			player->motion = Motion::Ladder;
+			player->motion = motion_;
 		}
 	}
+	this->animCnt = 0;		//スイッチのための初期化
 	return move;
 }
 bool Player::Animation::isMove()
@@ -839,7 +865,10 @@ bool Player::Animation::isMove()
 }
 Box2D Player::Animation::returnSrc(Motion motion, State state) 
 {
-	Box2D src(0,0, this->srcX, this->srcY);	//基本のsrc（後で消すかも）
+	Box2D src(0,0, this->srcX, this->srcY);
+	//src = Box2D(this->指定したアニメーションの順番の配列[this->timeCnt / ディレイ　% コマ数] * this->srcX, 
+	//		読み込む画像の行数 * this->srcY, 
+	//		this->srcX, this->Y);
 	if (state == Normal) {
 		switch (motion) {
 		case Motion::Normal:
@@ -859,7 +888,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 			break;
 		
 		case Motion::Ladder:
-			src = Box2D(this->ladder[this->ladderCnt / 8 % 2] * this->srcX, 3 *  this->srcY, this->srcX,  this->srcY);
+			src = Box2D(this->ladder[this->animCnt / 8 % 2] * this->srcX, 3 *  this->srcY, this->srcX,  this->srcY);
 			break;
 		case Motion::Block_M:
 			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
@@ -869,10 +898,10 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 			for (auto id = switchs->begin(); id != switchs->end(); ++id)
 			{
 				if ((*id)->isON()) {
-					src = Box2D(this->switch_2[this->timeCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+					src = Box2D(this->switch_2[this->animCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
 				}
 				else {
-					src = Box2D(this->switch_1[this->timeCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+					src = Box2D(this->switch_1[this->animCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
 				}
 			}
 			break;
@@ -984,6 +1013,7 @@ bool Player::TohaveObjectHit()
 			if (this->est.x < 0)
 			{
 				(*id)->GetMove(this->est);
+				return true;
 			}
 		}
 		if (right.hit(*(*id)))
@@ -992,6 +1022,7 @@ bool Player::TohaveObjectHit()
 			if (this->est.x > 0)
 			{
 				(*id)->GetMove(this->est);
+				return true;
 			}
 		}
 	}

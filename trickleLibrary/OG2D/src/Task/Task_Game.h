@@ -42,9 +42,10 @@ private:
 	Texture waterPurple;
 	Texture playerTex;
 	Texture fanTex;
+	Texture fireice;
 	Texture PaintTex;
 	Texture EffectTest;
-
+	Texture Effectsond;
 	std::string gamesoundname;
 	std::string tutorialsoundname;
 
