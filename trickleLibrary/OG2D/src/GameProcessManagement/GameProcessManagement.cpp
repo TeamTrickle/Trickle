@@ -3,7 +3,7 @@ using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Goal\Goal.h"
 #include "Task\Task_Result.h"
-#include "GameProcessManagement\GameClearCamera.h"
+
 bool GameProcessManagement::Initialize()
 {
 	//-----------------------------
@@ -11,8 +11,6 @@ bool GameProcessManagement::Initialize()
 	//-----------------------------
 	this->taskName = "GameProcessManagement";		//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
-
-	auto gameClearcamera = GameClearCamera::Create();
 
 	gameclear_flag = false;                 //初期値はfalseにしておく
 	pause_flag = false;
@@ -27,7 +25,7 @@ void GameProcessManagement::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
-	Goal_Check();                        //ゴールをしているのかどうか？
+	Goal_Check();                        //ゴールを全てしているのかどうか？
 	Goal_Event();
 }
 
@@ -70,31 +68,37 @@ bool GameProcessManagement::Finalize()
 }
 void GameProcessManagement::Goal_Check()
 {
-	auto goal = OGge->GetTask<Goal>("Goal");
-	if (goal != nullptr)
-	{//ゴールがクリアになった
-		if (goal->cleared)
+	if (!gameclear_flag)
+	{
+		auto goal = OGge->GetTasks<Goal>("Goal");
+		//ゴール判定を格納するVectorを用意する
+		std::vector<bool> goalCheck;
+		//ゴール判定を格納するVectorにデータを入れる
+		for (auto id = (*goal).begin(); id != (*goal).end(); ++id)
 		{
-			if (!gameclear_flag)
-			{
-				timer->Pause();
-			}
+			goalCheck.push_back((*id)->isGoal());
+		}
+
+		//要素を調べる
+		if (std::all_of(goalCheck.begin(), goalCheck.end(), [](bool flag) {return flag == true; }))
+		{
+			timer->Pause();
 			gameclear_flag = true;
-			//クリアしたらこの関数はここで終了するようにする
+			goalCheck.clear();
 			return;
 		}
-		//タイマーを動かす処理
+		//クリアしていないときはタイマーを動かす
 		timer->Frame_Set();
-		gameclear_flag = false;
-	}	
+		goalCheck.clear();
+	}
 }
 void GameProcessManagement::Goal_Event()
 {
 	//ゴールをしたら・・・
 	if (gameclear_flag)						//ゲームフラグがtrueになったら・・・
 	{
-		timer->Stop();						//タイマーの時間を元に戻す
 		File_Writing();						//フレームを書き込み
+		timer->Stop();						//タイマーの時間を元に戻す
 	}
 }
 void GameProcessManagement::File_Writing()
@@ -114,10 +118,10 @@ void GameProcessManagement::File_Writing()
 	}
 	fin.close();							//ファイルを閉じる
 }
-//----------------------------
-//ここから下はclass名のみ変更する
-//ほかは変更しないこと
-//----------------------------
+bool GameProcessManagement::isAllGoal()
+{
+	return this->gameclear_flag;
+}
 GameProcessManagement::GameProcessManagement()
 {
 	cout << "進行管理クラス　生成" << endl;

@@ -12,44 +12,23 @@
 
 class GameProcessManagement : public GameObject,public TaskObject
 {
-	//-------------------------------------------
-	//各自で制作するときに使用するものはここに記述する
-	//-------------------------------------------
-public:
-	/*
-	ゴールオブジェクトの追加をします
-	■引数　Object*　追加したいゴールオブジェクト
-	■戻り　なし
-	*/
-	//void Set_Goal();
-
-
-	/*
-	ゴールの判定を行います
-	■引数　なし
-	■戻り　なし
-	*/
-	void Goal_Check();
-
-
-	/*
-	ゲームのフラグによって変化するイベント管理関数
-	■引数　なし
-	■戻り　ゲームフラグを返す
-	*/
-	void Goal_Event();
-
-	void File_Writing();				 //フレームを書きこむ
 private:
+	//基本の情報
 	bool gameclear_flag;                 //様々なフラグを格納する
 	bool pause_flag;					 //ポーズ画面からタイトルへ戻れされる場合の対策
+
+	//タイマー関連
 	Timer::SP timer;                     //タイマーのセットをする
 
 	const char* TimeFilePath = "./data/Result/Result.dat";
 
-	//------------------
-	//固定化されている処理
-	//------------------
+private:
+	//ゴール判定関連
+	void Goal_Check();		//ゴールの判定をチェックします
+	void Goal_Event();		//全てがゴール状態ならリザルト画面に行きます
+
+	//リザルト画面にデータを送る関数関連
+	void File_Writing();				 //フレームを書きこむ
 public:
 	std::string taskName;
 	virtual ~GameProcessManagement();
@@ -63,4 +42,8 @@ public:
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
+
+	//他のクラスで使用する関数
+	bool isAllGoal();		//全てがゴールをしているかどうかを返します
+
 };
