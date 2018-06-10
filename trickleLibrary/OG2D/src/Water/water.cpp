@@ -2,6 +2,7 @@
 #include "Map\Map.h"
 #include "Block\block.h"
 #include "Player\Player.h"
+#include "Effect\Effect.h"
 //#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
 {
@@ -166,6 +167,7 @@ void Water::UpDate()
 			if (this->HeadSolidCheck())
 			{
 				this->SetState(State::LIQUID);
+				//this->SolidMelt();
 			}
 		}
 		break;
@@ -850,7 +852,18 @@ bool Water::SolidMelt()
 			player->ReleaseHold();
 		}
 		this->SetState(State::LIQUID);
-		this->SetSituation(Situation::Newfrom);
+		this->SetSituation(Situation::Normal);
+		//氷が溶けた時のエフェクト
+		auto effect = Effect::Create(
+			Vec2(this->position.x + (this->Scale.x / 2) - (128.f / 2), this->position.y + this->Scale.y - (128.f / 1.5)),
+			Vec2(128, 128),
+			Vec2(768, 768),
+			1,
+			150);
+		effect->SetTexture(rm->GetTextureData((std::string)"steam"));
+		effect->SetMode(Effect::Mode::Decrease);
+		//effect->SetMaxSize(Vec2(80, 80));
+		effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 200), 30);
 	}
 	return false;
 }

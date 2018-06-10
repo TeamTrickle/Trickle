@@ -19,6 +19,7 @@ public:
 		Normal,
 		Flash,
 		Decrease,
+		Expansion,
 	};
 private:
 	Texture* image;
@@ -33,6 +34,7 @@ private:
 	Vec2 oneSize;
 	Color color;
 	Mode mode;
+	Vec2 maxSize;
 	bool flag;
 public:
 	explicit Effect(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag);
@@ -43,6 +45,7 @@ public:
 	void SetTexture(Texture*);
 	void Color_a(const float a);
 	void SetMode(const Mode&);
+	void SetMaxSize(const Vec2&);
 	typedef std::shared_ptr<Effect> SP;
 	//位置、サイズ、元サイズ、枚数、表示時間、1枚あたりの時間
 	static SP Create(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime = 10, const std::string& tag = "", const bool = true);

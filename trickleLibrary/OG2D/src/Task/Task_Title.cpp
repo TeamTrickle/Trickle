@@ -46,6 +46,8 @@ bool Title::Initialize()
 	//文字位置設定
 	startPos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
+	this->textPos[0] = { this->startPos,Vec2(256,64) };
+	this->textPos[1] = { this->closePos,Vec2(256,64) };
 	//配列管理を行う
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
@@ -58,6 +60,9 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect02.png");
+	
+	this->effect03.Create("Effect03.png");
+	
 	//サウンドの生成
 	sound = new Sound();
 	sound->create(soundname, true);
@@ -248,6 +253,15 @@ void Title::UpDate()
 			case 2:
 				break;
 			}
+			auto effect03 = Effect::Create(
+				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
+				Vec2(0, 0),
+				Vec2(256, 256),
+				1,
+				100);
+			effect03->SetMode(Effect::Mode::Expansion);
+			effect03->SetTexture(&this->effect03);
+			effect03->SetMaxSize(Vec2(576, 576));
 		}
 	}
 	break;
@@ -346,6 +360,7 @@ bool Title::Finalize()
 	this->GierLogo.Finalize();
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
+	this->effect03.Finalize();
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)

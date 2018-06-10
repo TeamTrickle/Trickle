@@ -59,6 +59,16 @@ void Effect::UpDate()
 	case Mode::Decrease:
 		this->alpha = 1.0f - ((float)this->animCnt / (float)this->time);
 		break;
+	case Mode::Expansion:
+		if (this->Scale.x < this->maxSize.x || this->Scale.y < this->maxSize.y)
+		{
+			float size = 5.0f;
+			//Šg‘å‰»ˆ—
+			this->Scale += Vec2(size, size);
+			this->position.x -= size / 2.f;
+			this->position.y -= size / 2.f;
+		}
+		break;
 	default:
 		break;
 	}
@@ -78,6 +88,11 @@ void Effect::Render2D()
 void Effect::SetMode(const Mode& mode)
 {
 	this->mode = mode;
+}
+
+void Effect::SetMaxSize(const Vec2 &size)
+{
+	this->maxSize = size;
 }
 
 Effect::SP Effect::Create(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag, const bool flag)
