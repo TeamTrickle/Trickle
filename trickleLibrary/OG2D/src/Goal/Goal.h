@@ -7,25 +7,64 @@
 
 class Goal : public GameObject, public TaskObject
 {
-	//-------------------------------------------
-	//各自で制作するときに使用するものはここに記述する
-	//-------------------------------------------
 public:
-	bool Initialize(Vec2&);
-	bool cleared;
-	bool goal_anim;
-	int animCnt;
-	//void AddWater();
-	//bool DeleteWater();
-	bool ClearCheck();
+	enum CameraMode
+	{
+		//動いていない
+		NON,
+		//起動中
+		Play,
+		//終了した
+		End,		
+	};
 private:
+	//タスク関連
+	std::string taskName;
+
+	//基本の情報
+	bool cleared;
+
+	//画像関連
 	Texture tex;
 
-	//------------------
-	//固定化されている処理
-	//------------------
+	//アニメーション関連
+	bool isanimetion;
+	bool isanimetionfinish;
+	int  animCnt;
+
+	//ゴールカメラ関連
+	CameraMode cameramode;
+	bool iscameraPlay;			//カメラが起動しているか起動したかを返します
+	Vec2 cameraPos;				//カメラの座標値
+	Vec2 cameraMove;			//カメラの移動量
+	Vec2 cameraSize;			//カメラのサイズ
+	int  camerascalefeatureCnt;	//カメラの拡大機能
+
+private:
+	//タスク関連
+	void UpDate();			//更新処理
+	void Render2D();		//描画処理
+	bool Finalize();		//解放処理
+
+	//基本の情報
+	bool ClearCheck();			//ゴールの判定を返します
+
+
+	//アクセサメソッド関連
+	void ResetisGoal();			//ゴール判定の初期化を行います
+
+	void ResetAnimetion();		//アニメーションの初期化
+
+	void ResetCameraMode();		//カメラのモードを初期化します
+	void ResetisCameraPlay();	//カメラの起動するフラグを初期化します
+	void ResetCameraVec();		//Vectorクラスの初期化
+	void ResetCamera();			//ゴールカメラ関連をまとめて初期化します
+
+	//カメラ関連
+	void Camera_Think();
+	void Camera_Motion();
+	void Camera_Play();			//カメラを動かす
 public:
-	std::string taskName;
 	virtual ~Goal();
 	typedef std::shared_ptr<Goal> SP;
 	static Goal::SP Create(bool);
@@ -35,9 +74,18 @@ public:
 	//変更しないこと
 	//-------------
 	bool Initialize();		//初期化処理
-	void UpDate();			//更新処理
-	void Render2D();		//描画処理
-	bool Finalize();		//解放処理
+	bool Initialize(Vec2&);	//初期化処理
+	
+	//他のクラスで使用できるメソッド
+
+	//フラグ関係
+	bool isGoal();						//ゴールをしているかどうかを返す
+	bool isAnimetion();					//アニメーションが終了しているかを返す
+
+	//カメラモード関連
+	CameraMode GetCameraMode();		//カメラモードを返す
+	void SetCameraMode(CameraMode);	//カメラモードを変更します
+	void SetCameraSpeed(Vec2&);		//カメラを動かすスピードを変更します
 };
 
 #endif

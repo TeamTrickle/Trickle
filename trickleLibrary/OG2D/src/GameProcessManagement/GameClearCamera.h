@@ -5,14 +5,19 @@
 class GameClearCamera : public GameObject , public TaskObject
 {
 private:
+	//タスク関連
 	std::string taskName;	//タスク名
+
+	//カメラ関連
 	bool cameraMovefinish;	//カメラの移動が終了している？
-	bool active;			//現在カメラが移動中か？
 	bool Move;				//動く準備をする
 	Vec2 cameraPos;			//カメラの座標値
 	Vec2 cameraMove;		//カメラの移動量
 	Vec2 cameraSize;		//カメラのサイズ
 	int  moveCnt;
+
+	//ゴール関連
+	bool isgoal;			//ゴール判定フラグ
 private:
 	void CameraMove();
 	void Flag_Reset();
@@ -22,6 +27,7 @@ private:
 	bool Finalize();
 	void UpDate();
 	void Render2D();
+	
 public:
 	bool GetCameraMoveFinish();
 	void SetCameraSize();	//カメラの座標値をOGから代入する
@@ -31,4 +37,8 @@ public:
 	virtual ~GameClearCamera();
 	static GameClearCamera::SP Create(bool = true);
 	bool Initialize();
+
+
+	
+	bool isGoal();			//ゴール判定を返す
 };

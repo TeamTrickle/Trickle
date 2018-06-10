@@ -3,18 +3,21 @@
 #include "Goal\Goal.h"
 bool GameClearCamera::Initialize()
 {
+	//タスク関連
 	this->taskName = "GameClearCamera";
 	this->Init(taskName);
+
+	//カメラ関連
 	this->Flag_Reset();
 	this->Set_CameraSpeed(Vec2(3, 3));
 	this->SetCameraSize();
+
 	std::cout << "ゴールカメラ　初期化" << std::endl;
 	return true;
 }
 void GameClearCamera::Flag_Reset()
 {
 	this->cameraMovefinish = false;
-	this->active = false;
 	this->Move = false;
 	moveCnt = 0;
 }
@@ -42,6 +45,7 @@ void GameClearCamera::UpDate()
 {
 	NowCameraPos();
 	CameraMove();
+	this->isGoal();
 }
 void GameClearCamera::Render2D()
 {
@@ -55,7 +59,6 @@ void GameClearCamera::CameraMove()
 		if (goal->cleared)
 		{
 			Move = true;
-			active = true;
 			if (cameraPos.x <= goal->position.x - cameraSize.x / 2)
 			{
 				cameraPos.x += cameraMove.x;
@@ -81,7 +84,21 @@ void GameClearCamera::CameraMove()
 				}
 			}
 		}
+	}	
+}
+bool GameClearCamera::isGoal()
+{
+	auto goal = OGge->GetTasks<Goal>("Goal");
+	//ゴール判定を格納するVectorを用意する
+	std::vector<bool> goalCheck;
+	//ゴール判定を格納するVectorにデータを入れる
+	for (auto id = (*goal).begin(); id != (*goal).end(); ++id)
+	{
+		goalCheck.push_back((*id)->cleared);
 	}
+
+	//要素を調べる
+	return std::all_of(goalCheck.begin(), goalCheck.end(), [](bool flag){return flag == true;});
 }
 void GameClearCamera::SetCameraSize()
 {

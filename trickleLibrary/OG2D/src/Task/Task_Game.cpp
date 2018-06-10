@@ -13,7 +13,6 @@
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 
-#include "GameProcessManagement\GameClearCamera.h"
 #include "GameProcessManagement\Timer.h"
 #include "Task\Task_Pause.h"
 #include "Task\StageSelect.h"
@@ -336,26 +335,6 @@ void Game::UpDate()
 			effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 200));
 		}
 	}
-
-	{
-		auto goal = OGge->GetTask<Goal>("Goal");
-		if (goal != nullptr)
-		{
-			if (OGge->in->key.down(Input::KeyBoard::Q))
-			{
-				goal->cleared = true;
-			}
-		}
-
-		auto cameraMove = OGge->GetTask<GameClearCamera>("GameClearCamera");
-		if (cameraMove != nullptr)
-		{
-			if (cameraMove->GetCameraMoveFinish())
-			{
-				this->Kill();
-			}
-		}
-	}
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
@@ -422,11 +401,6 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto gamecamera = OGge->GetTasks<GameClearCamera>("GameClearCamera");
-	for (auto id = (*gamecamera).begin(); id != (*gamecamera).end(); ++id)
-	{
-		(*id)->Kill();
-	}
 	auto timers = OGge->GetTasks<Timer>("Timer");
 	for (auto id = (*timers).begin(); id != (*timers).end(); ++id)
 	{
@@ -478,13 +452,10 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
-	auto goal = OGge->GetTask<Goal>("Goal");
-	if (goal != nullptr)
+	auto goalPro = OGge->GetTask<GameProcessManagement>("GameProcessManagement");
+	if (goalPro->isAllGoal())
 	{
-		if (goal->ClearCheck())
-		{
-			return;
-		}
+		return;
 	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
