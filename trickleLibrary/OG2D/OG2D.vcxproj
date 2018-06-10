@@ -23,7 +23,7 @@
     <ProjectGuid>{61186991-858F-4A3C-BB26-186468F21C26}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OG2D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>OG2D</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -174,6 +174,7 @@
     <ClCompile Include="src\Goal\Goal.cpp" />
     <ClCompile Include="src\Load\LoadLogo.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
+    <ClCompile Include="src\Map\Ornament.cpp" />
     <ClCompile Include="src\Object\Object.cpp" />
     <ClCompile Include="src\OGSystem\Audio\Audio.cpp" />
     <ClCompile Include="src\OGSystem\Audio\Sound.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ornament.h" />
     <ClInclude Include="src\Back\Back.h" />
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />
@@ -234,6 +236,7 @@
     <ClInclude Include="src\Goal\Goal.h" />
     <ClInclude Include="src\Load\LoadLogo.h" />
     <ClInclude Include="src\Map\Map.h" />
+    <ClInclude Include="src\Map\Ornament.h" />
     <ClInclude Include="src\Object\Object.h" />
     <ClInclude Include="src\OGSystem\Audio\Audio.h" />
     <ClInclude Include="src\OGSystem\Audio\Sound.h" />

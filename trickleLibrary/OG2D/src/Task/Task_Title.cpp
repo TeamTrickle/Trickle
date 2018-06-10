@@ -53,7 +53,7 @@ bool Title::Initialize()
 	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//‰æ‘œ“Ç‚Ýž‚Ý
 	texCursor.Create("gear.png");
-	texStart.Create("start.png");
+	texStart.Create("start3.png");
 	texClose.Create("close.png");
 	texPause.Create("pause.png");
 	this->texLogo.Create("logo.png");
@@ -339,9 +339,9 @@ void Title::Render2D()
 	}
 	//Ý’è
 	{
-		Box2D draw(startPos.x, startPos.y, 256.f, 64.f);
+		Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
 		draw.OffsetSize();
-		Box2D src(0, 0, 256, 64);
+		Box2D src(0, 0, 512, 256);
 		src.OffsetSize();
 		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}

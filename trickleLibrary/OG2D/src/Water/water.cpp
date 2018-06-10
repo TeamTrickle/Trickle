@@ -53,6 +53,7 @@ Water::Water(Vec2 pos)
 	this->hold = false;
 	this->Radius = { 0.5f,0.9f };
 	__super::Init((std::string)"water");
+	__super::SetDrawOrder(0.2f);
 }
 
 Water::~Water()

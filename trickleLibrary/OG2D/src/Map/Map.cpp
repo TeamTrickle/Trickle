@@ -32,10 +32,10 @@ bool Map::LoadMap(std::string& path_, Format format)
 	//ファイルの読み込み(入力用式、バイナリデータでの読み込み)
 	std::ifstream ifs(this->_FilePath + path_, std::ios::in | std::ios::binary);
 	//読み込めなかった時のエラー処理
-	if (!ifs) 
+	if (!ifs)
 	{
 		std::cout << "マップ読み込みエラー" << std::endl;
-		return false; 
+		return false;
 	}
 	//読み込んだデータを入れておく変数
 	std::string line;
@@ -48,7 +48,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 	//_isに入っている文字列から','までの文字をtextにいれる
 	std::getline(_is, text, ',');
 	//textのデータを変数にいれる
- 	(std::stringstream)text >> this->mapSize.x;
+	(std::stringstream)text >> this->mapSize.x;
 	std::getline(_is, text, ',');
 	(std::stringstream)text >> this->mapSize.y;
 	//_arrをmapyのサイズ分にサイズを変更する(配列化)
@@ -89,7 +89,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 			else
 			{
 				//文字列に応じたオブジェクトを生成する
-				this->ObjectCreateCheck(text,x,y);
+				this->ObjectCreateCheck(text, x, y);
 				//その場所の番号は0としておく。
 				this->_arr[y][x] = 0;
 				//this->hitBase[y][x].Setarr(0);
@@ -158,7 +158,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 			default:
 				break;
 			}
-			
+
 			/*if (this->ID[y][x])
 			{
 				this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), this->DrawSize, 0.0f);
@@ -211,13 +211,13 @@ bool Map::LoadMap(std::string& path_, Format format)
 			}*/
 		}
 	}
-	
+
 	return true;
 }
 
-void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
+void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 {
-	if(text == "p")
+	if (text == "p")
 	{
 		auto player = Player::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
 		player->SetTexture(rm->GetTextureData((std::string)"playerTex"));
@@ -296,13 +296,13 @@ bool Map::MapHitCheck(GameObject &p)
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0 && 
-				this->_arr[y][x] != 10 && 
-				this->_arr[y][x] != 12 && 
+			if (this->_arr[y][x] != 0 &&
+				this->_arr[y][x] != 10 &&
+				this->_arr[y][x] != 12 &&
 				this->_arr[y][x] != 13 &&
-				this->_arr[y][x] != 21 && 
-				this->_arr[y][x] != 22 && 
-				this->_arr[y][x] != 20 && 
+				this->_arr[y][x] != 21 &&
+				this->_arr[y][x] != 22 &&
+				this->_arr[y][x] != 20 &&
 				this->_arr[y][x] != 23) {
 				if (this->hitBase[y][x].hit(p))
 				{
@@ -320,16 +320,16 @@ bool Map::HitCheck(GameObject &p, const int id)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-		/*	if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
-			{
-				if (this->hitBase[y][x].IDCheck(id))
+			/*	if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
 				{
-					if (this->hitBase[y][x].hit(p))
+					if (this->hitBase[y][x].IDCheck(id))
 					{
-						return true;
+						if (this->hitBase[y][x].hit(p))
+						{
+							return true;
+						}
 					}
-				}
-			}*/
+				}*/
 		}
 	}
 	return false;
