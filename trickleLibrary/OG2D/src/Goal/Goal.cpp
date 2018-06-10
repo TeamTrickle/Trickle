@@ -122,6 +122,7 @@ void Goal::ResetCameraMode()
 void Goal::ResetisCameraPlay()
 {
 	this->iscameraPlay = false;
+	this->camerafinish = false;
 }
 void Goal::ResetCameraCnt()
 {
@@ -131,6 +132,7 @@ void Goal::ResetCameraVec()
 {
 	this->cameraPos = OGge->camera->GetPos();
 	this->cameraSize = OGge->camera->GetSize();
+	this->PreCameraSize = OGge->camera->GetSize();
 }
 void Goal::ResetCamera()
 {
@@ -178,8 +180,6 @@ void Goal::Camera_Think()
 		}
 		break;
 	case Goal::End:		//起動した
-		//カメラのサイズを元に戻す
-
 		break;
 	}
 	this->SetCameraMode(nm);
@@ -203,13 +203,15 @@ void Goal::Camera_Motion()
 		}
 		break;
 	case Goal::Play:
+		this->cameraPos = OGge->camera->GetPos();
+		this->Camera_Play();
 		break;
 	case Goal::End:
-		
+		//カメラのサイズを元に戻す
+		OGge->camera->SetPos(this->PreCameraPos);
+		OGge->camera->SetSize(this->PreCameraSize);
 		break;
 	}
-	this->cameraPos = OGge->camera->GetPos();
-	this->Camera_Play();
 }
 void Goal::Camera_Play()
 {
@@ -231,6 +233,10 @@ void Goal::Camera_Play()
 				this->cameraPos.x -= this->cameraMove.x;
 				OGge->camera->SetPos_x(this->cameraPos.x);
 			}
+			else
+			{
+				this->camerafinish = true;
+			}
 		}
 	}
 	//Playerから見てゴールが右側にある場合
@@ -243,10 +249,14 @@ void Goal::Camera_Play()
 				this->cameraPos.x += this->cameraMove.x;
 				OGge->camera->SetPos_x(this->cameraPos.x);
 			}
+			else
+			{
+				this->camerafinish = true;
+			}
 		}
 	}
 	//Playerから見てゴールが上にある場合
-	else if (inside.y < 0)
+	if (inside.y < 0)
 	{
 		if (this->cameraPos.y < 0)
 		{
@@ -255,22 +265,39 @@ void Goal::Camera_Play()
 				cameraPos.y -= cameraMove.y;
 				OGge->camera->SetPos_y(cameraPos.y);
 			}
+			else
+			{
+				this->camerafinish = true;
+			}
 		}
 	}
+	//Playerから見てゴールが下にある場合
 	else if (inside.y > 0)
 	{
 		if (this->cameraPos.y + this->cameraSize.y < map->DrawSize.y * map->mapSize.y)
 		{
-			if (this->cameraPos.y <= this->cameraPos.y + this->inside.y)
+			if (this->cameraPos.y < this->cameraPos.y + this->inside.y)
 			{
 				cameraPos.y += cameraMove.y;
 				OGge->camera->SetPos_y(cameraPos.y);
 			}
+			else
+			{
+				this->camerafinish = true;
+			}
 		}
+		
 	}
-	else
+
+	if(this->camerafinish)
 	{
+		if (!this->isanimetion)
+		{
+			this->PreCameraPos = OGge->camera->GetPos();
+		}
 		this->isanimetion = true;
+		OGge->camera->SetPos(this->position);
+		OGge->camera->SetSize(this->Scale);
 	}
 }
 bool Goal::ClearCheck()

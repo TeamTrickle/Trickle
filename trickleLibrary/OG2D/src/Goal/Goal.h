@@ -38,7 +38,10 @@ private:
 	Vec2 cameraPos;				//カメラの座標値
 	Vec2 cameraMove;			//カメラの移動量
 	Vec2 cameraSize;			//カメラのサイズ
+	Vec2 PreCameraPos;			//保存しておくカメラの座標
+	Vec2 PreCameraSize;			//保存しておくカメラのサイズ
 	Vec2 inside;				//ゴール直後のPlayerとゴールの距離を格納します
+	bool camerafinish;			//カメラの動きが終了した
 
 private:
 	//タスク関連
