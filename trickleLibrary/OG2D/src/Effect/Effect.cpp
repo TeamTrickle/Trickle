@@ -14,7 +14,7 @@ Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const 
 	this->color = { 1.0f,1.0f,1.0f,this->alpha };
 	this->flag = false;
 	this->mode = Mode::Normal;
-	__super::Init(this->objectTag);
+	__super::Init((std::string)"effect");
 	__super::SetDrawOrder(1.0f);
 }
 

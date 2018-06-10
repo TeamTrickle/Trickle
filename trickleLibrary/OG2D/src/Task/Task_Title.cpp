@@ -369,6 +369,11 @@ bool Title::Finalize()
 	{
 		Npc->Kill();
 	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{

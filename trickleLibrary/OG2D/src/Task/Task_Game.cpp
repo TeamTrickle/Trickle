@@ -447,11 +447,19 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
 	rm->DeleteTexture((std::string)"paintTex");
 	rm->DeleteTexture((std::string)"sandsmoke");
+	rm->DeleteTexture((std::string)"waterRed");
+	rm->DeleteTexture((std::string)"waterBlue");
+	rm->DeleteTexture((std::string)"waterPurple");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
