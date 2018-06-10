@@ -15,8 +15,8 @@ void OGTK::_myGameInitialize()
 void OGTK::StartTaskObject()
 {
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
-	//auto TopTask = Title::Create();
-	*MapNum = 5;
-	auto ga = Game::Create();
+	auto TopTask = Title::Create();
+	//*MapNum = 5;
+	//auto ga = Game::Create();
 	
 }
