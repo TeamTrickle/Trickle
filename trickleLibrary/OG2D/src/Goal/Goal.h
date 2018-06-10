@@ -38,7 +38,7 @@ private:
 	Vec2 cameraPos;				//カメラの座標値
 	Vec2 cameraMove;			//カメラの移動量
 	Vec2 cameraSize;			//カメラのサイズ
-	int  camerascalefeatureCnt;	//カメラの拡大機能
+	Vec2 inside;				//ゴール直後のPlayerとゴールの距離を格納します
 
 private:
 	//タスク関連
@@ -59,6 +59,7 @@ private:
 	void ResetisCameraPlay();	//カメラの起動するフラグを初期化します
 	void ResetCameraVec();		//Vectorクラスの初期化
 	void ResetCamera();			//ゴールカメラ関連をまとめて初期化します
+	void ResetCameraCnt();		//ゴールのカウンタを初期化します
 
 	//カメラ関連
 	void Camera_Think();
