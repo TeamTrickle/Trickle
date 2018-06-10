@@ -276,9 +276,6 @@
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp">
-      <Filter>ソースファイル\GameProcessManager</Filter>
-    </ClCompile>
     <ClCompile Include="src\Chara\Chara.cpp">
       <Filter>ソースファイル\Chara</Filter>
     </ClCompile>
@@ -457,9 +454,6 @@
     </ClInclude>
     <ClInclude Include="src\Back\Back.h">
       <Filter>ソースファイル\Back</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\GameClearCamera.h">
-      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
     <ClInclude Include="src\Chara\Chara.h">
       <Filter>ソースファイル\Chara</Filter>
