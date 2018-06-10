@@ -72,8 +72,6 @@ void MapPreviewer::Render2D() {
 }
 
 bool MapPreviewer::isShootable(const Vec2& v) const {
-	std::cout << std::to_string(v.x) << "/"
-		<< std::to_string(v.y) << std::endl;
 	return
 		v.x >= 0 &&
 		v.y >= 0 &&

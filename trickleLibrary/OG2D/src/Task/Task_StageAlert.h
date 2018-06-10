@@ -21,13 +21,15 @@ private:
 	}Animation;
 	typedef std::pair<std::string, bool> Achievement;
 
-	bool Initialize();
+	bool Initialize(const Box2D&);
 	virtual void UpDate() override;
 	virtual void Render2D() override;
 	void Finalize();
 
+	void changeTexture(Texture*, const std::string&, bool);
 	inline bool isAnimPlayable() const;
 	inline Box2D GetFixedCameraCoord(const Box2D&) const;
+	Box2D OptimizeForWindowSize(const Box2D&) const;
 
 public:
 	explicit StageAlert() {}
@@ -47,24 +49,29 @@ public:
 	void AnimPlay();
 
 	typedef std::shared_ptr<StageAlert> SP;
-	static SP Create(bool = true);
+	static SP Create(bool, const Box2D&);
 
 private:
 	const static int MAX_ACHIEVEMENT = 3;
 
 private:
-	std::string							stageName;
-	bool								isClear = false;
-	Achievement							achievements[MAX_ACHIEVEMENT];
-	std::queue<Animation>				anis_origin;
-	std::queue<Animation>				anis;
-	Animation*							playingAnime;
-	std::map<Texture*, Box2D>			draws;
-	std::map<Texture*, Box2D>			srcs;
+	std::string									stageName;
+	bool										isClear = false;
+	Achievement									achievements[MAX_ACHIEVEMENT];
+	std::string									previewSrcName;
 
-	Texture								background;
-	Texture								star;
-	Texture								mission;
-	Texture								clearFlag;
-	MapPreviewer::SP					previewer;
+	std::queue<Animation>						anis_origin;
+	std::queue<Animation>						anis;
+	Animation*									playingAnime;
+	std::map<Texture*, Box2D>					draws;
+	std::map<Texture*, Box2D>					srcs;
+	Box2D										windowSize;
+
+	Texture										background;
+	Texture										stageNameTex;
+	Texture										mission;
+	Texture										clearFlag;
+	std::array<Texture, MAX_ACHIEVEMENT>		achievementsTex;
+	std::array<Texture, MAX_ACHIEVEMENT>		starsTex;
+	MapPreviewer::SP							previewer;
 };

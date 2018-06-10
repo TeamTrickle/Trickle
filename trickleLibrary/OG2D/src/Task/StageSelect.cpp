@@ -48,7 +48,7 @@ bool StageSelect::Initialize()
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.1f);
 	//ステージ概要表示用案内板
-	auto board = StageAlert::Create();
+	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
 	//サウンドの生成
 	//タグ指定
 	__super::Init((std::string)"select");
@@ -215,6 +215,7 @@ void StageSelect::From2()
 		auto board = OGge->GetTask<StageAlert>("stagealert");
 		if (board) {
 			//board->AnimPlay();
+			board->SetStageData("tutorial.txt");
 		}
 		//次へ移動
 		this->mode = Mode::from3;
