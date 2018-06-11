@@ -324,6 +324,9 @@
     <ClCompile Include="src\Effect\Effect.cpp">
       <Filter>ソースファイル\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\TimeSign.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -505,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="src\Effect\Effect.h">
       <Filter>ソースファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\TimeSign.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
