@@ -167,8 +167,8 @@ void Water::UpDate()
 			this->MoveSOILDCheck(move);
 			if (this->HeadSolidCheck())
 			{
-				this->SetState(State::LIQUID);
-				//this->SolidMelt();
+				//this->SetState(State::LIQUID);
+				this->SolidMelt();
 			}
 		}
 		break;
