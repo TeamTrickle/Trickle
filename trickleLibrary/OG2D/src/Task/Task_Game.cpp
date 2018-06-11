@@ -315,7 +315,7 @@ void Game::UpDate()
 	Camera_move();
 
 	// Pauseˆ—
-	if (OGge->in->key.down(In::D2)){
+	if (OGge->in->down(In::D2)){
 		OGge->SetPause(true);
 	}
 
