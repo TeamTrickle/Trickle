@@ -2,7 +2,8 @@
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
 #include "Player/Player.h"
-bool Goal::Initialize()
+#include "Map/Map.h"
+bool Goal::Initialize(Vec2& pos,Paint::PaintColor color) 
 {
 	//タスク関連
 	this->taskName = "Goal";		//検索時に使うための名を登録する
@@ -17,34 +18,10 @@ bool Goal::Initialize()
 	//カメラモード関連
 	this->ResetCamera();
 
-	//画像関連
-	tex.Create((std::string)"goal.png");
-	
-
-	//基本の情報
-	CreateObject(Objform::Cube, Vec2{}, Vec2(64, 64), 0.f);
-
-
-	std::cout << "ゴール　初期化" << std::endl;
-	return true;
-}
-bool Goal::Initialize(Vec2& pos) {
-	//タスク関連
-	this->taskName = "Goal";		//検索時に使うための名を登録する
-	__super::Init(taskName);		//TaskObject内の処理を行う
-
-	//ゴールフラグ関連
-	this->ResetisGoal();
-
-	//アニメーション関連
-	this->ResetAnimetion();
-
-	//カメラモード関連
-	this->ResetCamera();
-
 
 	//画像関連
-	tex.Create((std::string)"goal.png");
+	this->selectcolor = color;
+	this->SetColorTextrue();
 
 	//基本の情報
 	CreateObject(Objform::Cube, pos, Vec2(64, 64), 0.f);
@@ -56,6 +33,8 @@ void Goal::UpDate()
 {
 	this->Camera_Think();
 	this->Camera_Motion();
+
+	this->DebugGoalClear();
 }
 
 void Goal::Render2D()
@@ -75,7 +54,7 @@ void Goal::Render2D()
 			//(10カット*１０フレーム)-1になったら止める
 			animCnt++;
 		}
-		if (animCnt == 100)
+		if (animCnt >= 99)
 		{
 			this->isanimetionfinish = true;
 		}
@@ -87,7 +66,7 @@ void Goal::Render2D()
 	}
 	
 	src.OffsetSize();
-	tex.Draw(draw, src);
+	tex[this->selectcolor].Draw(draw, src);
 	this->LineDraw();
 }
 
@@ -96,7 +75,10 @@ bool Goal::Finalize()
 	//-----------------------------------------
 	//このオブジェクトが消滅するときに行う処理を記述
 	//-----------------------------------------
-	tex.Finalize();
+	for (int i = 0; i < 4; ++i)
+	{
+		tex[i].Finalize();
+	}
 	//次のタスクを作るかかつアプリケーションが終了予定かどうか
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
@@ -121,22 +103,32 @@ void Goal::ResetCameraMode()
 void Goal::ResetisCameraPlay()
 {
 	this->iscameraPlay = false;
+	this->camerafinish = false;
 }
 void Goal::ResetCameraVec()
 {
+	this->cameraPos = OGge->camera->GetPos();
 	this->cameraSize = OGge->camera->GetSize();
-	this->cameraPos = {};
+	this->PreCameraSize = OGge->camera->GetSize();
 }
 void Goal::ResetCamera()
 {
 	this->ResetCameraMode();
-	this->ResetCameraVec();
 	this->ResetisCameraPlay();
-	this->SetCameraSpeed(Vec2(2, 3));
+	this->ResetCameraVec();
+	this->SetCameraSpeed(Vec2(2, 2));
 }
 void Goal::SetCameraSpeed(Vec2& speed)
 {
 	this->cameraMove = speed;
+}
+void Goal::SetColorTextrue()
+{
+	//花のモーションとゴールの札を設定する
+	tex[Paint::Red].Create((std::string)"");
+	tex[Paint::Blue].Create((std::string)"");
+	tex[Paint::Purple].Create((std::string)"");
+	tex[Paint::Normal].Create((std::string)"goal.png");
 }
 Goal::CameraMode Goal::GetCameraMode()
 {
@@ -166,16 +158,20 @@ void Goal::Camera_Think()
 		}
 		break;
 	case Goal::Play:	//起動している
-
+		if (this->isanimetionfinish)
+		{
+			nm = End;
+		}
 		break;
 	case Goal::End:		//起動した
-
 		break;
 	}
 	this->SetCameraMode(nm);
 }
 void Goal::Camera_Motion()
 {
+	auto player = OGge->GetTask<Player>("Player");
+
 	switch (this->cameramode)
 	{
 	case Goal::NON:
@@ -185,71 +181,113 @@ void Goal::Camera_Motion()
 			if (this->ClearCheck())
 			{
 				this->cleared = true;
-				this->iscameraPlay = true;
 			}
 		}
+		else
+		{
+			this->iscameraPlay = true;
+		}
+		this->inside = (this->position - cameraPos);
 		break;
 	case Goal::Play:
-		if (iscameraPlay)
-		{
-			this->cameraPos = OGge->camera->GetPos();
-			this->Camera_Play();
-		}
+		this->cameraPos = OGge->camera->GetPos();
+		this->Camera_Play();
 		break;
 	case Goal::End:
-		if (!iscameraPlay)
-		{
-
-		}
+		//カメラのサイズを元に戻す
+		OGge->camera->SetPos(this->PreCameraPos);
+		OGge->camera->SetSize(this->PreCameraSize);
 		break;
 	}
 }
 void Goal::Camera_Play()
 {
-	auto player = OGge->GetTask<Player>("Player");
+	std::cout << "("  << this->inside.x << "  "<<this->inside.y << ")"<< std::endl;
 
-	Vec2 inside(this->position - player->position);
-
-	std::cout << inside.x << std::endl;
+	auto map = OGge->GetTask<Map>("map");
+	if (!map)
+	{
+		std::cout << "例外" << std::endl;
+		return;
+	}
 
 	//Playerから見てゴールが左側にある場合
 	if (inside.x < 0)
 	{
-		if (this->cameraPos.x >= this->position.x - this->cameraSize.x / 2)
+		//マップ外処理
+		if (this->cameraPos.x < 0)
 		{
-			this->cameraPos.x -= this->cameraMove.x;
-			OGge->camera->SetPos_x(cameraPos.x);
+			if (this->cameraPos.x / 2 >= this->cameraPos.x / 2 + this->inside.x)
+			{
+				this->cameraPos.x -= this->cameraMove.x;
+				OGge->camera->SetPos_x(this->cameraPos.x);
+			}
 		}
 	}
 	//Playerから見てゴールが右側にある場合
 	else if (inside.x > 0)
 	{
-		if(this->cameraPos.x <= this->position.x - this->cameraSize.x / 2)
+		//マップ外処理
+		if (this->cameraPos.x + this->cameraSize.x < map->DrawSize.x * map->mapSize.x)
 		{
-			this->cameraPos.x += this->cameraMove.x;
-			OGge->camera->SetPos_x(cameraPos.x);
+			if (this->cameraPos.x / 2 <= this->cameraPos.x / 2 + this->inside.x)
+			{
+				this->cameraPos.x += this->cameraMove.x;
+				OGge->camera->SetPos_x(this->cameraPos.x);
+			}
 		}
 	}
 	//Playerから見てゴールが上にある場合
-	else if (inside.y < 0)
+	if (inside.y < 0)
 	{
-		if (this->cameraPos.y >= this->position.y + this->Scale.y - this->cameraSize.y)
+		//マップ外処理
+		if (this->cameraPos.y < 0)
 		{
-		this->cameraPos.y -= cameraMove.y;
-		OGge->camera->SetPos_y(cameraPos.y);
+			if (this->cameraPos.y >= this->cameraPos.y + this->inside.y)
+			{
+				cameraPos.y -= cameraMove.y;
+				OGge->camera->SetPos_y(cameraPos.y);
+			}
 		}
 	}
+	//Playerから見てゴールが下にある場合
 	else if (inside.y > 0)
 	{
-		if (this->cameraPos.y <= this->position.y + this->Scale.y - this->cameraSize.y)
+		//マップ外処理
+		if (this->cameraPos.y + this->PreCameraSize.y < map->DrawSize.y * map->mapSize.y)
 		{
-		this->cameraPos.y += cameraMove.y;
-		OGge->camera->SetPos_y(cameraPos.y);
+			if (this->cameraPos.y < this->cameraPos.y + this->inside.y)
+			{
+				cameraPos.y += cameraMove.y;
+				OGge->camera->SetPos_y(cameraPos.y);
+			}
+		}
+		else
+		{
+			
 		}
 	}
-	else
+
+	//デバッグ機能
+	if (OGge->in->key.down(Input::KeyBoard::Q))
 	{
-		std::cout << "終了しました" << std::endl;
+		//カメラの移動を終了させる
+		this->camerafinish = true;
+	}
+
+	if(this->camerafinish)
+	{
+		if (!this->isanimetion)
+		{
+			//アニメーションが終了したときにカメラの座標が戻れるように保存しておく
+			this->PreCameraPos = OGge->camera->GetPos();
+		}
+		//花のアニメーションを開始
+		this->isanimetion = true;
+
+		//カメラの拡大
+		OGge->camera->SetPos(this->position);
+		OGge->camera->SetSize(this->Scale);
 	}
 }
 bool Goal::ClearCheck()
@@ -258,12 +296,15 @@ bool Goal::ClearCheck()
 	if (waters != nullptr)
 	{
 		for (int i = 0; i < (*waters).size(); ++i)
-		{
+		{//接触判定
 			if ((*waters)[i]->hit(*this))
-			{
+			{//水かどうかを調べる
 				if ((*waters)[i]->GetSituation() == Water::Situation::Normal && (*waters)[i]->GetState() == Water::State::LIQUID)
-				{
-					return true;
+				{//水の色がこのゴールの札を同じであるか
+					if ((*waters)[i]->GetColor() == this->selectcolor)
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -284,8 +325,7 @@ Goal::~Goal()
 	this->Finalize();
 	std::cout << "ゴール　解放" << std::endl;
 }
-
-Goal::SP Goal::Create(bool flag_)
+Goal::SP Goal::Create(bool flag_,Vec2& pos,Paint::PaintColor color)
 {
 	Goal::SP to = Goal::SP(new Goal());
 	if (to)
@@ -295,7 +335,7 @@ Goal::SP Goal::Create(bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize())
+		if (!to->Initialize(pos,color))
 		{
 			to->Kill();
 		}
@@ -304,21 +344,10 @@ Goal::SP Goal::Create(bool flag_)
 	return nullptr;
 }
 
-Goal::SP Goal::Create(bool flag_,Vec2& pos)
+void Goal::DebugGoalClear()
 {
-	Goal::SP to = Goal::SP(new Goal());
-	if (to)
+	if (OGge->in->key.down(Input::KeyBoard::Q))
 	{
-		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize(pos))
-		{
-			to->Kill();
-		}
-		return to;
+		this->cleared = true;
 	}
-	return nullptr;
 }

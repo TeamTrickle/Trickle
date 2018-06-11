@@ -4,6 +4,7 @@
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Paint/Paint.h"
 
 class Goal : public GameObject, public TaskObject
 {
@@ -25,7 +26,8 @@ private:
 	bool cleared;
 
 	//画像関連
-	Texture tex;
+	Texture tex[4];
+	Paint::PaintColor selectcolor;		//引数に当てた色のゴールを描画する
 
 	//アニメーション関連
 	bool isanimetion;
@@ -38,7 +40,11 @@ private:
 	Vec2 cameraPos;				//カメラの座標値
 	Vec2 cameraMove;			//カメラの移動量
 	Vec2 cameraSize;			//カメラのサイズ
-	int  camerascalefeatureCnt;	//カメラの拡大機能
+	Vec2 PreCameraPos;			//保存しておくカメラの座標
+	Vec2 PreCameraSize;			//保存しておくカメラのサイズ
+	Vec2 inside;				//ゴール直後のPlayerとゴールの距離を格納します
+	bool camerafinish;			//カメラの動きが終了した
+
 
 private:
 	//タスク関連
@@ -49,6 +55,8 @@ private:
 	//基本の情報
 	bool ClearCheck();			//ゴールの判定を返します
 
+	//画像関連
+	void SetColorTextrue();		//花のモーションを初期化します
 
 	//アクセサメソッド関連
 	void ResetisGoal();			//ゴール判定の初期化を行います
@@ -64,17 +72,19 @@ private:
 	void Camera_Think();
 	void Camera_Motion();
 	void Camera_Play();			//カメラを動かす
+
+	//その他(デバッグ機能)
+	void DebugGoalClear();		//ゴールを強制的にさせます
+
 public:
 	virtual ~Goal();
 	typedef std::shared_ptr<Goal> SP;
-	static Goal::SP Create(bool);
-	static Goal::SP Create(bool,Vec2&);
+	static Goal::SP Create(bool,Vec2& , Paint::PaintColor = Paint::PaintColor::Normal);
 	Goal();
 	//-------------
 	//変更しないこと
 	//-------------
-	bool Initialize();		//初期化処理
-	bool Initialize(Vec2&);	//初期化処理
+	bool Initialize(Vec2&,Paint::PaintColor);	//初期化処理
 	
 	//他のクラスで使用できるメソッド
 
