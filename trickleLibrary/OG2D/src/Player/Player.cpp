@@ -128,16 +128,15 @@ void Player::UpDate()
 				{
 					this->state = State::BUCKET;
 				}
-				if (this->ObjectHit((std::string)"Switch")) { //Switchが宣言されてなくて入れない
-					this->animation.animCnt = 0;	//動くアニメーションが実装されたら消してください
-					this->SwitchCheck();
-				}
+				//スイッチを操作する
+				this->SwitchCheck();
 			}
 			if (this->state != State::BUCKET) {
 				if (this->InputDown())
 				{
 					if (this->FootCheck((std::string)"Ladder"))
 					{
+						//移動が終わったら梯子モーションをするように設定
 						this->animation.animMo = Motion::Ladder;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
@@ -216,6 +215,7 @@ void Player::UpDate()
 					this->MoveCheck(e, (std::string)"Floor");
 					if (this->HeadCheck((std::string)"Ladder", 1))
 					{
+						//移動が終わったら梯子モーションをするように設定
 						this->animation.animMo = Motion::Ladder;
 						//アニメーション状態に移行
 						this->state = State::ANIMATION;
@@ -246,6 +246,7 @@ void Player::UpDate()
 		case Walk:
 			if (!this->InputRight() && !this->InputLeft() && this->AxisLX() == 0)
 			{
+				//左右ボタンを押さないとnormalに戻る
 				this->motion = Motion::Normal;
 			}
 			if (OGge->in->on(In::B1))
@@ -261,14 +262,11 @@ void Player::UpDate()
 				{
 					this->state = State::BUCKET;
 				}
-				else
-				{
-					//もしバケツをとれないならばスイッチの判定を行う
-					this->animation.animCnt = 0;	//動くアニメーションが実装されたら消す（仮）
-					this->SwitchCheck();
-				}
+				//スイッチを押す
+				this->SwitchCheck();
 			}
 			if (this->TohaveObjectHit()) {
+				//ブロックを押す
 				this->motion = Motion::Block_M;
 			}
 			if (this->HeadSolidCheck())
@@ -278,11 +276,23 @@ void Player::UpDate()
 			break;
 		case Switch_M:
 			++this->animation.animCnt;
-			if (this->animation.animCnt > 29) {
+			//スイッチのアニメーションが終わった時(フレイム5＊コマ数5) - 1
+			if (this->animation.animCnt > 24) {
 				this->motion = Motion::Normal;
+				this->state = State::NORMAL;
+				this->animation.animCnt = 0;		
 			}
 			break;
 		case Block_M:
+			if (OGge->in->down(In::B1))
+			{
+				if (this->FootCheck())
+				{
+					//落下していない時のみジャンプが有効
+					this->motion = Motion::Jump;
+					this->moveCnt = 0;
+				}
+			}
 			if (!this->TohaveObjectHit()) {
 				if (this->InputRight() && this->direction == Direction::LEFT) {
 					this->motion = Motion::Walk;
@@ -765,11 +775,10 @@ void Player::SwitchCheck()
 	{
 		if ((*id)->hit(*this))
 		{
-			this->motion = Motion::Switch_M; //スイッチまで動くアニメーションが実装されたら消してください
+			this->animation.SetAnimaVec(this->position, Vec2((*id)->position.x, (*id)->position.y));
 			(*id)->ChangeON_OFF();
 			this->animation.animMo = Motion::Switch_M;
 			this->state = State::ANIMATION;
-			this->moveCnt = 0;
 			this->est = { 0.f,0.f };
 			return;
 		}
@@ -814,6 +823,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 {
 	auto player = OGge->GetTask<Player>("Player");
 	Vec2 move = { 0.f,0.f };
+	//X軸だけ移動
 	if (this->animationVec.x != 0.f)
 	{
 		player->motion = Motion::Walk;
@@ -833,26 +843,31 @@ Vec2 Player::Animation::Move(Motion motion_)
 			this->animationVec.x = 0.f;
 		}
 	}
+	//Ｙ軸だけ移動
 	if (this->animationVec.x == 0.f)
 	{
+		//土の上の方で梯子に行く＆スイッチを押す時
+		//何でスイッチを押すとここに入るのか分からない
 		if (this->animationVec.y > 0.f)
 		{
 			move.y += this->animationVec.y;
 			player->motion = motion_;
 			this->animationVec.y = 0.f;
 		}
+		//梯子の上の方で土に行く
 		else if (this->animationVec.y < 0.f)
 		{
 			move.y += this->animationVec.y;
 			player->motion = Motion::Normal;
 			this->animationVec.y = 0.f;
 		}
+		//梯子の下の方で梯子に乗る
+		//スイッチはここに入るはずだけど…
 		else
 		{
 			player->motion = motion_;
 		}
 	}
-	this->animCnt = 0;		//スイッチのための初期化
 	return move;
 }
 bool Player::Animation::isMove()
@@ -898,10 +913,10 @@ Box2D Player::Animation::returnSrc(Motion motion, State state)
 			for (auto id = switchs->begin(); id != switchs->end(); ++id)
 			{
 				if ((*id)->isON()) {
-					src = Box2D(this->switch_2[this->animCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+					src = Box2D(this->switch_2[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
 				}
 				else {
-					src = Box2D(this->switch_1[this->animCnt / 5 % 6] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+					src = Box2D(this->switch_1[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
 				}
 			}
 			break;
