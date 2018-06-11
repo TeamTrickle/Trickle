@@ -16,12 +16,13 @@ private:
 		Texture tex;
 		Box2D draw;
 		Box2D src;
+		int angle;
 	};
 	Info pipe;
-	////スタートの水が垂れるパイプ
-	//Texture pipeTex;
+	Info gear;
 
 	bool Initialize();
+	void UpDate();
 	void Render2D();
 	void Finalize();
 };
