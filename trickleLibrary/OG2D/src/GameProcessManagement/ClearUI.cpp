@@ -6,7 +6,8 @@ bool ClearUI::Initialize(Vec2& pos)
 	this->Init(taskName);
 
 	//Šî–{‚Ìî•ñ
-	CreateObject(Cube, pos, Vec2(512, 96), 0);
+	CreateObject(Cube, pos, Vec2(256, 96), 30.f);
+
 
 	//‰æ‘œŠÖ˜A
 	this->SetDrawOrder(0.1f);

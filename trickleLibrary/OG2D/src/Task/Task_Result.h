@@ -14,8 +14,6 @@ public:
 	■戻り　なし
 	*/
 
-	void Result_DataInput();
-
 	enum Achievement
 	{
 		Flag1 = 1 << 0,		//フラグ1
@@ -32,19 +30,24 @@ public:
 		Effect =  1 << 2,	//☆のEffect
 		Clearui = 1 << 3,	//クリアUIの表示
 	};
+
+	//フラグ関連
 	void Flag_Input(Achievement);
-	
-	int Get_Flag();
-	//フラグのチェック
+	int  Get_Flag();
 	bool Flag_Judge();
 	bool Flag_Judge(Achievement, Achievement);
 	bool Flag_Judge(Achievement, Achievement, Achievement);
-
 	void Flag_Judge_Clear();
-	int GetFrameTime();
 
+	//ゴールのタイム関連
+	int  GetFrameTime();
+	void Result_DataInput();
+
+	//UIの出現について
 	void UI_Think();
 	void UI_Create();					//フラグによって生成させる
+
+
 private:
 	struct CreateTask
 	{
@@ -59,7 +62,12 @@ private:
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
 	//結果の際に必要なポインタ　または　ファイルの読み込む
+
+
+	//ファイルの出力
 	const char* TimeFilePath = "./data/Result/Result.dat";
+
+	//画像関連
 	Texture image;
 	const Box2D backSrc = { 0,0,1280,720 };
 	Texture maptile;
