@@ -12,6 +12,9 @@ Goal::Goal(const Vec2& pos)
 	this->animCnt = 0;
 	this->image = nullptr;
 	this->color = Paint::PaintColor::Normal;
+	this->mode = Mode::Non;
+	this->precmPos = nullptr;
+	this->precmSize = nullptr;
 }
 
 Goal::~Goal()
@@ -21,10 +24,59 @@ Goal::~Goal()
 
 void Goal::UpDate()
 {
-	this->isClear = this->WaterHit();
-	if (this->isClear && this->animCnt < 99)
+	switch (this->mode)
 	{
+	case Mode::Non:
+		if (this->WaterHit())
+		{
+			//カメラ移動終了地点を設定
+			this->cm_Pos.Set(OGge->camera->GetPos(), this->position, 10);
+			this->cm_Size.Set(OGge->camera->GetSize(), this->position + this->Scale, 10);
+			//移動前のカメラの位置とサイズを保存しておく
+			this->precmPos = new Vec2(OGge->camera->GetPos());
+			this->precmSize = new Vec2(OGge->camera->GetSize());
+			this->mode = Form1;
+		}
+		break;
+	case Mode::Form1:
+		if (this->cm_Pos.isPlay() || this->cm_Size.isPlay())
+		{
+			OGge->camera->SetPos(this->cm_Pos.Move());
+			OGge->camera->SetSize(this->cm_Size.Move());
+		}
+		else
+		{
+			this->mode = Form2;
+		}
+		break;
+	case Mode::Form2:
 		++this->animCnt;
+		if (this->animCnt >= 99)
+		{
+			//元のカメラ位置に戻す
+			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 10);
+			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 10);
+			delete this->precmPos;
+			delete this->precmSize;
+			this->precmPos = nullptr;
+			this->precmSize = nullptr;
+			this->mode = Mode::Form3;
+		}
+		break;
+	case Mode::Form3:
+		if (this->cm_Pos.isPlay() || this->cm_Size.isPlay())
+		{
+			OGge->camera->SetPos(this->cm_Pos.Move());
+			OGge->camera->SetSize(this->cm_Size.Move());
+		}
+		else
+		{
+			this->mode = End;
+		}
+		break;
+	case Mode::End:
+		this->isClear = true;
+		break;
 	}
 }
 
@@ -91,6 +143,26 @@ bool Goal::WaterHit()
 		}
 	}
 	return false;
+}
+
+void Goal::CameraAnim::Set(const Vec2& start, const Vec2& end, const unsigned int time)
+{
+	this->startPos = start;
+	this->endPos = end;
+	this->endPos -= this->startPos;
+	this->time = time;
+	this->easing_x.ResetTime();
+	this->easing_y.ResetTime();
+}
+Vec2 Goal::CameraAnim::Move()
+{
+	return Vec2(
+		this->easing_x.sine.InOut(this->easing_x.Time(this->time), this->startPos.x, this->endPos.x, this->time),
+		this->easing_y.sine.InOut(this->easing_x.Time(this->time), this->startPos.y, this->endPos.y, this->time));
+}
+bool Goal::CameraAnim::isPlay()
+{
+	return this->easing_x.isplay() || this->easing_y.isplay();
 }
 
 Goal::SP Goal::Create(const Vec2& pos,bool flag)
