@@ -23,6 +23,7 @@ bool Result::Initialize()
 
 	//ƒtƒ‰ƒO‚ÌÝ’è
 	this->Result_DataInput();
+	this->Flag = 0;
 
 	this->image.Create((std::string)"back.png");
 	this->maptile.Create((std::string)"tile.jpg");
@@ -264,7 +265,7 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
-			int selectflag[3] = {GameProcessManagement::Flag4,GameProcessManagement::Flag3,GameProcessManagement::Flag2};
+			int selectflag[3] = {GameProcessManagement::Flag1,GameProcessManagement::Flag2,GameProcessManagement::Flag4};
 
 			for (int i = 0; i < 3; ++i)
 			{

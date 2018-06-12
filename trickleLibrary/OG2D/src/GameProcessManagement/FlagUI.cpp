@@ -74,7 +74,9 @@ bool FlagUI::Finalize()
 void FlagUI::SetResultflag()
 {
 	//リザルト時に開いたデータからミッションのフラグ項目を抜き出す
-	if (auto result = OGge->GetTask<Result>("Result"))
+	auto result = OGge->GetTask<Result>("Result");
+
+	if (result != nullptr)
 	{
 		this->Resultflag = result->GetFlag();
 	}

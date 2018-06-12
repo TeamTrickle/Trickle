@@ -7,15 +7,18 @@ using namespace std;
 
 bool GameProcessManagement::Initialize()
 {
-	//-----------------------------
-	//生成時に処理する初期化処理を記述
-	//-----------------------------
+	//タスク関連
 	this->taskName = "GameProcessManagement";		//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
+	//フラグ関連
 	gameclear_flag = false;                 //初期値はfalseにしておく
 	pause_flag = false;
+	this->mission.Flag = 0;
+
 	timer = Timer::Create();
+
+
 
 	cout << "進行管理クラス　初期化" << endl;
 	return true;
