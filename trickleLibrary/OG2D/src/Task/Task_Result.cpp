@@ -58,10 +58,15 @@ void Result::UpDate()
 	//ƒtƒ‰ƒO‚É‚æ‚Á‚ÄCreate‚·‚é
 	this->UI_Create();
 
-	if (OGge->in->down(In::B2))
+	auto resultplayer = OGge->GetTask<ResultPlayer>("ResultPlayer");
+	if (!resultplayer)
 	{
-		Kill();
+		if (OGge->in->down(In::B2))
+		{
+			Kill();
+		}
 	}
+	
 }
 void Result::Render2D()
 {
@@ -336,14 +341,15 @@ void Result::Result_DataInput()
 			{
 				nowStagenumber = text.substr(5);
 				//•¶Žš—ñ‚©‚çintŒ^‚É‚·‚é
-
+				 nowStage = this->to_String(nowStagenumber);
 			}
 			else if(text == "Stage2")
 			{
 				nowStagenumber = text.substr(5);
 				//•¶Žš—ñ‚©‚çintŒ^‚É‚·‚é
-
+				nowStage = this->to_String(nowStagenumber);
 			}
+
 		}
 
 	}

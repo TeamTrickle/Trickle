@@ -62,7 +62,7 @@ void ResultPlayer::Think()
 		//アニメーションカウントが一定時間まで経過したら・・・
 		if (this->animetion.SmailMotionIsPlay())
 		{
-			if (OGge->in->key.down(Input::KeyBoard::S))
+			if (OGge->in->down(In::B2))
 			{
 				nm = Walk;
 			}
