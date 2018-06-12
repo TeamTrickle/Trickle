@@ -230,7 +230,7 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 	}
 	if (text == "g")
 	{
-		auto goal = Goal::Create(true, Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
 		return;
 	}
 	if (text == "paintred")

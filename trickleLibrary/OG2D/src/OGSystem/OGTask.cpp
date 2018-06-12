@@ -21,3 +21,12 @@ void OGTK::StartTaskObject()
 	//auto ga = Game::Create();
 	
 }
+
+OGTK::~OGTK()
+{
+	if (rm->GetTextureData((std::string)"fontui"))
+	{
+		delete rm->GetTextureData((std::string)"fontui");
+		rm->DeleteTexture((std::string)"fontui");
+	}
+}

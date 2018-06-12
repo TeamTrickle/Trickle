@@ -60,6 +60,9 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect02.png");
+	this->fontTex = new Texture();
+	this->fontTex->Create("fontui.png");
+	rm->SetTextureData((std::string)"fontui", this->fontTex);
 	
 	this->effect03.Create("Effect03.png");
 	

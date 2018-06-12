@@ -47,6 +47,7 @@ class Title :public TaskObject
 	Texture flowerLogo;
 
 	Texture texLogo;
+	Texture* fontTex;
 
 	std::string soundname;
 

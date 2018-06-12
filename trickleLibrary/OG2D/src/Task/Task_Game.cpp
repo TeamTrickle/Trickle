@@ -283,7 +283,7 @@ bool Game::Initialize()
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
 	//ゲームクリア判定を生成
-	auto gameprocess = GameProcessManagement::Create();
+	auto gameprocess = GameManager::Create();
 	//装飾
 	auto ornament = Ornament::Create();
 	return true;
@@ -379,7 +379,7 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto gamepros = OGge->GetTasks<GameProcessManagement>("GameProcessManagement");
+	auto gamepros = OGge->GetTasks<GameManager>("GM");
 	for (auto id = (*gamepros).begin(); id != (*gamepros).end(); ++id)
 	{
 		(*id)->Kill();
@@ -447,11 +447,6 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
-	auto goalPro = OGge->GetTask<GameProcessManagement>("GameProcessManagement");
-	if (goalPro->isAllGoal())
-	{
-		return;
-	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)
