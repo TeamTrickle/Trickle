@@ -32,7 +32,7 @@ void GoalTimeUI::UpDate()
 }
 void GoalTimeUI::MoveVolume()
 {
-	this->Volume += 0.02f;
+	this->Volume += 0.033f;
 	if (this->Volume >= 1.0f)
 	{
 		this->Volume = 1.0f;

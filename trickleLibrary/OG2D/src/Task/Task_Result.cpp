@@ -7,8 +7,8 @@
 #include "GameProcessManagement\GoalTimeUI.h"
 #include "GameProcessManagement\MissionUI.h"
 #include "GameProcessManagement\FrameTime.h"
+#include "Effect/SterEffect.h"
 #include "GameProcessManagement/GameProcessManagement.h"
-
 #include "Effect\SterEffect.h"
 
 ///285 
@@ -40,7 +40,7 @@ bool Result::Initialize()
 	this->createtask.SetNextFlag(CreateFlag::Timeui);
 
 	//リザルト画面に表示にする
-	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 96), Vec2(3, 0));
+	auto player = ResultPlayer::Create(Vec2(-96, (int)camerasize.y - 50 - 96), Vec2(3, 0));
 	auto mission = MissionUI::Create();
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
@@ -112,6 +112,7 @@ bool Result::Finalize()
 		auto player = OGge->GetTasks<ResultPlayer>("ResultPlayer");
 		auto ster = OGge->GetTasks<FlagUI>("Ster");
 		auto clear = OGge->GetTasks<ClearUI>("ClearUI");
+		auto effect = OGge->GetTasks<SterEffect>("SterEffect");
 		auto goaltime = OGge->GetTasks<GoalTimeUI>("GoalTimeUI");
 		auto mission = OGge->GetTasks<MissionUI>("MissionUI");
 		auto frametime = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
@@ -129,6 +130,10 @@ bool Result::Finalize()
 			(*id)->Kill();
 		}
 		for (auto id = (*goaltime).begin(); id != (*goaltime).end(); ++id)
+		{
+			(*id)->Kill();
+		}
+		for (auto id = (*effect).begin(); id != (*effect).end(); ++id)
 		{
 			(*id)->Kill();
 		}
@@ -207,13 +212,18 @@ void Result::UI_Think()
 		}
 		break;
 	case 1 << 3:
-		//仮条件
 		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Clearui)
 		{
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
+			std::vector<bool> flag;
 			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
 			{
-				if ((*id)->GetEffectEnd())
+				flag.push_back((*id)->GetEffectEnd());
+			}
+			//全てのEffectの演出が終了したら
+			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+			{
+				if (std::all_of(flag.begin(), flag.end(), [](bool flag) {return flag == true; }))
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Clearui);
 				}
@@ -253,11 +263,11 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
-			bool easingflag = false;
 			int selectflag[3] = {GameProcessManagement::Flag4,GameProcessManagement::Flag3,GameProcessManagement::Flag2};
+
 			for (int i = 0; i < 3; ++i)
 			{
-				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1) , camerasize.y * 0.5f), selectflag[i]);
+				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1) , camerasize.y * 0.5f), selectflag[i]);	
 			}
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
@@ -270,9 +280,26 @@ void Result::UI_Create()
 		if ((this->createtask.createflag & CreateFlag::Effect) == CreateFlag::Effect)
 		{
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
-			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+
+			//最初だけは条件なしで生成する
 			{
-				auto stereffect = SterEffect::Create((*id));
+				int count = 0;
+				for (auto id = sters->begin(); id != sters->end(); ++id, ++count)
+				{
+					if (count == 0)
+					{
+						auto effect = SterEffect::Create((*id));
+					}
+					else
+					{
+						auto Effect = OGge->GetTasks<SterEffect>("SterEffect");
+						if (!Effect)
+						{
+							continue;
+						}
+						auto effect = SterEffect::Create((*id), *(Effect->begin() + count - 1));
+					}
+				}
 			}
 			//生成するフラグをリセットする
 			this->createtask.ResetCreateFlag();

@@ -1,7 +1,7 @@
 #pragma once
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
-
+#include "GameProcessManagement/Timer.h"
 class Result : public TaskObject
 {
 	//-------------------------------------------
@@ -43,7 +43,10 @@ private:
 		void ResetNextFlag();
 	};
 	CreateTask createtask;
+
+
 	int Flag;
+	int efftimeCount;			//Effectカウント
 	int FrameTime;				//結果タイムを格納する
 
 	//結果の際に必要なポインタ　または　ファイルの読み込む

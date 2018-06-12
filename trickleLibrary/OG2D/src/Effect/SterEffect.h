@@ -35,9 +35,10 @@ private:
 	Easing easingX;
 	Easing easingY;
 	std::shared_ptr<GameObject> target;
+	std::shared_ptr<SterEffect> effect;
 	void ResetEasing(Easing&);
 	void MoveEasing();
-	bool isPlay;
+	bool isPlayed;
 
 	//タスク関連
 	std::string taskName;
@@ -48,8 +49,11 @@ public:
 	SterEffect();
 	virtual ~SterEffect();
 	static SterEffect::SP Create(std::shared_ptr<GameObject>,bool = true);
+	//タイミングをずらす場合に使用する
+	static SterEffect::SP Create(std::shared_ptr<GameObject>, std::shared_ptr<SterEffect> Targeteffect ,bool = true);
 	bool Initialize(std::shared_ptr<GameObject>);
-
+	//タイミングをずらす場合に使用する
+	bool Initialize(std::shared_ptr<GameObject>, std::shared_ptr<SterEffect> Targeteffect);
 	///リザルト時・喜ぶモーションにするときに使用します。
-	bool EasingIsPleyed();
+	bool EasingIsPlay();
 };

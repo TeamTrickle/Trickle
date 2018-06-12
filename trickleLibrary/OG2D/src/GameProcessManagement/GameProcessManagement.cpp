@@ -16,7 +16,6 @@ bool GameProcessManagement::Initialize()
 	gameclear_flag = false;                 //初期値はfalseにしておく
 	pause_flag = false;
 	timer = Timer::Create();
-	timer->Start();							//タイマーをスタートさせる
 
 	cout << "進行管理クラス　初期化" << endl;
 	return true;
@@ -89,7 +88,7 @@ void GameProcessManagement::Goal_Check()
 			return;
 		}
 		//クリアしていないときはタイマーを動かす
-		timer->Frame_Set();
+		//timer->Frame_Set();
 		goalCheck.clear();
 	}
 }

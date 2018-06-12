@@ -63,7 +63,7 @@ void FrameTimeUI::UpDate()
 	//コロン描画番号以外はドラムロールを行う
 	if (!this->goaltime.CoronnumberJudge(this->digitSelectnumber))
 	{
-		this->DramRoll(300);
+		this->DramRoll(2 * 100);
 	}
 	else
 	{
