@@ -39,7 +39,6 @@ void Seihyouki::UpDate() {
 
 void Seihyouki::Render2D() {
 	//デバッグ用
-	
 	if (active) {
 		LineDraw();
 		++animCnt;
@@ -63,7 +62,7 @@ void Seihyouki::toIce() {
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		if ((*id)->hit(hitBase))
+		if ((*id)->hit(*this))
 		{
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{

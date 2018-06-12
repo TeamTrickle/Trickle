@@ -41,6 +41,7 @@ class Title :public TaskObject
 	Texture texPause;
 
 	Texture texEffect;
+	Texture effect03;
 
 	Texture GierLogo;
 	Texture flowerLogo;
@@ -51,6 +52,7 @@ class Title :public TaskObject
 
 	Vec2 startPos;
 	Vec2 closePos;
+	Box2D textPos[2];
 	Vec2 cursorPos[3];
 
 	Texture waterTex;

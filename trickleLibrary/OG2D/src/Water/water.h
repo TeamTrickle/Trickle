@@ -7,7 +7,6 @@
  * @author	Heewon Kim
  */
 
-#include <map>
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 #include <algorithm>

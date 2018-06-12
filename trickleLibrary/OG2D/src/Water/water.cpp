@@ -2,6 +2,7 @@
 #include "Map\Map.h"
 #include "Block\block.h"
 #include "Player\Player.h"
+#include "Effect\Effect.h"
 //#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
 {
@@ -25,7 +26,7 @@ Water::Water(Vec2 pos)
 	/*this->nowSituation = Water::Situation::Normal;
 	this->currentState = Water::State::SOLID;*/
 	//‰Šú•ÛŽ…—Ê
-	this->volume = 0.5;
+	this->volume = 0.5f;
 	this->invi = 0;
 	//ˆÚ“®’l‚Ì‰Šú‰»
 	this->move = { 0,0 };
@@ -52,6 +53,7 @@ Water::Water(Vec2 pos)
 	this->hold = false;
 	this->Radius = { 0.5f,0.9f };
 	__super::Init((std::string)"water");
+	__super::SetDrawOrder(0.2f);
 }
 
 Water::~Water()
@@ -136,27 +138,35 @@ void Water::UpDate()
 			}
 			break;
 		case Water::Situation::Rainfrom:
-			if (this->nowTime < 10)
+			if (this->volume < 0.5f)
 			{
-				if (this->nowTime % 3 == 0)
-				{
-					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
-					water->SetMaxSize(Vec2(32, 32));
-					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
-				}
-				this->nowTime++;
+				this->Kill();
 			}
 			else
 			{
-				this->nowTime++;
-				if (this->nowTime > 40)
+				if (this->nowTime < 10)
 				{
-					this->Kill();
+					if (this->nowTime % 3 == 0)
+					{
+						auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
+						water->SetMaxSize(Vec2(32, 32));
+						water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+						water->SetWaterVolume(this->volume / 4.f);
+					}
+					this->nowTime++;
 				}
+				else
+				{
+					this->nowTime++;
+					if (this->nowTime > 40)
+					{
+						this->Kill();
+					}
+				}
+				break;
 			}
 			break;
 		}
-		break;
 	case Water::State::SOLID:
 		//•Xˆ—
 		if (!this->hold)
@@ -165,7 +175,8 @@ void Water::UpDate()
 			this->MoveSOILDCheck(move);
 			if (this->HeadSolidCheck())
 			{
-				this->SetState(State::LIQUID);
+				//this->SetState(State::LIQUID);
+				this->SolidMelt();
 			}
 		}
 		break;
@@ -850,7 +861,18 @@ bool Water::SolidMelt()
 			player->ReleaseHold();
 		}
 		this->SetState(State::LIQUID);
-		this->SetSituation(Situation::Newfrom);
+		this->SetSituation(Situation::Normal);
+		//•X‚ª—n‚¯‚½Žž‚ÌƒGƒtƒFƒNƒg
+		auto effect = Effect::Create(
+			Vec2(this->position.x + (this->Scale.x / 2) - (128.f / 2), this->position.y + this->Scale.y - (128.f / 1.5)),
+			Vec2(128, 128),
+			Vec2(768, 768),
+			1,
+			150);
+		effect->SetTexture(rm->GetTextureData((std::string)"steam"));
+		effect->SetMode(Effect::Mode::Decrease);
+		//effect->SetMaxSize(Vec2(80, 80));
+		effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 200), 30);
 	}
 	return false;
 }

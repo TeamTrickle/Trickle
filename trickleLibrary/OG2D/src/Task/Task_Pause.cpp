@@ -57,8 +57,11 @@ bool Pause::Finalize()
 	case Restart:
 		{
 			auto game = OGge->GetTask<Game>("game");
-			game->Finalize();
-			game->Initialize();
+			if (game)
+			{
+				game->Finalize();
+				game->Initialize();
+			}
 		}
 	break;
 	case Stage:

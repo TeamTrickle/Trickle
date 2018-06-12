@@ -324,6 +324,9 @@
     <ClCompile Include="src\Effect\Effect.cpp">
       <Filter>ソースファイル\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="src\Map\Ornament.cpp">
+      <Filter>ソースファイル\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -505,6 +508,12 @@
     </ClInclude>
     <ClInclude Include="src\Effect\Effect.h">
       <Filter>ソースファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornament.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Ornament.h">
+      <Filter>ソースファイル\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
