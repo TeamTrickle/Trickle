@@ -34,7 +34,7 @@ public:
 	//フラグ関連
 	void Flag_Input(Achievement);
 	int  Get_Flag();
-	bool Flag_Judge();
+	void Flag_Judge();
 	bool Flag_Judge(Achievement, Achievement);
 	bool Flag_Judge(Achievement, Achievement, Achievement);
 	void Flag_Judge_Clear();
@@ -61,6 +61,7 @@ private:
 	CreateTask createtask;
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
+
 	//結果の際に必要なポインタ　または　ファイルの読み込む
 
 

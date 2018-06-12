@@ -3,6 +3,7 @@ using namespace std;
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Goal\Goal.h"
 #include "Task\Task_Result.h"
+#include "Task/StageSelect.h"
 
 bool GameProcessManagement::Initialize()
 {
@@ -105,16 +106,21 @@ void GameProcessManagement::File_Writing()
 {
 	ofstream fin(TimeFilePath);				//ファイルのパスの指定
 	fin << timer->Get_frame();				//タイマーのフレーム数を書き込み
-	fin << ',';								//,の書き込み
+	fin << ",";
 	if (gameclear_flag)
 	{
-		fin << "GameClear";					//ゲームクリアフラグ
-		fin << ',';							//,の書き込み
-	}
-	else
-	{
-		fin << "NoGame";					//ゲーム未クリア
-		fin << ',';							//,の書き込み
+		switch (*MapNum)
+		{
+		case 5:
+			fin << "Stage1";
+			fin << ",";
+
+			break;
+		case 6:
+			fin << "Stage2";
+			fin << ",";
+			break;
+		}
 	}
 	fin.close();							//ファイルを閉じる
 }

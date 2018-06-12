@@ -7,8 +7,12 @@
 #include "GameProcessManagement\GoalTimeUI.h"
 #include "GameProcessManagement\MissionUI.h"
 #include "GameProcessManagement\FrameTime.h"
+#include "GameProcessManagement/GameProcessManagement.h"
 
 #include "Effect\SterEffect.h"
+
+///285 
+
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -17,9 +21,9 @@ bool Result::Initialize()
 	this->taskName = "Result";		//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
-	//生成例
-	Result_DataInput();
-	Flag_Judge();
+	//フラグの設定
+	this->Result_DataInput();
+
 	this->image.Create((std::string)"back.png");
 	this->maptile.Create((std::string)"tile.jpg");
 
@@ -135,38 +139,9 @@ bool Result::Finalize()
 	}
 	return true;
 }
-bool Result::Flag_Judge()
+void Result::Flag_Judge()
 {
-	bool active = false;
-	if ((Flag & Result::Flag1) == Result::Flag1)
-	{
-		//フラグ１を持っている
-		active = true;
-		std::cout << "Goalした" << std::endl;
-	}
-	if ((Flag & Result::Flag2) == Result::Flag2)
-	{
-		//フラグ２を持っている
-		active = true;
-		std::cout << "30秒以内にゴールをした" << std::endl;
-	}
-	if ((Flag & Result::Flag3) == Result::Flag3)
-	{
-		//フラグ３を持っている
-		std::cout << "60秒以内にゴールをした" << std::endl;
-		active = true;
-	}
-	if ((Flag & Result::Flag4) == Result::Flag4)
-	{
-		//フラグ４を持っている
-		std::cout << "普通にゴールをした" << std::endl;
-		active = true;
-	}
-	if ((Flag & Master) == Result::Master)
-	{
-		std::cout << "マスタークリア" << std::endl;
-	}
-	return active;
+
 }
 bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2)
 {
@@ -350,8 +325,7 @@ void Result::UI_Create()
 		break;
 	default:
 		break;
-	}
-	
+	}	
 }
 void Result::Result_DataInput()
 {
@@ -375,37 +349,12 @@ void Result::Result_DataInput()
 	std::getline(_fin, text, ',');
 	//textのデータを変数にいれる
 	(std::stringstream)text >> FrameTime;
-	if (FrameTime <= 30)//30秒以内にゴール
-	{
-		Flag_Input(Result::Achievement::Flag2);
-		Flag_Input(Result::Achievement::Flag3);
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	else if (FrameTime <= 60)//60秒以内にゴール
-	{
-		Flag_Input(Result::Achievement::Flag3);
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	else
-	{
-		Flag_Input(Result::Achievement::Flag4);
-	}
 	std::getline(_fin, text, ',');
 	(std::stringstream)text >> GameFalg;
-	if (GameFalg == "GameClear")		//ゲームがクリア
-	{
-		Flag_Input(Result::Achievement::Flag1);
-	}
-	//時間の計算
-	int sec, min, hour;
-	sec = FrameTime % 60;
-	min = FrameTime / 60;
-	hour = min / 60;
-	std::cout << hour << "時間" << min << "分" << sec << "秒" << std::endl;
+
+	this->Flag_Judge();
 
 	fin.close();
-
-
 }
 //----------------------------
 //ここから下はclass名のみ変更する
