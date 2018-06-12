@@ -36,7 +36,7 @@ bool Result::Initialize()
 	this->createtask.SetNextFlag(CreateFlag::Timeui);
 
 	//リザルト画面に表示にする
-	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64), Vec2(3, 0));
+	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 96), Vec2(3, 0));
 	auto mission = MissionUI::Create();
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
@@ -294,7 +294,7 @@ void Result::UI_Create()
 		//Playerが一定のところまで歩いたら・・・
 		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
 		{
-			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x / 100 * 15, camerasize.y / 100 * 30));
+			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x * 0.15f, camerasize.y * 0.2f));
 			for (int i = 0; i < 5; ++i)
 			{
 				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x + goaltime->Scale.x + (20 + i * 64), goaltime->position.y + 20), i, FrameTime);
@@ -313,7 +313,7 @@ void Result::UI_Create()
 			int selectflag[3] = {Flag4,Flag3,Flag2};
 			for (int i = 0; i < 3; ++i)
 			{
-				auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200) + 100 * (i + 1) , 130), selectflag[i]);
+				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1) , camerasize.y * 0.5f), selectflag[i]);
 			}
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
@@ -340,7 +340,7 @@ void Result::UI_Create()
 	case 1 << 3:
 		if ((this->createtask.createflag & CreateFlag::Clearui) == CreateFlag::Clearui)
 		{
-			auto clearui = ClearUI::Create(Vec2((int)camerasize.x - camerasize.x / 3, camerasize.y / 2));
+			auto clearui = ClearUI::Create(Vec2(camerasize.x * 0.70f, camerasize.y / 2));
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
 			this->createtask.ResetNextFlag();
@@ -417,7 +417,7 @@ Result::Result()
 	//カメラ座標を元に戻す
 	OGge->camera->SetPos(Vec2(0, 0));
 	//カメラのサイズを元に戻す
-	OGge->camera->SetSize(Vec2(1920,1080));
+	OGge->camera->SetSize(Vec2(60 * 16 , 60 * 9));
 	FrameTime = 0;
 	Flag_Judge_Clear();
 }

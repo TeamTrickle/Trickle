@@ -1,6 +1,7 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "OGSystem/_OGsystem.h"
 
 class ClearUI : public GameObject, public TaskObject
 {
@@ -11,6 +12,9 @@ private:
 	//‰æ‘œŠÖ˜A
 	Texture image;
 	const Box2D Src = {0,0,269,85};
+
+	//‰ñ“]
+	Vec2 rotate;
 
 	//Šg‘å‹@”\•Ï”
 	float Volume;
