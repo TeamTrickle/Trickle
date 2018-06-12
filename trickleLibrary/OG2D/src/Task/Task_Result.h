@@ -46,7 +46,6 @@ private:
 
 
 	int Flag;
-	int efftimeCount;			//Effectカウント
 	int FrameTime;				//結果タイムを格納する
 
 	//結果の際に必要なポインタ　または　ファイルの読み込む
@@ -77,4 +76,7 @@ public:
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
+
+	//他のクラスで使用する
+	int GetFlag();
 };

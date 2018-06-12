@@ -173,10 +173,11 @@ void Result::UI_Think()
 		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Timeui)
 		{
 			auto player = OGge->GetTask<ResultPlayer>("ResultPlayer");
-			if (player != nullptr)
+			auto missonUI = OGge->GetTask<MissionUI>("MissionUI");
+			if (player != nullptr && missonUI != nullptr)
 			{
 				//Playerが止まったら・・・
-				if (player->GetResetWalkStop())
+				if (player->GetResetWalkStop() && missonUI->isEasingPleyfinish())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Timeui);
 				}
@@ -361,14 +362,14 @@ void Result::Result_DataInput()
 		std::string nowStagenumber;
 		int nowStage = 0;
 
-		//フラグの書き込み
+		//フラグの読み込み
 		while (std::getline(_fin, text, ','))
 		{
 			if (text == "Stage1")
 			{
 				nowStagenumber = text.substr(5);
 				//文字列からint型にする
-				 nowStage = this->to_String(nowStagenumber);
+				nowStage = this->to_String(nowStagenumber);
 			}
 			else if(text == "Stage2")
 			{
@@ -376,25 +377,13 @@ void Result::Result_DataInput()
 				//文字列からint型にする
 				nowStage = this->to_String(nowStagenumber);
 			}
-
 		}
-
 	}
-	//改行か終了時点までの文字の文字列をlineに入れる
-	std::getline(fin, line);
-	//文字列を操作するための入力クラス、直接アクセスする
-	std::istringstream _fin(line);
-	//一字書き込み変数
-	std::string text;
-	//_finに入っている文字列から','までの文字をtextにいれる
-	std::getline(_fin, text, ',');
-	//textのデータを変数にいれる
-	(std::stringstream)text >> FrameTime;
-	std::getline(_fin, text, ',');
-	(std::stringstream)text >> GameFalg;
-
-
 	fin.close();
+}
+int Result::GetFlag()
+{
+	return this->Flag;
 }
 //----------------------------
 //ここから下はclass名のみ変更する

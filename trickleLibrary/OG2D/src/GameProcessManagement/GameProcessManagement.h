@@ -27,13 +27,13 @@ private:
 	{
 		//フラグ関連
 		void Flag_Input(Achievement);
-		void Flag_Judge(unsigned short& mapnumber , std::ofstream& fin);
 		void Flag_Judge_Clear();
 
 		//フラグを格納する変数
 		int  Flag;
 	};
-
+	//フラグ関連
+	void Flag_Judge(unsigned short& mapnumber, std::ofstream& fin);
 
 	//各自変数
 

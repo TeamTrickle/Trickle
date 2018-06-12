@@ -34,7 +34,6 @@ void GameProcessManagement::Render2D()
 	//--------------------
 	//描画時に行う処理を記述
 	//--------------------
-	
 }
 
 bool GameProcessManagement::Finalize()
@@ -113,15 +112,13 @@ void GameProcessManagement::File_Writing()
 			fin << "Stage1";
 			fin << ",";
 			//各自の達成項目について判定をしてフラグを代入させる
-			this->mission.Flag_Judge(*MapNum,fin);
-			fin << "," << std::endl;
+			this->Flag_Judge(*MapNum,fin);
 			break;
 		case 6:
 			fin << "Stage2";
 			fin << ",";
 			//各自の達成項目について判定をしてフラグを代入させる
-			this->mission.Flag_Judge(*MapNum,fin);
-			fin << "," << std::endl;
+			this->Flag_Judge(*MapNum,fin);
 			break;
 		}
 	}
@@ -143,16 +140,44 @@ void GameProcessManagement::Mission::Flag_Judge_Clear()
 {
 	this->Flag &= ~this->Flag;
 }
-void GameProcessManagement::Mission::Flag_Judge(unsigned short& mapnumber , std::ofstream& fin)
+void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream& fin)
 {
 	//条件を書く　IF
 	//フラグを代入する
 	//ファイルにデータを書く
+	int cleartime = this->timer->GetTime();
+
 	switch (mapnumber)
 	{
 	case 5:
 		//条件をここに入力する
-
+		//フラグ１の条件 30秒以内にゴールをした
+		if (cleartime <= 30)
+		{
+			fin << "Flag1" << ",";
+			this->mission.Flag_Input(Achievement::Flag1);
+			fin << "Flag2" << ",";
+			this->mission.Flag_Input(Achievement::Flag2);
+			fin << "Flag3" << ",";
+			this->mission.Flag_Input(Achievement::Flag3);
+			fin << std::endl;
+		}
+		//フラグ２の条件 60秒以内にゴールをした
+		if (cleartime <= 60)
+		{
+			fin << "Flag2" << ",";
+			this->mission.Flag_Input(Achievement::Flag2);
+			fin << "Flag3" << ",";
+			this->mission.Flag_Input(Achievement::Flag3);
+			fin << std::endl;
+		}
+		//フラグ３の条件 120秒以内にゴールをした
+		if (cleartime <= 120)
+		{
+			fin << "Flag3" << ",";
+			this->mission.Flag_Input(Achievement::Flag3);
+			fin << std::endl;
+		}
 		break;
 	case 6:
 		//条件をここに入力する

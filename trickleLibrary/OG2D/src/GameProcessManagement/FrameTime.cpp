@@ -31,10 +31,10 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	
 
 	//Easing関連
-	easingX.ResetTime();
+	/*easingX.ResetTime();
 	easingX.Init();
 	this->PrePos = position;
-	this->easingEnd = false;
+	this->easingEnd = false;*/
 
 	//ドラムロール関連
 	this->ResetMoveCnt();
@@ -52,14 +52,14 @@ bool FrameTimeUI::Finalize()
 }
 void FrameTimeUI::UpDate()
 {
-	if (easingX.isplay())
+	/*if (easingX.isplay())
 	{
 		position.x = easingX.linear.In(10, 0, this->PrePos.x, easingX.Time(10));
 	}
 	else
 	{
 		this->easingEnd = true;
-	}
+	}*/
 	//コロン描画番号以外はドラムロールを行う
 	if (!this->goaltime.CoronnumberJudge(this->digitSelectnumber))
 	{
@@ -278,17 +278,12 @@ bool FrameTimeUI::GetDramRollIsPlay()
 bool FrameTimeUI::GetIsPlay()
 {
 	auto frametimeUI = OGge->GetTasks<FrameTimeUI>(this->taskName);
-	int count = 0;
+	std::vector<bool> flag;
 	for (auto id = (*frametimeUI).begin(); id != (*frametimeUI).end(); ++id)
 	{
-		//演出が最後まで終了したフラグがtrueになっているか？
-		if ((*id)->Scaleanimeflag)
-		{
-			//カウントする
-			++count;
-		}
+		flag.push_back((*id)->Scaleanimeflag);
 	}
-	return count == 5 ? true : false;
+	return std::all_of(flag.begin(), flag.end(), [](bool flag) {return flag == true; });
 }
 FrameTimeUI::FrameTimeUI()
 {

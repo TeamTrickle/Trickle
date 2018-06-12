@@ -73,15 +73,17 @@ bool FlagUI::Finalize()
 }
 void FlagUI::SetResultflag()
 {
-	if (auto gameProcess = OGge->GetTask<GameProcessManagement>("GameProcessManagement"))
+	//リザルト時に開いたデータからミッションのフラグ項目を抜き出す
+	if (auto result = OGge->GetTask<Result>("Result"))
 	{
-		this->Resultflag = gameProcess->GetFlag();
+		this->Resultflag = result->GetFlag();
 	}
 }
 void FlagUI::FalgJudge(int judge)
 {
 	int flag = 0;
 	flag |= Resultflag;
+	//対象のフラグと一致している
 	if ((flag & judge) == judge)
 	{
 		flagactive = true;
