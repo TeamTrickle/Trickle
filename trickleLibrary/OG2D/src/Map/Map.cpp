@@ -231,6 +231,7 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 	if (text == "g")
 	{
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		return;
 	}
 	if (text == "paintred")

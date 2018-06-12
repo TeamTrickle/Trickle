@@ -1,5 +1,7 @@
 #include "GameProcessManagement.h"
 #include "Goal\Goal.h"
+#include "Task\Task_Game.h"
+#include "Task\Task_Result.h"
 GameManager::GameManager()
 {
 	this->Seconds = 0;
@@ -8,7 +10,10 @@ GameManager::GameManager()
 }
 GameManager::~GameManager()
 {
-
+	if (*MapNum == 5 || *MapNum == 6)
+	{
+		Result::Create();
+	}
 }
 void GameManager::UpDate()
 {
@@ -27,6 +32,16 @@ void GameManager::UpDate()
 					this->Minute++;
 				}
 			}
+		}
+	}
+	else
+	{
+		//クリア処理
+		//データの保存
+		auto game = OGge->GetTask<Game>("game");
+		if (game)
+		{
+			game->Kill();
 		}
 	}
 }

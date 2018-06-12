@@ -25,6 +25,8 @@ class Goal : public GameObject, public TaskObject
 		End,	//èIóπ
 	};
 	bool isClear;
+	bool isCheck;
+	bool cameraLock;
 	unsigned int animCnt;
 	Texture* image;
 	GameObject foot;
@@ -44,6 +46,7 @@ public:
 	bool GetClear() const;
 	void SetTexture(Texture*);
 	bool WaterHit();
+	bool GetLock() const;
 	typedef std::shared_ptr<Goal> SP;
 	static SP Create(const Vec2& pos, bool = true);
 };
