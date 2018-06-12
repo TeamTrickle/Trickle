@@ -104,9 +104,8 @@ void GameProcessManagement::Goal_Event()
 }
 void GameProcessManagement::File_Writing()
 {
-	ofstream fin(TimeFilePath);				//ファイルのパスの指定
-	fin << timer->Get_frame();				//タイマーのフレーム数を書き込み
-	fin << ",";
+	ofstream fin(TimeFilePath);							//ファイルのパスの指定
+	fin << timer->Get_frame() << "," << std::endl;		//タイマーのフレーム数を書き込み
 	if (gameclear_flag)
 	{
 		switch (*MapNum)
@@ -114,11 +113,16 @@ void GameProcessManagement::File_Writing()
 		case 5:
 			fin << "Stage1";
 			fin << ",";
-
+			//各自の達成項目について判定をしてフラグを代入させる
+			this->mission.Flag_Judge(*MapNum,fin);
+			fin << "," << std::endl;
 			break;
 		case 6:
 			fin << "Stage2";
 			fin << ",";
+			//各自の達成項目について判定をしてフラグを代入させる
+			this->mission.Flag_Judge(*MapNum,fin);
+			fin << "," << std::endl;
 			break;
 		}
 	}
@@ -127,6 +131,37 @@ void GameProcessManagement::File_Writing()
 bool GameProcessManagement::isAllGoal()
 {
 	return this->gameclear_flag;
+}
+int GameProcessManagement::GetFlag()
+{
+	return this->mission.Flag;
+}
+void GameProcessManagement::Mission::Flag_Input(GameProcessManagement::Achievement flag)
+{
+	this->Flag |= flag;
+}
+void GameProcessManagement::Mission::Flag_Judge_Clear()
+{
+	this->Flag &= ~this->Flag;
+}
+void GameProcessManagement::Mission::Flag_Judge(unsigned short& mapnumber , std::ofstream& fin)
+{
+	//条件を書く　IF
+	//フラグを代入する
+	//ファイルにデータを書く
+	switch (mapnumber)
+	{
+	case 5:
+		//条件をここに入力する
+
+		break;
+	case 6:
+		//条件をここに入力する
+
+		break;
+	default:
+		break;
+	}
 }
 GameProcessManagement::GameProcessManagement()
 {

@@ -139,42 +139,6 @@ bool Result::Finalize()
 	}
 	return true;
 }
-void Result::Flag_Judge()
-{
-
-}
-bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2)
-{
-	if ((Flag & achive1) == achive1 && (Flag & achive2) == achive2)
-	{
-		return true;
-	}
-	return false;
-}
-bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2, Result::Achievement achive3)
-{
-	if ((Flag & achive1) == achive1 && (Flag & achive2) == achive2 && (Flag & achive3) == achive3)
-	{
-		return true;
-	}
-	return false;
-}
-void Result::Flag_Input(Result::Achievement achive)
-{
-	Flag |= achive;
-}
-int Result::Get_Flag()
-{
-	return Flag;
-}
-int Result::GetFrameTime()
-{
-	return FrameTime;
-}
-void Result::Flag_Judge_Clear()
-{
-	Flag &= ~Flag;
-}
 void Result::CreateTask::ResetCreateFlag()
 {
 	this->createflag &= ~this->createflag;
@@ -285,7 +249,7 @@ void Result::UI_Create()
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
 			bool easingflag = false;
-			int selectflag[3] = {Flag4,Flag3,Flag2};
+			int selectflag[3] = {GameProcessManagement::Flag4,GameProcessManagement::Flag3,GameProcessManagement::Flag2};
 			for (int i = 0; i < 3; ++i)
 			{
 				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1) , camerasize.y * 0.5f), selectflag[i]);
@@ -327,10 +291,20 @@ void Result::UI_Create()
 		break;
 	}	
 }
+int Result::to_String(std::string& text)
+{
+	std::istringstream ss;
+	ss = std::istringstream(text);
+
+	int num = atoi(text.c_str());
+	ss >> num;
+
+	return num;
+}
 void Result::Result_DataInput()
 {
 	std::string GameFalg;			//ゲームフラグ
-								//データの読み込み
+	//データの読み込み
 	std::ifstream fin(TimeFilePath);
 
 	if (!fin)
@@ -339,6 +313,40 @@ void Result::Result_DataInput()
 	}
 	//読み込んだデータを入れておく変数
 	std::string line;
+	//ファイル全体のテキストを読み込み
+	while (std::getline(fin, line))
+	{
+		//文字列を操作するための入力クラス、直接アクセスする
+		std::istringstream _fin(line);
+		//一字書き込み変数
+		std::string text;
+		
+		//タイムの書き込み
+		std::getline(_fin, text, ',');
+		(std::stringstream)text >> FrameTime;
+
+		//ステージごとのフラグを書き込む
+		std::string nowStagenumber;
+		int nowStage = 0;
+
+		//フラグの書き込み
+		while (std::getline(_fin, text, ','))
+		{
+			if (text == "Stage1")
+			{
+				nowStagenumber = text.substr(5);
+				//文字列からint型にする
+
+			}
+			else if(text == "Stage2")
+			{
+				nowStagenumber = text.substr(5);
+				//文字列からint型にする
+
+			}
+		}
+
+	}
 	//改行か終了時点までの文字の文字列をlineに入れる
 	std::getline(fin, line);
 	//文字列を操作するための入力クラス、直接アクセスする
@@ -352,7 +360,6 @@ void Result::Result_DataInput()
 	std::getline(_fin, text, ',');
 	(std::stringstream)text >> GameFalg;
 
-	this->Flag_Judge();
 
 	fin.close();
 }
@@ -368,7 +375,6 @@ Result::Result()
 	//カメラのサイズを元に戻す
 	OGge->camera->SetSize(Vec2(60 * 16 , 60 * 9));
 	FrameTime = 0;
-	Flag_Judge_Clear();
 }
 
 Result::~Result()

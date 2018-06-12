@@ -1,6 +1,7 @@
 #include "FlagUI.h"
 
 #include "Effect\SterEffect.h"
+#include "GameProcessManagement.h"
 bool FlagUI::Initialize(Vec2& pos,int& target)
 {
 	//タスク関連
@@ -72,8 +73,10 @@ bool FlagUI::Finalize()
 }
 void FlagUI::SetResultflag()
 {
-	auto result = OGge->GetTask<Result>("Result");
-	Resultflag = result->Get_Flag();
+	if (auto gameProcess = OGge->GetTask<GameProcessManagement>("GameProcessManagement"))
+	{
+		this->Resultflag = gameProcess->GetFlag();
+	}
 }
 void FlagUI::FalgJudge(int judge)
 {
