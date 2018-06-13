@@ -17,7 +17,14 @@ void OGTK::StartTaskObject()
 {
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
 	auto TopTask = Title::Create();
-	//*MapNum = 5;
-	//auto ga = Game::Create();
 	
+}
+
+OGTK::~OGTK()
+{
+	if (rm->GetTextureData((std::string)"fontui"))
+	{
+		delete rm->GetTextureData((std::string)"fontui");
+		rm->DeleteTexture((std::string)"fontui");
+	}
 }

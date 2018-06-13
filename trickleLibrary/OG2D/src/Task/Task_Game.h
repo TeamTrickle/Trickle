@@ -47,6 +47,7 @@ private:
 	Texture EffectTest;
 	Texture Effectsond;
 	Texture texSteam;
+	Texture goalTex;
 	std::string gamesoundname;
 	std::string tutorialsoundname;
 
