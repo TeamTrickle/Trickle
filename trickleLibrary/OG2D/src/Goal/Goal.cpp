@@ -42,8 +42,8 @@ void Goal::UpDate()
 		if (this->WaterHit())
 		{
 			//カメラ移動終了地点を設定
-			this->cm_Pos.Set(OGge->camera->GetPos(), this->position, 1.f);
-			this->cm_Size.Set(OGge->camera->GetSize(), this->position + this->Scale, 1.f);
+			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 1.f);
+			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 1.f);
 			//移動前のカメラの位置とサイズを保存しておく
 			this->precmPos = new Vec2(OGge->camera->GetPos());
 			this->precmSize = new Vec2(OGge->camera->GetSize());

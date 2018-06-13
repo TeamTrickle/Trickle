@@ -17,6 +17,7 @@ GameManager::~GameManager()
 }
 void GameManager::UpDate()
 {
+	std::cout << this->Minute << ":" << this->Seconds << std::endl;
 	if (!this->isClear())
 	{
 		//ŠÔ‚ğƒvƒ‰ƒX‚·‚é
@@ -47,7 +48,7 @@ void GameManager::UpDate()
 }
 bool GameManager::isMaxTime()
 {
-	return this->Seconds < 59 && this->Minute < 59 ? false : true;
+	return this->Seconds >= 59 && this->Minute >= 59 ? true : false;
 }
 unsigned int GameManager::SecondsTime() const
 {
