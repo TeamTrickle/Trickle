@@ -14,7 +14,6 @@ public:
 private:
 	struct Info {
 		Box2D draw;
-		Box2D src;
 		int angle;
 	};
 	Info pipe;
@@ -25,6 +24,9 @@ private:
 	std::vector<Info> gear;
 	std::vector<Info> gear_nomove;
 	std::vector<Info> pipeBox;
+	Box2D pipeSrc;
+	Box2D gearSrc;
+	Box2D pipeBoxSrc;
 
 	bool Initialize();
 	void UpDate();
