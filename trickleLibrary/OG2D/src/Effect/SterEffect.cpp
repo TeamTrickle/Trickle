@@ -21,7 +21,6 @@ bool SterEffect::Initialize(std::shared_ptr<GameObject> target)
 	{
 		this->target = target;
 	}
-	this->target->position;
 
 	//EasingŠJnêŠ
 	if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
@@ -165,12 +164,14 @@ void SterEffect::MoveEasing()
 {
 	Vec2 camerasize = OGge->camera->GetSize();
 
+	Vec2 flagui = (std::static_pointer_cast<FlagUI>(target))->GetPos();
+
 	if (easingX.isplay() || easingY.isplay())
 	{
 		//‰E‚©‚ç¶
-		this->position.x = easingX.cubic.Out(10.5f, -camerasize.x + this->target->position.x, camerasize.x, easingX.Time(10.5f));
+		this->position.x = easingX.cubic.Out(10.5f, -camerasize.x + flagui.x, camerasize.x, easingX.Time(10.5f));
 		//ã‚©‚ç‰º
-		this->position.y = easingY.cubic.Out(12, 230 + this->target->position.y, -230, easingY.Time(12));
+		this->position.y = easingY.cubic.Out(12, 230 + flagui.y, -230, easingY.Time(12));
 	}
 	else
 	{

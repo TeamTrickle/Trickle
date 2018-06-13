@@ -33,7 +33,7 @@ void MissionUI::EasingMove()
 	if(easingY.isplay())
 	{
 		//è„Ç©ÇÁâ∫
-		position.y = easingY.quint.Out(25.65f, camerasize.y / 100 * 80  , -camerasize.y / 100 * 80 + 30 , easingY.Time(25.65f));
+		position.y = easingY.quint.Out(19.35f, camerasize.y / 100 * 80  , -camerasize.y / 100 * 80 + 30 , easingY.Time(19.35f));
 	}
 	else
 	{

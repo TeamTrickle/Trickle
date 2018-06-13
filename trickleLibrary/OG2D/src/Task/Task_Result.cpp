@@ -191,11 +191,7 @@ void Result::UI_Think()
 			auto frametimeUI = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
 			for (auto id = (*frametimeUI).begin(); id != (*frametimeUI).end(); ++id)
 			{
-				//タイムUIの演出が終了したら・・・
-				if ((*id)->GetIsPlay())
-				{
-					this->createtask.SetCreateFlag(CreateFlag::Starui);
-				}
+				this->createtask.SetCreateFlag(CreateFlag::Starui);
 			}
 		}
 		break;
@@ -205,7 +201,7 @@ void Result::UI_Think()
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
 			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
 			{
-				if ((*id)->EasingEnd())
+				if ((*id)->is_Scale())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Effect);
 				}
@@ -265,11 +261,11 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
-			int selectflag[3] = {GameProcessManagement::Flag1,GameProcessManagement::Flag2,GameProcessManagement::Flag4};
+			int selectflag[3] = { GameProcessManagement::Flag1,GameProcessManagement::Flag2,GameProcessManagement::Flag4 };
 
 			for (int i = 0; i < 3; ++i)
 			{
-				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1) , camerasize.y * 0.5f), selectflag[i]);	
+				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1), camerasize.y * 0.5f), selectflag[i]);
 			}
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
