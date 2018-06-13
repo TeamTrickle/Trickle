@@ -17,7 +17,6 @@ GameManager::~GameManager()
 }
 void GameManager::UpDate()
 {
-	std::cout << this->Minute << ":" << this->Seconds << std::endl;
 	if (!this->isClear())
 	{
 		//ŠÔ‚ğƒvƒ‰ƒX‚·‚é
