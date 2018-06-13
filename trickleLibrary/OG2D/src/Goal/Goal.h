@@ -28,11 +28,13 @@ class Goal : public GameObject, public TaskObject
 	bool isCheck;
 	bool cameraLock;
 	unsigned int animCnt;
+	unsigned int ID;
 	Texture* image;
 	GameObject foot;
 	Box2D draw;
 	Box2D src;
 	Paint::PaintColor color;
+	Paint::PaintColor termsColor;
 	Mode mode;
 	CameraAnim cm_Pos;
 	CameraAnim cm_Size;
@@ -41,12 +43,15 @@ class Goal : public GameObject, public TaskObject
 public:
 	explicit Goal(const Vec2& pos);
 	virtual ~Goal();
+	void SetColor(Paint::PaintColor&);
+	bool ColorCheck() const;
 	void UpDate() override;
 	void Render2D() override;
 	bool GetClear() const;
 	void SetTexture(Texture*);
 	bool WaterHit();
 	bool GetLock() const;
+	unsigned int GetID() const;
 	typedef std::shared_ptr<Goal> SP;
 	static SP Create(const Vec2& pos, bool = true);
 };

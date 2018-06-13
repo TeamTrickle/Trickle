@@ -6,12 +6,14 @@ GameManager::GameManager()
 {
 	this->Seconds = 0;
 	this->Minute = 0;
+	this->timeCnt = 0;
 	__super::Init((std::string)"GM");
 }
 GameManager::~GameManager()
 {
 	if (*MapNum == 5 || *MapNum == 6)
 	{
+		this->OutData();
 		Result::Create();
 	}
 }
@@ -23,13 +25,18 @@ void GameManager::UpDate()
 		//60秒を超えたら分をプラスし秒をリセット
 		if (!this->isMaxTime())
 		{
-			this->Seconds++;
-			if (this->Seconds >= 60)
+			this->timeCnt++;
+			if (this->timeCnt >= 60)
 			{
-				if (this->Minute < 59)
+				this->Seconds++;
+				this->timeCnt = 0;
+				if (this->Seconds >= 60)
 				{
-					this->Seconds = 0;
-					this->Minute++;
+					if (this->Minute < 59)
+					{
+						this->Seconds = 0;
+						this->Minute++;
+					}
 				}
 			}
 		}
@@ -67,6 +74,78 @@ bool GameManager::isClear()
 		{
 			return false;
 		}
+	}
+	return true;
+}
+bool GameManager::OutData()
+{
+	std::string path = "./data/Result/save" + std::to_string((int)*MapNum) + ".bin";
+	std::ofstream ofs(path, std::ios::out | std::ios::binary);
+	if (!ofs)
+	{
+		std::cout << "ファイルが存在しません" << std::endl;
+	}
+	//クリアしている場合
+	if (this->isClear())
+	{
+		//時間の保存
+		ofs << this->Minute << "," << this->Seconds << std::endl;
+		switch (*MapNum)
+		{
+		case 5:
+			//ステージ１のミッション
+			if (this->Minute * 60 + this->Seconds <= 120)
+			{
+				ofs << "t,";
+			}
+			else
+			{
+				ofs << "f," ;
+			}
+
+			if (this->Minute * 60 + this->Seconds <= 90)
+			{
+				ofs << "t,";
+			}
+			else
+			{
+				ofs << "f,";
+			}
+
+			if (this->Minute * 60 + this->Seconds <= 60)
+			{
+				ofs << "t," ;
+			}
+			else
+			{
+				ofs << "f," ;
+			}
+			break;
+		case 6:
+		{
+			//ステージ２のミッション
+			auto goals = OGge->GetTasks<Goal>("Goal");
+			for (auto id = goals->begin(); id != goals->end(); ++id)
+			{
+				if ((*id)->ColorCheck())
+				{
+					ofs << "t," ;
+				}
+				else
+				{
+					ofs << "f," ;
+				}
+			}
+		}
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		//それ以外(例外処理)
+		ofs << -1 << std::endl;
 	}
 	return true;
 }

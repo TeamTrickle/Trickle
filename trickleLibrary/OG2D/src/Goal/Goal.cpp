@@ -14,9 +14,19 @@ Goal::Goal(const Vec2& pos)
 	this->animCnt = 0;
 	this->image = nullptr;
 	this->color = Paint::PaintColor::Normal;
+	this->termsColor = Paint::PaintColor::Normal;
 	this->mode = Mode::Non;
 	this->precmPos = nullptr;
 	this->precmSize = nullptr;
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	auto id = goals->begin();
+	unsigned int count = 0;
+	while (id != goals->end())
+	{
+		count++;
+		id++;
+	}
+	this->ID = count;
 }
 
 Goal::~Goal()
@@ -32,6 +42,16 @@ Goal::~Goal()
 		delete this->precmSize;
 		this->precmSize = nullptr;
 	}
+}
+
+void Goal::SetColor(Paint::PaintColor & color)
+{
+	this->termsColor = color;
+}
+
+bool Goal::ColorCheck() const
+{
+	return this->termsColor == this->color ? true : false;
 }
 
 void Goal::UpDate()
@@ -177,6 +197,11 @@ Vec2 Goal::CameraAnim::Move()
 bool Goal::CameraAnim::isPlay()
 {
 	return this->easing_x.isplay() || this->easing_y.isplay();
+}
+
+unsigned int Goal::GetID() const
+{
+	return this->ID;
 }
 
 Goal::SP Goal::Create(const Vec2& pos,bool flag)
