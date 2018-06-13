@@ -28,6 +28,7 @@ Water::Water(Vec2 pos)
 	//初期保持水量
 	this->volume = 0.5f;
 	this->invi = 0;
+	this->color_a = { 1,1,1,1 };
 	//移動値の初期化
 	this->move = { 0,0 };
 	//経過時間初期化
@@ -138,11 +139,11 @@ void Water::UpDate()
 			}
 			break;
 		case Water::Situation::Rainfrom:
-			if (this->volume < 0.5f)
+			/*if (this->volume < 0.5f)
 			{
 				this->Kill();
 			}
-			else
+			else*/
 			{
 				if (this->nowTime < 10)
 				{
@@ -157,7 +158,9 @@ void Water::UpDate()
 				}
 				else
 				{
+					//雨を出現したあとも少しだけ残る
 					this->nowTime++;
+					this->color_a.alpha -= 0.02f;
 					if (this->nowTime > 40)
 					{
 						this->Kill();
@@ -246,7 +249,7 @@ void Water::Render2D()
 		src.x = (this->nowTime / 6) * 256;
 	}
 	src.OffsetSize();
-	this->tex->Draw(draw, src);
+	this->tex->Draw(draw, src, color_a);
 }
 
 bool Water::Finalize()
