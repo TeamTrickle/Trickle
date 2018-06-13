@@ -87,6 +87,8 @@ bool Game::Initialize()
 	rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
 	this->texSteam.Create("steam.png");
 	rm->SetTextureData(std::string("steam"), &this->texSteam);
+	this->goalTex.Create("goal.png");
+	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -428,6 +430,7 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"waterBlue");
 	rm->DeleteTexture((std::string)"waterPurple");
 	rm->DeleteTexture((std::string)"steam");
+	rm->DeleteTexture((std::string)"goalTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -438,6 +441,7 @@ bool Game::Finalize()
 	this->PaintTex.Finalize();
 	this->Effectsond.Finalize();
 	this->texSteam.Finalize();
+	this->goalTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -447,6 +451,14 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	for (auto id = goals->begin(); id != goals->end(); ++id)
+	{
+		if (!(*id)->GetLock())
+		{
+			return;
+		}
+	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)

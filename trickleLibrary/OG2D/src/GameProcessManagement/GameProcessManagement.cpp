@@ -1,5 +1,7 @@
 #include "GameProcessManagement.h"
 #include "Goal\Goal.h"
+#include "Task\Task_Game.h"
+#include "Task\Task_Result.h"
 GameManager::GameManager()
 {
 	this->Seconds = 0;
@@ -8,7 +10,10 @@ GameManager::GameManager()
 }
 GameManager::~GameManager()
 {
-
+	if (*MapNum == 5 || *MapNum == 6)
+	{
+		Result::Create();
+	}
 }
 void GameManager::UpDate()
 {
@@ -29,10 +34,20 @@ void GameManager::UpDate()
 			}
 		}
 	}
+	else
+	{
+		//クリア処理
+		//データの保存
+		auto game = OGge->GetTask<Game>("game");
+		if (game)
+		{
+			game->Kill();
+		}
+	}
 }
 bool GameManager::isMaxTime()
 {
-	return this->Seconds < 59 && this->Minute < 59 ? false : true;
+	return this->Seconds >= 59 && this->Minute >= 59 ? true : false;
 }
 unsigned int GameManager::SecondsTime() const
 {
