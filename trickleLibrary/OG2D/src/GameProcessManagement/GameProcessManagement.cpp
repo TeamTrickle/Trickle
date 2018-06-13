@@ -13,7 +13,6 @@ GameManager::~GameManager()
 {
 	if (*MapNum == 5 || *MapNum == 6)
 	{
-		this->OutData();
 		Result::Create();
 	}
 }
@@ -49,6 +48,10 @@ void GameManager::UpDate()
 		if (game)
 		{
 			game->Kill();
+			if (*MapNum == 5 || *MapNum == 6)
+			{
+				this->OutData();
+			}
 		}
 	}
 }

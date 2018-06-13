@@ -153,6 +153,7 @@ void Water::UpDate()
 						water->SetMaxSize(Vec2(32, 32));
 						water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
 						water->SetWaterVolume(this->volume / 4.f);
+						water->SetColor(this->color);
 					}
 					this->nowTime++;
 				}
