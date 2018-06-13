@@ -73,10 +73,12 @@ void Player::UpDate()
 	switch (this->state)
 	{
 	case State::ANIMATION:
-		if (this->animation.isMove())
+		//プレイヤが移動する距離が残っているとき||元々移動する距離がないとき
+		if (this->animation.isMove() || animation.same_flag)
 		{
 			//移動処理
 			this->position += this->animation.Move(this->animation.animMo);
+			animation.same_flag = false;
 		}
 		else
 		{
@@ -775,7 +777,7 @@ void Player::SwitchCheck()
 	{
 		if ((*id)->hit(*this))
 		{
-			this->animation.SetAnimaVec(this->position, Vec2((*id)->position.x, (*id)->position.y));
+			this->animation.SetAnimaVec(this->position, Vec2((*id)->position));
 			(*id)->ChangeON_OFF();
 			this->animation.animMo = Motion::Switch_M;
 			this->state = State::ANIMATION;
@@ -791,7 +793,7 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y  + 64.f};
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f };
 		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
@@ -799,7 +801,7 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y  + 64.f};
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f };
 		}
 	}
 }
@@ -807,6 +809,9 @@ void Player::Animation::SetAnimaVec(Vec2& start_, Vec2& end_)
 {
 	this->startVec = start_;
 	this->endVec = end_;
+	if (this->startVec == this->endVec) {
+		this->same_flag = true;
+	}
 	this->animationVec = { this->endVec.x - this->startVec.x ,this->endVec.y - this->startVec.y };
 }
 bool Player::Animation::Initialize()
@@ -846,26 +851,25 @@ Vec2 Player::Animation::Move(Motion motion_)
 	//Ｙ軸だけ移動
 	if (this->animationVec.x == 0.f)
 	{
-		//土の上の方で梯子に行く＆スイッチを押す時
-		//何でスイッチを押すとここに入るのか分からない
-		if (this->animationVec.y > 0.f)
+		//土の上の方で梯子に行く
+		if (this->animationVec.y >= 0.f && motion_==Motion::Ladder)
 		{
 			move.y += this->animationVec.y;
 			player->motion = motion_;
 			this->animationVec.y = 0.f;
 		}
+		//スイッチを押す
+		else if (this->animationVec.y > 0.f && motion_==Motion::Switch_M)
+		{
+			this->animationVec.y = 0.f;
+			player->motion = motion_;
+		}
 		//梯子の上の方で土に行く
-		else if (this->animationVec.y < 0.f)
+		else
 		{
 			move.y += this->animationVec.y;
 			player->motion = Motion::Normal;
 			this->animationVec.y = 0.f;
-		}
-		//梯子の下の方で梯子に乗る
-		//スイッチはここに入るはずだけど…
-		else
-		{
-			player->motion = motion_;
 		}
 	}
 	return move;
@@ -876,6 +880,7 @@ bool Player::Animation::isMove()
 	{
 		return true;
 	}
+
 	return false;
 }
 Box2D Player::Animation::returnSrc(Motion motion, State state) 

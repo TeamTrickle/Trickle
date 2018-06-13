@@ -48,6 +48,7 @@ private:
 		int timeCnt;											//アニメーション経過時間
 		int animCnt;											//リセットされるアニメーションのカウント（スイッチ、梯子）
 		Motion animMo;											//ギミックによって変わる後のモーション
+		int same_flag;											//移動する座標とプレイヤの座標が同じときtrueを返す
 		int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };					//Normal状態のアニメーション
 		int walk[9] = { 0,1,2,3,4,5,6,7,8 };					//Walk状態のアニメーション
 		int ladder[2] = { 0,1 };								//ladder_ani状態のアニメーション
