@@ -18,12 +18,26 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	animetion.AnimetionReset();
 
 	//画像関連の描画パス
-	std::string filePath = "fan.png";
+	std::string filePath = "fan.png";      //扇風機の画像
 	image.Create(filePath);
+	//風の画像
+	std::string filePathWind = "wind1.png";
+	windimage.Create(filePathWind);
+	std::string filePathWind2 = "wind2.png";
+	windimage2.Create(filePathWind2);
+	std::string filePathWind3 = "wind3.png";
+	windimage3.Create(filePathWind3);
+	std::string filePathWind4 = "wind4.PNG";
+	windimage4.Create(filePathWind4);
+	std::string filePathWind5 = "wind5.PNG";
+	windimage5.Create(filePathWind5);
+
 
 	//サウンドの生成
 	this->startflag = true;
 	sound.create(soundname, true);
+	//エフェクト関連情報
+	this->effectCnt = 0;
 
 	range = r;
 	dir = d;
@@ -51,6 +65,66 @@ void Fan::SetWindRange(Vec2&) {
 void Fan::UpDate() {
 	if (active_) {
 		SendWind();
+		//風のエフェクト生成-----------------------------------------------------------------------------------------------
+		this->effectCnt++;
+
+		if (this->effectCnt % 15 == 0)
+		{
+			effectnum = rand() % 5 + 1;
+			//扇風機が右向きの時
+			if (dir == RIGHT)
+			{
+				auto effect = Effect::Create(Vec2(this->position.x+32,this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200);
+				effect->SetWind(Vec2(64 * 8, 64), effect->position, Vec2(effect->position.x + (64 * 8), effect->position.y), Effect::Mode::WindR);
+				switch (effectnum)
+				{
+				case 1:
+					effect->SetTexture(&windimage);
+					break;
+				case 2:
+					effect->SetTexture(&windimage2);
+					break;
+				case 3:
+					effect->SetTexture(&windimage3);
+					break;
+				case 4:
+					effect->SetTexture(&windimage4);
+					break;
+				case 5:
+					effect->SetTexture(&windimage5);
+					break;
+				}
+			}
+			//扇風機が左向きの時
+			else
+			{
+				auto effect = Effect::Create(Vec2(this->position.x + 32, this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200);
+				effect->SetWind(Vec2(64 * 4, 64), effect->position, Vec2(effect->position.x - (64 * 8), effect->position.y), Effect::Mode::WindL);
+				switch (effectnum)
+				{
+				case 1:
+					effect->SetTexture(&windimage);
+					break;
+				case 2:
+					effect->SetTexture(&windimage2);
+					break;
+				case 3:
+					effect->SetTexture(&windimage3);
+					break;
+				case 4:
+					effect->SetTexture(&windimage4);
+					break;
+				case 5:
+					effect->SetTexture(&windimage5);
+					break;
+				}
+			}
+		}
+		if (this->effectCnt == 300)
+		{
+			this->effectCnt = 0;
+		}
+		//---------------------------------------------------------------------------------------------------------------
 	}
 
 	//アニメーションを動かす処理
@@ -77,6 +151,7 @@ void Fan::UpDate() {
 
 }
 void Fan::Render2D() {
+	//扇風機本体の描画
 	Box2D draw(position, Vec2(64, 64));
 	draw.OffsetSize();
 	Box2D src = this->Src;

@@ -17,7 +17,7 @@ Gate::Gate(const Vec2& pos)
 	this->isOpen = false;
 	this->preIsOpen = false;
 	//アニメーション用カウント初期化
-	this->AnimCnt = 20;
+	this->AnimCnt = 30;
 	this->Sense = 10;
 	//他のゲートの数に応じてIDを振りあてる
 	auto gates = OGge->GetTasks<Gate>("gate");
@@ -41,7 +41,7 @@ void Gate::UpDate()
 	if (this->isOpen != this->preIsOpen)
 	{
 		this->AnimCnt++;
-		if (this->AnimCnt > 20)
+		if (this->AnimCnt > 30)
 		{
 			this->preIsOpen = this->isOpen;
 		}
@@ -56,12 +56,12 @@ void Gate::Render2D()
 		this->draw.OffsetSize();
 		if (this->isOpen)
 		{
-			this->src = { 256 * (this->AnimCnt / this->Sense),0,256,512 };
+			this->src = { 460 * (this->AnimCnt / this->Sense),0,460,512 };
 			this->src.OffsetSize();
 		}
 		else
 		{
-			this->src = { 256 * (2 - (this->AnimCnt / this->Sense)),0,256,512 };
+			this->src = { 460 * (3 - (this->AnimCnt / this->Sense)),0,460,512 };
 			this->src.OffsetSize();
 		}
 		this->image->Draw(this->draw, this->src);

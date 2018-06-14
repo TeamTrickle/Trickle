@@ -119,25 +119,40 @@ void Goal::Render2D()
 		if (this->isCheck)
 		{
 			this->src = { 256 * (int)(animCnt / 10), 256, 256, 284 };
+			switch (this->color)
+			{
+			case Paint::PaintColor::Blue:
+				this->src.y += 540;
+				break;
+			case Paint::PaintColor::Red:
+				this->src.y += 1080;
+				break;
+			case Paint::PaintColor::Purple:
+				this->src.y += 1620;
+				break;
+			default:
+				break;
+			}
 		}
 		else
 		{
 			this->src = { 0,0,256,256 };
+			switch (this->termsColor)
+			{
+			case Paint::PaintColor::Blue:
+				this->src.y += 540;
+				break;
+			case Paint::PaintColor::Red:
+				this->src.y += 1080;
+				break;
+			case Paint::PaintColor::Purple:
+				this->src.y += 1620;
+				break;
+			default:
+				break;
+			}
 		}
-		switch (this->color)
-		{
-		case Paint::PaintColor::Blue:
-			this->src.y += 540;
-			break;
-		case Paint::PaintColor::Red:
-			this->src.y += 1080;
-			break;
-		case Paint::PaintColor::Purple:
-			this->src.y += 1620;
-			break;
-		default:
-			break;
-		}
+		
 		this->src.OffsetSize();
 		this->image->Draw(this->draw, this->src);
 	}
