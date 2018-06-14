@@ -1,6 +1,6 @@
 #include "Effect.h"
 
-Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime,const std::string& tag)
+Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag)
 {
 	this->CreateObject(Cube, pos, size, 0.0f);
 	this->objectTag = tag;
@@ -69,6 +69,43 @@ void Effect::UpDate()
 			this->position.y -= size / 2.f;
 		}
 		break;
+	case Mode::WindR:
+		//if (this->anim.flag)
+	{
+		this->alpha = 1.0f - ((float)this->animCnt / (float)this->time);
+	}
+	if (this->Scale.x < this->maxSize.x)
+	{
+		this->Scale.x += 5.0f;
+	}
+	else
+	{
+		if (!this->anim.flag)
+		{
+			this->Set(this->anim.preS, this->anim.preE, this->anim.time);
+			this->anim.flag = true;
+		}
+	}
+	break;
+	case Mode::WindL:
+		//if (this->anim.flag)
+	{
+		this->alpha = 1.0f - ((float)this->animCnt / (float)this->time);
+	}
+	if (this->Scale.x < this->maxSize.x)
+	{
+		this->Scale.x += 5.0f;
+		this->position.x -= 5.0f;
+	}
+	else
+	{
+		if (!this->anim.flag)
+		{
+			this->Set(this->position, this->anim.preE, this->anim.time);
+			this->anim.flag = true;
+		}
+	}
+	break;
 	default:
 		break;
 	}
@@ -82,7 +119,7 @@ void Effect::Render2D()
 	this->src.OffsetSize();
 	this->color.alpha = this->alpha;
 	this->image->Draw(this->draw, this->src, this->color);
-	
+
 }
 
 void Effect::SetMode(const Mode& mode)
@@ -109,7 +146,7 @@ Effect::SP Effect::Create(const Vec2 & pos, const Vec2 & size, const Vec2 & srcS
 	}
 	return nullptr;
 }
-void Effect::Set(const Vec2& start_, const Vec2& end_,const float time_)
+void Effect::Set(const Vec2& start_, const Vec2& end_, const float time_)
 {
 	this->anim.startPos = start_;
 	this->anim.endPos = end_;
@@ -117,6 +154,18 @@ void Effect::Set(const Vec2& start_, const Vec2& end_,const float time_)
 	this->anim.endPos -= this->anim.startPos;
 	this->anim.easing_x.ResetTime();
 	this->anim.easing_y.ResetTime();
+}
+
+void Effect::SetWind(const Vec2 & maxSize, const Vec2 & start_, const Vec2 & end_, const Mode& mode, const float time_)
+{
+	this->anim.preS = start_;
+	this->anim.preE = end_;
+	this->anim.time = time_;
+	this->anim.easing_x.ResetTime();
+	this->anim.easing_y.ResetTime();
+	this->maxSize = maxSize;
+	this->anim.flag = false;
+	this->mode = mode;
 }
 
 void Effect::SetTexture(Texture* tex)
