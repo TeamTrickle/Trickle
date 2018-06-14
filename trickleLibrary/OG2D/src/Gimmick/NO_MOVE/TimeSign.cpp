@@ -6,7 +6,7 @@ TimeSign::~TimeSign() {
 	Finalize();
 }
 
-TimeSign::SP TimeSign::Create(const std::string& bp, const Vec2& p, bool flag_ = true) {
+TimeSign::SP TimeSign::Create(const std::string& bp, const Box2D& p, bool flag_ = true) {
 	TimeSign::SP to = TimeSign::SP(new TimeSign());
 	if (to)
 	{
@@ -24,12 +24,9 @@ TimeSign::SP TimeSign::Create(const std::string& bp, const Vec2& p, bool flag_ =
 	return nullptr;
 }
 
-bool TimeSign::Initialize(const std::string& basePath, const Vec2& pos) {
+bool TimeSign::Initialize(const std::string& basePath, const Box2D& pos) {
 	base.Create(basePath);
-	Vec2 baseSize = base.GetTextureSize();
-	originPos.w = baseSize.x;
-	originPos.h = baseSize.y;
-	setPosition(pos);
+	originPos = pos;
 
 	__super::Init((std::string)"timesign");
 	__super::SetDrawOrder(0.5f);
@@ -57,7 +54,8 @@ void TimeSign::Render2D() {
 		{
 			Box2D draw = originPos;
 			draw.OffsetSize();
-			Box2D src(0.f, 0.f, originPos.w, originPos.h);
+			Vec2 srcRange = base.GetTextureSize();
+			Box2D src(0.f, 0.f, srcRange.x, srcRange.y);
 			src.OffsetSize();
 			base.Draw(draw, src);
 		}
@@ -83,10 +81,13 @@ void TimeSign::ClearNumberAtlas() {
 	numberSrcs.clear();
 }
 
-void TimeSign::setAtlas(const std::string& path, const Box2D& lettersize, const Vec2& initPos = Vec2(0, 0)) {
+void TimeSign::setAtlas(const std::string& path, 
+						const Box2D& lettersize, 
+						const Box2D& initPos = Box2D(0, 0, 0, 0)) {
 	ClearNumberAtlas();
 	numberAtlas.Create(path);
 
+	timerDraws[0] = initPos;
 	timerDraws[0].x = originPos.x + initPos.x;
 	timerDraws[0].y = originPos.y + initPos.y;
 	
@@ -98,13 +99,21 @@ void TimeSign::setAtlas(const std::string& path, const Box2D& lettersize, const 
 			numberBox
 		});
 		number += 1;
-		numberBox.x += lettersize.x;
+		numberBox.x += lettersize.w;
 	}
+	setAtlasAngle(0);
 }
 
 void TimeSign::setAtlasAngle(const float& a) {
 	rotateAngle = a;
 	numberAtlas.Rotate(a);
+
+	for (int i = 1; i < timerDraws.size(); ++i) {
+		auto& prevDraw = timerDraws[i - 1];
+		timerDraws[i] = prevDraw;
+		timerDraws[i].x = prevDraw.x + prevDraw.w;
+		timerDraws[i].y += (prevDraw.w) * sin(a * PI / 180);
+	}
 }
 
 void TimeSign::setPosition(const Vec2& p) {

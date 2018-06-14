@@ -12,13 +12,12 @@
 
 class TimeSign : public TaskObject {
 private:
-	bool Initialize(const std::string&, const Vec2&);
+	bool Initialize(const std::string&, const Box2D&);
 	virtual void UpDate() override;
 	virtual void Render2D() override;
 	void Finalize();
 
 	void ClearNumberAtlas();
-	void setAtlasAngle(const float&);
 
 public:
 	explicit TimeSign() {}
@@ -30,7 +29,7 @@ public:
 	 @param		1文字当たりのサイズ
 	 @param		背景位置からどのくらい離れとくか
 	 */
-	void setAtlas(const std::string&, const Box2D&, const Vec2&);
+	void setAtlas(const std::string&, const Box2D&, const Box2D&);
 
 	/**
 	 @brief		時計の中、数字の位置を指定します
@@ -38,11 +37,17 @@ public:
 	 */
 	void setDialogPos(const Vec2&);
 
+	/**
+	 @brief		時間を表示する数字の角度を設定します
+	 @param		度角度
+	 */
+	void setAtlasAngle(const float&);
+
 	void setPosition(const Vec2&);
 	Vec2& getPosition() const;
 
 	typedef std::shared_ptr<TimeSign> SP;
-	static SP Create(const std::string&, const Vec2&, bool);
+	static SP Create(const std::string&, const Box2D&, bool);
 
 private:
 	bool							activate = true;
