@@ -11,11 +11,11 @@ bool MissionUI::Initialize()
 	this->isEasinged = false;
 
 	Vec2 camerasize = OGge->camera->GetSize();
-	CreateObject(Cube, Vec2((int)camerasize.x / 2 - 200,0), Vec2(512, 64), 0);
+	CreateObject(Cube, Vec2((int)camerasize.x / 2 - 200,0), Vec2(256 * 2, 75), 0);
 
 
 	//‰æ‘œ‚Ì“Ç‚Ýž‚Ý
-	image.Create((std::string)"MissionUI.png");
+	image.Create((std::string)"stagealert_mission.png");
 	this->SetDrawOrder(0.1f);
 
 

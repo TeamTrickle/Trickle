@@ -245,7 +245,7 @@ void Result::UI_Create()
 		//Player‚ªˆê’è‚Ì‚Æ‚±‚ë‚Ü‚Å•à‚¢‚½‚çEEE
 		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
 		{
-			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x * 0.15f, camerasize.y * 0.2f));
+			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x * 0.10f, camerasize.y * 0.2f));
 			for (int i = 0; i < 5; ++i)
 			{
 				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x + goaltime->Scale.x + (20 + i * 64), goaltime->position.y + 20), i, FrameTime);

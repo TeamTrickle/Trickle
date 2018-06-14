@@ -1,7 +1,8 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-class ResultPlayer : public GameObject , public TaskObject 
+#include "Player.h"
+class ResultPlayer : public GameObject , public TaskObject
 {
 public:
 	enum State
@@ -39,6 +40,7 @@ private:
 	//移動関連
 	Vec2 moveVec;
 	void Move();
+	void Jump();
 	
 	//Playerの状態関連
 	void Think();
@@ -47,8 +49,13 @@ private:
 
 	//画像関連
 	Texture image;
+	Texture smail;
 	std::string filePath;
-	const Box2D Src = { Vec2(0, 575), Vec2(586, 575) };
+	const Box2D Src[2] =
+	{
+		Box2D(Vec2(0, 575), Vec2(586, 575)),
+		Box2D(Vec2(0,0),Vec2(1923 / 3 , 1068 / 2))
+	};
 
 	//リザルト画面へのフラグ関数
 	bool walkstop;

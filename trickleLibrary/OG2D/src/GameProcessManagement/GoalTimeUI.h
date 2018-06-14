@@ -24,7 +24,8 @@ private:
 
 	//画像関連
 	Texture image;
-	const Box2D Src = {0,0,227,90};
+	//const Box2D Src = {0,0,227,90};
+	const Box2D Src = { 0,64 * 3,640,768 / 12 };
 
 	//拡大機能
 	Vec2  Center;			//描画中央固定座標
