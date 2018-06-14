@@ -25,6 +25,9 @@ TimeSign::SP TimeSign::Create(const std::string& bp, const Box2D& p, bool flag_ 
 }
 
 bool TimeSign::Initialize(const std::string& basePath, const Box2D& pos) {
+	for (auto& t : timerDraws)
+		t = Box2D(0.f, 0.f, 0.f, 0.f);
+
 	base.Create(basePath);
 	originPos = pos;
 
@@ -36,10 +39,14 @@ bool TimeSign::Initialize(const std::string& basePath, const Box2D& pos) {
 void TimeSign::UpDate() {
 	auto timeSrc = OGge->GetTask<GameManager>((std::string)"GM");
 	if (timeSrc) {
+		if (currentTime[4] != timeSrc->SecondsTime() % 10) {
+			currentTime[2] = (currentTime[2] == 1) ? 0 : 1;
+		}
+
 		currentTime[0] = timeSrc->MinuteTime() / 10;
 		currentTime[1] = timeSrc->MinuteTime() % 10;
-		currentTime[2] = timeSrc->SecondsTime() / 10;
-		currentTime[3] = timeSrc->SecondsTime() % 10;
+		currentTime[3] = timeSrc->SecondsTime() / 10;
+		currentTime[4] = timeSrc->SecondsTime() % 10;
 		activate = true;
 	}
 	else {
@@ -63,8 +70,15 @@ void TimeSign::Render2D() {
 		// ”š
 		for (int i = 0; i < timerDraws.size(); ++i) {
 			Box2D draw = timerDraws[i];
-			draw.OffsetSize();
 			Box2D src = numberSrcs[currentTime[i]];
+			if (isCommaDrawable(i)) {
+				switch (currentTime[2]) {
+				case 0:		src = numberSrcs[':']; break;
+				case 1:		src = numberSrcs[' ']; break;
+				}
+			}
+			else if (i == 2) continue;
+			draw.OffsetSize();
 			src.OffsetSize();
 			numberAtlas.Draw(draw, src);
 		}
@@ -81,6 +95,10 @@ void TimeSign::ClearNumberAtlas() {
 	numberSrcs.clear();
 }
 
+inline bool TimeSign::isCommaDrawable(const int& idx) const {
+	return idx == 2 && (numberSrcs.find(':') != numberSrcs.end());
+}
+
 void TimeSign::setAtlas(const std::string& path, 
 						const Box2D& lettersize, 
 						const Box2D& initPos = Box2D(0, 0, 0, 0)) {
@@ -91,7 +109,7 @@ void TimeSign::setAtlas(const std::string& path,
 	timerDraws[0].x = originPos.x + initPos.x;
 	timerDraws[0].y = originPos.y + initPos.y;
 	
-	int number = 0;
+	char number = 0;
 	Box2D numberBox = Box2D(0.f , lettersize.y, lettersize.w, lettersize.h);
 	while (number < 10) {
 		numberSrcs.insert({
@@ -109,11 +127,22 @@ void TimeSign::setAtlasAngle(const float& a) {
 	numberAtlas.Rotate(a);
 
 	for (int i = 1; i < timerDraws.size(); ++i) {
-		auto& prevDraw = timerDraws[i - 1];
+		auto prevDraw = timerDraws[i - 1];
+		if (!isCommaDrawable(i - 1)) {
+			if (i == 3) 
+				prevDraw = timerDraws[1];
+		}
 		timerDraws[i] = prevDraw;
 		timerDraws[i].x = prevDraw.x + prevDraw.w;
-		timerDraws[i].y += (prevDraw.w) * sin(a * PI / 180);
+		timerDraws[i].y += prevDraw.w * sin(a * PI / 180);
 	}
+}
+
+void TimeSign::setComma(const Box2D& d, const Box2D& f, const Box2D& s) {
+	timerDraws[2] = d;
+	numberSrcs.insert({ ':', f });
+	numberSrcs.insert({ ' ', s });
+	setAtlasAngle(rotateAngle);
 }
 
 void TimeSign::setPosition(const Vec2& p) {

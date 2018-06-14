@@ -18,6 +18,7 @@ private:
 	void Finalize();
 
 	void ClearNumberAtlas();
+	inline bool isCommaDrawable(const int&) const;
 
 public:
 	explicit TimeSign() {}
@@ -43,6 +44,15 @@ public:
 	 */
 	void setAtlasAngle(const float&);
 
+	/**
+	 @brief		分と秒間に「：」を追加します
+	 @param		Draw
+	 @param		数字表の中にいる場合、その範囲
+	 @param		もう１個
+	 @note		setAtlasを呼んだら、そのあとに呼んでください
+	 */
+	void setComma(const Box2D&, const Box2D&, const Box2D&);
+
 	void setPosition(const Vec2&);
 	Vec2& getPosition() const;
 
@@ -51,13 +61,12 @@ public:
 
 private:
 	bool							activate = true;
-	std::array<Box2D, 4>			timeNumberDraw;
 	Box2D							originPos;
 	
 	Texture							base;
 	Texture							numberAtlas;
-	std::map<int, Box2D>			numberSrcs;
-	std::array<Box2D, 4>			timerDraws;
-	std::array<int, 4>				currentTime;
+	std::map<char, Box2D>			numberSrcs;
+	std::array<Box2D, 5>			timerDraws;
+	std::array<int, 5>				currentTime;
 	float							rotateAngle = 0.f;
 };
