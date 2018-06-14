@@ -44,7 +44,7 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	startPos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
+	startPos = Vec2(720.f - 155.f/*128.f*/, 624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
 	this->textPos[0] = { this->startPos,Vec2(256,64) };
 	this->textPos[1] = { this->closePos,Vec2(256,64) };
@@ -52,10 +52,7 @@ bool Title::Initialize()
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//画像読み込み
-	texCursor.Create("gear.png");
-	texStart.Create("start3.png");
-	texClose.Create("close.png");
-	texPause.Create("pause.png");
+	texCursor.Create("gear3.png");
 	this->texLogo.Create("logo.png");
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
@@ -328,25 +325,27 @@ void Title::Render2D()
 		src.OffsetSize();
 		this->texCursor.Rotate((float)this->gierCnt);
 		texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 256.f, cursorPos[this->cursorNum].y, 64.f, 64.f);
+		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 320.f/*256.f*/, cursorPos[this->cursorNum].y, 64.f, 64.f);
 		draw2.OffsetSize();
 		texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 	}
 	//終了
 	{
-		Box2D draw(closePos.x, closePos.y, 256.f, 64.f);
+		Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
 		draw.OffsetSize();
-		Box2D src(0, 0, 256, 64);
+		Box2D src(0, 64, 64*4, 64);
 		src.OffsetSize();
-		texClose.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
-	//設定
+	//スタート
 	{
-		Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
+		//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
+		Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
 		draw.OffsetSize();
-		Box2D src(0, 0, 512, 256);
+		Box2D src(0, 0, 64*5, 64);
 		src.OffsetSize();
-		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 }
 
@@ -356,9 +355,9 @@ bool Title::Finalize()
 
 	//使用画像の解放
 	texCursor.Finalize();
-	texStart.Finalize();
-	texClose.Finalize();
-	texPause.Finalize();
+	//texStart.Finalize();
+	//texClose.Finalize();
+	//texPause.Finalize();
 	this->texLogo.Finalize();
 	this->GierLogo.Finalize();
 	this->flowerLogo.Finalize();

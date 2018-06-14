@@ -36,9 +36,6 @@ class Title :public TaskObject
 		End,
 	};
 	Texture texCursor;
-	Texture texStart;
-	Texture texClose;
-	Texture texPause;
 
 	Texture texEffect;
 	Texture effect03;
