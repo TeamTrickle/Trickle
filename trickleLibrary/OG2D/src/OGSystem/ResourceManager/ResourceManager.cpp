@@ -56,6 +56,10 @@ Texture* ResourceManager::GetTextureData(std::string& dataname)
 
 ResourceManager::~ResourceManager()
 {
+	for (auto id = this->textureData.begin(); id != this->textureData.end(); ++id)
+	{
+		id->second->Finalize();
+	}
 	this->soundData.clear();
 	this->textureData.clear();
 }

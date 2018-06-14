@@ -46,16 +46,18 @@ private:
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
 		int timeCnt;											//アニメーション経過時間
-		int ladderCnt;											//梯子アニメーションのカウント
+		int animCnt;											//リセットされるアニメーションのカウント（スイッチ、梯子）
+		Motion animMo;											//ギミックによって変わる後のモーション
+		int same_flag;											//移動する座標とプレイヤの座標が同じときtrueを返す
 		int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };					//Normal状態のアニメーション
 		int walk[9] = { 0,1,2,3,4,5,6,7,8 };					//Walk状態のアニメーション
 		int ladder[2] = { 0,1 };								//ladder_ani状態のアニメーション
-		int switch_1[6] = { 0,1,2,3,4,4 };
-		int switch_2[6] = { 4,3,2,1,0,0 };
+		int switch_1[6] = { 0,1,2,3,4 };
+		int switch_2[6] = { 4,3,2,1,0 };
 	public:
 		void SetAnimaVec(Vec2& start_, Vec2& end_);				//開始位置と終了位置を登録
 		bool Initialize();										//初期化
-		Vec2 Move();											//移動処理を行い移動値を返す
+		Vec2 Move(Motion motion_);								//移動処理を行い移動値を返す
 		bool isMove();											//移動処理中かどうかを返す
 		Box2D returnSrc(Motion motion, State state);			//motionによってsrcを返す
 	private:
@@ -90,10 +92,12 @@ private:
 	void Friction();											//重力や摩擦の計算
 	bool BucketHit();											//バケツとの当たり判定
 	void BucketMove();											//所持しているバケツの位置を変える
-	bool BlockHit();											//ブロックとの当たり判定
+	bool TohaveObjectHit();											//ブロックとの当たり判定
 	bool ObjectHit(std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
 	void SwitchCheck();											//スイッチとの当たり判定
 	bool LadderJumpCheck();										//梯子中にジャンプを行う際の当たり判定
+	bool PutCheck();											//置く動作を行えるかの判定
+	bool HeadSolidCheck();										//頭上氷判定
 public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);
@@ -111,16 +115,12 @@ public:
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
 	bool ReleaseHold();
 	//入力処理簡略化
-	bool InputLeft() {
-		return OGge->in->on(Input::CL);
-	}
-	bool InputRight() {
-		return OGge->in->on(Input::CR);
-	}
-	bool InputDown() {
-		return OGge->in->on(Input::CD);
-	}
-	bool InputUp() {
-		return OGge->in->on(Input::CU);
-	}
+	bool InputLeft();
+	bool InputRight();
+	bool InputDown();
+	bool InputUp();
+	float AxisLX();
+	float AxisLY();
+	float AxisRX();
+	float AxisRY();
 };

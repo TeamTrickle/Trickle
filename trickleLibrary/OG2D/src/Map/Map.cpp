@@ -3,6 +3,7 @@
 #include "Bucket\bucket.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "Goal\Goal.h"
+#include "Paint\Paint.h"
 Map::Map()
 {
 	this->chip.resize(45);
@@ -31,10 +32,10 @@ bool Map::LoadMap(std::string& path_, Format format)
 	//ファイルの読み込み(入力用式、バイナリデータでの読み込み)
 	std::ifstream ifs(this->_FilePath + path_, std::ios::in | std::ios::binary);
 	//読み込めなかった時のエラー処理
-	if (!ifs) 
+	if (!ifs)
 	{
 		std::cout << "マップ読み込みエラー" << std::endl;
-		return false; 
+		return false;
 	}
 	//読み込んだデータを入れておく変数
 	std::string line;
@@ -47,19 +48,19 @@ bool Map::LoadMap(std::string& path_, Format format)
 	//_isに入っている文字列から','までの文字をtextにいれる
 	std::getline(_is, text, ',');
 	//textのデータを変数にいれる
- 	(std::stringstream)text >> this->mapSize.x;
+	(std::stringstream)text >> this->mapSize.x;
 	std::getline(_is, text, ',');
 	(std::stringstream)text >> this->mapSize.y;
 	//_arrをmapyのサイズ分にサイズを変更する(配列化)
-	this->_arr.resize(this->mapSize.y);
-	this->ID.resize(this->mapSize.y);
-	this->hitBase.resize(this->mapSize.y);
+	this->_arr.resize((int)this->mapSize.y);
+	this->ID.resize((int)this->mapSize.y);
+	this->hitBase.resize((int)this->mapSize.y);
 	//_arr[]をmapxのサイズ分にサイズを変更する(二次配列化)
 	for (int i = 0; i < this->mapSize.y; ++i)
 	{
-		this->_arr[i].resize(this->mapSize.x);
-		this->ID.resize(this->mapSize.x);
-		this->hitBase[i].resize(this->mapSize.x);
+		this->_arr[i].resize((int)this->mapSize.x);
+		this->ID.resize((int)this->mapSize.x);
+		this->hitBase[i].resize((int)this->mapSize.x);
 	}
 	for (int y = 0; y < this->mapSize.y; ++y) {
 		std::string lineText;
@@ -68,6 +69,14 @@ bool Map::LoadMap(std::string& path_, Format format)
 		for (int x = 0; x < this->mapSize.x; ++x) {
 			std::string  text;
 			std::getline(ss_lt, text, ',');
+			if (text == "\r")
+			{
+				continue;
+			}
+			if (text.find("\r") != std::string::npos)
+			{
+				text.erase(text.find("\r"));
+			}
 			//文字列が数字のみかを検索
 			if (std::all_of(text.cbegin(), text.cend(), isdigit))
 			{
@@ -80,7 +89,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 			else
 			{
 				//文字列に応じたオブジェクトを生成する
-				this->ObjectCreateCheck(text,x,y);
+				this->ObjectCreateCheck(text, x, y);
 				//その場所の番号は0としておく。
 				this->_arr[y][x] = 0;
 				//this->hitBase[y][x].Setarr(0);
@@ -149,7 +158,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 			default:
 				break;
 			}
-			
+
 			/*if (this->ID[y][x])
 			{
 				this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), this->DrawSize, 0.0f);
@@ -202,13 +211,13 @@ bool Map::LoadMap(std::string& path_, Format format)
 			}*/
 		}
 	}
-	
+
 	return true;
 }
 
-void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
+void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 {
-	if(text == "p")
+	if (text == "p")
 	{
 		auto player = Player::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
 		player->SetTexture(rm->GetTextureData((std::string)"playerTex"));
@@ -221,7 +230,27 @@ void Map::ObjectCreateCheck(std::string& text,int x_index,int y_index)
 	}
 	if (text == "g")
 	{
-		auto goal = Goal::Create(true, Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		return;
+	}
+	if (text == "paintred")
+	{
+		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Red);
+		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		return;
+	}
+	if (text == "paintblue")
+	{
+		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Blue);
+		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		return;
+	}
+	if (text == "paintpurple")
+	{
+		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Purple);
+		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		return;
 	}
 }
 
@@ -268,13 +297,13 @@ bool Map::MapHitCheck(GameObject &p)
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0 && 
-				this->_arr[y][x] != 10 && 
-				this->_arr[y][x] != 12 && 
+			if (this->_arr[y][x] != 0 &&
+				this->_arr[y][x] != 10 &&
+				this->_arr[y][x] != 12 &&
 				this->_arr[y][x] != 13 &&
-				this->_arr[y][x] != 21 && 
-				this->_arr[y][x] != 22 && 
-				this->_arr[y][x] != 20 && 
+				this->_arr[y][x] != 21 &&
+				this->_arr[y][x] != 22 &&
+				this->_arr[y][x] != 20 &&
 				this->_arr[y][x] != 23) {
 				if (this->hitBase[y][x].hit(p))
 				{
@@ -292,16 +321,16 @@ bool Map::HitCheck(GameObject &p, const int id)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
-		/*	if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
-			{
-				if (this->hitBase[y][x].IDCheck(id))
+			/*	if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
 				{
-					if (this->hitBase[y][x].hit(p))
+					if (this->hitBase[y][x].IDCheck(id))
 					{
-						return true;
+						if (this->hitBase[y][x].hit(p))
+						{
+							return true;
+						}
 					}
-				}
-			}*/
+				}*/
 		}
 	}
 	return false;

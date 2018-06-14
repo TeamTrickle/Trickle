@@ -1,43 +1,57 @@
-#ifndef __GOAL_H__
-#define __GOAL_H__
-
-//必要読み込みファイル
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Paint\Paint.h"
 
 class Goal : public GameObject, public TaskObject
 {
-	//-------------------------------------------
-	//各自で制作するときに使用するものはここに記述する
-	//-------------------------------------------
+	class CameraAnim
+	{
+		Vec2 startPos;
+		Vec2 endPos;
+		unsigned int time;
+		Easing easing_x;
+		Easing easing_y;
+	public:
+		void Set(const Vec2& start, const Vec2& end, const unsigned int time);
+		Vec2 Move();
+		bool isPlay();
+	};
+	enum Mode
+	{
+		Non,	//初期
+		Form1,	//カメラ移動
+		Form2,	//花咲き
+		Form3,	//カメラ戻り
+		End,	//終了
+	};
+	bool isClear;
+	bool isCheck;
+	bool cameraLock;
+	unsigned int animCnt;
+	unsigned int ID;
+	Texture* image;
+	GameObject foot;
+	Box2D draw;
+	Box2D src;
+	Paint::PaintColor color;
+	Paint::PaintColor termsColor;
+	Mode mode;
+	CameraAnim cm_Pos;
+	CameraAnim cm_Size;
+	Vec2* precmPos;
+	Vec2* precmSize;
 public:
-	bool Initialize(Vec2&);
-	bool cleared;
-	bool goal_anim;
-	int animCnt;
-	//void AddWater();
-	//bool DeleteWater();
-	bool ClearCheck();
-private:
-	Texture tex;
-
-	//------------------
-	//固定化されている処理
-	//------------------
-public:
-	std::string taskName;
+	explicit Goal(const Vec2& pos);
 	virtual ~Goal();
+	void SetColor(Paint::PaintColor&);
+	bool ColorCheck() const;
+	void UpDate() override;
+	void Render2D() override;
+	bool GetClear() const;
+	void SetTexture(Texture*);
+	bool WaterHit();
+	bool GetLock() const;
+	unsigned int GetID() const;
 	typedef std::shared_ptr<Goal> SP;
-	static Goal::SP Create(bool);
-	static Goal::SP Create(bool,Vec2&);
-	Goal();
-	//-------------
-	//変更しないこと
-	//-------------
-	bool Initialize();		//初期化処理
-	void UpDate();			//更新処理
-	void Render2D();		//描画処理
-	bool Finalize();		//解放処理
+	static SP Create(const Vec2& pos, bool = true);
 };
-
-#endif

@@ -12,6 +12,8 @@ public:
 		Stop,	//ストップ中
 	};
 private:
+
+	//アニメーション関連
 	struct Animetion
 	{
 		int animetionCnt;				//アニメーションカウンタ
@@ -20,39 +22,51 @@ private:
 		void Reset();					//アニメーションのリセット
 		void ResetAnimetionCnt();		//アニメーションカウントをリセット
 		void MotionChenge(State);		//アニメーションを変更する
+		void AnimetionMove();			//アニメーションカウントをカウントします
 		State motion;					//モーション
 
 		//モーションに関する変数
-		int toSmailCnt = 0;				//喜ぶモーションにするまでの時間を格納する
-		bool SmailChangeCheck();		//喜ぶモーションに切り替えて良いかを返す
-		bool smailflag;					//喜ぶフラグ
-		void SmailMotion();				//喜びモーションを入れる
-	};
+		const int toSmailCnt = 200;				//喜ぶモーションにするまでの時間を格納する
 
-	Texture image;
-	std::string filePath;
-	Vec2 moveVec;
+		//喜ぶモーションが終了したか返す
+		bool  SmailMotionIsPlay();
+
+		//Srcの喜びモーションをリセット
+		void  ResetSrc(Box2D&);
+	};
 	Animetion animetion;
+	
+	//移動関連
+	Vec2 moveVec;
 	void Move();
+	
+	//Playerの状態関連
 	void Think();
 	void Motion();
+	
+
+	//画像関連
+	Texture image;
+	std::string filePath;
 	const Box2D Src = { Vec2(0, 575), Vec2(586, 575) };
 
 	//リザルト画面へのフラグ関数
 	bool walkstop;
+	bool keyflag;
 	void ResetWalkStop();
 	
+	//タスク関連
+	std::string taskName;
+	void UpDate();
+	void Render2D();
+	bool Finalize();
 
 public:
 	typedef std::shared_ptr<ResultPlayer> SP;
 	ResultPlayer();
 	virtual ~ResultPlayer();
-	std::string taskName;
 
 	bool Initialize(Vec2& pos,Vec2& speed);
-	void UpDate();
-	void Render2D();
-	bool Finalize();
 	static ResultPlayer::SP Create(Vec2 pos,Vec2 speed = Vec2(1,0) ,bool = true);
 
 	//リザルト画面に関連するフラグ関数

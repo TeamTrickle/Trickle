@@ -6,6 +6,7 @@
 #include "Back\Back.h"
 #include "Chara\Chara.h"
 #include "Load\LoadLogo.h"
+#include "Effect\Effect.h"
 Title::Title()
 {
 	this->mode = Non;
@@ -43,19 +44,25 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	startPos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
+	startPos = Vec2(720.f - 155.f/*128.f*/, 624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
+	this->textPos[0] = { this->startPos,Vec2(256,64) };
+	this->textPos[1] = { this->closePos,Vec2(256,64) };
 	//配列管理を行う
 	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
 	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
 	//画像読み込み
-	texCursor.Create((std::string)"gear.png");
-	texStart.Create((std::string)"start.png");
-	texClose.Create((std::string)"close.png");
-	texPause.Create((std::string)"pause.png");
-	this->texLogo.Create((std::string)"logo.png");
-	this->GierLogo.Create((std::string)"gearofi.png");
-	this->flowerLogo.Create((std::string)"flower.png");
+	texCursor.Create("gear3.png");
+	this->texLogo.Create("logo.png");
+	this->GierLogo.Create("gearofi.png");
+	this->flowerLogo.Create("flower.png");
+	this->texEffect.Create("Effect02.png");
+	this->fontTex = new Texture();
+	this->fontTex->Create("fontui.png");
+	rm->SetTextureData((std::string)"fontui", this->fontTex);
+	
+	this->effect03.Create("Effect03.png");
+	
 	//サウンドの生成
 	sound = new Sound();
 	sound->create(soundname, true);
@@ -93,7 +100,7 @@ void Title::UpDate()
 	{
 		this->Kill();
 	}
-	if (OGge->in->key.down(In::ENTER))
+	if (OGge->in->key.down(In::ENTER) || OGge->in->down(In::B2))
 	{
 		this->Skip();
 	}
@@ -137,16 +144,26 @@ void Title::UpDate()
 			{
 				this->isGierAng = true;
 				this->mode = from2;
+				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 100, 100, "titleEffect");
+				effect->SetTexture(&this->texEffect);
+				effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 500), 15);
+				effect->SetMode(Effect::Mode::Flash);
+				for (int i = 0; i < 10; ++i)
+				{
+					float rand = random::GetRand(this->Logo.position.x, this->Logo.position.x + 182.f);
+					auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 100, 100, "titleEffect");
+					effect_r->SetTexture(&this->texEffect);
+					effect_r->Set(effect_r->position, Vec2(effect_r->position.x, effect_r->position.y - 500), 15);
+					effect_r->SetMode(Effect::Mode::Flash);
+					float rand_a = random::GetRand(0.0f, 1.0f);
+					effect_r->Color_a(rand_a);
+				}
 			}
 		}
 	}
 	break;
 	case from2:	//花咲き開始から終了まで
 	{
-		if (this->timeCnt < 3)
-		{
-
-		}
 		//テスト用10フレーム後移動
 		if (this->flowerVolume >= 1.0f)
 		{
@@ -187,7 +204,7 @@ void Title::UpDate()
 		if (this->tex_a >= 1.0f)
 		{
 			this->mode = from5;
-			auto Npc = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+			auto Npc = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 			Npc->SetReplayEnable();
 		}
 	}
@@ -236,6 +253,15 @@ void Title::UpDate()
 			case 2:
 				break;
 			}
+			auto effect03 = Effect::Create(
+				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
+				Vec2(0, 0),
+				Vec2(256, 256),
+				1,
+				100);
+			effect03->SetMode(Effect::Mode::Expansion);
+			effect03->SetTexture(&this->effect03);
+			effect03->SetMaxSize(Vec2(576, 576));
 		}
 	}
 	break;
@@ -281,7 +307,7 @@ void Title::Render2D()
 		Box2D draw(634, 380, 52, 52);
 		draw.OffsetSize();
 		Box2D src(0, 0, 128, 128);
-		this->GierLogo.Rotate(this->gierCnt);
+		this->GierLogo.Rotate((float)this->gierCnt);
 		this->GierLogo.Draw(draw, src);
 	}
 	{
@@ -297,27 +323,29 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 0, 195, 195);
 		src.OffsetSize();
-		this->texCursor.Rotate(this->gierCnt);
+		this->texCursor.Rotate((float)this->gierCnt);
 		texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 256.f, cursorPos[this->cursorNum].y, 64.f, 64.f);
+		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 320.f/*256.f*/, cursorPos[this->cursorNum].y, 64.f, 64.f);
 		draw2.OffsetSize();
 		texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 	}
 	//終了
 	{
-		Box2D draw(closePos.x, closePos.y, 256.f, 64.f);
+		Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
 		draw.OffsetSize();
-		Box2D src(0, 0, 256, 64);
+		Box2D src(0, 64, 64*4, 64);
 		src.OffsetSize();
-		texClose.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
-	//設定
+	//スタート
 	{
-		Box2D draw(startPos.x, startPos.y, 256.f, 64.f);
+		//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
+		Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
 		draw.OffsetSize();
-		Box2D src(0, 0, 256, 64);
+		Box2D src(0, 0, 64*5, 64);
 		src.OffsetSize();
-		texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 }
 
@@ -327,12 +355,14 @@ bool Title::Finalize()
 
 	//使用画像の解放
 	texCursor.Finalize();
-	texStart.Finalize();
-	texClose.Finalize();
-	texPause.Finalize();
+	//texStart.Finalize();
+	//texClose.Finalize();
+	//texPause.Finalize();
 	this->texLogo.Finalize();
 	this->GierLogo.Finalize();
 	this->flowerLogo.Finalize();
+	this->texEffect.Finalize();
+	this->effect03.Finalize();
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)
@@ -355,6 +385,11 @@ bool Title::Finalize()
 	if (Npc)
 	{
 		Npc->Kill();
+	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
 	}
 
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
@@ -389,11 +424,11 @@ bool Title::Finalize()
 
 void Title::CursorMove()
 {
-	if (OGge->in->down(In::CU))
+	if (OGge->in->down(In::CU) || OGge->in->down(In::LU))
 	{
 		this->cursorNum--;
 	}
-	if (OGge->in->down(In::CD))
+	if (OGge->in->down(In::CD) || OGge->in->down(In::LD))
 	{
 		this->cursorNum++;
 	}
@@ -462,7 +497,7 @@ void Title::BackTitleSkip()
 	OGge->camera->SetSize(Vec2(1440, 810));
 	this->flowerVolume = 1.0f;
 	this->tex_a = 1.0f;
-	auto npc2 = Chara::Create((std::string)"player2.png", Vec2(1600, 628));
+	auto npc2 = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 	npc2->SetReplayEnable();
 	this->sound->play();
 }
@@ -486,10 +521,11 @@ void Title::SkipMove()
 	{
 		npc->Kill();
 	}
-	auto npc2 = Chara::Create((std::string)"player2.png", Vec2(790, 639));
+	auto npc2 = Chara::Create((std::string)"player.png", Vec2(790, 639));
 	npc2->SetReplayEnable();
 	this->sound->play();
 	this->isSkip = false;
+	OGge->in->ResetInputData();
 }
 
 Title::SP Title::Create(bool flag_)

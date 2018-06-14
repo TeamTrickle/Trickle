@@ -2,17 +2,17 @@
 //---------------------------------
 //@:StrimingSoundclass
 //---------------------------------
-void StreamingSound::queueStream(Audio::StreamWav& stream, Audio::Source& source, Audio::Buffer& buffer, std::vector<char>& sound_buffer)
+void StreamingSound::queueStream(StreamWav& stream, Source& source, Buffer& buffer, std::vector<char>& sound_buffer)
 {
 	size_t length = stream.read(sound_buffer);
 	buffer.Bind(stream.isStereo(), &sound_buffer[0], static_cast<u_int>(length), stream.sampleRate());
 	source.queueBuffer(buffer);
 }
-void StreamingSound::streamProc(const std::string& path, const bool loop, std::shared_ptr<Audio::Source>& source, std::shared_ptr<Param>& param)
+void StreamingSound::streamProc(const std::string& path, const bool loop, std::shared_ptr<Source>& source, std::shared_ptr<Param>& param)
 {
-	Audio::StreamWav stream(path);
+	StreamWav stream(path);
 	stream.loop(loop);
-	Audio::Buffer buffer[BUFFER_NUM];
+	Buffer buffer[BUFFER_NUM];
 	// 読み込みバッファを1秒ぶんの長さにする
 	u_int buffer_size = stream.sampleRate() * (stream.isStereo() ? 2 : 1) * sizeof(uint16_t);
 	std::vector<char> sound_buffer(buffer_size);
@@ -57,7 +57,7 @@ StreamingSound::StreamingSound()
 
 }
 StreamingSound::StreamingSound(const std::string& path, const bool loop) :
-	source_(std::make_shared<Audio::Source>()),
+	source_(std::make_shared<Source>()),
 	param_(std::make_shared<Param>()),
 	pause_(false)
 {
@@ -66,9 +66,9 @@ StreamingSound::StreamingSound(const std::string& path, const bool loop) :
 	this->isplay_ = false;
 	this->param_->backStartPos = false;
 }
-void StreamingSound::createSound(std::string& path_, bool loop)
+void StreamingSound::createSound(const std::string& path_, bool loop)
 {
-	source_ = std::make_shared<Audio::Source>();
+	source_ = std::make_shared<Source>();
 	param_ = std::make_shared<Param>();
 	pause_ = false;
 	this->filepath_ = path_;

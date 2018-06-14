@@ -16,19 +16,43 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
 	changeStateCnt = 0;
-	hitBase.CreateObject(Cube, pos, range, 0);
+	CreateObject(Cube, pos, range, 0);
 	this->active = false;
 	cout << "製氷機　初期化" << endl;
+	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
+
+	this->animCnt = 0;
+	this->coldNum = 0;
+	draw.clear();
+
 	return true;
 }
 void Seihyouki::UpDate() {
 	if (active) {
+		//if(ここに製氷機の方向をもらう) {
+		this->coldNum = Scale.x / 64;
+		draw.resize(coldNum);
+		//}
 		toIce();
 	}
 }
+
 void Seihyouki::Render2D() {
 	//デバッグ用
-	if(active) hitBase.LineDraw();
+	if (active) {
+		LineDraw();
+		++animCnt;
+		for (int i = 0; i < coldNum; ++i) {
+			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+			draw[i].OffsetSize();
+		}
+		Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+		src.OffsetSize();
+
+		for (auto draw_ : draw) {
+			this->coldImg->Draw(draw_, src);
+		}
+	}
 }
 bool Seihyouki::Finalize() {
 	//画像をこっちで読み込むならTextureのFinalize()を呼ぶこと
@@ -38,7 +62,7 @@ void Seihyouki::toIce() {
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		if ((*id)->hit(hitBase))
+		if ((*id)->hit(*this))
 		{
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
@@ -55,6 +79,10 @@ void Seihyouki::toIce() {
 }
 void Seihyouki::changeActive() {
 	this->active = !this->active;
+}
+void Seihyouki::SetTexture(Texture* tex)
+{
+	this->coldImg = tex;
 }
 Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, bool flag_) {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());

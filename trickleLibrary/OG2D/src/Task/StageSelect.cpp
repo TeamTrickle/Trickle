@@ -39,7 +39,7 @@ bool StageSelect::Initialize()
 	//‰æ‘œ‚Ì“Ç‚Ýž‚Ý
 	this->Testdoor.Create((std::string)"door.png");
 	//ƒvƒŒƒCƒ„[NPC‚Ì¶¬
-	auto chara = Chara::Create(std::string("player2.png"), Vec2(400, -200));
+	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
 	chara->SetAutoFlag(true);
 	//”wŒi‚Ì•`‰æ
@@ -84,6 +84,8 @@ bool StageSelect::Initialize()
 	{
 		(*id)->Kill();
 	}
+
+	std::cout << "StageSelect ¶¬Š®—¹" << std::endl;
 	return true;
 }
 
@@ -231,7 +233,7 @@ void StageSelect::From3()
 		if (!chara->isAutoPlay())
 		{
 			//Left“ü—Í
-			if (OGge->in->down(In::CL))
+			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
 				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::LEFT)
@@ -273,7 +275,7 @@ void StageSelect::From3()
 				}
 			}
 			//right“ü—Í
-			if (OGge->in->down(In::CR))
+			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 			{
 				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::RIGHT)

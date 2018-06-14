@@ -1,8 +1,9 @@
 #include "Block/block.h"   //変更した
 #include "Player\Player.h"
 #include "Map\Map.h"
-
+#include "Effect\Effect.h"
 Block::Block() {
+	this->Cnt = 0;
 }
 
 Block::Block(Vec2& pos) {
@@ -97,7 +98,8 @@ void Block::UpDate() {
 		}
 	}
 	gravity.y = 4.0f;
-	CheckMove(gravity);
+	Vec2 move = this->gravity;
+	CheckMove(move);
 }
 
 void Block::Render2D() {
@@ -153,6 +155,8 @@ void Block::PlCheckHit(GameObject &p)
 //めり込まない処理
 void Block::CheckMove(Vec2 &e_)
 {
+	float dir = 0;
+	
 	//x軸について
 	while (e_.x != 0.0f)
 	{
@@ -162,23 +166,62 @@ void Block::CheckMove(Vec2 &e_)
 		{
 			this->position.x += 1.0f;
 			e_.x -= 1.0f;
+			dir += 1.f;
 		}
 		else if (e_.x <= -1.0f)
 		{
 			this->position.x -= 1.0f;
 			e_.x += 1.0f;
+			dir -= 1.f;
 		}
 		else
 		{
 			this->position.x += e_.x;
 			e_.x = 0.0f;
+			dir += e_.x;
 		}
-
+		this->Cnt++;
 		if (isCollideSomething())
 		{
 			backmove.x = position.x - preX;
 			this->position.x = preX;
+			Cnt = 0;
 			break;
+		}
+		else
+		{
+			//エフェクト表示処理
+			if (this->footCheck())
+			{
+				if (this->Cnt > 30)
+				{
+					if (dir > 0.f)
+					{
+						auto effect = Effect::Create(
+							Vec2(this->foot.position.x + (this->Scale.x / 2), this->position.y + this->Scale.y - 32.f),
+							Vec2(64, 64),
+							Vec2(768, 768),
+							1,
+							50);
+						effect->SetTexture(rm->GetTextureData((std::string)"sandsmoke"));
+						effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 128.f));
+						effect->SetMode(Effect::Mode::Decrease);
+					}
+					else if (dir < 0.f)
+					{
+						auto effect = Effect::Create(
+							Vec2(this->foot.position.x + (this->foot.Scale.x / 2) - 32.f, this->position.y + this->Scale.y - 32.f),
+							Vec2(64, 64),
+							Vec2(768, 768),
+							1,
+							50);
+						effect->SetTexture(rm->GetTextureData((std::string)"sandsmoke"));
+						effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 128.f));
+						effect->SetMode(Effect::Mode::Decrease);
+					}
+					this->Cnt = 0;
+				}
+			}
 		}
 	}
 	//y軸について
@@ -218,12 +261,59 @@ bool Block::isCollideSomething()
 	if (!map) {
 		return false;
 	}
-	auto bucket = OGge->GetTask<Bucket>("bucket");
-	if (!bucket) {
-		return false;
+	auto buckets = OGge->GetTasks<Bucket>("bucket");
+	for (auto id = buckets->begin(); id != buckets->end(); ++id)
+	{
+		if (!(*id)->GetHold())
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->hit(*(*id)))
+				{
+					return true;
+				}
+			}
+		}
 	}
 
-	return map->MapHitCheck(*this) || bucket->hit(*this);
+	return map->MapHitCheck(*this);
+}
+
+bool Block::footCheck()
+{
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
+	auto map = OGge->GetTask<Map>("map");
+	if (map)
+	{
+		for (int y = 0; y < map->mapSize.y; ++y)
+		{
+			for (int x = 0; x < map->mapSize.x; ++x)
+			{
+				if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
+				{
+					if (map->hitBase[y][x].objectTag == "Floor")
+					{
+						if (foot.hit(map->hitBase[y][x]))
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	auto buckets = OGge->GetTasks<Bucket>("bucket");
+	for (auto id = buckets->begin(); id != buckets->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (this->hit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 Block::SP Block::Create(Vec2& pos, bool flag_)

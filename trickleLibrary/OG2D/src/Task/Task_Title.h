@@ -36,19 +36,21 @@ class Title :public TaskObject
 		End,
 	};
 	Texture texCursor;
-	Texture texStart;
-	Texture texClose;
-	Texture texPause;
+
+	Texture texEffect;
+	Texture effect03;
 
 	Texture GierLogo;
 	Texture flowerLogo;
 
 	Texture texLogo;
+	Texture* fontTex;
 
 	std::string soundname;
 
 	Vec2 startPos;
 	Vec2 closePos;
+	Box2D textPos[2];
 	Vec2 cursorPos[3];
 
 	Texture waterTex;

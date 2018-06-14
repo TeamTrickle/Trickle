@@ -5,14 +5,17 @@
 class MissionUI : public GameObject, public TaskObject
 {
 private:
-	Vec2 PrePos;			//座標を保存する
+	//タスク関連
 	std::string taskName;
-	Texture image;
 
-	Easing easingX;
+	//Easing関連
+	Easing easingY;
+	bool   isEasinged;
+	//画像関連
+	Texture image;
 	const Box2D Src = {0,0,616,101};
 private:
-	bool Initialize(Vec2&);
+	bool Initialize();
 	bool Finalize();
 	void UpDate();
 	void Render2D();
@@ -22,7 +25,9 @@ private:
 	void EasingMove();
 public:
 	typedef std::shared_ptr<MissionUI> SP;
-	static MissionUI::SP Create(Vec2& pos, bool = true);
+	static MissionUI::SP Create(bool = true);
 	virtual ~MissionUI();
 
+	//他のクラスで使用
+	bool isEasingPleyfinish();
 };

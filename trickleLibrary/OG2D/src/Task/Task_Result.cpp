@@ -7,8 +7,10 @@
 #include "GameProcessManagement\GoalTimeUI.h"
 #include "GameProcessManagement\MissionUI.h"
 #include "GameProcessManagement\FrameTime.h"
+#include "Effect/SterEffect.h"
 
-#include "Effect\SterEffect.h"
+///285 
+
 bool Result::Initialize()
 {
 	//-----------------------------
@@ -17,9 +19,10 @@ bool Result::Initialize()
 	this->taskName = "Result";		//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
 
-	//生成例
-	Result_DataInput();
-	Flag_Judge();
+	//フラグの設定
+	this->Result_DataInput();
+	this->Flag = 0;
+
 	this->image.Create((std::string)"back.png");
 	this->maptile.Create((std::string)"tile.jpg");
 
@@ -36,8 +39,8 @@ bool Result::Initialize()
 	this->createtask.SetNextFlag(CreateFlag::Timeui);
 
 	//リザルト画面に表示にする
-	auto player = ResultPlayer::Create(Vec2(0, (int)camerasize.y - 50 - 64), Vec2(3, 0));
-	auto mission = MissionUI::Create(Vec2((windowsize.x / 2 - 200)* aspect.x, 30.f * aspect.y));
+	auto player = ResultPlayer::Create(Vec2(-96, (int)camerasize.y - 50 - 96), Vec2(3, 0));
+	auto mission = MissionUI::Create();
 	std::cout << "結果画面処理　初期化" << std::endl;
 	return true;
 }
@@ -54,10 +57,15 @@ void Result::UpDate()
 	//フラグによってCreateする
 	this->UI_Create();
 
-	if (OGge->in->down(In::B2))
+	auto resultplayer = OGge->GetTask<ResultPlayer>("ResultPlayer");
+	if (!resultplayer)
 	{
-		Kill();
+		if (OGge->in->down(In::B2))
+		{
+			Kill();
+		}
 	}
+	
 }
 void Result::Render2D()
 {
@@ -103,6 +111,7 @@ bool Result::Finalize()
 		auto player = OGge->GetTasks<ResultPlayer>("ResultPlayer");
 		auto ster = OGge->GetTasks<FlagUI>("Ster");
 		auto clear = OGge->GetTasks<ClearUI>("ClearUI");
+		auto effect = OGge->GetTasks<SterEffect>("SterEffect");
 		auto goaltime = OGge->GetTasks<GoalTimeUI>("GoalTimeUI");
 		auto mission = OGge->GetTasks<MissionUI>("MissionUI");
 		auto frametime = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
@@ -123,6 +132,10 @@ bool Result::Finalize()
 		{
 			(*id)->Kill();
 		}
+		for (auto id = (*effect).begin(); id != (*effect).end(); ++id)
+		{
+			(*id)->Kill();
+		}
 		for (auto id = (*frametime).begin(); id != (*frametime).end(); ++id)
 		{
 			(*id)->Kill();
@@ -134,71 +147,6 @@ bool Result::Finalize()
 		auto stageselect = StageSelect::Create();
 	}
 	return true;
-}
-bool Result::Flag_Judge()
-{
-	bool active = false;
-	if ((Flag & Result::Flag1) == Result::Flag1)
-	{
-		//フラグ１を持っている
-		active = true;
-		std::cout << "Goalした" << std::endl;
-	}
-	if ((Flag & Result::Flag2) == Result::Flag2)
-	{
-		//フラグ２を持っている
-		active = true;
-		std::cout << "30秒以内にゴールをした" << std::endl;
-	}
-	if ((Flag & Result::Flag3) == Result::Flag3)
-	{
-		//フラグ３を持っている
-		std::cout << "60秒以内にゴールをした" << std::endl;
-		active = true;
-	}
-	if ((Flag & Result::Flag4) == Result::Flag4)
-	{
-		//フラグ４を持っている
-		std::cout << "普通にゴールをした" << std::endl;
-		active = true;
-	}
-	if ((Flag & Master) == Result::Master)
-	{
-		std::cout << "マスタークリア" << std::endl;
-	}
-	return active;
-}
-bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2)
-{
-	if ((Flag & achive1) == achive1 && (Flag & achive2) == achive2)
-	{
-		return true;
-	}
-	return false;
-}
-bool Result::Flag_Judge(Result::Achievement achive1, Result::Achievement achive2, Result::Achievement achive3)
-{
-	if ((Flag & achive1) == achive1 && (Flag & achive2) == achive2 && (Flag & achive3) == achive3)
-	{
-		return true;
-	}
-	return false;
-}
-void Result::Flag_Input(Result::Achievement achive)
-{
-	Flag |= achive;
-}
-int Result::Get_Flag()
-{
-	return Flag;
-}
-int Result::GetFrameTime()
-{
-	return FrameTime;
-}
-void Result::Flag_Judge_Clear()
-{
-	Flag &= ~Flag;
 }
 void Result::CreateTask::ResetCreateFlag()
 {
@@ -224,10 +172,11 @@ void Result::UI_Think()
 		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Timeui)
 		{
 			auto player = OGge->GetTask<ResultPlayer>("ResultPlayer");
-			if (player != nullptr)
+			auto missonUI = OGge->GetTask<MissionUI>("MissionUI");
+			if (player != nullptr && missonUI != nullptr)
 			{
 				//Playerが止まったら・・・
-				if (player->GetResetWalkStop())
+				if (player->GetResetWalkStop() && missonUI->isEasingPleyfinish())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Timeui);
 				}
@@ -240,11 +189,7 @@ void Result::UI_Think()
 			auto frametimeUI = OGge->GetTasks<FrameTimeUI>("FrameTimeUI");
 			for (auto id = (*frametimeUI).begin(); id != (*frametimeUI).end(); ++id)
 			{
-				//タイムUIの演出が終了したら・・・
-				if ((*id)->GetIsPlay())
-				{
-					this->createtask.SetCreateFlag(CreateFlag::Starui);
-				}
+				this->createtask.SetCreateFlag(CreateFlag::Starui);
 			}
 		}
 		break;
@@ -254,7 +199,7 @@ void Result::UI_Think()
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
 			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
 			{
-				if ((*id)->EasingEnd())
+				if ((*id)->is_Scale())
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Effect);
 				}
@@ -263,13 +208,18 @@ void Result::UI_Think()
 		}
 		break;
 	case 1 << 3:
-		//仮条件
 		if ((this->createtask.nextflag & 0x0F) == CreateFlag::Clearui)
 		{
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
+			std::vector<bool> flag;
 			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
 			{
-				if ((*id)->GetEffectEnd())
+				flag.push_back((*id)->GetEffectEnd());
+			}
+			//全てのEffectの演出が終了したら
+			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+			{
+				if (std::all_of(flag.begin(), flag.end(), [](bool flag) {return flag == true; }))
 				{
 					this->createtask.SetCreateFlag(CreateFlag::Clearui);
 				}
@@ -294,7 +244,7 @@ void Result::UI_Create()
 		//Playerが一定のところまで歩いたら・・・
 		if ((this->createtask.createflag & CreateFlag::Timeui) == CreateFlag::Timeui)
 		{
-			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x / 100 * 15, camerasize.y / 100 * 30));
+			auto goaltime = GoalTimeUI::Create(Vec2(camerasize.x * 0.15f, camerasize.y * 0.2f));
 			for (int i = 0; i < 5; ++i)
 			{
 				auto time = FrameTimeUI::Create(Vec2(goaltime->position.x + goaltime->Scale.x + (20 + i * 64), goaltime->position.y + 20), i, FrameTime);
@@ -309,11 +259,11 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
-			bool easingflag = false;
-			int selectflag[3] = {Flag4,Flag3,Flag2};
+			int selectflag[3] = { 1 << 0,1 << 1,1 << 3 };
+
 			for (int i = 0; i < 3; ++i)
 			{
-				auto ster = FlagUI::Create(Vec2(((int)camerasize.x / 2 - 200) + 100 * (i + 1) , 130), selectflag[i]);
+				auto ster = FlagUI::Create(Vec2((camerasize.x / 2 - 200) + 100 * (i + 1), camerasize.y * 0.5f), selectflag[i]);
 			}
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
@@ -326,9 +276,26 @@ void Result::UI_Create()
 		if ((this->createtask.createflag & CreateFlag::Effect) == CreateFlag::Effect)
 		{
 			auto sters = OGge->GetTasks<FlagUI>("Ster");
-			for (auto id = (*sters).begin(); id != (*sters).end(); ++id)
+
+			//最初だけは条件なしで生成する
 			{
-				auto stereffect = SterEffect::Create((*id));
+				int count = 0;
+				for (auto id = sters->begin(); id != sters->end(); ++id, ++count)
+				{
+					if (count == 0)
+					{
+						auto effect = SterEffect::Create((*id));
+					}
+					else
+					{
+						auto Effect = OGge->GetTasks<SterEffect>("SterEffect");
+						if (!Effect)
+						{
+							continue;
+						}
+						auto effect = SterEffect::Create((*id), *(Effect->begin() + count - 1));
+					}
+				}
 			}
 			//生成するフラグをリセットする
 			this->createtask.ResetCreateFlag();
@@ -340,7 +307,7 @@ void Result::UI_Create()
 	case 1 << 3:
 		if ((this->createtask.createflag & CreateFlag::Clearui) == CreateFlag::Clearui)
 		{
-			auto clearui = ClearUI::Create(Vec2((int)camerasize.x - camerasize.x / 3, camerasize.y / 2));
+			auto clearui = ClearUI::Create(Vec2(camerasize.x * 0.70f, camerasize.y / 2));
 			//フラグのリセット
 			this->createtask.ResetCreateFlag();
 			this->createtask.ResetNextFlag();
@@ -350,13 +317,22 @@ void Result::UI_Create()
 		break;
 	default:
 		break;
-	}
-	
+	}	
+}
+int Result::to_String(std::string& text)
+{
+	std::istringstream ss;
+	ss = std::istringstream(text);
+
+	int num = atoi(text.c_str());
+	ss >> num;
+
+	return num;
 }
 void Result::Result_DataInput()
 {
 	std::string GameFalg;			//ゲームフラグ
-								//データの読み込み
+	//データの読み込み
 	std::ifstream fin(TimeFilePath);
 
 	if (!fin)
@@ -365,47 +341,44 @@ void Result::Result_DataInput()
 	}
 	//読み込んだデータを入れておく変数
 	std::string line;
-	//改行か終了時点までの文字の文字列をlineに入れる
-	std::getline(fin, line);
-	//文字列を操作するための入力クラス、直接アクセスする
-	std::istringstream _fin(line);
-	//一字書き込み変数
-	std::string text;
-	//_finに入っている文字列から','までの文字をtextにいれる
-	std::getline(_fin, text, ',');
-	//textのデータを変数にいれる
-	(std::stringstream)text >> FrameTime;
-	if (FrameTime <= 30)//30秒以内にゴール
+	//ファイル全体のテキストを読み込み
+	while (std::getline(fin, line))
 	{
-		Flag_Input(Result::Achievement::Flag2);
-		Flag_Input(Result::Achievement::Flag3);
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	else if (FrameTime <= 60)//60秒以内にゴール
-	{
-		Flag_Input(Result::Achievement::Flag3);
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	else
-	{
-		Flag_Input(Result::Achievement::Flag4);
-	}
-	std::getline(_fin, text, ',');
-	(std::stringstream)text >> GameFalg;
-	if (GameFalg == "GameClear")		//ゲームがクリア
-	{
-		Flag_Input(Result::Achievement::Flag1);
-	}
-	//時間の計算
-	int sec, min, hour;
-	sec = FrameTime % 60;
-	min = FrameTime / 60;
-	hour = min / 60;
-	std::cout << hour << "時間" << min << "分" << sec << "秒" << std::endl;
+		//文字列を操作するための入力クラス、直接アクセスする
+		std::istringstream _fin(line);
+		//一字書き込み変数
+		std::string text;
+		
+		//タイムの書き込み
+		std::getline(_fin, text, ',');
+		(std::stringstream)text >> FrameTime;
 
+		//ステージごとのフラグを書き込む
+		std::string nowStagenumber;
+		int nowStage = 0;
+
+		//フラグの読み込み
+		while (std::getline(_fin, text, ','))
+		{
+			if (text == "Stage1")
+			{
+				nowStagenumber = text.substr(5);
+				//文字列からint型にする
+				nowStage = this->to_String(nowStagenumber);
+			}
+			else if(text == "Stage2")
+			{
+				nowStagenumber = text.substr(5);
+				//文字列からint型にする
+				nowStage = this->to_String(nowStagenumber);
+			}
+		}
+	}
 	fin.close();
-
-
+}
+int Result::GetFlag()
+{
+	return this->Flag;
 }
 //----------------------------
 //ここから下はclass名のみ変更する
@@ -417,9 +390,8 @@ Result::Result()
 	//カメラ座標を元に戻す
 	OGge->camera->SetPos(Vec2(0, 0));
 	//カメラのサイズを元に戻す
-	OGge->camera->SetSize(Vec2(1920,1080));
+	OGge->camera->SetSize(Vec2(60 * 16 , 60 * 9));
 	FrameTime = 0;
-	Flag_Judge_Clear();
 }
 
 Result::~Result()

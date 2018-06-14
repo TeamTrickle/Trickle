@@ -5,7 +5,7 @@
 bool SterEffect::Initialize(std::shared_ptr<GameObject> target)
 {
 	//タスク関連
-	this->taskName = "StarEffect";
+	this->taskName = "SterEffect";
 	this->Init(taskName);
 
 	//基本の情報
@@ -21,8 +21,44 @@ bool SterEffect::Initialize(std::shared_ptr<GameObject> target)
 	{
 		this->target = target;
 	}
-	this->target->position;
 
+	//Easing開始場所
+	if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
+	{
+		//画像関連
+		image.Create((std::string)"Ster.png");
+	}
+	else
+	{
+		image.Create((std::string)"SterB.png");
+	}
+
+	std::cout << "スターエフェクト　初期化" << std::endl;
+	return true;
+}
+bool SterEffect::Initialize(std::shared_ptr<GameObject> target , std::shared_ptr<SterEffect> effect)
+{
+	//タスク関連
+	this->taskName = "SterEffect";
+	this->Init(taskName);
+
+	//基本の情報
+	this->CreateObject(Cube, Vec2{}, Vec2(64, 64), 0.f);
+
+	//アニメーションの動き
+	this->animetion.StateChenge(State::Motion);
+
+	//Easing関連
+	this->ResetEasing(easingX);
+	this->ResetEasing(easingY);
+	if (target != nullptr)
+	{
+		this->target = target;
+	}
+	if (effect != nullptr)
+	{
+		this->effect = effect;
+	}
 	//Easing開始場所
 	if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
 	{
@@ -41,7 +77,7 @@ void SterEffect::ResetEasing(Easing& easing)
 {
 	easing.Init();
 	easing.ResetTime();
-	this->isPlay = false;
+	this->isPlayed = false;
 }
 bool SterEffect::Finalize()
 {
@@ -50,11 +86,34 @@ bool SterEffect::Finalize()
 }
 void SterEffect::UpDate()
 {
-	Think();
-	MotionActive();
+	if (effect)
+	{
+		if (effect->EasingIsPlay())
+		{
+			Think();
+			MotionActive();
+		}
+	}
+	else
+	{
+		Think();
+		MotionActive();
+	}
 }
 void SterEffect::Render2D()
 {
+	if (effect)
+	{
+		if (effect->EasingIsPlay())
+		{
+			Box2D draw(this->position, this->Scale);
+			draw.OffsetSize();
+			Box2D src = this->Src;
+			src.OffsetSize();
+			image.Draw(draw, src);
+		}
+	}
+	else
 	{
 		Box2D draw(this->position, this->Scale);
 		draw.OffsetSize();
@@ -63,13 +122,9 @@ void SterEffect::Render2D()
 		image.Draw(draw, src);
 	}
 }
-bool SterEffect::EasingIsPleyed()
+bool SterEffect::EasingIsPlay()
 {
-	if (this->isPlay)
-	{
-		return true;
-	}
-	return false;
+	return this->isPlayed ? true : false;
 }
 void SterEffect::Think()
 {
@@ -79,7 +134,7 @@ void SterEffect::Think()
 	case State::NON:
 		break;
 	case State::Motion:
-		if (this->isPlay)
+		if (this->isPlayed)
 		{
 			nm = NON;
 		}
@@ -109,16 +164,18 @@ void SterEffect::MoveEasing()
 {
 	Vec2 camerasize = OGge->camera->GetSize();
 
+	Vec2 flagui = (std::static_pointer_cast<FlagUI>(target))->GetPos();
+
 	if (easingX.isplay() || easingY.isplay())
 	{
 		//右から左
-		this->position.x = easingX.cubic.Out(10, -camerasize.x + this->target->position.x, camerasize.x, easingX.Time(10));
-		//下から上
-		this->position.y = easingY.cubic.Out(15, 120 + this->target->position.y, -120, easingY.Time(15));
+		this->position.x = easingX.cubic.Out(10.5f, -camerasize.x + flagui.x, camerasize.x, easingX.Time(10.5f));
+		//上から下
+		this->position.y = easingY.cubic.Out(12, 230 + flagui.y, -230, easingY.Time(12));
 	}
 	else
 	{
-		this->isPlay = true;
+		this->isPlayed = true;
 	}
 }
 void SterEffect::Animetion::StateChenge(SterEffect::State state)
@@ -144,6 +201,24 @@ SterEffect::SP SterEffect::Create(std::shared_ptr<GameObject> target ,bool flag)
 			OGge->SetTaskObject(to);
 		}
 		if (!to->Initialize(target))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
+SterEffect::SP SterEffect::Create(std::shared_ptr<GameObject> target,std::shared_ptr<SterEffect> effect , bool flag)
+{
+	SterEffect::SP to = SterEffect::SP(new SterEffect());
+	if (to)
+	{
+		to->me = to;
+		if (flag)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(target,effect))
 		{
 			to->Kill();
 		}

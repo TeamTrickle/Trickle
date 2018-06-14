@@ -78,20 +78,13 @@ void Chara::UpDate()
 			//移動している間はカウントを0にしておく
 			this->MoveCnt = 0;
 		}
-		//if (this->move.x == 0) { this->motion = Motion::Normal; }
-		//if (this->move.x != 0) { this->motion = Motion::Walk; }
 		
 	}
-	if (this->move.x == 0)
-	{
-		this->motion = Normal;
-	}
-	else
-	{
-		this->motion = Walk;
-	}
+	if (this->move.x == 0)	{ this->motion = Normal; }
+	else					{ this->motion = Walk; }
 	if (this->move.y > 0) { this->motion = Motion::Fall; }
 	if (this->move.y < 0) { this->motion = Motion::Jump_M; }
+	if (this->EndPos.y != 0) { this->motion = Motion::Ladder; }
 	//カウントが10を超えているならばオート移動へ移行する
 	if (this->MoveCnt > 10)
 	{
@@ -116,7 +109,7 @@ void Chara::Render2D()
 			if (draw.x < *this->Restriction_x)
 			{
 				draw.x = *this->Restriction_x;
-				src.x += 550 - (550 * ((draw.w - draw.x) / this->Scale.x));
+				src.x += this->srcX - (this->srcX * ((draw.w - draw.x) / this->Scale.x));
 			}
 		}
 		else
@@ -124,7 +117,7 @@ void Chara::Render2D()
 			if (draw.w > *this->Restriction_x)
 			{
 				draw.w = *this->Restriction_x;
-				src.x += 550 - (550 * ((draw.w - draw.x) / this->Scale.x));
+				src.x += this->srcX - (this->srcX * ((draw.w - draw.x) / this->Scale.x));
 			}
 		}
 	}
@@ -140,7 +133,7 @@ void Chara::Render2D()
 	}
 	//左向きなら画像を逆にする
 	if (direction == Direction::RIGHT) {
-		int k = src.w;
+		float k = src.w;
 		src.w = src.x;
 		src.x = k;
 	}
@@ -427,27 +420,28 @@ void Chara::SetRestriction(const float x_)
 }
 Box2D Chara::returnSrc(Motion motion)
 {
-	Motion motion_ = motion;
+	Box2D src(0, 0, this->srcX, this->srcY);	//仮のsrc（後で消すかも）
+	switch (motion)
+	{
+	case Motion::Normal:
+		src = Box2D(this->idle[this->AnimCnt / 3 % 10] * this->srcX, 0, this->srcX, this->srcY);
+		break;
 
-	Box2D src2(0, 0, 550, 550);	//仮のsrc（後で消すかも）
-	if (motion_ == Motion::Normal) {
-		Box2D src(this->idle[this->AnimCnt / 3 % 10] * 550, 0, 550, 550);
-		return src;
-	}
+	case Motion::Walk:
+		src = Box2D(this->walk[this->AnimCnt / 3 % 9] * this->srcX, this->srcY, this->srcX, this->srcY);
+		break;
 
-	if (motion_ == Motion::Walk) {
-		Box2D src(this->walk[this->AnimCnt / 3 % 9] * 550, 550, 550, 550);
-		return src;
-	}
+	case Motion::Jump_M:
+		src = Box2D(0 * this->srcX, 2 * this->srcY, this->srcX, this->srcY);
+		break;
 
-	if (motion_ == Motion::Jump_M) {
-		Box2D src(0 * 550, 2 * 550, 550, 550);
-		return src;
-	}
+	case Motion::Fall:
+		src = Box2D(1 * this->srcX, 2 * this->srcY, this->srcX, this->srcY);
+		break;
 
-	if (motion_ == Motion::Fall) {
-		Box2D src(1 * 550, 2 * 550, 550, 550);
-		return src;
+	case Motion::Ladder:
+		src = Box2D(this->ladder[this->AnimCnt / 15 % 2] * this->srcX, 3 * this->srcY, this->srcX, this->srcY);
+		break;
 	}
-	return src2;
+	return src;
 }

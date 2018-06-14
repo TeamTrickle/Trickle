@@ -1,119 +1,172 @@
 #include "Goal.h"
-//別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
-bool Goal::Initialize()
+
+
+Goal::Goal(const Vec2& pos)
 {
-	//-----------------------------
-	//生成時に処理する初期化処理を記述
-	//-----------------------------
-	this->taskName = "Goal";		//検索時に使うための名を登録する
-	__super::Init(taskName);		//TaskObject内の処理を行う
-
-	cleared = false;
-	goal_anim = false;
-	animCnt = 0;
-	this->objectTag = "Goal";
-	//テクスチャの読み込み
-	tex.Create((std::string)"goal.png");
-	//オブジェクトの生成
-	CreateObject(Objform::Cube, Vec2(28 * 64, 14 * 64), Vec2(64, 64), 0.f);
-
-	std::cout << "ゴール　初期化" << std::endl;
-	return true;
-}
-bool Goal::Initialize(Vec2& pos) {
-	cleared = false;
-	goal_anim = false;
-	animCnt = 0;
+	this->CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
 	this->objectTag = "Goal";
 	__super::Init(this->objectTag);
-	//テクスチャの読み込み
-	tex.Create((std::string)"goal.png");
-	//オブジェクトの生成
-	CreateObject(Objform::Cube, pos, Vec2(64, 64), 0.f);
+	__super::SetDrawOrder(0.5f);
+	this->isClear = false;
+	this->isCheck = false;
+	this->cameraLock = true;
+	this->animCnt = 0;
+	this->image = nullptr;
+	this->color = Paint::PaintColor::Normal;
+	this->termsColor = Paint::PaintColor::Normal;
+	this->mode = Mode::Non;
+	this->precmPos = nullptr;
+	this->precmSize = nullptr;
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	auto id = goals->begin();
+	unsigned int count = 0;
+	while (id != goals->end())
+	{
+		count++;
+		id++;
+	}
+	this->ID = count;
+}
 
-	
-	return true;
+Goal::~Goal()
+{
+	this->image = nullptr;
+	if (this->precmPos)
+	{
+		delete this->precmPos;
+		this->precmPos = nullptr;
+	}
+	if (this->precmSize)
+	{
+		delete this->precmSize;
+		this->precmSize = nullptr;
+	}
+}
+
+void Goal::SetColor(Paint::PaintColor & color)
+{
+	this->termsColor = color;
+}
+
+bool Goal::ColorCheck() const
+{
+	return this->termsColor == this->color ? true : false;
 }
 
 void Goal::UpDate()
 {
-	//--------------------
-	//更新時に行う処理を記述
-	//--------------------
-	if (this->ClearCheck())
+	switch (this->mode)
 	{
-		cleared = true;
+	case Mode::Non:
+		if (this->WaterHit())
+		{
+			//カメラ移動終了地点を設定
+			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 1.f);
+			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 1.f);
+			//移動前のカメラの位置とサイズを保存しておく
+			this->precmPos = new Vec2(OGge->camera->GetPos());
+			this->precmSize = new Vec2(OGge->camera->GetSize());
+			this->cameraLock = false;
+			this->mode = Form1;
+		}
+		break;
+	case Mode::Form1:
+		OGge->camera->SetPos(this->cm_Pos.Move());
+		OGge->camera->SetSize(this->cm_Size.Move());
+		if (!this->cm_Pos.isPlay() && !this->cm_Size.isPlay())
+		{
+			this->isCheck = true;
+			this->mode = Mode::Form2;
+		}
+		break;
+	case Mode::Form2:
+		++this->animCnt;
+		if (this->animCnt >= 99)
+		{
+			//元のカメラ位置に戻す
+			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 10);
+			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 10);
+			delete this->precmPos;
+			delete this->precmSize;
+			this->precmPos = nullptr;
+			this->precmSize = nullptr;
+			this->mode = Mode::Form3;
+		}
+
+		break;
+	case Mode::Form3:
+		OGge->camera->SetPos(this->cm_Pos.Move());
+		OGge->camera->SetSize(this->cm_Size.Move());
+		if (!this->cm_Pos.isPlay() && !this->cm_Size.isPlay())
+		{
+			this->cameraLock = true;
+			this->mode = Mode::End;
+		}
+		break;
+	case Mode::End:
+		this->isClear = true;
+		break;
 	}
 }
 
 void Goal::Render2D()
 {
-	//--------------------
-	//描画時に行う処理を記述
-	//--------------------
-	Box2D draw(this->position.x, this->position.y, this->Scale.x, this->Scale.y);
-	draw.OffsetSize();
-	Box2D src;
-	if (this->cleared) {
-		if (this->goal_anim && animCnt < 69) {
-			//拡大が終わったらアニメーション
-			//(7カット*１０フレーム)-1になったら止める
-			animCnt++;
-		}
-		src = Box2D(64*(animCnt / 10), 64, 64, 64);
-	}
-	else {
-		src = Box2D(0, 0, 64, 64);
-	}
-	
-	src.OffsetSize();
-	tex.Draw(draw, src);
-	this->LineDraw();
-}
-
-bool Goal::Finalize()
-{
-	//-----------------------------------------
-	//このオブジェクトが消滅するときに行う処理を記述
-	//-----------------------------------------
-	tex.Finalize();
-	//次のタスクを作るかかつアプリケーションが終了予定かどうか
-	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	if (this->image)
 	{
-		
-	}
-	return true;
-}
-//void Goal::AddWater(Water* o)
-//{
-//	this->waters.push_back(o);
-//}
-
-//bool Goal::DeleteWater(Water* o)
-//{
-//	for (auto id = this->waters.begin(); id != this->waters.end(); ++id)
-//	{
-//		if ((*id) == o)
-//		{
-//			this->waters.erase(id);
-//			return true;
-//		}
-//	}
-//	return false;
-//}
-
-bool Goal::ClearCheck()
-{
-	auto waters = OGge->GetTasks<Water>("water");
-	if (waters != nullptr)
-	{
-		for (int i = 0; i < (*waters).size(); ++i)
+		this->draw = { this->position, this->Scale };
+		this->draw.OffsetSize();
+		if (this->isCheck)
 		{
-			if ((*waters)[i]->hit(*this))
+			this->src = { 256 * (int)(animCnt / 10), 256, 256, 284 };
+		}
+		else
+		{
+			this->src = { 0,0,256,256 };
+		}
+		switch (this->color)
+		{
+		case Paint::PaintColor::Blue:
+			this->src.y += 540;
+			break;
+		case Paint::PaintColor::Red:
+			this->src.y += 1080;
+			break;
+		case Paint::PaintColor::Purple:
+			this->src.y += 1620;
+			break;
+		default:
+			break;
+		}
+		this->src.OffsetSize();
+		this->image->Draw(this->draw, this->src);
+	}
+}
+
+bool Goal::GetClear() const
+{
+	return this->isClear;
+}
+
+void Goal::SetTexture(Texture* tex)
+{
+	this->image = tex;
+}
+
+bool Goal::WaterHit()
+{
+	this->foot.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if ((*id)->GetState() == Water::State::LIQUID)
+		{
+			if (this->foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if ((*waters)[i]->GetSituation() == Water::Situation::Normal && (*waters)[i]->GetState() == Water::State::LIQUID)
+				if (this->foot.hit(*(*id)))
 				{
+					this->color = (*id)->GetColor();
+					(*id)->Kill();
 					return true;
 				}
 			}
@@ -121,53 +174,44 @@ bool Goal::ClearCheck()
 	}
 	return false;
 }
-//----------------------------
-//ここから下はclass名のみ変更する
-//ほかは変更しないこと
-//----------------------------
-Goal::Goal()
+bool Goal::GetLock() const
 {
-	std::cout << "ゴール　生成" << std::endl;
+	return this->cameraLock;
 }
 
-Goal::~Goal()
+void Goal::CameraAnim::Set(const Vec2& start, const Vec2& end, const unsigned int time)
 {
-	this->Finalize();
-	std::cout << "ゴール　解放" << std::endl;
+	this->startPos = start;
+	this->endPos = end;
+	this->endPos = this->endPos - this->startPos;
+	this->time = time;
+	this->easing_x.ResetTime();
+	this->easing_y.ResetTime();
+}
+Vec2 Goal::CameraAnim::Move()
+{
+	return Vec2(
+		this->easing_x.sine.InOut(this->easing_x.Time(this->time), this->startPos.x, this->endPos.x, this->time),
+		this->easing_y.sine.InOut(this->easing_y.Time(this->time), this->startPos.y, this->endPos.y, this->time));
+}
+bool Goal::CameraAnim::isPlay()
+{
+	return this->easing_x.isplay() || this->easing_y.isplay();
 }
 
-Goal::SP Goal::Create(bool flag_)
+unsigned int Goal::GetID() const
 {
-	Goal::SP to = Goal::SP(new Goal());
+	return this->ID;
+}
+
+Goal::SP Goal::Create(const Vec2& pos,bool flag)
+{
+	Goal::SP to = Goal::SP(new Goal(pos));
 	if (to)
 	{
-		to->me = to;
-		if (flag_)
+		if (flag)
 		{
 			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize())
-		{
-			to->Kill();
-		}
-		return to;
-	}
-	return nullptr;
-}
-
-Goal::SP Goal::Create(bool flag_,Vec2& pos)
-{
-	Goal::SP to = Goal::SP(new Goal());
-	if (to)
-	{
-		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize(pos))
-		{
-			to->Kill();
 		}
 		return to;
 	}

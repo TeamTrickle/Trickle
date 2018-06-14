@@ -144,6 +144,12 @@
     <Filter Include="ソースファイル\Task\StageAlert">
       <UniqueIdentifier>{75c978a2-1cb3-4ceb-b8f5-06fc277ecd2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\volumeControl">
+      <UniqueIdentifier>{e3751e79-378a-4a46-8f29-4d057e8b11d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Paint">
+      <UniqueIdentifier>{848715e8-54c7-4038-aa37-758e7282c09f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -273,9 +279,6 @@
     <ClCompile Include="src\Back\Back.cpp">
       <Filter>ソースファイル\Back</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\GameClearCamera.cpp">
-      <Filter>ソースファイル\GameProcessManager</Filter>
-    </ClCompile>
     <ClCompile Include="src\Chara\Chara.cpp">
       <Filter>ソースファイル\Chara</Filter>
     </ClCompile>
@@ -320,6 +323,21 @@
     </ClCompile>
     <ClCompile Include="src\Task\MapPreviewer.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VolumeControl\volumeControl.cpp">
+      <Filter>ソースファイル\volumeControl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paint\Paint.cpp">
+      <Filter>ソースファイル\Paint</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect\Effect.cpp">
+      <Filter>ソースファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gimmick\NO_MOVE\TimeSign.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Ornament.cpp">
+      <Filter>ソースファイル\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -452,9 +470,6 @@
     <ClInclude Include="src\Back\Back.h">
       <Filter>ソースファイル\Back</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\GameClearCamera.h">
-      <Filter>ソースファイル\GameProcessManager</Filter>
-    </ClInclude>
     <ClInclude Include="src\Chara\Chara.h">
       <Filter>ソースファイル\Chara</Filter>
     </ClInclude>
@@ -505,6 +520,24 @@
     </ClInclude>
     <ClInclude Include="src\Task\MapPreviewer.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VolumeControl\volumeControl.h">
+      <Filter>ソースファイル\volumeControl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paint\Paint.h">
+      <Filter>ソースファイル\Paint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Effect\Effect.h">
+      <Filter>ソースファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gimmick\NO_MOVE\TimeSign.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornament.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Ornament.h">
+      <Filter>ソースファイル\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,16 +3,16 @@
 class Sound
 {
 private:
-	std::shared_ptr<Audio::Buffer> buffer;
-	std::shared_ptr<Audio::Source> source;
+	std::shared_ptr<Buffer> buffer;
+	std::shared_ptr<Source> source;
 	bool isloop_;
-	const std::string filepath_ = "./data/bgm/";
+	const std::string filepath_;
 	float volume_;
 public:
 	Sound();
-	explicit Sound(std::string& path_, bool loop = false);
+	explicit Sound(const std::string& path_, const bool loop = false);
 	~Sound();
-	bool create(std::string& path_, bool loop = false);
+	bool create(const std::string& path_, const bool loop = false);
 	void play() const;
 	void stop() const;
 	void pause() const;

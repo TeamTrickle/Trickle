@@ -13,6 +13,7 @@ bool Timer::Initialize()
 
 	//時間のゼロクリア
 	frame_time = 0;               //GetTimeの時間を代入する変数
+	this->Start();
 	std::cout << "タイマー　初期化" << std::endl;
 	return true;
 }
@@ -21,6 +22,7 @@ void Timer::UpDate()
 	//--------------------
 	//更新時に行う処理を記述
 	//--------------------
+	this->Frame_Set();
 }
 
 void Timer::Render2D()

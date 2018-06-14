@@ -1,7 +1,7 @@
 #pragma once
 //必要読み込みファイル
 #include "OGSystem\OGsystem.h"
-
+#include "GameProcessManagement/Timer.h"
 class Result : public TaskObject
 {
 	//-------------------------------------------
@@ -13,17 +13,6 @@ public:
 	■引数　Timer アドレス値を受け継ぐ
 	■戻り　なし
 	*/
-
-	void Result_DataInput();
-
-	enum Achievement
-	{
-		Flag1 = 1 << 0,		//フラグ1
-		Flag2 = 1 << 1,		//フラグ2
-		Flag3 = 1 << 2,		//フラグ3
-		Flag4 = 1 << 3,		//フラグ4
-		Master = 0x0F,		//全てのフラグ
-	};
 	enum CreateFlag
 	{
 		NON = 0,			//全てを生成した
@@ -32,19 +21,17 @@ public:
 		Effect =  1 << 2,	//☆のEffect
 		Clearui = 1 << 3,	//クリアUIの表示
 	};
-	void Flag_Input(Achievement);
-	
-	int Get_Flag();
-	//フラグのチェック
-	bool Flag_Judge();
-	bool Flag_Judge(Achievement, Achievement);
-	bool Flag_Judge(Achievement, Achievement, Achievement);
+private:
+	//ゴール関連
+	void Result_DataInput();
 
-	void Flag_Judge_Clear();
-	int GetFrameTime();
-
+	//UIの出現について
 	void UI_Think();
 	void UI_Create();					//フラグによって生成させる
+
+	//その他の関数
+	int  to_String(std::string&);
+
 private:
 	struct CreateTask
 	{
@@ -56,10 +43,18 @@ private:
 		void ResetNextFlag();
 	};
 	CreateTask createtask;
+
+
 	int Flag;
 	int FrameTime;				//結果タイムを格納する
+
 	//結果の際に必要なポインタ　または　ファイルの読み込む
+
+
+	//ファイルの出力
 	const char* TimeFilePath = "./data/Result/Result.dat";
+
+	//画像関連
 	Texture image;
 	const Box2D backSrc = { 0,0,1280,720 };
 	Texture maptile;
@@ -81,4 +76,7 @@ public:
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
+
+	//他のクラスで使用する
+	int GetFlag();
 };
