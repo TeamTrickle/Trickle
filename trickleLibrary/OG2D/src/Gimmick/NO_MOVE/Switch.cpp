@@ -28,8 +28,8 @@ bool Switch::Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> targ
 	//描画関連
 	draw = Box2D(pos.x, pos.y, 64.0f, 64.0f);
 	draw.OffsetSize();
-	srcbase = Box2D(0, 0, 256, 256);
 	animCnt = 24;
+	play_switch = false;
 	//ターゲット関連
 	this->ttype = ttype;
 	this->targets_ = targets;
@@ -42,13 +42,20 @@ void Switch::Update() {
 
 }
 void Switch::Render2D() {
-	//プレイヤがスイッチまで行くのを待つのが実装されてない
 
-	if (this->isON_) {
-		if (this->animCnt < 24) { ++this->animCnt; }
-	}
-	else {
-		if (this->animCnt > 0) { --this->animCnt; }
+	//プレイヤがスイッチまで移動終了したとき
+	if (this->play_switch)
+	{
+		if (this->isON_) {
+			//スイッチがONならアニメーションをPLUS方向に
+			if (this->animCnt < 24) { ++this->animCnt; }
+			else { this->play_switch = false; }
+		}
+		else {
+			//スイッチがOFFならアニメーションをMINUS方向に
+			if (this->animCnt > 0) { --this->animCnt; }
+			else { this->play_switch = false; }
+		}
 	}
 	Box2D src;
 	int switchM[5] = { 0,1,2,3,4 };
@@ -83,6 +90,15 @@ void Switch::ChangeON_OFF() {
 bool Switch::isON() {
 	return this->isON_;
 }
+void Switch::setSwitch(bool play)
+{
+	//プレイヤがスイッチまで移動終了したとき
+	if (play == true)
+	{
+		this->play_switch = true;
+	}
+}
+
 Switch::TargetType Switch::getTargetType() {
 	return this->ttype;
 }
