@@ -124,7 +124,6 @@ int main() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	//初期化処理
 	Initialize();
-	delete ogtk;
 	//ウィンドウが存在する場合ループ
 	while (!glfwWindowShouldClose(OGge->window->GetWindow())) {
 		//エンジン内の更新処理
@@ -151,6 +150,7 @@ int main() {
 	Finalize();
 	//ゲームエンジンの内容を解放
 	delete MapNum;
+	delete ogtk;
 	delete OGge;
 	delete rm;
 	//GLFWのライブラリを終了する

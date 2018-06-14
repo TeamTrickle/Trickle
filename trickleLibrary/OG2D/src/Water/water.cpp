@@ -26,8 +26,9 @@ Water::Water(Vec2 pos)
 	/*this->nowSituation = Water::Situation::Normal;
 	this->currentState = Water::State::SOLID;*/
 	//‰Šú•ÛŽ…—Ê
-	this->volume = 0.5;
+	this->volume = 0.5f;
 	this->invi = 0;
+	this->color_a = { 1,1,1,1 };
 	//ˆÚ“®’l‚Ì‰Šú‰»
 	this->move = { 0,0 };
 	//Œo‰ßŽžŠÔ‰Šú‰»
@@ -53,6 +54,7 @@ Water::Water(Vec2 pos)
 	this->hold = false;
 	this->Radius = { 0.5f,0.9f };
 	__super::Init((std::string)"water");
+	__super::SetDrawOrder(0.2f);
 }
 
 Water::~Water()
@@ -137,27 +139,38 @@ void Water::UpDate()
 			}
 			break;
 		case Water::Situation::Rainfrom:
-			if (this->nowTime < 10)
+			/*if (this->volume < 0.5f)
 			{
-				if (this->nowTime % 3 == 0)
-				{
-					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
-					water->SetMaxSize(Vec2(32, 32));
-					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
-				}
-				this->nowTime++;
+				this->Kill();
 			}
-			else
+			else*/
 			{
-				this->nowTime++;
-				if (this->nowTime > 40)
+				if (this->nowTime < 10)
 				{
-					this->Kill();
+					if (this->nowTime % 3 == 0)
+					{
+						auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
+						water->SetMaxSize(Vec2(32, 32));
+						water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+						water->SetWaterVolume(this->volume / 4.f);
+						water->SetColor(this->color);
+					}
+					this->nowTime++;
 				}
+				else
+				{
+					//‰J‚ðoŒ»‚µ‚½‚ ‚Æ‚à­‚µ‚¾‚¯Žc‚é
+					this->nowTime++;
+					this->color_a.alpha -= 0.02f;
+					if (this->nowTime > 40)
+					{
+						this->Kill();
+					}
+				}
+				break;
 			}
 			break;
 		}
-		break;
 	case Water::State::SOLID:
 		//•Xˆ—
 		if (!this->hold)
@@ -166,8 +179,8 @@ void Water::UpDate()
 			this->MoveSOILDCheck(move);
 			if (this->HeadSolidCheck())
 			{
-				this->SetState(State::LIQUID);
-				//this->SolidMelt();
+				//this->SetState(State::LIQUID);
+				this->SolidMelt();
 			}
 		}
 		break;
@@ -237,7 +250,7 @@ void Water::Render2D()
 		src.x = (this->nowTime / 6) * 256;
 	}
 	src.OffsetSize();
-	this->tex->Draw(draw, src);
+	this->tex->Draw(draw, src, color_a);
 }
 
 bool Water::Finalize()

@@ -19,6 +19,7 @@
 #include "Back\Back.h"
 #include "Task_Title.h"
 #include "Effect\Effect.h"
+#include "Map\Ornament.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -65,14 +66,8 @@ bool Game::Initialize()
 	//Pauseタスクの生成
 	auto pause = Pause::Create();
 
-	////switchまではそのまま
-	//Vec2 bucketpos[2] = {
-	//	{ 150,250 },
-	//	{ 400,800 }
-	//};
 
-	//Vec2 blockpos = Vec2(1536, 70);  //1536,100
-	_waterpos = { 200,100 };
+	_waterpos = { 200 - 25,100 };
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 16,7 };
 
@@ -92,6 +87,8 @@ bool Game::Initialize()
 	rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
 	this->texSteam.Create("steam.png");
 	rm->SetTextureData(std::string("steam"), &this->texSteam);
+	this->goalTex.Create("goal.png");
+	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -107,7 +104,7 @@ bool Game::Initialize()
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial1.csv");
 		//水の位置
-		_waterpos.x = 64 * 7;
+		_waterpos.x = 64 * 7 - 25;
 		_waterpos.y = 64 * 15;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
@@ -120,8 +117,9 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial2.csv");
-		//水の位置(勘)
-		_waterpos.x = 64 * 8;
+		//水の位置
+		_waterpos.x = 64 * 8 - 25;
+		_waterpos.y = 64 * 10;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
 		sound.volume(1.0f);
@@ -132,7 +130,7 @@ bool Game::Initialize()
 	break;
 	case 3:		//チュートリアル３
 		//位置変更
-		_waterpos.x = 6 * 64;
+		_waterpos.x = 6 * 64 - 25;
 		_waterpos.y = 64 * 12;
 		{
 			//map生成
@@ -157,8 +155,8 @@ bool Game::Initialize()
 		//map生成
 		auto mapload = Map::Create((std::string)"tutorial4.csv");
 		//水の位置
-		_waterpos.x = 64 * 5;
-		_waterpos.y = 64 * 2;
+		_waterpos.x = 64 * 5 - 25;
+		_waterpos.y = 64 * 4;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
 		sound.volume(1.0f);
@@ -178,6 +176,9 @@ bool Game::Initialize()
 	{
 		//map生成
 		auto mapload = Map::Create((std::string)"stage1.csv");
+		//水の位置
+		_waterpos.x = 64 * 4 - 25;
+		_waterpos.y = 64 * 2;
 
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);
@@ -185,16 +186,13 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
-		//スイッチを対象にした扇風機の生成
+		//扇風機の生成
 		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, false);
-		//fanを対象にした扇風機の生成（スイッチによって扇風機を入れ替えることができる）
 		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, true);
 		//加熱器生成
 		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), false);
-		//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 20, 64 * 15 - 32), false);
 		//製氷機生成
 		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64));
-		//auto seihyouki2 = Seihyouki::Create(Vec2(64 * 7, 64 * 7));
 
 		//スイッチの生成
 		//扇風機用
@@ -234,32 +232,21 @@ bool Game::Initialize()
 		auto fan5 = Fan::Create(fanpos[4], 4.5f, Fan::Dir::LEFT, false);
 		//加熱器
 		auto kanetsuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 21 - 20), Vec2(64 * 3, 84), false);
-		//auto kanetsuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 21 - 20), false);
-		//auto kanetsuki3 = Kanetuki::Create(Vec2(64 * 23, 64 * 21 - 20), false);
 		auto kanetsuki4 = Kanetuki::Create(Vec2(64 * 18, 64 * 29), Vec2(64 * 5, 64 + 32), true);
-		//auto kanetsuki5 = Kanetuki::Create(Vec2(64 * 19, 64 * 29 + 32), true);
-		//auto kanetsuki6 = Kanetuki::Create(Vec2(64 * 20, 64 * 29 + 32), true);
-		//auto kanetsuki7 = Kanetuki::Create(Vec2(64 * 21, 64 * 29 + 32), true);
-		//auto kanetsuki8 = Kanetuki::Create(Vec2(64 * 22, 64 * 29 + 32), true);
 		auto kanetsuki9 = Kanetuki::Create(Vec2(64 * 33, 64 * 32 - 20), Vec2(64 * 2, 84) , true);
-		//auto kanetsuki10 = Kanetuki::Create(Vec2(64 * 34, 64 * 32 - 20), true);
 		//製氷機
 		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12), Vec2(64 * 2, 64));
-		//auto seihyouki2 = Seihyouki::Create(Vec2(64 * 10, 64 * 12));
 		auto seihyouki3 = Seihyouki::Create(Vec2(64 * 9, 64 * 22), Vec2(64 * 2, 64));
-		//auto seihyouki4 = Seihyouki::Create(Vec2(64 * 10, 64 * 22));
 		//扇風機スイッチ
 		auto fanSwitch1 = Switch::Create(Vec2(64 * 19, 64 * 12), std::vector<std::shared_ptr<GameObject>>{fan2, fan3}, Switch::TargetType::Fan);
 		auto fanSwitch2 = Switch::Create(Vec2(64 * 31, 64 * 31), std::vector<std::shared_ptr<GameObject>>{fan4, fan5}, Switch::TargetType::Fan);
 		//加熱器スイッチ
 		auto heaterSwitch1 = Switch::Create(Vec2(64 * 20, 64 * 20), std::vector<std::shared_ptr<GameObject>>{kanetsuki1/*, kanetsuki2, kanetsuki3*/}, Switch::TargetType::Heater);
-	//	auto heaterSwitch2 = Switch::Create(Vec2(64 * 35, 64 * 31), std::vector<std::shared_ptr<GameObject>>{kanetsuki5, kanetsuki6, kanetsuki7}, Switch::TargetType::Heater);
 		//製氷機スイッチ
 		auto iceSwitch = Switch::Create(Vec2(64 * 12, 64 * 20), std::vector<std::shared_ptr<GameObject>>{seihyouki1, /*seihyouki2,*/ seihyouki3/*, seihyouki4*/}, Switch::TargetType::IceMachine);
 		//ブロック
 		auto block = Block::Create(Vec2(64 * 20, 64 * 29));
 		auto block2 = Block::Create(Vec2(64 * 33, 64 * 10));
-		//this->Kill();
 		break;
 	}
 	default:
@@ -298,7 +285,9 @@ bool Game::Initialize()
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
 	//ゲームクリア判定を生成
-	auto gameprocess = GameProcessManagement::Create();
+	auto gameprocess = GameManager::Create();
+	//装飾
+	auto ornament = Ornament::Create();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -315,7 +304,7 @@ void Game::UpDate()
 	Camera_move();
 
 	// Pause処理
-	if (OGge->in->key.down(In::D2)){
+	if (OGge->in->down(In::D2)){
 		OGge->SetPause(true);
 	}
 
@@ -341,7 +330,6 @@ void Game::UpDate()
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
 {
-
 }
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
@@ -393,7 +381,7 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto gamepros = OGge->GetTasks<GameProcessManagement>("GameProcessManagement");
+	auto gamepros = OGge->GetTasks<GameManager>("GM");
 	for (auto id = (*gamepros).begin(); id != (*gamepros).end(); ++id)
 	{
 		(*id)->Kill();
@@ -428,6 +416,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto ornament = OGge->GetTasks<Ornament>("Ornament");
+	for (auto id = ornament->begin(); id != ornament->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
@@ -437,6 +430,7 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"waterBlue");
 	rm->DeleteTexture((std::string)"waterPurple");
 	rm->DeleteTexture((std::string)"steam");
+	rm->DeleteTexture((std::string)"goalTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -447,6 +441,7 @@ bool Game::Finalize()
 	this->PaintTex.Finalize();
 	this->Effectsond.Finalize();
 	this->texSteam.Finalize();
+	this->goalTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -456,10 +451,13 @@ void Game::Camera_move()
 	//デバッグ用
 	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
-	auto goalPro = OGge->GetTask<GameProcessManagement>("GameProcessManagement");
-	if (goalPro->isAllGoal())
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	for (auto id = goals->begin(); id != goals->end(); ++id)
 	{
-		return;
+		if (!(*id)->GetLock())
+		{
+			return;
+		}
 	}
 	auto player = OGge->GetTask<Player>("Player");
 	auto map = OGge->GetTask<Map>("map");
@@ -504,14 +502,14 @@ void Game::Camera_move()
 		if (NowCameraPos.x < 0) {
 			NowCameraPos.x = 0;
 		}
-		if (NowCameraPos.x + NowCameraSize.x >(map->mapSize.x - 1) * map->DrawSize.x) {
-			NowCameraPos.x = ((map->mapSize.x - 1)* map->DrawSize.x) - NowCameraSize.x;
+		if (NowCameraPos.x + NowCameraSize.x >map->mapSize.x * map->DrawSize.x) {
+			NowCameraPos.x = (map->mapSize.x * map->DrawSize.x) - NowCameraSize.x;
 		}
 		if (NowCameraPos.y < 0) {
 			NowCameraPos.y = 0;
 		}
-		if (NowCameraPos.y + NowCameraSize.y >(map->mapSize.y)* map->DrawSize.y) {
-			NowCameraPos.y = ((map->mapSize.y)* map->DrawSize.y) - NowCameraSize.y;
+		if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
+			NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
 		}
 
 		OGge->camera->SetPos(NowCameraPos);

@@ -143,7 +143,14 @@ void Kanetuki::toSteam() {
 				if (changeStateCnt >= maxChangeTimeLiquid)
 				{
 					//…ö‹C‚É‚·‚é
-					(*id)->SetState(Water::State::GAS);
+					if ((*id)->GetWaterVolume() < 0.5f)
+					{
+						(*id)->Kill();
+					}
+					else
+					{
+						(*id)->SetState(Water::State::GAS);
+					}
 					changeStateCnt = 0;
 				}
 			}

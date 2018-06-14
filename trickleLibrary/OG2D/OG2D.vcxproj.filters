@@ -327,6 +327,9 @@
     <ClCompile Include="src\Gimmick\NO_MOVE\TimeSign.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
+    <ClCompile Include="src\Map\Ornament.cpp">
+      <Filter>ソースファイル\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -511,6 +514,12 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\TimeSign.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornament.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Ornament.h">
+      <Filter>ソースファイル\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

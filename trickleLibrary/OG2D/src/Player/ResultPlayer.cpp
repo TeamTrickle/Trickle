@@ -10,8 +10,10 @@ bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 	this->Init(taskName);
 	
 	//基本情報
-	this->CreateObject(Cube, pos, Vec2(64, 64), 0);
+	this->CreateObject(Cube, pos, Vec2(96, 96), 0);
 	this->moveVec = speed;
+
+	this->keyflag = false;
 	
 	//アニメーションの設定
 	this->animetion.Reset();
@@ -60,7 +62,10 @@ void ResultPlayer::Think()
 		//アニメーションカウントが一定時間まで経過したら・・・
 		if (this->animetion.SmailMotionIsPlay())
 		{
-			nm = Walk;
+			if (OGge->in->down(In::B2))
+			{
+				nm = Walk;
+			}
 		}
 		break;
 	case ResultPlayer::Stop:
@@ -73,8 +78,6 @@ void ResultPlayer::Think()
 				nm = Smail;
 			}
 		}
-		break;
-	default:
 		break;
 	}
 	animetion.MotionChenge(nm);
@@ -93,7 +96,7 @@ void ResultPlayer::Motion()
 		//特になし
 		this->animetion.AnimetionMove();
 		break;
-	default:
+	case ResultPlayer::Stop:
 		break;
 	}
 }
@@ -101,8 +104,6 @@ void ResultPlayer::UpDate()
 {
 	Think();
 	Motion();
-
-	std::cout << position.y << std::endl;
 }
 
 void ResultPlayer::Move()
@@ -179,12 +180,21 @@ Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
 			src.y = 0;
 		}
 		break;
+	case ResultPlayer::Stop:
+		src.x = 0;
+		src.y = 0;
+		break;
 	}
 	return src;
 }
 void ResultPlayer::Animetion::MotionChenge(State state)
 {
 	this->motion = state;
+}
+void ResultPlayer::Animetion::ResetSrc(Box2D& src)
+{
+	src.x = 0;
+	src.y = 0;
 }
 void ResultPlayer::ResetWalkStop()
 {

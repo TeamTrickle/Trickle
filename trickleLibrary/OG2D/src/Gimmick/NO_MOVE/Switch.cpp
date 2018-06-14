@@ -6,6 +6,7 @@ Switch::Switch()
 	cout << "スイッチ　生成" << endl;
 	soundname = "switch.wav";
 	this->taskName = "Switch";
+	this->objectTag = "Switch";
 	//タグ検索を検知可能にする
 	this->Init(taskName);
 }
@@ -28,6 +29,7 @@ bool Switch::Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> targ
 	draw = Box2D(pos.x, pos.y, 64.0f, 64.0f);
 	draw.OffsetSize();
 	srcbase = Box2D(0, 0, 256, 256);
+	animCnt = 24;
 	//ターゲット関連
 	this->ttype = ttype;
 	this->targets_ = targets;
@@ -40,16 +42,32 @@ void Switch::Update() {
 
 }
 void Switch::Render2D() {
-	//現在は画像反転で対応、あとでアニメーションつける
-	//TargetType(ttype)によって使用する画像の色を分けること
-	Box2D src = this->srcbase;
-	if (this->isON_)
-	{
-		int temp = src.x;
-		src.x = src.w;
-		src.w = temp;
+	//プレイヤがスイッチまで行くのを待つのが実装されてない
+
+	if (this->isON_) {
+		if (this->animCnt < 24) { ++this->animCnt; }
 	}
+	else {
+		if (this->animCnt > 0) { --this->animCnt; }
+	}
+	Box2D src;
+	int switchM[5] = { 0,1,2,3,4 };
+	switch (this->ttype)
+	{
+	case TargetType::Heater:
+		src = Box2D(switchM[this->animCnt / 5 % 5] * 256, 256 * 0, 256, 256);
+		break;
+	case TargetType::IceMachine:
+		src = Box2D(switchM[this->animCnt / 5 % 5] * 256, 256 * 1, 256, 256);
+		break;
+	case TargetType::Fan:
+		src = Box2D(switchM[this->animCnt / 5 % 5] * 256, 256 * 2, 256, 256);
+		break;
+	}
+
+	src.OffsetSize();
 	image.Draw(draw, src);
+
 }
 bool Switch::Finalize() {
 	return image.Finalize();

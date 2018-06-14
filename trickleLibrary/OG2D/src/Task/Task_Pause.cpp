@@ -4,7 +4,7 @@
 #include "Task_Game.h"
 Pause::Pause()
 {
-	__super::SetDrawOrder(1.f);
+	__super::SetDrawOrder(1.0f);
 }
 //--------------------------------------------------------------------------------------
 Pause::~Pause()
@@ -22,7 +22,6 @@ bool Pause::Initialize()
 	texStageSelect.Create((std::string)"StageSelect.png");
 	texTransparentBack.Create((std::string)"TransparentBack.png");
 
-	this->nextTaskCheck = 0;
 	__super::Init((std::string)"pause");
 	__super::SetDrawOrder(1.f);		//画像表示順位
 	std::cout << "ポーズ画面初期化" << std::endl;
@@ -57,8 +56,10 @@ bool Pause::Finalize()
 	case Restart:
 		{
 			auto game = OGge->GetTask<Game>("game");
-			game->Finalize();
-			game->Initialize();
+			if (game){
+				game->Finalize();
+				game->Initialize();
+			}
 		}
 	break;
 	case Stage:
@@ -98,7 +99,7 @@ void Pause::Pause_draw()
 				src.OffsetSize();
 				texCursor.Draw(draw, src);
 			}
-			//restart
+			//Restart
 			{
 				Box2D draw(RestartPos.x, RestartPos.y, 256.0f, 64.0f);
 				draw.OffsetSize();
@@ -160,27 +161,26 @@ void Pause::PauseUpDate()
 	stageselectPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 150.0f);
 
 	//矢印の移動
-	if (OGge->in->key.down(In::UP)) {
+	if (OGge->in->down(Input::CU) || OGge->in->down(In::LU)) {
 		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
 	}
-	if (OGge->in->key.down(In::DOWN)) {
+	if (OGge->in->down(Input::CD) || OGge->in->down(In::LD)) {
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
 	}
 	cursorPos = Vec2(NewPos + 500.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));
 	select = Select::Return;
+
 	//選択し
-	if (cursorPos.y == RestartPos.y)
-	{
+	if (cursorPos.y == RestartPos.y){
 		select = Restart;
 	}
-	if (cursorPos.y == stageselectPos.y)
-	{
+	if (cursorPos.y == stageselectPos.y){
 		select = Stage;
 	}
-	if (cursorPos.y == ReturnPos.y)
-	{
+	if (cursorPos.y == ReturnPos.y){
 		select = Return;
 	}
+
 	//選択しの決定処理
 	if (OGge->in->down(In::B2)){
 		OGge->SetPause(false);
@@ -190,24 +190,24 @@ void Pause::PauseUpDate()
 	}
 
 	//カメラ移動処理
-		if (OGge->in->key.on(In::A)){
-			if (NowCameraPos.x > 0) {
-				OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
-			}
+	if (InputLeft()) {
+		if (NowCameraPos.x > 0) {
+			OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
 		}
-		if (OGge->in->key.on(In::D)){
-			if (NowCameraPos.x + NowCameraSize.x<map->mapSize.x * map->DrawSize.x) {
-				OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
-			}
+	}
+	if (InputRight()) {
+		if (NowCameraPos.x + NowCameraSize.x<map->mapSize.x * map->DrawSize.x) {
+			OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
 		}
-		if (OGge->in->key.on(In::W)) {
-			if (NowCameraPos.y > 0) {
-				OGge->camera->MovePos(Vec2(0.0f, -5.0f));
-			}
+	}
+	if (InputUp()) {
+		if (NowCameraPos.y > 0) {
+			OGge->camera->MovePos(Vec2(0.0f, -5.0f));
 		}
-		if (OGge->in->key.on(In::S)) {
-			if (NowCameraPos.y + NowCameraSize.y < map->mapSize.y * map->DrawSize.y) {
-				OGge->camera->MovePos(Vec2(0.0f, 5.0f));
-			}
+	}
+	if (InputDown()) {
+		if (NowCameraPos.y + NowCameraSize.y < map->mapSize.y * map->DrawSize.y) {
+			OGge->camera->MovePos(Vec2(0.0f, 5.0f));
 		}
+	}
 }
