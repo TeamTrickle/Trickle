@@ -16,11 +16,12 @@ Pause::~Pause()
 bool Pause::Initialize()
 {
 	//画像読み込み
-	texCursor.Create((std::string)"Collision.png");
+	texCursor.Create((std::string)"gear2.png");
 	texRestart.Create((std::string)"restart.png");
 	texReturn.Create((std::string)"return.png");
 	texStageSelect.Create((std::string)"StageSelect.png");
 	texTransparentBack.Create((std::string)"TransparentBack.png");
+	select = Select::Return;
 
 	__super::Init((std::string)"pause");
 	__super::SetDrawOrder(1.f);		//画像表示順位
@@ -84,44 +85,43 @@ void Pause::Pause_draw()
 		{
 			//背景
 			{
-				Box2D draw(transparentbackPos.x, transparentbackPos.y, 1280.0f*2.0f, 720.0f*2.0f);
+				Box2D draw(transparentbackPos.x, transparentbackPos.y, 1920.f, 1080.f);
 				draw.OffsetSize();
 				Box2D src(0, 0, 1280, 720);
 				src.OffsetSize();
-				texTransparentBack.Draw(draw, src);
+				texTransparentBack.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.5f));
 			}
 			//カーソルの表示
 			{
-				//ゲームスタート
 				Box2D draw(cursorPos.x, cursorPos.y, 64.0f, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 0, 128, 128);
+				Box2D src(0, 0, 200, 200);
 				src.OffsetSize();
 				texCursor.Draw(draw, src);
 			}
 			//Restart
 			{
-				Box2D draw(RestartPos.x, RestartPos.y, 256.0f, 64.0f);
+				Box2D draw(RestartPos.x, RestartPos.y, 64.f*7, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 0, 256, 64);
+				Box2D src(0, 64*8, 64*7, 64);
 				src.OffsetSize();
-				texRestart.Draw(draw, src);
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
 			}
 			//Return
 			{
-				Box2D draw(ReturnPos.x, ReturnPos.y, 256.0f, 64.0f);
+				Box2D draw(ReturnPos.x, ReturnPos.y, 64.f*11, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 0, 256, 64);
+				Box2D src(0, 64*9, 64*11, 64);
 				src.OffsetSize();
-				texReturn.Draw(draw, src);
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
 			}
 			//stageselect
 			{
-				Box2D draw(stageselectPos.x, stageselectPos.y, 256.0f, 64.0f);
+				Box2D draw(stageselectPos.x, stageselectPos.y, 64.f*18, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 0, 256, 64);
+				Box2D src(0, 64*7, 64*19, 64);
 				src.OffsetSize();
-				texStageSelect.Draw(draw, src);
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
 			}
 
 		}
@@ -151,14 +151,13 @@ void Pause::PauseUpDate()
 	auto NowCameraPos = OGge->camera->GetPos();
 	auto NowCameraSize = OGge->camera->GetSize();
 	auto map = OGge->GetTask<Map>("map");
-	float keisan = NowCameraSize.x / 2;
-	float NewPos = keisan + NowCameraPos.x;
-	transparentbackPos = Vec2(0, 0);
+	float NewPos = NowCameraSize.x + NowCameraPos.x;
+	transparentbackPos = OGge->camera->GetPos();
 
 	//選択し位置
-	RestartPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 50.0f);
-	ReturnPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 250.0f);
-	stageselectPos = Vec2(NewPos + 600.0f, NowCameraPos.y + 150.0f);
+	ReturnPos = Vec2(NewPos - 64 * 12, NowCameraPos.y + NowCameraSize.y - 300.f);
+	RestartPos = Vec2(NewPos - 64 * 8, NowCameraPos.y + NowCameraSize.y - 200.f);
+	stageselectPos = Vec2(NewPos - 64*19 + 50,NowCameraPos.y + NowCameraSize.y - 100.f);
 
 	//矢印の移動
 	if (OGge->in->down(Input::CU) || OGge->in->down(In::LU)) {
@@ -167,7 +166,10 @@ void Pause::PauseUpDate()
 	if (OGge->in->down(Input::CD) || OGge->in->down(In::LD)) {
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
 	}
-	cursorPos = Vec2(NewPos + 500.0f, NowCameraPos.y + 50.0f + (100.f * selectPos));
+	Vec2 cPosTable[3] = { Vec2(ReturnPos.x - 80, ReturnPos.y)
+							,Vec2(stageselectPos.x - 80,stageselectPos.y)
+							,Vec2(RestartPos.x - 80,RestartPos.y) };
+	cursorPos = cPosTable[selectPos];
 	select = Select::Return;
 
 	//選択し
