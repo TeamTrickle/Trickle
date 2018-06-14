@@ -193,12 +193,12 @@ void Block::CheckMove(Vec2 &e_)
 			//エフェクト表示処理
 			if (this->footCheck())
 			{
-				if (this->Cnt > 5)
+				if (this->Cnt > 30)
 				{
 					if (dir > 0.f)
 					{
 						auto effect = Effect::Create(
-							Vec2(this->foot.position.x - 32.f, this->position.y + this->Scale.y - 32.f),
+							Vec2(this->foot.position.x + (this->Scale.x / 2), this->position.y + this->Scale.y - 32.f),
 							Vec2(64, 64),
 							Vec2(768, 768),
 							1,
@@ -210,7 +210,7 @@ void Block::CheckMove(Vec2 &e_)
 					else if (dir < 0.f)
 					{
 						auto effect = Effect::Create(
-							Vec2(this->foot.position.x + this->foot.Scale.x - 32.f, this->position.y + this->Scale.y - 32.f),
+							Vec2(this->foot.position.x + (this->foot.Scale.x / 2) - 32.f, this->position.y + this->Scale.y - 32.f),
 							Vec2(64, 64),
 							Vec2(768, 768),
 							1,

@@ -1,18 +1,17 @@
 #include "GameProcessManagement.h"
-using namespace std;
-//•Êƒ^ƒXƒN‚â•ÊƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éê‡‚±‚±‚É‚»‚Ìclass‚Ì‘‚©‚ê‚½h‚ğƒCƒ“ƒNƒ‹[ƒh‚·‚é
 #include "Goal\Goal.h"
+#include "Task\Task_Game.h"
 #include "Task\Task_Result.h"
 #include "Task/StageSelect.h"
 
 bool GameProcessManagement::Initialize()
 {
-	//ƒ^ƒXƒNŠÖ˜A
-	this->taskName = "GameProcessManagement";		//ŒŸõ‚Ég‚¤‚½‚ß‚Ì–¼‚ğ“o˜^‚·‚é
-	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ğs‚¤
+	//ã‚¿ã‚¹ã‚¯é–¢é€£
+	this->taskName = "GameProcessManagement";		//æ¤œç´¢æ™‚ã«ä½¿ã†ãŸã‚ã®åã‚’ç™»éŒ²ã™ã‚‹
+	__super::Init(taskName);		//TaskObjectå†…ã®å‡¦ç†ã‚’è¡Œã†
 
-	//ƒtƒ‰ƒOŠÖ˜A
-	gameclear_flag = false;                 //‰Šú’l‚Ífalse‚É‚µ‚Ä‚¨‚­
+	//ãƒ•ãƒ©ã‚°é–¢é€£
+	gameclear_flag = false;                 //åˆæœŸå€¤ã¯falseã«ã—ã¦ãŠã
 	pause_flag = false;
 	this->mission.Flag = 0;
 
@@ -20,93 +19,109 @@ bool GameProcessManagement::Initialize()
 
 
 
-	cout << "isŠÇ—ƒNƒ‰ƒX@‰Šú‰»" << endl;
+	cout << "é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹ã€€åˆæœŸåŒ–" << endl;
 	return true;
 }
 void GameProcessManagement::UpDate()
 {
 	//--------------------
-	//XV‚És‚¤ˆ—‚ğ‹Lq
+	//æ›´æ–°æ™‚ã«è¡Œã†å‡¦ç†ã‚’è¨˜è¿°
 	//--------------------
-	Goal_Check();                        //ƒS[ƒ‹‚ğ‘S‚Ä‚µ‚Ä‚¢‚é‚Ì‚©‚Ç‚¤‚©H
+	Goal_Check();                        //ã‚´ãƒ¼ãƒ«ã‚’å…¨ã¦ã—ã¦ã„ã‚‹ã®ã‹ã©ã†ã‹ï¼Ÿ
 	Goal_Event();
 }
 
 void GameProcessManagement::Render2D()
 {
 	//--------------------
-	//•`‰æ‚És‚¤ˆ—‚ğ‹Lq
+	//æç”»æ™‚ã«è¡Œã†å‡¦ç†ã‚’è¨˜è¿°
 	//--------------------
 }
-
-bool GameProcessManagement::Finalize()
+GameManager::GameManager()
 {
-	//-----------------------------------------
-	//‚±‚ÌƒIƒuƒWƒFƒNƒg‚ªÁ–Å‚·‚é‚Æ‚«‚És‚¤ˆ—‚ğ‹Lq
-	//-----------------------------------------
-	//Ÿ‚Ìƒ^ƒXƒN‚ğì‚é‚©‚©‚ÂƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ªI—¹—\’è‚©‚Ç‚¤‚©
-	if (timer != nullptr)
+	this->Seconds = 0;
+	this->Minute = 0;
+	this->timeCnt = 0;
+	__super::Init((std::string)"GM");
+}
+GameManager::~GameManager()
+{
+	if (*MapNum == 5 || *MapNum == 6)
 	{
-		timer->Kill();
+		Result::Create();
 	}
-	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+}
+void GameManager::UpDate()
+{
+	if (!this->isClear())
 	{
-		//ƒS[ƒ‹‚ğ‚µ‚Ä‚¢‚é
-		if (gameclear_flag)
-		{//ƒ|[ƒYˆ—‚ğs‚Á‚Ä‚¢‚È‚¢
-			if (!pause_flag)
+		//æ™‚é–“ã‚’ãƒ—ãƒ©ã‚¹ã™ã‚‹
+		//60ç§’ã‚’è¶…ãˆãŸã‚‰åˆ†ã‚’ãƒ—ãƒ©ã‚¹ã—ç§’ã‚’ãƒªã‚»ãƒƒãƒˆ
+		if (!this->isMaxTime())
+		{
+			this->timeCnt++;
+			if (this->timeCnt >= 60)
 			{
-				//‡”Ô‚ªˆá‚¤‚ÆƒŠƒUƒ‹ƒg‰æ–Ê‚Ì•\¦‚ª‚Å‚«‚Ü‚¹‚ñ
-				//ƒ`ƒ…[ƒgƒŠƒAƒ‹‚Å‚Í•\¦‚µ‚È‚¢
-				if (*MapNum == 5 || *MapNum == 6)
+				this->Seconds++;
+				this->timeCnt = 0;
+				if (this->Seconds >= 60)
 				{
-					auto result = Result::Create();
-					pause_flag = true;
+					if (this->Minute < 59)
+					{
+						this->Seconds = 0;
+						this->Minute++;
+					}
 				}
 			}
 		}
 	}
-	return true;
-}
-void GameProcessManagement::Goal_Check()
-{
-	if (!gameclear_flag)
+	else
 	{
-		auto goal = OGge->GetTasks<Goal>("Goal");
-		//ƒS[ƒ‹”»’è‚ğŠi”[‚·‚éVector‚ğ—pˆÓ‚·‚é
-		std::vector<bool> goalCheck;
-		//ƒS[ƒ‹”»’è‚ğŠi”[‚·‚éVector‚Éƒf[ƒ^‚ğ“ü‚ê‚é
-		for (auto id = (*goal).begin(); id != (*goal).end(); ++id)
+		//ã‚¯ãƒªã‚¢å‡¦ç†
+		//ãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜
+		auto game = OGge->GetTask<Game>("game");
+		if (game)
 		{
-			goalCheck.push_back((*id)->isGoal());
+			game->Kill();
+			if (*MapNum == 5 || *MapNum == 6)
+			{
+				this->OutData();
+			}
 		}
-
-		//—v‘f‚ğ’²‚×‚é
-		if (std::all_of(goalCheck.begin(), goalCheck.end(), [](bool flag) {return flag == true; }))
-		{
-			timer->Pause();
-			gameclear_flag = true;
-			goalCheck.clear();
-			return;
-		}
-		//ƒNƒŠƒA‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚Íƒ^ƒCƒ}[‚ğ“®‚©‚·
+		//ã‚¯ãƒªã‚¢ã—ã¦ã„ãªã„ã¨ãã¯ã‚¿ã‚¤ãƒãƒ¼ã‚’å‹•ã‹ã™
 		//timer->Frame_Set();
 		goalCheck.clear();
 	}
 }
-void GameProcessManagement::Goal_Event()
+bool GameManager::isMaxTime()
 {
-	//ƒS[ƒ‹‚ğ‚µ‚½‚çEEE
-	if (gameclear_flag)						//ƒQ[ƒ€ƒtƒ‰ƒO‚ªtrue‚É‚È‚Á‚½‚çEEE
-	{
-		File_Writing();						//ƒtƒŒ[ƒ€‚ğ‘‚«‚İ
-		timer->Stop();						//ƒ^ƒCƒ}[‚ÌŠÔ‚ğŒ³‚É–ß‚·
-	}
+	return this->Seconds >= 59 && this->Minute >= 59 ? true : false;
 }
-void GameProcessManagement::File_Writing()
+unsigned int GameManager::SecondsTime() const
 {
-	ofstream fin(TimeFilePath);							//ƒtƒ@ƒCƒ‹‚ÌƒpƒX‚Ìw’è
-	fin << timer->Get_frame() << "," << std::endl;		//ƒ^ƒCƒ}[‚ÌƒtƒŒ[ƒ€”‚ğ‘‚«‚İ
+	return this->Seconds;
+}
+unsigned int GameManager::MinuteTime() const
+{
+	return this->Minute;
+}
+bool GameManager::isClear()
+{
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	for (auto id = goals->begin(); id != goals->end(); ++id)
+	{
+		//ï¼‘ã¤ã§ã‚‚ã‚¯ãƒªã‚¢ã—ã¦ã„ãªã„ã®ãªã‚‰falseã‚’è¿”ã™
+		if (!(*id)->GetClear())
+		{
+			return false;
+		}
+	}
+	return true;
+}
+bool GameManager::OutData()
+{
+	ofstream fin(TimeFilePath);							//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã®æŒ‡å®š
+	fin << timer->Get_frame() << "," << std::endl;		//ã‚¿ã‚¤ãƒãƒ¼ã®ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’æ›¸ãè¾¼ã¿
 	if (gameclear_flag)
 	{
 		switch (*MapNum)
@@ -114,18 +129,18 @@ void GameProcessManagement::File_Writing()
 		case 5:
 			fin << "Stage1";
 			fin << ",";
-			//Še©‚Ì’B¬€–Ú‚É‚Â‚¢‚Ä”»’è‚ğ‚µ‚Äƒtƒ‰ƒO‚ğ‘ã“ü‚³‚¹‚é
+			//å„è‡ªã®é”æˆé …ç›®ã«ã¤ã„ã¦åˆ¤å®šã‚’ã—ã¦ãƒ•ãƒ©ã‚°ã‚’ä»£å…¥ã•ã›ã‚‹
 			this->Flag_Judge(*MapNum,fin);
 			break;
 		case 6:
 			fin << "Stage2";
 			fin << ",";
-			//Še©‚Ì’B¬€–Ú‚É‚Â‚¢‚Ä”»’è‚ğ‚µ‚Äƒtƒ‰ƒO‚ğ‘ã“ü‚³‚¹‚é
+			//å„è‡ªã®é”æˆé …ç›®ã«ã¤ã„ã¦åˆ¤å®šã‚’ã—ã¦ãƒ•ãƒ©ã‚°ã‚’ä»£å…¥ã•ã›ã‚‹
 			this->Flag_Judge(*MapNum,fin);
 			break;
 		}
 	}
-	fin.close();							//ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+	fin.close();							//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 }
 bool GameProcessManagement::isAllGoal()
 {
@@ -145,16 +160,16 @@ void GameProcessManagement::Mission::Flag_Judge_Clear()
 }
 void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream& fin)
 {
-	//ğŒ‚ğ‘‚­@IF
-	//ƒtƒ‰ƒO‚ğ‘ã“ü‚·‚é
-	//ƒtƒ@ƒCƒ‹‚Éƒf[ƒ^‚ğ‘‚­
+	//æ¡ä»¶ã‚’æ›¸ãã€€IF
+	//ãƒ•ãƒ©ã‚°ã‚’ä»£å…¥ã™ã‚‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ã
 	int cleartime = this->timer->GetTime();
 
 	switch (mapnumber)
 	{
 	case 5:
-		//ğŒ‚ğ‚±‚±‚É“ü—Í‚·‚é
-		//ƒtƒ‰ƒO‚P‚ÌğŒ 30•bˆÈ“à‚ÉƒS[ƒ‹‚ğ‚µ‚½
+		//æ¡ä»¶ã‚’ã“ã“ã«å…¥åŠ›ã™ã‚‹
+		//ãƒ•ãƒ©ã‚°ï¼‘ã®æ¡ä»¶ 30ç§’ä»¥å†…ã«ã‚´ãƒ¼ãƒ«ã‚’ã—ãŸ
 		if (cleartime <= 30)
 		{
 			fin << "Flag1" << ",";
@@ -165,7 +180,7 @@ void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream&
 			this->mission.Flag_Input(Achievement::Flag3);
 			fin << std::endl;
 		}
-		//ƒtƒ‰ƒO‚Q‚ÌğŒ 60•bˆÈ“à‚ÉƒS[ƒ‹‚ğ‚µ‚½
+		//ãƒ•ãƒ©ã‚°ï¼’ã®æ¡ä»¶ 60ç§’ä»¥å†…ã«ã‚´ãƒ¼ãƒ«ã‚’ã—ãŸ
 		if (cleartime <= 60)
 		{
 			fin << "Flag2" << ",";
@@ -174,7 +189,7 @@ void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream&
 			this->mission.Flag_Input(Achievement::Flag3);
 			fin << std::endl;
 		}
-		//ƒtƒ‰ƒO‚R‚ÌğŒ 120•bˆÈ“à‚ÉƒS[ƒ‹‚ğ‚µ‚½
+		//ãƒ•ãƒ©ã‚°ï¼“ã®æ¡ä»¶ 120ç§’ä»¥å†…ã«ã‚´ãƒ¼ãƒ«ã‚’ã—ãŸ
 		if (cleartime <= 120)
 		{
 			fin << "Flag3" << ",";
@@ -183,7 +198,7 @@ void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream&
 		}
 		break;
 	case 6:
-		//ğŒ‚ğ‚±‚±‚É“ü—Í‚·‚é
+		//æ¡ä»¶ã‚’ã“ã“ã«å…¥åŠ›ã™ã‚‹
 
 		break;
 	default:
@@ -192,30 +207,26 @@ void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream&
 }
 GameProcessManagement::GameProcessManagement()
 {
-	cout << "isŠÇ—ƒNƒ‰ƒX@¶¬" << endl;
+	cout << "é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹ã€€ç”Ÿæˆ" << endl;
 }
 
 GameProcessManagement::~GameProcessManagement()
 {
 	this->Finalize();
-	cout << "isŠÇ—ƒNƒ‰ƒX@‰ğ•ú" << endl;
+	cout << "é€²è¡Œç®¡ç†ã‚¯ãƒ©ã‚¹ã€€è§£æ”¾" << endl;
 }
-
-GameProcessManagement::SP GameProcessManagement::Create(bool flag_)
+GameManager::SP GameManager::Create(bool flag)
 {
-	GameProcessManagement::SP to = GameProcessManagement::SP(new GameProcessManagement());
+	GameManager::SP to = GameManager::SP(new GameManager());
 	if (to)
 	{
 		to->me = to;
-		if (flag_)
+		if (flag)
 		{
 			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize())
-		{
-			to->Kill();
 		}
 		return to;
 	}
 	return nullptr;
 }
+

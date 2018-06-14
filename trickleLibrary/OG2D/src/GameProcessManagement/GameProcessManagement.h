@@ -1,63 +1,53 @@
-//__________________________
-//|                      //|
-//|—š—ğ@2018/04/14 ‰¡”ö //|
-//|—š—ğ@2018/04/19 ‰¡”ö //|
-//|—š—ğ@2018/04/26 ‰¡”ö //|
-//|______________________//|
-#pragma once
-//•K—v“Ç‚İ‚İƒtƒ@ƒCƒ‹
 #include "OGSystem\OGsystem.h"
-#include "Object\Object.h"
-#include "Timer.h"
 
-class GameProcessManagement : public GameObject,public TaskObject
+class GameManager : public TaskObject
 {
 public:
 	enum Achievement
 	{
-		Flag1 = 1 << 0,		//ƒtƒ‰ƒO1
-		Flag2 = 1 << 1,		//ƒtƒ‰ƒO2
-		Flag3 = 1 << 2,		//ƒtƒ‰ƒO3
-		Flag4 = 1 << 3,		//ƒtƒ‰ƒO4
-		Master = 0x0F,		//‘S‚Ä‚Ìƒtƒ‰ƒO‚ª’B¬‚µ‚½
+		Flag1 = 1 << 0,		//ï¿½tï¿½ï¿½ï¿½O1
+		Flag2 = 1 << 1,		//ï¿½tï¿½ï¿½ï¿½O2
+		Flag3 = 1 << 2,		//ï¿½tï¿½ï¿½ï¿½O3
+		Flag4 = 1 << 3,		//ï¿½tï¿½ï¿½ï¿½O4
+		Master = 0x0F,		//ï¿½Sï¿½Ä‚Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	};
 private:
-	//ƒ~ƒbƒVƒ‡ƒ“€–ÚŠÖ˜A
+	//ï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚŠÖ˜A
 	struct Mission
 	{
-		//ƒtƒ‰ƒOŠÖ˜A
+		//ï¿½tï¿½ï¿½ï¿½Oï¿½Ö˜A
 		void Flag_Input(Achievement);
 		void Flag_Judge_Clear();
 
-		//ƒtƒ‰ƒO‚ğŠi”[‚·‚é•Ï”
+		//ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½Ïï¿½
 		int  Flag;
 	};
-	//ƒtƒ‰ƒOŠÖ˜A
+	//ï¿½tï¿½ï¿½ï¿½Oï¿½Ö˜A
 	void Flag_Judge(unsigned short& mapnumber, std::ofstream& fin);
 
-	//Še©•Ï”
+	//ï¿½eï¿½ï¿½ï¿½Ïï¿½
 
-	//ƒ~ƒbƒVƒ‡ƒ“ŠÖ˜A
-	Mission mission;					//’B¬€–Ú‚ÌğŒ‚ğˆµ‚¤
+	//ï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ö˜A
+	Mission mission;					//ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½Ú‚Ìï¿½ï¿½ï¿½
 
-	//Šî–{‚Ìî•ñ
-	bool gameclear_flag;                 //—lX‚Èƒtƒ‰ƒO‚ğŠi”[‚·‚é
-	bool pause_flag;					 //ƒ|[ƒY‰æ–Ê‚©‚çƒ^ƒCƒgƒ‹‚Ö–ß‚ê‚³‚ê‚éê‡‚Ì‘Îô
+	//ï¿½ï¿½{ï¿½Ìï¿½ï¿½
+	bool gameclear_flag;                 //ï¿½lï¿½Xï¿½Èƒtï¿½ï¿½ï¿½Oï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
+	bool pause_flag;					 //ï¿½|ï¿½[ï¿½Yï¿½ï¿½Ê‚ï¿½ï¿½ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Ö–ß‚ê‚³ï¿½ï¿½ï¿½ê‡ï¿½Ì‘Îï¿½
 
-	//ƒ^ƒCƒ}[ŠÖ˜A
-	Timer::SP timer;                     //ƒ^ƒCƒ}[‚ÌƒZƒbƒg‚ğ‚·‚é
+	//ï¿½^ï¿½Cï¿½}ï¿½[ï¿½Ö˜A
+	Timer::SP timer;                     //ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ÌƒZï¿½bï¿½gï¿½ï¿½ï¿½
 
 	
 
 	const char* TimeFilePath = "./data/Result/Result.dat";
 
 private:
-	//ƒS[ƒ‹”»’èŠÖ˜A
-	void Goal_Check();		//ƒS[ƒ‹‚Ì”»’è‚ğƒ`ƒFƒbƒN‚µ‚Ü‚·
-	void Goal_Event();		//‘S‚Ä‚ªƒS[ƒ‹ó‘Ô‚È‚çƒŠƒUƒ‹ƒg‰æ–Ê‚És‚«‚Ü‚·
+	//ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö˜A
+	void Goal_Check();		//ï¿½Sï¿½[ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Ü‚ï¿½
+	void Goal_Event();		//ï¿½Sï¿½Ä‚ï¿½ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½Ô‚È‚çƒŠï¿½Uï¿½ï¿½ï¿½gï¿½ï¿½Ê‚Ésï¿½ï¿½ï¿½Ü‚ï¿½
 
-	//ƒŠƒUƒ‹ƒg‰æ–Ê‚Éƒf[ƒ^‚ğ‘—‚éŠÖ”ŠÖ˜A
-	void File_Writing();				 //ƒtƒŒ[ƒ€‚ğ‘‚«‚±‚Ş
+	//ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½gï¿½ï¿½Ê‚Éƒfï¿½[ï¿½^ï¿½ğ‘—‚ï¿½Öï¿½ï¿½Ö˜A
+	void File_Writing();				 //ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 public:
 	std::string taskName;
 	virtual ~GameProcessManagement();
@@ -65,14 +55,28 @@ public:
 	static GameProcessManagement::SP Create(bool = true);
 	GameProcessManagement();
 	//-------------
-	//•ÏX‚µ‚È‚¢‚±‚Æ
+	//ï¿½ÏXï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
 	//-------------
-	bool Initialize();		//‰Šú‰»ˆ—
-	void UpDate();			//XVˆ—
-	void Render2D();		//•`‰æˆ—
-	bool Finalize();		//‰ğ•úˆ—
+	bool Initialize();		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	void UpDate();			//ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
+	void Render2D();		//ï¿½`ï¿½æˆï¿½ï¿½
+	bool Finalize();		//ï¿½ï¿½ï¿½
 
-	//‘¼‚ÌƒNƒ‰ƒX‚Åg—p‚·‚éŠÖ”
-	bool isAllGoal();		//‘S‚Ä‚ªƒS[ƒ‹‚ğ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚µ‚Ü‚·
-	int  GetFlag();			//Œ»İ‚ÌƒXƒe[ƒWƒ~ƒbƒVƒ‡ƒ“ƒtƒ‰ƒO‚ğ•Ô‚µ‚Ü‚·
+	//ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Ågï¿½pï¿½ï¿½ï¿½ï¿½Öï¿½
+	bool isAllGoal();		//ï¿½Sï¿½Ä‚ï¿½ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½
+	int  GetFlag();			//ï¿½ï¿½ï¿½İ‚ÌƒXï¿½eï¿½[ï¿½Wï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½
+	unsigned int Seconds;
+	unsigned int Minute;
+	unsigned int timeCnt;
+	bool isMaxTime();
+	bool OutData();
+public:
+	bool isClear();
+	unsigned int SecondsTime() const;
+	unsigned int MinuteTime() const;
+	explicit GameManager();
+	void UpDate() override;
+	virtual ~GameManager();
+	typedef std::shared_ptr<GameManager> SP;
+	static SP Create(bool = true);
 };

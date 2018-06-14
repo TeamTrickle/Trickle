@@ -39,6 +39,7 @@ private:
 	Box2D draw;
 	Box2D srcbase;
 	TargetType ttype;
+	int animCnt;
 
 	Switch();
 	bool Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> target, TargetType ttype);

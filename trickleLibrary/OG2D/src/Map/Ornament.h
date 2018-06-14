@@ -13,13 +13,20 @@ public:
 
 private:
 	struct Info {
-		Texture tex;
 		Box2D draw;
-		Box2D src;
 		int angle;
 	};
 	Info pipe;
-	Info gear;
+	//Info gear;
+	Texture pipeTex;
+	Texture gearTex;
+	Texture pipeBoxTex;
+	std::vector<Info> gear;
+	std::vector<Info> gear_nomove;
+	std::vector<Info> pipeBox;
+	Box2D pipeSrc;
+	Box2D gearSrc;
+	Box2D pipeBoxSrc;
 
 	bool Initialize();
 	void UpDate();

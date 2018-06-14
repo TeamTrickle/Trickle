@@ -1,5 +1,5 @@
 #pragma once
-//______________________________ //
+//______________________________//
 //|ポーズタスク                 |//
 //|履歴：2018/05/23     劉韋君　|//
 //|____________________________ |//
@@ -13,12 +13,13 @@ class Pause :public TaskObject
 	Texture texReturn;
 	Texture texStageSelect;
 	Texture texTransparentBack;
+
 	Vec2 RestartPos;
 	Vec2 ReturnPos;
 	Vec2 stageselectPos;
 	Vec2 cursorPos;
 	Vec2 transparentbackPos;
-	int nextTaskCheck;
+
 	int selectPos = 0;
 
 public:
@@ -35,6 +36,20 @@ public:
 		Restart, Stage, Return,
 	};
 	Select select;
+
+	//カメラ移動
+	bool Pause::InputLeft() {
+		return OGge->in->key.on(In::A) || OGge->in->on(In::RL);
+	}
+	bool Pause::InputRight() {
+		return OGge->in->key.on(In::D) || OGge->in->on(In::RR);
+	}
+	bool Pause::InputDown() {
+		return OGge->in->key.on(In::S) || OGge->in->on(In::RD);
+	}
+	bool Pause::InputUp() {
+		return OGge->in->key.on(In::W) || OGge->in->on(In::RU);
+	}
 
 	typedef std::shared_ptr<Pause> SP;
 	static SP Create(bool = true);
