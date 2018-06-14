@@ -2,11 +2,13 @@
 #include "Goal\Goal.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_Result.h"
+#include "Task\StageSelect.h"
 GameManager::GameManager()
 {
 	this->Seconds = 0;
 	this->Minute = 0;
 	this->timeCnt = 0;
+	this->isclear = false;
 	for (int i = 0; i < 3; ++i)
 	{
 		this->M_flag[i] = false;
@@ -15,10 +17,28 @@ GameManager::GameManager()
 }
 GameManager::~GameManager()
 {
-	if ((*MapNum == 5 || *MapNum == 6) && this->isClear())
+	if (this->isclear)
 	{
-		Result::Create();
+		if (*MapNum == 5 || *MapNum == 6)
+		{
+			Result::Create();
+		}
+		else
+		{
+			if (*MapNum < 4)
+			{
+				*MapNum = *MapNum + 1;
+				auto next = Game::Create();
+			}
+			//次にチュートリアルを控えているものは次のチュートリアルへ移動
+			else if (*MapNum == 4)
+			{
+				//チュートリアル終了でセレクトに戻る
+				auto next = StageSelect::Create();
+			}
+		}
 	}
+	
 }
 void GameManager::UpDate()
 {
@@ -60,6 +80,7 @@ void GameManager::UpDate()
 				this->ComparisonData();
 			}
 		}
+		this->isclear = true;
 	}
 }
 void GameManager::ResetData()

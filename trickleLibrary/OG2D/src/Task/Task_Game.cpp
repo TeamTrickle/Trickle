@@ -42,20 +42,7 @@ Game::~Game()
 		{
 			auto next = Title::Create();
 		}
-		else
-		{
-			if (*MapNum < 4)
-			{
-				*MapNum = *MapNum + 1;
-				auto next = Game::Create();
-			}
-			//次にチュートリアルを控えているものは次のチュートリアルへ移動
-			else if (*MapNum == 4)
-			{
-				//チュートリアル終了でセレクトに戻る
-				auto next = StageSelect::Create();
-			}
-		}
+		
 	}
 }
 
@@ -396,11 +383,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	/*auto pauses = OGge->GetTasks<Pause>("pause");
+	auto pauses = OGge->GetTasks<Pause>("pause");
 	for (auto id = pauses->begin(); id != pauses->end(); ++id)
 	{
 		(*id)->Kill();
-	}*/
+	}
 	auto back = OGge->GetTask<Back>("back");
 	if (back)
 	{
