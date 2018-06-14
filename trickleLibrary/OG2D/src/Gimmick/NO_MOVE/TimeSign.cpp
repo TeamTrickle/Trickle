@@ -150,7 +150,7 @@ void TimeSign::setPosition(const Vec2& p) {
 	originPos.y = p.y;
 }
 
-Vec2& TimeSign::getPosition() const {
+Vec2 TimeSign::getPosition() const {
 	return Vec2(originPos.x, originPos.y);
 }
 

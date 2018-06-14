@@ -54,7 +54,7 @@ public:
 	void setComma(const Box2D&, const Box2D&, const Box2D&);
 
 	void setPosition(const Vec2&);
-	Vec2& getPosition() const;
+	Vec2 getPosition() const;
 
 	typedef std::shared_ptr<TimeSign> SP;
 	static SP Create(const std::string&, const Box2D&, bool);
