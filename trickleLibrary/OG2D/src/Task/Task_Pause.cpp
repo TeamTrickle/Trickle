@@ -56,19 +56,20 @@ bool Pause::Finalize()
 	switch (select) {
 	case Restart:
 		{
-			auto game = OGge->GetTask<Game>("game");
+			/*auto game = OGge->GetTask<Game>("game");
 			if (game){
 				game->Finalize();
 				game->Initialize();
-			}
+			}*/
+		auto game = Game::Create();
 		}
 	break;
 	case Stage:
 		{
-			auto game = OGge->GetTasks<Game>("game");
+		/*	auto game = OGge->GetTasks<Game>("game");
 			for (auto& g : (*game)) {
 				g->Kill();
-			}
+			}*/
 		}
 		StageSelect::Create();
 		break;
@@ -187,7 +188,7 @@ void Pause::PauseUpDate()
 	if (OGge->in->down(In::B2)){
 		OGge->SetPause(false);
 		if (select != Return) {
-			this->Kill();
+			OGge->GetTask<Game>("game")->Kill();
 		}
 	}
 
