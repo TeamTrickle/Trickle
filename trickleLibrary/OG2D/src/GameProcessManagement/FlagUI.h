@@ -20,7 +20,7 @@ private:
 
 	//‰æ‘œŠÖ˜A
 	Texture image[2];
-	const Box2D Src = Box2D(0, 0, 322, 322);
+	const Box2D Src = Box2D(0, 0, 78, 79);
 	bool effectEnd;
 
 	//Šg‘å‹@”\

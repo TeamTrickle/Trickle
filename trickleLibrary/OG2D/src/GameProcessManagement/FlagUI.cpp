@@ -28,8 +28,8 @@ bool FlagUI::Initialize(Vec2& pos,int& target)
 	//画像関連
 	flagactive = false;			//画像を変更する際に判定を比較する
 	SetDrawOrder(0.1f);
-	image[0].Create((std::string)"Ster.png");
-	image[1].Create((std::string)"SterB.png");
+	image[0].Create((std::string)"stagealert_star.png");
+	image[1].Create((std::string)"stagealert_star.png");
 
 	//拡大機能関連
 	this->ResetVolume();
@@ -84,7 +84,7 @@ void FlagUI::Render2D()
 	}
 	else
 	{
-		image[1].Draw(draw, src);
+		image[1].Draw(draw, src,Color(0.0f,0.0f,0.0f,1.0f));
 	}
 }
 bool FlagUI::Finalize()

@@ -15,7 +15,7 @@ private:
 	typedef std::shared_ptr<SterEffect> SP;
 
 	//‰æ‘œŠÖ˜A
-	const Box2D Src = { 0,0,322,322 };
+	const Box2D Src = { 0,0,78,79 };
 	Texture image;
 	
 

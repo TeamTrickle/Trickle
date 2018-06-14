@@ -13,7 +13,7 @@ private:
 	bool   isEasinged;
 	//‰æ‘œŠÖ˜A
 	Texture image;
-	const Box2D Src = {0,0,616,101};
+	const Box2D Src = {0,0,275,75};
 private:
 	bool Initialize();
 	bool Finalize();

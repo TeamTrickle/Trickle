@@ -19,8 +19,14 @@ bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 	this->animetion.Reset();
 
 	//画像関連
-	std::string filePath = "player.png";
-	image.Create(filePath);
+	{
+		std::string filePath = "player.png";
+		image.Create(filePath);
+	}
+	{
+		std::string filePath = "clear.png";
+		smail.Create(filePath);
+	}
 	this->SetDrawOrder(1.0f);
 
 	//リザルト画面に関連する関数
@@ -88,6 +94,7 @@ void ResultPlayer::Motion()
 	switch (nm)
 	{
 	case ResultPlayer::Normal:
+
 		break;
 	case ResultPlayer::Walk:
 		this->Move();
@@ -95,10 +102,15 @@ void ResultPlayer::Motion()
 	case ResultPlayer::Smail:
 		//特になし
 		this->animetion.AnimetionMove();
+		this->Jump();
 		break;
 	case ResultPlayer::Stop:
 		break;
 	}
+}
+void ResultPlayer::Jump()
+{
+
 }
 void ResultPlayer::UpDate()
 {
@@ -129,16 +141,34 @@ void ResultPlayer::Move()
 }
 void ResultPlayer::Render2D()
 {
-	Box2D draw(position, Scale);
-	draw.OffsetSize();
-	Box2D src = this->Src;
-	src = this->animetion.ReturnSrc(src,this->animetion.motion);
-	src.OffsetSize();
+	//通常時
+	if(this->animetion.motion != State::Smail)
+	{
+		Box2D draw(position, Scale);
+		draw.OffsetSize();
+		Box2D src = this->Src[0];
+		src = this->animetion.ReturnSrc(src, this->animetion.motion);
+		src.OffsetSize();
 
-	int temp = src.w;
-	src.w = src.x;
-	src.x = temp;
-	image.Draw(draw, src);
+		int temp = src.w;
+		src.w = src.x;
+		src.x = temp;
+		image.Draw(draw, src);
+	}
+	//喜びモーション
+	else
+	{
+		Box2D draw(position, Scale);
+		draw.OffsetSize();
+		Box2D src = this->Src[1];
+		src = this->animetion.ReturnSrc(src, this->animetion.motion);
+		src.OffsetSize();
+
+		int temp = src.w;
+		src.w = src.x;
+		src.x = temp;
+		smail.Draw(draw, src);
+	}
 }
 void ResultPlayer::Animetion::Reset()
 {
@@ -169,15 +199,8 @@ Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
 		src.x = this->animetionCnt / 3 % 9 * src.w;
 		break;
 	case ResultPlayer::Smail:
-		if (animetionCnt % 60 >= 30)
 		{
-			src.x = 5 * src.h;
-			src.y = 5 * src.w;
-		}
-		else
-		{
-			src.x = 0;
-			src.y = 0;
+			src.x = this->animetionCnt / 10 % 3 * src.w;
 		}
 		break;
 	case ResultPlayer::Stop:

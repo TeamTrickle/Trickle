@@ -6,11 +6,11 @@ bool GoalTimeUI::Initialize(Vec2& pos)
 	this->Init(taskName);
 
 	//基本の情報
-	CreateObject(Cube, pos, Vec2(448, 90), 0);
+	CreateObject(Cube, pos, Vec2(450, 64), 0);
 
 
 	//画像関連
-	image.Create((std::string)"TimeUI.png");
+	image.Create((std::string)"fontui.png");
 	this->SetDrawOrder(0.1f);
 
 
@@ -33,12 +33,11 @@ void GoalTimeUI::ResetCenter()
 	this->ReSize.y = this->Scale.y *  this->ScaleVolume.y;
 
 	//座標値に影響をさせる　(リサイズ　－　前回行ったリサイズ) * 2
-	this->position.x -= (this->ReSize.x - this->PreSize.x) * 2;
-	this->position.y -= (this->ReSize.y - this->PreSize.y) * 2;
+	this->position.x -= (this->ReSize.x - this->PreSize.x) * 1.5f;
+	this->position.y -= (this->ReSize.y - this->PreSize.y) * 1.5f;
 
 	//全体を求める	座標　－　リサイズ
 	this->Center = this->position + this->ReSize;
-
 	//座標の中央値を求める
 	this->Center.x = this->Center.x / 2.f;
 	this->Center.y = this->Center.y / 2.f;
@@ -111,7 +110,7 @@ void GoalTimeUI::MoveVolume()
 //}
 void GoalTimeUI::Render2D()
 {
-	Box2D draw(this->Center.x - this->Center.x / 2, this->Center.y , this->Scale.x * this->ScaleVolume.x, this->Scale.y * this->ScaleVolume.y);
+	Box2D draw(this->Center.x + this->Scale.x - 450, this->Center.y + 40 , this->Scale.x * this->ScaleVolume.x, this->Scale.y * this->ScaleVolume.y);
 	draw.OffsetSize();
 
 	//拡大機能

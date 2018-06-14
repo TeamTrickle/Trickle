@@ -26,11 +26,11 @@ bool SterEffect::Initialize(std::shared_ptr<GameObject> target)
 	if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
 	{
 		//画像関連
-		image.Create((std::string)"Ster.png");
+		image.Create((std::string)"stagealert_star.png");
 	}
 	else
 	{
-		image.Create((std::string)"SterB.png");
+		image.Create((std::string)"stagealert_star.png");
 	}
 
 	std::cout << "スターエフェクト　初期化" << std::endl;
@@ -63,11 +63,7 @@ bool SterEffect::Initialize(std::shared_ptr<GameObject> target , std::shared_ptr
 	if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
 	{
 		//画像関連
-		image.Create((std::string)"Ster.png");
-	}
-	else
-	{
-		image.Create((std::string)"SterB.png");
+		image.Create((std::string)"stagealert_star.png");
 	}
 
 	std::cout << "スターエフェクト　初期化" << std::endl;
@@ -110,7 +106,15 @@ void SterEffect::Render2D()
 			draw.OffsetSize();
 			Box2D src = this->Src;
 			src.OffsetSize();
-			image.Draw(draw, src);
+			if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
+			{
+				//画像関連
+				image.Draw(draw, src);
+			}
+			else
+			{
+				image.Draw(draw, src, Color(0.0f, 0.0f, 0.0f, 1.0f));
+			}
 		}
 	}
 	else
@@ -119,7 +123,15 @@ void SterEffect::Render2D()
 		draw.OffsetSize();
 		Box2D src = this->Src;
 		src.OffsetSize();
-		image.Draw(draw, src);
+		if ((std::static_pointer_cast<FlagUI>)(target)->GetFlag())
+		{
+			//画像関連
+			image.Draw(draw, src);
+		}
+		else
+		{
+			image.Draw(draw, src, Color(0.0f, 0.0f, 0.0f, 1.0f));
+		}
 	}
 }
 bool SterEffect::EasingIsPlay()

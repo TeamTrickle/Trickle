@@ -14,7 +14,7 @@ class FrameTimeUI : public GameObject, public TaskObject
 
 	//画像関連
 	Texture image;
-	const Box2D Src = { 0,0,64,128 };
+	const Box2D Src = { 0,0,720 / 11,64 };
 	int digitSelectnumber;				//この数字によって描画に変化が起きる
 	int randomSelectnumber;				//ドラムロール中はこちらで描画する
 
@@ -51,6 +51,8 @@ class FrameTimeUI : public GameObject, public TaskObject
 		int toMinutes();							//分の計算
 	};
 	
+	//画像関連
+
 	//ドラムロール関連
 	int Random();					//ランダムの値を返す
 	void ResetMoveCnt();			//アニメーションカウントをリセットする
