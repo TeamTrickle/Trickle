@@ -52,7 +52,7 @@ private:
 
 
 	//ファイルの出力
-	const char* TimeFilePath = "./data/Result/Result.dat";
+	const char* FilePath = "./data/Result/";
 
 	//画像関連
 	Texture image;

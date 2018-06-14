@@ -8,7 +8,9 @@
 #include "GameProcessManagement\MissionUI.h"
 #include "GameProcessManagement\FrameTime.h"
 #include "Effect/SterEffect.h"
+#include "GameProcessManagement/GameProcessManagement.h"
 
+#include <bitset>
 ///285 
 
 bool Result::Initialize()
@@ -21,7 +23,6 @@ bool Result::Initialize()
 
 	//フラグの設定
 	this->Result_DataInput();
-	this->Flag = 0;
 
 	this->image.Create((std::string)"back.png");
 	this->maptile.Create((std::string)"tile.jpg");
@@ -259,7 +260,7 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
-			int selectflag[3] = { 1 << 0,1 << 1,1 << 3 };
+			int selectflag[3] = { 1 << 0,1 << 1,1 << 2 };
 
 			for (int i = 0; i < 3; ++i)
 			{
@@ -331,9 +332,14 @@ int Result::to_String(std::string& text)
 }
 void Result::Result_DataInput()
 {
-	std::string GameFalg;			//ゲームフラグ
+	//時間を格納する
+	int Min, Sec = 0;
+	bool active = false;
+
+
+	std::string file = "save";
 	//データの読み込み
-	std::ifstream fin(TimeFilePath);
+	std::ifstream fin(FilePath + file + std::to_string(*MapNum) + ".bin");
 
 	if (!fin)
 	{
@@ -341,6 +347,11 @@ void Result::Result_DataInput()
 	}
 	//読み込んだデータを入れておく変数
 	std::string line;
+
+	int count = 0;
+	this->Flag = 0;
+
+
 	//ファイル全体のテキストを読み込み
 	while (std::getline(fin, line))
 	{
@@ -349,28 +360,33 @@ void Result::Result_DataInput()
 		//一字書き込み変数
 		std::string text;
 		
-		//タイムの書き込み
-		std::getline(_fin, text, ',');
-		(std::stringstream)text >> FrameTime;
-
-		//ステージごとのフラグを書き込む
-		std::string nowStagenumber;
-		int nowStage = 0;
-
-		//フラグの読み込み
-		while (std::getline(_fin, text, ','))
+		if (!active)
 		{
-			if (text == "Stage1")
+			for (int i = 0; i < 2; ++i)
 			{
-				nowStagenumber = text.substr(5);
-				//文字列からint型にする
-				nowStage = this->to_String(nowStagenumber);
+				std::getline(_fin, text, ',');
+				if (i == 0)
+				{
+					(std::stringstream)text >> Min;
+				}
+				else
+				{
+					(std::stringstream)text >> Sec;
+				}
 			}
-			else if(text == "Stage2")
+			this->FrameTime = Min * 60 + Sec;
+			active = true;
+		}
+		else
+		{
+			for (int i = 0; i < 3; ++i)
 			{
-				nowStagenumber = text.substr(5);
-				//文字列からint型にする
-				nowStage = this->to_String(nowStagenumber);
+				std::getline(_fin, text, ',');
+				if (text == "t")
+				{
+					this->Flag |= 1 << count;
+				}
+				count++;
 			}
 		}
 	}

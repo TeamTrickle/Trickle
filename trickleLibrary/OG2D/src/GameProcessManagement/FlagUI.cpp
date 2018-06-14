@@ -2,6 +2,8 @@
 
 #include "Effect\SterEffect.h"
 #include "GameProcessManagement.h"
+
+#include <bitset>
 bool FlagUI::Initialize(Vec2& pos,int& target)
 {
 	//タスク関連
@@ -12,6 +14,7 @@ bool FlagUI::Initialize(Vec2& pos,int& target)
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
 	//フラグ代入を格納する
 	Resultflag = 0;
+	this->SetResultflag();
 	//ターゲットフラグの設定
 	targetflag = target;
 
@@ -52,7 +55,6 @@ void FlagUI::ResetVolume()
 void FlagUI::UpDate()
 {
 	//フラグを代入する
-	this->SetResultflag();
 	this->FalgJudge(targetflag);
 	this->MoveVolume();
 	//this->EasingMove();
