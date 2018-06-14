@@ -8,8 +8,6 @@
 #include "GameProcessManagement\MissionUI.h"
 #include "GameProcessManagement\FrameTime.h"
 #include "Effect/SterEffect.h"
-#include "GameProcessManagement/GameProcessManagement.h"
-#include "Effect\SterEffect.h"
 
 ///285 
 
@@ -261,7 +259,7 @@ void Result::UI_Create()
 	case 1 << 1:
 		if ((this->createtask.createflag & CreateFlag::Starui) == CreateFlag::Starui)
 		{
-			int selectflag[3] = { GameProcessManagement::Flag1,GameProcessManagement::Flag2,GameProcessManagement::Flag4 };
+			int selectflag[3] = { 1 << 0,1 << 1,1 << 3 };
 
 			for (int i = 0; i < 3; ++i)
 			{
