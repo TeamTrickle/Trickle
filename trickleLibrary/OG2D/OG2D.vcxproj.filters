@@ -339,6 +339,9 @@
     <ClCompile Include="src\Map\Ornament.cpp">
       <Filter>ソースファイル\Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\Task\StageInfoRes.cpp">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -538,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="src\Map\Ornament.h">
       <Filter>ソースファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\StageInfoRes.h">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

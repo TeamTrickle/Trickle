@@ -1,6 +1,7 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "MapPreviewer.h"
+#include "StageInfoRes.h"
 #include <queue>
 #include <functional>
 
@@ -13,21 +14,14 @@
 
 class StageAlert : public TaskObject {
 private:
-	typedef struct _Animation {
-		Box2D					draw;
-		Box2D					src;
-		std::function<bool()>	action;
-		Easing					ease;
-	}Animation;
-	typedef std::pair<std::string, bool> Achievement;
 
 	bool Initialize(const Box2D&);
 	virtual void UpDate() override;
 	virtual void Render2D() override;
 	void Finalize();
 
+	bool preloadResource(const std::string&);
 	void changeTexture(Texture*, const std::string&, bool);
-	inline bool isAnimPlayable() const;
 	inline Box2D GetFixedCameraCoord(const Box2D&) const;
 	Box2D OptimizeForWindowSize(const Box2D&) const;
 
@@ -38,40 +32,30 @@ public:
 	/**
 	 @brief			ステージの詳細をファイルから読み込みます
 	 @param			ファイルのパス
-	 @return true	読み込みに成功した
-	 @note			ステージをクリアしたか、どんな評価をもらったかなどが「ステージ名前_save.txt」形で保存されます
 	 */
-	bool SetStageData(const std::string&);
+	void SetStageData(const std::string&);
 
 	/**
-	 @brief			転換するアニメーションを流します
+	 @brief			ステージごとに見せる情報データを予めInitします
+	 @param			関連情報が入ってるテキストファイルのパス
+	 @return true	読み込み成功
+	 @return false	読み込み失敗、テキストファイルの名前、パスなどが正しいかもう一度確認してみること！
 	 */
-	void AnimPlay();
+	bool operator<<(const std::string&);
 
 	typedef std::shared_ptr<StageAlert> SP;
 	static SP Create(bool, const Box2D&);
 
 private:
-	const static int MAX_ACHIEVEMENT = 3;
+	std::map<Texture*, Box2D>								draws;
+	std::map<Texture*, Box2D>								srcs;
+	Box2D													windowSize;
 
-private:
-	std::string									stageName;
-	bool										isClear = false;
-	Achievement									achievements[MAX_ACHIEVEMENT];
-	std::string									previewSrcName;
-
-	std::queue<Animation>						anis_origin;
-	std::queue<Animation>						anis;
-	Animation*									playingAnime;
-	std::map<Texture*, Box2D>					draws;
-	std::map<Texture*, Box2D>					srcs;
-	Box2D										windowSize;
-
-	Texture										background;
-	Texture										stageNameTex;
-	Texture										mission;
-	Texture										clearFlag;
-	std::array<Texture, MAX_ACHIEVEMENT>		achievementsTex;
-	std::array<Texture, MAX_ACHIEVEMENT>		starsTex;
-	MapPreviewer::SP							previewer;
+	Texture													background;
+	Texture													mission;
+	Texture													clearFlag;
+	std::array<Texture, StageInfoRes::MAX_ACHIEVEMENT>		starsTex;
+	std::map<std::string, StageInfoRes*>					infoRes;
+	StageInfoRes*											currentRes;
+	MapPreviewer::SP										previewer;
 };

@@ -6,11 +6,8 @@ StageAlert::~StageAlert() {
 	this->Finalize();
 }
 
-void StageAlert::AnimPlay() {
-	previewer->replaceThumbnail(previewSrcName);
-	previewer->setVisible(true);
-	anis = anis_origin;
-	playingAnime = &anis.front();
+bool StageAlert::operator<<(const std::string& path) {
+	return preloadResource(path);
 }
 
 StageAlert::SP StageAlert::Create(bool flag_, const Box2D& winSize)
@@ -42,19 +39,10 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	srcs.insert ({ &background, Box2D(0, 0,	TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y) });
 	draws.insert({ &mission,    Box2D((int)draws[&background].x + 20, (int)draws[&background].y + 175, TEXTURE_SIZE(mission).x, TEXTURE_SIZE(mission).y) });
 	srcs.insert ({ &mission,    Box2D(0, 0, TEXTURE_SIZE(mission).x, TEXTURE_SIZE(mission).y) });
-	draws.insert({ &stageNameTex, Box2D((int)draws[&background].x + 405, (int)draws[&background].y + 30 , 0, 100) });
-	srcs.insert ({ &stageNameTex, Box2D(0, 0, 0, 0) });
 	Box2D batch = Box2D((int)draws[&background].x + 310, (int)draws[&background].y + 150, 50, 50);
 	for (auto& a : starsTex) {
 		draws.insert({ &a, batch });
 		srcs.insert({ &a, Box2D(0, 0, TEXTURE_SIZE(a).x, TEXTURE_SIZE(a).y) });
-		batch.y += 50;
-	}
-	batch.x = (int)draws[&background].x + 330;
-	batch.y = (int)draws[&background].y + 150;
-	for (auto& a : achievementsTex) {
-		draws.insert({ &a, batch });
-		srcs.insert({ &a, Box2D(0, 0, 0, 0) });
 		batch.y += 50;
 	}
 
@@ -64,12 +52,18 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 			(int)windowSize.y + 300,
 			(int)windowSize.w - 100,
 			(int)windowSize.h - 325
-		), "stageinfo_test.jpg");
+		), "");
 	previewer->setVisible(true);
 
 	__super::Init((std::string)"stagealert");
 	__super::SetDrawOrder(0.8f);
 	std::cout << "stagealert ¶¬" << std::endl;
+	return true;
+}
+
+bool StageAlert::preloadResource(const std::string& path) {
+	StageInfoRes* res = new StageInfoRes(path);
+	infoRes.insert({ path, res });
 	return true;
 }
 
@@ -86,17 +80,7 @@ void StageAlert::changeTexture(Texture* target, const std::string& texName, bool
 #undef TEXTURE_SIZE
 
 void StageAlert::UpDate() {
-	if (isAnimPlayable()) {
-		if (!playingAnime || playingAnime->action()) {
-			anis.pop();
-			if (isAnimPlayable()) {
-				playingAnime = &anis.front();
-			}
-			else {
-				playingAnime = nullptr;
-			}
-		}
-	}
+	
 }
 
 void StageAlert::Render2D() {
@@ -114,10 +98,9 @@ void StageAlert::Finalize() {
 	for (auto& d : draws) {
 		d.first->Finalize();
 	}
-}
-
-inline bool StageAlert::isAnimPlayable() const {
-	return !anis.empty();
+	for (auto& r : infoRes) {
+		delete r.second;
+	}
 }
 
 inline Box2D StageAlert::GetFixedCameraCoord(const Box2D& origin) const {
@@ -135,35 +118,6 @@ Box2D StageAlert::OptimizeForWindowSize(const Box2D& b) const
 	return ret;
 }
 
-bool StageAlert::SetStageData(const std::string& fPath) {
-	std::ifstream file(fPath, std::ios::in);
-	if (file.is_open()) {
-		file >> stageName;
-		file >> previewSrcName;
-		std::ifstream saveFile(Stage::GetSaveFilePath(fPath), std::ios::in);
-		isClear = saveFile.is_open();
-
-		int i = 0;
-		for (auto& a : achievements) {
-			file >> a.first;
-			if (isClear) {
-				std::string buf;
-				saveFile >> buf;
-				a.second = (stoi(buf) != 0) ? true : false;
-				changeTexture(&starsTex[i], "Ster.png");
-			}
-			else {
-				a.second = false;
-				changeTexture(&starsTex[i], "SterB.png");
-			}
-			changeTexture(&achievementsTex[i], a.first, true);
-			i += 1;
-		}
-
-		changeTexture(&stageNameTex, stageName, true);
-		previewer->replaceThumbnail(previewSrcName);
-		return true;
-	}
-
-	return false;
+void StageAlert::SetStageData(const std::string& fPath) {
+	
 }

@@ -13,7 +13,7 @@ MapPreviewer::~MapPreviewer() {
 	std::cout << "MapPreviewer ‰ð•ú" << std::endl;
 }
 
-MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size, const std::string& mf)
+MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size, const std::string& mf = "")
 {
 	auto to = MapPreviewer::SP(new MapPreviewer());
 	if (to)
@@ -30,9 +30,11 @@ MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size, const std::
 	return nullptr;
 }
 
-bool MapPreviewer::Initialize(const Box2D& size, const std::string& mapFile) {
+bool MapPreviewer::Initialize(const Box2D& size, const std::string& mapFile = "") {
 	windowSize = size;
-	mapThumbnail.Create(mapFile);
+	if (!mapFile.empty()) {
+		mapThumbnail.Create(mapFile);
+	}
 	thumbSize = mapThumbnail.GetTextureSize();
 
 	__super::Init((std::string)"mappreviewer");
