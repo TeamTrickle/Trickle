@@ -5,6 +5,7 @@ class GameManager : public TaskObject
 	unsigned int Seconds;
 	unsigned int Minute;
 	unsigned int timeCnt;
+	unsigned int time;
 	bool isclear;
 	bool M_flag[3];
 	bool isMaxTime();

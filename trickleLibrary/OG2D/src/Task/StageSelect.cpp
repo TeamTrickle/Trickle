@@ -1,6 +1,7 @@
 #include "StageSelect.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_Title.h"
+#include "Task\Task_StageAlert.h"
 #include "Chara\Chara.h"
 #include "Back\Back.h"
 #include "Map\Map.h"
@@ -46,6 +47,8 @@ bool StageSelect::Initialize()
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.1f);
+	//ステージ概要表示用案内板
+	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
 	//サウンドの生成
 	//タグ指定
 	__super::Init((std::string)"select");
@@ -154,6 +157,11 @@ bool StageSelect::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto alert = OGge->GetTasks<StageAlert>("stagealert");
+	for (auto id = alert->begin(); id != alert->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	//扉情報すべて削除
 	this->Entrance.clear();
 	return true;
@@ -206,6 +214,11 @@ void StageSelect::From2()
 	//移動が終了したら
 	if (!this->camera_anim.isPlay())
 	{
+		auto board = OGge->GetTask<StageAlert>("stagealert");
+		if (board) {
+			//board->AnimPlay();
+			board->SetStageData("monitor0.txt");
+		}
 		//次へ移動
 		this->mode = Mode::from3;
 	}
@@ -260,6 +273,11 @@ void StageSelect::From3()
 						(*id)->ToOpen();
 					}
 				}
+				auto board = OGge->GetTask<StageAlert>("stagealert");
+				if (board) {
+					//board->AnimPlay();
+					board->SetStageData("monitor" + std::to_string(this->nowPos / 2) + ".txt");
+				}
 			}
 			//right入力
 			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
@@ -301,6 +319,11 @@ void StageSelect::From3()
 					{
 						(*id)->ToOpen();
 					}
+				}
+				auto board = OGge->GetTask<StageAlert>("stagealert");
+				if (board) {
+					//board->AnimPlay();
+					board->SetStageData("monitor" + std::to_string(this->nowPos / 2) + ".txt");
 				}
 			}
 			//決定入力

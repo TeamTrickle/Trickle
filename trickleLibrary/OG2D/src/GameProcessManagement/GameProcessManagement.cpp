@@ -13,6 +13,7 @@ GameManager::GameManager()
 	{
 		this->M_flag[i] = false;
 	}
+	this->time = 0;
 	__super::Init((std::string)"GM");
 }
 GameManager::~GameManager()
@@ -66,21 +67,28 @@ void GameManager::UpDate()
 	}
 	else
 	{
-		//クリア処理
-		//データの保存
-		auto game = OGge->GetTask<Game>("game");
-		if (game)
+		if (this->time > 180)
 		{
-			game->Kill();
-			if (*MapNum == 5 || *MapNum == 6)
+			//クリア処理
+			//データの保存
+			auto game = OGge->GetTask<Game>("game");
+			if (game)
 			{
-				//現在の記録を保存
-				this->OutData();
-				//現在の最大記録との比較
-				this->ComparisonData();
+				game->Kill();
+				if (*MapNum == 5 || *MapNum == 6)
+				{
+					//現在の記録を保存
+					this->OutData();
+					//現在の最大記録との比較
+					this->ComparisonData();
+				}
 			}
+			this->isclear = true;
 		}
-		this->isclear = true;
+		else
+		{
+			this->time++;
+		}
 	}
 }
 void GameManager::ResetData()

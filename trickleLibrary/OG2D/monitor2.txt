@@ -1,0 +1,5 @@
+stage2.png
+tutorial_preview.png
+stage2_01.png
+stage2_02.png
+stage2_03.png
