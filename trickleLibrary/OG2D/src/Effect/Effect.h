@@ -2,7 +2,7 @@
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
 
-class Effect : public TaskObject , public GameObject
+class Effect : public TaskObject, public GameObject
 {
 	class Animation
 	{
@@ -12,6 +12,9 @@ class Effect : public TaskObject , public GameObject
 		float time;
 		Vec2 startPos;
 		Vec2 endPos;
+		Vec2 preS;
+		Vec2 preE;
+		bool flag;
 	};
 public:
 	enum Mode
@@ -20,6 +23,8 @@ public:
 		Flash,
 		Decrease,
 		Expansion,
+		WindR,
+		WindL,
 	};
 private:
 	Texture* image;
@@ -41,7 +46,8 @@ public:
 	virtual ~Effect();
 	void UpDate();
 	void Render2D();
-	void Set(const Vec2& start_, const Vec2& end_,const float time_ = 10.f);
+	void Set(const Vec2& start_, const Vec2& end_, const float time_ = 10.f);
+	void SetWind(const Vec2&maxSize, const Vec2& start_, const Vec2& end_, const Mode& mode, const float time_ = 10.f);
 	void SetTexture(Texture*);
 	void Color_a(const float a);
 	void SetMode(const Mode&);

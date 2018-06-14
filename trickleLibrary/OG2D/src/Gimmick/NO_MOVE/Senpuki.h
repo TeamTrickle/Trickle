@@ -16,6 +16,7 @@
 #include "Object\Object.h"
 #include "Switch.h"
 #include "VolumeControl\volumeControl.h"
+#include "Effect\Effect.h"
 
 class Switch;
 
@@ -30,6 +31,9 @@ public:
 	bool startflag;
 	Sound sound;
 	VolumeControl volControl;
+	//エフェクト周りの情報
+	int effectCnt;
+	int effectnum;       //エフェクトの画像をランダムで決定
 
 	typedef std::shared_ptr<Fan> SP;
 	//座標、風の範囲(マス数)、向き、スイッチがオフ(初期状態)で稼働しているならtrue
@@ -46,11 +50,17 @@ private:
 	bool Finalize();		//解放処理
 	void SendWind();		//風で水蒸気を動かす
 
-	//std::shared_ptr<Switch> swich_;		//オンオフに対応するスイッチ
+							//std::shared_ptr<Switch> swich_;		//オンオフに対応するスイッチ
 	bool active_;						//自分が稼働しているならtrue(注：スイッチのboolと同じではない)
 
 	Dir dir;		//向き
 	Texture image;
+	Texture windimage;      //風の画像
+	Texture windimage2;     //風の画像2
+	Texture windimage3;      //風の画像
+	Texture windimage4;      //風の画像
+	Texture windimage5;      //風の画像
+
 	const Box2D Src = { 0,0,768 / 3,256 };
 	float range;
 	float movePos;
