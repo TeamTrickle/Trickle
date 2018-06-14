@@ -13,11 +13,11 @@ private:
 	Texture image;
 	const Box2D Src = {0,0,269,85};
 
-	//回転
-	Vec2 rotate;
-
-	//拡大機能変数
-	float Volume;
+	//拡大機能
+	Vec2  Center;			//描画中央固定座標
+	Vec2  ReSize;			//新しくリサイズしたScale
+	Vec2  ScaleVolume;		//拡大率
+	Vec2  PreSize;			//前回のデータを取っておく
 	bool  Volumefinish;
 
 private:
@@ -29,10 +29,10 @@ private:
 	ClearUI();
 
 	//拡大機能
-	void ResetVolume();
-	void ResetVolumeFlag();
+	void MoveVolume();		  //拡大率を少しずつ上昇させていきます
+	void ResetVolume();	      //拡大率を上げるための初期化を行う
+	void ResetCenter();		  //中央値の再計算をします（1フレームで計算をして終了をさせること）
 	void SetVolumeFlag(bool);
-	void MoveVolume();
 public:
 	virtual ~ClearUI();
 	typedef std::shared_ptr<ClearUI> SP;

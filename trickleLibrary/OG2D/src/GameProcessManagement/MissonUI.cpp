@@ -8,6 +8,7 @@ bool MissionUI::Initialize()
 	//EasingÝ’è
 	easingY.Init();
 	easingY.ResetTime();
+	this->isEasinged = false;
 
 	Vec2 camerasize = OGge->camera->GetSize();
 	CreateObject(Cube, Vec2((int)camerasize.x / 2 - 200,0), Vec2(512, 64), 0);
@@ -32,7 +33,11 @@ void MissionUI::EasingMove()
 	if(easingY.isplay())
 	{
 		//ã‚©‚ç‰º
-		position.y = easingY.quint.Out(10, camerasize.y / 100 * 80  , -camerasize.y / 100 * 80 + 30 , easingY.Time(10));
+		position.y = easingY.quint.Out(19.35f, camerasize.y / 100 * 80  , -camerasize.y / 100 * 80 + 30 , easingY.Time(19.35f));
+	}
+	else
+	{
+		this->isEasinged = true;
 	}
 }
 void MissionUI::UpDate()
@@ -46,6 +51,10 @@ void MissionUI::Render2D()
 	Box2D src = this->Src;
 	src.OffsetSize();
 	image.Draw(draw, src);
+}
+bool MissionUI::isEasingPleyfinish()
+{
+	return this->isEasinged;
 }
 MissionUI::MissionUI()
 {
