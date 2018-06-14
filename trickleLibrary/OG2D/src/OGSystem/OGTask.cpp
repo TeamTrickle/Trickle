@@ -3,6 +3,9 @@
 #include "Task\Task_Game.h"
 #include "Task\Task_TitleMovement.h"
 #include "Task\Task_Game.h"
+
+#include "Task\Task_Result.h"
+
 void OGTK::_myGameInitialize()
 {
 	//¶¬‚·‚éWindowî•ñ
@@ -16,8 +19,9 @@ void OGTK::_myGameInitialize()
 void OGTK::StartTaskObject()
 {
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
-	auto TopTask = Title::Create();
-	
+	//auto TopTask = Title::Create();
+	auto task = Result::Create();
+	OGge->camera->SetSize(Vec2(1920, 1080));
 }
 
 OGTK::~OGTK()
