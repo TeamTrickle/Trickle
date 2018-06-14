@@ -15,7 +15,7 @@ GameManager::GameManager()
 }
 GameManager::~GameManager()
 {
-	if (*MapNum == 5 || *MapNum == 6)
+	if ((*MapNum == 5 || *MapNum == 6) && this->isClear())
 	{
 		Result::Create();
 	}
