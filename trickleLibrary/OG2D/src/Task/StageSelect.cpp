@@ -217,7 +217,7 @@ void StageSelect::From2()
 		auto board = OGge->GetTask<StageAlert>("stagealert");
 		if (board) {
 			//board->AnimPlay();
-			board->SetStageData("tutorial.txt");
+			board->SetStageData("monitor0.txt");
 		}
 		//ŽŸ‚ÖˆÚ“®
 		this->mode = Mode::from3;
@@ -273,6 +273,11 @@ void StageSelect::From3()
 						(*id)->ToOpen();
 					}
 				}
+				auto board = OGge->GetTask<StageAlert>("stagealert");
+				if (board) {
+					//board->AnimPlay();
+					board->SetStageData("monitor" + std::to_string(this->nowPos / 2) + ".txt");
+				}
 			}
 			//right“ü—Í
 			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
@@ -314,6 +319,11 @@ void StageSelect::From3()
 					{
 						(*id)->ToOpen();
 					}
+				}
+				auto board = OGge->GetTask<StageAlert>("stagealert");
+				if (board) {
+					//board->AnimPlay();
+					board->SetStageData("monitor" + std::to_string(this->nowPos / 2) + ".txt");
 				}
 			}
 			//Œˆ’è“ü—Í
