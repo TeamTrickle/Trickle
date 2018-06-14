@@ -43,26 +43,33 @@ void TimeSign::UpDate() {
 		currentTime[1] = timeSrc->MinuteTime() % 10;
 		currentTime[2] = timeSrc->SecondsTime() / 10;
 		currentTime[3] = timeSrc->SecondsTime() % 10;
+		activate = true;
+	}
+	else {
+		std::cout << "TimeSignƒGƒ‰[FŽžŠÔî•ñ‚ðŽ‚Á‚Ä‚±‚ê‚Ü‚¹‚ñ" << std::endl;
+		activate = false;
 	}
 }
 
 void TimeSign::Render2D() {
-	// ”wŒi‰æ‘œ
-	{
-		Box2D draw = originPos;
-		draw.OffsetSize();
-		Box2D src(0.f, 0.f, originPos.w, originPos.h);
-		src.OffsetSize();
-		base.Draw(draw, src);
-	}
+	if (activate) {
+		// ”wŒi‰æ‘œ
+		{
+			Box2D draw = originPos;
+			draw.OffsetSize();
+			Box2D src(0.f, 0.f, originPos.w, originPos.h);
+			src.OffsetSize();
+			base.Draw(draw, src);
+		}
 
-	// ”Žš
-	for (int i = 0; i < timerDraws.size(); ++i) {
-		Box2D draw = timerDraws[i];
-		draw.OffsetSize();
-		Box2D src = numberSrcs[currentTime[i]];
-		src.OffsetSize();
-		numberAtlas.Draw(draw, src);
+		// ”Žš
+		for (int i = 0; i < timerDraws.size(); ++i) {
+			Box2D draw = timerDraws[i];
+			draw.OffsetSize();
+			Box2D src = numberSrcs[currentTime[i]];
+			src.OffsetSize();
+			numberAtlas.Draw(draw, src);
+		}
 	}
 }
 
@@ -76,9 +83,12 @@ void TimeSign::ClearNumberAtlas() {
 	numberSrcs.clear();
 }
 
-void TimeSign::setAtlas(const std::string& path, const Box2D& lettersize) {
+void TimeSign::setAtlas(const std::string& path, const Box2D& lettersize, const Vec2& initPos = Vec2(0, 0)) {
 	ClearNumberAtlas();
 	numberAtlas.Create(path);
+
+	timerDraws[0].x = originPos.x + initPos.x;
+	timerDraws[0].y = originPos.y + initPos.y;
 	
 	int number = 0;
 	Box2D numberBox = Box2D(0.f , lettersize.y, lettersize.w, lettersize.h);
