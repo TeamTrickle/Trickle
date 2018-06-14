@@ -729,7 +729,22 @@ bool Water::HeadSolidCheck()
 
 bool Water::SetColor(const Paint::PaintColor& color)
 {
-	this->color = color;
+	if (this->color == Paint::PaintColor::Purple)
+	{
+		
+	}
+	else if (this->color == Paint::PaintColor::Blue && color == Paint::PaintColor::Red)
+	{
+		this->color = Paint::PaintColor::Purple;
+	}
+	else if (this->color == Paint::PaintColor::Red && color == Paint::PaintColor::Blue)
+	{
+		this->color = Paint::PaintColor::Purple;
+	}
+	else
+	{
+		this->color = color;
+	}
 	switch (this->color)
 	{
 	case Paint::PaintColor::Red:
