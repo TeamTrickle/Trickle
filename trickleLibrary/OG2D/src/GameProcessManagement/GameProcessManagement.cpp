@@ -2,41 +2,6 @@
 #include "Goal\Goal.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_Result.h"
-#include "Task/StageSelect.h"
-
-bool GameProcessManagement::Initialize()
-{
-	//タスク関連
-	this->taskName = "GameProcessManagement";		//検索時に使うための名を登録する
-	__super::Init(taskName);		//TaskObject内の処理を行う
-
-	//フラグ関連
-	gameclear_flag = false;                 //初期値はfalseにしておく
-	pause_flag = false;
-	this->mission.Flag = 0;
-
-	timer = Timer::Create();
-
-
-
-	cout << "進行管理クラス　初期化" << endl;
-	return true;
-}
-void GameProcessManagement::UpDate()
-{
-	//--------------------
-	//更新時に行う処理を記述
-	//--------------------
-	Goal_Check();                        //ゴールを全てしているのかどうか？
-	Goal_Event();
-}
-
-void GameProcessManagement::Render2D()
-{
-	//--------------------
-	//描画時に行う処理を記述
-	//--------------------
-}
 GameManager::GameManager()
 {
 	this->Seconds = 0;
@@ -55,8 +20,8 @@ void GameManager::UpDate()
 {
 	if (!this->isClear())
 	{
-		//時間をプラスする
-		//60秒を超えたら分をプラスし秒をリセット
+		//���Ԃ��v���X����
+		//60�b�𒴂����番���v���X���b�����Z�b�g
 		if (!this->isMaxTime())
 		{
 			this->timeCnt++;
@@ -77,8 +42,8 @@ void GameManager::UpDate()
 	}
 	else
 	{
-		//クリア処理
-		//データの保存
+		//�N���A����
+		//�f�[�^�̕ۑ�
 		auto game = OGge->GetTask<Game>("game");
 		if (game)
 		{
@@ -88,9 +53,6 @@ void GameManager::UpDate()
 				this->OutData();
 			}
 		}
-		//クリアしていないときはタイマーを動かす
-		//timer->Frame_Set();
-		goalCheck.clear();
 	}
 }
 bool GameManager::isMaxTime()
@@ -110,7 +72,7 @@ bool GameManager::isClear()
 	auto goals = OGge->GetTasks<Goal>("Goal");
 	for (auto id = goals->begin(); id != goals->end(); ++id)
 	{
-		//１つでもクリアしていないのならfalseを返す
+		//�P�ł��N���A���Ă��Ȃ��̂Ȃ�false��Ԃ�
 		if (!(*id)->GetClear())
 		{
 			return false;
@@ -120,100 +82,75 @@ bool GameManager::isClear()
 }
 bool GameManager::OutData()
 {
-	ofstream fin(TimeFilePath);							//ファイルのパスの指定
-	fin << timer->Get_frame() << "," << std::endl;		//タイマーのフレーム数を書き込み
-	if (gameclear_flag)
+	std::string path = "./data/Result/save" + std::to_string((int)*MapNum) + ".bin";
+	std::ofstream ofs(path, std::ios::out | std::ios::binary);
+	if (!ofs)
 	{
+		std::cout << "�t�@�C�������݂��܂���" << std::endl;
+	}
+	//�N���A���Ă���ꍇ
+	if (this->isClear())
+	{
+		//���Ԃ̕ۑ�
+		ofs << this->Minute << "," << this->Seconds << std::endl;
 		switch (*MapNum)
 		{
 		case 5:
-			fin << "Stage1";
-			fin << ",";
-			//各自の達成項目について判定をしてフラグを代入させる
-			this->Flag_Judge(*MapNum,fin);
+			//�X�e�[�W�P�̃~�b�V����
+			if (this->Minute * 60 + this->Seconds <= 120)
+			{
+				ofs << "t,";
+			}
+			else
+			{
+				ofs << "f," ;
+			}
+
+			if (this->Minute * 60 + this->Seconds <= 90)
+			{
+				ofs << "t,";
+			}
+			else
+			{
+				ofs << "f,";
+			}
+
+			if (this->Minute * 60 + this->Seconds <= 60)
+			{
+				ofs << "t," ;
+			}
+			else
+			{
+				ofs << "f," ;
+			}
 			break;
 		case 6:
-			fin << "Stage2";
-			fin << ",";
-			//各自の達成項目について判定をしてフラグを代入させる
-			this->Flag_Judge(*MapNum,fin);
+		{
+			//�X�e�[�W�Q�̃~�b�V����
+			auto goals = OGge->GetTasks<Goal>("Goal");
+			for (auto id = goals->begin(); id != goals->end(); ++id)
+			{
+				if ((*id)->ColorCheck())
+				{
+					ofs << "t," ;
+				}
+				else
+				{
+					ofs << "f," ;
+				}
+			}
+		}
+			break;
+		default:
 			break;
 		}
 	}
-	fin.close();							//ファイルを閉じる
-}
-bool GameProcessManagement::isAllGoal()
-{
-	return this->gameclear_flag;
-}
-int GameProcessManagement::GetFlag()
-{
-	return this->mission.Flag;
-}
-void GameProcessManagement::Mission::Flag_Input(GameProcessManagement::Achievement flag)
-{
-	this->Flag |= flag;
-}
-void GameProcessManagement::Mission::Flag_Judge_Clear()
-{
-	this->Flag &= ~this->Flag;
-}
-void GameProcessManagement::Flag_Judge(unsigned short& mapnumber, std::ofstream& fin)
-{
-	//条件を書く　IF
-	//フラグを代入する
-	//ファイルにデータを書く
-	int cleartime = this->timer->GetTime();
-
-	switch (mapnumber)
+	else
 	{
-	case 5:
-		//条件をここに入力する
-		//フラグ１の条件 30秒以内にゴールをした
-		if (cleartime <= 30)
-		{
-			fin << "Flag1" << ",";
-			this->mission.Flag_Input(Achievement::Flag1);
-			fin << "Flag2" << ",";
-			this->mission.Flag_Input(Achievement::Flag2);
-			fin << "Flag3" << ",";
-			this->mission.Flag_Input(Achievement::Flag3);
-			fin << std::endl;
-		}
-		//フラグ２の条件 60秒以内にゴールをした
-		if (cleartime <= 60)
-		{
-			fin << "Flag2" << ",";
-			this->mission.Flag_Input(Achievement::Flag2);
-			fin << "Flag3" << ",";
-			this->mission.Flag_Input(Achievement::Flag3);
-			fin << std::endl;
-		}
-		//フラグ３の条件 120秒以内にゴールをした
-		if (cleartime <= 120)
-		{
-			fin << "Flag3" << ",";
-			this->mission.Flag_Input(Achievement::Flag3);
-			fin << std::endl;
-		}
-		break;
-	case 6:
-		//条件をここに入力する
-
-		break;
-	default:
-		break;
+		//����ȊO(��O����)
+		ofs << -1 << std::endl;
 	}
-}
-GameProcessManagement::GameProcessManagement()
-{
-	cout << "進行管理クラス　生成" << endl;
-}
-
-GameProcessManagement::~GameProcessManagement()
-{
-	this->Finalize();
-	cout << "進行管理クラス　解放" << endl;
+	return true;
 }
 GameManager::SP GameManager::Create(bool flag)
 {
