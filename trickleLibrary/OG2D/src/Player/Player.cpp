@@ -858,6 +858,14 @@ Vec2 Player::Animation::Move(Motion motion_)
 	//XŽ²‚¾‚¯ˆÚ“®(–Ú“I’n‚Ü‚Å•à‚¢‚Äs‚­)
 	if (this->animationVec.x != 0.f)
 	{
+		if (this->animationVec.x > 0.f)
+		{
+			player->direction = Player::Direction::RIGHT;
+		}
+		else if (this->animationVec.x < 0.f)
+		{
+			player->direction = Player::Direction::LEFT;
+		}
 		player->motion = Motion::Walk;
 		if (this->animationVec.x >= 1.0f)
 		{
