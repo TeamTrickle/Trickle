@@ -1,5 +1,4 @@
 #include "Task_StageAlert.h"
-#include "StageFileSys.h"
 #include <fstream>
 
 StageAlert::~StageAlert() {
@@ -41,6 +40,8 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	background.Create((std::string)"stagealert_background.png");
 	mission.Create((std::string)"stagealert_mission.png");
 	clearFlag.Create((std::string)"stagealert_clearflag.png");
+	clearStarTex.Create((std::string)"Ster.png");
+	normalStarTex.Create((std::string)"SterB.png");
 	rm->SetTextureData((std::string)"Ster.png", &clearStarTex);
 	rm->SetTextureData((std::string)"SterB.png", &normalStarTex);
 
@@ -50,10 +51,19 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	draws.insert({ &mission,    Box2D((int)draws[&background].x + 20, (int)draws[&background].y + 175, TEXTURE_SIZE(mission).x, TEXTURE_SIZE(mission).y) });
 	srcs.insert ({ &mission,    Box2D(0, 0, TEXTURE_SIZE(mission).x, TEXTURE_SIZE(mission).y) });
 	Box2D batch = Box2D((int)draws[&background].x + 310, (int)draws[&background].y + 150, 50, 50);
-	for (auto& a : starFixedDraw) {
-		a = batch;
+	for (int i = 0; i < starFixedDraw.size(); ++i) {
+		starFixedDraw[i] = batch;
+		achievementFixedDraw[i] = batch;
+		achievementFixedDraw[i].x += 60.f;
+		achievementFixedDraw[i].w = 600.f;
 		batch.y += 50;
 	}
+
+	titleDraw = draws[&background];
+	titleDraw.x += 380;
+	titleDraw.y += 10;
+	titleDraw.w = 600;
+	titleDraw.h = 110;
 
 	previewer = MapPreviewer::Create(true, 
 		Box2D(
@@ -101,15 +111,35 @@ void StageAlert::Render2D() {
 		}
 
 		// î•ñ
-		currentRes->atlas->Draw(titleDraw, currentRes->title);
+		Box2D draw, src;
+
+		draw = titleDraw;
+		src = currentRes->title;
+		draw.OffsetSize();
+		src.OffsetSize();
+
+		currentRes->atlas->Draw(draw, src);
 		for (int i = 0; i < StageInfoRes::MAX_ACHIEVEMENT; ++i) {
 			if (currentRes->isThisAchievementClear(i)) {
-				clearStarTex.Draw(starFixedDraw[i], getSrcOriginal(&clearStarTex));
+				draw = starFixedDraw[i];
+				src = getSrcOriginal(&clearStarTex);
+				draw.OffsetSize();
+				src.OffsetSize();
+				clearStarTex.Draw(draw, src);
 			}
 			else {
-				normalStarTex.Draw(starFixedDraw[i], getSrcOriginal(&normalStarTex));
+				draw = starFixedDraw[i];
+				src = getSrcOriginal(&normalStarTex);
+				draw.OffsetSize();
+				src.OffsetSize();
+				normalStarTex.Draw(draw, src);
 			}
-			currentRes->atlas->Draw(achievementFixedDraw[i], currentRes->achievement[i].first);
+			draw = achievementFixedDraw[i];
+			src = currentRes->achievement[i].first;
+			draw.w = src.w;
+			draw.OffsetSize();
+			src.OffsetSize();
+			currentRes->atlas->Draw(draw, src);
 		}
 	}
 }
@@ -122,6 +152,11 @@ void StageAlert::Finalize() {
 	for (auto& r : infoRes) {
 		delete r.second;
 	}
+	clearFlag.Finalize();
+	clearStarTex.Finalize();
+	normalStarTex.Finalize();
+	rm->DeleteTexture((std::string)"Ster.png");
+	rm->DeleteTexture((std::string)"SterB.png");
 }
 
 inline Box2D StageAlert::GetFixedCameraCoord(const Box2D& origin) const {
@@ -142,4 +177,5 @@ Box2D StageAlert::OptimizeForWindowSize(const Box2D& b) const
 void StageAlert::SetStageData(const std::string& fPath) {
 	currentRes = infoRes[fPath];
 	previewer->replaceThumbnail(currentRes->mapInfo);
+	previewer->setVisible(true);
 }

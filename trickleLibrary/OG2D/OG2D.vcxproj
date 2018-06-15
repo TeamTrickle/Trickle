@@ -269,7 +269,6 @@
     <ClInclude Include="src\Recorder\RecDef.h" />
     <ClInclude Include="src\Recorder\Recorder.h" />
     <ClInclude Include="src\Recorder\RecPlayer.h" />
-    <ClInclude Include="src\StageFileSys.h" />
     <ClInclude Include="src\Task\MapPreviewer.h" />
     <ClInclude Include="src\Task\StageInfoRes.h" />
     <ClInclude Include="src\Task\StageSelect.h" />

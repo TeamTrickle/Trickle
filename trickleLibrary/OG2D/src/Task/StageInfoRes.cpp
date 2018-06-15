@@ -1,5 +1,4 @@
 #include "StageInfoRes.h"
-#include "StageFileSys.h"
 #include "OGSystem\ResourceManager\ResourceManager.h"
 
 
@@ -36,6 +35,8 @@ Box2D StageInfoRes::stringToBox2D(const std::string& str) {
 Texture* StageInfoRes::loadFromTexture(std::string& path) {
 	Texture* ret = rm->GetTextureData(path);
 	if (ret == nullptr) {
+		ret = new Texture();
+		ret->Create(path);
 		rm->SetTextureData(path, ret);
 	}
 	return ret;
@@ -50,8 +51,10 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		atlas = loadFromTexture(atlasFileName);
 		file >> mapInfoFileName;
 		mapInfo = loadFromTexture(mapInfoFileName);
+		file >> buf;
+		title = stringToBox2D(buf);
 
-		std::ifstream saveFile(Stage::GetSaveFilePath(filePath), std::ios::in);
+		std::ifstream saveFile(filePath + "sss", std::ios::in);
 		bool isCleared = saveFile.is_open();
 		
 		for (auto& a : achievement) {
@@ -72,7 +75,7 @@ StageInfoRes::~StageInfoRes() {
 	atlas->Finalize();
 	mapInfo->Finalize();
 	rm->DeleteTexture(atlasFileName);
-	rm->DeleteSound(mapInfoFileName);
+	rm->DeleteTexture(mapInfoFileName);
 }
 
 bool StageInfoRes::isThisAchievementClear(const int& idx) const

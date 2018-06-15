@@ -518,9 +518,6 @@
     <ClInclude Include="src\Task\Task_StageAlert.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
-    <ClInclude Include="src\StageFileSys.h">
-      <Filter>ソースファイル\Task\StageSelect</Filter>
-    </ClInclude>
     <ClInclude Include="src\Task\MapPreviewer.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
