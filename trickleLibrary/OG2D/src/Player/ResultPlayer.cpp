@@ -116,7 +116,6 @@ void ResultPlayer::Think()
 		break;
 	}
 	animetion.MotionChenge(nm);
-	std::cout << nm << std::endl;
 }
 void ResultPlayer::Motion()
 {
