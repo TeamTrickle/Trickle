@@ -22,6 +22,7 @@ GameManager::~GameManager()
 	{
 		if (*MapNum == 5 || *MapNum == 6)
 		{
+			OGge->ChengeTask();
 			Result::Create();
 		}
 		else

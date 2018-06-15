@@ -40,6 +40,7 @@ class Goal : public GameObject, public TaskObject
 	CameraAnim cm_Size;
 	Vec2* precmPos;
 	Vec2* precmSize;
+	bool isGoalCheck();
 public:
 	explicit Goal(const Vec2& pos);
 	virtual ~Goal();

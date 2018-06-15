@@ -2,14 +2,15 @@
 #include "Chara\Chara.h"
 #include "Back\Back.h"
 #include "Map\Map.h"
-
+#include "Effect/Effect.h"
+#include "StageSelect.h"
 
 Result::Result() {
 	this->taskName = "Result";
 	__super::Init(taskName);
 }
 Result::~Result() {
-
+	this->Finalize();
 }
 
 bool Result::Initialize() {
@@ -22,18 +23,25 @@ bool Result::Initialize() {
 	//this->clearTex
 
 	this->nowMode = Mode1;
-	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64*8));
+	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
 	npc->SetDirection(Chara::Direction::RIGHT);
 	npc->Set(Vec2(-120, 64 * 8), Vec2(64 * 2, 64 * 8), 15.f);
 	Map::Create((std::string)"result.csv");
-
+	//TIME
 	time.nowWH = Vec2(0, 0);
 	time.pos = Vec2(150 + 64 * 2, 280 + 32);
 	for (int i = 0; i < 3; ++i) {
+		//星の枠
 		starFrame[i].nowWH = Vec2(0, 0);
-		starFrame[i].pos = Vec2(300 + 64 + i * 200, 370 + 64 - 8*i);
-
-		starFlag[i] = false;
+		starFrame[i].pos = Vec2(300 + 64 + i * 200, 370 + 64 - 8 * i);
+		//星
+		star[i].nowWH = Vec2(512, 512);
+		star[i].pos = Vec2(1280, 300);
+		star[i].bezcnt = 0.0f;
+		star[i].angle = -5;
+		//星出すフラグ
+		starFlag[i] = true;
+		starturn[i] = false;
 		num[i] = 0;
 	}
 	num[3] = 0;
@@ -45,6 +53,8 @@ void Result::UpDate() {
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
 	float pretimew = 0, pretimeh = 0;
+	float prestarw[3] = {}, prestarh[3] = {};
+	float starytmp[3] = {};
 	float presfw = 0, presfh = 0;
 	switch (nowMode) {
 	case Mode1:
@@ -56,12 +66,12 @@ void Result::UpDate() {
 	case Mode2:
 		++cnt;
 		//TIME
-		if (time.nowWH.x < 64*4) {
+		if (time.nowWH.x < 64 * 4) {
 			pretimew = time.nowWH.x;
-			time.nowWH.x = time.easeX.expo.In(time.easeX.Time(3), 0.0f, 64*4, 3);
+			time.nowWH.x = time.easeX.expo.In(time.easeX.Time(3), 0.0f, 64 * 4, 3);
 			time.pos.x -= (time.nowWH.x - pretimew) / 2.0f;
-			if (time.nowWH.x == pretimew) {
-				time.nowWH.x = 64*4;
+			if (time.nowWH.x >= 64 * 4) {
+				time.nowWH.x = 64 * 4;
 				time.pos.x = 150;
 			}
 		}
@@ -69,7 +79,7 @@ void Result::UpDate() {
 			pretimeh = time.nowWH.y;
 			time.nowWH.y = time.easeY.bounce.In(time.easeY.Time(3), 0.0f, 64, 3);
 			time.pos.y -= (time.nowWH.y - pretimeh) / 2.0f;
-			if (time.nowWH.y == pretimeh) {
+			if (time.nowWH.y >= 64) {
 				time.nowWH.y = 64;
 				time.pos.y = 280;
 			}
@@ -80,7 +90,7 @@ void Result::UpDate() {
 				presfw = starFrame[i].nowWH.x;
 				starFrame[i].nowWH.x = starFrame[i].easeX.expo.In(starFrame[i].easeX.Time(3), 0.0f, 64 * 2, 3);
 				starFrame[i].pos.x -= (starFrame[i].nowWH.x - presfw) / 2.0f;
-				if (starFrame[i].nowWH.x == presfw) {
+				if (starFrame[i].nowWH.x >= 64 * 2) {
 					starFrame[i].nowWH.x = 64 * 2;
 					starFrame[i].pos.x = 300 + i * 200;
 				}
@@ -89,7 +99,7 @@ void Result::UpDate() {
 				presfh = starFrame[i].nowWH.y;
 				starFrame[i].nowWH.y = starFrame[i].easeY.bounce.In(starFrame[i].easeY.Time(3), 0.0f, 64 * 2, 3);
 				starFrame[i].pos.y -= (starFrame[i].nowWH.y - presfh) / 2.0f;
-				if (starFrame[i].nowWH.y == presfh) {
+				if (starFrame[i].nowWH.y >= 64 * 2) {
 					starFrame[i].nowWH.y = 64 * 2;
 					starFrame[i].pos.y = 370 - i * 8;
 				}
@@ -113,22 +123,61 @@ void Result::UpDate() {
 			}
 		}
 		if (cnt >= 150) {
-			this->nowMode = Mode6;
-			npc->Set(Vec2(64 * 2, 64 * 8), Vec2(1500, 64 * 8), 30.f);
-
+			this->nowMode = Mode4;
+			cnt = 0;
 		}
 		break;
 	case Mode4:
+		++cnt;
 		//星出現
+		for (int i = 0; i < 3; ++i) {
+			if (starFlag[i] && cnt >= 20 * i) {	
+				star[i].bezcnt += 0.03f;
+				star[i].angle += 15;
+				//X
+				star[i].pos.x = (1 - star[i].bezcnt)*(1 - star[i].bezcnt) * 1280 + 2 * (1 - star[i].bezcnt)*star[i].bezcnt * 1000 + star[i].bezcnt * star[i].bezcnt * (300 + i * 200);
+					if (star[i].pos.x <= 300 + i * 200) {
+						star[i].pos.x = 300 + i * 200;
+					}
+				//Y
+				star[i].pos.y = (1 - star[i].bezcnt)*(1 - star[i].bezcnt) * 300 + 2 * (1 - star[i].bezcnt)*star[i].bezcnt * 0 + star[i].bezcnt * star[i].bezcnt * (370 - i * 8);
+				if (star[i].pos.y >= 370 - i * 8) {
+					star[i].pos.y = 370 - i * 8;
+				}
+				//W,H縮小
+				star[i].nowWH.x = star[i].nowWH.y = star[i].easeX.cubic.Out(star[i].easeX.Time(5), 512, 128 - 512, 5);
+				if (star[i].nowWH.x <= 128) {
+					star[i].nowWH.x = star[i].nowWH.y = 128;
+				}
+				//停止地点に到着
+				if (star[i].pos == Vec2(300 + i * 200, 370 - i * 8) && star[i].nowWH == Vec2(128, 128)) {
+					star[i].angle = -5;
+					auto eff = Effect::Create(Vec2(300 + i * 200, 370 - i * 8), Vec2(32, 32), Vec2(256, 256), 1, 5);
+					eff->SetTexture(&this->starTex);
+				}
+			}
+		}
+		if (star[2].pos == Vec2(300 + 2 * 200, 370 - 2 * 8) && star[2].nowWH == Vec2(128,128)) {
+			this->nowMode = Mode5;
+		}
 		break;
-	case Mode5:	
-		//プレイヤ喜びモーション
-		//クリアUI出現
+	case Mode5:
+		//プレイヤ喜びモーション(未実装)
+		//クリアUI出現(未実装)
 
+		if (OGge->in->down(Input::in::B2))
+		{
+			npc->Set(Vec2(64 * 2, 64 * 8), Vec2(1500, 64 * 8), 30.f);
+			this->nowMode = Mode6;
+		}
 		break;
 	case Mode6:
 		//プレイヤ退場
 		npc->AutoMove();
+		if (npc->position.x >=  1450) {
+			this->nowMode = Non;
+			this->Kill();
+		}
 		break;
 	case Non:
 	default:
@@ -136,15 +185,18 @@ void Result::UpDate() {
 	}
 }
 void Result::Render2D() {
+	//背景
 	{
 		backTex.Draw(Box2D(0, 0, 1280, 720), Box2D(0, 0, 1280, 720));
 	}
-	{	
+	//モニター枠
+	{
 		Box2D draw((1280 - 1400) / 2, 720 - 700 - 32, 1400, 700);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1000, 500);
 		frameTex.Draw(draw, src);
 	}
+	//Result
 	{
 		Box2D draw(470, 110, 64 * 6, 64);
 		draw.OffsetSize();
@@ -154,6 +206,7 @@ void Result::Render2D() {
 		fontui.Draw(draw, src);
 	}
 	//rm->GetTextureData((std::string)"fontui")->Draw(result.draw, result.src);
+	//TIME
 	{
 		Box2D draw(time.pos.x, time.pos.y, time.nowWH.x, time.nowWH.y);
 		draw.OffsetSize();
@@ -161,6 +214,7 @@ void Result::Render2D() {
 		src.OffsetSize();
 		fontui.Draw(draw, src);
 	}
+	//星の枠
 	{
 		for (int i = 0; i < 3; ++i) {
 			Box2D draw(starFrame[i].pos.x, starFrame[i].pos.y, starFrame[i].nowWH.x, starFrame[i].nowWH.y);
@@ -170,8 +224,10 @@ void Result::Render2D() {
 			starTex.Draw(draw, src);
 		}
 	}
+	//タイム
 	{
 		if (nowMode >= Mode3) {
+			//数字
 			for (int i = 0; i < 4; ++i) {
 				Box2D draw(150 + 64 * 4 + 100 + 96 * i, 250 - 7 * i, 96, 96);
 				draw.OffsetSize();
@@ -180,6 +236,7 @@ void Result::Render2D() {
 				numberui.Rotate(-5);
 				numberui.Draw(draw, src);
 			}
+			//：
 			Box2D draw(150 + 96 * 4 + 100 + 40, 260 - 17, 64, 64);
 			draw.OffsetSize();
 			Box2D src(64 * 10, 0, 40, 64);
@@ -187,8 +244,44 @@ void Result::Render2D() {
 			numberui.Draw(draw, src);
 		}
 	}
+	//星
+	{
+		if (nowMode >= Mode4) {
+			for (int i = 0; i < 3; ++i) {
+				Box2D draw(star[i].pos, star[i].nowWH);
+				draw.OffsetSize();
+				Box2D src(256, 0, 256, 256);
+				src.OffsetSize();
+				starTex.Rotate(star[i].angle);
+				starTex.Draw(draw, src);
+			}
+		}
+	}
 }
 bool Result::Finalize() {
+	//解放処理
+	this->backTex.Finalize();
+	//this->clearTex.Finalize();
+	this->frameTex.Finalize();
+	this->fontui.Finalize();
+	this->numberui.Finalize();
+	this->starTex.Finalize();
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto npc = OGge->GetTask<Chara>("Chara");
+	if (npc) { npc->Kill(); }
+	auto map = OGge->GetTask<Map>("map");
+	if (map) { map->Kill(); }
+	//ステージセレクトに戻る
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		OGge->ChengeTask();
+		StageSelect::Create();
+	}
+
 	return true;
 }
 

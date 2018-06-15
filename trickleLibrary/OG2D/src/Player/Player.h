@@ -87,6 +87,7 @@ private:
 	int inv;													//無敵時間
 	std::string taskName;
 	bool hold;
+	bool isInputAuto;
 private:
 	bool HeadCheck();											//頭の当たり判定
 	bool FootCheck();											//足元の当たり判定
@@ -118,12 +119,18 @@ public:
 	State NowState() const;										//現在のStateを返す
 	void SetPos(Vec2&);											//プレイヤーの位置を設定する
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
+	void SetInputAuto(bool);
+	bool GetInputAuto() const;
 	bool ReleaseHold();
 	//入力処理簡略化
 	bool InputLeft();
 	bool InputRight();
 	bool InputDown();
 	bool InputUp();
+	bool InputB1down();
+	bool InputB2down();
+	bool InputB1on();
+	bool InputB2on();
 	float AxisLX();
 	float AxisLY();
 	float AxisRX();

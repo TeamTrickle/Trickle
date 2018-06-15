@@ -45,6 +45,10 @@ private:
 		Vec2 preWH;
 		Easing easeX;
 		Easing easeY;
+		Easing easeW;
+		Easing easeH;
+		float bezcnt;
+		int angle;
 	};
 	resultUI frame;
 	resultUI result;
@@ -58,6 +62,11 @@ private:
 	int cnt;
 	int num[4];
 	bool starFlag[3];
+	bool starturn[3];
+	float starAngle;
+
+
+	int test1, test2;
 };
 
 //class Result : public TaskObject

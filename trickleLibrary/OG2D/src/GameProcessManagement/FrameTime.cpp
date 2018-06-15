@@ -15,9 +15,9 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	this->goaltime.InitTime();
 	//基本の情報
 	CreateObject(Cube, pos, Vec2(64, 64), 0);
-	
+
 	//画像関連
-	image.Create((std::string)"../font/math.png");
+	image.Create((std::string)"number.png");
 	this->SetDrawOrder(0.1f);
 	//大きさ変更モーション
 	this->ResetMoveCnt(this->ScaleanimetionCnt);
@@ -25,6 +25,7 @@ bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 	if (this->goaltime.CoronnumberJudge(this->digitSelectnumber))
 	{
 		this->Scaleanimeflag = true;
+		this->position.x += this->Scale.x / 3;
 	}
 	else
 	{
@@ -105,6 +106,7 @@ void FrameTimeUI::Render2D()
 	if (this->GetDramRollIsPlay())
 	{
 		src.x = src.w * this->goaltime.outputtime[this->digitSelectnumber];
+		src.y = this->Src.h;
 	}
 	else
 	{
@@ -113,6 +115,7 @@ void FrameTimeUI::Render2D()
 	if (this->goaltime.CoronnumberJudge(this->digitSelectnumber))
 	{
 		src.x = src.w * this->goaltime.outputtime[this->digitSelectnumber];
+		src.y = this->Src.h;
 	}
 	src.OffsetSize();
 	image.Draw(draw, src);
