@@ -36,8 +36,10 @@ private:
 		Jump,		//ジャンプ
 		Ladder,		//はしご
 		Fall,		//落下
-		Switch_M,		//スイッチ
-		Block_M,
+		Switch_M,	//スイッチ操作
+		Block_M,	//ブロック押し
+		Lift,		//持ちあげる
+		Lower,		//持ちおろす
 	};
 	class Animation
 	{
@@ -46,20 +48,23 @@ private:
 		Vec2 startVec;											//開始位置
 		Vec2 endVec;											//終了位置
 		int timeCnt;											//アニメーション経過時間
-		int animCnt;											//リセットされるアニメーションのカウント（スイッチ、梯子）
-		Motion animMo;											//ギミックによって変わる後のモーション
+		int animCnt;											//リセットされるアニメーションのカウント（スイッチ、梯子、持ちあげる）
+		Motion animMo;											//移動するanimation関数をスイッチと梯子両方で使っていて作った変数, アニメーション中に動かないようにすることもやってる
 		int same_flag;											//移動する座標とプレイヤの座標が同じときtrueを返す
+
 		int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };					//Normal状態のアニメーション
 		int walk[9] = { 0,1,2,3,4,5,6,7,8 };					//Walk状態のアニメーション
 		int ladder[2] = { 0,1 };								//ladder_ani状態のアニメーション
 		int switch_1[6] = { 0,1,2,3,4 };
 		int switch_2[6] = { 4,3,2,1,0 };
+		int lift[2] = { 2,3 }; 
+		int lower[2] = { 3,2 };
 	public:
 		void SetAnimaVec(Vec2& start_, Vec2& end_);				//開始位置と終了位置を登録
 		bool Initialize();										//初期化
 		Vec2 Move(Motion motion_);								//移動処理を行い移動値を返す
 		bool isMove();											//移動処理中かどうかを返す
-		Box2D returnSrc(Motion motion, State state);			//motionによってsrcを返す
+		Box2D returnSrc(Motion motion, State state, Direction dir);			//motionによってsrcを返す
 	private:
 		int srcX = 586, srcY = 575;									//プレイヤ画像の元々のサイズ
 	};
@@ -82,6 +87,7 @@ private:
 	int inv;													//無敵時間
 	std::string taskName;
 	bool hold;
+	bool isInputAuto;
 private:
 	bool HeadCheck();											//頭の当たり判定
 	bool FootCheck();											//足元の当たり判定
@@ -113,12 +119,18 @@ public:
 	State NowState() const;										//現在のStateを返す
 	void SetPos(Vec2&);											//プレイヤーの位置を設定する
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
+	void SetInputAuto(bool);
+	bool GetInputAuto() const;
 	bool ReleaseHold();
 	//入力処理簡略化
 	bool InputLeft();
 	bool InputRight();
 	bool InputDown();
 	bool InputUp();
+	bool InputB1down();
+	bool InputB2down();
+	bool InputB1on();
+	bool InputB2on();
 	float AxisLX();
 	float AxisLY();
 	float AxisRX();

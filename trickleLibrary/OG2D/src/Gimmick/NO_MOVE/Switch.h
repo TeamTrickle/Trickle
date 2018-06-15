@@ -40,6 +40,7 @@ private:
 	Box2D srcbase;
 	TargetType ttype;
 	int animCnt;
+	bool play_switch;
 
 	Switch();
 	bool Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> target, TargetType ttype);
@@ -49,11 +50,13 @@ private:
 
 	std::vector<std::shared_ptr<GameObject>> targets_;		
 	bool PostMsg(std::shared_ptr<GameObject> receiver);
-public:	
+public:
+
 	Sound sound;
 
 	bool isON();				//自分のオンオフを返す、オンならtrue
 	void ChangeON_OFF();		//オンオフを切り替える
+	void setSwitch(bool play);			//プレイヤが行動終了に合わせてスイッチが動く
 	TargetType getTargetType();
 
 	typedef std::shared_ptr<Switch> SP;

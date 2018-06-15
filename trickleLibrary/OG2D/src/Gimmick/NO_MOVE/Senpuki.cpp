@@ -98,7 +98,7 @@ void Fan::UpDate() {
 			//î•—‹@‚ª¶Œü‚«‚ÌŽž
 			else
 			{
-				auto effect = Effect::Create(Vec2(this->position.x + 32, this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200);
+				auto effect = Effect::Create(Vec2(this->position.x + 32, this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200, 5);
 				effect->SetWind(Vec2(64 * 4, 64), effect->position, Vec2(effect->position.x - (64 * 8), effect->position.y), Effect::Mode::WindL);
 				switch (effectnum)
 				{
