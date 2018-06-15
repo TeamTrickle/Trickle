@@ -26,6 +26,7 @@ public:
 	Texture*									mapInfo;
 	Box2D										title;
 	std::array<Achievement, MAX_ACHIEVEMENT>	achievement;
+	bool										clearFlag = false;
 
 private:
 	std::string									atlasFileName;
