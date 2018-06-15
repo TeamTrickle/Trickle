@@ -8,6 +8,7 @@
 Player::Player()
 {
 	this->hold = false;
+	this->isInputAuto = false;
 }
 Player::~Player()
 {
@@ -228,10 +229,14 @@ void Player::UpDate()
 						this->est = { 0.f,0.f };
 					}
 				}
-				if (this->InputDown())
+				if (this->InputDown() || this->isInputAuto)
 				{
 					++this->animation.animCnt;
 					Vec2 e = { 0.f,5.0f };
+					if (this->isInputAuto)
+					{
+						e.y += 10.f;
+					}
 					this->MoveCheck(e, (std::string)"Floor");
 					if (this->FootCheck((std::string)"Ladder", 1))
 					{
@@ -1234,6 +1239,10 @@ bool Player::PutCheck()
 		}
 	}
 	return true;
+}
+void Player::SetInputAuto(bool flag)
+{
+	this->isInputAuto = flag;
 }
 bool Player::InputLeft() {
 	return OGge->in->on(Input::CL);
