@@ -65,8 +65,10 @@ private:
 	bool starturn[3];
 	float starAngle;
 
-
+	unsigned timer[4];
 	int test1, test2;
+
+	void RoadData();
 };
 
 //class Result : public TaskObject

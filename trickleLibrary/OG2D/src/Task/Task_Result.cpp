@@ -46,7 +46,7 @@ bool Result::Initialize() {
 	}
 	num[3] = 0;
 	cnt = 0;
-
+	this->RoadData();
 	return true;
 }
 void Result::UpDate() {
@@ -119,7 +119,7 @@ void Result::UpDate() {
 		}
 		else {
 			for (int i = 0; i < 4; ++i) {
-				num[i] = 0;
+				num[i] = this->timer[i];
 			}
 		}
 		if (cnt >= 150) {
@@ -284,7 +284,38 @@ bool Result::Finalize() {
 
 	return true;
 }
-
+void Result::RoadData()
+{
+	std::ifstream ifs("./data/Result/save" + std::to_string(*MapNum) + ".bin", std::ios::in | std::ios::binary);
+	if (!ifs)
+	{
+		this->Kill();
+	}
+	std::string line;
+	std::getline(ifs, line);
+	std::istringstream* is = new std::istringstream(line);
+	std::string text;
+	for (int i = 0; i < 2; ++i)
+	{
+		int t_time;
+		std::getline(*is, text, ',');
+		(std::stringstream)text >> t_time;
+		this->timer[i * 2] = t_time / 10;
+		this->timer[i * 2 + 1] = t_time % 10;
+	}
+	std::getline(ifs, line);
+	delete is;
+	is = new std::istringstream(line);
+	for (int i = 0; i < 3; ++i)
+	{
+		std::getline(*is, text, ',');
+		if (text == "f")
+		{
+			this->starFlag[i] = false;
+		}
+	}
+	delete is;
+}
 
 Result::SP Result::Create(bool flag) {
 	Result::SP to = Result::SP(new Result());
