@@ -1,5 +1,6 @@
-tutorial.png
+tutorial_atlas.png
 tutorial_preview.png
-tuto_01.png
-tuto_02.png
-tuto_03.png
+30,80,690,90
+0,260,610,60
+0,360,530,60
+0,450,730,60

@@ -18,6 +18,8 @@ public:
 	 StageInfoRes(const std::string&);
 	~StageInfoRes();
 
+	bool isThisAchievementClear(const int&) const;
+
 public:
 	const static int MAX_ACHIEVEMENT = 3;
 	Texture*									atlas;

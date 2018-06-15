@@ -74,3 +74,11 @@ StageInfoRes::~StageInfoRes() {
 	rm->DeleteTexture(atlasFileName);
 	rm->DeleteSound(mapInfoFileName);
 }
+
+bool StageInfoRes::isThisAchievementClear(const int& idx) const
+{
+	if (idx < MAX_ACHIEVEMENT && idx >= 0) {
+		return achievement[idx].second;
+	}
+	return false;
+}

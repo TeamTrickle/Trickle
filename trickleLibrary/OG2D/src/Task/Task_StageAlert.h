@@ -20,8 +20,8 @@ private:
 	virtual void Render2D() override;
 	void Finalize();
 
+	Box2D getSrcOriginal(Texture*) const;
 	bool preloadResource(const std::string&);
-	void changeTexture(Texture*, const std::string&, bool);
 	inline Box2D GetFixedCameraCoord(const Box2D&) const;
 	Box2D OptimizeForWindowSize(const Box2D&) const;
 
@@ -43,19 +43,29 @@ public:
 	 */
 	bool operator<<(const std::string&);
 
+	void setActive(const bool&);
+	bool isActive() const;
+
 	typedef std::shared_ptr<StageAlert> SP;
 	static SP Create(bool, const Box2D&);
 
 private:
+	bool													active = false;
+
+	Box2D													titleDraw;
+	std::array<Box2D, StageInfoRes::MAX_ACHIEVEMENT>		starFixedDraw;
+	std::array<Box2D, StageInfoRes::MAX_ACHIEVEMENT>		achievementFixedDraw;
 	std::map<Texture*, Box2D>								draws;
 	std::map<Texture*, Box2D>								srcs;
 	Box2D													windowSize;
 
+	std::map<std::string, StageInfoRes*>					infoRes;
+	StageInfoRes*											currentRes;
+
 	Texture													background;
 	Texture													mission;
 	Texture													clearFlag;
-	std::array<Texture, StageInfoRes::MAX_ACHIEVEMENT>		starsTex;
-	std::map<std::string, StageInfoRes*>					infoRes;
-	StageInfoRes*											currentRes;
+	Texture													clearStarTex;
+	Texture													normalStarTex;
 	MapPreviewer::SP										previewer;
 };

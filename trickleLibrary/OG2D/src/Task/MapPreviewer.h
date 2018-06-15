@@ -11,7 +11,7 @@
 
 class MapPreviewer : public TaskObject {
 private:
-	bool Initialize(const Box2D&, const std::string&);
+	bool Initialize(const Box2D&);
 	bool isShootable(const Vec2&) const;
 
 public:
@@ -25,19 +25,19 @@ public:
 		@brief	プレビュー用写真を差し替えます
 		@param	ファイル名
 	 */
-	void replaceThumbnail(const std::string&);
+	void replaceThumbnail(Texture*);
 
 	void setVisible(const bool&);
 	bool isVisible() const;
 
 	typedef std::shared_ptr<MapPreviewer> SP;
-	static SP Create(bool, const Box2D&, const std::string&);
+	static SP Create(bool, const Box2D&);
 
 
 private:
 	bool					visible = true;
 	Box2D					windowSize;
-	Texture					mapThumbnail;
+	Texture*				mapThumbnail;
 	Vec2					thumbSize;
 	Vec2					pointPos;
 	float					camSpeed = 5.f;

@@ -49,6 +49,9 @@ bool StageSelect::Initialize()
 	map->SetDrawOrder(0.1f);
 	//ステージ概要表示用案内板
 	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
+	(*board) << "monitor0.txt";
+	(*board) << "monitor1.txt";
+	(*board) << "monitor2.txt";
 	//サウンドの生成
 	//タグ指定
 	__super::Init((std::string)"select");
@@ -216,7 +219,7 @@ void StageSelect::From2()
 	{
 		auto board = OGge->GetTask<StageAlert>("stagealert");
 		if (board) {
-			//board->AnimPlay();
+			board->setActive(true);
 			board->SetStageData("monitor0.txt");
 		}
 		//次へ移動
