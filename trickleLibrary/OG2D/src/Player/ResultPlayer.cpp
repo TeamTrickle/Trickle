@@ -2,6 +2,7 @@
 
 #include "GameProcessManagement\ClearUI.h"
 #include "Effect\SterEffect.h"
+#include "Map/Map.h"
 
 bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 {
@@ -12,6 +13,10 @@ bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 	//基本情報
 	this->CreateObject(Cube, pos, Vec2(96, 96), 0);
 	this->moveVec = speed;
+
+	//ジャンプ関連
+	this->moveCnt = 0;
+	this->PreY = this->position.y;
 
 	this->keyflag = false;
 	
@@ -52,7 +57,10 @@ void ResultPlayer::Think()
 	switch (nm)
 	{
 	case ResultPlayer::Normal:
-
+		if (CheckFoot())
+		{
+			nm = Walk;
+		}
 		break;
 	case ResultPlayer::Walk:
 		if (!this->animetion.SmailMotionIsPlay())
@@ -65,13 +73,34 @@ void ResultPlayer::Think()
 		}
 		break;
 	case ResultPlayer::Smail:
-		//アニメーションカウントが一定時間まで経過したら・・・
-		if (this->animetion.SmailMotionIsPlay())
+		if (!this->animetion.SmailMotionIsPlay())
 		{
+			if (est.y >= 0)
+			{
+				this->moveCnt = 0;
+				nm = Fall;
+			}
+		}
+		//アニメーションカウントが一定時間まで経過したら・・・
+		else
+		{
+			if (est.y >= 0)
+			{
+				this->moveCnt = 0;
+				nm = Fall;
+			}
 			if (OGge->in->down(In::B2))
 			{
-				nm = Walk;
+				this->moveCnt = 0;
+				nm = Normal;
 			}
+		}
+		break;
+	case ResultPlayer::Fall:
+		if (CheckFoot())
+		{
+			this->moveCnt = 0;
+			nm = Smail;
 		}
 		break;
 	case ResultPlayer::Stop:
@@ -87,6 +116,7 @@ void ResultPlayer::Think()
 		break;
 	}
 	animetion.MotionChenge(nm);
+	std::cout << nm << std::endl;
 }
 void ResultPlayer::Motion()
 {
@@ -94,7 +124,7 @@ void ResultPlayer::Motion()
 	switch (nm)
 	{
 	case ResultPlayer::Normal:
-
+		FallSpeed();
 		break;
 	case ResultPlayer::Walk:
 		this->Move();
@@ -104,20 +134,49 @@ void ResultPlayer::Motion()
 		this->animetion.AnimetionMove();
 		this->Jump();
 		break;
+	case ResultPlayer::Fall:
+		this->animetion.AnimetionMove();
+		FallSpeed();
+		break;
 	case ResultPlayer::Stop:
 		break;
 	}
 }
 void ResultPlayer::Jump()
 {
-
+	//飛び出したときに初期値を入れる
+	if (this->moveCnt == 0)
+	{
+		this->est.y = -13;
+		this->moveCnt++;
+	}
+	this->position.y += est.y;
+	est.y++;
+}
+void ResultPlayer::FallSpeed()
+{
+	if (moveCnt == 0)
+	{
+		this->est.y = 13;
+		this->moveCnt++;
+	}
+	this->position.y += est.y;
+	est.y--;
+}
+bool ResultPlayer::CheckFoot()
+{
+	if (this->position.y >= this->PreY)
+	{
+		this->position.y = this->PreY;
+		return true;
+	}
+	return false;
 }
 void ResultPlayer::UpDate()
 {
 	Think();
 	Motion();
 }
-
 void ResultPlayer::Move()
 {
 	auto clearui = OGge->GetTask<ClearUI>("ClearUI");
@@ -142,7 +201,7 @@ void ResultPlayer::Move()
 void ResultPlayer::Render2D()
 {
 	//通常時
-	if(this->animetion.motion != State::Smail)
+	if(this->animetion.motion != State::Smail && this->animetion.motion != State::Fall && this->animetion.motion != State::Normal)
 	{
 		Box2D draw(position, Scale);
 		draw.OffsetSize();
@@ -199,6 +258,11 @@ Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
 		src.x = this->animetionCnt / 3 % 9 * src.w;
 		break;
 	case ResultPlayer::Smail:
+		{
+			src.x = this->animetionCnt / 10 % 3 * src.w;
+		}
+		break;
+	case ResultPlayer::Fall:
 		{
 			src.x = this->animetionCnt / 10 % 3 * src.w;
 		}
