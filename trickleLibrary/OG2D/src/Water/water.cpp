@@ -15,19 +15,17 @@ Water::Water(Vec2 pos)
 	this->setTime = 0;
 	//オブジェクトの生成
 	CreateObject(Objform::Cube, pos, this->minSize, 0.f);
-	//デバッグ用位置調整
-	//this->position = { 28 * 64 + 32, 12 * 64 };//ゴール位置
-	//this->position = { 19 * 64 + 32,13 * 64 };//加熱器上
 	//初期ステータスの設定
 	this->nowSituation = Water::Situation::Newfrom;
 	this->currentState = Water::State::LIQUID;
 	this->preState = Water::State::LIQUID;
-	//テスト
-	/*this->nowSituation = Water::Situation::Normal;
-	this->currentState = Water::State::SOLID;*/
+	//this->nowSituation = Water::Situation::Normal;
+	//this->currentState = Water::State::SOLID;
 	//初期保持水量
 	this->volume = 0.5f;
+	//無敵時間初期化
 	this->invi = 0;
+	//カラー値の初期化
 	this->color_a = { 1,1,1,1 };
 	//移動値の初期化
 	this->move = { 0,0 };
@@ -51,9 +49,13 @@ Water::Water(Vec2 pos)
 	this->id = i;
 	//サウンドのファイル名設定
 	soundname = "water-drop3.wav";
+	//所持状態の初期化
 	this->hold = false;
+	//当たり判定を制限
 	this->Radius = { 0.5f,0.9f };
+	//タグの指定
 	__super::Init((std::string)"water");
+	//描画優先度の設定
 	__super::SetDrawOrder(0.2f);
 }
 
@@ -251,6 +253,7 @@ void Water::Render2D()
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
+	this->LineDraw();
 }
 
 bool Water::Finalize()
@@ -858,7 +861,7 @@ void Water::CheckState()
 				}
 			}
 			this->objectTag = "SOLID";
-			this->Radius = { 1.0f,1.0f };
+			this->Radius = { 0.7f,1.0f };
 			this->nowSituation = Situation::Normal;
 			break;
 		}

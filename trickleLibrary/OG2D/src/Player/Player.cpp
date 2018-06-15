@@ -255,6 +255,11 @@ void Player::UpDate()
 			}
 			break;
 		case Walk:
+			if (!this->FootCheck())
+			{
+				this->motion = Motion::Fall;
+				break;
+			}
 			if (!this->InputRight() && !this->InputLeft() && this->AxisLX() == 0)
 			{
 				//¶‰Eƒ{ƒ^ƒ“‚ð‰Ÿ‚³‚È‚¢‚Ænormal‚É–ß‚é
