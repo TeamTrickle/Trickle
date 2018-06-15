@@ -425,6 +425,7 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"waterPurple");
 	rm->DeleteTexture((std::string)"steam");
 	rm->DeleteTexture((std::string)"goalTex");
+	rm->DeleteTexture((std::string)"fireIce");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
