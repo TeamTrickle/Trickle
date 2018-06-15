@@ -126,6 +126,10 @@ public:
 	bool InputRight();
 	bool InputDown();
 	bool InputUp();
+	bool InputB1down();
+	bool InputB2down();
+	bool InputB1on();
+	bool InputB2on();
 	float AxisLX();
 	float AxisLY();
 	float AxisRX();

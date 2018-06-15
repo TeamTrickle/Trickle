@@ -90,7 +90,7 @@ void Player::UpDate()
 	case State::BUCKET:
 		//バケツの値を自分に合わせる
 		this->BucketMove();
-		if (OGge->in->down(In::B2))
+		if (this->InputB2down())
 		{
 			this->ReleaseHold();
 			this->motion = Motion::Lower;
@@ -116,7 +116,7 @@ void Player::UpDate()
 				this->motion = Motion::Fall;
 				break;
 			}
-			if (OGge->in->down(In::B1))
+			if (this->InputB1down())
 			{
 				if (this->FootCheck())
 				{
@@ -125,7 +125,7 @@ void Player::UpDate()
 					this->moveCnt = 0;
 				}
 			}
-			if (OGge->in->down(In::B2))
+			if (this->InputB2down())
 			{
 				//バケツを持つ
 				if (this->BucketHit())
@@ -204,7 +204,7 @@ void Player::UpDate()
 								//アニメーション中以外
 			if (this->state != State::ANIMATION)
 			{
-				if (OGge->in->down(In::B1))
+				if (this->InputB1down())
 				{
 					if (this->LadderJumpCheck())
 					{
@@ -256,13 +256,13 @@ void Player::UpDate()
 				//左右ボタンを押さないとnormalに戻る
 				this->motion = Motion::Normal;
 			}
-			if (OGge->in->on(In::B1))
+			if (this->InputB1down())
 			{
 				//歩いてるときのジャンプ
 				this->motion = Motion::Jump;
 				this->moveCnt = 0;
 			}
-			if (OGge->in->down(In::B2))
+			if (this->InputB2down())
 			{
 				//バケツを持つ
 				if (this->BucketHit())
@@ -293,7 +293,7 @@ void Player::UpDate()
 			}
 			break;
 		case Block_M:
-			if (OGge->in->down(In::B1))
+			if (this->InputB1down())
 			{
 				if (this->FootCheck())
 				{
@@ -1169,7 +1169,7 @@ bool Player::ReleaseHold()
 			{
 				if ((*id)->GetHold())
 				{
-					if (OGge->in->down(In::B2))
+					if (this->InputB2down())
 					{
 						if (this->direction == Direction::LEFT)
 						{
@@ -1245,19 +1245,39 @@ void Player::SetInputAuto(bool flag)
 	this->isInputAuto = flag;
 }
 bool Player::InputLeft() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CL);
 }
 bool Player::InputRight() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CR);
 }
 bool Player::InputDown() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CD) || OGge->in->on(In::LD);
 }
 bool Player::InputUp() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CU) || OGge->in->on(In::LU);
 }
 float Player::AxisLX()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	if (OGge->in->axis(In::AXIS_LEFT_X) > 0.3f || OGge->in->axis(In::AXIS_LEFT_X) < -0.3f)
 	{
 		return OGge->in->axis(In::AXIS_LEFT_X);
@@ -1266,15 +1286,59 @@ float Player::AxisLX()
 }
 float Player::AxisLY()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	return OGge->in->axis(In::AXIS_LEFT_Y);
 }
 float Player::AxisRX()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	return OGge->in->axis(In::AXIS_RIGHT_X);
 }
 float Player::AxisRY()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	return OGge->in->axis(In::AXIS_RIGHT_Y);
+}
+bool Player::InputB1down()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->down(In::B1);
+}
+bool Player::InputB2down()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->down(In::B2);
+}
+bool Player::InputB1on()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->on(In::B1);
+}
+bool Player::InputB2on()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->on(In::B2);
 }
 Player::SP Player::Create(Vec2& pos, bool flag)
 {
