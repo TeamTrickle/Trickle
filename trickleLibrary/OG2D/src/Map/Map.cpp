@@ -2,6 +2,7 @@
 #include "Player\Player.h"
 #include "Bucket\bucket.h"
 #include "Gimmick\NO_MOVE\Switch.h"
+#include "Gimmick\NO_MOVE\TimeSign.h"
 #include "Goal\Goal.h"
 #include "Paint\Paint.h"
 Map::Map()
@@ -233,6 +234,13 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
 		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		return;
+	}
+	if (text == "t") 
+	{
+		auto inTimer = TimeSign::Create("frame.png", Box2D(this->DrawSize.x * x_index, this->DrawSize.y * y_index - 64.f, 144.f, 128.f), true);
+		inTimer->setAtlas("number.png", Box2D(0, 64, 64, 64), Box2D(21, 40, 19.5, 40));
+		inTimer->setComma(Box2D(25, 40, 8, 14), Box2D(640, 64, 40, 64), Box2D(680, 64, 40, 64));
+		inTimer->setAtlasAngle(-10.f);
 	}
 	if (text == "paintred")
 	{
