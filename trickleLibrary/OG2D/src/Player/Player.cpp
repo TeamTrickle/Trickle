@@ -271,8 +271,11 @@ void Player::UpDate()
 				{
 					this->motion = Motion::Lift;
 				}
-				//スイッチを押す
-				this->SwitchCheck();
+				else
+				{
+					//スイッチを押す
+					this->SwitchCheck();
+				}
 			}
 			if (this->TohaveObjectHit()) {
 				//ブロックを押す
