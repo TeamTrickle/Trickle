@@ -39,12 +39,14 @@ bool Player::Initialize()
 	//自動移動用値の初期化
 	this->animation.Initialize();
 	__super::Init((std::string)"Player");
+	__super::SetDrawOrder(1.f);
 	return true;
 }
 bool Player::Initialize(Vec2& pos)
 {
 	this->taskName = "Player";
 	__super::Init(this->taskName);
+	__super::SetDrawOrder(0.4f);
 	//オブジェクトの初期化
 	this->CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
