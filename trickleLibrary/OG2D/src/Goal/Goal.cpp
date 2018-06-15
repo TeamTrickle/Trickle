@@ -44,7 +44,7 @@ Goal::~Goal()
 	}
 }
 
-void Goal::SetColor(Paint::PaintColor & color)
+void Goal::SetColor(const Paint::PaintColor & color)
 {
 	this->termsColor = color;
 }

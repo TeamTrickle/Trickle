@@ -217,7 +217,6 @@
     <ClCompile Include="src\Win\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ornament.h" />
     <ClInclude Include="src\Back\Back.h" />
     <ClInclude Include="src\Block\block.h" />
     <ClInclude Include="src\Bucket\bucket.h" />

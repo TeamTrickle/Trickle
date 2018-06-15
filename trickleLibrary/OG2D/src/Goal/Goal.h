@@ -44,7 +44,7 @@ class Goal : public GameObject, public TaskObject
 public:
 	explicit Goal(const Vec2& pos);
 	virtual ~Goal();
-	void SetColor(Paint::PaintColor&);
+	void SetColor(const Paint::PaintColor&);
 	bool ColorCheck() const;
 	void UpDate() override;
 	void Render2D() override;
