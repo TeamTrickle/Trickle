@@ -1244,6 +1244,10 @@ void Player::SetInputAuto(bool flag)
 {
 	this->isInputAuto = flag;
 }
+bool Player::GetInputAuto() const
+{
+	return this->isInputAuto;
+}
 bool Player::InputLeft() {
 	if (this->isInputAuto)
 	{

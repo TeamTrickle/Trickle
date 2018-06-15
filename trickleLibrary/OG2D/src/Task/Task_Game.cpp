@@ -292,7 +292,14 @@ void Game::UpDate()
 
 	// Pauseˆ—
 	if (OGge->in->down(In::D2)){
-		OGge->SetPause(true);
+		auto player = OGge->GetTask<Player>("Player");
+		if (player)
+		{
+			if (!player->GetInputAuto())
+			{
+				OGge->SetPause(true);
+			}
+		}
 	}
 
 	//UI

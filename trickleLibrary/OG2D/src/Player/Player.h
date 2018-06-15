@@ -120,6 +120,7 @@ public:
 	void SetPos(Vec2&);											//プレイヤーの位置を設定する
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
 	void SetInputAuto(bool);
+	bool GetInputAuto() const;
 	bool ReleaseHold();
 	//入力処理簡略化
 	bool InputLeft();
