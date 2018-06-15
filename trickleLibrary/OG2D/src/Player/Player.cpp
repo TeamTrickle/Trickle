@@ -97,7 +97,6 @@ void Player::UpDate()
 		}
 		break;
 	case State::NORMAL:
-		
 		break;
 	}
 	if (this->inv > 0)
@@ -1251,6 +1250,14 @@ bool Player::PutCheck()
 void Player::SetInputAuto(bool flag)
 {
 	this->isInputAuto = flag;
+	if (this->isInputAuto)
+	{
+		if (this->state == State::BUCKET)
+		{
+			this->ReleaseHold();
+			this->motion = Motion::Lower;
+		}
+	}
 }
 bool Player::GetInputAuto() const
 {
