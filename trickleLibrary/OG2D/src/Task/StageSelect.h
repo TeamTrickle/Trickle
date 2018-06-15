@@ -30,6 +30,7 @@ class StageSelect : public TaskObject
 	Animation camera_anim;
 
 	Texture Testdoor;		//ドアの画像
+	Texture Wall;           //壁の画像
 
 	std::string soundname;     //サウンドのファイル名格納
 
