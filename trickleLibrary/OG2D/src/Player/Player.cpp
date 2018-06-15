@@ -131,8 +131,11 @@ void Player::UpDate()
 				{
 					this->motion = Motion::Lift;
 				}
-				//スイッチを操作する
-				this->SwitchCheck();
+				else
+				{
+					//スイッチを操作する
+					this->SwitchCheck();
+				}
 			}
 			if (this->state != State::BUCKET) {
 				if (this->InputDown())
@@ -237,7 +240,7 @@ void Player::UpDate()
 						e.y += 10.f;
 					}
 					this->MoveCheck(e, (std::string)"Floor");
-					if (this->FootCheck((std::string)"Ladder", 1))
+					if (this->FootCheck((std::string)"Ladder", 1) || this->SolidFootCheck())
 					{
 						this->motion = Motion::Normal;
 					}
@@ -580,6 +583,23 @@ bool Player::FootCheck(std::string& objname_,int n)
 						return true;
 					}
 				}
+			}
+		}
+	}
+	return false;
+}
+bool Player::SolidFootCheck()
+{
+	GameObject foot;
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if ((*id)->GetState() == Water::State::SOLID && foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (foot.hit(*(*id)))
+			{
+				return true;
 			}
 		}
 	}
@@ -1042,14 +1062,29 @@ void Player::MoveCheck(Vec2& est, std::string& objname_)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->hit(map->hitBase[y][x]))
+				if (this->IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 				{
-					if (map->hitBase[y][x].objectTag == "Floor" ||
-						map->hitBase[y][x].objectTag == "LadderTop")
+					if (this->hit(map->hitBase[y][x]))
 					{
-						this->position.y = preY;
-						break;
+						if (map->hitBase[y][x].objectTag == "Floor" ||
+							map->hitBase[y][x].objectTag == "LadderTop")
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
+				}
+			}
+		}
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if ((*id)->GetState() == Water::State::SOLID && this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->hit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
 				}
 			}
 		}
