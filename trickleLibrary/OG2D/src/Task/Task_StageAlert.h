@@ -57,6 +57,7 @@ private:
 	std::array<Box2D, StageInfoRes::MAX_ACHIEVEMENT>		achievementFixedDraw;
 	std::map<Texture*, Box2D>								draws;
 	std::map<Texture*, Box2D>								srcs;
+	Box2D													clearFlagDraw;
 	Box2D													windowSize;
 
 	std::map<std::string, StageInfoRes*>					infoRes;

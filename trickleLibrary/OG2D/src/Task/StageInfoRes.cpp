@@ -54,19 +54,45 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		file >> buf;
 		title = stringToBox2D(buf);
 
-		std::ifstream saveFile(filePath + "sss", std::ios::in);
+		std::string saveFilePath = "";
+		if (filePath == "monitor0.txt") clearFlag = false;
+		if (filePath == "monitor1.txt") saveFilePath = "data/Result/data5.bin";
+		if (filePath == "monitor2.txt") saveFilePath = "data/Result/data6.bin";
+		std::ifstream saveFile(saveFilePath, std::ios::in);
 		bool isCleared = saveFile.is_open();
+
+		if (isCleared) {
+			saveFile >> buf;
+			if (buf == "-1") {
+				isCleared = false;
+				clearFlag = false;
+			}
+			else {
+				clearFlag = true;
+			}
+		}
+
+		std::array<bool, MAX_ACHIEVEMENT> isClearAchievement;
+		if (clearFlag) {
+			saveFile >> buf;
+			auto flags = SplitString(buf, ',');
+			for (int i = 0; i < isClearAchievement.size(); ++i) {
+				isClearAchievement[i] = (flags[i] == "f") ? false : true;
+			}
+		}
 		
+		int i = 0;
 		for (auto& a : achievement) {
 			file >> buf;
 			a.first = stringToBox2D(buf);
+			saveFile >> clearFlag;
 			if (isCleared) {
-				saveFile >> buf;
-				a.second = (stoi(buf) != 0) ? true : false;
+				a.second = isClearAchievement[i];
 			}
 			else {
 				a.second = false;
 			}
+			i += 1;
 		}
 	}
 }
