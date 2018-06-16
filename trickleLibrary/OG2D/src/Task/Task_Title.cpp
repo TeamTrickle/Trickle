@@ -57,9 +57,7 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect02.png");
-	this->fontTex = new Texture();
-	this->fontTex->Create("fontui.png");
-	rm->SetTextureData((std::string)"fontui", this->fontTex);
+	
 	
 	this->effect03.Create("Effect03.png");
 	
@@ -335,7 +333,7 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 64, 64*4, 64);
 		src.OffsetSize();
-		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 	//スタート
 	{
@@ -345,7 +343,7 @@ void Title::Render2D()
 		Box2D src(0, 0, 64*5, 64);
 		src.OffsetSize();
 		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 }
 

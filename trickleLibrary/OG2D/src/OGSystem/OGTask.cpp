@@ -17,10 +17,14 @@ void OGTK::_myGameInitialize()
 
 void OGTK::StartTaskObject()
 {
+	//使用フォントの読み込み
+	Texture* fontTex;
+	fontTex = new Texture();
+	fontTex->Create("fontui.png");
+	rm->SetTextureData((std::string)"fontui", fontTex);
+
 	//タスクの初期化
-	//auto TopTask = Title::Create();
-	auto task = StageSelect::Create();
-	OGge->camera->SetSize(Vec2(1920, 1080));
+	auto TopTask = Title::Create();
 }
 
 OGTK::~OGTK()
