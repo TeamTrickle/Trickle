@@ -24,6 +24,7 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 	this->animCnt = 0;
 	this->coldNum = 0;
 	draw.clear();
+	draw.resize(1);
 
 	this->angle = ang;
 
@@ -31,13 +32,6 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 }
 void Seihyouki::UpDate() {
 	if (active) {
-		//if(‚±‚±‚É»•X‹@‚Ì•ûŒü‚ð‚à‚ç‚¤) {
-		if (Angle::UP)
-		{
-			this->coldNum = Scale.x / 64;
-			draw.resize(coldNum);
-		}
-		//}
 		toIce();
 	}
 }
