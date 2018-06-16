@@ -317,6 +317,11 @@ bool Map::Finalize()
 	this->hitBase.clear();
 	this->chip.clear();
 	this->mapimg.Finalize();
+	auto timer = OGge->GetTasks<TimeSign>("timesign");
+	for (auto id = timer->begin(); id != timer->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	return true;
 }
 
@@ -326,18 +331,21 @@ bool Map::MapHitCheck(GameObject &p)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
+			if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
+			{ 
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0 &&
-				this->_arr[y][x] != 10 &&
-				this->_arr[y][x] != 12 &&
-				this->_arr[y][x] != 13 &&
-				this->_arr[y][x] != 21 &&
-				this->_arr[y][x] != 22 &&
-				this->_arr[y][x] != 20 &&
-				this->_arr[y][x] != 23) {
-				if (this->hitBase[y][x].hit(p))
-				{
-					return true;
+				if (this->_arr[y][x] != 0 &&
+					this->_arr[y][x] != 10 &&
+					this->_arr[y][x] != 12 &&
+					this->_arr[y][x] != 13 &&
+					this->_arr[y][x] != 21 &&
+					this->_arr[y][x] != 22 &&
+					this->_arr[y][x] != 20 &&
+					this->_arr[y][x] != 23) {
+					if (this->hitBase[y][x].hit(p))
+					{
+						return true;
+					}
 				}
 			}
 		}
