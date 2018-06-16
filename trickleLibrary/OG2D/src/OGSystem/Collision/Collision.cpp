@@ -8,14 +8,14 @@ bool CollisionBox::hitBox(CollisionBox& b)
 	//頂点情報のセット
 	Vec2 _ver[4] = {
 		{ b.hitBase.x,b.hitBase.y },
-	{ b.hitBase.w - 1,b.hitBase.y },
-	{ b.hitBase.w - 1,b.hitBase.h },
+	{ b.hitBase.w - 1.f,b.hitBase.y },
+	{ b.hitBase.w - 1.f,b.hitBase.h },
 	{ b.hitBase.x,b.hitBase.h }
 	};
 	Vec2 _v[4] = {
 		{ hitBase.x,hitBase.y },
-	{ hitBase.w - 1,hitBase.y },
-	{ hitBase.w - 1,hitBase.h },
+	{ hitBase.w - 1.f,hitBase.y },
+	{ hitBase.w - 1.f,hitBase.h },
 	{ hitBase.x,hitBase.h }
 	};
 	//回転の適用
@@ -23,20 +23,20 @@ bool CollisionBox::hitBox(CollisionBox& b)
 	OG::_Rotate(b.angle, _ver);
 	//どちらかの範囲内に相手の頂点が存在する場合TRUEを返す
 	for (int i = 0; i < 4; ++i) {
-		if ((((_v[1].x - _v[0].x)*(_ver[i].y - _v[0].y)) - ((_ver[i].x - _v[0].x)*(_v[1].y - _v[0].y))) >= 0 &&
-			(((_v[2].x - _v[1].x)*(_ver[i].y - _v[1].y)) - ((_ver[i].x - _v[1].x)*(_v[2].y - _v[1].y))) >= 0 &&
-			(((_v[3].x - _v[2].x)*(_ver[i].y - _v[2].y)) - ((_ver[i].x - _v[2].x)*(_v[3].y - _v[2].y))) >= 0 &&
-			(((_v[0].x - _v[3].x)*(_ver[i].y - _v[3].y)) - ((_ver[i].x - _v[3].x)*(_v[0].y - _v[3].y))) >= 0)
+		if ((((_v[1].x - _v[0].x)*(_ver[i].y - _v[0].y)) - ((_ver[i].x - _v[0].x)*(_v[1].y - _v[0].y))) >= 0.f &&
+			(((_v[2].x - _v[1].x)*(_ver[i].y - _v[1].y)) - ((_ver[i].x - _v[1].x)*(_v[2].y - _v[1].y))) >= 0.f &&
+			(((_v[3].x - _v[2].x)*(_ver[i].y - _v[2].y)) - ((_ver[i].x - _v[2].x)*(_v[3].y - _v[2].y))) >= 0.f &&
+			(((_v[0].x - _v[3].x)*(_ver[i].y - _v[3].y)) - ((_ver[i].x - _v[3].x)*(_v[0].y - _v[3].y))) >= 0.f)
 		{
 			return true;
 		}
 	}
 	//相手オブジェクト目線でも同じく処理を行う
 	for (int i = 0; i < 4; ++i) {
-		if ((((_ver[1].x - _ver[0].x)*(_v[i].y - _ver[0].y)) - ((_v[i].x - _ver[0].x)*(_ver[1].y - _ver[0].y))) >= 0 &&
-			(((_ver[2].x - _ver[1].x)*(_v[i].y - _ver[1].y)) - ((_v[i].x - _ver[1].x)*(_ver[2].y - _ver[1].y))) >= 0 &&
-			(((_ver[3].x - _ver[2].x)*(_v[i].y - _ver[2].y)) - ((_v[i].x - _ver[2].x)*(_ver[3].y - _ver[2].y))) >= 0 &&
-			(((_ver[0].x - _ver[3].x)*(_v[i].y - _ver[3].y)) - ((_v[i].x - _ver[3].x)*(_ver[0].y - _ver[3].y))) >= 0)
+		if ((((_ver[1].x - _ver[0].x)*(_v[i].y - _ver[0].y)) - ((_v[i].x - _ver[0].x)*(_ver[1].y - _ver[0].y))) >= 0.f &&
+			(((_ver[2].x - _ver[1].x)*(_v[i].y - _ver[1].y)) - ((_v[i].x - _ver[1].x)*(_ver[2].y - _ver[1].y))) >= 0.f &&
+			(((_ver[3].x - _ver[2].x)*(_v[i].y - _ver[2].y)) - ((_v[i].x - _ver[2].x)*(_ver[3].y - _ver[2].y))) >= 0.f &&
+			(((_ver[0].x - _ver[3].x)*(_v[i].y - _ver[3].y)) - ((_v[i].x - _ver[3].x)*(_ver[0].y - _ver[3].y))) >= 0.f)
 		{
 			return true;
 		}

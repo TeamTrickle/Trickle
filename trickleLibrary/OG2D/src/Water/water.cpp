@@ -75,6 +75,7 @@ bool Water::Initialize()
 
 void Water::UpDate()
 {
+	printf("%.f,%.f,%.f,%.f\n", this->position.x, this->position.y, this->position.x + this->Scale.x, this->position.y + this->Scale.y);
 	if (this->invi > 0)
 	{
 		this->invi--;
@@ -905,10 +906,13 @@ bool Water::SolidMelt()
 {
 	if (this->currentState == State::SOLID)
 	{
-		auto player = OGge->GetTask<Player>("Player");
-		if (player)
+		if (this->hold)
 		{
-			player->ReleaseHold();
+			auto player = OGge->GetTask<Player>("Player");
+			if (player)
+			{
+				player->ReleaseHold();
+			}
 		}
 		this->SetState(State::LIQUID);
 		this->SetSituation(Situation::Normal);

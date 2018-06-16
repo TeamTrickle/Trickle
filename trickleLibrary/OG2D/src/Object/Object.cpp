@@ -141,6 +141,37 @@ bool GameObject::hit(GameObject& o)
 	}
 	return false;
 }
+bool GameObject::CubeHit(GameObject &o)
+{
+	if (this->objform != Objform::Cube || o.objform != Objform::Cube)
+	{
+		return false;
+	}
+	Vec2 ScaleSize = { this->Scale.x * this->Radius.x,this->Scale.y * this->Radius.y };
+	//当たり判定を生成する
+	this->collisionCube.hitBase = {
+		this->position.x + ((this->Scale.x - ScaleSize.x) / 2),
+		this->position.y + ((this->Scale.y - ScaleSize.y) / 2),
+		ScaleSize.x + (this->position.x + ((this->Scale.x - ScaleSize.x) / 2)),
+		ScaleSize.y + (this->position.y + ((this->Scale.y - ScaleSize.y) / 2))
+	};
+	Vec2 ScaleSize_o = { o.Scale.x * o.Radius.x,o.Scale.y * o.Radius.y };
+	//位置とサイズから当たり判定を生成する
+	o.collisionCube.hitBase = {
+		o.position.x + ((o.Scale.x - ScaleSize_o.x) / 2),
+		o.position.y + ((o.Scale.y - ScaleSize_o.y) / 2),
+		ScaleSize_o.x + (o.position.x + ((o.Scale.x - ScaleSize_o.x) / 2)),
+		ScaleSize_o.y + (o.position.y + ((o.Scale.y - ScaleSize_o.y) / 2))
+	};
+	if (this->collisionCube.hitBase.x < o.collisionCube.hitBase.w &&
+		this->collisionCube.hitBase.w > o.collisionCube.hitBase.x &&
+		this->collisionCube.hitBase.y < o.collisionCube.hitBase.h &&
+		this->collisionCube.hitBase.h > o.collisionCube.hitBase.y)
+	{
+		return true;
+	}
+	return false;
+}
 
 void GameObject::LineDraw()
 {

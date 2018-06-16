@@ -25,6 +25,7 @@ public:
 	bool Gravity;									//重力の有無
 	float mass;										//質量
 	bool hit(GameObject& o);						//GameObject同士の当たり判定
+	bool CubeHit(GameObject& o);					//簡易版回転なし判定
 	GameObject();									//コンストラクタ	
 	GameObject(										//コンストラクタ
 		const Objform& form, 
