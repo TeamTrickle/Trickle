@@ -508,6 +508,11 @@ void Title::SkipMove()
 	{
 		(*id)->Kill();
 	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	this->cm.DeleteObject();
 	OGge->camera->SetPos(Vec2(0, 200));
 	OGge->camera->SetSize(Vec2(1440, 810));
