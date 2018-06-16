@@ -743,24 +743,28 @@ bool Water::HeadSolidCheck()
 
 bool Water::SetColor(const Paint::PaintColor& color)
 {
-	if (this->color == Paint::PaintColor::Purple)
+	//色の変化は液体の時に限定する
+	if (this->currentState == State::LIQUID)
 	{
-		//紫なら色の変化を行わない
-	}
-	else if (this->color == Paint::PaintColor::Blue && color == Paint::PaintColor::Red)
-	{
-		//青と赤で紫へ
-		this->color = Paint::PaintColor::Purple;
-	}
-	else if (this->color == Paint::PaintColor::Red && color == Paint::PaintColor::Blue)
-	{
-		//赤と青で紫へ
-		this->color = Paint::PaintColor::Purple;
-	}
-	else
-	{
-		//それ以外はそのまま変化させる
-		this->color = color;
+		if (this->color == Paint::PaintColor::Purple)
+		{
+			//紫なら色の変化を行わない
+		}
+		else if (this->color == Paint::PaintColor::Blue && color == Paint::PaintColor::Red)
+		{
+			//青と赤で紫へ
+			this->color = Paint::PaintColor::Purple;
+		}
+		else if (this->color == Paint::PaintColor::Red && color == Paint::PaintColor::Blue)
+		{
+			//赤と青で紫へ
+			this->color = Paint::PaintColor::Purple;
+		}
+		else
+		{
+			//それ以外はそのまま変化させる
+			this->color = color;
+		}
 	}
 	//色に合わせて使用する画像を変える
 	switch (this->color)
