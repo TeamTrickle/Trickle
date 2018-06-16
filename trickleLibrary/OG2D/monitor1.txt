@@ -1,5 +1,5 @@
 stage1_atlas.png
-tutorial_preview.png
+stage1.png
 0,0,480,90
 0,100,600,60
 0,160,530,60
