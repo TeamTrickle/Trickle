@@ -245,6 +245,7 @@ void Water::Render2D()
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
+	LineDraw();
 }
 
 bool Water::Finalize()
@@ -888,7 +889,7 @@ void Water::CheckState()
 				}
 			}
 			this->objectTag = "SOLID";
-			this->Radius = { 0.7f,1.0f };
+			this->Radius = { 0.7f,0.7f };
 			this->nowSituation = Situation::Normal;
 			break;
 		}
