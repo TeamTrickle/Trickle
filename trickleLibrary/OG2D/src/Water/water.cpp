@@ -95,13 +95,6 @@ void Water::UpDate()
 			break;
 		case Water::Situation::Deleteform:
 			this->nowSituation = Water::UpDeleteform();
-			if (soundplay)
-			{
-				volControl.Play(&this->position, 1000.0f, 1.0f, sound);
-
-				sound.play();
-				soundplay = false;   //連続して再生されることを防ぐ
-			}
 			break;
 		case Water::Situation::CreaDelete:
 			this->Kill();
@@ -141,35 +134,27 @@ void Water::UpDate()
 			}
 			break;
 		case Water::Situation::Rainfrom:
-			/*if (this->volume < 0.5f)
+			if (this->nowTime < 10)
 			{
-				this->Kill();
+				if (this->nowTime % 3 == 0)
+				{
+					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
+					water->SetMaxSize(Vec2(32, 32));
+					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+					water->SetWaterVolume(this->volume / 4.f);
+					water->SetColor(this->color);
+				}
+				this->nowTime++;
 			}
-			else*/
+			else
 			{
-				if (this->nowTime < 10)
+				//雨を出現したあとも少しだけ残る
+				this->nowTime++;
+				this->color_a.alpha -= 0.02f;
+				if (this->nowTime > 40)
 				{
-					if (this->nowTime % 3 == 0)
-					{
-						auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
-						water->SetMaxSize(Vec2(32, 32));
-						water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
-						water->SetWaterVolume(this->volume / 4.f);
-						water->SetColor(this->color);
-					}
-					this->nowTime++;
+					this->Kill();
 				}
-				else
-				{
-					//雨を出現したあとも少しだけ残る
-					this->nowTime++;
-					this->color_a.alpha -= 0.02f;
-					if (this->nowTime > 40)
-					{
-						this->Kill();
-					}
-				}
-				break;
 			}
 			break;
 		}
@@ -210,6 +195,13 @@ Water::Situation Water::UpDeleteform()
 	if (this->nowTime >= 72)
 	{
 		now = Water::Situation::CreaDelete;
+	}
+	if (soundplay)
+	{
+		volControl.Play(&this->position, 1000.0f, 1.0f, sound);
+
+		sound.play();
+		soundplay = false;   //連続して再生されることを防ぐ
 	}
 	return now;
 }
@@ -253,7 +245,6 @@ void Water::Render2D()
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
-	this->LineDraw();
 }
 
 bool Water::Finalize()
@@ -344,12 +335,14 @@ bool Water::FootCheck(std::string& objtag, int n)
 	{
 		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (foot.hit(map->hitBase[y][x]))
+			if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 			{
-
-				if (map->hitBase[y][x].objectTag == objtag)
+				if (foot.hit(map->hitBase[y][x]))
 				{
-					return true;
+					if (map->hitBase[y][x].objectTag == objtag)
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -357,9 +350,12 @@ bool Water::FootCheck(std::string& objtag, int n)
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = blocks->begin(); id != blocks->end(); ++id)
 	{
-		if (foot.hit(*(*id)))
+		if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			return true;
+			if (foot.hit(*(*id)))
+			{
+				return true;
+			}
 		}
 	}
 	if (this->currentState == State::SOLID)
@@ -367,9 +363,12 @@ bool Water::FootCheck(std::string& objtag, int n)
 		auto buckets = OGge->GetTasks<Bucket>("bucket");
 		for (auto id = buckets->begin(); id != buckets->end(); ++id)
 		{
-			if (foot.hit(*(*id)))
+			if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				return true;
+				if (foot.hit(*(*id)))
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -389,9 +388,12 @@ bool Water::FootSolidCheck()
 		{
 			if ((*id)->objectTag == "SOLID")
 			{
-				if (foot.hit(*(*id)))
+				if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					return true;
+					if (foot.hit(*(*id)))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -686,12 +688,15 @@ bool Water::HeadCheck(std::string& objtag, int n)
 	{
 		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (head.hit(map->hitBase[y][x]))
+			if (head.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 			{
-				if (map->hitBase[y][x].objectTag == objtag ||
-					map->_arr[y][x] == 24)
+				if (head.hit(map->hitBase[y][x]))
 				{
-					return true;
+					if (map->hitBase[y][x].objectTag == objtag ||
+						map->_arr[y][x] == 24)
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -699,9 +704,12 @@ bool Water::HeadCheck(std::string& objtag, int n)
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = blocks->begin(); id != blocks->end(); ++id)
 	{
-		if (head.hit(*(*id)))
+		if (head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			return true;
+			if (head.hit(*(*id)))
+			{
+				return true;
+			}
 		}
 	}
 	return false;
@@ -718,11 +726,14 @@ bool Water::HeadSolidCheck()
 	{
 		if (this->id != (*id)->id)
 		{
-			if ((*id)->objectTag == "SOLID")
+			if (head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (head.hit(*(*id)))
+				if ((*id)->objectTag == "SOLID")
 				{
-					return true;
+					if (head.hit(*(*id)))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -734,20 +745,24 @@ bool Water::SetColor(const Paint::PaintColor& color)
 {
 	if (this->color == Paint::PaintColor::Purple)
 	{
-		
+		//紫なら色の変化を行わない
 	}
 	else if (this->color == Paint::PaintColor::Blue && color == Paint::PaintColor::Red)
 	{
+		//青と赤で紫へ
 		this->color = Paint::PaintColor::Purple;
 	}
 	else if (this->color == Paint::PaintColor::Red && color == Paint::PaintColor::Blue)
 	{
+		//赤と青で紫へ
 		this->color = Paint::PaintColor::Purple;
 	}
 	else
 	{
+		//それ以外はそのまま変化させる
 		this->color = color;
 	}
+	//色に合わせて使用する画像を変える
 	switch (this->color)
 	{
 	case Paint::PaintColor::Red:
@@ -848,14 +863,22 @@ void Water::CheckState()
 			auto waters = OGge->GetTasks<Water>("water");
 			for (auto id = waters->begin(); id != waters->end(); ++id)
 			{
+				//自分以外のIDであり
 				if (this->id != (*id)->id)
 				{
+					//状態が氷であり
 					if ((*id)->GetState() == State::SOLID)
 					{
-						if (this->hit(*(*id)))
+						//当たり判定を行う空間にいる時
+						if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 						{
-							(*id)->SetSituation(Situation::Normal);
-							(*id)->SetState(State::LIQUID);
+							//当たり判定を行う
+							if (this->hit(*(*id)))
+							{
+								//相手を水に移行させる
+								(*id)->SetSituation(Situation::Normal);
+								(*id)->SetState(State::LIQUID);
+							}
 						}
 					}
 				}
