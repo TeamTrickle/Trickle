@@ -38,6 +38,8 @@ private:
 	Texture clearTex;
 	Texture fontui;			//âºÅAñ{î‘Ç≈è¡Ç∑
 	Texture numberui;
+	Texture stareffectTex;
+
 
 	struct resultUI {
 		Vec2 pos;

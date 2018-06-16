@@ -20,6 +20,7 @@ bool Result::Initialize() {
 	backTex.Create((std::string)"back.png");
 	this->starTex.Create((std::string)"resultstar.png");
 	this->frameTex.Create((std::string)"resultframe.png");
+	this->stareffectTex.Create((std::string)"stareffect.png");
 	//this->clearTex
 
 	this->nowMode = Mode1;
@@ -152,8 +153,10 @@ void Result::UpDate() {
 				//’âŽ~’n“_‚É“ž’…
 				if (star[i].pos == Vec2(300 + i * 200, 370 - i * 8) && star[i].nowWH == Vec2(128, 128)) {
 					star[i].angle = -5;
-					auto eff = Effect::Create(Vec2(300 + i * 200, 370 - i * 8), Vec2(32, 32), Vec2(256, 256), 1, 5);
-					eff->SetTexture(&this->starTex);
+					//auto eff = Effect::Create(Vec2(300 + i * 200, 370 - i * 8), Vec2(32, 32), Vec2(256, 256), 5, 5);
+					//eff->SetMode(Effect::Mode::Decrease);
+					//eff->SetTexture(&this->stareffectTex);
+					//eff->Set(eff->position, Vec2(eff->position.x + random::GetRand(-30, 30), eff->position.y + random::GetRand(-30, 30)));
 				}
 			}
 		}
@@ -205,7 +208,7 @@ void Result::Render2D() {
 		fontui.Rotate(-5);
 		fontui.Draw(draw, src);
 	}
-	//rm->GetTextureData((std::string)"fontui")->Draw(result.draw, result.src);
+	//rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
 	//TIME
 	{
 		Box2D draw(time.pos.x, time.pos.y, time.nowWH.x, time.nowWH.y);

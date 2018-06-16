@@ -59,7 +59,7 @@ bool Title::Initialize()
 	this->texEffect.Create("Effect02.png");
 	
 	
-	this->effect03.Create("Effect03.png");
+	this->effect03.Create("starteffect.png");
 	
 	//ƒTƒEƒ“ƒh‚Ì¶¬
 	sound = new Sound();
@@ -254,12 +254,12 @@ void Title::UpDate()
 			auto effect03 = Effect::Create(
 				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
 				Vec2(0, 0),
-				Vec2(256, 256),
+				Vec2(320, 64),
 				1,
 				100);
 			effect03->SetMode(Effect::Mode::Expansion);
 			effect03->SetTexture(&this->effect03);
-			effect03->SetMaxSize(Vec2(576, 576));
+			effect03->SetMaxSize(Vec2(640, 128));
 		}
 	}
 	break;

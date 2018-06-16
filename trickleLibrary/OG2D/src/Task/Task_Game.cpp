@@ -233,7 +233,7 @@ bool Game::Initialize()
 		auto iceSwitch = Switch::Create(Vec2(64 * 12, 64 * 20), std::vector<std::shared_ptr<GameObject>>{seihyouki1, /*seihyouki2,*/ seihyouki3/*, seihyouki4*/}, Switch::TargetType::IceMachine);
 		//ÉuÉçÉbÉN
 		auto block = Block::Create(Vec2(64 * 20, 64 * 29));
-		auto block2 = Block::Create(Vec2(64 * 33, 64 * 10));
+		auto block2 = Block::Create(Vec2(64 * 33, 64 * 11));
 		break;
 	}
 	default:
