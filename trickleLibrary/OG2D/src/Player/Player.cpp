@@ -72,7 +72,7 @@ void Player::UpDate()
 {
 	++animation.timeCnt;
 	//アニメーションカウントを増やす
-
+	//printf("%.f:%.f:%.f:%.f\n", this->position.x, this->position.y, this->position.x + this->Scale.x, this->position.y + this->Scale.y);
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -172,7 +172,7 @@ void Player::UpDate()
 				//NORMALの時、左右ボタンを押すとWALKに変わる
 				this->motion = Motion::Walk;
 			}
-			this->TohaveObjectHit();
+			//this->TohaveObjectHit();
 			if (this->HeadSolidCheck())
 			{
 				this->state = State::BUCKET;
@@ -646,6 +646,7 @@ void Player::MoveCheck(Vec2 est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Net" || 
+						map->hitBase[y][x].objectTag == "Soil" ||
 						map->_arr[y][x] == 24)
 					{
 						this->position.x = preX;
@@ -712,6 +713,7 @@ void Player::MoveCheck(Vec2 est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Net" ||
+						map->hitBase[y][x].objectTag == "Soil" ||
 						map->_arr[y][x] == 24)
 					{
 						this->position.y = preY;
@@ -790,19 +792,22 @@ bool Player::BucketHit()
 	auto bucket = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
-		if (this->hit(*(*id)))
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			(*id)->HoldCheck(true);
-			this->hold = true;
-			this->position.y -= 64.f;
-			this->Scale.y += 64.f;
-			return true;
+			if (this->hit(*(*id)))
+			{
+				(*id)->HoldCheck(true);
+				this->hold = true;
+				this->position.y -= 64.f;
+				this->Scale.y += 64.f;
+				return true;
+			}
 		}
 	}
 	GameObject left;
-	left.CreateObject(Objform::Cube, Vec2(this->position.x - 3.0f, this->position.y), Vec2(3.0f, this->Scale.y), 0.0f);
+	left.CreateObject(Objform::Cube, Vec2(this->position.x - 16.0f, this->position.y), Vec2(16.0f + this->Scale.x, this->Scale.y), 0.0f);
 	GameObject right;
-	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(3.0f, this->Scale.y), 0.0f);
+	right.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y), Vec2(16.0f + this->Scale.x, this->Scale.y), 0.0f);
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
@@ -810,13 +815,16 @@ bool Player::BucketHit()
 		{
 			if ((*id)->GetState() == Water::State::SOLID)
 			{
-				if (left.hit(*(*id)) || right.hit(*(*id)))
+				if (left.IsObjectDistanceCheck((*id)->position, (*id)->Scale) || right.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					(*id)->HoldCheck(true);
-					this->hold = true;
-					this->position.y -= 64.f;
-					this->Scale.y += 64.f;
-					return true;
+					if (left.hit(*(*id)) || right.hit(*(*id)))
+					{
+						(*id)->HoldCheck(true);
+						this->hold = true;
+						this->position.y -= 64.f;
+						this->Scale.y += 64.f;
+						return true;
+					}
 				}
 			}
 		}
@@ -857,7 +865,7 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f };
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f + (64.f * 0.3f) };
 		}
 	}
 }
@@ -1125,6 +1133,8 @@ bool Player::TohaveObjectHit()
 	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f,this->Scale.y), 0.0f);
 	GameObject right;
 	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(1.0f, this->Scale.y), 0.0f);
+	left.LineDraw();
+	right.LineDraw();
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = (*blocks).begin(); id != (*blocks).end(); ++id)
 	{
@@ -1148,20 +1158,21 @@ bool Player::TohaveObjectHit()
 		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
+
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
 		if ((*id)->GetState() == Water::State::SOLID)
 		{
 			if (this->est.x < 0)
 			{
-				if (left.hit(*(*id)))
+				if (left.CubeHit(*(*id)))
 				{
 					(*id)->MoveSolid(this->est);
 				}
 			}
 			if (this->est.x > 0)
 			{
-				if (right.hit(*(*id)))
+				if (right.CubeHit(*(*id)))
 				{
 					(*id)->MoveSolid(this->est);
 				}
