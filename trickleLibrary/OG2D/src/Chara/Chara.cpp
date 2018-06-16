@@ -13,7 +13,8 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->objectTag = this->taskName;	//タグを登録
 	this->direction = Direction::LEFT;	//向きを設定
 	this->AnimCnt = 0;					//アニメーションカウントを初期化
-	this->motion = Motion::Normal;
+	this->happyCnt = 0;					//クリア状態のカウント
+	this->motion = Motion::Normal;		//motion初期化
 	this->isAuto = true;				//オート移動設定を初期化
 	this->isCollision = true;			//当たり判定設定初期化
 	this->MoveCnt = 0;					//移動カウント初期化
@@ -80,11 +81,13 @@ void Chara::UpDate()
 		}
 		
 	}
-	if (this->move.x == 0)	{ this->motion = Normal; }
-	else					{ this->motion = Walk; }
-	if (this->move.y > 0) { this->motion = Motion::Fall; }
-	if (this->move.y < 0) { this->motion = Motion::Jump_M; }
-	if (this->EndPos.y != 0) { this->motion = Motion::Ladder; }
+	if (this->motion != Happy_N && this->motion != Happy_J && this->motion != Happy_F) {
+		if (this->move.x == 0) { this->motion = Normal; }
+		else { this->motion = Walk; }
+		if (this->move.y > 0) { this->motion = Motion::Fall; }
+		if (this->move.y < 0) { this->motion = Motion::Jump_M; }
+		if (this->EndPos.y != 0) { this->motion = Motion::Ladder; }
+	}
 	//カウントが10を超えているならばオート移動へ移行する
 	if (this->MoveCnt > 10)
 	{
@@ -257,6 +260,42 @@ bool Chara::Jump()
 	//カウントを増やす(当たり判定を消すもしくは復活させる)
 	this->IsCollisionCheck();
 	return true;
+}
+void Chara::Happy()
+{
+	//5回ジャンプする
+	if (this->happyCnt < 6) {
+		//モーションを変える
+		if (this->move.y > 0) {
+			this->motion = Motion::Happy_J;
+		}
+		else {
+			this->motion = Motion::Happy_F;
+		}
+		//向きを変える
+		if (this->happyCnt % 2 == 0) {
+			this->direction = Direction::LEFT;
+			this->move.x = -2;
+		}
+		else {
+			this->direction = Direction::RIGHT;
+			this->move.x = 2;
+		}
+
+		//ジャンプする
+		if (this->FootCheck() && this->move.y == 0) {
+			this->motion = Motion::Happy_N;
+			++this->happyCnt;
+			this->move.y = this->JUMP_POWER - 5.f;
+		}
+	}
+
+	else {
+		this->move.x = 0;
+		this->move.y = 0;
+		this->motion = Motion::Normal;
+		++this->happyCnt;
+	}
 }
 void Chara::AutoMove()
 {
@@ -441,6 +480,16 @@ Box2D Chara::returnSrc(Motion motion)
 
 	case Motion::Ladder:
 		src = Box2D(this->ladder[this->AnimCnt / 15 % 2] * this->srcX, 3 * this->srcY, this->srcX, this->srcY);
+		break;
+
+	case Motion::Happy_N:
+		src = Box2D(2* 641, 10 * this->srcY, 641, this->srcY);
+		break;
+	case Motion::Happy_J:
+		src = Box2D(0 * 641, 10 * this->srcY, 641, this->srcY);
+		break;
+	case Motion::Happy_F:
+		src = Box2D(1 * 641, 10 * this->srcY, 641, this->srcY);
 		break;
 	}
 	return src;

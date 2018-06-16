@@ -162,14 +162,19 @@ void Result::UpDate() {
 		}
 		break;
 	case Mode5:
-		//プレイヤ喜びモーション(未実装)
-		//クリアUI出現(未実装)
-
-		if (OGge->in->down(Input::in::B2))
-		{
-			npc->Set(Vec2(64 * 2, 64 * 8), Vec2(1500, 64 * 8), 30.f);
-			this->nowMode = Mode6;
+		//アニメーションが終わるまでは入力できない
+		if (npc->happyCnt < 7) {
+			npc->Happy();
+			//クリアUI出現(未実装)
 		}
+		else {
+			if (OGge->in->down(Input::in::B2))
+			{
+				npc->Set(Vec2(64 * 2, 64 * 8), Vec2(1500, 64 * 8), 30.f);
+				this->nowMode = Mode6;
+			}
+		}
+
 		break;
 	case Mode6:
 		//プレイヤ退場
