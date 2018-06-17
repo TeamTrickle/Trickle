@@ -132,7 +132,7 @@ bool Game::Initialize()
 			auto kanetuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 17), Vec2(64 * 2, 64), Kanetuki::Angle::UP, false);
 			//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 17), false);
 			//扇風機生成
-			auto fan = Fan::Create(Vec2(64 * 14, 64 * 7), 13, Fan::Dir::RIGHT, true);
+			auto fan = Fan::Create(Vec2(64 * 14, 64 * 7), 13, Fan::Dir::RIGHT, 64 * 5, true);
 			//加熱器用スイッチ生成
 			auto swich = Switch::Create(Vec2(64 * 18, 64 * 16), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
 		}
@@ -174,8 +174,8 @@ bool Game::Initialize()
 		sound.play();
 
 		//扇風機の生成
-		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, false);
-		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, true);
+		auto fan1 = Fan::Create(fanpos[1], fanrange[1], Fan::Dir::LEFT, 64 * 8, false);
+		auto fan2 = Fan::Create(fanpos[0], fanrange[0], Fan::Dir::RIGHT, 64 * 9, true);
 		//加熱器生成
 		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), Kanetuki::Angle::UP, false);
 		//製氷機生成
@@ -212,11 +212,11 @@ bool Game::Initialize()
 
 		//扇風機
 		Vec2 fanpos[5] = { Vec2(64 * 11,64 * 6),Vec2(64 * 20,64 * 6),Vec2(64 * 25,64 * 17),Vec2(64 * 30,64 * 23),Vec2(64 * 34,64 * 27) };
-		auto fan1 = Fan::Create(fanpos[0], 7, Fan::Dir::LEFT, true);
-		auto fan2 = Fan::Create(fanpos[1], 12, Fan::Dir::RIGHT, true);
-		auto fan3 = Fan::Create(fanpos[2], 15, Fan::Dir::LEFT, true);
-		auto fan4 = Fan::Create(fanpos[3], 8, Fan::Dir::RIGHT, true);
-		auto fan5 = Fan::Create(fanpos[4], 4.5f, Fan::Dir::LEFT, false);
+		auto fan1 = Fan::Create(fanpos[0], 7, Fan::Dir::LEFT, 64 * 7, true);
+		auto fan2 = Fan::Create(fanpos[1], 12, Fan::Dir::RIGHT, 64 * 5, true);
+		auto fan3 = Fan::Create(fanpos[2], 15, Fan::Dir::LEFT, 64 * 15, true);
+		auto fan4 = Fan::Create(fanpos[3], 8, Fan::Dir::RIGHT, 64 * 2, true);
+		auto fan5 = Fan::Create(fanpos[4], 4.5f, Fan::Dir::LEFT, 64 * 5, false);
 		//加熱器
 		auto kanetsuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 21 - 20), Vec2(64 * 3, 84), Kanetuki::Angle::UP, false);
 		auto kanetsuki4 = Kanetuki::Create(Vec2(64 * 18, 64 * 29), Vec2(64 * 5, 64 + 32), Kanetuki::Angle::BOTTOM, true);

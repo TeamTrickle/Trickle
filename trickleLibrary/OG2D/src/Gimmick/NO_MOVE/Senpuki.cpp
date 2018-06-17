@@ -10,7 +10,7 @@ Fan::Fan() {
 	this->soundname = "wind1.wav";
 }
 Fan::~Fan() {}
-bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,*/ bool active) {
+bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,*/float effectdis, bool active) {
 	this->taskName = "Senpuki";			//検索時に使うための名を登録する
 	__super::Init(taskName);			//TaskObject内の処理を行う
 
@@ -38,6 +38,7 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	sound.create(soundname, true);
 	//エフェクト関連情報
 	this->effectCnt = 0;
+	this->endpos = effectdis;
 
 	range = r;
 	dir = d;
@@ -75,7 +76,7 @@ void Fan::UpDate() {
 			if (dir == RIGHT)
 			{
 				auto effect = Effect::Create(Vec2(this->position.x+32,this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200);
-				effect->SetWind(Vec2(64 * 8, 64), effect->position, Vec2(effect->position.x + (64 * 8), effect->position.y), Effect::Mode::WindR);
+				effect->SetWind(Vec2(64 * 8, 64), effect->position, Vec2(effect->position.x + endpos, effect->position.y), Effect::Mode::WindR);
 				switch (effectnum)
 				{
 				case 1:
@@ -99,7 +100,7 @@ void Fan::UpDate() {
 			else
 			{
 				auto effect = Effect::Create(Vec2(this->position.x + 32, this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200, 5);
-				effect->SetWind(Vec2(64 * 4, 64), effect->position, Vec2(effect->position.x - (64 * 8), effect->position.y), Effect::Mode::WindL);
+				effect->SetWind(Vec2(64 * 4, 64), effect->position, Vec2(effect->position.x - endpos, effect->position.y), Effect::Mode::WindL);
 				switch (effectnum)
 				{
 				case 1:
@@ -266,7 +267,7 @@ void Fan::changeActive() {
 	this->active_ = !this->active_;
 }
 
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, /*std::shared_ptr<Switch>& swich,*/ bool active, bool flag) {
+Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, /*std::shared_ptr<Switch>& swich,*/ float effectdis, bool active, bool flag) {
 	Fan::SP to = Fan::SP(new Fan());
 	if (to)
 	{
@@ -275,7 +276,7 @@ Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, /*std::shared_ptr<Switch>& sw
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, r, d, /*swich,*/ active))
+		if (!to->Initialize(pos, r, d, /*swich,*/effectdis, active))
 		{
 			to->Kill();
 		}

@@ -37,14 +37,14 @@ public:
 
 	typedef std::shared_ptr<Fan> SP;
 	//座標、風の範囲(マス数)、向き、スイッチがオフ(初期状態)で稼働しているならtrue
-	static Fan::SP Create(Vec2 pos, float r, Fan::Dir d, /*std::shared_ptr<Switch>& swich,*/ bool active, bool flag = true);
+	static Fan::SP Create(Vec2 pos, float r, Fan::Dir d, /*std::shared_ptr<Switch>& swich,*/float effectdis, bool active, bool flag = true);
 
 	void changeActive();				//自身の稼働状態を反転させる
 	~Fan();
 
 private:
 	Fan();
-	bool Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,*/ bool active);
+	bool Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,*/ float effectdis, bool active);
 	void UpDate();			//更新処理
 	void Render2D();		//描画処理
 	bool Finalize();		//解放処理
@@ -65,6 +65,7 @@ private:
 	float range;
 	float movePos;
 	int strength;
+	float endpos;
 	std::string soundname;      //サウンドのファイル名格納
 	std::string taskName;		//検索用
 
