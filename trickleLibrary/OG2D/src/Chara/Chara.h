@@ -65,7 +65,7 @@ public:
 	void MoveCheck(Vec2);	//移動処理
 	bool FootCheck();		//足元チェック
 	bool Jump();			//ジャンプを行う
-	void Happy();			//喜ぶモーションを行う
+	void Happy(int count);			//喜ぶモーションを行う
 	bool AutoJump();
 	void AutoMove();		//オート移動
 	void ManualMove(Vec2&);	//手動移動

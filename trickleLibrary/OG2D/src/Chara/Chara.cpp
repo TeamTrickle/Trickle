@@ -261,10 +261,10 @@ bool Chara::Jump()
 	this->IsCollisionCheck();
 	return true;
 }
-void Chara::Happy()
+void Chara::Happy(int count)
 {
-	//5回ジャンプする
-	if (this->happyCnt < 6) {
+	//ジャンプする
+	if (this->happyCnt < count-1) {
 		//モーションを変える
 		if (this->move.y > 0) {
 			this->motion = Motion::Happy_J;
@@ -281,18 +281,17 @@ void Chara::Happy()
 			this->direction = Direction::RIGHT;
 			this->move.x = 2;
 		}
-
 		//ジャンプする
 		if (this->FootCheck() && this->move.y == 0) {
 			this->motion = Motion::Happy_N;
+			if (this->happyCnt < count - 2) {
+				this->move.y = this->JUMP_POWER - 5.f;
+			}
 			++this->happyCnt;
-			this->move.y = this->JUMP_POWER - 5.f;
 		}
 	}
-
+	//終わったらモーション調整
 	else {
-		this->move.x = 0;
-		this->move.y = 0;
 		this->motion = Motion::Normal;
 		++this->happyCnt;
 	}
