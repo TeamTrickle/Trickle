@@ -186,7 +186,7 @@ bool Goal::WaterHit()
 		{
 			if (this->foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->foot.hit(*(*id)))
+				if (this->foot.CubeHit(*(*id)))
 				{
 					this->color = (*id)->GetColor();
 					(*id)->Kill();

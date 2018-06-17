@@ -148,7 +148,10 @@ void Block::PlCheckHitL(GameObject &p)
 
 void Block::PlCheckHit(GameObject &p)
 {
-	plhit = this->hit(p);
+	if (this->IsObjectDistanceCheck(p.position, p.Scale))
+	{
+		plhit = this->hit(p);
+	}
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -268,7 +271,7 @@ bool Block::isCollideSomething()
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->hit(*(*id)))
+				if (this->CubeHit(*(*id)))
 				{
 					return true;
 				}
@@ -307,7 +310,7 @@ bool Block::footCheck()
 	{
 		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			if (this->hit(*(*id)))
+			if (this->CubeHit(*(*id)))
 			{
 				return true;
 			}
