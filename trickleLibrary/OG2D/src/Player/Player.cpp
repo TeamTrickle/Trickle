@@ -328,6 +328,7 @@ void Player::UpDate()
 			break;
 		case Lift:
 			++this->animation.animCnt;
+			//8フレーム＊２コマ-１
 			if (this->animation.animCnt > 15) {
 				this->motion = Motion::Normal;
 				this->state = State::BUCKET;
@@ -336,7 +337,16 @@ void Player::UpDate()
 			break;
 		case Lower:
 			++this->animation.animCnt;
+			//8フレーム＊２コマ-１
 			if (this->animation.animCnt > 15) {
+				this->motion = Motion::Normal;
+				this->animation.animCnt = 0;
+			}
+			break;
+		case Spill:
+			++this->animation.animCnt;
+			//8フレーム＊３コマ-１
+			if (this->animation.animCnt > 23) {
 				this->motion = Motion::Normal;
 				this->animation.animCnt = 0;
 			}
@@ -346,7 +356,7 @@ void Player::UpDate()
 
 		//スイッチはすぐモーションが変わらないのでanimation中の状態を持ってくる
 		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M && 
-			this->motion != Motion::Lift && this->motion != Lower){
+			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill){
 			if (this->InputLeft())
 			{
 				this->est.x = -this->MOVE_SPEED;
@@ -1050,6 +1060,10 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 		case Motion::Fall:
 			src = Box2D(1 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
 			break;
+		case Motion::Spill:
+			src = Box2D(this->spill[this->animCnt / 8 % 3] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
+
+			break;
 		}
 	}
 	return src;
@@ -1303,6 +1317,10 @@ bool Player::PutCheck()
 	}
 	return true;
 }
+void Player::SetMotion(Motion motion_)
+{
+	this->motion = motion_;
+}
 void Player::SetInputAuto(bool flag)
 {
 	this->isInputAuto = flag;
@@ -1319,6 +1337,8 @@ bool Player::GetInputAuto() const
 {
 	return this->isInputAuto;
 }
+
+
 bool Player::InputLeft() {
 	if (this->isInputAuto)
 	{
