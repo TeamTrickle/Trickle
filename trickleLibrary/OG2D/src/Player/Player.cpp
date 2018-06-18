@@ -8,6 +8,7 @@
 Player::Player()
 {
 	this->hold = false;
+	this->isInputAuto = false;
 }
 Player::~Player()
 {
@@ -38,12 +39,14 @@ bool Player::Initialize()
 	//自動移動用値の初期化
 	this->animation.Initialize();
 	__super::Init((std::string)"Player");
+	__super::SetDrawOrder(1.f);
 	return true;
 }
 bool Player::Initialize(Vec2& pos)
 {
 	this->taskName = "Player";
 	__super::Init(this->taskName);
+	__super::SetDrawOrder(0.4f);
 	//オブジェクトの初期化
 	this->CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
 	this->objectTag = "Player";
@@ -69,7 +72,7 @@ void Player::UpDate()
 {
 	++animation.timeCnt;
 	//アニメーションカウントを増やす
-
+	//printf("%.f:%.f:%.f:%.f\n", this->position.x, this->position.y, this->position.x + this->Scale.x, this->position.y + this->Scale.y);
 	switch (this->state)
 	{
 	case State::ANIMATION:
@@ -89,14 +92,13 @@ void Player::UpDate()
 	case State::BUCKET:
 		//バケツの値を自分に合わせる
 		this->BucketMove();
-		if (OGge->in->down(In::B2))
+		if (this->InputB2down())
 		{
 			this->ReleaseHold();
 			this->motion = Motion::Lower;
 		}
 		break;
 	case State::NORMAL:
-		
 		break;
 	}
 	if (this->inv > 0)
@@ -115,7 +117,7 @@ void Player::UpDate()
 				this->motion = Motion::Fall;
 				break;
 			}
-			if (OGge->in->down(In::B1))
+			if (this->InputB1down())
 			{
 				if (this->FootCheck())
 				{
@@ -124,15 +126,18 @@ void Player::UpDate()
 					this->moveCnt = 0;
 				}
 			}
-			if (OGge->in->down(In::B2))
+			if (this->InputB2down())
 			{
 				//バケツを持つ
 				if (this->BucketHit())
 				{
 					this->motion = Motion::Lift;
 				}
-				//スイッチを操作する
-				this->SwitchCheck();
+				else
+				{
+					//スイッチを操作する
+					this->SwitchCheck();
+				}
 			}
 			if (this->state != State::BUCKET) {
 				if (this->InputDown())
@@ -167,7 +172,7 @@ void Player::UpDate()
 				//NORMALの時、左右ボタンを押すとWALKに変わる
 				this->motion = Motion::Walk;
 			}
-			this->TohaveObjectHit();
+			//this->TohaveObjectHit();
 			if (this->HeadSolidCheck())
 			{
 				this->state = State::BUCKET;
@@ -203,7 +208,7 @@ void Player::UpDate()
 								//アニメーション中以外
 			if (this->state != State::ANIMATION)
 			{
-				if (OGge->in->down(In::B1))
+				if (this->InputB1down())
 				{
 					if (this->LadderJumpCheck())
 					{
@@ -228,12 +233,16 @@ void Player::UpDate()
 						this->est = { 0.f,0.f };
 					}
 				}
-				if (this->InputDown())
+				if (this->InputDown() || this->isInputAuto)
 				{
 					++this->animation.animCnt;
 					Vec2 e = { 0.f,5.0f };
+					if (this->isInputAuto)
+					{
+						e.y += 10.f;
+					}
 					this->MoveCheck(e, (std::string)"Floor");
-					if (this->FootCheck((std::string)"Ladder", 1))
+					if (this->FootCheck((std::string)"Ladder", 1) || this->SolidFootCheck())
 					{
 						this->motion = Motion::Normal;
 					}
@@ -246,26 +255,34 @@ void Player::UpDate()
 			}
 			break;
 		case Walk:
+			if (!this->FootCheck())
+			{
+				this->motion = Motion::Fall;
+				break;
+			}
 			if (!this->InputRight() && !this->InputLeft() && this->AxisLX() == 0)
 			{
 				//左右ボタンを押さないとnormalに戻る
 				this->motion = Motion::Normal;
 			}
-			if (OGge->in->on(In::B1))
+			if (this->InputB1down())
 			{
 				//歩いてるときのジャンプ
 				this->motion = Motion::Jump;
 				this->moveCnt = 0;
 			}
-			if (OGge->in->down(In::B2))
+			if (this->InputB2down())
 			{
 				//バケツを持つ
 				if (this->BucketHit())
 				{
 					this->motion = Motion::Lift;
 				}
-				//スイッチを押す
-				this->SwitchCheck();
+				else
+				{
+					//スイッチを押す
+					this->SwitchCheck();
+				}
 			}
 			if (this->TohaveObjectHit()) {
 				//ブロックを押す
@@ -288,7 +305,7 @@ void Player::UpDate()
 			}
 			break;
 		case Block_M:
-			if (OGge->in->down(In::B1))
+			if (this->InputB1down())
 			{
 				if (this->FootCheck())
 				{
@@ -581,6 +598,23 @@ bool Player::FootCheck(std::string& objname_,int n)
 	}
 	return false;
 }
+bool Player::SolidFootCheck()
+{
+	GameObject foot;
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if ((*id)->GetState() == Water::State::SOLID && foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (foot.hit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
 void Player::MoveCheck(Vec2 est)
 {
 	auto map = OGge->GetTask<Map>("map");
@@ -612,6 +646,7 @@ void Player::MoveCheck(Vec2 est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Net" || 
+						map->hitBase[y][x].objectTag == "Soil" ||
 						map->_arr[y][x] == 24)
 					{
 						this->position.x = preX;
@@ -678,6 +713,7 @@ void Player::MoveCheck(Vec2 est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Net" ||
+						map->hitBase[y][x].objectTag == "Soil" ||
 						map->_arr[y][x] == 24)
 					{
 						this->position.y = preY;
@@ -756,19 +792,22 @@ bool Player::BucketHit()
 	auto bucket = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = (*bucket).begin(); id != (*bucket).end(); ++id)
 	{
-		if (this->hit(*(*id)))
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			(*id)->HoldCheck(true);
-			this->hold = true;
-			this->position.y -= 64.f;
-			this->Scale.y += 64.f;
-			return true;
+			if (this->hit(*(*id)))
+			{
+				(*id)->HoldCheck(true);
+				this->hold = true;
+				this->position.y -= 64.f;
+				this->Scale.y += 64.f;
+				return true;
+			}
 		}
 	}
 	GameObject left;
-	left.CreateObject(Objform::Cube, Vec2(this->position.x - 3.0f, this->position.y), Vec2(3.0f, this->Scale.y), 0.0f);
+	left.CreateObject(Objform::Cube, Vec2(this->position.x - 16.0f, this->position.y), Vec2(16.0f + this->Scale.x, this->Scale.y), 0.0f);
 	GameObject right;
-	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(3.0f, this->Scale.y), 0.0f);
+	right.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y), Vec2(16.0f + this->Scale.x, this->Scale.y), 0.0f);
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
@@ -776,13 +815,16 @@ bool Player::BucketHit()
 		{
 			if ((*id)->GetState() == Water::State::SOLID)
 			{
-				if (left.hit(*(*id)) || right.hit(*(*id)))
+				if (left.IsObjectDistanceCheck((*id)->position, (*id)->Scale) || right.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					(*id)->HoldCheck(true);
-					this->hold = true;
-					this->position.y -= 64.f;
-					this->Scale.y += 64.f;
-					return true;
+					if (left.hit(*(*id)) || right.hit(*(*id)))
+					{
+						(*id)->HoldCheck(true);
+						this->hold = true;
+						this->position.y -= 64.f;
+						this->Scale.y += 64.f;
+						return true;
+					}
 				}
 			}
 		}
@@ -823,7 +865,7 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f };
+			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f + (64.f * 0.3f) };
 		}
 	}
 }
@@ -853,6 +895,14 @@ Vec2 Player::Animation::Move(Motion motion_)
 	//X軸だけ移動(目的地まで歩いて行く)
 	if (this->animationVec.x != 0.f)
 	{
+		if (this->animationVec.x > 0.f)
+		{
+			player->direction = Player::Direction::RIGHT;
+		}
+		else if (this->animationVec.x < 0.f)
+		{
+			player->direction = Player::Direction::LEFT;
+		}
 		player->motion = Motion::Walk;
 		if (this->animationVec.x >= 1.0f)
 		{
@@ -1030,14 +1080,29 @@ void Player::MoveCheck(Vec2& est, std::string& objname_)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (this->hit(map->hitBase[y][x]))
+				if (this->IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 				{
-					if (map->hitBase[y][x].objectTag == "Floor" ||
-						map->hitBase[y][x].objectTag == "LadderTop")
+					if (this->hit(map->hitBase[y][x]))
 					{
-						this->position.y = preY;
-						break;
+						if (map->hitBase[y][x].objectTag == "Floor" ||
+							map->hitBase[y][x].objectTag == "LadderTop")
+						{
+							this->position.y = preY;
+							break;
+						}
 					}
+				}
+			}
+		}
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if ((*id)->GetState() == Water::State::SOLID && this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->hit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
 				}
 			}
 		}
@@ -1068,6 +1133,8 @@ bool Player::TohaveObjectHit()
 	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f,this->Scale.y), 0.0f);
 	GameObject right;
 	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(1.0f, this->Scale.y), 0.0f);
+	left.LineDraw();
+	right.LineDraw();
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = (*blocks).begin(); id != (*blocks).end(); ++id)
 	{
@@ -1091,20 +1158,21 @@ bool Player::TohaveObjectHit()
 		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
+
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
 		if ((*id)->GetState() == Water::State::SOLID)
 		{
 			if (this->est.x < 0)
 			{
-				if (left.hit(*(*id)))
+				if (left.CubeHit(*(*id)))
 				{
 					(*id)->MoveSolid(this->est);
 				}
 			}
 			if (this->est.x > 0)
 			{
-				if (right.hit(*(*id)))
+				if (right.CubeHit(*(*id)))
 				{
 					(*id)->MoveSolid(this->est);
 				}
@@ -1164,7 +1232,7 @@ bool Player::ReleaseHold()
 			{
 				if ((*id)->GetHold())
 				{
-					if (OGge->in->down(In::B2))
+					if (this->InputB2down())
 					{
 						if (this->direction == Direction::LEFT)
 						{
@@ -1235,20 +1303,56 @@ bool Player::PutCheck()
 	}
 	return true;
 }
+void Player::SetInputAuto(bool flag)
+{
+	this->isInputAuto = flag;
+	if (this->isInputAuto)
+	{
+		if (this->state == State::BUCKET)
+		{
+			this->ReleaseHold();
+			this->motion = Motion::Lower;
+		}
+	}
+}
+bool Player::GetInputAuto() const
+{
+	return this->isInputAuto;
+}
 bool Player::InputLeft() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CL);
 }
 bool Player::InputRight() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CR);
 }
 bool Player::InputDown() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CD) || OGge->in->on(In::LD);
 }
 bool Player::InputUp() {
+	if (this->isInputAuto)
+	{
+		return false;
+	}
 	return OGge->in->on(Input::CU) || OGge->in->on(In::LU);
 }
 float Player::AxisLX()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	if (OGge->in->axis(In::AXIS_LEFT_X) > 0.3f || OGge->in->axis(In::AXIS_LEFT_X) < -0.3f)
 	{
 		return OGge->in->axis(In::AXIS_LEFT_X);
@@ -1257,15 +1361,59 @@ float Player::AxisLX()
 }
 float Player::AxisLY()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	return OGge->in->axis(In::AXIS_LEFT_Y);
 }
 float Player::AxisRX()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	return OGge->in->axis(In::AXIS_RIGHT_X);
 }
 float Player::AxisRY()
 {
+	if (this->isInputAuto)
+	{
+		return 0.0f;
+	}
 	return OGge->in->axis(In::AXIS_RIGHT_Y);
+}
+bool Player::InputB1down()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->down(In::B1);
+}
+bool Player::InputB2down()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->down(In::B2);
+}
+bool Player::InputB1on()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->on(In::B1);
+}
+bool Player::InputB2on()
+{
+	if (this->isInputAuto)
+	{
+		return false;
+	}
+	return OGge->in->on(In::B2);
 }
 Player::SP Player::Create(Vec2& pos, bool flag)
 {

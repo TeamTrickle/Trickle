@@ -7,6 +7,15 @@
 
 
 class Kanetuki : public GameObject, public TaskObject {
+public:
+	enum Angle {
+		UP,
+		LEFT,
+		RIGHT,
+		BOTTOM,
+	};
+
+private:
 	std::string taskName;
 	int changeStateCnt;				//水を水蒸気にするまでの時間カウンタ
 	const int maxChangeTimeLiquid;	//水が水蒸気になるフレーム数
@@ -19,8 +28,10 @@ class Kanetuki : public GameObject, public TaskObject {
 	int animCnt;				//アニメーションカウント
 	int hotNum;				//横幅によって増える画像の数
 	std::vector<Box2D> draw;
+	Angle angle;
+	float texRotaAng;
 
-	bool Initialize(Vec2&, Vec2 range, bool active);		//初期化処理
+	bool Initialize(Vec2&, Vec2 range, Angle ang, bool active);		//初期化処理
 	void UpDate();				//更新処理
 	void Render2D();			//描画処理
 	bool Finalize();			//解放処理
@@ -31,7 +42,7 @@ class Kanetuki : public GameObject, public TaskObject {
 public:
 	~Kanetuki();
 	typedef std::shared_ptr<Kanetuki> SP;
-	static Kanetuki::SP Create(Vec2& pos, Vec2 range, bool active, bool flag = true);
+	static Kanetuki::SP Create(Vec2& pos, Vec2 range, Angle ang, bool active, bool flag = true);
 
 	void changeActive();				//自身の稼働状態を反転させる
 
@@ -42,6 +53,7 @@ public:
 	bool startflag;       //サウンドを再生していいかのフラッグ
 	bool nowplay;
 	void SetTexture(Texture*);
+
 
 };
 

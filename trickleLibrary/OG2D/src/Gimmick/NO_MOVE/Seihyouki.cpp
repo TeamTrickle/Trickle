@@ -11,7 +11,7 @@ Seihyouki::Seihyouki()
 {}
 
 
-bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
+bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 	this->taskName = "Seihyouki";	//ŒŸõ‚Ég‚¤‚½‚ß‚Ì–¼‚ğ“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ğs‚¤
 
@@ -24,15 +24,14 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range) {
 	this->animCnt = 0;
 	this->coldNum = 0;
 	draw.clear();
+	draw.resize(1);
+
+	this->angle = ang;
 
 	return true;
 }
 void Seihyouki::UpDate() {
 	if (active) {
-		//if(‚±‚±‚É»•X‹@‚Ì•ûŒü‚ğ‚à‚ç‚¤) {
-		this->coldNum = Scale.x / 64;
-		draw.resize(coldNum);
-		//}
 		toIce();
 	}
 }
@@ -42,16 +41,53 @@ void Seihyouki::Render2D() {
 	if (active) {
 		LineDraw();
 		++animCnt;
-		for (int i = 0; i < coldNum; ++i) {
-			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
-			draw[i].OffsetSize();
-		}
-		Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
-		src.OffsetSize();
+		//Box2D drawRL,srcR;
+		if (angle==RIGHT)
+		{
+					coldNum = 1;
+					float angle = 90.0f;
+					for (int i = 0; i < coldNum; ++i) {
+						draw[i] = Box2D(position.x+15 + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
+						draw[i].OffsetSize();
+					}
+					Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+					src.OffsetSize();
 
-		for (auto draw_ : draw) {
-			this->coldImg->Draw(draw_, src);
+					coldImg->Rotate(angle);
+					for (auto draw_ : draw) {
+						this->coldImg->Draw(draw_, src);
+					}
 		}
+		else if (angle==LEFT)
+		{
+			coldNum = 1;
+			float angle = 270.0f;
+			for (int i = 0; i < coldNum; ++i) {
+				draw[i] = Box2D(position.x+32.0f + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
+				draw[i].OffsetSize();
+			}
+			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+			src.OffsetSize();
+
+			coldImg->Rotate(angle);
+			for (auto draw_ : draw) {
+				this->coldImg->Draw(draw_, src);
+			}
+		}
+		//ãŒü‚«‚Ì»•X‹@g‚Á‚Ä‚¢‚È‚¢
+		//else if (angle == UP)
+		//{
+		//			for (int i = 0; i < coldNum; ++i) {
+		//				draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+		//				draw[i].OffsetSize();
+		//			}
+		//			src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+		//			src.OffsetSize();
+
+		//			for (auto draw_ : draw) {
+		//				this->coldImg->Draw(draw_, src);
+		//			}
+		//}
 	}
 }
 bool Seihyouki::Finalize() {
@@ -84,7 +120,7 @@ void Seihyouki::SetTexture(Texture* tex)
 {
 	this->coldImg = tex;
 }
-Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, bool flag_) {
+Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, bool flag_) {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
 	if (to)
 	{
@@ -93,7 +129,7 @@ Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, bool flag_) {
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, range))
+		if (!to->Initialize(pos, range, ang))
 		{
 			to->Kill();
 		}

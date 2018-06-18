@@ -38,6 +38,7 @@ bool StageSelect::Initialize()
 {
 	//画像の読み込み
 	this->Testdoor.Create((std::string)"door.png");
+	this->Wall.Create((std::string)"wall.PNG");
 	//プレイヤーNPCの生成
 	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
@@ -46,14 +47,17 @@ bool StageSelect::Initialize()
 	auto back = Back::Create(std::string("back.png"), Vec2(1920 + 200, 1080));
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
-	map->SetDrawOrder(0.1f);
+	map->SetDrawOrder(0.5f);
 	//ステージ概要表示用案内板
 	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
+	(*board) << "monitor0.txt";
+	(*board) << "monitor1.txt";
+	(*board) << "monitor2.txt";
 	//サウンドの生成
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定
-	__super::SetDrawOrder(0.5f);
+	__super::SetDrawOrder(0.3f);
 	//初期モード設定
 	this->mode = Mode::from1;
 	//テスト処理
@@ -62,7 +66,7 @@ bool StageSelect::Initialize()
 	//停止位置の設定
 	for (int i = 1; i <= 3; ++i)
 	{
-		auto gate = Gate::Create((400.f * i) + 450.f, 640.f);
+		auto gate = Gate::Create((490.f * i) + 100.f, 640.f);      //元データ(490.f*i)+450.f
 		gate->SetTexture(&this->Testdoor);
 		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
@@ -126,13 +130,22 @@ void StageSelect::UpDate()
 
 void StageSelect::Render2D()
 {
-	
+
+	//壁の描画
+	{
+		Box2D draw = Box2D(450, 600, 1500, 300);
+		draw.OffsetSize();
+		Box2D src = Box2D(0.f, 0.f, Wall.GetTextureSize().x, Wall.GetTextureSize().y);
+		this->Wall.Draw(draw, src);
+		//OG::LineHitDraw(&draw);
+	}
 }
 
 bool StageSelect::Finalize()
 {
 	//画像の解放
 	this->Testdoor.Finalize();
+	this->Wall.Finalize();
 	//サウンドの解放
 	delete rm->GetSoundData((std::string)"titleBGM");
 	rm->DeleteSound((std::string)"titleBGM");
@@ -216,7 +229,7 @@ void StageSelect::From2()
 	{
 		auto board = OGge->GetTask<StageAlert>("stagealert");
 		if (board) {
-			//board->AnimPlay();
+			board->setActive(true);
 			board->SetStageData("monitor0.txt");
 		}
 		//次へ移動

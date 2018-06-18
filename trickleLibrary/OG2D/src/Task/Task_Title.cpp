@@ -57,11 +57,9 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect02.png");
-	this->fontTex = new Texture();
-	this->fontTex->Create("fontui.png");
-	rm->SetTextureData((std::string)"fontui", this->fontTex);
 	
-	this->effect03.Create("Effect03.png");
+	
+	this->effect03.Create("starteffect.png");
 	
 	//サウンドの生成
 	sound = new Sound();
@@ -256,12 +254,12 @@ void Title::UpDate()
 			auto effect03 = Effect::Create(
 				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
 				Vec2(0, 0),
-				Vec2(256, 256),
+				Vec2(320, 64),
 				1,
 				100);
 			effect03->SetMode(Effect::Mode::Expansion);
 			effect03->SetTexture(&this->effect03);
-			effect03->SetMaxSize(Vec2(576, 576));
+			effect03->SetMaxSize(Vec2(640, 128));
 		}
 	}
 	break;
@@ -335,7 +333,7 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 64, 64*4, 64);
 		src.OffsetSize();
-		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 	//スタート
 	{
@@ -345,7 +343,7 @@ void Title::Render2D()
 		Box2D src(0, 0, 64*5, 64);
 		src.OffsetSize();
 		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-		fontTex->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
 }
 
@@ -507,6 +505,11 @@ void Title::SkipMove()
 	this->mode = Mode::from6;
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
 	{
 		(*id)->Kill();
 	}

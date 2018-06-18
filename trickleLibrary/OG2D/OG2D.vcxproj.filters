@@ -339,6 +339,9 @@
     <ClCompile Include="src\Map\Ornament.cpp">
       <Filter>ソースファイル\Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\Task\StageInfoRes.cpp">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -515,9 +518,6 @@
     <ClInclude Include="src\Task\Task_StageAlert.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
-    <ClInclude Include="src\StageFileSys.h">
-      <Filter>ソースファイル\Task\StageSelect</Filter>
-    </ClInclude>
     <ClInclude Include="src\Task\MapPreviewer.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
@@ -533,11 +533,11 @@
     <ClInclude Include="src\Gimmick\NO_MOVE\TimeSign.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
-    <ClInclude Include="Ornament.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\Map\Ornament.h">
       <Filter>ソースファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\StageInfoRes.h">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -22,6 +22,7 @@ GameManager::~GameManager()
 	{
 		if (*MapNum == 5 || *MapNum == 6)
 		{
+			OGge->ChengeTask();
 			Result::Create();
 		}
 		else
@@ -75,7 +76,7 @@ void GameManager::UpDate()
 			if (game)
 			{
 				game->Kill();
-				if (*MapNum == 5 || *MapNum == 6)
+				if (*MapNum == 4 || *MapNum == 5 || *MapNum == 6)
 				{
 					//現在の記録を保存
 					this->OutData();
@@ -93,7 +94,7 @@ void GameManager::UpDate()
 }
 void GameManager::ResetData()
 {
-	for (int i = 5; i <= 6; ++i)
+	for (int i = 4; i <= 6; ++i)
 	{
 		std::ofstream ofs("./data/Result/data" + std::to_string(i) + ".bin", std::ios::out | std::ios::binary);
 		ofs << -1 << std::endl;
@@ -143,6 +144,12 @@ bool GameManager::OutData()
 		ofs << this->Minute << "," << this->Seconds << std::endl;
 		switch (*MapNum)
 		{
+		case 4:
+			for (int i = 0; i < 3; ++i)
+			{
+				ofs << "f,";
+			}
+			break;
 		case 5:
 			//ステージ１のミッション
 			if (this->Minute * 60 + this->Seconds <= 120)

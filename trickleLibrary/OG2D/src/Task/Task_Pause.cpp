@@ -167,9 +167,10 @@ void Pause::PauseUpDate()
 	if (OGge->in->down(Input::CD) || OGge->in->down(In::LD)) {
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
 	}
-	Vec2 cPosTable[3] = { Vec2(ReturnPos.x - 80, ReturnPos.y)
-							,Vec2(stageselectPos.x - 80,stageselectPos.y)
-							,Vec2(RestartPos.x - 80,RestartPos.y) };
+	Vec2 cPosTable[3] = { Vec2(ReturnPos.x - 80, ReturnPos.y),
+							Vec2(RestartPos.x - 80,RestartPos.y),
+							Vec2(stageselectPos.x - 80,stageselectPos.y)
+							 };
 	cursorPos = cPosTable[selectPos];
 	select = Select::Return;
 

@@ -62,11 +62,12 @@ void Effect::UpDate()
 	case Mode::Expansion:
 		if (this->Scale.x < this->maxSize.x || this->Scale.y < this->maxSize.y)
 		{
-			float size = 5.0f;
+			//float size = 5.0f;
+			Vec2 size(this->maxSize.x / this->time, this->maxSize.y / this->time);
 			//Šg‘å‰»ˆ—
-			this->Scale += Vec2(size, size);
-			this->position.x -= size / 2.f;
-			this->position.y -= size / 2.f;
+			this->Scale += size;//Vec2(size, size);
+			this->position.x -= size.x / 2.f;
+			this->position.y -= size.y / 2.f;
 		}
 		break;
 	case Mode::WindR:

@@ -45,6 +45,7 @@ bool Bucket::Initialize(Vec2& pos)
 
 	tex.Create((std::string)"bucket.png");
 	__super::Init((std::string)"bucket");
+	__super::SetDrawOrder(0.5f);
 	return true;
 }
 

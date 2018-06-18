@@ -66,7 +66,7 @@ public:
 	SoundManager* soundManager;
 	//Input in;				//“ü—Íó‹µ
 	Input* in;
-	
+
 	bool Initialize();		//‰Šú‰»ˆ—
 	void Update();			//XVˆ—
 	void SetWindow(			//Windowî•ñ“o˜^

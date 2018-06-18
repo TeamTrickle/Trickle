@@ -2,6 +2,7 @@
 #include "Player\Player.h"
 #include "Bucket\bucket.h"
 #include "Gimmick\NO_MOVE\Switch.h"
+#include "Gimmick\NO_MOVE\TimeSign.h"
 #include "Goal\Goal.h"
 #include "Paint\Paint.h"
 Map::Map()
@@ -234,6 +235,35 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		return;
 	}
+	if (text == "gred")
+	{
+		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetColor(Paint::PaintColor::Red);
+		return;
+	}
+	if (text == "gblue")
+	{
+		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetColor(Paint::PaintColor::Blue);
+		return;
+	}
+	if (text == "gpurple")
+	{
+		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
+		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetColor(Paint::PaintColor::Purple);
+		return;
+	}
+	if (text == "t") 
+	{
+		auto inTimer = TimeSign::Create("frame.png", Box2D(this->DrawSize.x * x_index, this->DrawSize.y * y_index - 64.f, 144.f, 128.f), true);
+		inTimer->setAtlas("number.png", Box2D(0, 64, 64, 64), Box2D(21, 40, 19.5, 40));
+		inTimer->setComma(Box2D(25, 40, 8, 14), Box2D(640, 64, 40, 64), Box2D(680, 64, 40, 64));
+		inTimer->setAtlasAngle(-10.f);
+		return;
+	}
 	if (text == "paintred")
 	{
 		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Red);
@@ -287,6 +317,11 @@ bool Map::Finalize()
 	this->hitBase.clear();
 	this->chip.clear();
 	this->mapimg.Finalize();
+	auto timer = OGge->GetTasks<TimeSign>("timesign");
+	for (auto id = timer->begin(); id != timer->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	return true;
 }
 
@@ -296,18 +331,21 @@ bool Map::MapHitCheck(GameObject &p)
 	{
 		for (int x = 0; x < this->mapSize.x; ++x)
 		{
+			if (this->hitBase[y][x].IsObjectDistanceCheck(p.position, p.Scale))
+			{ 
 			//マップ番号０以外に当たったらTRUEを返す
-			if (this->_arr[y][x] != 0 &&
-				this->_arr[y][x] != 10 &&
-				this->_arr[y][x] != 12 &&
-				this->_arr[y][x] != 13 &&
-				this->_arr[y][x] != 21 &&
-				this->_arr[y][x] != 22 &&
-				this->_arr[y][x] != 20 &&
-				this->_arr[y][x] != 23) {
-				if (this->hitBase[y][x].hit(p))
-				{
-					return true;
+				if (this->_arr[y][x] != 0 &&
+					this->_arr[y][x] != 10 &&
+					this->_arr[y][x] != 12 &&
+					this->_arr[y][x] != 13 &&
+					this->_arr[y][x] != 21 &&
+					this->_arr[y][x] != 22 &&
+					this->_arr[y][x] != 20 &&
+					this->_arr[y][x] != 23) {
+					if (this->hitBase[y][x].hit(p))
+					{
+						return true;
+					}
 				}
 			}
 		}

@@ -32,7 +32,7 @@ bool TimeSign::Initialize(const std::string& basePath, const Box2D& pos) {
 	originPos = pos;
 
 	__super::Init((std::string)"timesign");
-	__super::SetDrawOrder(0.5f);
+	__super::SetDrawOrder(0.1f);
 	return true;
 }
 

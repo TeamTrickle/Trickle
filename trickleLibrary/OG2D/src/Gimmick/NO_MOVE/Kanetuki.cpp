@@ -23,7 +23,7 @@ Kanetuki::~Kanetuki()
 }
 
 
-bool Kanetuki::Initialize(Vec2& pos, Vec2 range, bool active) {
+bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	this->taskName = "Kanetuki";	//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//Taskwaterect“à‚Ìˆ—‚ðs‚¤
 
@@ -42,7 +42,41 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, bool active) {
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 	this->animCnt = 0;
 	draw.clear();
-	this->hotNum = 0;
+	//this->hotNum = 0;
+	this->angle = ang;
+	//–{‘Ì‚ÌŒü‚«‚É‚æ‚Á‚Ä‰Š‚ÌŒü‚«‚Æ•`‰æ”‚ð•ÏX
+	switch (this->angle) {
+	case UP:
+		this->hotNum = this->Scale.x / 64;
+		this->draw.resize(this->hotNum);
+		for (int i = 0; i < this->hotNum; ++i) {
+			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+			draw[i].OffsetSize();
+		}
+		this->texRotaAng = 0.0f;
+		break;
+	case RIGHT:
+		this->hotNum = this->Scale.y / 64;
+		this->draw.resize(this->hotNum);
+		for (int i = 0; i < this->hotNum; ++i) {
+			draw[i] = Box2D(position.x, position.y + (64 * i), Scale.x, 64.f);
+			draw[i].OffsetSize();
+		}
+		this->texRotaAng = 90.0f;
+		break;
+	case LEFT:
+		//Œ»Žž“_‚Å‘¶Ý‚µ‚È‚¢‚Ì‚Å—ª
+		break;
+	case BOTTOM:
+		this->hotNum = this->Scale.x / 64;
+		this->draw.resize(this->hotNum);
+		for (int i = 0; i < this->hotNum; ++i) {
+			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+			draw[i].OffsetSize();
+		}
+		this->texRotaAng = 180.0f;
+		break;
+	}
 
 	cout << "‰Á”MŠí@‰Šú‰»" << endl;
 
@@ -59,8 +93,8 @@ void Kanetuki::UpDate() {
 	if (active)
 	{
 		//if(‚±‚±‚É‰Á”MŠí‚Ì•ûŒü‚ð‚à‚ç‚¤) {
-		this->hotNum = Scale.x / 64;
-		draw.resize(hotNum);
+		//this->hotNum = Scale.x / 64;
+		//draw.resize(hotNum);
 		//}
 		if (startflag)
 		{
@@ -90,13 +124,10 @@ void Kanetuki::Render2D() {
 	
 	if (active) {
 		++animCnt;
-		for (int i = 0; i < hotNum; ++i) {
-			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
-			draw[i].OffsetSize();
-		}
 		Box2D src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
 		src.OffsetSize();
 
+		this->hotImg->Rotate(this->texRotaAng);
 		for (auto draw_ : draw) {
 			this->hotImg->Draw(draw_, src);
 		}
@@ -164,7 +195,7 @@ void Kanetuki::SetTexture(Texture* tex)
 {
 	this->hotImg = tex;
 }
-Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2 range, bool active, bool flag_) {
+Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2 range, Angle ang, bool active, bool flag_) {
 	Kanetuki::SP to = Kanetuki::SP(new Kanetuki());
 	if (to)
 	{
@@ -173,7 +204,7 @@ Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2 range, bool active, bool flag_) {
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, range, active))
+		if (!to->Initialize(pos, range, ang, active))
 		{
 			to->Kill();
 		}

@@ -9,11 +9,10 @@ std::array<Vec2, 4> MapPreviewer::CamMoveSeq = {
 };
 
 MapPreviewer::~MapPreviewer() {
-	mapThumbnail.Finalize();
 	std::cout << "MapPreviewer ‰ð•ú" << std::endl;
 }
 
-MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size, const std::string& mf)
+MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size)
 {
 	auto to = MapPreviewer::SP(new MapPreviewer());
 	if (to)
@@ -22,7 +21,7 @@ MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size, const std::
 		if (flag_) {
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(size, mf)) {
+		if (!to->Initialize(size)) {
 			to->Kill();
 		}
 		return to;
@@ -30,10 +29,10 @@ MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size, const std::
 	return nullptr;
 }
 
-bool MapPreviewer::Initialize(const Box2D& size, const std::string& mapFile) {
+bool MapPreviewer::Initialize(const Box2D& size) {
 	windowSize = size;
-	mapThumbnail.Create(mapFile);
-	thumbSize = mapThumbnail.GetTextureSize();
+	thumbSize = Vec2(0, 0);
+	visible = false;
 
 	__super::Init((std::string)"mappreviewer");
 	__super::SetDrawOrder(0.85f);
@@ -67,7 +66,7 @@ void MapPreviewer::Render2D() {
 			(int)windowSize.h
 		);
 		src.OffsetSize();
-		mapThumbnail.Draw(draw, src);
+		mapThumbnail->Draw(draw, src);
 	}
 }
 
@@ -79,11 +78,10 @@ bool MapPreviewer::isShootable(const Vec2& v) const {
 		v.y + windowSize.h < thumbSize.y;
 }
 
-void MapPreviewer::replaceThumbnail(const std::string& filePath) {
-	mapThumbnail.Finalize();
-	mapThumbnail.Create(filePath);
+void MapPreviewer::replaceThumbnail(Texture* tex) {
+	mapThumbnail = tex;
 	pointPos = Vec2(0.f, 0.f);
-	thumbSize = mapThumbnail.GetTextureSize();
+	thumbSize = mapThumbnail->GetTextureSize();
 }
 
 void MapPreviewer::setVisible(const bool& v) {

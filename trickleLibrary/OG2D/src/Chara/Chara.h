@@ -19,14 +19,18 @@ public:
 		Jump_M,		//ジャンプ(関数と名前が被ったのでここで変えました）
 		Fall,		//落下
 		Ladder,		//梯子
+		Happy_N,		//喜びモーション、現在未実装
+		Happy_J,
+		Happy_F,
 	};
+	int happyCnt;			//喜ぶアニメーションカウント
 private:
 	Texture Image;		//使用画像
 	Vec2 move;			//移動値
 	const float MOVE_SPEED;								//移動スピード
 	const float JUMP_POWER;								//ジャンプパワー
 	const float MAX_FALL;								//落下最大速度
-	const float GRAVITY;		//重力加速度
+	const float GRAVITY;								//重力加速度
 	const float FIN_SPEED;								//摩擦
 	Direction direction;										//向きを格納する変数
 	std::string taskName;										//名
@@ -61,6 +65,7 @@ public:
 	void MoveCheck(Vec2);	//移動処理
 	bool FootCheck();		//足元チェック
 	bool Jump();			//ジャンプを行う
+	void Happy(int count);			//喜ぶモーションを行う
 	bool AutoJump();
 	void AutoMove();		//オート移動
 	void ManualMove(Vec2&);	//手動移動

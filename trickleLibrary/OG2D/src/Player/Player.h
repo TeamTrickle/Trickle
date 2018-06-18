@@ -87,11 +87,13 @@ private:
 	int inv;													//無敵時間
 	std::string taskName;
 	bool hold;
+	bool isInputAuto;
 private:
 	bool HeadCheck();											//頭の当たり判定
 	bool FootCheck();											//足元の当たり判定
 	bool HeadCheck(std::string& objname_, int n = 0);			//頭の別オブジェクトへの判定,0 = そのオブジェクト,1 = それ以外のオブジェクト
 	bool FootCheck(std::string& objname_, int n = 0);			//足元の別オブジェクトへの判定
+	bool SolidFootCheck();
 	void MoveCheck(Vec2 est);									//移動判定処理
 	void MoveCheck(Vec2& est, std::string& objname_);			//梯子状態で使用する移動処理
 	void Friction();											//重力や摩擦の計算
@@ -118,12 +120,18 @@ public:
 	State NowState() const;										//現在のStateを返す
 	void SetPos(Vec2&);											//プレイヤーの位置を設定する
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
+	void SetInputAuto(bool);
+	bool GetInputAuto() const;
 	bool ReleaseHold();
 	//入力処理簡略化
 	bool InputLeft();
 	bool InputRight();
 	bool InputDown();
 	bool InputUp();
+	bool InputB1down();
+	bool InputB2down();
+	bool InputB1on();
+	bool InputB2on();
 	float AxisLX();
 	float AxisLY();
 	float AxisRX();

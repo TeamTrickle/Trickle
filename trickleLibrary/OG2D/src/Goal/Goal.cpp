@@ -1,6 +1,6 @@
 #include "Goal.h"
 #include "Water\water.h"
-
+#include "Player\Player.h"
 
 Goal::Goal(const Vec2& pos)
 {
@@ -44,7 +44,7 @@ Goal::~Goal()
 	}
 }
 
-void Goal::SetColor(Paint::PaintColor & color)
+void Goal::SetColor(const Paint::PaintColor & color)
 {
 	this->termsColor = color;
 }
@@ -78,6 +78,14 @@ void Goal::UpDate()
 		{
 			this->isCheck = true;
 			this->mode = Mode::Form2;
+			if (this->isGoalCheck())
+			{
+				auto player = OGge->GetTasks<Player>("Player");
+				for (auto id = player->begin(); id != player->end(); ++id)
+				{
+					(*id)->SetInputAuto(true);
+				}
+			}
 		}
 		break;
 	case Mode::Form2:
@@ -121,10 +129,10 @@ void Goal::Render2D()
 			this->src = { 256 * (int)(animCnt / 10), 256, 256, 284 };
 			switch (this->color)
 			{
-			case Paint::PaintColor::Blue:
+			case Paint::PaintColor::Red:
 				this->src.y += 540;
 				break;
-			case Paint::PaintColor::Red:
+			case Paint::PaintColor::Blue:
 				this->src.y += 1080;
 				break;
 			case Paint::PaintColor::Purple:
@@ -139,10 +147,10 @@ void Goal::Render2D()
 			this->src = { 0,0,256,256 };
 			switch (this->termsColor)
 			{
-			case Paint::PaintColor::Blue:
+			case Paint::PaintColor::Red:
 				this->src.y += 540;
 				break;
-			case Paint::PaintColor::Red:
+			case Paint::PaintColor::Blue:
 				this->src.y += 1080;
 				break;
 			case Paint::PaintColor::Purple:
@@ -178,7 +186,7 @@ bool Goal::WaterHit()
 		{
 			if (this->foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->foot.hit(*(*id)))
+				if (this->foot.CubeHit(*(*id)))
 				{
 					this->color = (*id)->GetColor();
 					(*id)->Kill();
@@ -217,6 +225,22 @@ bool Goal::CameraAnim::isPlay()
 unsigned int Goal::GetID() const
 {
 	return this->ID;
+}
+
+bool Goal::isGoalCheck()
+{
+	auto goals = OGge->GetTasks<Goal>("Goal");
+	for (auto id = goals->begin(); id != goals->end(); ++id)
+	{
+		if ((*id)->ID != this->ID)
+		{
+			if (!(*id)->GetClear())
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 Goal::SP Goal::Create(const Vec2& pos,bool flag)

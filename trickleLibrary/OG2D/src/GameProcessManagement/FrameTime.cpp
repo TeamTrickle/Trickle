@@ -1,6 +1,8 @@
 #include "FrameTime.h"
 
 #include "Task\Task_Result.h"
+
+#include <algorithm>
 bool FrameTimeUI::Initialize(Vec2& pos,int digitselect,int& resulttime)
 {
 	//タスク関連

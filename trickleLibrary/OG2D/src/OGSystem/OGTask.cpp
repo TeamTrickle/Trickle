@@ -2,7 +2,9 @@
 #include "Task\Task_Title.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_TitleMovement.h"
-#include "Task\Task_Game.h"
+#include "Task\StageSelect.h"
+#include "Task\Task_Result.h"
+
 void OGTK::_myGameInitialize()
 {
 	//生成するWindow情報
@@ -15,9 +17,14 @@ void OGTK::_myGameInitialize()
 
 void OGTK::StartTaskObject()
 {
+	//使用フォントの読み込み
+	Texture* fontTex;
+	fontTex = new Texture();
+	fontTex->Create("fontui.png");
+	rm->SetTextureData((std::string)"fontui", fontTex);
+
 	//タスクの初期化
 	auto TopTask = Title::Create();
-	
 }
 
 OGTK::~OGTK()
