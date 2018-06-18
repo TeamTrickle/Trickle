@@ -41,12 +41,13 @@ bool Result::Initialize() {
 		star[i].bezcnt = 0.0f;
 		star[i].angle = -5;
 		//星出すフラグ
-		starFlag[i] = true;
+		starFlag[i] = false;
 		starturn[i] = false;
 		num[i] = 0;
 	}
 	num[3] = 0;
 	cnt = 0;
+	this->maxTrueNumber = -1;
 	this->RoadData();
 	return true;
 }
@@ -129,6 +130,11 @@ void Result::UpDate() {
 		}
 		break;
 	case Mode4:
+		if (this->maxTrueNumber == -1)
+		{
+			this->nowMode = Mode5;
+			break;
+		}
 		++cnt;
 		//星出現
 		for (int i = 0; i < 3; ++i) {
@@ -160,7 +166,7 @@ void Result::UpDate() {
 				}
 			}
 		}
-		if (star[2].pos == Vec2(300 + 2 * 200, 370 - 2 * 8) && star[2].nowWH == Vec2(128,128)) {
+		if (star[this->maxTrueNumber].pos == Vec2(300 + this->maxTrueNumber * 200, 370 - this->maxTrueNumber * 8) && star[this->maxTrueNumber].nowWH == Vec2(128,128)) {
 			this->nowMode = Mode5;
 		}
 		break;
@@ -318,9 +324,10 @@ void Result::RoadData()
 	for (int i = 0; i < 3; ++i)
 	{
 		std::getline(*is, text, ',');
-		if (text == "f")
+		if (text == "t")
 		{
-			this->starFlag[i] = false;
+			this->starFlag[i] = true;
+			this->maxTrueNumber = (__int8)i;
 		}
 	}
 	delete is;

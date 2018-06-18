@@ -219,12 +219,6 @@
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp">
       <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\Timer.cpp">
-      <Filter>ソースファイル\GameProcessManager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Task\Task_Option.cpp">
-      <Filter>ソースファイル\Task\Option</Filter>
-    </ClCompile>
     <ClCompile Include="src\Task\Task_Result.cpp">
       <Filter>ソースファイル\Task\Result</Filter>
     </ClCompile>
@@ -270,9 +264,6 @@
     <ClCompile Include="src\OGSystem\ResourceManager\ResourceManager.cpp">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\Player\ResultPlayer.cpp">
-      <Filter>ソースファイル\Player</Filter>
-    </ClCompile>
     <ClCompile Include="src\CameraManager\CameraManager.cpp">
       <Filter>ソースファイル\CameraManager</Filter>
     </ClCompile>
@@ -282,23 +273,8 @@
     <ClCompile Include="src\Chara\Chara.cpp">
       <Filter>ソースファイル\Chara</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\FlagUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\ClearUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\GoalTimeUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\MissonUI.cpp">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClCompile>
     <ClCompile Include="src\Task\Task_Pause.cpp">
       <Filter>ソースファイル\Task\Pause</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameProcessManagement\FrameTime.cpp">
-      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClCompile>
     <ClCompile Include="src\Recorder\Recorder.cpp">
       <Filter>ソースファイル\Recorder</Filter>
@@ -314,9 +290,6 @@
     </ClCompile>
     <ClCompile Include="src\Recorder\RecPlayer.cpp">
       <Filter>ソースファイル\Recorder</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Effect\SterEffect.cpp">
-      <Filter>ソースファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="src\Task\Task_StageAlert.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
@@ -419,12 +392,6 @@
     <ClInclude Include="src\OGSystem\Easing\easing.hpp">
       <Filter>ソースファイル\OGSystem\System\Easing</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\Timer.h">
-      <Filter>ソースファイル\GameProcessManager</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Task\Task_Option.h">
-      <Filter>ソースファイル\Task\Option</Filter>
-    </ClInclude>
     <ClInclude Include="src\Task\Task_Result.h">
       <Filter>ソースファイル\Task\Result</Filter>
     </ClInclude>
@@ -464,9 +431,6 @@
     <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h">
       <Filter>ソースファイル\OGSystem\System\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="src\Player\ResultPlayer.h">
-      <Filter>ソースファイル\Player</Filter>
-    </ClInclude>
     <ClInclude Include="src\CameraManager\CameraManager.h">
       <Filter>ソースファイル\CameraManager</Filter>
     </ClInclude>
@@ -476,23 +440,8 @@
     <ClInclude Include="src\Chara\Chara.h">
       <Filter>ソースファイル\Chara</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\FlagUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\ClearUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\GoalTimeUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\MissionUI.h">
-      <Filter>ソースファイル\Task\UI\Result</Filter>
-    </ClInclude>
     <ClInclude Include="src\Task\Task_Pause.h">
       <Filter>ソースファイル\Task\Pause</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameProcessManagement\FrameTime.h">
-      <Filter>ソースファイル\GameProcessManager</Filter>
     </ClInclude>
     <ClInclude Include="src\Recorder\Recorder.h">
       <Filter>ソースファイル\Recorder</Filter>
@@ -511,9 +460,6 @@
     </ClInclude>
     <ClInclude Include="src\Recorder\RecPlayer.h">
       <Filter>ソースファイル\Recorder</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Effect\SterEffect.h">
-      <Filter>ソースファイル\Effect</Filter>
     </ClInclude>
     <ClInclude Include="src\Task\Task_StageAlert.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>

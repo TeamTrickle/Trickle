@@ -69,7 +69,7 @@ private:
 
 	unsigned timer[4];
 	int test1, test2;
-
+	__int8 maxTrueNumber;
 	void RoadData();
 };
 
