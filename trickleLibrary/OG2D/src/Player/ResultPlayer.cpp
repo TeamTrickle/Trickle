@@ -1,4 +1,321 @@
-//<<<<<<< HEAD
+#include "ResultPlayer.h"
+
+#include "GameProcessManagement\ClearUI.h"
+#include "Effect\SterEffect.h"
+#include "Map/Map.h"
+
+bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
+{
+	//ã‚¿ã‚¹ã‚¯ç™»éŒ²
+	this->taskName = "ResultPlayer";
+	this->Init(taskName);
+	
+	//åŸºæœ¬æƒ…å ±
+	this->CreateObject(Cube, pos, Vec2(96, 96), 0);
+	this->moveVec = speed;
+
+	//ã‚¸ãƒ£ãƒ³ãƒ—é–¢é€£
+	this->moveCnt = 0;
+	this->PreY = this->position.y;
+
+	this->keyflag = false;
+	
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
+	this->animetion.Reset();
+
+	//ç”»åƒé–¢é€£
+	{
+		std::string filePath = "player.png";
+		image.Create(filePath);
+	}
+	{
+		std::string filePath = "clear.png";
+		smail.Create(filePath);
+	}
+	this->SetDrawOrder(1.0f);
+
+	//ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã«é–¢é€£ã™ã‚‹é–¢æ•°
+	this->ResetWalkStop();
+
+	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€åˆæœŸåŒ–" << std::endl;
+	return true;
+}
+bool ResultPlayer::Finalize()
+{
+	image.Finalize();
+	return true;
+}
+void ResultPlayer::Think()
+{
+	Vec2 camerasize = OGge->camera->GetSize();
+	Vec2 windowsize = OGge->window->GetSize();
+
+	auto clearui = OGge->GetTask<ClearUI>("ClearUI");
+	auto sterEffect = OGge->GetTasks<SterEffect>("SterEffect");
+
+	ResultPlayer::State nm = this->animetion.motion;
+	switch (nm)
+	{
+	case ResultPlayer::Normal:
+		if (CheckFoot())
+		{
+			nm = Walk;
+		}
+		break;
+	case ResultPlayer::Walk:
+		if (!this->animetion.SmailMotionIsPlay())
+		{
+			if (this->position.x >= camerasize.x * 25 / 100)
+			{
+				this->walkstop = true;		//ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã¸ã®æƒ…å ±ãƒ•ãƒ©ã‚°
+				nm = Stop;
+			}
+		}
+		break;
+	case ResultPlayer::Smail:
+		if (!this->animetion.SmailMotionIsPlay())
+		{
+			if (est.y >= 0)
+			{
+				this->moveCnt = 0;
+				nm = Fall;
+			}
+		}
+		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒä¸€å®šæ™‚é–“ã¾ã§çµŒéã—ãŸã‚‰ãƒ»ãƒ»ãƒ»
+		else
+		{
+			if (est.y >= 0)
+			{
+				this->moveCnt = 0;
+				nm = Fall;
+			}
+			if (OGge->in->down(In::B2))
+			{
+				this->moveCnt = 0;
+				nm = Normal;
+			}
+		}
+		break;
+	case ResultPlayer::Fall:
+		if (CheckFoot())
+		{
+			this->moveCnt = 0;
+			nm = Smail;
+		}
+		break;
+	case ResultPlayer::Stop:
+		//ã‚¯ãƒªã‚¢UIãŒè¡¨ç¤ºã•ã‚ŒãŸå ´åˆæ­©ãã ã™ï¼ˆæ‹¡å¤§ã¾ã§ãŒçµ‚äº†ã—ãŸã‚‰ï¼‰
+		if (clearui != nullptr)
+		{
+			if (clearui->GetVolumeFlag())
+			{
+				this->animetion.ResetAnimetionCnt();
+				nm = Smail;
+			}
+		}
+		break;
+	}
+	animetion.MotionChenge(nm);
+}
+void ResultPlayer::Motion()
+{
+	ResultPlayer::State nm = this->animetion.motion;
+	switch (nm)
+	{
+	case ResultPlayer::Normal:
+		FallSpeed();
+		break;
+	case ResultPlayer::Walk:
+		this->Move();
+		break;
+	case ResultPlayer::Smail:
+		//ç‰¹ã«ãªã—
+		this->animetion.AnimetionMove();
+		this->Jump();
+		break;
+	case ResultPlayer::Fall:
+		this->animetion.AnimetionMove();
+		FallSpeed();
+		break;
+	case ResultPlayer::Stop:
+		break;
+	}
+}
+void ResultPlayer::Jump()
+{
+	//é£›ã³å‡ºã—ãŸã¨ãã«åˆæœŸå€¤ã‚’å…¥ã‚Œã‚‹
+	if (this->moveCnt == 0)
+	{
+		this->est.y = -13;
+		this->moveCnt++;
+	}
+	this->position.y += est.y;
+	est.y++;
+}
+void ResultPlayer::FallSpeed()
+{
+	if (moveCnt == 0)
+	{
+		this->est.y = 13;
+		this->moveCnt++;
+	}
+	this->position.y += est.y;
+	est.y--;
+}
+bool ResultPlayer::CheckFoot()
+{
+	if (this->position.y >= this->PreY)
+	{
+		this->position.y = this->PreY;
+		return true;
+	}
+	return false;
+}
+void ResultPlayer::UpDate()
+{
+	Think();
+	Motion();
+}
+void ResultPlayer::Move()
+{
+	auto clearui = OGge->GetTask<ClearUI>("ClearUI");
+	if (clearui != nullptr)
+	{
+		this->moveVec.x = 8;
+	}
+
+	Vec2 camerasize = OGge->camera->GetSize();
+
+	//PlayerãŒè§£æ”¾ã•ã‚Œã‚‹ã¾ã§
+	if(position.x <= camerasize.x)
+	{
+		this->animetion.AnimetionMove();
+		position.x += moveVec.x;
+	}
+	else
+	{
+		Kill();
+	}
+}
+void ResultPlayer::Render2D()
+{
+	//é€šå¸¸æ™‚
+	if(this->animetion.motion != State::Smail && this->animetion.motion != State::Fall && this->animetion.motion != State::Normal)
+	{
+		Box2D draw(position, Scale);
+		draw.OffsetSize();
+		Box2D src = this->Src[0];
+		src = this->animetion.ReturnSrc(src, this->animetion.motion);
+		src.OffsetSize();
+
+		int temp = src.w;
+		src.w = src.x;
+		src.x = temp;
+		image.Draw(draw, src);
+	}
+	//å–œã³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+	else
+	{
+		Box2D draw(position, Scale);
+		draw.OffsetSize();
+		Box2D src = this->Src[1];
+		src = this->animetion.ReturnSrc(src, this->animetion.motion);
+		src.OffsetSize();
+
+		int temp = src.w;
+		src.w = src.x;
+		src.x = temp;
+		smail.Draw(draw, src);
+	}
+}
+void ResultPlayer::Animetion::Reset()
+{
+	this->animetionCnt = 0;
+	this->motion = Walk;
+}
+void ResultPlayer::Animetion::ResetAnimetionCnt()
+{
+	this->animetionCnt = 0;
+}
+bool ResultPlayer::Animetion::SmailMotionIsPlay()
+{
+	return this->animetionCnt >= this->toSmailCnt ? true : false;
+}
+void ResultPlayer::Animetion::AnimetionMove()
+{
+	this->animetionCnt++;
+}
+Box2D ResultPlayer::Animetion::ReturnSrc(Box2D Src, State motion)
+{
+	Box2D src = Src;
+	switch (motion)
+	{
+	case ResultPlayer::Normal:
+		src.x = 0;
+		break;
+	case ResultPlayer::Walk:
+		src.x = this->animetionCnt / 3 % 9 * src.w;
+		break;
+	case ResultPlayer::Smail:
+		{
+			src.x = this->animetionCnt / 10 % 3 * src.w;
+		}
+		break;
+	case ResultPlayer::Fall:
+		{
+			src.x = this->animetionCnt / 10 % 3 * src.w;
+		}
+		break;
+	case ResultPlayer::Stop:
+		src.x = 0;
+		src.y = 0;
+		break;
+	}
+	return src;
+}
+void ResultPlayer::Animetion::MotionChenge(State state)
+{
+	this->motion = state;
+}
+void ResultPlayer::Animetion::ResetSrc(Box2D& src)
+{
+	src.x = 0;
+	src.y = 0;
+}
+void ResultPlayer::ResetWalkStop()
+{
+	this->walkstop = false;
+}
+bool ResultPlayer::GetResetWalkStop()
+{
+	return this->walkstop;
+}
+ResultPlayer::ResultPlayer()
+{
+	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€ç”Ÿæˆ" << std::endl;
+}
+ResultPlayer::~ResultPlayer()
+{
+	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€è§£æ”¾" << std::endl;
+}
+ResultPlayer::SP ResultPlayer::Create(Vec2 pos,Vec2 speed,bool flag)
+{
+	ResultPlayer::SP to = ResultPlayer::SP(new ResultPlayer());
+	if (to)
+	{
+		to->me = to;
+		if (flag)
+		{
+			OGge->SetTaskObject(to);
+		}
+		if (!to->Initialize(pos,speed))
+		{
+			to->Kill();
+		}
+		return to;
+	}
+	return nullptr;
+}
 ////#include "ResultPlayer.h"
 ////
 ////#include "GameProcessManagement\ClearUI.h"
@@ -6,28 +323,28 @@
 ////
 ////bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 ////{
-////	//ƒ^ƒXƒN“o˜^
+////	//ã‚¿ã‚¹ã‚¯ç™»éŒ²
 ////	this->taskName = "ResultPlayer";
 ////	this->Init(taskName);
 ////	
-////	//Šî–{î•ñ
+////	//åŸºæœ¬æƒ…å ±
 ////	this->CreateObject(Cube, pos, Vec2(96, 96), 0);
 ////	this->moveVec = speed;
 ////
 ////	this->keyflag = false;
 ////	
-////	//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìİ’è
+////	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
 ////	this->animetion.Reset();
 ////
-////	//‰æ‘œŠÖ˜A
+////	//ç”»åƒé–¢é€£
 ////	std::string filePath = "player.png";
 ////	image.Create(filePath);
 ////	this->SetDrawOrder(1.0f);
 ////
-////	//ƒŠƒUƒ‹ƒg‰æ–Ê‚ÉŠÖ˜A‚·‚éŠÖ”
+////	//ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã«é–¢é€£ã™ã‚‹é–¢æ•°
 ////	this->ResetWalkStop();
 ////
-////	std::cout << "ƒŠƒUƒ‹ƒgƒvƒŒƒCƒ„@‰Šú‰»" << std::endl;
+////	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€åˆæœŸåŒ–" << std::endl;
 ////	return true;
 ////}
 ////bool ResultPlayer::Finalize()
@@ -54,13 +371,13 @@
 ////		{
 ////			if (this->position.x >= camerasize.x * 25 / 100)
 ////			{
-////				this->walkstop = true;		//ƒŠƒUƒ‹ƒg‰æ–Ê‚Ö‚Ìî•ñƒtƒ‰ƒO
+////				this->walkstop = true;		//ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã¸ã®æƒ…å ±ãƒ•ãƒ©ã‚°
 ////				nm = Stop;
 ////			}
 ////		}
 ////		break;
 ////	case ResultPlayer::Smail:
-////		//ƒAƒjƒ[ƒVƒ‡ƒ“ƒJƒEƒ“ƒg‚ªˆê’èŠÔ‚Ü‚ÅŒo‰ß‚µ‚½‚çEEE
+////		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒä¸€å®šæ™‚é–“ã¾ã§çµŒéã—ãŸã‚‰ãƒ»ãƒ»ãƒ»
 ////		if (this->animetion.SmailMotionIsPlay())
 ////		{
 ////			if (OGge->in->down(In::B2))
@@ -70,7 +387,7 @@
 ////		}
 ////		break;
 ////	case ResultPlayer::Stop:
-////		//ƒNƒŠƒAUI‚ª•\¦‚³‚ê‚½ê‡•à‚«‚¾‚·iŠg‘å‚Ü‚Å‚ªI—¹‚µ‚½‚çj
+////		//ã‚¯ãƒªã‚¢UIãŒè¡¨ç¤ºã•ã‚ŒãŸå ´åˆæ­©ãã ã™ï¼ˆæ‹¡å¤§ã¾ã§ãŒçµ‚äº†ã—ãŸã‚‰ï¼‰
 ////		if (clearui != nullptr)
 ////		{
 ////			if (clearui->GetVolumeFlag())
@@ -94,7 +411,7 @@
 ////		this->Move();
 ////		break;
 ////	case ResultPlayer::Smail:
-////		//“Á‚É‚È‚µ
+////		//ç‰¹ã«ãªã—
 ////		this->animetion.AnimetionMove();
 ////		break;
 ////	case ResultPlayer::Stop:
@@ -117,7 +434,7 @@
 ////
 ////	Vec2 camerasize = OGge->camera->GetSize();
 ////
-////	//Player‚ª‰ğ•ú‚³‚ê‚é‚Ü‚Å
+////	//PlayerãŒè§£æ”¾ã•ã‚Œã‚‹ã¾ã§
 ////	if(position.x <= camerasize.x)
 ////	{
 ////		this->animetion.AnimetionMove();
@@ -207,11 +524,11 @@
 ////}
 ////ResultPlayer::ResultPlayer()
 ////{
-////	std::cout << "ƒŠƒUƒ‹ƒgƒvƒŒƒCƒ„@¶¬" << std::endl;
+////	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€ç”Ÿæˆ" << std::endl;
 ////}
 ////ResultPlayer::~ResultPlayer()
 ////{
-////	std::cout << "ƒŠƒUƒ‹ƒgƒvƒŒƒCƒ„@‰ğ•ú" << std::endl;
+////	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€è§£æ”¾" << std::endl;
 ////}
 ////ResultPlayer::SP ResultPlayer::Create(Vec2 pos,Vec2 speed,bool flag)
 ////{
@@ -239,20 +556,20 @@
 //
 //bool ResultPlayer::Initialize(Vec2& pos,Vec2& speed)
 //{
-//	//ƒ^ƒXƒN“o˜^
+//	//ã‚¿ã‚¹ã‚¯ç™»éŒ²
 //	this->taskName = "ResultPlayer";
 //	this->Init(taskName);
 //	
-//	//Šî–{î•ñ
+//	//åŸºæœ¬æƒ…å ±
 //	this->CreateObject(Cube, pos, Vec2(96, 96), 0);
 //	this->moveVec = speed;
 //
 //	this->keyflag = false;
 //	
-//	//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìİ’è
+//	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
 //	this->animetion.Reset();
 //
-//	//‰æ‘œŠÖ˜A
+//	//ç”»åƒé–¢é€£
 //	{
 //		std::string filePath = "player.png";
 //		image.Create(filePath);
@@ -263,10 +580,10 @@
 //	}
 //	this->SetDrawOrder(1.0f);
 //
-//	//ƒŠƒUƒ‹ƒg‰æ–Ê‚ÉŠÖ˜A‚·‚éŠÖ”
+//	//ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã«é–¢é€£ã™ã‚‹é–¢æ•°
 //	this->ResetWalkStop();
 //
-//	std::cout << "ƒŠƒUƒ‹ƒgƒvƒŒƒCƒ„@‰Šú‰»" << std::endl;
+//	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€åˆæœŸåŒ–" << std::endl;
 //	return true;
 //}
 //bool ResultPlayer::Finalize()
@@ -293,13 +610,13 @@
 //		{
 //			if (this->position.x >= camerasize.x * 25 / 100)
 //			{
-//				this->walkstop = true;		//ƒŠƒUƒ‹ƒg‰æ–Ê‚Ö‚Ìî•ñƒtƒ‰ƒO
+//				this->walkstop = true;		//ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã¸ã®æƒ…å ±ãƒ•ãƒ©ã‚°
 //				nm = Stop;
 //			}
 //		}
 //		break;
 //	case ResultPlayer::Smail:
-//		//ƒAƒjƒ[ƒVƒ‡ƒ“ƒJƒEƒ“ƒg‚ªˆê’èŠÔ‚Ü‚ÅŒo‰ß‚µ‚½‚çEEE
+//		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒä¸€å®šæ™‚é–“ã¾ã§çµŒéã—ãŸã‚‰ãƒ»ãƒ»ãƒ»
 //		if (this->animetion.SmailMotionIsPlay())
 //		{
 //			if (OGge->in->down(In::B2))
@@ -309,7 +626,7 @@
 //		}
 //		break;
 //	case ResultPlayer::Stop:
-//		//ƒNƒŠƒAUI‚ª•\¦‚³‚ê‚½ê‡•à‚«‚¾‚·iŠg‘å‚Ü‚Å‚ªI—¹‚µ‚½‚çj
+//		//ã‚¯ãƒªã‚¢UIãŒè¡¨ç¤ºã•ã‚ŒãŸå ´åˆæ­©ãã ã™ï¼ˆæ‹¡å¤§ã¾ã§ãŒçµ‚äº†ã—ãŸã‚‰ï¼‰
 //		if (clearui != nullptr)
 //		{
 //			if (clearui->GetVolumeFlag())
@@ -334,7 +651,7 @@
 //		this->Move();
 //		break;
 //	case ResultPlayer::Smail:
-//		//“Á‚É‚È‚µ
+//		//ç‰¹ã«ãªã—
 //		this->animetion.AnimetionMove();
 //		this->Jump();
 //		break;
@@ -362,7 +679,7 @@
 //
 //	Vec2 camerasize = OGge->camera->GetSize();
 //
-//	//Player‚ª‰ğ•ú‚³‚ê‚é‚Ü‚Å
+//	//PlayerãŒè§£æ”¾ã•ã‚Œã‚‹ã¾ã§
 //	if(position.x <= camerasize.x)
 //	{
 //		this->animetion.AnimetionMove();
@@ -375,7 +692,7 @@
 //}
 //void ResultPlayer::Render2D()
 //{
-//	//’Êí
+//	//é€šå¸¸æ™‚
 //	if(this->animetion.motion != State::Smail)
 //	{
 //		Box2D draw(position, Scale);
@@ -389,7 +706,7 @@
 //		src.x = temp;
 //		image.Draw(draw, src);
 //	}
-//	//Šì‚Ñƒ‚[ƒVƒ‡ƒ“
+//	//å–œã³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 //	else
 //	{
 //		Box2D draw(position, Scale);
@@ -463,11 +780,11 @@
 //}
 //ResultPlayer::ResultPlayer()
 //{
-//	std::cout << "ƒŠƒUƒ‹ƒgƒvƒŒƒCƒ„@¶¬" << std::endl;
+//	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€ç”Ÿæˆ" << std::endl;
 //}
 //ResultPlayer::~ResultPlayer()
 //{
-//	std::cout << "ƒŠƒUƒ‹ƒgƒvƒŒƒCƒ„@‰ğ•ú" << std::endl;
+//	std::cout << "ãƒªã‚¶ãƒ«ãƒˆæ™‚ãƒ—ãƒ¬ã‚¤ãƒ¤ã€€è§£æ”¾" << std::endl;
 //}
 //ResultPlayer::SP ResultPlayer::Create(Vec2 pos,Vec2 speed,bool flag)
 //{
@@ -487,4 +804,3 @@
 //	}
 //	return nullptr;
 //}
-//>>>>>>> develop

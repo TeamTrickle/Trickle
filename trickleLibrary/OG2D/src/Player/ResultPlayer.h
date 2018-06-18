@@ -86,6 +86,7 @@ public:
 		Normal,	//何もしない
 		Walk,	//歩くモーション
 		Smail,	//喜ぶモーション
+		Fall,	//落ちるモーション
 		Stop,	//ストップ中
 	};
 private:
@@ -103,7 +104,7 @@ private:
 		State motion;					//モーション
 
 		//モーションに関する変数
-		const int toSmailCnt = 200;				//喜ぶモーションにするまでの時間を格納する
+		const int toSmailCnt = 150;				//喜ぶモーションにするまでの時間を格納する
 
 		//喜ぶモーションが終了したか返す
 		bool  SmailMotionIsPlay();
@@ -116,7 +117,14 @@ private:
 	//移動関連
 	Vec2 moveVec;
 	void Move();
+
+	//ジャンプ関連
+	Vec2 est;
+	int moveCnt;
+	int PreY;
+	bool CheckFoot();
 	void Jump();
+	void FallSpeed();
 	
 	//Playerの状態関連
 	void Think();
