@@ -97,6 +97,7 @@ void Bucket::Render2D() {
 	draw.OffsetSize();
 	Box2D src(GetSpriteCrop());
 	src.OffsetSize();
+	tex.Rotate(this->angle);
 	tex.Draw(draw, src);
 }
 
