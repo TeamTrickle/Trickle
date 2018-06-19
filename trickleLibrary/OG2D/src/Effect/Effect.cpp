@@ -1,6 +1,7 @@
 #include "Effect.h"
 
 Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag)
+	:MaxFallSpeed(5.f), FallSpeed((9.8f / 60.f / 60.f * 32) * 3), FinSpeed(1.f)
 {
 	this->CreateObject(Cube, pos, size, 0.0f);
 	this->objectTag = tag;
@@ -14,12 +15,18 @@ Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const 
 	this->color = { 1.0f,1.0f,1.0f,this->alpha };
 	this->flag = false;
 	this->mode = Mode::Normal;
+	this->move = nullptr;
+	this->Gravity = false;
 	__super::Init((std::string)"effect");
 	__super::SetDrawOrder(1.0f);
 }
 
 Effect::~Effect()
 {
+	if (this->move)
+	{
+		delete this->move;
+	}
 }
 
 void Effect::UpDate()
@@ -107,6 +114,15 @@ void Effect::UpDate()
 		}
 	}
 	break;
+	case Mode::Down:
+		//—Ž‰ºˆ—
+		this->Friction();
+		this->alpha = 1.0f - ((float)this->animCnt / (float)this->time);
+		if (this->move)
+		{
+			this->position += *this->move;
+		}
+		break;
 	default:
 		break;
 	}
@@ -177,4 +193,40 @@ void Effect::SetTexture(Texture* tex)
 void Effect::Color_a(const float a)
 {
 	this->alpha = a;
+}
+
+void Effect::SetMove(const Vec2& est)
+{
+	if (this->move)
+	{
+		delete this->move;
+	}
+	this->move = new Vec2(est);
+	if (this->mode == Mode::Down)
+	{
+		this->Gravity = true;
+	}
+}
+
+void Effect::Friction()
+{
+	if (this->move)
+	{
+		if (this->move->x > 0)
+		{
+			this->move->x = std::max(this->move->x - this->FinSpeed, 0.f);
+		}
+		else
+		{
+			this->move->x = std::min(this->move->x + this->FinSpeed, 0.f);
+		}
+		if (this->Gravity)
+		{
+			this->move->y = std::min(this->move->y + this->FallSpeed, this->MaxFallSpeed);
+		}
+		else
+		{
+			this->move->y = 0.0f;
+		}
+	}
 }

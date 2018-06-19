@@ -25,6 +25,7 @@ public:
 		Expansion,
 		WindR,
 		WindL,
+		Down,
 	};
 private:
 	Texture* image;
@@ -40,7 +41,12 @@ private:
 	Color color;
 	Mode mode;
 	Vec2 maxSize;
+	Vec2* move;
+	const float MaxFallSpeed;
+	const float FallSpeed;
+	const float FinSpeed;
 	bool flag;
+	void Friction();
 public:
 	explicit Effect(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag);
 	virtual ~Effect();
@@ -52,6 +58,7 @@ public:
 	void Color_a(const float a);
 	void SetMode(const Mode&);
 	void SetMaxSize(const Vec2&);
+	void SetMove(const Vec2&);
 	typedef std::shared_ptr<Effect> SP;
 	//位置、サイズ、元サイズ、枚数、表示時間、1枚あたりの時間
 	static SP Create(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime = 10, const std::string& tag = "", const bool = true);

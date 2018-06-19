@@ -56,7 +56,7 @@ bool Title::Initialize()
 	this->texLogo.Create("logo.png");
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
-	this->texEffect.Create("Effect02.png");
+	this->texEffect.Create("Effect01.png");
 	
 	
 	this->effect03.Create("starteffect.png");
@@ -144,20 +144,10 @@ void Title::UpDate()
 			{
 				this->isGierAng = true;
 				this->mode = from2;
-				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 100, 100, "titleEffect");
+				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 5, 100, "titleEffect");
 				effect->SetTexture(&this->texEffect);
 				effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 500), 15);
 				effect->SetMode(Effect::Mode::Flash);
-				for (int i = 0; i < 10; ++i)
-				{
-					float rand = random::GetRand(this->Logo.position.x, this->Logo.position.x + 182.f);
-					auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 100, 100, "titleEffect");
-					effect_r->SetTexture(&this->texEffect);
-					effect_r->Set(effect_r->position, Vec2(effect_r->position.x, effect_r->position.y - 500), 15);
-					effect_r->SetMode(Effect::Mode::Flash);
-					float rand_a = random::GetRand(0.0f, 1.0f);
-					effect_r->Color_a(rand_a);
-				}
 			}
 		}
 	}
@@ -178,6 +168,17 @@ void Title::UpDate()
 		}
 		else
 		{
+			for (int i = 0; i < 7; ++i)
+			{
+				float rand = random::GetRand(this->Logo.position.x, this->Logo.position.x + 182.f);
+				auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 32.f), Vec2(32,32), Vec2(64, 64), 1, 15, 100, "titleEffect");
+				effect_r->SetTexture(&this->texEffect);
+				//effect_r->Set(effect_r->position, Vec2(effect_r->position.x, effect_r->position.y - 500), 15);
+				effect_r->SetMode(Effect::Mode::Down);
+				rand = random::GetRand(-10.f, 10.f);
+				effect_r->SetMove(Vec2(rand, 0.f));
+				effect_r->Color_a(0.6f);
+			}
 			if (this->flowerVolume < 1.f)
 			{
 				this->flowerVolume += 0.01f;
