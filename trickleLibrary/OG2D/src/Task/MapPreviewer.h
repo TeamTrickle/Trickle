@@ -13,6 +13,7 @@ class MapPreviewer : public TaskObject {
 private:
 	bool Initialize(const Box2D&);
 	bool isShootable(const Vec2&) const;
+	void resetMetadata();
 
 public:
 	explicit MapPreviewer() {}
@@ -25,7 +26,7 @@ public:
 		@brief	プレビュー用写真を差し替えます
 		@param	ファイル名
 	 */
-	void replaceThumbnail(Texture*);
+	void replaceThumbnail(std::vector<Texture*>*);
 
 	void setVisible(const bool&);
 	bool isVisible() const;
@@ -40,8 +41,11 @@ private:
 	Texture*				mapThumbnail;
 	Vec2					thumbSize;
 	Vec2					pointPos;
+	Vec2					zoom = Vec2(1.f, 1.f);
 	float					camSpeed = 5.f;
 	int						curMoveIdx = 0;
+	int						curThumbnailIdx = 0;
+	std::vector<Texture*>*	thumbnails;
 
 	static std::array<Vec2, 4> CamMoveSeq;
 };

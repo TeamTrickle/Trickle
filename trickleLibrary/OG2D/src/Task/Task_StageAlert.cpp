@@ -194,6 +194,6 @@ Box2D StageAlert::OptimizeForWindowSize(const Box2D& b) const
 
 void StageAlert::SetStageData(const std::string& fPath) {
 	currentRes = infoRes[fPath];
-	previewer->replaceThumbnail(currentRes->mapInfo[0]);
+	previewer->replaceThumbnail(&currentRes->mapInfo);
 	previewer->setVisible(true);
 }
