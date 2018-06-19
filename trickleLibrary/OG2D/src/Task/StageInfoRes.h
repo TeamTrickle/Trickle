@@ -19,16 +19,17 @@ public:
 	~StageInfoRes();
 
 	bool isThisAchievementClear(const int&) const;
+	void loadThumbnails(const std::string&);
 
 public:
 	const static int MAX_ACHIEVEMENT = 3;
 	Texture*									atlas;
-	Texture*									mapInfo;
 	Box2D										title;
 	std::array<Achievement, MAX_ACHIEVEMENT>	achievement;
+	std::vector<Texture*>						mapInfo;
 	bool										clearFlag = false;
 
 private:
 	std::string									atlasFileName;
-	std::string									mapInfoFileName;
+	std::vector<std::string>					mapInfoName;
 };

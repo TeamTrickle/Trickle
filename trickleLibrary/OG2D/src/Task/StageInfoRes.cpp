@@ -14,9 +14,7 @@ std::vector<std::string> StageInfoRes::SplitString(const std::string& str, const
 		}
 		buf += c;
 	}
-	if (!ret.empty()) {
-		ret.push_back(buf);
-	}
+	ret.push_back(buf);
 
 	return ret;
 }
@@ -49,8 +47,8 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 	if (file.is_open()) {
 		file >> atlasFileName;
 		atlas = loadFromTexture(atlasFileName);
-		file >> mapInfoFileName;
-		mapInfo = loadFromTexture(mapInfoFileName);
+		file >> buf;
+		loadThumbnails(buf);
 		file >> buf;
 		title = stringToBox2D(buf);
 
@@ -99,16 +97,15 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 
 StageInfoRes::~StageInfoRes() {
 	atlas->Finalize();
-	mapInfo->Finalize();
 	if (rm->GetTextureData(atlasFileName) != nullptr) {
 		atlas->Finalize();
 		delete atlas;
 		rm->DeleteTexture(atlasFileName);
 	}
-	if (rm->GetTextureData(mapInfoFileName) != nullptr) {
-		mapInfo->Finalize();
-		delete mapInfo;
-		rm->DeleteTexture(mapInfoFileName);
+	for (int i = 0; i < mapInfo.size(); ++i) {
+		mapInfo[i]->Finalize();
+		delete mapInfo[i];
+		rm->DeleteTexture(mapInfoName[i]);
 	}
 }
 
@@ -118,4 +115,18 @@ bool StageInfoRes::isThisAchievementClear(const int& idx) const
 		return achievement[idx].second;
 	}
 	return false;
+}
+
+void StageInfoRes::loadThumbnails(const std::string& longstr) {
+	auto filePaths = SplitString(longstr, '|');
+	for (auto& f : filePaths) {
+		Texture* tex = rm->GetTextureData(f);
+		if (!tex) {
+			tex = new Texture();
+			tex->Create(f);
+			rm->SetTextureData(f, tex);
+		}
+		mapInfo.push_back(tex);
+		mapInfoName.push_back(f);
+	}
 }
