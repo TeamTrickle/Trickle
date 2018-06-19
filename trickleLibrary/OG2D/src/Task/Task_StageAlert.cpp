@@ -9,6 +9,10 @@ bool StageAlert::operator<<(const std::string& path) {
 	return preloadResource(path);
 }
 
+bool StageAlert::isExist(const std::string& path) {
+	return infoRes.find(path) != infoRes.end();
+}
+
 void StageAlert::setActive(const bool& a){
 	active = a;
 }

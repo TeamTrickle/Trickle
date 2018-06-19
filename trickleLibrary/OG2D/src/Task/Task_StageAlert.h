@@ -43,6 +43,12 @@ public:
 	 */
 	bool operator<<(const std::string&);
 
+	/**
+	 @param			ステージ名
+	 @return		ステージ情報がロードされているかどうか
+	 */
+	bool isExist(const std::string&);
+
 	void setActive(const bool&);
 	bool isActive() const;
 

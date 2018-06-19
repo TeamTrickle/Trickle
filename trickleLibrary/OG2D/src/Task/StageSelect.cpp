@@ -38,7 +38,7 @@ bool StageSelect::Initialize()
 {
 	//‰æ‘œ‚Ì“Ç‚Ýž‚Ý
 	this->Testdoor.Create((std::string)"door.png");
-	this->Wall.Create((std::string)"wall.PNG");
+	this->Wall.Create((std::string)"wall2.PNG");
 	//ƒvƒŒƒCƒ„[NPC‚Ì¶¬
 	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
@@ -287,9 +287,10 @@ void StageSelect::From3()
 					}
 				}
 				auto board = OGge->GetTask<StageAlert>("stagealert");
-				if (board) {
+				std::string curStageName = "monitor" + std::to_string(this->nowPos / 2) + ".txt";
+				if (board && board->isExist(curStageName)) {
 					//board->AnimPlay();
-					board->SetStageData("monitor" + std::to_string(this->nowPos / 2) + ".txt");
+					board->SetStageData(curStageName);
 				}
 			}
 			//right“ü—Í
@@ -334,9 +335,10 @@ void StageSelect::From3()
 					}
 				}
 				auto board = OGge->GetTask<StageAlert>("stagealert");
-				if (board) {
+				std::string curStageName = "monitor" + std::to_string(this->nowPos / 2) + ".txt";
+				if (board && board->isExist(curStageName)) {
 					//board->AnimPlay();
-					board->SetStageData("monitor" + std::to_string(this->nowPos / 2) + ".txt");
+					board->SetStageData(curStageName);
 				}
 			}
 			//Œˆ’è“ü—Í
