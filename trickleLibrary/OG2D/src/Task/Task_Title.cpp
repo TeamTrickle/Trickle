@@ -77,7 +77,9 @@ bool Title::Initialize()
 	auto map = Map::Create((std::string)"title.csv");
 	//–îˆó‚ÌˆÊ’u‚Åg—p‚·‚é
 	this->nextTaskCheck = 0;
-	
+	auto chara = Chara::Create((std::string)"player.png", Vec2(1600, 628));
+	chara->SetPause(true);
+
 	//•`‰æ‡‚ÌŒˆ’è
 	__super::SetDrawOrder(0.5f);
 	//ƒJƒƒ‰‚Ì’†S‚Ìƒ^[ƒQƒbƒg‚ğ“o˜^
@@ -202,8 +204,9 @@ void Title::UpDate()
 		if (this->tex_a >= 1.0f)
 		{
 			this->mode = from5;
-			auto Npc = Chara::Create((std::string)"player.png", Vec2(1600, 628));
+			auto Npc = OGge->GetTask<Chara>("Chara");
 			Npc->SetReplayEnable();
+			Npc->SetPause(false);
 		}
 	}
 	break;
