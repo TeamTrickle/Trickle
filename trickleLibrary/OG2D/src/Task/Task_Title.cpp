@@ -44,13 +44,13 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	startPos = Vec2(720.f - 155.f/*128.f*/, 624.f + 129.f + 30.f);
+	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 30.f);
 	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
 	this->textPos[0] = { this->startPos,Vec2(256,64) };
 	this->textPos[1] = { this->closePos,Vec2(256,64) };
 	//配列管理を行う
-	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y };
-	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y };
+	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y ,320.f,64.f };
+	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y ,64.f*4.f,64.f };
 	//画像読み込み
 	texCursor.Create("gear3.png");
 	this->texLogo.Create("logo.png");
@@ -68,7 +68,7 @@ bool Title::Initialize()
 	//カメラ位置の移動
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
 	//水読み込みと生成
-	auto water = Water::Create(Vec2(500.f, 0.f));
+	auto water = Water::Create(Vec2(500.f, -64.f));
 	waterTex.Create((std::string)"waterTex.png");
 	water->SetTexture(&this->waterTex);
 	water->SetMaxSize(Vec2(128, 128));
@@ -252,8 +252,6 @@ void Title::UpDate()
 			case 1:
 				OGge->GameEnd();
 				break;
-			case 2:
-				break;
 			}
 			auto effect03 = Effect::Create(
 				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
@@ -327,7 +325,7 @@ void Title::Render2D()
 		src.OffsetSize();
 		this->texCursor.Rotate((float)this->gierCnt);
 		texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + 320.f/*256.f*/, cursorPos[this->cursorNum].y, 64.f, 64.f);
+		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + cursorPos[this->cursorNum].w, cursorPos[this->cursorNum].y, 64.f, 64.f);
 		draw2.OffsetSize();
 		texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 	}
@@ -383,10 +381,10 @@ bool Title::Finalize()
 	{
 		(*map).Kill();
 	}
-	auto Npc = OGge->GetTask<Chara>("Chara");
-	if (Npc)
+	auto Npc = OGge->GetTasks<Chara>("Chara");
+	for(auto id = Npc->begin(); id != Npc->end();++id)
 	{
-		Npc->Kill();
+		(*id)->Kill();
 	}
 	auto effects = OGge->GetTasks<Effect>("effect");
 	for (auto id = effects->begin(); id != effects->end(); ++id)
@@ -488,11 +486,16 @@ void Title::Skip()
 
 void Title::BackTitleSkip()
 {
-	this->mode = Mode::from5;
+	this->mode = Mode::from4;
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
 		(*id)->Kill();
+	}
+	auto npc = OGge->GetTask<Chara>("Chara");
+	if (npc)
+	{
+		npc->Kill();
 	}
 	this->cm.DeleteObject();
 	OGge->camera->SetPos(Vec2(0, 200));
@@ -500,7 +503,7 @@ void Title::BackTitleSkip()
 	this->flowerVolume = 1.0f;
 	this->tex_a = 1.0f;
 	auto npc2 = Chara::Create((std::string)"player.png", Vec2(1600, 628));
-	npc2->SetReplayEnable();
+	npc2->SetPause(true);
 	this->sound->play();
 }
 

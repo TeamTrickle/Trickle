@@ -132,16 +132,22 @@ void Water::UpDate()
 				this->MoveGASCheck(move);
 				this->Friction();
 			}
+			//‰æ–ÊŠOˆ—
+			if (this->position.y < 0.f)
+			{
+				this->Kill();
+			}
 			break;
 		case Water::Situation::Rainfrom:
 			if (this->nowTime < 10)
 			{
-				if (this->nowTime % 3 == 0)
+				if (this->nowTime % 2 == 0)
 				{
-					auto water = Water::Create(Vec2(this->position.x + (this->nowTime / 3 * 12) + 12, this->position.y + this->maxSize.x / 2));
+					float rand = random::GetRand(this->position.x + 12, this->position.x + this->maxSize.x - 12.f);
+					auto water = Water::Create(Vec2(rand, this->position.y + this->maxSize.x / 2));
 					water->SetMaxSize(Vec2(32, 32));
 					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
-					water->SetWaterVolume(this->volume / 4.f);
+					water->SetWaterVolume(this->volume / 5.f);
 					water->SetColor(this->color);
 				}
 				this->nowTime++;
