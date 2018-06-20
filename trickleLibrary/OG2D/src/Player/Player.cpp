@@ -94,7 +94,6 @@ void Player::UpDate()
 		this->BucketMove();
 		if (this->InputB2down())
 		{
-			this->ReleaseHold();
 			this->motion = Motion::Lower;
 		}
 		break;
@@ -131,6 +130,7 @@ void Player::UpDate()
 				//バケツを持つ
 				if (this->BucketHit())
 				{
+					this->state = State::BUCKET;
 					this->motion = Motion::Lift;
 				}
 				else
@@ -276,6 +276,7 @@ void Player::UpDate()
 				//バケツを持つ
 				if (this->BucketHit())
 				{
+					this->state = State::BUCKET;
 					this->motion = Motion::Lift;
 				}
 				else
@@ -284,7 +285,7 @@ void Player::UpDate()
 					this->SwitchCheck();
 				}
 			}
-			if (this->TohaveObjectHit()) {
+			if (this->TohaveObjectHit() && this->state == State::NORMAL) {
 				//ブロックを押す
 				this->motion = Motion::Block_M;
 			}
@@ -328,15 +329,26 @@ void Player::UpDate()
 			break;
 		case Lift:
 			++this->animation.animCnt;
+			//8フレーム＊２コマ-１
 			if (this->animation.animCnt > 15) {
 				this->motion = Motion::Normal;
-				this->state = State::BUCKET;
 				this->animation.animCnt = 0;
 			}
 			break;
 		case Lower:
 			++this->animation.animCnt;
+			//8フレーム＊２コマ-１
 			if (this->animation.animCnt > 15) {
+				this->ReleaseHold();
+				this->motion = Motion::Normal;
+				this->state = State::NORMAL;
+				this->animation.animCnt = 0;
+			}
+			break;
+		case Spill:
+			++this->animation.animCnt;
+			//8フレーム＊３コマ-１
+			if (this->animation.animCnt > 23) {
 				this->motion = Motion::Normal;
 				this->animation.animCnt = 0;
 			}
@@ -346,7 +358,7 @@ void Player::UpDate()
 
 		//スイッチはすぐモーションが変わらないのでanimation中の状態を持ってくる
 		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M && 
-			this->motion != Motion::Lift && this->motion != Lower){
+			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill){
 			if (this->InputLeft())
 			{
 				this->est.x = -this->MOVE_SPEED;
@@ -857,7 +869,94 @@ void Player::BucketMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f };
+			if (this->motion == Motion::Spill) {
+				if (this->direction == Direction::LEFT)
+				{
+					switch (animation.animCnt / 8 % 3) {
+					case 0:
+						(*id)->position = { this->position.x - 40,this->position.y + 30 };
+						(*id)->angle = 315;
+						break;
+					case 1:
+						(*id)->position = { this->position.x - 40,this->position.y + 60 };
+						(*id)->angle = 270;
+						break;
+					case 2:
+						(*id)->position = { this->position.x - 40,this->position.y + 30 };
+						(*id)->angle = 315;
+						break;
+					}
+				}
+				else
+				{
+					switch (animation.animCnt / 8 % 3) {
+					case 0:
+						(*id)->position = { this->position.x + 40,this->position.y + 30 };
+						(*id)->angle = 45;
+						break;
+					case 1:
+						(*id)->position = { this->position.x + 40,this->position.y + 60 };
+						(*id)->angle = 90;
+						break;
+					case 2:
+						(*id)->position = { this->position.x + 40,this->position.y + 30 };
+						(*id)->angle = 45;
+						break;
+					}
+				}
+			}
+			else if (this->motion == Motion::Lift) {
+				if (this->direction == Direction::LEFT)
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x - 40,this->position.y + 60 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x - 20,this->position.y + 30 };
+						break;
+					}
+				}
+				else
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x + 40,this->position.y + 60 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x + 20,this->position.y + 30 };
+						break;
+					}
+				}
+			}
+			else if (this->motion == Motion::Lower) {
+				if (this->direction == Direction::LEFT)
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x - 20,this->position.y + 30 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x - 40,this->position.y + 50 };
+						break;
+					}
+				}
+				else
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x + 20,this->position.y + 30 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x + 40,this->position.y + 50 };
+						break;
+					}
+				}
+			}
+			else {
+				(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 69.f };
+				(*id)->angle = 0;
+			}
 		}
 	}
 	auto waters = OGge->GetTasks<Water>("water");
@@ -995,12 +1094,6 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 		case Motion::Block_M:
 			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
 			break;
-		case Motion::Lift:
-			src = Box2D(this->lift[this->animCnt / 8 % 2] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
-			break;
-		case Motion::Lower:
-			src = Box2D(this->lower[this->animCnt / 8 % 2] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
-			break;
 		case Motion::Switch_M:
 			auto switchs = OGge->GetTasks<Switch>("Switch");
 			for (auto id = switchs->begin(); id != switchs->end(); ++id){
@@ -1038,17 +1131,25 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 		case Motion::Normal:
 			src = Box2D(this->idle[this->timeCnt / 3 % 10] * this->srcX, 4* this->srcY, this->srcX,  this->srcY);
 			break;
-
 		case Motion::Walk:
 			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 5 *  this->srcY, this->srcX,  this->srcY);
 			break;
-
 		case Motion::Jump:
 			src = Box2D(0 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
 			break;
-
 		case Motion::Fall:
 			src = Box2D(1 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
+			break;
+
+		case Motion::Lift:
+			src = Box2D(this->lift[this->animCnt / 8 % 2] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
+			break;
+		case Motion::Lower:
+			src = Box2D(this->lower[this->animCnt / 8 % 2] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
+			break;
+		case Motion::Spill:
+			src = Box2D(this->spill[this->animCnt / 8 % 3] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
+
 			break;
 		}
 	}
@@ -1207,8 +1308,6 @@ bool Player::ReleaseHold()
 	{
 		if (this->PutCheck())
 		{
-			//元に戻す
-			this->state = State::NORMAL;
 			//持っている判定を元に戻す
 			auto bucket = OGge->GetTasks<Bucket>("bucket");
 			for (auto id = bucket->begin(); id != bucket->end(); ++id)
@@ -1219,11 +1318,11 @@ bool Player::ReleaseHold()
 					this->hold = false;
 					if (this->direction == Direction::LEFT)
 					{
-						(*id)->position.x -= this->Scale.x;
+						(*id)->position.x = this->position.x - 50;
 					}
 					else
 					{
-						(*id)->position.x += this->Scale.x;
+						(*id)->position.x = this->position.x + 50;
 					}
 				}
 			}
@@ -1236,11 +1335,11 @@ bool Player::ReleaseHold()
 					{
 						if (this->direction == Direction::LEFT)
 						{
-							(*id)->position.x -= this->Scale.x;
+							(*id)->position.x = this->position.x - 50;
 						}
 						else
 						{
-							(*id)->position.x += this->Scale.x;
+							(*id)->position.x = this->position.x + 50;
 						}
 					}
 					(*id)->HoldCheck(false);
@@ -1303,6 +1402,10 @@ bool Player::PutCheck()
 	}
 	return true;
 }
+void Player::SetMotion(Motion motion_)
+{
+	this->motion = motion_;
+}
 void Player::SetInputAuto(bool flag)
 {
 	this->isInputAuto = flag;
@@ -1310,7 +1413,6 @@ void Player::SetInputAuto(bool flag)
 	{
 		if (this->state == State::BUCKET)
 		{
-			this->ReleaseHold();
 			this->motion = Motion::Lower;
 		}
 	}
@@ -1319,6 +1421,8 @@ bool Player::GetInputAuto() const
 {
 	return this->isInputAuto;
 }
+
+
 bool Player::InputLeft() {
 	if (this->isInputAuto)
 	{

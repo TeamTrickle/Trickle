@@ -28,7 +28,6 @@ public:
 		BUCKET,		//バケツ所持
 		ANIMATION,	//アニメーション中
 	};
-private:
 	enum Motion
 	{
 		Normal,		//通常
@@ -40,7 +39,9 @@ private:
 		Block_M,	//ブロック押し
 		Lift,		//持ちあげる
 		Lower,		//持ちおろす
+		Spill,		//溢す
 	};
+private:
 	class Animation
 	{
 	public:
@@ -59,6 +60,7 @@ private:
 		int switch_2[6] = { 4,3,2,1,0 };
 		int lift[2] = { 2,3 }; 
 		int lower[2] = { 3,2 };
+		int spill[3] = { 0, 1, 0 };
 	public:
 		void SetAnimaVec(Vec2& start_, Vec2& end_);				//開始位置と終了位置を登録
 		bool Initialize();										//初期化
@@ -109,11 +111,11 @@ public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);
 	Player();													//コンストラクタ
-	virtual ~Player();													//デストラクタ
+	virtual ~Player();											//デストラクタ
 	bool Initialize();											//初期化
 	bool Initialize(Vec2&);										//位置設定初期化
 	void UpDate();												//更新処理
-	void Render2D();												//描画処理
+	void Render2D();											//描画処理
 	bool Finalize();											//解放処理
 	Vec2 GetEst() const;										//現在移動値を返す
 	void SetTexture(Texture* texture);							//テクスチャを登録
@@ -123,6 +125,7 @@ public:
 	void SetInputAuto(bool);
 	bool GetInputAuto() const;
 	bool ReleaseHold();
+	void SetMotion(Motion motion_);
 	//入力処理簡略化
 	bool InputLeft();
 	bool InputRight();

@@ -1,6 +1,7 @@
 #include "Bucket\bucket.h"
 #include "Water\water.h"
 #include "Map\Map.h"
+#include "Player\Player.h"
 Bucket::Bucket() {
 	this->invi = 0;
 }
@@ -63,6 +64,8 @@ void Bucket::UpDate() {
 	gravity.y += 5.0f;
 	if (this->BucketWaterCreate())	//バケツから水を出す処理
 	{
+		auto player = OGge->GetTask<Player>("Player");
+		player->SetMotion(Player::Motion::Spill);
 		//水をこぼす音の再生
 		soundD.play();
 
@@ -94,6 +97,7 @@ void Bucket::Render2D() {
 	draw.OffsetSize();
 	Box2D src(GetSpriteCrop());
 	src.OffsetSize();
+	tex.Rotate(this->angle);
 	tex.Draw(draw, src);
 }
 
