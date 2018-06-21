@@ -41,6 +41,7 @@ Texture* StageInfoRes::loadFromTexture(std::string& path) {
 }
 
 StageInfoRes::StageInfoRes(const std::string& filePath) {
+	clearSrc = Box2D(0, 0, 512, 512);
 	std::string buf;
 
 	std::ifstream file(filePath, std::ios::in);
@@ -67,6 +68,7 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 			}
 			else {
 				clearFlag = true;
+				clearSrc = Box2D(512, 0, 512, 512);
 			}
 		}
 

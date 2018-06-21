@@ -27,6 +27,7 @@ public:
 	Box2D										title;
 	std::array<Achievement, MAX_ACHIEVEMENT>	achievement;
 	std::vector<Texture*>						mapInfo;
+	Box2D										clearSrc;
 	bool										clearFlag = false;
 
 private:
