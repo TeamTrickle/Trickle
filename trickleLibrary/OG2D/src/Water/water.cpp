@@ -133,7 +133,7 @@ void Water::UpDate()
 				this->Friction();
 			}
 			//‰æ–ÊŠOˆ—
-			if (this->position.y < 0.f)
+			if (this->position.y < 0.f - this->Scale.y)
 			{
 				this->Kill();
 			}
@@ -169,12 +169,13 @@ void Water::UpDate()
 		if (!this->hold)
 		{
 			this->Friction();
-			this->MoveSOILDCheck(move);
 			if (this->HeadSolidCheck())
 			{
 				//this->SetState(State::LIQUID);
 				this->SolidMelt();
 			}
+			this->MoveSOILDCheck(move);
+			
 		}
 		break;
 	}
@@ -616,7 +617,7 @@ void Water::MoveSOILDCheck(Vec2 est)
 				{
 					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						if (this->hit(*(*id)))
+						if (this->CubeHit(*(*id)))
 						{
 							this->position.x = preX;
 							break;
@@ -671,7 +672,7 @@ void Water::MoveSOILDCheck(Vec2 est)
 				{
 					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						if (this->hit(*(*id)))
+						if (this->CubeHit(*(*id)))
 						{
 							this->position.y = preY;
 							break;

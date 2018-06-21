@@ -97,7 +97,7 @@ void Player::Render2D()
 	Box2D draw;
 	if (this->hold)
 	{
-		draw = { this->position.x,this->position.y + 64.f,this->Scale.x, this->Scale.y  - 64.f};
+		draw = { this->position.x,this->position.y + this->haveAddPos.y,this->Scale.x, this->Scale.y  - this->haveAddPos.y};
 		draw.OffsetSize();
 	}
 	else
@@ -166,7 +166,7 @@ bool Player::HeadCheck()
 	}
 	return false;
 }
-bool Player::HeadMapCheck(std::string& objname_)
+bool Player::HeadMapCheck(std::string& objname_,bool flag)
 {
 	this->head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
@@ -174,12 +174,23 @@ bool Player::HeadMapCheck(std::string& objname_)
 	{
 		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (map->hitBase[y][x].objectTag == objname_)
+			if (head.hit(map->hitBase[y][x]))
 			{
-				if (head.hit(map->hitBase[y][x]))
+				if (flag)
 				{
-					this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
-					return true;
+					if (map->hitBase[y][x].objectTag == objname_)
+					{
+						this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+						return true;
+					}
+				}
+				else
+				{
+					if (map->hitBase[y][x].objectTag != objname_)
+					{
+						this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+						return true;
+					}
 				}
 			}
 		}
@@ -188,10 +199,10 @@ bool Player::HeadMapCheck(std::string& objname_)
 }
 bool Player::HeadSolidCheck()
 {
-	/*if (this->hold)
+	if (this->hold)
 	{
 		return false;
-	}*/
+	}
 	//頭の当たり判定
 	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	//水情報
@@ -212,12 +223,30 @@ bool Player::HeadSolidCheck()
 					{
 						(*id)->HoldCheck(true);
 						this->hold = true;
-						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x),((*id)->Scale.y * (*id)->Radius.y) };
+						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
 						this->position.y -= this->haveAddPos.y;
 						this->Scale.y += this->haveAddPos.y;
 						return true;
 						return true;
 					}
+				}
+			}
+		}
+	}
+	return false;
+}
+bool Player::SolidHitCheck()
+{
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		if ((*id)->objectTag == "SOLID")
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					return true;
 				}
 			}
 		}
@@ -274,7 +303,7 @@ bool Player::FootCheck()
 	}
 	return false;
 }
-bool Player::FootMapCheck(std::string& objname_)
+bool Player::FootMapCheck(std::string& objname_, bool flag)
 {
 	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
@@ -282,14 +311,25 @@ bool Player::FootMapCheck(std::string& objname_)
 	{
 		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (map->hitBase[y][x].objectTag == objname_)
+			if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 			{
-				if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
+				if (foot.CubeHit(map->hitBase[y][x]))
 				{
-					if (foot.CubeHit(map->hitBase[y][x]))
+					if (flag)
 					{
-						this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y + 10.f));
-						return true;
+						if (map->hitBase[y][x].objectTag == objname_)
+						{
+							this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y + 10.f));
+							return true;
+						}
+					}
+					else
+					{
+						if (map->hitBase[y][x].objectTag != objname_)
+						{
+							//this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y + 10.f));
+							return true;
+						}
 					}
 				}
 			}
@@ -299,7 +339,7 @@ bool Player::FootMapCheck(std::string& objname_)
 }
 bool Player::SolidFootCheck()
 {
-	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y), Vec2(this->Scale.x - 1.f, 64.0f), 0.0f);
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
@@ -508,7 +548,7 @@ bool Player::HaveObjectHit()
 			{
 				(*id)->HoldCheck(true);
 				this->hold = true;
-				this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x),((*id)->Scale.y * (*id)->Radius.y) };
+				this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
 				this->position.y -= this->haveAddPos.y;
 				this->Scale.y += this->haveAddPos.y;
 				return true;
@@ -530,7 +570,7 @@ bool Player::HaveObjectHit()
 					{
 						(*id)->HoldCheck(true);
 						this->hold = true;
-						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x),((*id)->Scale.y * (*id)->Radius.y) };
+						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x)  - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
 						this->position.y -= this->haveAddPos.y;
 						this->Scale.y += this->haveAddPos.y;
 						return true;
@@ -665,7 +705,7 @@ void Player::HaveObjectPosMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 64.f + (64.f * 0.3f) };
+			(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y};
 		}
 	}
 }
@@ -1042,16 +1082,13 @@ bool Player::ReleaseHold()
 			{
 				if ((*id)->GetHold())
 				{
-					if (this->InputB2down())
+					if (this->direction == Direction::LEFT)
 					{
-						if (this->direction == Direction::LEFT)
-						{
-							(*id)->position.x = this->position.x - 50;
-						}
-						else
-						{
-							(*id)->position.x = this->position.x + 50;
-						}
+						(*id)->position.x = this->position.x - 64;
+					}
+					else
+					{
+						(*id)->position.x = this->position.x + 64;
 					}
 					(*id)->HoldCheck(false);
 					(*id)->ResetMove();
@@ -1300,7 +1337,7 @@ bool Player::MotionNormalUpDate()
 	if (this->state != State::BUCKET) {
 		if (this->InputDown())
 		{
-			if (this->FootMapCheck((std::string)"Ladder") || !this->SolidFootCheck())
+			if (this->FootMapCheck((std::string)"Ladder",true) && !this->SolidFootCheck())
 			{
 				//移動が終わったら梯子モーションをするように設定
 				this->animation.animMo = Motion::Ladder;
@@ -1315,7 +1352,7 @@ bool Player::MotionNormalUpDate()
 		}
 		if (this->InputUp())
 		{
-			if (this->MapHitCheck((std::string)"Ladder") || !this->HeadSolidCheck())
+			if (this->MapHitCheck((std::string)"Ladder") && !this->SolidHitCheck())
 			{
 				this->animation.animMo = Motion::Ladder;
 				this->state = State::ANIMATION;
@@ -1377,7 +1414,7 @@ bool Player::MotionLadderUpDate()
 		++this->animation.animCnt;
 		Vec2 e = { 0.f,-5.0f };
 		this->LadderMoveCheck(e);
-		if (!this->HeadMapCheck((std::string)"Ladder"))
+		if (this->HeadMapCheck((std::string)"Ladder", false))
 		{
 			//移動が終わったら梯子モーションをするように設定
 			this->animation.animMo = Motion::Ladder;
@@ -1398,7 +1435,7 @@ bool Player::MotionLadderUpDate()
 			e.y += 10.f;
 		}
 		this->LadderMoveCheck(e);
-		if (!this->FootMapCheck((std::string)"Ladder") || this->SolidFootCheck())
+		if (this->FootMapCheck((std::string)"Ladder",false) || this->SolidFootCheck())
 		{
 			this->motion = Motion::Normal;
 		}

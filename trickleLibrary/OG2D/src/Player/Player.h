@@ -98,9 +98,10 @@ private:
 private:
 	bool HeadCheck();											//頭の当たり判定
 	bool FootCheck();											//足元の当たり判定
-	bool HeadMapCheck(std::string& objname_);			//頭の別オブジェクトへの判定,0 = そのオブジェクト,1 = それ以外のオブジェクト
-	bool FootMapCheck(std::string& objname_);			//足元の別オブジェクトへの判定
+	bool HeadMapCheck(std::string& objname_,bool = true);			//頭の別オブジェクトへの判定
+	bool FootMapCheck(std::string& objname_,bool = false);			//足元の別オブジェクトへの判定
 	bool SolidFootCheck();
+	bool SolidHitCheck();
 	void MoveCheck(Vec2& est);									//移動判定処理
 	void LadderMoveCheck(Vec2& est);			//梯子状態で使用する移動処理
 	void Friction();											//重力や摩擦の計算
