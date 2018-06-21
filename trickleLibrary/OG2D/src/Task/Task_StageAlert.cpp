@@ -43,7 +43,7 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	// ƒŠƒ\[ƒX‰Šú‰»
 	background.Create((std::string)"stagealert_background.png");
 	mission.Create((std::string)"stagealert_mission.png");
-	clearFlag.Create((std::string)"stagealert_clearflag.png");
+	clearFlag.Create((std::string)"selectflower.png");
 	clearStarTex.Create((std::string)"Ster.png");
 	normalStarTex.Create((std::string)"SterB.png");
 	rm->SetTextureData((std::string)"Ster.png", &clearStarTex);
@@ -71,9 +71,9 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 
 	clearFlagDraw = draws[&background];
 	clearFlagDraw.x += 1100;
-	clearFlagDraw.y += 420;
-	clearFlagDraw.w = 500;
-	clearFlagDraw.h = 500;
+	clearFlagDraw.y -= 50;
+	clearFlagDraw.w = 300;
+	clearFlagDraw.h = 300;
 
 	previewer = MapPreviewer::Create(true, 
 		Box2D(
@@ -152,13 +152,11 @@ void StageAlert::Render2D() {
 			currentRes->atlas->Draw(draw, src);
 		}
 
-		if (currentRes->clearFlag) {
-			draw = clearFlagDraw;
-			src = Box2D(0.f, 0.f, clearFlag.GetTextureSize().x, clearFlag.GetTextureSize().y);
-			draw.OffsetSize();
-			src.OffsetSize();
-			clearFlag.Draw(draw, src);
-		}
+		draw = clearFlagDraw;
+		src = currentRes->clearSrc;
+		draw.OffsetSize();
+		src.OffsetSize();
+		clearFlag.Draw(draw, src);
 	}
 }
 
