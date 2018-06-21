@@ -27,6 +27,7 @@ public:
 		NORMAL,		//通常
 		BUCKET,		//バケツ所持
 		ANIMATION,	//アニメーション中
+		CLEAR,		//クリアの時
 	};
 	enum Motion
 	{
@@ -119,6 +120,7 @@ private:
 	bool MotionJumpUpDate();
 	bool MotionLadderUpDate();
 	bool MotionWalkUpDate();
+	void StateClearUpdate();
 	//入力処理簡略化
 	bool InputLeft();
 	bool InputRight();
