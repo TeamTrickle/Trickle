@@ -49,6 +49,9 @@ void Player::UpDate()
 {
 	++animation.timeCnt;
 	//アニメーションカウントを増やす
+	if (this->isInputAuto) {
+		this->state = State::CLEAR;
+	}
 	this->StateUpDate();
 	//各状態での処理と別状態への移行
 	if (this->state != State::ANIMATION)
@@ -570,7 +573,7 @@ bool Player::HaveObjectHit()
 					{
 						(*id)->HoldCheck(true);
 						this->hold = true;
-						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x)  - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
+						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
 						this->position.y -= this->haveAddPos.y;
 						this->Scale.y += this->haveAddPos.y;
 						return true;
@@ -705,7 +708,57 @@ void Player::HaveObjectPosMove()
 	{
 		if ((*id)->GetHold())
 		{
-			(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y};
+			if (this->motion == Motion::Lift) {
+				if (this->direction == Direction::LEFT)
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x - 40,this->position.y - this->haveAddPos.y + 40 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x - 20,this->position.y - this->haveAddPos.y + 10 };
+						break;
+					}
+				}
+				else
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x + 40,this->position.y - this->haveAddPos.y + 40 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x + 20,this->position.y - this->haveAddPos.y + 10 };
+						break;
+					}
+				}
+			}
+			else if (this->motion == Motion::Lower) {
+				if (this->direction == Direction::LEFT)
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x - 20,this->position.y - this->haveAddPos.y + 10 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x - 40,this->position.y - this->haveAddPos.y + 40 };
+						break;
+					}
+				}
+				else
+				{
+					switch (animation.animCnt / 8 % 2) {
+					case 0:
+						(*id)->position = { this->position.x + 20,this->position.y - this->haveAddPos.y + 10 };
+						break;
+					case 1:
+						(*id)->position = { this->position.x + 40,this->position.y - this->haveAddPos.y + 40 };
+						break;
+					}
+				}
+			}
+			else {
+				(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y };
+			}
 		}
 	}
 }
@@ -891,6 +944,19 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 		case Motion::Spill:
 			src = Box2D(this->spill[this->animCnt / 8 % 3] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
 
+			break;
+		}
+	}
+	if (state == CLEAR) {
+		switch (motion) {
+		case Motion::Normal:
+			src = Box2D(2 * 641, 10 * this->srcY, 641, this->srcY);
+			break;
+		case Motion::Jump:
+			src = Box2D(0 * 641, 10 * this->srcY, 641, this->srcY);
+			break;
+		case Motion::Fall:
+			src = Box2D(1 * 641, 10 * this->srcY, 641, this->srcY);
 			break;
 		}
 	}
@@ -1195,10 +1261,16 @@ void Player::StateUpDate()
 		//バケツを置く動作
 		if (this->InputB2down() && this->FootCheck())
 		{
-			this->motion = Motion::Lower;
+			if (this->PutCheck() && this->motion != Motion::Spill)
+			{
+				this->motion = Motion::Lower;
+			}
 		}
 		break;
 	case State::NORMAL:
+		break;
+	case State::CLEAR:
+		StateClearUpdate();
 		break;
 	}
 	//無敵時間減少
@@ -1488,6 +1560,13 @@ bool Player::MotionWalkUpDate()
 		this->state = State::BUCKET;
 	}
 	return true;
+}
+void Player::StateClearUpdate()
+{
+	if (this->motion == Motion::Normal) {
+		this->moveCnt = 0;
+		this->motion = Motion::Jump;
+	}
 }
 bool Player::InputLeft() {
 	if (this->isInputAuto)

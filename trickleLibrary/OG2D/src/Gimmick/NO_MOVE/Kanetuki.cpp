@@ -8,7 +8,7 @@ using namespace std;
 
 Kanetuki::Kanetuki()
 	:
-	maxChangeTimeLiquid(8),
+	maxChangeTimeLiquid(7),
 	maxChangeTimeSolid(90)
 {
 	cout << "‰Á”MŠí@¶¬" << endl;
