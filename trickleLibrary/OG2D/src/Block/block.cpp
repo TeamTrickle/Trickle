@@ -8,6 +8,7 @@ Block::Block() {
 
 Block::Block(Vec2& pos) {
 	this->position = pos;
+	this->soundname = "blockMove.wav";
 }
 
 Block::~Block() {
@@ -27,11 +28,18 @@ bool Block::Initialize(Vec2& pos) {
 	gravity.x = 0.0f;  //不要
 	gravity.y = 0.0f;
 
+	this->plhit = false;
+
 	//プレイヤとの当たり判定フラッグ　使わなくなった
 	plhitH = false;
 	plhitF = false;
 	plhitL = false;
 	plhitR = false;
+
+	//サウンドの生成
+	sound.create(soundname, false);
+	sound.volume(1.0f);
+	this->soundstart = true;
 
 	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f);       //オブジェクトの生成
 	GameObject::objectTag = "Block";
@@ -95,6 +103,18 @@ void Block::UpDate() {
 				//speed.x = -5.0f;
 				CheckMove(speed);
 			}
+
+			if (soundstart)
+			{
+				sound.play();
+				soundstart = false;
+			}
+		}
+
+		else
+		{
+			soundstart = true;
+			sound.stop();
 		}
 	}
 	gravity.y = 4.0f;
@@ -183,6 +203,7 @@ void Block::CheckMove(Vec2 &e_)
 			e_.x = 0.0f;
 			dir += e_.x;
 		}
+
 		this->Cnt++;
 		if (isCollideSomething())
 		{

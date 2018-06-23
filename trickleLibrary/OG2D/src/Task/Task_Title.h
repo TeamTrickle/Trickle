@@ -47,6 +47,9 @@ class Title :public TaskObject
 	
 
 	std::string soundname;
+	std::string soundcursorname;
+	std::string sounddecisionname;
+	std::string soundflowername;
 
 	Vec2 startPos;
 	Vec2 closePos;
@@ -100,6 +103,11 @@ public:
 	};
 	State state;
 	Sound* sound;
+	Sound cursorsound;
+	Sound decisionsound;
+	Sound flowersound;
+
+	bool soundstart;
 
 	typedef std::shared_ptr<Title> SP;
 	static SP Create(bool = true);

@@ -13,6 +13,8 @@ class Gate : public GameObject, public TaskObject
 	int Sense;
 	float door_x;
 	float door_w;
+	std::string soundclosename;     //サウンドのファイル名格納
+	std::string soundopenname;
 public:
 	Gate(const Vec2&);
 	virtual ~Gate();
@@ -27,4 +29,7 @@ public:
 	bool ToClose();
 	float Get_Door_x() const;
 	float Get_Door_w() const;
+
+	Sound soundOpen;
+	Sound soundClose;
 };

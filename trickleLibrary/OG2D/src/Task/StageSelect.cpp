@@ -54,6 +54,13 @@ bool StageSelect::Initialize()
 	(*board) << "monitor1.txt";
 	(*board) << "monitor2.txt";
 	//サウンドの生成
+	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
+	{
+		sound = new Sound();
+		sound->create(soundname, true);
+		rm->SetSoundData((std::string)"titleBGM", sound);
+		sound->play();
+	}
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定

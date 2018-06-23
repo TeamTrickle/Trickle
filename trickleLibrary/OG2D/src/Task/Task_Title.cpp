@@ -19,6 +19,10 @@ Title::Title()
 	this->flowerVolume = 0.f;
 	this->isSkip = false;
 	this->soundname = "title.wav";     //サウンドのファイル名	
+	this->soundcursorname = "cursormove.wav";
+	this->sounddecisionname = "decision.wav";
+	this->soundflowername = "flower.wav";
+	this->soundstart = true;
 	this->sound = nullptr;
 	//タグ設定
 	__super::Init((std::string)"title");
@@ -62,9 +66,21 @@ bool Title::Initialize()
 	this->effect03.Create("starteffect.png");
 	
 	//サウンドの生成
+	//BGM
 	sound = new Sound();
 	sound->create(soundname, true);
 	rm->SetSoundData((std::string)"titleBGM", sound);
+	//カーゾルの移動音
+	cursorsound.create(soundcursorname,false);
+	cursorsound.volume(1.0f);
+	//決定音
+	decisionsound.create(sounddecisionname, false);
+	decisionsound.volume(1.0f);
+	//花が咲く効果音
+	flowersound.create(soundflowername, false);
+	flowersound.volume(0.1f);
+
+	
 	//カメラ位置の移動
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
 	//水読み込みと生成
@@ -159,6 +175,8 @@ void Title::UpDate()
 		{
 			//花が咲いた時点でサウンドの再生を始める
 			sound->play();
+			soundstart = true;      //花の咲く効果音で使用
+
 			this->mode = from3;
 			//歯車を回す処理
 
@@ -181,6 +199,13 @@ void Title::UpDate()
 			}
 			if (this->flowerVolume < 1.f)
 			{
+				//花が咲く効果音の再生------------------------
+				if (soundstart)
+				{
+					flowersound.play();
+					soundstart = false;
+				}
+				//--------------------------------------------
 				this->flowerVolume += 0.01f;
 			}
 		}
@@ -231,6 +256,8 @@ void Title::UpDate()
 
 		if (OGge->in->down(Input::in::B2))
 		{
+			//決定音の再生
+			decisionsound.play();
 			switch (this->cursorNum)
 			{
 			case 0:
@@ -426,10 +453,14 @@ void Title::CursorMove()
 {
 	if (OGge->in->down(In::CU) || OGge->in->down(In::LU))
 	{
+		//カーソルの移動音再生
+		cursorsound.play();
 		this->cursorNum--;
 	}
 	if (OGge->in->down(In::CD) || OGge->in->down(In::LD))
 	{
+		//カーソルの移動音再生
+		cursorsound.play();
 		this->cursorNum++;
 	}
 	if (this->cursorNum > 1)
