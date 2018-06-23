@@ -47,6 +47,7 @@ void Switch::Render2D() {
 	//プレイヤがスイッチまで移動終了したとき
 	if (this->play_switch)
 	{
+		sound.play();
 		if (this->isON_) {
 			//スイッチがONならアニメーションをPLUS方向に
 			if (this->animCnt < 24) { ++this->animCnt; }
@@ -82,7 +83,6 @@ bool Switch::Finalize() {
 }
 void Switch::ChangeON_OFF() {
 	//切り替え時サウンドを生成
-	sound.play();
 	for (auto target : targets_) {
 		PostMsg(target);
 	}
