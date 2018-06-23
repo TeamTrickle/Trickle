@@ -367,6 +367,8 @@ void Player::MoveCheck(Vec2& est)
 	}
 	auto blocks = OGge->GetTasks<Block>("block");
 	auto waters = OGge->GetTasks<Water>("water");
+	auto block = OGge->GetTask<Block>("block");
+
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -411,8 +413,14 @@ void Player::MoveCheck(Vec2& est)
 			{
 				if (this->CubeHit(*(*id)))
 				{
+					block->plhit = true;
+
 					this->position.x = preX;
 					break;
+				}
+				else
+				{
+					block->plhit = false;
 				}
 			}
 		}

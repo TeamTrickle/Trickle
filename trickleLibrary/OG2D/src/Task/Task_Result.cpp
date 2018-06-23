@@ -8,6 +8,7 @@
 Result::Result() {
 	this->taskName = "Result";
 	__super::Init(taskName);
+	starsoundname = "kira2.wav";
 }
 Result::~Result() {
 	this->Finalize();
@@ -22,6 +23,14 @@ bool Result::Initialize() {
 	this->frameTex.Create((std::string)"resultframe.png");
 	this->stareffectTex.Create((std::string)"stareffect.png");
 	//this->clearTex
+
+	//サウンドの生成
+	soundstar.create(starsoundname, false);    //星のはまる音声
+	soundstar.volume(1.0f);
+
+	//sound.create(soundname, true);           //BGM未実装
+	//sound.volume(1.0f);
+	//sound.play();
 
 	this->nowMode = Mode1;
 	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
@@ -159,6 +168,9 @@ void Result::UpDate() {
 				//停止地点に到着
 				if (star[i].pos == Vec2(300 + i * 200, 370 - i * 8) && star[i].nowWH == Vec2(128, 128)) {
 					star[i].angle = -5;
+					//サウンドの再生
+					soundstar.play();
+
 					//auto eff = Effect::Create(Vec2(300 + i * 200, 370 - i * 8), Vec2(32, 32), Vec2(256, 256), 5, 5);
 					//eff->SetMode(Effect::Mode::Decrease);
 					//eff->SetTexture(&this->stareffectTex);

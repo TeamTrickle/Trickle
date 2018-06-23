@@ -17,6 +17,10 @@ public:
 	void Render2D();
 	bool Finalize();
 
+	//サウンドの生成
+	Sound sound;
+	Sound soundstar;
+
 private:
 	enum Mode {
 		Non,
@@ -40,6 +44,9 @@ private:
 	Texture numberui;
 	Texture stareffectTex;
 
+	//サウンドのファイル名格納
+	std::string soundname;
+	std::string starsoundname;
 
 	struct resultUI {
 		Vec2 pos;
