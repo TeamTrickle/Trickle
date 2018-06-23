@@ -201,19 +201,27 @@ void Fan::Animetion::AnimetionMove(bool flag)
 	if (flag)
 	{
 		//扇風機を動かす(アニメーション)
-		if (animetionframe <= 300)
+		if (animetionframe <= 100)
 		{
 			animetionframe++;
+		}
+		else if (animetionframe <= 170)
+		{
+			animetionframe += speed;
 		}
 		else
 		{
 			animetionframe += speed;
+			if (animetionframe >= 300)
+			{
+				animetionframe = 170;
+			}
 		}
 	}
 	else
 	{
 		//扇風機を遅くする（アニメーション）
-		if (animetionframe >= 300)
+		if (animetionframe >= 100)
 		{
 			animetionframe -= 5;
 		}
