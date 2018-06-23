@@ -14,6 +14,14 @@ Gate::Gate(const Vec2& pos)
 	__super::SetDrawOrder(0.4f);
 	//画像データ初期化
 	this->image = nullptr;
+	//サウンドのファイル名初期化
+	this->soundopenname = "doorOpen.wav";
+	this->soundclosename = "doorClose.wav";
+	//サウンド生成
+	soundOpen.create(soundopenname, false);
+	soundOpen.volume(1.0f);
+	soundClose.create(soundclosename, false);
+	soundClose.volume(1.0f);
 	//初期扉状態を登録
 	this->isOpen = false;
 	this->preIsOpen = false;
@@ -83,6 +91,7 @@ bool Gate::ToOpen()
 {
 	if (!this->isOpen)
 	{
+		soundOpen.play();
 		this->isOpen = true;
 		this->AnimCnt = 0;
 		return true;
@@ -95,6 +104,9 @@ bool Gate::ToClose()
 
 	if (this->isOpen)
 	{
+		//扉が閉じるタイミングと音が合わない
+		//soundClose.play();
+		soundOpen.play();
 		this->isOpen = false;
 		this->AnimCnt = 0;
 		return true;

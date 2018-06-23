@@ -22,7 +22,9 @@ private:
 	const int maxChangeTimeSolid;	//氷が水になるフレーム数
 	GameObject hitBase;				//水との当たり判定用
 	bool active;					//稼働中かどうか
+	//サウンドのファイル名格納
 	std::string startsoundname;
+	std::string stopsoundname;
 	std::string soundname;
 	Texture* hotImg;			//画像データ
 	int animCnt;				//アニメーションカウント
@@ -46,15 +48,16 @@ public:
 
 	void changeActive();				//自身の稼働状態を反転させる
 
+	//サウンドの生成
 	Sound soundstart;
 	Sound sound;
+	Sound soundstop;
+
 	VolumeControl volControl;
 	
 	bool startflag;       //サウンドを再生していいかのフラッグ
 	bool nowplay;
 	void SetTexture(Texture*);
-
-
 };
 
 

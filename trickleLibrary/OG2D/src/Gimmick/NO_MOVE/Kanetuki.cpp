@@ -15,6 +15,7 @@ Kanetuki::Kanetuki()
 	//サウンドファイル名	
 	startsoundname = "fire1.wav";
 	soundname = "fire2.wav";
+	stopsoundname = "fire3.wav";
 }
 Kanetuki::~Kanetuki()
 {
@@ -38,6 +39,8 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	sound.create(soundname, true);
 	//サウンドの生成　　着火
 	soundstart.create(startsoundname, false);
+	//サウンドの生成　　消火
+	soundstop.create(stopsoundname, false);
 
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 	this->animCnt = 0;
@@ -115,6 +118,10 @@ void Kanetuki::UpDate() {
 		if (nowplay)
 		{
 			sound.stop();
+		}
+		if(startflag == false)
+		{
+			soundstop.play();
 		}
 		startflag = true;
 	}

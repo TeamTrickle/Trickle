@@ -13,6 +13,9 @@ private:
 	*/
 	bool isCollideSomething();
 	bool footCheck();
+
+	//サウンドのファイルネーム格納
+	std::string soundname;
 public:
 	explicit Block();
 	explicit Block(Vec2& pos);
@@ -44,6 +47,10 @@ public:
 	Vec2 BackMove();
 
 	Vec2 backmove;
+
+	//サウンドを生成する
+	Sound sound;
+	bool soundstart;
 
 	//プレイヤとの当たり判定に使用　　使わなくなった
 	void PlCheckHitR(GameObject &p);
