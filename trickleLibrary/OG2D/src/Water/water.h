@@ -31,12 +31,10 @@ public:
 		Rainfrom			//雨状態
 	};
 private:
-	const float MOVE_SPEED = 15.f;								//移動スピード
-	const float JUMP_POWER = -20.f;								//ジャンプパワー
-	const float MAX_FALL = 15.f;								//落下最大速度
-	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 5;		//重力加速度
-	const float FIN_SPEED = 1.0f;								//摩擦
-	const int RAIN_TIME = 180;
+	const float MAX_FALL;								//落下最大速度
+	const float GRAVITY;		//重力加速度
+	const float FIN_SPEED;								//摩擦
+	const unsigned __int8 RAIN_TIME;
 	Texture* tex;
 	State currentState;
 	State preState;
@@ -44,6 +42,7 @@ private:
 	Vec2 minSize;
 	Vec2 maxSize;
 	Vec2 move;
+	Vec2 nowMove;
 	Paint::PaintColor color;
 	int setTime;
 	bool hold;
@@ -70,9 +69,9 @@ private:
 	bool FootCheck(std::string&, int = 0);
 	bool FootSolidCheck();
 	bool HeadSolidCheck();
-	void MoveWATERCheck(Vec2);
-	void MoveGASCheck(Vec2);
-	void MoveSOILDCheck(Vec2);
+	void MoveWATERCheck(Vec2&);
+	void MoveGASCheck(Vec2&);
+	void MoveSOILDCheck(Vec2&);
 	bool HeadCheck(std::string&, int = 0);
 	void CheckState();
 public:

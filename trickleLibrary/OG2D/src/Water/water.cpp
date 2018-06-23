@@ -5,6 +5,7 @@
 #include "Effect\Effect.h"
 //#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
+	:MAX_FALL(15.f), GRAVITY((9.8f / 60.f / 60.f*32.f) * 5), FIN_SPEED(0.05f), RAIN_TIME(180)
 {
 	//ƒ^ƒOİ’è
 	this->objectTag = "water";
@@ -91,7 +92,8 @@ void Water::UpDate()
 			break;
 		case Water::Situation::Normal:
 			this->nowSituation = Water::UpNormal();
-			this->MoveWATERCheck(move);
+			this->nowMove = this->move;
+			this->MoveWATERCheck(this->nowMove);
 			break;
 		case Water::Situation::Deleteform:
 			this->nowSituation = Water::UpDeleteform();
@@ -129,7 +131,8 @@ void Water::UpDate()
 			}
 			else
 			{
-				this->MoveGASCheck(move);
+				this->nowMove = this->move;
+				this->MoveGASCheck(this->nowMove);
 				this->Friction();
 			}
 			//‰æ–ÊŠOˆ—
@@ -174,7 +177,8 @@ void Water::UpDate()
 				//this->SetState(State::LIQUID);
 				this->SolidMelt();
 			}
-			this->MoveSOILDCheck(move);
+			this->nowMove = this->move;
+			this->MoveSOILDCheck(this->nowMove);
 			
 		}
 		break;
@@ -409,7 +413,7 @@ bool Water::FootSolidCheck()
 	return false;
 }
 
-void Water::MoveWATERCheck(Vec2 est)
+void Water::MoveWATERCheck(Vec2& est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	if (!map)
@@ -491,7 +495,7 @@ void Water::MoveWATERCheck(Vec2 est)
 	}
 }
 
-void Water::MoveGASCheck(Vec2 est)
+void Water::MoveGASCheck(Vec2& est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	while (est.x != 0.f)
@@ -568,10 +572,11 @@ void Water::MoveGASCheck(Vec2 est)
 	}
 }
 
-void Water::MoveSOILDCheck(Vec2 est)
+void Water::MoveSOILDCheck(Vec2& est)
 {
 	auto map = OGge->GetTask<Map>("map");
 	auto waters = OGge->GetTasks<Water>("water");
+	auto blocks = OGge->GetTasks<Block>("block");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -623,6 +628,17 @@ void Water::MoveSOILDCheck(Vec2 est)
 							break;
 						}
 					}
+				}
+			}
+		}
+		for (auto id = blocks->begin(); id != blocks->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
 				}
 			}
 		}
@@ -678,6 +694,17 @@ void Water::MoveSOILDCheck(Vec2 est)
 							break;
 						}
 					}
+				}
+			}
+		}
+		for (auto id = blocks->begin(); id != blocks->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
 				}
 			}
 		}
@@ -826,7 +853,9 @@ void Water::SetWaterVolume(float value)
 Vec2 Water::MoveSolid(const Vec2& est)
 {
 	this->move.x = est.x;
-	//this->MoveSOILDCheck(this->move);
+	std::cout << move.x << std::endl;
+	this->nowMove = move;
+	//this->MoveSOILDCheck(this->nowMove);
 	return this->move;
 }
 
