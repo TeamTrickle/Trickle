@@ -9,7 +9,7 @@ using namespace std;
 Kanetuki::Kanetuki()
 	:
 	maxChangeTimeLiquid(7),
-	maxChangeTimeSolid(90)
+	maxChangeTimeSolid(300)
 {
 	cout << "加熱器　生成" << endl;
 	//サウンドファイル名	
