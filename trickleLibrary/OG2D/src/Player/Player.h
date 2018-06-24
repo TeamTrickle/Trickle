@@ -8,6 +8,8 @@
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "Recorder\Recorder.h"
+#include "Recorder\RecPlayer.h"
 
 class Player :public GameObject ,public TaskObject
 {
@@ -96,6 +98,8 @@ private:
 	bool hold;
 	bool isInputAuto;
 	Vec2 haveAddPos;	//‚Âó‘Ô‚Ì‚ÌpositionˆÚ“®—Ê
+	Recorder* recorder;
+	RecPlayer* recplay;
 private:
 	bool HeadCheck();											//“ª‚Ì“–‚½‚è”»’è
 	bool FootCheck();											//‘«Œ³‚Ì“–‚½‚è”»’è
@@ -153,5 +157,6 @@ public:
 	bool ReleaseHold();
 	void SetMotion(Motion motion_);
 	void SetState(State state_);
-
+	void SetPlayRecord(const std::string&);
+	void SetReplayMode(const std::string&);
 };

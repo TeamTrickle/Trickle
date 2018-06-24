@@ -121,6 +121,9 @@ void Player::Render2D()
 }
 bool Player::Finalize()
 {
+	if (recorder) {
+		recorder->Destroy();
+	}
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 
@@ -1237,6 +1240,22 @@ void Player::SetMotion(Motion motion_)
 void Player::SetState(State state_)
 {
 	this->state = state_;
+}
+void Player::SetPlayRecord(const std::string& fileName)
+{
+	recorder = Recorder::Create(fileName, true);
+	(*recorder) >> Input::in::CL;
+	(*recorder) >> Input::in::CR;
+	(*recorder) >> Input::in::CU;
+	(*recorder) >> Input::in::CD;
+}
+void Player::SetReplayMode(const std::string& fileName)
+{
+	recplay = RecPlayer::Create(fileName, true);
+	recplay->SetRepeat(false);
+	// この間にキー入力に対する動きに関した技術を書くこと
+	// すべてのキー入力でのキャラ操作を無力化させること
+	recplay->SetPause();
 }
 void Player::SetInputAuto(bool flag)
 {
