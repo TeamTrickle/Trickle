@@ -49,9 +49,6 @@ void Player::UpDate()
 {
 	++animation.timeCnt;
 	//アニメーションカウントを増やす
-	if (this->isInputAuto) {
-		this->state = State::CLEAR;
-	}
 	this->StateUpDate();
 	//各状態での処理と別状態への移行
 	if (this->state != State::ANIMATION)

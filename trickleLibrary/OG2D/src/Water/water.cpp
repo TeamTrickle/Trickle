@@ -947,6 +947,8 @@ bool Water::SolidMelt()
 			if (player)
 			{
 				player->ReleaseHold();
+				player->SetState(Player::State::NORMAL);
+				player->SetMotion(Player::Motion::Normal);
 			}
 		}
 		this->SetState(State::LIQUID);
