@@ -44,20 +44,17 @@ void Switch::Update() {
 }
 void Switch::Render2D() {
 
-	//プレイヤがスイッチまで移動終了したとき
-	if (this->play_switch)
-	{
-		if (this->isON_) {
-			//スイッチがONならアニメーションをPLUS方向に
-			if (this->animCnt < 24) { ++this->animCnt; }
-			else { this->play_switch = false; }
-		}
-		else {
-			//スイッチがOFFならアニメーションをMINUS方向に
-			if (this->animCnt > 0) { --this->animCnt; }
-			else { this->play_switch = false; }
-		}
+	if (this->isON_) {
+		//スイッチがONならアニメーションをPLUS方向に
+		if (this->animCnt < 24) { ++this->animCnt; }
+		else { this->play_switch = false; }
 	}
+	else {
+		//スイッチがOFFならアニメーションをMINUS方向に
+		if (this->animCnt > 0) { --this->animCnt; }
+		else { this->play_switch = false; }
+	}
+
 	Box2D src;
 	int switchM[5] = { 0,1,2,3,4 };
 	switch (this->ttype)
@@ -90,14 +87,6 @@ void Switch::ChangeON_OFF() {
 }
 bool Switch::isON() {
 	return this->isON_;
-}
-void Switch::setSwitch(bool play)
-{
-	//プレイヤがスイッチまで移動終了したとき
-	if (play == true)
-	{
-		this->play_switch = true;
-	}
 }
 
 Switch::TargetType Switch::getTargetType() {

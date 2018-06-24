@@ -99,6 +99,13 @@ void Goal::UpDate()
 			delete this->precmSize;
 			this->precmPos = nullptr;
 			this->precmSize = nullptr;
+			{
+				auto player = OGge->GetTasks<Player>("Player");
+				for (auto id = player->begin(); id != player->end(); ++id)
+				{
+					(*id)->SetState(Player::State::CLEAR);
+				}
+			}
 			this->mode = Mode::Form3;
 		}
 

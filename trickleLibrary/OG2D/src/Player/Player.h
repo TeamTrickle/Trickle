@@ -152,5 +152,6 @@ public:
 	bool GetInputAuto() const;
 	bool ReleaseHold();
 	void SetMotion(Motion motion_);
+	void SetState(State state_);
 
 };

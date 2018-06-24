@@ -56,7 +56,6 @@ public:
 
 	bool isON();				//自分のオンオフを返す、オンならtrue
 	void ChangeON_OFF();		//オンオフを切り替える
-	void setSwitch(bool play);			//プレイヤが行動終了に合わせてスイッチが動く
 	TargetType getTargetType();
 
 	typedef std::shared_ptr<Switch> SP;

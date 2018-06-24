@@ -49,9 +49,6 @@ void Player::UpDate()
 {
 	++animation.timeCnt;
 	//アニメーションカウントを増やす
-	if (this->isInputAuto) {
-		this->state = State::CLEAR;
-	}
 	this->StateUpDate();
 	//各状態での処理と別状態への移行
 	if (this->state != State::ANIMATION)
@@ -65,8 +62,8 @@ void Player::UpDate()
 		this->Friction();
 
 		//スイッチはすぐモーションが変わらないのでanimation中の状態を持ってくる
-		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M && 
-			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill){
+		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M &&
+			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill) {
 			if (this->InputLeft())
 			{
 				this->est.x = -this->MOVE_SPEED;
@@ -100,7 +97,7 @@ void Player::Render2D()
 	Box2D draw;
 	if (this->hold)
 	{
-		draw = { this->position.x,this->position.y + this->haveAddPos.y,this->Scale.x, this->Scale.y  - this->haveAddPos.y};
+		draw = { this->position.x,this->position.y + this->haveAddPos.y,this->Scale.x, this->Scale.y - this->haveAddPos.y };
 		draw.OffsetSize();
 	}
 	else
@@ -126,7 +123,7 @@ bool Player::Finalize()
 {
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		
+
 	}
 	return true;
 }
@@ -135,7 +132,7 @@ Vec2 Player::GetEst() const {
 }
 bool Player::HeadCheck()
 {
-	this->head.CreateObject(Objform::Cube, Vec2(this->position.x,this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
+	this->head.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	for (int y = 0; y < map->mapSize.y; ++y)
 	{
@@ -143,7 +140,7 @@ bool Player::HeadCheck()
 		{
 			if (map->hitBase[y][x].objectTag == "Floor" ||
 				map->hitBase[y][x].objectTag == "Net" ||
-				map->hitBase[y][x].objectTag == "Soil" || 
+				map->hitBase[y][x].objectTag == "Soil" ||
 				map->_arr[y][x] == 24)
 			{
 				if (head.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
@@ -169,7 +166,7 @@ bool Player::HeadCheck()
 	}
 	return false;
 }
-bool Player::HeadMapCheck(std::string& objname_,bool flag)
+bool Player::HeadMapCheck(std::string& objname_, bool flag)
 {
 	this->head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
@@ -603,7 +600,6 @@ void Player::SwitchCheck()
 			{
 				//移動する位置を返す
 				this->animation.SetAnimaVec(this->position, Vec2((*id)->position));
-				(*id)->ChangeON_OFF();
 				//移動した後にスイッチのアニメーションをするように
 				this->animation.animMo = Motion::Switch_M;
 				//移動するアニメーションに変える
@@ -825,7 +821,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 	if (this->animationVec.x == 0.f)
 	{
 		//梯子に乗る
-		if (this->animationVec.y >= 0.f && motion_==Motion::Ladder)
+		if (this->animationVec.y >= 0.f && motion_ == Motion::Ladder)
 		{
 			move.y += this->animationVec.y;
 			player->motion = motion_;
@@ -833,7 +829,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 			this->animMo = Motion::Normal;
 		}
 		//スイッチを押す
-		else if (this->animationVec.y > 0.f && motion_==Motion::Switch_M)
+		else if (this->animationVec.y >= 0.f && motion_ == Motion::Switch_M)
 		{
 			//スイッチのアニメーションを実行する
 			auto switchs = OGge->GetTasks<Switch>("Switch");
@@ -841,7 +837,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 			{
 				if ((*id)->hit(*player))
 				{
-					(*id)->setSwitch(true);
+					(*id)->ChangeON_OFF();
 				}
 			}
 			//yに移動させないようにする
@@ -869,10 +865,10 @@ bool Player::Animation::isMove()
 
 	return false;
 }
-Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir) 
+Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 {
 	auto player = OGge->GetTask<Player>("Player");
-	Box2D src(0,0, this->srcX, this->srcY);
+	Box2D src(0, 0, this->srcX, this->srcY);
 	//src = Box2D(this->指定したアニメーションの順番の配列[this->timeCnt / ディレイ　% コマ数] * this->srcX, 
 	//		読み込む画像の行数 * this->srcY, 
 	//		this->srcX, this->Y);
@@ -888,29 +884,37 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 			src = Box2D(0 * this->srcX, 2 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Fall:
-			src = Box2D(1 * this->srcX, 2 *  this->srcY, this->srcX,  this->srcY);
+			src = Box2D(1 * this->srcX, 2 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Ladder:
-			src = Box2D(this->ladder[this->animCnt / 8 % 2] * this->srcX, 3 *  this->srcY, this->srcX,  this->srcY);
+			src = Box2D(this->ladder[this->animCnt / 8 % 2] * this->srcX, 3 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Block_M:
 			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Switch_M:
 			auto switchs = OGge->GetTasks<Switch>("Switch");
-			for (auto id = switchs->begin(); id != switchs->end(); ++id){
-				if ((*id)->hit(*player)){
+			for (auto id = switchs->begin(); id != switchs->end(); ++id) {
+				if ((*id)->hit(*player)) {
 					if ((*id)->isON()) {
 						if (dir == Direction::LEFT)
-						{ src = Box2D(this->switch_1[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);	}
+						{
+							src = Box2D(this->switch_1[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+						}
 						else
-						{ src = Box2D(this->switch_2[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY); }
+						{
+							src = Box2D(this->switch_2[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+						}
 					}
-					else { 
+					else {
 						if (dir == Direction::LEFT)
-						{ src = Box2D(this->switch_2[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY); }
+						{
+							src = Box2D(this->switch_2[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+						}
 						else
-						{ src = Box2D(this->switch_1[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY); }
+						{
+							src = Box2D(this->switch_1[this->animCnt / 5 % 5] * this->srcX, 8 * this->srcY, this->srcX, this->srcY);
+						}
 					}
 				}
 			}
@@ -931,16 +935,16 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 	if (state == BUCKET) {
 		switch (motion) {
 		case Motion::Normal:
-			src = Box2D(this->idle[this->timeCnt / 3 % 10] * this->srcX, 4* this->srcY, this->srcX,  this->srcY);
+			src = Box2D(this->idle[this->timeCnt / 3 % 10] * this->srcX, 4 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Walk:
-			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 5 *  this->srcY, this->srcX,  this->srcY);
+			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 5 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Jump:
-			src = Box2D(0 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
+			src = Box2D(0 * this->srcX, 7 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Fall:
-			src = Box2D(1 * this->srcX, 7 *  this->srcY, this->srcX,  this->srcY);
+			src = Box2D(1 * this->srcX, 7 * this->srcY, this->srcX, this->srcY);
 			break;
 
 		case Motion::Lift:
@@ -1048,7 +1052,7 @@ bool Player::MapHitCheck(std::string& objname_)
 }
 bool Player::TohaveObjectHit()
 {
-	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f,this->Scale.y - 1.0f), 0.0f);
+	left.CreateObject(Objform::Cube, Vec2(this->position.x - 1.0f, this->position.y), Vec2(1.0f, this->Scale.y - 1.0f), 0.0f);
 	right.CreateObject(Objform::Cube, Vec2(this->position.x + this->Scale.x, this->position.y), Vec2(1.0f, this->Scale.y - 1.0f), 0.0f);
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = (*blocks).begin(); id != (*blocks).end(); ++id)
@@ -1183,7 +1187,7 @@ bool Player::LadderJumpCheck()
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
 	{
-		for (int y = 0; y < map->mapSize.y;++y)
+		for (int y = 0; y < map->mapSize.y; ++y)
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
@@ -1229,6 +1233,10 @@ bool Player::PutCheck()
 void Player::SetMotion(Motion motion_)
 {
 	this->motion = motion_;
+}
+void Player::SetState(State state_)
+{
+	this->state = state_;
 }
 void Player::SetInputAuto(bool flag)
 {
@@ -1310,7 +1318,7 @@ bool Player::MotionUpDate()
 			this->motion = Motion::Normal;
 		}
 		break;
-	case Motion::Ladder:	
+	case Motion::Ladder:
 		//梯子処理
 		//アニメーション中以外
 		if (this->state != State::ANIMATION)
@@ -1417,7 +1425,7 @@ bool Player::MotionNormalUpDate()
 	if (this->state != State::BUCKET) {
 		if (this->InputDown())
 		{
-			if (this->FootMapCheck((std::string)"Ladder",true) && !this->SolidFootCheck())
+			if (this->FootMapCheck((std::string)"Ladder", true) && !this->SolidFootCheck())
 			{
 				//移動が終わったら梯子モーションをするように設定
 				this->animation.animMo = Motion::Ladder;
@@ -1515,7 +1523,7 @@ bool Player::MotionLadderUpDate()
 			e.y += 10.f;
 		}
 		this->LadderMoveCheck(e);
-		if (this->FootMapCheck((std::string)"Ladder",false) || this->SolidFootCheck())
+		if (this->FootMapCheck((std::string)"Ladder", false) || this->SolidFootCheck())
 		{
 			this->motion = Motion::Normal;
 		}
