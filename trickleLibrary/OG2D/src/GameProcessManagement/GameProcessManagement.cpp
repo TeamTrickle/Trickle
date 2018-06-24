@@ -76,13 +76,10 @@ void GameManager::UpDate()
 			if (game)
 			{
 				game->Kill();
-				if (*MapNum == 4 || *MapNum == 5 || *MapNum == 6)
-				{
-					//Œ»Ý‚Ì‹L˜^‚ð•Û‘¶
-					this->OutData();
-					//Œ»Ý‚ÌÅ‘å‹L˜^‚Æ‚Ì”äŠr
-					this->ComparisonData();
-				}
+				//Œ»Ý‚Ì‹L˜^‚ð•Û‘¶
+				this->OutData();
+				//Œ»Ý‚ÌÅ‘å‹L˜^‚Æ‚Ì”äŠr
+				this->ComparisonData();
 			}
 			this->isclear = true;
 		}
@@ -144,10 +141,50 @@ bool GameManager::OutData()
 		ofs << this->Minute << "," << this->Seconds << std::endl;
 		switch (*MapNum)
 		{
-		case 4:
+		case 1:
+			//‚Æ‚è‚ ‚¦‚¸“Ç‚Ýž‚ÝŽž‚ÉƒGƒ‰[‚ð“f‚©‚È‚¢‚æ‚¤‚É‰¼‚Ì’l‚ð‚¢‚ê‚Ä‚¨‚­
+			for(int i = 0;i < 3;++i)
+			{
+				ofs << "t,";
+			}
+			break;
+		case 2:
 			for (int i = 0; i < 3; ++i)
 			{
-				ofs << "f,";
+				ofs << "t,";
+			}
+			break;
+		case 3:
+			for (int i = 0; i < 3; ++i)
+			{
+				ofs << "t,";
+			}
+			break;
+		case 4:
+			for (int i = 1; i <= 3; ++i)
+			{
+				std::ifstream ifs("./data/Result/save" + std::to_string(i) + ".bin", std::ios::in | std::ios::binary);
+				if (!ifs)
+				{
+					ofs << "f,";
+				}
+				std::string line;
+				std::getline(ifs, line);
+				std::istringstream* is = new std::istringstream(line);
+				std::string text;
+				int timer;
+				std::getline(*is, text, ',');
+				(std::stringstream)text >> timer;
+				if (timer != -1)
+				{
+					ofs << "t,";
+				}
+				else
+				{
+					ofs << "f,";
+				}
+				delete is;
+				ifs.close();
 			}
 			break;
 		case 5:
@@ -212,6 +249,40 @@ bool GameManager::OutData()
 		ofs << -1 << std::endl;
 	}
 	ofs.close();
+	if (*MapNum >= 1 && *MapNum <= 3)
+	{
+		ofs.open("./data/Result/save4.bin", std::ios::out | std::ios::binary);
+		ofs << -1 << "," << -1 << std::endl;
+		for (int i = 1; i <= 3; ++i)
+		{
+			std::ifstream ifs("./data/Result/save" + std::to_string(i) + ".bin", std::ios::in | std::ios::binary);
+			if (!ifs)
+			{
+				ofs << "f,";
+			}
+			else
+			{
+				std::string line;
+				std::getline(ifs, line);
+				std::istringstream* is = new std::istringstream(line);
+				std::string text;
+				int timer;
+				std::getline(*is, text, ',');
+				(std::stringstream)text >> timer;
+				if (timer != -1)
+				{
+					ofs << "t,";
+				}
+				else
+				{
+					ofs << "f,";
+				}
+				delete is;
+			}
+			ifs.close();
+		}
+		ofs.close();
+	}
 	return true;
 }
 bool GameManager::ComparisonData()

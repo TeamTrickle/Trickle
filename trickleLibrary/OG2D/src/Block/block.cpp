@@ -96,12 +96,12 @@ void Block::UpDate() {
 			{
 				//speed.x = 5.0f;はテスト用に設定
 				//speed.x = 5.0f;
-				CheckMove(speed);
+				//CheckMove(speed);
 			}
 			if (p->position.x > this->position.x)
 			{
 				//speed.x = -5.0f;
-				CheckMove(speed);
+				//CheckMove(speed);
 			}
 
 			if (soundstart)
@@ -117,7 +117,7 @@ void Block::UpDate() {
 			sound.stop();
 		}
 	}
-	gravity.y = 4.0f;
+	gravity.y = 6.0f;
 	Vec2 move = this->gravity;
 	CheckMove(move);
 }
@@ -138,6 +138,7 @@ bool Block::Finalize() {
 Vec2 Block::GetMove(Vec2& move)       //moveにプレイヤから受け取る移動量を入れる
 {
 	speed.x = move.x;
+	this->CheckMove(speed);
 	return speed;
 }
 //めり込んだ値を返す処理
