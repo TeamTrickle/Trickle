@@ -603,7 +603,6 @@ void Player::SwitchCheck()
 			{
 				//移動する位置を返す
 				this->animation.SetAnimaVec(this->position, Vec2((*id)->position));
-				(*id)->ChangeON_OFF();
 				//移動した後にスイッチのアニメーションをするように
 				this->animation.animMo = Motion::Switch_M;
 				//移動するアニメーションに変える
@@ -833,7 +832,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 			this->animMo = Motion::Normal;
 		}
 		//スイッチを押す
-		else if (this->animationVec.y > 0.f && motion_ == Motion::Switch_M)
+		else if (this->animationVec.y >= 0.f && motion_ == Motion::Switch_M)
 		{
 			//スイッチのアニメーションを実行する
 			auto switchs = OGge->GetTasks<Switch>("Switch");
@@ -841,7 +840,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 			{
 				if ((*id)->hit(*player))
 				{
-					(*id)->setSwitch(true);
+					(*id)->ChangeON_OFF();
 				}
 			}
 			//yに移動させないようにする
@@ -1237,6 +1236,10 @@ bool Player::PutCheck()
 void Player::SetMotion(Motion motion_)
 {
 	this->motion = motion_;
+}
+void Player::SetState(State state_)
+{
+	this->state = state_;
 }
 void Player::SetInputAuto(bool flag)
 {
