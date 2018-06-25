@@ -458,56 +458,59 @@ void Game::Camera_move()
 	auto map = OGge->GetTask<Map>("map");
 	if (player && map)
 	{
-		OGge->camera->MovePos(player->GetEst());
+		if (!player->GetInputAuto())
+		{
+			OGge->camera->MovePos(player->GetEst());
 
-		//カメラ処理
-		Vec2 NowCameraPos = OGge->camera->GetPos();
-		Vec2 NowCameraSize = OGge->camera->GetSize();
+			//カメラ処理
+			Vec2 NowCameraPos = OGge->camera->GetPos();
+			Vec2 NowCameraSize = OGge->camera->GetSize();
 
-		//プレイヤーを画面中央
-		float PlayerCenter_x = NowCameraSize.x / 2.0f;
-		float PlayerCenter_y = NowCameraSize.y / 2.0f;
-		//カメラ座標を求める
-		float camera_x = float(player->GetPos().x) - PlayerCenter_x;
-		float camera_y = float(player->GetPos().y) - PlayerCenter_y;
-		//カメラの座標を更新
-		NowCameraPos.x = camera_x;
-		NowCameraPos.y = camera_y;
+			//プレイヤーを画面中央
+			float PlayerCenter_x = NowCameraSize.x / 2.0f;
+			float PlayerCenter_y = NowCameraSize.y / 2.0f;
+			//カメラ座標を求める
+			float camera_x = float(player->GetPos().x) - PlayerCenter_x;
+			float camera_y = float(player->GetPos().y) - PlayerCenter_y;
+			//カメラの座標を更新
+			NowCameraPos.x = camera_x;
+			NowCameraPos.y = camera_y;
 
 
-		//左右のスクロール範囲の設定(サイズの10分の1)
-		float Boundary = NowCameraSize.x / 10.0f;
-		//現在スクロール値とプレイヤーの座標の差を修正
-		Vec2 NowPlayerPos = { player->GetPos().x - NowCameraPos.x,player->GetPos().y - NowCameraPos.y };
-		//x座標
-		if (NowPlayerPos.x < Boundary) {
-			NowCameraPos.x = NowPlayerPos.x - Boundary;
-		}
-		if (NowPlayerPos.x > NowCameraSize.x - Boundary) {
-			NowCameraPos.x = (NowPlayerPos.x + NowCameraPos.x) - NowPlayerPos.x + Boundary;
-		}
-		//y座標
-		if (NowPlayerPos.y < Boundary) {
-			NowCameraPos.y = NowPlayerPos.y - Boundary;
-		}
-		if (NowPlayerPos.y > NowCameraSize.y - Boundary) {
-			NowCameraPos.y = (NowCameraSize.y + NowCameraPos.y) - NowPlayerPos.y + Boundary;
-		}
-		//画面外処理
-		if (NowCameraPos.x < 0) {
-			NowCameraPos.x = 0;
-		}
-		if (NowCameraPos.x + NowCameraSize.x >map->mapSize.x * map->DrawSize.x) {
-			NowCameraPos.x = (map->mapSize.x * map->DrawSize.x) - NowCameraSize.x;
-		}
-		if (NowCameraPos.y < 0) {
-			NowCameraPos.y = 0;
-		}
-		if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
-			NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
-		}
+			//左右のスクロール範囲の設定(サイズの10分の1)
+			float Boundary = NowCameraSize.x / 10.0f;
+			//現在スクロール値とプレイヤーの座標の差を修正
+			Vec2 NowPlayerPos = { player->GetPos().x - NowCameraPos.x,player->GetPos().y - NowCameraPos.y };
+			//x座標
+			if (NowPlayerPos.x < Boundary) {
+				NowCameraPos.x = NowPlayerPos.x - Boundary;
+			}
+			if (NowPlayerPos.x > NowCameraSize.x - Boundary) {
+				NowCameraPos.x = (NowPlayerPos.x + NowCameraPos.x) - NowPlayerPos.x + Boundary;
+			}
+			//y座標
+			if (NowPlayerPos.y < Boundary) {
+				NowCameraPos.y = NowPlayerPos.y - Boundary;
+			}
+			if (NowPlayerPos.y > NowCameraSize.y - Boundary) {
+				NowCameraPos.y = (NowCameraSize.y + NowCameraPos.y) - NowPlayerPos.y + Boundary;
+			}
+			//画面外処理
+			if (NowCameraPos.x < 0) {
+				NowCameraPos.x = 0;
+			}
+			if (NowCameraPos.x + NowCameraSize.x > map->mapSize.x * map->DrawSize.x) {
+				NowCameraPos.x = (map->mapSize.x * map->DrawSize.x) - NowCameraSize.x;
+			}
+			if (NowCameraPos.y < 0) {
+				NowCameraPos.y = 0;
+			}
+			if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
+				NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
+			}
 
-		OGge->camera->SetPos(NowCameraPos);
+			OGge->camera->SetPos(NowCameraPos);
+		}
 	}
 }
 
