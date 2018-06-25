@@ -132,6 +132,10 @@ Vec2 Player::GetEst() const {
 }
 bool Player::HeadCheck()
 {
+	if (this->state == State::CLEAR)
+	{
+		return false;
+	}
 	this->head.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	for (int y = 0; y < map->mapSize.y; ++y)

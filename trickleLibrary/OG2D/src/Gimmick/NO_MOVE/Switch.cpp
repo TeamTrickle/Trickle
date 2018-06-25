@@ -29,8 +29,8 @@ bool Switch::Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> targ
 	//描画関連
 	draw = Box2D(pos.x, pos.y, 64.0f, 64.0f);
 	draw.OffsetSize();
-	animCnt = 24;
-	play_switch = false;
+	animCnt = 0;
+	isON_ = false;
 	//ターゲット関連
 	this->ttype = ttype;
 	this->targets_ = targets;
@@ -47,12 +47,10 @@ void Switch::Render2D() {
 	if (this->isON_) {
 		//スイッチがONならアニメーションをPLUS方向に
 		if (this->animCnt < 24) { ++this->animCnt; }
-		else { this->play_switch = false; }
 	}
 	else {
 		//スイッチがOFFならアニメーションをMINUS方向に
 		if (this->animCnt > 0) { --this->animCnt; }
-		else { this->play_switch = false; }
 	}
 
 	Box2D src;
