@@ -1232,6 +1232,32 @@ bool Player::PutCheck()
 			}
 		}
 	}
+	auto blocks = OGge->GetTasks<Block>("block");
+	for (auto id = blocks->begin(); id != blocks->end(); ++id)
+	{
+		if (this->direction == Direction::LEFT)
+		{
+			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
+			if ((*id)->IsObjectDistanceCheck(left.position, left.Scale))
+			{
+				if ((*id)->CubeHit(left))
+				{
+					return false;
+				}
+			}
+		}
+		else
+		{
+			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
+			if ((*id)->IsObjectDistanceCheck(right.position, right.Scale))
+			{
+				if ((*id)->CubeHit(right))
+				{
+					return false;
+				}
+			}
+		}
+	}
 	return true;
 }
 void Player::SetMotion(Motion motion_)
