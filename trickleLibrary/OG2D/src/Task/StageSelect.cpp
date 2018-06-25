@@ -39,6 +39,7 @@ bool StageSelect::Initialize()
 	//画像の読み込み
 	this->Testdoor.Create((std::string)"door.png");
 	this->Wall.Create((std::string)"wall2.PNG");
+	this->LadderTex.Create("mapchip2.png");
 	//プレイヤーNPCの生成
 	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
@@ -78,17 +79,19 @@ bool StageSelect::Initialize()
 		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
-	for (int y = 0; y < map->mapSize.y; ++y)
-	{
-		for (int x = 0; x < map->mapSize.x; ++x)
-		{
-			if (map->_arr[y][x] == 23)
-			{
-				//梯子位置(x座標)の検索
-				this->Entrance.emplace_back(LEFT, map->hitBase[y][x].position.x - chara->Scale.x);
-			}
-		}
-	}
+	this->Entrance.emplace_back(LEFT, 31.f * 64.f - chara->Scale.x);
+	//for (int y = 0; y < map->mapSize.y; ++y)
+	//{
+	//	for (int x = 0; x < map->mapSize.x; ++x)
+	//	{
+	//		if (map->_arr[y][x] == 23)
+	//		{
+	//			//梯子位置(x座標)の検索
+	//			
+	//			break;
+	//		}
+	//	}
+	//}
 	//読み込み終了でロード画面を破棄
 	auto load = OGge->GetTasks<Load>("load");
 	for (auto id = load->begin(); id != load->end(); ++id)
@@ -146,6 +149,14 @@ void StageSelect::Render2D()
 		this->Wall.Draw(draw, src);
 		//OG::LineHitDraw(&draw);
 	}
+	for (int i = 0; i < 8; ++i)
+	{
+		Box2D draw(31.f*64.f, i * 128.f, 128.f, 128.f);
+		draw.OffsetSize();
+		Box2D src(768, 256, 256, 256);
+		src.OffsetSize();
+		this->LadderTex.Draw(draw, src);
+	}
 }
 
 bool StageSelect::Finalize()
@@ -153,6 +164,7 @@ bool StageSelect::Finalize()
 	//画像の解放
 	this->Testdoor.Finalize();
 	this->Wall.Finalize();
+	this->LadderTex.Finalize();
 	//サウンドの解放
 	delete rm->GetSoundData((std::string)"titleBGM");
 	rm->DeleteSound((std::string)"titleBGM");

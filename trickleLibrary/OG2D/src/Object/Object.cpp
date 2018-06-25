@@ -175,6 +175,7 @@ bool GameObject::CubeHit(GameObject &o)
 
 void GameObject::LineDraw()
 {
+#if(_DEBUG)
 	switch (this->objform)
 	{
 	case Objform::Cube:		//Ž©•ª‚ª‹éŒ`‚ÌŽž
@@ -207,6 +208,7 @@ void GameObject::LineDraw()
 	case Objform::Non:
 		break;
 	}
+#endif
 }
 
 void GameObject::CheckON()
