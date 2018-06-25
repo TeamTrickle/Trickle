@@ -33,7 +33,7 @@ public:
 private:
 	const float MAX_FALL;								//—‰ºÅ‘å‘¬“x
 	const float GRAVITY;		//d—Í‰Á‘¬“x
-	const float FIN_SPEED;								//–€C
+	float FIN_SPEED;								//–€C
 	const unsigned __int8 RAIN_TIME;
 	Texture* tex;
 	State currentState;

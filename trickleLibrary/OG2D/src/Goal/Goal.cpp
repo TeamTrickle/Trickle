@@ -133,7 +133,7 @@ void Goal::Render2D()
 		this->draw = { this->position, this->Scale };
 		if (this->isCheck)
 		{
-			this->draw += Box2D(-32, -64, 64, 64);
+			this->draw += Box2D(-32, -63, 64, 64);
 		}
 		this->draw.OffsetSize();
 		if (this->isCheck)

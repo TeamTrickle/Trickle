@@ -25,7 +25,7 @@ bool Player::Initialize(Vec2& pos)
 	__super::Init(this->taskName);
 	__super::SetDrawOrder(0.4f);
 	//オブジェクトの初期化
-	this->CreateObject(Cube, pos, Vec2(64.0f, 64.f), 0.0f);
+	this->CreateObject(Cube, pos, Vec2(64.0f, 80.f), 0.0f);
 	this->objectTag = "Player";
 	//デバッグ用位置調整
 	//this->position = { 841,700 };
@@ -97,12 +97,12 @@ void Player::Render2D()
 	Box2D draw;
 	if (this->hold)
 	{
-		draw = { this->position.x,this->position.y + this->haveAddPos.y,this->Scale.x, this->Scale.y - this->haveAddPos.y };
+		draw = { this->position.x - 8.f,this->position.y + this->haveAddPos.y,this->Scale.x + 8.f, this->Scale.y - this->haveAddPos.y };
 		draw.OffsetSize();
 	}
 	else
 	{
-		draw = { this->position.x, this->position.y, this->Scale.x, this->Scale.y };
+		draw = { this->position.x - 8.f, this->position.y, this->Scale.x + 8.f, this->Scale.y };
 		draw.OffsetSize();
 	}
 
@@ -192,7 +192,7 @@ bool Player::HeadMapCheck(std::string& objname_, bool flag)
 				{
 					if (map->hitBase[y][x].objectTag != objname_)
 					{
-						this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+						this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - (this->Scale.y - 64.f)));
 						return true;
 					}
 				}
@@ -706,7 +706,7 @@ void Player::HaveObjectPosMove()
 				}
 			}
 			else {
-				(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 69.f };
+				(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 60.f };
 				(*id)->angle = 0;
 			}
 		}
@@ -765,7 +765,7 @@ void Player::HaveObjectPosMove()
 				}
 			}
 			else {
-				(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y };
+				(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y - 30.f };
 			}
 		}
 	}
@@ -1166,11 +1166,11 @@ bool Player::ReleaseHold()
 				{
 					if (this->direction == Direction::LEFT)
 					{
-						(*id)->position.x = this->position.x - 64;
+						(*id)->position.x = this->position.x - 72;
 					}
 					else
 					{
-						(*id)->position.x = this->position.x + 64;
+						(*id)->position.x = this->position.x + 72;
 					}
 					(*id)->HoldCheck(false);
 					(*id)->ResetMove();

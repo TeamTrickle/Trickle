@@ -5,7 +5,7 @@
 #include "Effect\Effect.h"
 //#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
-	:MAX_FALL(15.f), GRAVITY((9.8f / 60.f / 60.f*32.f) * 5), FIN_SPEED(0.05f), RAIN_TIME(180)
+	:MAX_FALL(15.f), GRAVITY((9.8f / 60.f / 60.f*32.f) * 5), FIN_SPEED(1.0f), RAIN_TIME(180)
 {
 	//ƒ^ƒOÝ’è
 	this->objectTag = "water";
@@ -894,10 +894,12 @@ void Water::CheckState()
 			this->objectTag = "GAS";
 			this->Radius = { 0.5f,0.8f };
 			this->nowSituation = Situation::Normal;
+			this->FIN_SPEED = 1.0f;
 			break;
 		case State::LIQUID:
 			this->Radius = { 0.5f,0.9f };
 			this->objectTag = "LIQUID";
+			this->FIN_SPEED = 1.0f;
 			break;
 		case State::SOLID:
 			this->Scale = this->maxSize;
@@ -927,6 +929,7 @@ void Water::CheckState()
 			this->objectTag = "SOLID";
 			this->Radius = { 0.7f,0.7f };
 			this->nowSituation = Situation::Normal;
+			this->FIN_SPEED = 0.05f;
 			break;
 		}
 	}
