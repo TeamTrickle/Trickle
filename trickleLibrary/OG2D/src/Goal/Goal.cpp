@@ -99,6 +99,7 @@ void Goal::UpDate()
 			delete this->precmSize;
 			this->precmPos = nullptr;
 			this->precmSize = nullptr;
+			if (this->isGoalCheck())
 			{
 				auto player = OGge->GetTasks<Player>("Player");
 				for (auto id = player->begin(); id != player->end(); ++id)
