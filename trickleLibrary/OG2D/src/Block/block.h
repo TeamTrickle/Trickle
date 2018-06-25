@@ -3,13 +3,13 @@
 #include "Object\Object.h"
 #include "Bucket\bucket.h"
 
-class Block : public GameObject ,public TaskObject{
+class Block : public GameObject, public TaskObject {
 
 private:
 	/**
-	 @author Heewon Kim
-	 @brief 当たり判定関連全体的な判定を行います
-	 @return 何かにぶつかったのかの判定
+	@author Heewon Kim
+	@brief 当たり判定関連全体的な判定を行います
+	@return 何かにぶつかったのかの判定
 	*/
 	bool isCollideSomething();
 	bool footCheck();
@@ -22,7 +22,7 @@ public:
 	virtual ~Block();
 
 	typedef std::shared_ptr<Block> SP;
-	static SP Create(Vec2&,bool = true);
+	static SP Create(Vec2&, bool = true);
 
 	//bool HitMap;
 	//float speed;
@@ -41,6 +41,11 @@ public:
 	void PlCheckHit(GameObject &p);
 	//プレイヤーとブロックの当たり判定フラッグ
 	bool plhit;
+	//押されているかつ壁に当たっていないならtrue	
+	bool isPushed;
+
+
+
 	//プレイヤ側から、移動する量を持ってくる
 	Vec2 GetMove(Vec2& move);
 	//プレイヤーに移動不可分の値を返す
