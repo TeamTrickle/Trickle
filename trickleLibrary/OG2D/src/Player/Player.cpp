@@ -1361,7 +1361,7 @@ bool Player::MotionUpDate()
 			}
 		}
 		if (!this->TohaveObjectHit()) {
-			if (this->InputRight() && this->direction == Direction::LEFT) {
+			/*if (this->InputRight() && this->direction == Direction::LEFT) {
 				this->motion = Motion::Walk;
 			}
 			if (this->InputLeft() && this->direction == Direction::RIGHT) {
@@ -1369,7 +1369,8 @@ bool Player::MotionUpDate()
 			}
 			if (!this->InputRight() && !this->InputLeft()) {
 				this->motion = Motion::Normal;
-			}
+			}*/
+			this->motion = Motion::Normal;
 		}
 		break;
 	case Lift:
