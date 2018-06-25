@@ -49,6 +49,9 @@ bool Block::Initialize(Vec2& pos) {
 
 	tex.Create((std::string)"block.png");
 	__super::Init((std::string)"block");
+
+	isPushed = false;
+
 	return true;
 }
 
@@ -90,7 +93,7 @@ void Block::UpDate() {
 	if (p)
 	{
 		//this->PlCheckHit(*p);
-		if (plhit)
+		if (isPushed)
 		{
 			if (p->position.x < this->position.x)
 			{
@@ -180,7 +183,8 @@ void Block::PlCheckHit(GameObject &p)
 void Block::CheckMove(Vec2 &e_)
 {
 	float dir = 0;
-	
+	isPushed = false;
+
 	//xŽ²‚É‚Â‚¢‚Ä
 	while (e_.x != 0.0f)
 	{
@@ -247,6 +251,7 @@ void Block::CheckMove(Vec2 &e_)
 					this->Cnt = 0;
 				}
 			}
+			isPushed = true;
 		}
 	}
 	//yŽ²‚É‚Â‚¢‚Ä
@@ -280,7 +285,7 @@ void Block::CheckMove(Vec2 &e_)
 }
 
 
-bool Block::isCollideSomething() 
+bool Block::isCollideSomething()
 {
 	auto map = OGge->GetTask<Map>("map");
 	if (!map) {
