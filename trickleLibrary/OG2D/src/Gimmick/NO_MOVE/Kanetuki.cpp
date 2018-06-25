@@ -153,7 +153,7 @@ void Kanetuki::toSteam() {
 		//…‚Æ‚Ì“–‚½‚è”»’è
 		if ((*id)->hit(*this))
 		{	//@ŒÂ‘Ì@Ë@‰t‘Ì
-			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() != Water::Situation::Newfrom)
+			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() == Water::Situation::Normal)
 			{
 				changeStateCnt++;
 				cout << changeStateCnt++ << endl;
