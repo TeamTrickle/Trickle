@@ -53,7 +53,6 @@ bool Bucket::Initialize(Vec2& pos)
 }
 
 void Bucket::UpDate() {
-	std::cout << this->IsOutCheck << ":" << this->WaterOutTime << std::endl;
 	if (this->invi > 0)
 	{
 		--this->invi;
