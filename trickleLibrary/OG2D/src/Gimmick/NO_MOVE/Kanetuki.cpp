@@ -188,6 +188,7 @@ void Kanetuki::toSteam() {
 					else
 					{
 						(*id)->SetState(Water::State::GAS);
+						(*id)->position.y -= 10.f;
 					}
 					changeStateCnt = 0;
 				}

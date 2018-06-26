@@ -521,7 +521,7 @@ void Water::MoveGASCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 					{
-						if (this->hit(map->hitBase[y][x]))
+						if (this->CubeHit(map->hitBase[y][x]))
 						{
 							this->position.x = preX;
 							break;
@@ -557,7 +557,7 @@ void Water::MoveGASCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor")
 					{
-						if (this->hit(map->hitBase[y][x]))
+						if (this->CubeHit(map->hitBase[y][x]))
 						{
 							this->position.y = preY;
 							break;
