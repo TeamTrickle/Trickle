@@ -126,7 +126,6 @@ void Water::UpDate()
 			if (this->RAIN_TIME < this->nowTime)
 			{
 				this->nowSituation = Situation::Rainfrom;
-				//this->position.x += this->maxSize.x / 2;
 				this->nowTime = 0;
 			}
 			else
@@ -169,17 +168,15 @@ void Water::UpDate()
 		}
 	case Water::State::SOLID:
 		//•Xˆ—
+		if (this->HeadSolidCheck())
+		{
+			this->SolidMelt();
+		}
 		if (!this->hold)
 		{
-			this->Friction();
-			if (this->HeadSolidCheck())
-			{
-				//this->SetState(State::LIQUID);
-				this->SolidMelt();
-			}
+			this->Friction();	
 			this->nowMove = this->move;
 			this->MoveSOILDCheck(this->nowMove);
-			
 		}
 		break;
 	}
@@ -765,7 +762,7 @@ bool Water::HeadSolidCheck()
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (head.hit(*(*id)))
+					if (head.CubeHit(*(*id)))
 					{
 						return true;
 					}
@@ -916,7 +913,7 @@ void Water::CheckState()
 						if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 						{
 							//“–‚½‚è”»’è‚ðs‚¤
-							if (this->hit(*(*id)))
+							if (this->CubeHit(*(*id)))
 							{
 								//‘ŠŽè‚ð…‚ÉˆÚs‚³‚¹‚é
 								(*id)->SetSituation(Situation::Normal);
@@ -949,7 +946,8 @@ bool Water::SolidMelt()
 			auto player = OGge->GetTask<Player>("Player");
 			if (player)
 			{
-				player->ReleaseHold();
+				//player->ReleaseHold();
+				player->ReleaseSolid();
 				player->SetState(Player::State::NORMAL);
 				player->SetMotion(Player::Motion::Normal);
 			}
