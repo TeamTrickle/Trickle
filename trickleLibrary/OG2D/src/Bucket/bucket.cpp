@@ -82,7 +82,7 @@ void Bucket::UpDate() {
 			//水をこぼす音の再生
 			soundD.play();
 
-			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) -32.f, this->position.y));
+			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) -32.f, this->position.y - 20.f));
 			water->SetSituation(Water::Situation::Normal);
 			water->SetScale(Vec2(64, 64));
 			water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる

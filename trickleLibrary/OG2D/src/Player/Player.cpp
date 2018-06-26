@@ -309,7 +309,7 @@ bool Player::FootCheck()
 }
 bool Player::FootMapCheck(std::string& objname_, bool flag)
 {
-	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.5f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	for (int y = 0; y < map->mapSize.y; ++y)
 	{
