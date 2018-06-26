@@ -970,7 +970,10 @@ bool Water::SolidMelt()
 	}
 	return false;
 }
-
+void Water::SetScale(const Vec2& s)
+{
+	this->Scale = s;
+}
 Water::SP Water::Create(Vec2& pos, bool flag_)
 {
 	auto to = Water::SP(new Water(pos));
