@@ -1525,6 +1525,7 @@ bool Player::MotionLadderUpDate()
 		if (this->LadderJumpCheck())
 		{
 			this->motion = Motion::Jump;
+			this->animation.animCnt = 0;
 			this->moveCnt = 0;
 		}
 	}
@@ -1556,6 +1557,7 @@ bool Player::MotionLadderUpDate()
 		this->LadderMoveCheck(e);
 		if (this->FootMapCheck((std::string)"Ladder", false) || this->SolidFootCheck())
 		{
+			this->animation.animCnt = 0;
 			this->motion = Motion::Normal;
 		}
 		else
