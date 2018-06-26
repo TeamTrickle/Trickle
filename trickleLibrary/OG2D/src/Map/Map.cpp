@@ -342,7 +342,7 @@ bool Map::MapHitCheck(GameObject &p)
 					this->_arr[y][x] != 22 &&
 					this->_arr[y][x] != 20 &&
 					this->_arr[y][x] != 23) {
-					if (this->hitBase[y][x].hit(p))
+					if (this->hitBase[y][x].CubeHit(p))
 					{
 						return true;
 					}
