@@ -281,7 +281,7 @@ void Title::UpDate()
 				break;
 			}
 			auto effect03 = Effect::Create(
-				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
+				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2 + 50), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
 				Vec2(0, 0),
 				Vec2(320, 64),
 				1,
