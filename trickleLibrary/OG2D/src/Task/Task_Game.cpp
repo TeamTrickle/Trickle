@@ -211,7 +211,7 @@ bool Game::Initialize()
 		sound.play();
 
 		//êÓïóã@
-		Vec2 fanpos[5] = { Vec2(64 * 11,64 * 6),Vec2(64 * 20,64 * 6),Vec2(64 * 25,64 * 17),Vec2(64 * 30,64 * 23),Vec2(64 * 34,64 * 27) };
+		Vec2 fanpos[5] = { Vec2(64 * 11,64 * 6),Vec2(64 * 20,64 * 4),Vec2(64 * 26,64 * 17),Vec2(64 * 30,64 * 23),Vec2(64 * 34,64 * 27) };
 		auto fan1 = Fan::Create(fanpos[0], 7, Fan::Dir::LEFT, 64 * 7, true);
 		auto fan2 = Fan::Create(fanpos[1], 11, Fan::Dir::RIGHT, 64 * 5, true);
 		auto fan3 = Fan::Create(fanpos[2], 15, Fan::Dir::LEFT, 64 * 15, true);
