@@ -853,6 +853,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 		else
 		{
 			move.y += this->animationVec.y;
+			this->animCnt = 0;
 			player->motion = Motion::Normal;
 			this->animationVec.y = 0.f;
 			this->animMo = Motion::Normal;
@@ -1305,6 +1306,7 @@ void Player::StateUpDate()
 		//バケツの値を自分に合わせる
 		this->HaveObjectPosMove();
 		//バケツを置く動作
+		std::cout << this->PutCheck() << std::endl;
 		if (this->InputB2down() && this->FootCheck())
 		{
 			if (this->PutCheck() && this->motion != Motion::Spill)
@@ -1449,8 +1451,10 @@ bool Player::MotionNormalUpDate()
 		}
 		else
 		{
-			//スイッチを操作する
-			this->SwitchCheck();
+			if (this->state == State::NORMAL) {
+				//スイッチを操作する
+				this->SwitchCheck();
+			}
 		}
 	}
 	if (this->state != State::BUCKET) {
