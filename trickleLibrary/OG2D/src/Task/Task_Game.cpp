@@ -12,7 +12,7 @@
 #include "Gimmick\NO_MOVE\Seihyouki.h"
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
-
+#include "Gimmick\NO_MOVE\TimeSign.h"
 #include "GameProcessManagement\Timer.h"
 #include "Task\Task_Pause.h"
 #include "Task\StageSelect.h"
@@ -412,6 +412,11 @@ bool Game::Finalize()
 	}
 	auto ornament = OGge->GetTasks<Ornament>("Ornament");
 	for (auto id = ornament->begin(); id != ornament->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto timer = OGge->GetTasks<TimeSign>("timesign");
+	for (auto id = timer->begin(); id != timer->end(); ++id)
 	{
 		(*id)->Kill();
 	}

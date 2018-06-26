@@ -317,11 +317,6 @@ bool Map::Finalize()
 	this->hitBase.clear();
 	this->chip.clear();
 	this->mapimg.Finalize();
-	auto timer = OGge->GetTasks<TimeSign>("timesign");
-	for (auto id = timer->begin(); id != timer->end(); ++id)
-	{
-		(*id)->Kill();
-	}
 	return true;
 }
 
