@@ -111,4 +111,5 @@ public:
 	void HoldCheck(bool);
 	void ResetMove();
 	bool SolidMelt();
+	void SetScale(const Vec2&);
 };
