@@ -150,6 +150,9 @@
     <Filter Include="ソースファイル\Paint">
       <UniqueIdentifier>{848715e8-54c7-4038-aa37-758e7282c09f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\OGSystem\System\Icon">
+      <UniqueIdentifier>{b752a1f7-d8d9-467f-939c-7f74e9922062}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -485,5 +488,15 @@
     <ClInclude Include="src\Task\StageInfoRes.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\image\testicon.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\OGSystem\Icon\Resource.rc">
+      <Filter>ソースファイル\OGSystem\System\Icon</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

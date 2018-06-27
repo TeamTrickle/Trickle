@@ -264,6 +264,12 @@
     <ClInclude Include="src\VolumeControl\volumeControl.h" />
     <ClInclude Include="src\Water\water.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\image\testicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\OGSystem\Icon\Resource.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
