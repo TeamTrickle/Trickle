@@ -33,7 +33,9 @@ class StageSelect : public TaskObject
 	Texture Wall;           //壁の画像
 	Texture LadderTex;
 
-	std::string soundname;     //サウンドのファイル名格納
+	//サウンドのファイル名格納
+	std::string soundname;     
+	std::string decisionsoundname;      //決定音
 
 	std::vector<std::pair<Direction, float>> Entrance;	//扉に対しての向きとその座標
 	//各処理管理
@@ -79,6 +81,7 @@ public:
 	};
 	State state;
 	Sound* sound;
+	Sound decisionsound;
 
 	typedef std::shared_ptr<StageSelect> SP;
 	static SP Create(bool = true);

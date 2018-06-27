@@ -15,6 +15,7 @@ StageSelect::StageSelect()
 	this->timeCnt = 0;
 	this->nowPos = -1;
 	this->soundname = "title.wav";      //サウンドのファイル名格納
+	this->decisionsoundname = "decision.wav";
 }
 
 StageSelect::~StageSelect()
@@ -55,6 +56,7 @@ bool StageSelect::Initialize()
 	(*board) << "monitor1.txt";
 	(*board) << "monitor2.txt";
 	//サウンドの生成
+	//BGM
 	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
 	{
 		sound = new Sound();
@@ -62,6 +64,9 @@ bool StageSelect::Initialize()
 		rm->SetSoundData((std::string)"titleBGM", sound);
 		sound->play();
 	}
+	//決定音
+	decisionsound.create(decisionsoundname, false);
+
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定
@@ -363,6 +368,9 @@ void StageSelect::From3()
 			//決定入力
 			if (OGge->in->down(In::B2))
 			{
+				//サウンドの再生
+				decisionsound.play();
+
 				switch (this->nowPos)
 				{
 				case 0:
