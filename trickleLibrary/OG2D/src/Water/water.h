@@ -112,4 +112,5 @@ public:
 	void ResetMove();
 	bool SolidMelt();
 	void SetScale(const Vec2&);
+	unsigned int GetID() const;
 };
