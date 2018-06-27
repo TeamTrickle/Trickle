@@ -41,7 +41,8 @@ StageAlert::SP StageAlert::Create(bool flag_, const Box2D& winSize)
 #define TEXTURE_SIZE(X) (int)X.GetTextureSize()
 bool StageAlert::Initialize(const Box2D& winSize) {
 	// リソース初期化
-	background.Create((std::string)"stagealert_background.png");
+	background.Create((std::string)"selectframe2.png");
+	background.Rotate(180.f);
 	mission.Create((std::string)"stagealert_mission.png");
 	clearFlag.Create((std::string)"selectflower.png");
 	clearStarTex.Create((std::string)"Ster.png");
@@ -50,7 +51,7 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	rm->SetTextureData((std::string)"SterB.png", &normalStarTex);
 
 	windowSize = winSize;
-	draws.insert({ &background, Box2D(500, 50,	TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y) });
+	draws.insert({ &background, Box2D(350, 0, 1625, 650) });
 	srcs.insert ({ &background, Box2D(0, 0,	TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y) });
 	draws.insert({ &mission,    Box2D((int)draws[&background].x + 20, (int)draws[&background].y + 175, TEXTURE_SIZE(mission).x, TEXTURE_SIZE(mission).y) });
 	srcs.insert ({ &mission,    Box2D(0, 0, TEXTURE_SIZE(mission).x, TEXTURE_SIZE(mission).y) });
@@ -70,10 +71,10 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	titleDraw.h = 110;
 
 	clearFlagDraw = draws[&background];
-	clearFlagDraw.x += 1100;
-	clearFlagDraw.y -= 50;
-	clearFlagDraw.w = 300;
-	clearFlagDraw.h = 300;
+	clearFlagDraw.x += 1200;
+	clearFlagDraw.y += 70;
+	clearFlagDraw.w = 280;
+	clearFlagDraw.h = 280;
 
 	previewer = MapPreviewer::Create(true, 
 		Box2D(
@@ -113,7 +114,7 @@ void StageAlert::Render2D() {
 	if (isActive()) {
 		// 非変動要素
 		for (auto& d : draws) {
-			Box2D draw = OptimizeForWindowSize(d.second);
+			Box2D draw = d.second;
 			draw.OffsetSize();
 			Box2D src = srcs[d.first];
 			src.OffsetSize();
