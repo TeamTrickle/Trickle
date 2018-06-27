@@ -73,11 +73,11 @@ bool Paint::WaterHit()
 			if ((*id)->GetColor() != *this->color)
 			{
 				//“–‚½‚Á‚Ä‚¢‚é‚©‚Ì”»’è
-				if (this->hit(*(*id)))
+				if (this->CubeHit(*(*id)))
 				{
 					//…‚ÌF‚ğ•Ï‚¦‚é
 					(*id)->SetColor(*this->color);
-					return true;
+					//return true;
 				}
 			}
 		}
