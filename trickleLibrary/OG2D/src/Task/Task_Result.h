@@ -20,6 +20,7 @@ public:
 	//サウンドの生成
 	Sound sound;
 	Sound soundstar;
+	Sound sounddrum;
 
 private:
 	enum Mode {
@@ -47,6 +48,7 @@ private:
 	//サウンドのファイル名格納
 	std::string soundname;
 	std::string starsoundname;
+	std::string drumsoundname;
 
 	struct resultUI {
 		Vec2 pos;

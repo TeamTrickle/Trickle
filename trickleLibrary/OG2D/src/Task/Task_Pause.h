@@ -22,6 +22,10 @@ class Pause :public TaskObject
 
 	int selectPos = 0;
 
+	//サウンドのファイル名格納
+	std::string cursorsoundname;
+	std::string dicisionsoundname;
+
 public:
 	Pause();
 	virtual ~Pause();
@@ -53,4 +57,8 @@ public:
 
 	typedef std::shared_ptr<Pause> SP;
 	static SP Create(bool = true);
+
+	//サウンド生成
+	Sound cursorsound;
+	Sound decisionsound;
 };

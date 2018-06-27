@@ -41,6 +41,8 @@ class Goal : public GameObject, public TaskObject
 	Vec2* precmPos;
 	Vec2* precmSize;
 	bool isGoalCheck();
+	std::string soundname;   //サウンドのファイル名格納
+
 public:
 	explicit Goal(const Vec2& pos);
 	virtual ~Goal();
@@ -55,4 +57,5 @@ public:
 	unsigned int GetID() const;
 	typedef std::shared_ptr<Goal> SP;
 	static SP Create(const Vec2& pos, bool = true);
+	Sound sound;     //サウンド生成
 };

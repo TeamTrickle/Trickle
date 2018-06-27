@@ -27,6 +27,8 @@ Goal::Goal(const Vec2& pos)
 		id++;
 	}
 	this->ID = count;
+	this->soundname = "flower.wav";         //サウンドのファイル名格納
+	sound.create(soundname, false);
 }
 
 Goal::~Goal()
@@ -77,6 +79,9 @@ void Goal::UpDate()
 		if (!this->cm_Pos.isPlay() && !this->cm_Size.isPlay())
 		{
 			this->isCheck = true;
+			//サウンドの再生
+			sound.play();
+
 			this->mode = Mode::Form2;
 			if (this->isGoalCheck())
 			{

@@ -5,6 +5,9 @@
 Pause::Pause()
 {
 	__super::SetDrawOrder(1.0f);
+	//サウンドのファイル名格納
+	this->cursorsoundname = "cursormove.wav";
+	this->dicisionsoundname = "decision.wav";
 }
 //--------------------------------------------------------------------------------------
 Pause::~Pause()
@@ -22,6 +25,13 @@ bool Pause::Initialize()
 	texStageSelect.Create((std::string)"StageSelect.png");
 	texTransparentBack.Create((std::string)"TransparentBack.png");
 	select = Select::Return;
+
+	//サウンドの生成
+	//カーソルの移動音
+	cursorsound.create(cursorsoundname, false);
+	cursorsound.volume(0.7f);
+	//決定音
+	decisionsound.create(dicisionsoundname, false);
 
 	__super::Init((std::string)"pause");
 	__super::SetDrawOrder(1.f);		//画像表示順位
@@ -163,9 +173,13 @@ void Pause::PauseUpDate()
 	//矢印の移動
 	if (OGge->in->down(Input::CU) || OGge->in->down(In::LU)) {
 		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
+		//サウンドの再生
+		cursorsound.play();
 	}
 	if (OGge->in->down(Input::CD) || OGge->in->down(In::LD)) {
 		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
+		//サウンドの再生
+		cursorsound.play();
 	}
 	Vec2 cPosTable[3] = { Vec2(ReturnPos.x - 80, ReturnPos.y),
 							Vec2(RestartPos.x - 80,RestartPos.y),
@@ -187,6 +201,9 @@ void Pause::PauseUpDate()
 
 	//選択しの決定処理
 	if (OGge->in->down(In::B2)){
+		//サウンドの再生
+		decisionsound.play();
+
 		OGge->SetPause(false);
 		if (select != Return) {
 			OGge->GetTask<Game>("game")->Kill();

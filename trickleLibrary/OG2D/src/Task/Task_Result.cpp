@@ -9,6 +9,7 @@ Result::Result() {
 	this->taskName = "Result";
 	__super::Init(taskName);
 	starsoundname = "kira2.wav";
+	drumsoundname = "drum.wav";
 }
 Result::~Result() {
 	this->Finalize();
@@ -27,6 +28,9 @@ bool Result::Initialize() {
 	//サウンドの生成
 	soundstar.create(starsoundname, false);    //星のはまる音声
 	soundstar.volume(1.0f);
+
+	sounddrum.create(drumsoundname, false);     //ドラムロール
+	sounddrum.volume(1.0f);
 
 	//sound.create(soundname, true);           //BGM未実装
 	//sound.volume(1.0f);
@@ -124,6 +128,12 @@ void Result::UpDate() {
 	case Mode3:
 		++cnt;
 		if (cnt < 120) {
+			//サウンドの再生
+			if (cnt == 1)        //0だと入らないので1の時にプレイを開始、二秒後に停止
+			{
+				sounddrum.play();
+			}
+
 			for (int i = 0; i < 4; ++i) {
 				num[i] = random::GetRand(0, 9);
 			}
