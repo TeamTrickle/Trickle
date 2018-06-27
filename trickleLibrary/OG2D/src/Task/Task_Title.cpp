@@ -24,6 +24,7 @@ Title::Title()
 	this->soundflowername = "flower.wav";
 	this->soundstart = true;
 	this->sound = nullptr;
+	this->skipInoutFlag = false;
 	//タグ設定
 	__super::Init((std::string)"title");
 }
@@ -116,7 +117,7 @@ void Title::UpDate()
 	{
 		this->Kill();
 	}
-	if (OGge->in->key.down(In::ENTER) || OGge->in->down(In::B2))
+	if (OGge->in->down(In::B2) && !this->skipInoutFlag)
 	{
 		this->Skip();
 	}
@@ -382,9 +383,6 @@ bool Title::Finalize()
 
 	//使用画像の解放
 	texCursor.Finalize();
-	//texStart.Finalize();
-	//texClose.Finalize();
-	//texPause.Finalize();
 	this->texLogo.Finalize();
 	this->GierLogo.Finalize();
 	this->flowerLogo.Finalize();
@@ -536,6 +534,7 @@ void Title::BackTitleSkip()
 	auto npc2 = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 	npc2->SetPause(true);
 	this->sound->play();
+	this->skipInoutFlag = true;
 }
 
 void Title::SkipMove()
