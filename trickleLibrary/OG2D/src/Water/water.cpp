@@ -600,7 +600,8 @@ void Water::MoveSOILDCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Soil" ||
-						map->hitBase[y][x].objectTag == "Net")
+						map->hitBase[y][x].objectTag == "Net" || 
+						map->_arr[y][x] == 24)
 					{
 						if (this->hit(map->hitBase[y][x]))
 						{
@@ -666,7 +667,8 @@ void Water::MoveSOILDCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Soil" ||
-						map->hitBase[y][x].objectTag == "Net")
+						map->hitBase[y][x].objectTag == "Net" ||
+						map->_arr[y][x] == 24)
 					{
 						if (this->hit(map->hitBase[y][x]))
 						{

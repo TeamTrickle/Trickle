@@ -1627,7 +1627,9 @@ bool Player::MotionWalkUpDate()
 		else
 		{
 			//スイッチを押す
-			this->SwitchCheck();
+			if (this->state == State::NORMAL) {
+				this->SwitchCheck();
+			}
 		}
 	}
 	if (this->TohaveObjectHit() && this->state == State::NORMAL) {
