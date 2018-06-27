@@ -853,10 +853,9 @@ void Water::SetWaterVolume(float value)
 Vec2 Water::MoveSolid(const Vec2& est)
 {
 	this->move.x = est.x;
-	std::cout << move.x << std::endl;
 	this->nowMove = move;
-	//this->MoveSOILDCheck(this->nowMove);
-	return this->move;
+	this->MoveSOILDCheck(this->nowMove);
+	return this->nowMove;
 }
 
 void Water::HoldCheck(bool flag)

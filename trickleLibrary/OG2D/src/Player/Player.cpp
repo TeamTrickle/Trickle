@@ -86,11 +86,16 @@ void Player::UpDate()
 					this->direction = Direction::LEFT;
 				}
 			}
+			
 		}
 	}
 	//最終的な移動値を反映させる
 	Vec2 move = this->est;
 	this->MoveCheck(move);
+	if (this->TohaveObjectHit() && this->state == State::NORMAL) {
+		//ブロックを押す
+		this->motion = Motion::Block_M;
+	}
 }
 void Player::Render2D()
 {
@@ -1097,7 +1102,10 @@ bool Player::TohaveObjectHit()
 				{
 					if (left.CubeHit(*(*id)))
 					{
-						(*id)->MoveSolid(this->est);
+						if ((*id)->MoveSolid(this->est) == Vec2(0, 0))
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -1107,7 +1115,10 @@ bool Player::TohaveObjectHit()
 				{
 					if (right.CubeHit(*(*id)))
 					{
-						(*id)->MoveSolid(this->est);
+						if ((*id)->MoveSolid(this->est) == Vec2(0, 0))
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -1324,7 +1335,11 @@ void Player::StateUpDate()
 			{
 				this->est.x += 5.0f;
 			}
-			this->TohaveObjectHit();
+			if (this->TohaveObjectHit())
+			{
+				this->state = State::NORMAL;
+				this->motion = Motion::Normal;
+			}
 			this->est = { 0,0 };
 			animation.same_flag = false;
 		}
@@ -1632,10 +1647,10 @@ bool Player::MotionWalkUpDate()
 			}
 		}
 	}
-	if (this->TohaveObjectHit() && this->state == State::NORMAL) {
-		//ブロックを押す
-		this->motion = Motion::Block_M;
-	}
+	//if (this->TohaveObjectHit() && this->state == State::NORMAL) {
+	//	//ブロックを押す
+	//	this->motion = Motion::Block_M;
+	//}
 	if (this->HeadSolidCheck())
 	{
 		this->state = State::BUCKET;
