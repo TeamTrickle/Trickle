@@ -20,8 +20,6 @@ Water::Water(Vec2 pos)
 	this->nowSituation = Water::Situation::Newfrom;
 	this->currentState = Water::State::LIQUID;
 	this->preState = Water::State::LIQUID;
-	//this->nowSituation = Water::Situation::Normal;
-	//this->currentState = Water::State::SOLID;
 	//初期保持水量
 	this->volume = 0.5f;
 	//無敵時間初期化
@@ -37,15 +35,18 @@ Water::Water(Vec2 pos)
 	//IDを設定
 	auto waters = OGge->GetTasks<Water>("water");
 	int i = 0;
-	auto id = waters->begin();
-	while (id != waters->end())
+	auto ids = waters->begin();
+	while (ids != waters->end())
 	{
-		if ((*id)->id == i)
+		if ((*ids)->id == i)
 		{
 			++i;
-			id = waters->begin();
+			ids = waters->begin();
 		}
-		++id;
+		else
+		{
+			++ids;
+		}
 	}
 	this->id = i;
 	//サウンドのファイル名設定
@@ -973,6 +974,10 @@ bool Water::SolidMelt()
 void Water::SetScale(const Vec2& s)
 {
 	this->Scale = s;
+}
+unsigned int Water::GetID() const
+{
+	return this->id;
 }
 Water::SP Water::Create(Vec2& pos, bool flag_)
 {
