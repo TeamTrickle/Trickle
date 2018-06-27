@@ -208,13 +208,13 @@ bool Player::HeadSolidCheck()
 		return false;
 	}
 	//頭の当たり判定
-	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, this->Scale.y), 0.0f);
 	//水情報
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
 		//相手が氷であり
-		if ((*id)->objectTag == "SOLID")
+		if ((*id)->GetState() == Water::State::SOLID)
 		{
 			//自分の近辺に存在しており
 			if (head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
@@ -230,7 +230,6 @@ bool Player::HeadSolidCheck()
 						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
 						this->position.y -= this->haveAddPos.y;
 						this->Scale.y += this->haveAddPos.y;
-						return true;
 						return true;
 					}
 				}
@@ -309,7 +308,7 @@ bool Player::FootCheck()
 }
 bool Player::FootMapCheck(std::string& objname_, bool flag)
 {
-	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.1f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
+	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.5f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	for (int y = 0; y < map->mapSize.y; ++y)
 	{
@@ -1187,6 +1186,29 @@ bool Player::ReleaseHold()
 	}
 	return false;
 }
+bool Player::ReleaseSolid()
+{
+	if (this->hold)
+	{
+		auto waters = OGge->GetTasks<Water>("water");
+		for (auto id = waters->begin(); id != waters->end(); ++id)
+		{
+			if ((*id)->GetHold())
+			{
+				(*id)->position.x = this->position.x;
+				(*id)->HoldCheck(false);
+				(*id)->ResetMove();
+				this->hold = false;
+			}
+		}
+		this->inv = 0;
+		this->position.y += this->haveAddPos.y;
+		this->Scale.y -= this->haveAddPos.y;
+		this->haveAddPos = { 0,0 };
+		return true;
+	}
+	return false;
+}
 bool Player::LadderJumpCheck()
 {
 	auto map = OGge->GetTask<Map>("map");
@@ -1294,6 +1316,16 @@ void Player::StateUpDate()
 		{
 			//移動処理
 			this->position += this->animation.Move(this->animation.animMo);
+			if (this->direction == Direction::LEFT)
+			{
+				this->est.x -= 5.0f;
+			}
+			else
+			{
+				this->est.x += 5.0f;
+			}
+			this->TohaveObjectHit();
+			this->est = { 0,0 };
 			animation.same_flag = false;
 		}
 		else
@@ -1306,7 +1338,6 @@ void Player::StateUpDate()
 		//バケツの値を自分に合わせる
 		this->HaveObjectPosMove();
 		//バケツを置く動作
-		std::cout << this->PutCheck() << std::endl;
 		if (this->InputB2down() && this->FootCheck())
 		{
 			if (this->PutCheck() && this->motion != Motion::Spill)
@@ -1389,15 +1420,6 @@ bool Player::MotionUpDate()
 			}
 		}
 		if (!this->TohaveObjectHit()) {
-			/*if (this->InputRight() && this->direction == Direction::LEFT) {
-				this->motion = Motion::Walk;
-			}
-			if (this->InputLeft() && this->direction == Direction::RIGHT) {
-				this->motion = Motion::Walk;
-			}
-			if (!this->InputRight() && !this->InputLeft()) {
-				this->motion = Motion::Normal;
-			}*/
 			this->motion = Motion::Normal;
 		}
 		break;
@@ -1520,6 +1542,10 @@ bool Player::MotionJumpUpDate()
 		this->est.y = 0.f;
 		this->motion = Fall;
 	}
+	if (this->HeadSolidCheck())
+	{
+		this->state = State::BUCKET;
+	}
 	return true;
 }
 bool Player::MotionLadderUpDate()
@@ -1601,7 +1627,9 @@ bool Player::MotionWalkUpDate()
 		else
 		{
 			//スイッチを押す
-			this->SwitchCheck();
+			if (this->state == State::NORMAL) {
+				this->SwitchCheck();
+			}
 		}
 	}
 	if (this->TohaveObjectHit() && this->state == State::NORMAL) {

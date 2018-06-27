@@ -133,9 +133,15 @@ bool Map::LoadMap(std::string& path_, Format format)
 				//*this->ID[y][x] = new int(0);
 				break;
 			case 14:
-				this->hitBase[y][x].Scale.y = 20.0f;		//‰¼ˆ—Aã•ûŒü‹à–Ô‚Ì‚İ“–‚½‚è”»’è‚Ì‚‚³‚ğ20‚É§ŒÀ
+				this->hitBase[y][x].Scale.y = 12.0f;		//‰¼ˆ—Aã•ûŒü‹à–Ô‚Ì‚İ“–‚½‚è”»’è‚Ì‚‚³‚ğ20‚É§ŒÀ
+				this->hitBase[y][x].objectTag = "Net";
+				break;
 			case 15:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
 			case 16:
+				this->hitBase[y][x].objectTag = "Net";
+				break;
 			case 17:
 				//this->ID[y][x] = new int(1);
 				this->hitBase[y][x].objectTag = "Net";
@@ -159,7 +165,6 @@ bool Map::LoadMap(std::string& path_, Format format)
 			default:
 				break;
 			}
-
 			/*if (this->ID[y][x])
 			{
 				this->hitBase[y][x].CreateObject(Cube, Vec2(this->DrawSize.x * x, this->DrawSize.y * y), this->DrawSize, 0.0f);
@@ -301,6 +306,10 @@ void Map::Render2D()
 				draw.OffsetSize();
 				this->mapimg.Draw(draw, this->chip[this->_arr[y][x]]);
 			}
+			if (this->_arr[y][x] == 14)
+			{
+				this->hitBase[y][x].LineDraw();
+			}
 			/*if (this->hitBase[y][x].Getarr() != 0)
 			{
 				Box2D draw(this->hitBase[y][x].position, this->DrawSize);
@@ -317,11 +326,6 @@ bool Map::Finalize()
 	this->hitBase.clear();
 	this->chip.clear();
 	this->mapimg.Finalize();
-	auto timer = OGge->GetTasks<TimeSign>("timesign");
-	for (auto id = timer->begin(); id != timer->end(); ++id)
-	{
-		(*id)->Kill();
-	}
 	return true;
 }
 

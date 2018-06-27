@@ -20,7 +20,8 @@ private:
 	Box2D GetSpriteCrop() const;
 	bool BucketWaterCreate();
 	bool isObjectCollided();
-
+	bool IsOutCheck;
+	unsigned int WaterOutTime;
 public:
 	explicit Bucket();
 	explicit Bucket(Vec2& pos);
@@ -32,6 +33,7 @@ public:
 	void UpDate();
 	void Render2D();
 	bool Finalize();
+	
 
 	void CheckMove(Vec2 &);
 

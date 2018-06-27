@@ -193,7 +193,7 @@ bool GameManager::OutData()
 			break;
 		case 5:
 			//ステージ１のミッション
-			if (this->Minute * 60 + this->Seconds <= 120)
+			if (this->Minute * 60 + this->Seconds <= 180)
 			{
 				ofs << "t,";
 				this->M_flag[0] = true;
@@ -203,7 +203,7 @@ bool GameManager::OutData()
 				ofs << "f," ;
 			}
 
-			if (this->Minute * 60 + this->Seconds <= 90)
+			if (this->Minute * 60 + this->Seconds <= 120)
 			{
 				ofs << "t,";
 				this->M_flag[1] = true;

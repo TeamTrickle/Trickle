@@ -62,8 +62,8 @@ void Goal::UpDate()
 		if (this->WaterHit())
 		{
 			//カメラ移動終了地点を設定
-			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 1.f);
-			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 1.f);
+			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5.f);
+			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5.f);
 			//移動前のカメラの位置とサイズを保存しておく
 			this->precmPos = new Vec2(OGge->camera->GetPos());
 			this->precmSize = new Vec2(OGge->camera->GetSize());
@@ -93,8 +93,8 @@ void Goal::UpDate()
 		if (this->animCnt >= 99)
 		{
 			//元のカメラ位置に戻す
-			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 10);
-			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 10);
+			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 6);
+			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 6);
 			delete this->precmPos;
 			delete this->precmSize;
 			this->precmPos = nullptr;
@@ -133,7 +133,7 @@ void Goal::Render2D()
 		this->draw = { this->position, this->Scale };
 		if (this->isCheck)
 		{
-			this->draw += Box2D(-32, -63, 64, 64);
+			this->draw += Box2D(-32, -60, 64, 64);
 		}
 		this->draw.OffsetSize();
 		if (this->isCheck)

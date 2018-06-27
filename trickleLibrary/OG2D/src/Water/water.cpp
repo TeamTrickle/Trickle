@@ -126,7 +126,6 @@ void Water::UpDate()
 			if (this->RAIN_TIME < this->nowTime)
 			{
 				this->nowSituation = Situation::Rainfrom;
-				//this->position.x += this->maxSize.x / 2;
 				this->nowTime = 0;
 			}
 			else
@@ -169,17 +168,15 @@ void Water::UpDate()
 		}
 	case Water::State::SOLID:
 		//•Xˆ—
+		if (this->HeadSolidCheck())
+		{
+			this->SolidMelt();
+		}
 		if (!this->hold)
 		{
-			this->Friction();
-			if (this->HeadSolidCheck())
-			{
-				//this->SetState(State::LIQUID);
-				this->SolidMelt();
-			}
+			this->Friction();	
 			this->nowMove = this->move;
 			this->MoveSOILDCheck(this->nowMove);
-			
 		}
 		break;
 	}
@@ -524,7 +521,7 @@ void Water::MoveGASCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
 					{
-						if (this->hit(map->hitBase[y][x]))
+						if (this->CubeHit(map->hitBase[y][x]))
 						{
 							this->position.x = preX;
 							break;
@@ -560,7 +557,7 @@ void Water::MoveGASCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor")
 					{
-						if (this->hit(map->hitBase[y][x]))
+						if (this->CubeHit(map->hitBase[y][x]))
 						{
 							this->position.y = preY;
 							break;
@@ -603,7 +600,8 @@ void Water::MoveSOILDCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Soil" ||
-						map->hitBase[y][x].objectTag == "Net")
+						map->hitBase[y][x].objectTag == "Net" || 
+						map->_arr[y][x] == 24)
 					{
 						if (this->hit(map->hitBase[y][x]))
 						{
@@ -669,7 +667,8 @@ void Water::MoveSOILDCheck(Vec2& est)
 				{
 					if (map->hitBase[y][x].objectTag == "Floor" ||
 						map->hitBase[y][x].objectTag == "Soil" ||
-						map->hitBase[y][x].objectTag == "Net")
+						map->hitBase[y][x].objectTag == "Net" ||
+						map->_arr[y][x] == 24)
 					{
 						if (this->hit(map->hitBase[y][x]))
 						{
@@ -765,7 +764,7 @@ bool Water::HeadSolidCheck()
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (head.hit(*(*id)))
+					if (head.CubeHit(*(*id)))
 					{
 						return true;
 					}
@@ -916,7 +915,7 @@ void Water::CheckState()
 						if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 						{
 							//“–‚½‚è”»’è‚ðs‚¤
-							if (this->hit(*(*id)))
+							if (this->CubeHit(*(*id)))
 							{
 								//‘ŠŽè‚ð…‚ÉˆÚs‚³‚¹‚é
 								(*id)->SetSituation(Situation::Normal);
@@ -949,7 +948,8 @@ bool Water::SolidMelt()
 			auto player = OGge->GetTask<Player>("Player");
 			if (player)
 			{
-				player->ReleaseHold();
+				//player->ReleaseHold();
+				player->ReleaseSolid();
 				player->SetState(Player::State::NORMAL);
 				player->SetMotion(Player::Motion::Normal);
 			}
@@ -970,7 +970,10 @@ bool Water::SolidMelt()
 	}
 	return false;
 }
-
+void Water::SetScale(const Vec2& s)
+{
+	this->Scale = s;
+}
 Water::SP Water::Create(Vec2& pos, bool flag_)
 {
 	auto to = Water::SP(new Water(pos));

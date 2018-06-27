@@ -179,7 +179,7 @@ void Fan::SendWind() {
 	{
 		for (auto id = (*water).begin(); id != (*water).end(); ++id)
 		{
-			if ((*id)->hit(this->WindHitBase))
+			if ((*id)->CubeHit(this->WindHitBase))
 			{
 				if ((*id)->GetState() == Water::State::GAS)
 				{

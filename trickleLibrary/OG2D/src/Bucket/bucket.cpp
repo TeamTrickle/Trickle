@@ -47,6 +47,8 @@ bool Bucket::Initialize(Vec2& pos)
 	tex.Create((std::string)"bucket.png");
 	__super::Init((std::string)"bucket");
 	__super::SetDrawOrder(0.5f);
+	this->IsOutCheck = false;
+	this->WaterOutTime = 0;
 	return true;
 }
 
@@ -64,24 +66,40 @@ void Bucket::UpDate() {
 	gravity.y += 5.0f;
 	if (this->BucketWaterCreate())	//バケツから水を出す処理
 	{
-		auto player = OGge->GetTask<Player>("Player");
-		player->SetMotion(Player::Motion::Spill);
-		//水をこぼす音の再生
-		soundD.play();
-
-		auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2), this->position.y));
-		water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
-		this->capacity = 0.f;
-		//70カウント中は次の水を引き受けない
-		this->invi = 70;
-		auto tex = rm->GetTextureData((std::string)"waterTex");
-		if (tex)
+		if (!this->IsOutCheck)
 		{
-			water->SetTexture(tex);
+			auto player = OGge->GetTask<Player>("Player");
+			player->SetMotion(Player::Motion::Spill);
+			this->IsOutCheck = true;
 		}
-		else
+	}
+	if (this->IsOutCheck)
+	{
+		this->WaterOutTime++;
+		if (this->WaterOutTime > 10)
 		{
-			water->Kill();
+			
+			//水をこぼす音の再生
+			soundD.play();
+
+			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) -32.f, this->position.y - 20.f));
+			water->SetSituation(Water::Situation::Normal);
+			water->SetScale(Vec2(64, 64));
+			water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
+			this->capacity = 0.f;
+			//70カウント中は次の水を引き受けない
+			this->invi = 70;
+			auto tex = rm->GetTextureData((std::string)"waterTex");
+			if (tex)
+			{
+				water->SetTexture(tex);
+			}
+			else
+			{
+				water->Kill();
+			}
+			this->IsOutCheck = false;
+			this->WaterOutTime = 0;
 		}
 	}
 	//水が当たった時の処理
@@ -260,6 +278,7 @@ Bucket::SP Bucket::Create(Vec2& pos, bool flag_)
 	}
 	return nullptr;
 }
+
 void Bucket::WaterIsHitCheck()
 {
 	if (this->invi > 0 || this->capacity >= 1.0f)

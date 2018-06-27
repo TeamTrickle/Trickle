@@ -81,6 +81,7 @@ class Title :public TaskObject
 	bool isSkip;
 
 	void SkipMove();
+	bool skipInoutFlag;
 
 public:
 	Title();

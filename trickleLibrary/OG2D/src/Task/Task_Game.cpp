@@ -12,7 +12,7 @@
 #include "Gimmick\NO_MOVE\Seihyouki.h"
 #include "Gimmick\NO_MOVE\Senpuki.h"
 #include "Gimmick\NO_MOVE\Switch.h"
-
+#include "Gimmick\NO_MOVE\TimeSign.h"
 #include "GameProcessManagement\Timer.h"
 #include "Task\Task_Pause.h"
 #include "Task\StageSelect.h"
@@ -211,10 +211,10 @@ bool Game::Initialize()
 		sound.play();
 
 		//î•—‹@
-		Vec2 fanpos[5] = { Vec2(64 * 11,64 * 6),Vec2(64 * 20,64 * 6),Vec2(64 * 25,64 * 17),Vec2(64 * 30,64 * 23),Vec2(64 * 34,64 * 27) };
+		Vec2 fanpos[5] = { Vec2(64 * 11,64 * 6),Vec2(64 * 20,64 * 4),Vec2(64 * 26,64 * 17),Vec2(64 * 30,64 * 23),Vec2(64 * 34,64 * 27) };
 		auto fan1 = Fan::Create(fanpos[0], 7, Fan::Dir::LEFT, 64 * 7, true);
 		auto fan2 = Fan::Create(fanpos[1], 11, Fan::Dir::RIGHT, 64 * 5, true);
-		auto fan3 = Fan::Create(fanpos[2], 15, Fan::Dir::LEFT, 64 * 15, true);
+		auto fan3 = Fan::Create(fanpos[2], 19, Fan::Dir::LEFT, 64 * 19, true);
 		auto fan4 = Fan::Create(fanpos[3], 8, Fan::Dir::RIGHT, 64 * 2, true);
 		auto fan5 = Fan::Create(fanpos[4], 4.5f, Fan::Dir::LEFT, 64 * 5, false);
 		//‰Á”MŠí
@@ -412,6 +412,11 @@ bool Game::Finalize()
 	}
 	auto ornament = OGge->GetTasks<Ornament>("Ornament");
 	for (auto id = ornament->begin(); id != ornament->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto timer = OGge->GetTasks<TimeSign>("timesign");
+	for (auto id = timer->begin(); id != timer->end(); ++id)
 	{
 		(*id)->Kill();
 	}

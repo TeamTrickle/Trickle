@@ -151,6 +151,7 @@ public:
 	void SetInputAuto(bool);
 	bool GetInputAuto() const;
 	bool ReleaseHold();
+	bool ReleaseSolid();						//‚Á‚Ä‚¢‚é•X‚Ìã‚É•X‚ª“–‚½‚Á‚½‚Ìˆ—
 	void SetMotion(Motion motion_);
 	void SetState(State state_);
 
