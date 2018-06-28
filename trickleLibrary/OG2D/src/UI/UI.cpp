@@ -8,7 +8,7 @@ UI::~UI() {
 }
 
 //座標、ファイルパス、画像分割数
-bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, int id, std::function<bool()> func, int num) {
+bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, int id, std::function<bool()> appear, std::function<bool()> vanish, int num) {
 	this->pos = Vec2(renderPos.x + 128.0f / 2.0f, renderPos.y + 128.0f / 2.0f);
 	endPos = renderPos;
 	tex.Create(path);
@@ -21,7 +21,8 @@ bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, i
 	maxWH = Vec2(128.0f, 128.0f);
 	nowWH = Vec2(0, 0);
 	id_ = id;
-	vanish = func;
+	this->appear = appear;
+	this->vanish = vanish;
 
 	srcTable.resize(num);
 	for (int i = 0; i < num; ++i) {
@@ -36,7 +37,7 @@ bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, i
 void UI::UpDate() {
 	auto player = OGge->GetTask<Player>("Player");
 	//出現条件
-	if (appear != nullptr) {
+	if (appear) {
 		if (appear() && appeared == -1) {
 			active = true;
 			appeared = 0;
@@ -147,7 +148,7 @@ UI::SP UI::Create(Vec2& pos, Box2D& coll, std::string& path, int life, int num, 
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, coll, path, life, id, nullptr, num))
+		if (!to->Initialize(pos, coll, path, life, id, nullptr, nullptr, num))
 		{
 			to->Kill();
 		}
@@ -164,7 +165,8 @@ UI::SP UI::Create(UIinfo& info, int id, bool flag_)
 	std::string path = info.path;
 	int life = info.life;
 	int picNum = info.picNum;
-	std::function<bool()> func = info.vanish;
+	std::function<bool()> appear = info.appear;
+	std::function<bool()> vanish = info.vanish;
 
 	auto to = UI::SP(new UI());
 	if (to)
@@ -174,7 +176,7 @@ UI::SP UI::Create(UIinfo& info, int id, bool flag_)
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, hit, path, life, id, func, picNum))
+		if (!to->Initialize(pos, hit, path, life, id, appear, vanish, picNum))
 		{
 			to->Kill();
 		}
@@ -207,11 +209,11 @@ bool UImanager::Initialize(unsigned short& mapNum) {
 		activeID = 0;
 		break;
 	case 3:		//チュートリアル３
-		maxNum = 2;
+		maxNum = 1;
 		UIlist_.resize(maxNum);
 		uiInfo.resize(maxNum);
-		uiInfo[0] = { Vec2(17 * 64,14 * 64),Box2D(17 * 64,15 * 64,64,128),(std::string)"pushb.png",500,2,nullptr,std::bind(&UIfunc::getBucket,*uifunc) };
-		uiInfo[1] = { Vec2(21 * 64 + 32,14 * 64),Box2D(21 * 64,15 * 64,128,128),(std::string)"pushx.png",500,2,std::bind(&UIfunc::getWater,*uifunc),std::bind(&UIfunc::spoilWater,*uifunc) };
+		//uiInfo[0] = { Vec2(17 * 64,14 * 64),Box2D(17 * 64,15 * 64,64,128),(std::string)"pushb.png",500,2,nullptr,std::bind(&UIfunc::getBucket,*uifunc) };
+		uiInfo[0] = { Vec2(21 * 64 + 32,14 * 64),Box2D(21 * 64,15 * 64,128,128),(std::string)"pushx.png",500,2,std::bind(&UIfunc::getWater,*uifunc),std::bind(&UIfunc::spoilWater,*uifunc) };
 		UIlist_[0] = UI::Create(uiInfo[0], 0);
 		activeID = 0;
 		break;

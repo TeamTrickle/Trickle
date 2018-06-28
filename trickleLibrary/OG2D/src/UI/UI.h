@@ -44,7 +44,7 @@ public:
 	static SP Create(Vec2&, Box2D&, std::string&, int life, int num, int id, bool = true);
 	static SP Create(UIinfo& info, int id, bool = true);
 
-	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, std::function<bool()> func, int num = 0);	//座標、ファイルパス、寿命、画像分割数
+	bool Initialize(Vec2& p, Box2D& coll, std::string& path, int life, int id, std::function<bool()> appear, std::function<bool()> vanish, int num = 0);	//座標、ファイルパス、寿命、画像分割数
 	void UpDate();
 	void Move(Vec2 p);		//座標を動かすときに使う
 	void Render2D();
