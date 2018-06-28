@@ -85,24 +85,12 @@ bool StageSelect::Initialize()
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
 	this->Entrance.emplace_back(LEFT, 31.f * 64.f - chara->Scale.x);
-	//for (int y = 0; y < map->mapSize.y; ++y)
-	//{
-	//	for (int x = 0; x < map->mapSize.x; ++x)
-	//	{
-	//		if (map->_arr[y][x] == 23)
-	//		{
-	//			//梯子位置(x座標)の検索
-	//			
-	//			break;
-	//		}
-	//	}
-	//}
 	//読み込み終了でロード画面を破棄
-	auto load = OGge->GetTasks<Load>("load");
+	/*auto load = OGge->GetTasks<Load>("load");
 	for (auto id = load->begin(); id != load->end(); ++id)
 	{
 		(*id)->Kill();
-	}
+	}*/
 
 	std::cout << "StageSelect 生成完了" << std::endl;
 	return true;

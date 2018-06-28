@@ -286,7 +286,7 @@ void Title::UpDate()
 				Vec2(0, 0),
 				Vec2(320, 64),
 				1,
-				100);
+				30);
 			effect03->SetMode(Effect::Mode::Expansion);
 			effect03->SetTexture(&this->effect03);
 			effect03->SetMaxSize(Vec2(640, 128));
