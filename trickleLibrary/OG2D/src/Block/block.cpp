@@ -306,31 +306,16 @@ bool Block::isCollideSomething()
 		}
 	}
 
-	return map->MapHitCheck(*this);
+	return map->HitCheck(*this, 1);
 }
 
 bool Block::footCheck()
 {
 	foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
-	if (map)
+	if (map && map->HitCheck(foot, "Floor"))
 	{
-		for (int y = 0; y < map->mapSize.y; ++y)
-		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-				{
-					if (map->hitBase[y][x].objectTag == "Floor")
-					{
-						if (foot.hit(map->hitBase[y][x]))
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
+		return true;
 	}
 	auto buckets = OGge->GetTasks<Bucket>("bucket");
 	for (auto id = buckets->begin(); id != buckets->end(); ++id)

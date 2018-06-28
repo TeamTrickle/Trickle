@@ -341,21 +341,9 @@ bool Water::FootCheck(std::string& objtag, int n)
 	{
 		return false;
 	}
-	for (int y = 0; y < map->mapSize.y; ++y)
+	if (map->HitCheck(foot, objtag))
 	{
-		for (int x = 0; x < map->mapSize.x; ++x)
-		{
-			if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-			{
-				if (foot.hit(map->hitBase[y][x]))
-				{
-					if (map->hitBase[y][x].objectTag == objtag)
-					{
-						return true;
-					}
-				}
-			}
-		}
+		return true;
 	}
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = blocks->begin(); id != blocks->end(); ++id)
@@ -437,22 +425,10 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 0))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
-				{
-					if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
-					{
-						if (this->hit(map->hitBase[y][x]))
-						{
-							this->position.x = preX;
-							break;
-						}
-					}
-				}
-			}
+			this->position.x = preX;
+			break;
 		}
 	}
 	while (est.y != 0.f)
@@ -473,22 +449,10 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 0))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
-				{
-					if (map->hitBase[y][x].objectTag == "Floor" || map->hitBase[y][x].objectTag == "Soil")
-					{
-						if (this->hit(map->hitBase[y][x]))
-						{
-							this->position.y = preY;
-							break;
-						}
-					}
-				}
-			}
+			this->position.y = preY;
+			break;
 		}
 	}
 }
@@ -514,22 +478,10 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 0))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (map->hitBase[y][x].objectTag == "Floor")
-				{
-					if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
-					{
-						if (this->CubeHit(map->hitBase[y][x]))
-						{
-							this->position.x = preX;
-							break;
-						}
-					}
-				}
-			}
+			this->position.x = preX;
+			break;
 		}
 	}
 	while (est.y != 0.f)
@@ -550,22 +502,10 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 0))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
-				{
-					if (map->hitBase[y][x].objectTag == "Floor")
-					{
-						if (this->CubeHit(map->hitBase[y][x]))
-						{
-							this->position.y = preY;
-							break;
-						}
-					}
-				}
-			}
+			this->position.y = preY;
+			break;
 		}
 	}
 }
@@ -593,25 +533,10 @@ void Water::MoveSOILDCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 1))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
-				{
-					if (map->hitBase[y][x].objectTag == "Floor" ||
-						map->hitBase[y][x].objectTag == "Soil" ||
-						map->hitBase[y][x].objectTag == "Net" || 
-						map->_arr[y][x] == 24)
-					{
-						if (this->hit(map->hitBase[y][x]))
-						{
-							this->position.x = preX;
-							break;
-						}
-					}
-				}
-			}
+			this->position.x = preX;
+			break;
 		}
 		for (auto id = waters->begin(); id != waters->end(); ++id)
 		{
@@ -660,25 +585,10 @@ void Water::MoveSOILDCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 1))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (map->hitBase[y][x].IsObjectDistanceCheck(this->position, this->Scale))
-				{
-					if (map->hitBase[y][x].objectTag == "Floor" ||
-						map->hitBase[y][x].objectTag == "Soil" ||
-						map->hitBase[y][x].objectTag == "Net" ||
-						map->_arr[y][x] == 24)
-					{
-						if (this->hit(map->hitBase[y][x]))
-						{
-							this->position.y = preY;
-							break;
-						}
-					}
-				}
-			}
+			this->position.y = preY;
+			break;
 		}
 		for (auto id = waters->begin(); id != waters->end(); ++id)
 		{
@@ -719,22 +629,9 @@ bool Water::HeadCheck(std::string& objtag, int n)
 
 	head.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + (y_ / 2.f) - 1.0f), Vec2(this->Scale.x - x_, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
-	for (int y = 0; y < map->mapSize.y; ++y)
+	if (map->HitCheck(head, 0))
 	{
-		for (int x = 0; x < map->mapSize.x; ++x)
-		{
-			if (head.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-			{
-				if (head.hit(map->hitBase[y][x]))
-				{
-					if (map->hitBase[y][x].objectTag == objtag ||
-						map->_arr[y][x] == 24)
-					{
-						return true;
-					}
-				}
-			}
-		}
+		return true;
 	}
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = blocks->begin(); id != blocks->end(); ++id)
