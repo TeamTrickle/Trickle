@@ -1,6 +1,6 @@
 tutorial_atlas_2.png
 tutorial1.png|tutorial2.png|tutorial3.png|tutorial4.png
-0,10,860,100
+11,17,817,89
 170,110,580,40
 170,155,580,40
 170,195,580,40
