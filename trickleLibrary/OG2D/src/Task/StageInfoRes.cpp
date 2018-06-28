@@ -54,7 +54,7 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		title = stringToBox2D(buf);
 
 		std::string saveFilePath = "";
-		if (filePath == "monitor0.txt") clearFlag = false;
+		if (filePath == "monitor0.txt") saveFilePath = "data/Result/data4.bin";
 		if (filePath == "monitor1.txt") saveFilePath = "data/Result/data5.bin";
 		if (filePath == "monitor2.txt") saveFilePath = "data/Result/data6.bin";
 		std::ifstream saveFile(saveFilePath, std::ios::in);
@@ -62,7 +62,7 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 
 		if (isCleared) {
 			saveFile >> buf;
-			if (buf == "-1") {
+			if (buf == "-1" || buf == "-2,-2") {
 				isCleared = false;
 				clearFlag = false;
 			}
@@ -72,13 +72,15 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 			}
 		}
 
+		bool isAchievementAvaliable = false;
 		std::array<bool, MAX_ACHIEVEMENT> isClearAchievement;
-		if (clearFlag) {
+		if (clearFlag || buf == "-2,-2") {
 			saveFile >> buf;
 			auto flags = SplitString(buf, ',');
 			for (int i = 0; i < isClearAchievement.size(); ++i) {
 				isClearAchievement[i] = (flags[i] == "f") ? false : true;
 			}
+			isAchievementAvaliable = true;
 		}
 		
 		int i = 0;
@@ -86,7 +88,7 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 			file >> buf;
 			a.first = stringToBox2D(buf);
 			saveFile >> clearFlag;
-			if (isCleared) {
+			if (isAchievementAvaliable) {
 				a.second = isClearAchievement[i];
 			}
 			else {
