@@ -65,12 +65,13 @@ private:
 	std::map<Texture*, Box2D>								srcs;
 	Box2D													clearFlagDraw;
 	Box2D													windowSize;
+	Box2D													missionDraw;
+	Box2D													missionSrc;
 
 	std::map<std::string, StageInfoRes*>					infoRes;
 	StageInfoRes*											currentRes;
 
 	Texture													background;
-	Texture													mission;
 	Texture													clearFlag;
 	Texture													clearStarTex;
 	Texture													normalStarTex;
