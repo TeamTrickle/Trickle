@@ -202,23 +202,7 @@ bool Bucket::isObjectCollided() {
 	auto map = OGge->GetTask<Map>("map");
 	auto block = OGge->GetTask<Block>("block");
 	if (map) {
-		hitMap = map->MapHitCheck(*this);
-		/*if (hitMap == false)
-		{
-			for (int y = 0; y < map->mapSize.y; ++y)
-			{
-				for (int x = 0; x < map->mapSize.x; ++x)
-				{
-
-					{
-						if (map->_arr[y][x] != 23 && map->_arr[y][x] != 24)
-						{
-							hitMap = map->hitBase[y][x].hit(*this);
-						}
-					}
-				}
-			}
-		}*/
+		hitMap = map->HitCheck(*this, 1);
 		if (hitMap == true)
 		{
 			if (putsoundplay)    //ƒTƒEƒ“ƒh‚ðˆê‰ñÄ¶‚µ‚½‚©‚Ç‚¤‚©‚Ì”»’f
@@ -229,19 +213,9 @@ bool Bucket::isObjectCollided() {
 		}
 	}
 	if (block) {
-		hitBlock = block->hit(*this);
+		hitBlock = block->CubeHit(*this);
 	}
 	return hitMap || hitBlock;
-
-	//if (!map) {
-	//	return false;
-	//}
-	//auto block = OGge->GetTask<Block>("block");
-	//if (!block)
-	//	return false;
-
-	//return map->MapHitCheck(*this) ||
-	//	block->hit(*this);
 }
 
 void Bucket::HoldCheck(bool flag)
@@ -288,7 +262,7 @@ void Bucket::WaterIsHitCheck()
 	auto waters = OGge->GetTasks<Water>("water");
 	for (int i = 0; i < (*waters).size(); ++i)
 	{
-		if (this->hit(*(*waters)[i]))
+		if (this->CubeHit(*(*waters)[i]))
 		{
 			this->capacity += (*waters)[i]->waterMove();
 		}

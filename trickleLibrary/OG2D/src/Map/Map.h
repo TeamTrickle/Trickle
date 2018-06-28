@@ -33,13 +33,10 @@ public:
 	//描画するマップチップの数
 	Vec2 mapSize;
 	//描画マップ配列
-	std::vector<std::vector<int>> _arr;
-	std::vector<std::vector<int*>> ID;
 	//元画像の画像位置
 	std::vector<Box2D> chip;
 	//オブジェクト情報
-	std::vector<std::vector<GameObject>> hitBase;
-	//std::vector<std::vector<Base>> hitBase;
+	std::vector<std::vector<Base>> hitBase;
 	//使用画像情報
 	Texture mapimg;
 	//元画像の縦横サイズ
@@ -56,8 +53,8 @@ public:
 	void Render2D();
 	bool Finalize();
 	//マップとの当たり判定
-	bool MapHitCheck(GameObject &p);
 	bool HitCheck(GameObject &p, const int id);
+	bool HitCheck(GameObject &p, const std::string name);
 private:
 	//ファイルパス
 	const std::string _FilePath = "./data/map/";

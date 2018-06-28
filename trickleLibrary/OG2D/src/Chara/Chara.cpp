@@ -192,7 +192,7 @@ void Chara::MoveCheck(Vec2 est)
 		{
 			if (map && this->isCollision)
 			{
-				if (map->MapHitCheck(*this))
+				if (map->HitCheck(*this, 1))
 				{
 					this->position.x = preX;
 					break;
@@ -224,7 +224,7 @@ void Chara::MoveCheck(Vec2 est)
 			if (map && this->isCollision)
 			{
 
-				if (map->MapHitCheck(*this))
+				if (map->HitCheck(*this, 1))
 				{
 					this->position.y = preY;
 					break;
@@ -246,7 +246,7 @@ bool Chara::FootCheck()
 	auto map = OGge->GetTask<Map>("map");
 	if (map && this->isCollision)
 	{
-		if (map->MapHitCheck(foot))
+		if (map->HitCheck(foot, 1))
 		{
 			return true;
 		}

@@ -143,24 +143,9 @@ bool Player::HeadCheck()
 	}
 	this->head.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
-	for (int y = 0; y < map->mapSize.y; ++y)
+	if (map && map->HitCheck(head, 1))
 	{
-		for (int x = 0; x < map->mapSize.x; ++x)
-		{
-			if (map->hitBase[y][x].objectTag == "Floor" ||
-				map->hitBase[y][x].objectTag == "Net" ||
-				map->hitBase[y][x].objectTag == "Soil" ||
-				map->_arr[y][x] == 24)
-			{
-				if (head.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-				{
-					if (head.hit(map->hitBase[y][x]))
-					{
-						return true;
-					}
-				}
-			}
-		}
+		return true;
 	}
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = blocks->begin(); id != blocks->end(); ++id)
@@ -183,22 +168,25 @@ bool Player::HeadMapCheck(std::string& objname_, bool flag)
 	{
 		for (int x = 0; x < map->mapSize.x; ++x)
 		{
-			if (head.hit(map->hitBase[y][x]))
+			if (head.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 			{
-				if (flag)
+				if (head.CubeHit(map->hitBase[y][x]))
 				{
-					if (map->hitBase[y][x].objectTag == objname_)
+					if (flag)
 					{
-						this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
-						return true;
+						if (map->hitBase[y][x].objectTag == objname_)
+						{
+							this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+							return true;
+						}
 					}
-				}
-				else
-				{
-					if (map->hitBase[y][x].objectTag != objname_)
+					else
 					{
-						this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - (this->Scale.y - 64.f)));
-						return true;
+						if (map->hitBase[y][x].objectTag != objname_)
+						{
+							this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - (this->Scale.y - 64.f)));
+							return true;
+						}
 					}
 				}
 			}
@@ -265,24 +253,9 @@ bool Player::FootCheck()
 {
 	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x, this->position.y + this->Scale.y), Vec2(this->Scale.x, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
-	for (int y = 0; y < map->mapSize.y; ++y)
+	if (map && map->HitCheck(foot, 1))
 	{
-		for (int x = 0; x < map->mapSize.x; ++x)
-		{
-			if (foot.IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-			{
-				if (map->hitBase[y][x].objectTag == "Floor" ||
-					map->hitBase[y][x].objectTag == "Net" ||
-					map->hitBase[y][x].objectTag == "Soil" ||
-					map->_arr[y][x] == 24)
-				{
-					if (foot.CubeHit(map->hitBase[y][x]))
-					{
-						return true;
-					}
-				}
-			}
-		}
+		return true;
 	}
 	auto blocks = OGge->GetTasks<Block>("block");
 	for (auto id = blocks->begin(); id != blocks->end(); ++id)
@@ -335,7 +308,7 @@ bool Player::FootMapCheck(std::string& objname_, bool flag)
 					{
 						if (map->hitBase[y][x].objectTag != objname_)
 						{
-							//this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y + 10.f));
+							//this->animation.SetAnimaVec(this->position, Vec2(map->hitBase_[y][x].position.x, map->hitBase_[y][x].position.y + 10.f));
 							return true;
 						}
 					}
@@ -392,25 +365,10 @@ void Player::MoveCheck(Vec2& est)
 			this->position.x += est.x;
 			est.x = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 1))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (this->IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-				{
-					if (this->CubeHit(map->hitBase[y][x]))
-					{
-						if (map->hitBase[y][x].objectTag == "Floor" ||
-							map->hitBase[y][x].objectTag == "Net" ||
-							map->hitBase[y][x].objectTag == "Soil" ||
-							map->_arr[y][x] == 24)
-						{
-							this->position.x = preX;
-							break;
-						}
-					}
-				}
-			}
+			this->position.x = preX;
+			break;
 		}
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
 		{
@@ -468,25 +426,10 @@ void Player::MoveCheck(Vec2& est)
 			this->position.y += est.y;
 			est.y = 0.f;
 		}
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map->HitCheck(*this, 1))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (this->IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-				{
-					if (this->CubeHit(map->hitBase[y][x]))
-					{
-						if (map->hitBase[y][x].objectTag == "Floor" ||
-							map->hitBase[y][x].objectTag == "Net" ||
-							map->hitBase[y][x].objectTag == "Soil" ||
-							map->_arr[y][x] == 24)
-						{
-							this->position.y = preY;
-							break;
-						}
-					}
-				}
-			}
+			this->position.y = preY;
+			break;
 		}
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
 		{
@@ -1005,23 +948,10 @@ void Player::LadderMoveCheck(Vec2& est)
 			est.y = 0.f;
 		}
 		auto map = OGge->GetTask<Map>("map");
-		for (int y = 0; y < map->mapSize.y; ++y)
+		if (map && (map->HitCheck(*this, "Floor") || map->HitCheck(*this, "LadderTop")))
 		{
-			for (int x = 0; x < map->mapSize.x; ++x)
-			{
-				if (this->IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
-				{
-					if (this->CubeHit(map->hitBase[y][x]))
-					{
-						if (map->hitBase[y][x].objectTag == "Floor" ||
-							map->hitBase[y][x].objectTag == "LadderTop")
-						{
-							this->position.y = preY;
-							break;
-						}
-					}
-				}
-			}
+			this->position.y = preY;
+			break;
 		}
 		auto waters = OGge->GetTasks<Water>("water");
 		for (auto id = waters->begin(); id != waters->end(); ++id)
@@ -1102,7 +1032,7 @@ bool Player::TohaveObjectHit()
 				{
 					if (left.CubeHit(*(*id)))
 					{
-						if ((*id)->MoveSolid(this->est) == Vec2(0, 0))
+						if (!((*id)->MoveSolid(this->est) == Vec2(0, 0)))
 						{
 							return true;
 						}
@@ -1115,7 +1045,7 @@ bool Player::TohaveObjectHit()
 				{
 					if (right.CubeHit(*(*id)))
 					{
-						if ((*id)->MoveSolid(this->est) == Vec2(0, 0))
+						if (!((*id)->MoveSolid(this->est) == Vec2(0, 0)))
 						{
 							return true;
 						}
@@ -1229,11 +1159,11 @@ bool Player::LadderJumpCheck()
 		{
 			for (int x = 0; x < map->mapSize.x; ++x)
 			{
-				if (map->_arr[y][x] == 24)
+				if (map->hitBase[y][x].Getarr() == 24)
 				{
 					if (this->IsObjectDistanceCheck(map->hitBase[y][x].position, map->hitBase[y][x].Scale))
 					{
-						if (this->hit(map->hitBase[y][x]))
+						if (this->CubeHit(map->hitBase[y][x]))
 						{
 							return false;
 						}
@@ -1252,7 +1182,7 @@ bool Player::PutCheck()
 		if (this->direction == Direction::LEFT)
 		{
 			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
-			if (map->MapHitCheck(left))
+			if (map->HitCheck(left,1))
 			{
 				return false;
 			}
@@ -1260,7 +1190,7 @@ bool Player::PutCheck()
 		else
 		{
 			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
-			if (map->MapHitCheck(right))
+			if (map->HitCheck(right,1))
 			{
 				return false;
 			}
