@@ -221,7 +221,7 @@ bool Player::HeadSolidCheck()
 					{
 						(*id)->HoldCheck(true);
 						this->hold = true;
-						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
+						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) + 30.f };
 						this->position.y -= this->haveAddPos.y;
 						this->Scale.y += this->haveAddPos.y;
 						return true;
@@ -530,7 +530,7 @@ bool Player::HaveObjectHit()
 					{
 						(*id)->HoldCheck(true);
 						this->hold = true;
-						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) };
+						this->haveAddPos = { ((*id)->Scale.x * (*id)->Radius.x) - (this->Scale.x - ((*id)->Scale.x * (*id)->Radius.x)),((*id)->Scale.y * (*id)->Radius.y) - (this->Scale.y - ((*id)->Scale.y * (*id)->Radius.y)) + 30.f };
 						this->position.y -= this->haveAddPos.y;
 						this->Scale.y += this->haveAddPos.y;
 						return true;
@@ -669,10 +669,10 @@ void Player::HaveObjectPosMove()
 				{
 					switch (animation.animCnt / 8 % 2) {
 					case 0:
-						(*id)->position = { this->position.x - 40,this->position.y - this->haveAddPos.y + 40 };
+						(*id)->position = { this->position.x - 40,this->position.y - this->haveAddPos.y + 70 };
 						break;
 					case 1:
-						(*id)->position = { this->position.x - 20,this->position.y - this->haveAddPos.y + 10 };
+						(*id)->position = { this->position.x - 20,this->position.y - this->haveAddPos.y + 50 };
 						break;
 					}
 				}
@@ -680,10 +680,10 @@ void Player::HaveObjectPosMove()
 				{
 					switch (animation.animCnt / 8 % 2) {
 					case 0:
-						(*id)->position = { this->position.x + 40,this->position.y - this->haveAddPos.y + 40 };
+						(*id)->position = { this->position.x + 40,this->position.y - this->haveAddPos.y + 70 };
 						break;
 					case 1:
-						(*id)->position = { this->position.x + 20,this->position.y - this->haveAddPos.y + 10 };
+						(*id)->position = { this->position.x + 20,this->position.y - this->haveAddPos.y + 50 };
 						break;
 					}
 				}
@@ -693,10 +693,10 @@ void Player::HaveObjectPosMove()
 				{
 					switch (animation.animCnt / 8 % 2) {
 					case 0:
-						(*id)->position = { this->position.x - 20,this->position.y - this->haveAddPos.y + 10 };
+						(*id)->position = { this->position.x - 20,this->position.y - this->haveAddPos.y + 50 };
 						break;
 					case 1:
-						(*id)->position = { this->position.x - 40,this->position.y - this->haveAddPos.y + 40 };
+						(*id)->position = { this->position.x - 40,this->position.y - this->haveAddPos.y + 70 };
 						break;
 					}
 				}
@@ -704,16 +704,16 @@ void Player::HaveObjectPosMove()
 				{
 					switch (animation.animCnt / 8 % 2) {
 					case 0:
-						(*id)->position = { this->position.x + 20,this->position.y - this->haveAddPos.y + 10 };
+						(*id)->position = { this->position.x + 20,this->position.y - this->haveAddPos.y + 50 };
 						break;
 					case 1:
-						(*id)->position = { this->position.x + 40,this->position.y - this->haveAddPos.y + 40 };
+						(*id)->position = { this->position.x + 40,this->position.y - this->haveAddPos.y + 70 };
 						break;
 					}
 				}
 			}
 			else {
-				(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y - 30.f };
+				(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y + 30.f };
 			}
 		}
 	}
