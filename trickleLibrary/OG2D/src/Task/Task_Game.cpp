@@ -306,11 +306,6 @@ void Game::UpDate()
 	//UI
 	UImng_->UpDate();
 
-	if (OGge->in->on(In::D1) && OGge->in->on(In::D2))
-	{
-		this->Kill();
-	}
-
 	if (OGge->in->key.down(In::E))
 	{
 		auto player = OGge->GetTask<Player>("Player");

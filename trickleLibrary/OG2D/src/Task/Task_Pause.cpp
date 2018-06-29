@@ -203,32 +203,59 @@ void Pause::PauseUpDate()
 	if (OGge->in->down(In::B2)){
 		//サウンドの再生
 		decisionsound.play();
-
 		OGge->SetPause(false);
 		if (select != Return) {
 			OGge->GetTask<Game>("game")->Kill();
 		}
 	}
+	if (OGge->in->down(In::D2))
+	{
+		decisionsound.play();
+		OGge->SetPause(false);
+	}
 
 	//カメラ移動処理
+	float stickSlopeX = OGge->in->axis(In::AXIS_RIGHT_X);
+	float stickSlopeY = OGge->in->axis(In::AXIS_RIGHT_Y) * -1.f;
+
+	auto isCameraInStageX = [&](Vec2 eest) ->bool {
+		return
+			eest.x > 0 &&
+			eest.x + NowCameraSize.x < map->mapSize.x * map->DrawSize.x;
+	};
+	auto isCameraInStageY = [&](Vec2 eest) ->bool {
+		return
+			eest.y > 0 &&
+			eest.y + NowCameraSize.y < map->mapSize.y * map->DrawSize.y;
+	};
+
+	Vec2 originCam = OGge->camera->GetPos();
+
+	if (isCameraInStageX(originCam + Vec2(stickSlopeX * 5.f, 0.f))) {
+		OGge->camera->MovePos(Vec2(stickSlopeX * 5.f, 0.f));
+	}
+	if (isCameraInStageY(originCam + Vec2(0.f, stickSlopeY * 5.f))) {
+		OGge->camera->MovePos(Vec2(0.f, stickSlopeY * 5.f));
+	}
+
 	if (InputLeft()) {
 		if (NowCameraPos.x > 0) {
-			OGge->camera->MovePos(Vec2(-5.0f, 0.0f));
+			OGge->camera->MovePos(Vec2(-2.5f, 0.0f));
 		}
 	}
 	if (InputRight()) {
 		if (NowCameraPos.x + NowCameraSize.x<map->mapSize.x * map->DrawSize.x) {
-			OGge->camera->MovePos(Vec2(+5.0f, 0.0f));
+			OGge->camera->MovePos(Vec2(+2.5f, 0.0f));
 		}
 	}
 	if (InputUp()) {
 		if (NowCameraPos.y > 0) {
-			OGge->camera->MovePos(Vec2(0.0f, -5.0f));
+			OGge->camera->MovePos(Vec2(0.0f, -2.5f));
 		}
 	}
 	if (InputDown()) {
 		if (NowCameraPos.y + NowCameraSize.y < map->mapSize.y * map->DrawSize.y) {
-			OGge->camera->MovePos(Vec2(0.0f, 5.0f));
+			OGge->camera->MovePos(Vec2(0.0f, 2.5f));
 		}
 	}
 }

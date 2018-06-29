@@ -41,6 +41,7 @@ private:
 	bool w_sc;			//WindowMode
 	bool isPause;		//PauseCheck
 	bool Cursor_on;		//カーソル可視化
+	bool isPause_;
 	const std::string path = "./data/image/";	//ファイルパス
 	std::string file;	//ファイル名
 	Vec2 w_pos;			//WindowPosition

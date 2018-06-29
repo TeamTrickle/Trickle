@@ -47,6 +47,7 @@ bool EngineSystem::Initialize()
 	//各値の初期化
 	DebugFunction = false;
 	this->isPause = false;
+	this->isPause_ = false;
 	this->end = false;
 	return true;
 }
@@ -84,7 +85,7 @@ void EngineSystem::Task_UpDate()
 	{
 		if (this->taskobjects[id].second->GetKillCount() == 0) 
 		{
-			if (!this->GetPause())
+			if (!this->isPause_)
 			{
 				this->taskobjects[id].second->T_UpDate();
 			}
@@ -117,6 +118,7 @@ void EngineSystem::TaskGameUpDate()
 		this->TaskKillCheck();		//削除予定のタスクを削除する
 		this->ConfigDrawOrder();	//タスクの集合体の変更後に描画順を設定する
 	}
+	this->isPause_ = this->isPause;
 }
 void EngineSystem::ConfigDrawOrder()
 {
