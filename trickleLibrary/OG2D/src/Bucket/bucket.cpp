@@ -267,8 +267,12 @@ void Bucket::WaterIsHitCheck()
 	{
 		if (this->CubeHit(*(*waters)[i]))
 		{
-			sound.play();
-			this->capacity += (*waters)[i]->waterMove();
+			float cap = (*waters)[i]->waterMove();
+			if (cap > 0.0f)
+			{
+				sound.play();
+				this->capacity += cap;
+			}
 		}
 	}
 }
