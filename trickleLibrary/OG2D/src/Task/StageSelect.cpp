@@ -321,7 +321,7 @@ void StageSelect::From3()
 				}
 				else
 				{
-					if (this->nowPos < 5)
+					if (this->nowPos < 6)
 					{
 						for (auto id = gates->begin(); id != gates->end(); ++id)
 						{
