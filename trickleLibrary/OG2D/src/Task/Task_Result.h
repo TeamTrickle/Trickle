@@ -12,6 +12,13 @@ public:
 	Result();
 	~Result();
 
+	//エフェクトに使用する座標
+	//エフェクトに使用する移動量
+	Vec2 effectpos;
+	Vec2 effectmove[4];                              //4つで移動方向、速度を変える
+	Vec2 SetStarEffect(Vec2 pos,int nowstar);        //posに初期位置、nowstarが表示している星を明示
+
+
 	bool Initialize();
 	void UpDate();
 	void Render2D();
@@ -74,6 +81,7 @@ private:
 	int num[4];
 	bool starFlag[3];
 	bool starturn[3];
+	bool effectStarFlag[3];			//☆エフェクトを出力したかどうかのフラグ
 	float starAngle;
 
 	unsigned timer[4];

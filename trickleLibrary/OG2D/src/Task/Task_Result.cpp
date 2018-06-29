@@ -4,6 +4,7 @@
 #include "Map\Map.h"
 #include "Effect/Effect.h"
 #include "StageSelect.h"
+#include "Load\LoadLogo.h"
 
 Result::Result() {
 	this->taskName = "Result";
@@ -56,12 +57,14 @@ bool Result::Initialize() {
 		//星出すフラグ
 		starFlag[i] = false;
 		starturn[i] = false;
+		this->effectStarFlag[i] = false;
 		num[i] = 0;
 	}
 	num[3] = 0;
 	cnt = 0;
 	this->maxTrueNumber = -1;
 	this->RoadData();
+	
 	return true;
 }
 void Result::UpDate() {
@@ -181,6 +184,36 @@ void Result::UpDate() {
 					//サウンドの再生
 					soundstar.play();
 
+					//星のエフェクト
+					if (!this->effectStarFlag[i])
+					{
+						for (int j = 0; j < 4; ++j)
+						{
+							auto effect = Effect::Create(Vec2(310 + i * 200, 370), Vec2(64, 64), Vec2(256, 256), 1, 15);
+							effect->SetMode(Effect::Mode::Down);
+							effect->SetTexture(&stareffectTex);
+							if (j / 2 == 0)
+							{
+								//移動値を登録
+								effect->SetMove(Vec2(-10, ((j % 2) - 1) * 8));
+								//内部で行われる重力、摩擦の時の値をいじる
+								//最大落下速度15.f,1fごとに下に落ちていく重力値,横移動の摩擦値
+								effect->SetSpeed(15.f, (9.8f / 60.f / 60.f * 32) * 10, 0.1f);
+								effect->SetAngle(15.f,-1);
+							}
+							else
+							{
+								effect->SetMove(Vec2(10, ((j % 2) - 1) * 8));
+								effect->SetSpeed(15.f, (9.8f / 60.f / 60.f * 32) * 10, 0.1f);
+								effect->SetAngle(15.f, 1);
+							}
+
+							//effect->Set(Vec2((effect->position.x+64.0f)+random::GetRand(-30,30),effect->position.y), Vec2(effect->position.x + random::GetRand(-100, 100), effect->position.y + random::GetRand(-100, 100)));
+							//effect->Set(effect->position, Vec2(effect->position.x-30, effect->position.y + 100));
+							effect->SetDrawOrder(1.0f);
+						}
+					}
+					this->effectStarFlag[i] = true;
 					//auto eff = Effect::Create(Vec2(300 + i * 200, 370 - i * 8), Vec2(32, 32), Vec2(256, 256), 5, 5);
 					//eff->SetMode(Effect::Mode::Decrease);
 					//eff->SetTexture(&this->stareffectTex);
@@ -315,6 +348,8 @@ bool Result::Finalize() {
 	//ステージセレクトに戻る
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
+		auto load = Load::Create();
+		load->Draw();
 		OGge->ChengeTask();
 		StageSelect::Create();
 	}

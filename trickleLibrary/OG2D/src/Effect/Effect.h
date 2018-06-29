@@ -27,6 +27,13 @@ public:
 		WindL,
 		Down,
 	};
+	enum ModeAlpha
+	{
+		NON,
+		FLASH,
+		DOWN,
+		UP,
+	};
 private:
 	Texture* image;
 	Box2D draw;
@@ -40,12 +47,16 @@ private:
 	Vec2 oneSize;
 	Color color;
 	Mode mode;
+	ModeAlpha modealpha;
 	Vec2 maxSize;
 	Vec2* move;
-	const float MaxFallSpeed;
-	const float FallSpeed;
-	const float FinSpeed;
+	float MaxFallSpeed;
+	float FallSpeed;
+	float FinSpeed;
 	bool flag;
+	float oneangle;
+	float angle;
+	int direction;
 	void Friction();
 public:
 	explicit Effect(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime, const std::string& tag);
@@ -59,6 +70,9 @@ public:
 	void SetMode(const Mode&);
 	void SetMaxSize(const Vec2&);
 	void SetMove(const Vec2&);
+	void SetSpeed(float maxfall, float fall, float fin);
+	void SetAlphaMode(const ModeAlpha& mode);
+	void SetAngle(float, int = 1);
 	typedef std::shared_ptr<Effect> SP;
 	//位置、サイズ、元サイズ、枚数、表示時間、1枚あたりの時間
 	static SP Create(const Vec2& pos, const Vec2& size, const Vec2& srcSize, const unsigned int number, const unsigned int time, const unsigned int onetime = 10, const std::string& tag = "", const bool = true);

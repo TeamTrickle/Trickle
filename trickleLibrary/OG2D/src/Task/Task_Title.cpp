@@ -113,10 +113,6 @@ bool Title::Initialize()
 
 void Title::UpDate()
 {
-	if (OGge->in->key.down(In::SPACE))
-	{
-		this->Kill();
-	}
 	if (OGge->in->down(In::B2) && !this->skipInoutFlag)
 	{
 		this->Skip();
@@ -288,6 +284,7 @@ void Title::UpDate()
 				1,
 				30);
 			effect03->SetMode(Effect::Mode::Expansion);
+			effect03->SetAlphaMode(Effect::ModeAlpha::DOWN);
 			effect03->SetTexture(&this->effect03);
 			effect03->SetMaxSize(Vec2(640, 128));
 		}
@@ -531,6 +528,7 @@ void Title::BackTitleSkip()
 	OGge->camera->SetSize(Vec2(1440, 810));
 	this->flowerVolume = 1.0f;
 	this->tex_a = 1.0f;
+	this->isGierAng = true;
 	auto npc2 = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 	npc2->SetPause(true);
 	this->sound->play();

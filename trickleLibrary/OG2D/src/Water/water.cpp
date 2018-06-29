@@ -217,7 +217,14 @@ Water::Situation Water::UpDeleteform()
 
 Water::Situation Water::UpNormal()
 {
+	
 	Water::Situation now = this->nowSituation;
+	auto map = OGge->GetTask<Map>("map");
+	if (map && map->HitCheck(*this, 0))
+	{
+		now = Water::Situation::Deleteform;
+		this->nowTime = 0;
+	}
 	if (this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil"))
 	{
 		now = Water::Situation::Deleteform;

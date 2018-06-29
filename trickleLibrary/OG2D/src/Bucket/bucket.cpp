@@ -12,6 +12,7 @@ Bucket::Bucket(Vec2& pos) {
 	//サウンドのファイル名
 	putsoundname = "bucket-put1.wav";
 	dropsoundname = "spoil.wav";
+	soundname = "water-drop3.wav";
 }
 
 Bucket::~Bucket() {
@@ -43,6 +44,8 @@ bool Bucket::Initialize(Vec2& pos)
 	soundP.volume(1.0f);
 	OGge->soundManager->SetSound(&soundP);
 
+	//サウンド生成　水がバケツにあたった音
+	sound.create(soundname, false);
 
 	tex.Create((std::string)"bucket.png");
 	__super::Init((std::string)"bucket");
@@ -264,6 +267,7 @@ void Bucket::WaterIsHitCheck()
 	{
 		if (this->CubeHit(*(*waters)[i]))
 		{
+			sound.play();
 			this->capacity += (*waters)[i]->waterMove();
 		}
 	}

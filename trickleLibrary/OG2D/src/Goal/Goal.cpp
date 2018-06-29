@@ -1,6 +1,7 @@
 #include "Goal.h"
 #include "Water\water.h"
 #include "Player\Player.h"
+#include "Map\Map.h"
 
 Goal::Goal(const Vec2& pos)
 {
@@ -71,6 +72,12 @@ void Goal::UpDate()
 			this->precmSize = new Vec2(OGge->camera->GetSize());
 			this->cameraLock = false;
 			this->mode = Form1;
+			auto player = OGge->GetTasks<Player>("Player");
+			for (auto id = player->begin(); id != player->end(); ++id)
+			{
+				(*id)->SetInput(true);
+			}
+			OGge->SetPause(false);
 		}
 		break;
 	case Mode::Form1:
@@ -114,7 +121,6 @@ void Goal::UpDate()
 			}
 			this->mode = Mode::Form3;
 		}
-
 		break;
 	case Mode::Form3:
 		OGge->camera->SetPos(this->cm_Pos.Move());
@@ -122,6 +128,11 @@ void Goal::UpDate()
 		if (!this->cm_Pos.isPlay() && !this->cm_Size.isPlay())
 		{
 			this->cameraLock = true;
+			auto player = OGge->GetTasks<Player>("Player");
+			for (auto id = player->begin(); id != player->end(); ++id)
+			{
+				(*id)->SetInput(false);
+			}
 			this->mode = Mode::End;
 		}
 		break;

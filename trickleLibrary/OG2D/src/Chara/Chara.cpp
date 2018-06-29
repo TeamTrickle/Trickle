@@ -398,7 +398,7 @@ Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
 }
 void Chara::SetReplayEnable()
 {
-	this->player = RecPlayer::Create("TitleMovement.txt", true);
+	this->player = RecPlayer::Create("./data/TitleMovement.txt", true);
 	this->player->SetPause();
 	this->player->SetRepeat(true);
 	this->player->AddKeyEvent(Input::in::CL, RecDef::KeyState::PRESS, [&]() {
@@ -435,7 +435,7 @@ void Chara::SetRecordEnable()
 {
 	this->isAuto = false;
 	this->isAutoOff = true;
-	recorder = Recorder::Create("TitleMovement.txt", true);
+	recorder = Recorder::Create("./data/TitleMovement.txt", true);
 	recorder->ActivateKeyRecord(OGge->in);
 	(*recorder) >> Input::in::CL;
 	(*recorder) >> Input::in::CR;

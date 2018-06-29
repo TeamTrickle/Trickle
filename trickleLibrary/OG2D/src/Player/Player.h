@@ -95,6 +95,7 @@ private:
 	std::string taskName;
 	bool hold;
 	bool isInputAuto;
+	bool isInput;
 	Vec2 haveAddPos;	//‚Âó‘Ô‚Ì‚ÌpositionˆÚ“®—Ê
 private:
 	bool HeadCheck();											//“ª‚Ì“–‚½‚è”»’è
@@ -154,5 +155,6 @@ public:
 	bool ReleaseSolid();						//‚Á‚Ä‚¢‚é•X‚Ìã‚É•X‚ª“–‚½‚Á‚½‚Ìˆ—
 	void SetMotion(Motion motion_);
 	void SetState(State state_);
-
+	void SetInput(bool);
+	bool GetInput() const;
 };

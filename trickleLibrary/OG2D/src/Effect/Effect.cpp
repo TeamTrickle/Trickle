@@ -12,9 +12,13 @@ Effect::Effect(const Vec2 & pos, const Vec2 & size, const Vec2 & srcSize, const 
 	this->one_time = onetime;
 	this->oneSize = srcSize;
 	this->alpha = 1.0f;
+	this->angle = 0.f;
+	this->oneangle = 0.f;
+	this->direction = 0;
 	this->color = { 1.0f,1.0f,1.0f,this->alpha };
 	this->flag = false;
 	this->mode = Mode::Normal;
+	this->modealpha = ModeAlpha::NON;
 	this->move = nullptr;
 	this->Gravity = false;
 	__super::Init((std::string)"effect");
@@ -32,6 +36,10 @@ Effect::~Effect()
 void Effect::UpDate()
 {
 	this->animCnt++;
+	if (this->oneangle != 0.0f)
+	{
+		this->angle += this->oneangle * this->direction;
+	}
 	if (!(this->anim.startPos == this->anim.endPos))
 	{
 		this->position.x = this->anim.easing_x.sine.InOut(this->anim.easing_x.Time(this->anim.time), this->anim.startPos.x, this->anim.endPos.x, this->anim.time);
@@ -126,6 +134,35 @@ void Effect::UpDate()
 	default:
 		break;
 	}
+	switch (this->modealpha)
+	{
+	case ModeAlpha::NON:
+		break;
+	case ModeAlpha::FLASH:
+		if (this->flag)
+		{
+			this->alpha += 0.01f;
+		}
+		else
+		{
+			this->alpha -= 0.01f;
+		}
+		if (this->alpha > 1.0f)
+		{
+			this->flag = false;
+		}
+		if (this->alpha < 0.0f)
+		{
+			this->flag = true;
+		}
+		break;
+	case ModeAlpha::UP:
+		this->alpha = ((float)this->animCnt / (float)this->time);
+		break;
+	case ModeAlpha::DOWN:
+		this->alpha = 1.0f - ((float)this->animCnt / (float)this->time);
+		break;
+	}
 }
 
 void Effect::Render2D()
@@ -135,6 +172,7 @@ void Effect::Render2D()
 	this->src = { (this->animCnt / this->one_time) % (unsigned int)(this->image->GetTextureSize().x / this->oneSize.x) * this->oneSize.x,(this->animCnt / this->one_time) / (unsigned int)(this->image->GetTextureSize().x / this->oneSize.x) * this->oneSize.y ,this->oneSize.x,this->oneSize.y };
 	this->src.OffsetSize();
 	this->color.alpha = this->alpha;
+	this->image->Rotate(this->angle);
 	this->image->Draw(this->draw, this->src, this->color);
 
 }
@@ -190,6 +228,22 @@ void Effect::SetTexture(Texture* tex)
 	this->image = tex;
 }
 
+void Effect::SetAlphaMode(const ModeAlpha& mode)
+{
+	this->modealpha = mode;
+	switch (this->modealpha)
+	{
+	case ModeAlpha::DOWN:
+		this->color.alpha = 1.0f;
+		break;
+	case ModeAlpha::UP:
+		this->color.alpha = 0.0f;
+		break;
+	default:
+		break;
+	}
+}
+
 void Effect::Color_a(const float a)
 {
 	this->alpha = a;
@@ -230,3 +284,21 @@ void Effect::Friction()
 		}
 	}
 }
+
+void Effect::SetSpeed(float maxfall, float fall, float fin)
+{
+	this->MaxFallSpeed = maxfall;
+	this->FallSpeed = fall;
+	this->FinSpeed = fin;
+}
+
+void Effect::SetAngle(float f, int i)
+{
+	this->oneangle = f;
+	this->direction = i;
+}
+
+//void Effect::SetAlpha(float alpha_)
+//{
+//	this->alpha = alpha_;
+//}

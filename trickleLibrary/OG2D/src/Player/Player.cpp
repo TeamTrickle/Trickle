@@ -9,6 +9,7 @@ Player::Player()
 {
 	this->hold = false;
 	this->isInputAuto = false;
+	this->isInput = false;
 	this->haveAddPos = { 0,0 };
 }
 Player::~Player()
@@ -1595,28 +1596,28 @@ void Player::StateClearUpdate()
 	}
 }
 bool Player::InputLeft() {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
 	return OGge->in->on(Input::CL);
 }
 bool Player::InputRight() {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
 	return OGge->in->on(Input::CR);
 }
 bool Player::InputDown() {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
 	return OGge->in->on(Input::CD) || OGge->in->on(In::LD);
 }
 bool Player::InputUp() {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
@@ -1624,7 +1625,7 @@ bool Player::InputUp() {
 }
 float Player::AxisLX()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return 0.0f;
 	}
@@ -1636,7 +1637,7 @@ float Player::AxisLX()
 }
 float Player::AxisLY()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return 0.0f;
 	}
@@ -1644,7 +1645,7 @@ float Player::AxisLY()
 }
 float Player::AxisRX()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return 0.0f;
 	}
@@ -1652,7 +1653,7 @@ float Player::AxisRX()
 }
 float Player::AxisRY()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return 0.0f;
 	}
@@ -1660,7 +1661,7 @@ float Player::AxisRY()
 }
 bool Player::InputB1down()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
@@ -1668,7 +1669,7 @@ bool Player::InputB1down()
 }
 bool Player::InputB2down()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
@@ -1676,7 +1677,7 @@ bool Player::InputB2down()
 }
 bool Player::InputB1on()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
@@ -1684,7 +1685,7 @@ bool Player::InputB1on()
 }
 bool Player::InputB2on()
 {
-	if (this->isInputAuto)
+	if (this->isInputAuto || this->isInput)
 	{
 		return false;
 	}
@@ -1707,4 +1708,13 @@ Player::SP Player::Create(Vec2& pos, bool flag)
 		return to;
 	}
 	return nullptr;
+}
+
+void Player::SetInput(bool b)
+{
+	this->isInput = b;
+}
+bool Player::GetInput() const
+{
+	return this->isInput;
 }

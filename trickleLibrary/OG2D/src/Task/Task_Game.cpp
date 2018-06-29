@@ -20,6 +20,7 @@
 #include "Task_Title.h"
 #include "Effect\Effect.h"
 #include "Map\Ornament.h"
+#include "Load\LoadLogo.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -29,21 +30,21 @@ Game::Game()
 	gamesoundname = "game.wav";
 	tutorialsoundname = "tutorial.wav";
 	//this->ResetKillCount();
+	OGge->camera->SetSize(Vec2(1920, 1080));
 }
 
 Game::~Game()
 {
+	if (this->GetNextTask() && !OGge->GetDeleteEngine())
+	{
+		auto load = Load::Create();
+		load->Draw();
+	}
 	//解放処理と次のsceneの生成
 	this->Finalize();
 	//OGge->DeleteTasks();
-	if (this->GetNextTask() && !OGge->GetDeleteEngine())
-	{
-		if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
-		{
-			auto next = Title::Create();
-		}
-		
-	}
+	OGge->ChengeTask();
+	
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -152,7 +153,7 @@ bool Game::Initialize()
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64), Vec2(64, 64), Kanetuki::Angle::RIGHT, false);
 		//製氷機生成
-		auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 10 * 64), Vec2(64 * 2, 64),Seihyouki::Angle::LEFT);
+		auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 10 * 64), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT);
 		//製氷機用スイッチ生成
 		auto iceSwitch = Switch::Create(Vec2(64 * 7, 64 * 8), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//加熱器用スイッチ生成
@@ -179,7 +180,7 @@ bool Game::Initialize()
 		//加熱器生成
 		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), Kanetuki::Angle::UP, false);
 		//製氷機生成
-		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64),Seihyouki::Angle::RIGHT);
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT);
 
 		//スイッチの生成
 		//扇風機用
@@ -222,7 +223,7 @@ bool Game::Initialize()
 		auto kanetsuki4 = Kanetuki::Create(Vec2(64 * 18, 64 * 29), Vec2(64 * 5, 64 + 32), Kanetuki::Angle::BOTTOM, true);
 		auto kanetsuki9 = Kanetuki::Create(Vec2(64 * 33, 64 * 32 - 20), Vec2(64 * 2, 84), Kanetuki::Angle::UP, true);
 		//製氷機
-		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12), Vec2(64 * 2, 64),Seihyouki::Angle::LEFT);
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT);
 		auto seihyouki3 = Seihyouki::Create(Vec2(64 * 9, 64 * 22), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT);
 		//扇風機スイッチ
 		auto fanSwitch1 = Switch::Create(Vec2(64 * 19, 64 * 12), std::vector<std::shared_ptr<GameObject>>{fan2, fan3}, Switch::TargetType::Fan);
@@ -291,10 +292,10 @@ void Game::UpDate()
 	Camera_move();
 
 	// Pause処理
-	if (OGge->in->down(In::D2)){
-		auto player = OGge->GetTask<Player>("Player");
-		if (player)
-		{
+	auto player = OGge->GetTask<Player>("Player");
+	if (player)
+	{
+		if (OGge->in->down(In::D2) && !player->GetInput()) {
 			if (!player->GetInputAuto())
 			{
 				OGge->SetPause(true);

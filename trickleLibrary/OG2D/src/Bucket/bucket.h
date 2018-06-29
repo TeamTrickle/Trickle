@@ -53,6 +53,7 @@ public:
 	//サウンドの生成について
 	Sound soundP;
 	Sound soundD;
+	Sound sound;
 	bool putsoundplay;
 
 
@@ -60,4 +61,5 @@ private:
 	Texture tex;
 	std::string putsoundname;     //バケツを置く音
 	std::string dropsoundname;    //水をこぼす音
+	std::string soundname;
 };

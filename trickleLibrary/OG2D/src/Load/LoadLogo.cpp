@@ -32,18 +32,23 @@ void Load::UpDate()
 
 void Load::Draw()
 {
+	OGge->camera->SetSize(Vec2(1920, 1080));
+	OGge->camera->SetPos(Vec2(0, 0));
+	OGge->camera->CameraUpdate();
 	unsigned int time = 0;
 	while (this->color->alpha <= 1.0)
 	{
 		if (time >= 60)
 		{
-			this->draw = { OGge->camera->GetPos(),OGge->camera->GetSize() };
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			this->draw = { 0,0,1920,1080 };
 			this->draw.OffsetSize();
 			this->src = { 0.f,0.f,this->image.GetTextureSize().x,this->image.GetTextureSize().y };
 			this->src.OffsetSize();
 			this->image.Draw(this->draw, this->src, *this->color);
+		
 			glfwSwapBuffers(OGge->window->GetWindow());
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
 			this->color->alpha += 0.01f;
 			time = 0;
 		}

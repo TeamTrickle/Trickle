@@ -23,6 +23,8 @@ StageSelect::~StageSelect()
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
+		auto load = Load::Create();
+		load->Draw();
 		if (state == State::ToTitle)
 		{
 			auto nexttask = Title::Create();
@@ -32,6 +34,7 @@ StageSelect::~StageSelect()
 		{
 			auto nexttask = Game::Create();
 		}
+		
 	}
 }
 
@@ -52,9 +55,9 @@ bool StageSelect::Initialize()
 	map->SetDrawOrder(0.5f);
 	//ステージ概要表示用案内板
 	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
-	(*board) << "monitor0.txt";
-	(*board) << "monitor1.txt";
-	(*board) << "monitor2.txt";
+	(*board) << "./data/monitor0.txt";
+	(*board) << "./data/monitor1.txt";
+	(*board) << "./data/monitor2.txt";
 	//サウンドの生成
 	//BGM
 	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
@@ -242,7 +245,7 @@ void StageSelect::From2()
 		auto board = OGge->GetTask<StageAlert>("stagealert");
 		if (board) {
 			board->setActive(true);
-			board->SetStageData("monitor0.txt");
+			board->SetStageData("./data/monitor0.txt");
 		}
 		//次へ移動
 		this->mode = Mode::from3;
@@ -299,7 +302,7 @@ void StageSelect::From3()
 					}
 				}
 				auto board = OGge->GetTask<StageAlert>("stagealert");
-				std::string curStageName = "monitor" + std::to_string(this->nowPos / 2) + ".txt";
+				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
 				if (board && board->isExist(curStageName)) {
 					//board->AnimPlay();
 					board->SetStageData(curStageName);
@@ -347,7 +350,7 @@ void StageSelect::From3()
 					}
 				}
 				auto board = OGge->GetTask<StageAlert>("stagealert");
-				std::string curStageName = "monitor" + std::to_string(this->nowPos / 2) + ".txt";
+				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
 				if (board && board->isExist(curStageName)) {
 					//board->AnimPlay();
 					board->SetStageData(curStageName);

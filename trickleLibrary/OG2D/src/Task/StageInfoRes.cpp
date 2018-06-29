@@ -54,9 +54,9 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		title = stringToBox2D(buf);
 
 		std::string saveFilePath = "";
-		if (filePath == "monitor0.txt") saveFilePath = "data/Result/data4.bin";
-		if (filePath == "monitor1.txt") saveFilePath = "data/Result/data5.bin";
-		if (filePath == "monitor2.txt") saveFilePath = "data/Result/data6.bin";
+		if (filePath == "./data/monitor0.txt") saveFilePath = "data/Result/data4.bin";
+		if (filePath == "./data/monitor1.txt") saveFilePath = "data/Result/data5.bin";
+		if (filePath == "./data/monitor2.txt") saveFilePath = "data/Result/data6.bin";
 		std::ifstream saveFile(saveFilePath, std::ios::in);
 		bool isCleared = saveFile.is_open();
 

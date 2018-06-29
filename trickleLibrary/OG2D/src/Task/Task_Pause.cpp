@@ -96,7 +96,7 @@ void Pause::Pause_draw()
 		{
 			//îwåi
 			{
-				Box2D draw(transparentbackPos.x, transparentbackPos.y, 1920.f, 1080.f);
+				Box2D draw(transparentbackPos.x - 16, transparentbackPos.y - 9, 1920.f + 16.f*2.f, 1080.f + 9.f*2.f);
 				draw.OffsetSize();
 				Box2D src(0, 0, 1280, 720);
 				src.OffsetSize();
