@@ -3,7 +3,6 @@ using namespace std;
 
 Switch::Switch()
 {
-	cout << "スイッチ　生成" << endl;
 	soundname = "switch.wav";
 	this->taskName = "Switch";
 	this->objectTag = "Switch";
@@ -15,7 +14,6 @@ Switch::Switch()
 Switch::~Switch()
 {
 	this->Finalize();
-	cout << "スイッチ　解放" << endl;
 }
 
 bool Switch::Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> targets, TargetType ttype) {
@@ -34,8 +32,6 @@ bool Switch::Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> targ
 	//ターゲット関連
 	this->ttype = ttype;
 	this->targets_ = targets;
-
-	cout << "通常スイッチ　初期化" << endl;
 	return true;
 
 }

@@ -35,7 +35,6 @@ bool Pause::Initialize()
 
 	__super::Init((std::string)"pause");
 	__super::SetDrawOrder(1.f);		//画像表示順位
-	std::cout << "ポーズ画面初期化" << std::endl;
 	return true;
 }
 //--------------------------------------------------------------------------------------
@@ -52,8 +51,6 @@ void Pause::Render2D()
 //--------------------------------------------------------------------------------------
 bool Pause::Finalize()
 {
-	std::cout << "Pause解放" << std::endl;
-
 	//使用画像の解放
 	texCursor.Finalize();
 	texRestart.Finalize();

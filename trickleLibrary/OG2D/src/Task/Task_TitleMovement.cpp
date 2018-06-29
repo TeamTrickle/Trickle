@@ -12,8 +12,6 @@ TitleMovement::~TitleMovement() {
 }
 
 bool TitleMovement::Initialize() {
-	std::cout << "TitleMovement‰Šú‰»" << std::endl;
-
 	// ”wŒi“Ç‚Ýž‚Ý
 	auto back = Back::Create((std::string)"back.png", 1440, 810);
 

@@ -91,7 +91,6 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 
 	__super::Init((std::string)"stagealert");
 	__super::SetDrawOrder(0.8f);
-	std::cout << "stagealert ¶¬" << std::endl;
 	return true;
 }
 #undef TEXTURE_SIZE

@@ -11,7 +11,6 @@ Kanetuki::Kanetuki()
 	maxChangeTimeLiquid(7),
 	maxChangeTimeSolid(120)
 {
-	cout << "加熱器　生成" << endl;
 	//サウンドファイル名	
 	startsoundname = "fire1.wav";
 	soundname = "fire2.wav";
@@ -20,7 +19,6 @@ Kanetuki::Kanetuki()
 Kanetuki::~Kanetuki()
 {
 	this->Finalize();
-	cout << "加熱器　解放" << endl;
 }
 
 
@@ -80,8 +78,6 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 		this->texRotaAng = 180.0f;
 		break;
 	}
-
-	cout << "加熱器　初期化" << endl;
 
 	return true;
 }
@@ -156,7 +152,6 @@ void Kanetuki::toSteam() {
 			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() == Water::Situation::Normal)
 			{
 				changeStateCnt++;
-				cout << changeStateCnt++ << endl;
 				//一定の時間が経ったら・・・
 				if (changeStateCnt >= maxChangeTimeSolid)
 				{
@@ -176,7 +171,6 @@ void Kanetuki::toSteam() {
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
 				changeStateCnt++;
-				cout << changeStateCnt << endl;
 				//一定の時間が経ったら・・・
 				if (changeStateCnt >= maxChangeTimeLiquid)
 				{

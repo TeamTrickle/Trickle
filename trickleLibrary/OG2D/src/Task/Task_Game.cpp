@@ -58,9 +58,6 @@ bool Game::Initialize()
 	_waterpos = { 200 - 25,100 };
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 16,7 };
-
-	std::cout << "Game初期化" << std::endl;
-
 	//扇風機画像読み込み
 	this->fanTex.Create((std::string)"fan.png");
 	this->playerTex.Create((std::string)"player.png");
@@ -324,7 +321,6 @@ void Game::Render2D()
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
 {
-	std::cout << "Game解放" << std::endl;
 	//各オブジェクトが存在している場合にKillする。
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
@@ -444,8 +440,6 @@ bool Game::Finalize()
 //カメラ処理
 void Game::Camera_move()
 {
-	//デバッグ用
-	//std::cout << OGge->camera->GetSize().x << "//"<<OGge->camera->GetPos().x << std::endl;
 	//カメラの移動
 	auto goals = OGge->GetTasks<Goal>("Goal");
 	for (auto id = goals->begin(); id != goals->end(); ++id)

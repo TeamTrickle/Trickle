@@ -18,7 +18,6 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
 	this->active = false;
-	cout << "»•X‹@@‰Šú‰»" << endl;
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 
 	this->animCnt = 0;

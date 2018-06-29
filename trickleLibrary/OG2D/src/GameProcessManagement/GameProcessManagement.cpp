@@ -416,7 +416,6 @@ bool GameManager::ComparisonData()
 				}
 			}
 			delete is;
-			std::cout << std::endl;
 		}
 		int timers[2] = { 0,0 };
 		bool flags[3] = { false,false,false };

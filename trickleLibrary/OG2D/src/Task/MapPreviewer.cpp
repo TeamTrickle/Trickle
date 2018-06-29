@@ -9,7 +9,6 @@ std::array<Vec2, 4> MapPreviewer::CamMoveSeq = {
 };
 
 MapPreviewer::~MapPreviewer() {
-	std::cout << "MapPreviewer ‰ð•ú" << std::endl;
 }
 
 MapPreviewer::SP MapPreviewer::Create(bool flag_, const Box2D& size)
@@ -36,7 +35,6 @@ bool MapPreviewer::Initialize(const Box2D& size) {
 
 	__super::Init((std::string)"mappreviewer");
 	__super::SetDrawOrder(0.85f);
-	std::cout << "MapPreviewer ¶¬" << std::endl;
 	return true;
 }
 

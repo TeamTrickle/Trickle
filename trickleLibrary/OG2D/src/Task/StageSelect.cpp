@@ -88,14 +88,6 @@ bool StageSelect::Initialize()
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
 	this->Entrance.emplace_back(LEFT, 31.f * 64.f - chara->Scale.x);
-	//“Ç‚İ‚İI—¹‚Åƒ[ƒh‰æ–Ê‚ğ”jŠü
-	/*auto load = OGge->GetTasks<Load>("load");
-	for (auto id = load->begin(); id != load->end(); ++id)
-	{
-		(*id)->Kill();
-	}*/
-
-	std::cout << "StageSelect ¶¬Š®—¹" << std::endl;
 	return true;
 }
 

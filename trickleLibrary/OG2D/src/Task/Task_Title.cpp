@@ -42,7 +42,6 @@ Title::~Title()
 
 bool Title::Initialize()
 {
-	std::cout << "Title初期化" << std::endl;
 	//背景読み込み
 	auto back = Back::Create((std::string)"back.png", 1440, 810);
 	//ロゴオブジェクト生成
@@ -376,8 +375,6 @@ void Title::Render2D()
 
 bool Title::Finalize()
 {
-	std::cout << "Title解放" << std::endl;
-
 	//使用画像の解放
 	texCursor.Finalize();
 	this->texLogo.Finalize();
