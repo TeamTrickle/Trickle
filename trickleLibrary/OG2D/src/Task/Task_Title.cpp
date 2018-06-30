@@ -7,6 +7,7 @@
 #include "Chara\Chara.h"
 #include "Load\LoadLogo.h"
 #include "Effect\Effect.h"
+#include "GameProcessManagement\GameProcessManagement.h"
 Title::Title()
 {
 	this->mode = Non;
@@ -128,6 +129,10 @@ void Title::UpDate()
 		{
 			this->gierCnt = 0;
 		}
+	}
+	if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
+	{
+		GameManager::ResetData();
 	}
 	switch (this->mode)
 	{
