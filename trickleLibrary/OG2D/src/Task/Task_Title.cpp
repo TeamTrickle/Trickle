@@ -96,6 +96,8 @@ bool Title::Initialize()
 	this->nextTaskCheck = 0;
 	auto chara = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 	chara->SetPause(true);
+	//ƒƒS‚Ì•Ô‰ñ“]
+	this->gierCnt = 0;
 
 	//•`‰æ‡‚ÌŒˆ’è
 	__super::SetDrawOrder(0.5f);
