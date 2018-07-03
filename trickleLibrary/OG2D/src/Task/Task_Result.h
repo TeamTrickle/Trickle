@@ -12,13 +12,6 @@ public:
 	Result();
 	~Result();
 
-	//エフェクトに使用する座標
-	//エフェクトに使用する移動量
-	Vec2 effectpos;
-	Vec2 effectmove[4];                              //4つで移動方向、速度を変える
-	Vec2 SetStarEffect(Vec2 pos,int nowstar);        //posに初期位置、nowstarが表示している星を明示
-
-
 	bool Initialize();
 	void UpDate();
 	void Render2D();
@@ -28,6 +21,9 @@ public:
 	Sound sound;
 	Sound soundstar;
 	Sound sounddrum;
+
+	//エフェクトのカウント
+	int effCounter;
 
 private:
 	enum Mode {
@@ -51,6 +47,12 @@ private:
 	Texture fontui;			//仮、本番で消す
 	Texture numberui;
 	Texture stareffectTex;
+	//花びらのエフェクト
+	Texture petalTex1;
+	Texture petalTex2;
+	Texture petalTex3;
+	Texture petalTex4;
+	Texture petalTex5;
 
 	//サウンドのファイル名格納
 	std::string soundname;
