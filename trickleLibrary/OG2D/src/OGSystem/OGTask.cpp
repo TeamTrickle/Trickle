@@ -4,13 +4,14 @@
 #include "Task\Task_TitleMovement.h"
 #include "Task\StageSelect.h"
 #include "Task\Task_Result.h"
+#include "Task\Task_Credit.h"
 #include "GameProcessManagement\GameProcessManagement.h"
 
 void OGTK::_myGameInitialize()
 {
 	//生成するWindow情報
-	//OGge->SetWindow(960, 540, "WindowName", false);	
-	OGge->SetWindow(1920, 1080, "Trickel", true);
+	OGge->SetWindow(960, 540, "WindowName", false);	
+//	OGge->SetWindow(1920, 1080, "Trickel", true);
 	OGge->SetWindowPos(Vec2(0, 0));
 	//マウスカーソル不可視
 	OGge->SetCursorOn(false);
@@ -25,9 +26,9 @@ void OGTK::StartTaskObject()
 	rm->SetTextureData((std::string)"fontui", fontTex);
 
 	//タスクの初期化
-	auto TopTask = Title::Create();
-	//*MapNum = 6;
-	//Game::Create();
+	//auto TopTask = Title::Create();
+	*MapNum = 5;
+	auto TopTask = Credit::Create();
 	//GameManager::ResetData();
 }
 
