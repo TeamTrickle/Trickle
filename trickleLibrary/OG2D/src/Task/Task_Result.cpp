@@ -24,6 +24,12 @@ bool Result::Initialize() {
 	this->starTex.Create((std::string)"resultstar.png");
 	this->frameTex.Create((std::string)"resultframe.png");
 	this->stareffectTex.Create((std::string)"stareffect.png");
+	this->petalTex1.Create((std::string)"resultFlower1.PNG");
+	this->petalTex2.Create((std::string)"resultFlower2.PNG");
+	this->petalTex3.Create((std::string)"resultFlower3.PNG");
+	this->petalTex4.Create((std::string)"resultFlower4.PNG");
+	this->petalTex5.Create((std::string)"resultFlower5.PNG");
+
 	//this->clearTex
 
 	//サウンドの生成
@@ -36,6 +42,8 @@ bool Result::Initialize() {
 	//sound.create(soundname, true);           //BGM未実装
 	//sound.volume(1.0f);
 	//sound.play();
+
+	this->effCounter = 0;
 
 	this->nowMode = Mode1;
 	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
@@ -64,7 +72,7 @@ bool Result::Initialize() {
 	cnt = 0;
 	this->maxTrueNumber = -1;
 	this->RoadData();
-	
+
 	return true;
 }
 void Result::UpDate() {
@@ -160,14 +168,14 @@ void Result::UpDate() {
 		++cnt;
 		//星出現
 		for (int i = 0; i < 3; ++i) {
-			if (starFlag[i] && cnt >= 20 * i) {	
+			if (starFlag[i] && cnt >= 20 * i) {
 				star[i].bezcnt += 0.03f;
 				star[i].angle += 15;
 				//X
 				star[i].pos.x = (1 - star[i].bezcnt)*(1 - star[i].bezcnt) * 1280 + 2 * (1 - star[i].bezcnt)*star[i].bezcnt * 1000 + star[i].bezcnt * star[i].bezcnt * (300 + i * 200);
-					if (star[i].pos.x <= 300 + i * 200) {
-						star[i].pos.x = 300 + i * 200;
-					}
+				if (star[i].pos.x <= 300 + i * 200) {
+					star[i].pos.x = 300 + i * 200;
+				}
 				//Y
 				star[i].pos.y = (1 - star[i].bezcnt)*(1 - star[i].bezcnt) * 300 + 2 * (1 - star[i].bezcnt)*star[i].bezcnt * 0 + star[i].bezcnt * star[i].bezcnt * (370 - i * 8);
 				if (star[i].pos.y >= 370 - i * 8) {
@@ -199,7 +207,7 @@ void Result::UpDate() {
 								//内部で行われる重力、摩擦の時の値をいじる
 								//最大落下速度15.f,1fごとに下に落ちていく重力値,横移動の摩擦値
 								effect->SetSpeed(15.f, (9.8f / 60.f / 60.f * 32) * 10, 0.1f);
-								effect->SetAngle(15.f,-1);
+								effect->SetAngle(15.f, -1);
 							}
 							else
 							{
@@ -221,13 +229,72 @@ void Result::UpDate() {
 				}
 			}
 		}
-		if (star[this->maxTrueNumber].pos == Vec2(300 + this->maxTrueNumber * 200, 370 - this->maxTrueNumber * 8) && star[this->maxTrueNumber].nowWH == Vec2(128,128)) {
+		if (star[this->maxTrueNumber].pos == Vec2(300 + this->maxTrueNumber * 200, 370 - this->maxTrueNumber * 8) && star[this->maxTrueNumber].nowWH == Vec2(128, 128)) {
 			this->nowMode = Mode5;
 		}
 		break;
 	case Mode5:
 		//アニメーションが終わるまで(５回ジャンプ＋位置調整)は入力できない
 		if (npc->happyCnt < 7) {
+
+			//花を降らせるエフェクト-----------------------------------------------------
+			if (effCounter < 300)
+			{
+				effCounter++;
+			}
+			else
+			{
+				effCounter = 0;
+			}
+			//一定時間ごとに花びらが出現
+			if (effCounter % 3 == 0)
+			{
+				int x = random::GetRand(-768, 1800);
+
+				auto effect = Effect::Create(Vec2(x, -700), Vec2(256, 256), Vec2(256, 256), 1, 400);
+				effect->SetMode(Effect::Mode::Down);
+
+				//画像の種類にランダムをかける
+				int anim = rand() % 5 + 1;
+				switch (anim)
+				{
+				case 1:
+					effect->SetTexture(&petalTex1);
+					break;
+				case 2:
+					effect->SetTexture(&petalTex2);
+					break;
+				case 3:
+					effect->SetTexture(&petalTex3);
+					break;
+				case 4:
+					effect->SetTexture(&petalTex4);
+					break;
+				case 5:
+					effect->SetTexture(&petalTex5);
+					break;
+				}
+				//出現した花びらの動きについて
+				if (npc->happyCnt % 3 == 0)
+				{
+					effect->SetMove(Vec2(-15, 5));
+					effect->SetSpeed(10.f, (9.8f / 60.f / 60.f * 32) * 5, 0.1f);
+					effect->SetAngle(3.f, -1);
+				}
+				else if (npc->happyCnt % 3 == 1)
+				{
+					effect->SetMove(Vec2(-15, 5));
+					effect->SetSpeed(10.f, (9.8f / 60.f / 60.f * 32) * 5, 0.1f);
+					effect->SetAngle(2.f, 1);
+				}
+				else
+				{
+					effect->SetMove(Vec2(15, 15));
+					effect->SetSpeed(10.f, (9.8f / 60.f / 60.f * 32) * 15, 0.1f);
+					effect->SetAngle(2.f, 1);
+				}
+			}
+			//--------------------------------------------------------------------------------
 			npc->Happy(7);
 			//クリアUI出現(未実装)
 		}
@@ -244,7 +311,7 @@ void Result::UpDate() {
 	case Mode6:
 		//プレイヤ退場
 		npc->AutoMove();
-		if (npc->position.x >=  1450) {
+		if (npc->position.x >= 1450) {
 			this->nowMode = Non;
 			this->Kill();
 		}
