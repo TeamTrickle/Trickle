@@ -97,6 +97,10 @@ void Player::UpDate()
 		//ブロックを押す
 		this->motion = Motion::Block_M;
 	}
+	if (this->state == State::BUCKET)
+	{
+		this->HaveObjectPosMove();
+	}
 }
 void Player::Render2D()
 {
@@ -1282,7 +1286,7 @@ void Player::StateUpDate()
 		break;
 	case State::BUCKET:
 		//バケツの値を自分に合わせる
-		this->HaveObjectPosMove();
+		//this->HaveObjectPosMove();
 		//バケツを置く動作
 		if (this->InputB2down() && this->FootCheck())
 		{
