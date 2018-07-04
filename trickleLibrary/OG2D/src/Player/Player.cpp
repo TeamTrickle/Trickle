@@ -122,7 +122,7 @@ void Player::Render2D()
 
 	//¶Œü‚«‚È‚ç‰æ‘œ‚ğ‹t‚É‚·‚é
 	if (direction == Direction::RIGHT) {
-		int k = src.w;
+		float k = src.w;
 		src.w = src.x;
 		src.x = k;
 	}

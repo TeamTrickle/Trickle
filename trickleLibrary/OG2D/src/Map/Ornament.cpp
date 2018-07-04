@@ -204,15 +204,15 @@ void Ornament::UpDate() {
 void Ornament::Render2D() {
 	pipeTex.Draw(pipe.draw, pipeSrc);
 	for (int i = 0; i < gear.size(); ++i) {
-		gearTex.Rotate(gear[i].angle);
+		gearTex.Rotate((float)gear[i].angle);
 		gearTex.Draw(gear[i].draw, gearSrc);
 	}
 	for (int i = 0; i < gear_nomove.size(); ++i) {
-		gearTex.Rotate(gear_nomove[i].angle);
+		gearTex.Rotate((float)gear_nomove[i].angle);
 		gearTex.Draw(gear_nomove[i].draw, gearSrc);
 	}
 	for (int i = 0; i < pipeBox.size(); ++i) {
-		pipeBoxTex.Rotate(pipeBox[i].angle);
+		pipeBoxTex.Rotate((float)pipeBox[i].angle);
 		pipeBoxTex.Draw(pipeBox[i].draw, pipeBoxSrc);
 	}
 }

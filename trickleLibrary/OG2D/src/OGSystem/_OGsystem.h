@@ -16,15 +16,6 @@
 #define GLFW_INCLUDE_GLU
 #define GLM_FORCE_SWIZZLE
 
-//GLincludeより前にwindowsをincludeをする必要がある
-#include <Windows.h>
-
-// いくつかの余計な警告を表示しないようにする
-#pragma warning (disable:4244)
-#pragma warning (disable:4522)
-#pragma warning (disable:4800)
-#pragma warning (disable:4996)
-
 #pragma comment(lib, "OPENGL32.lib")
 #pragma comment(lib, "GLU32.lib")
 #pragma comment(lib, "Win64/OpenAL32.lib")

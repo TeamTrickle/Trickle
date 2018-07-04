@@ -116,18 +116,18 @@ void Result::UpDate() {
 				presfw = starFrame[i].nowWH.x;
 				starFrame[i].nowWH.x = starFrame[i].easeX.expo.In(starFrame[i].easeX.Time(3), 0.0f, 64 * 2, 3);
 				starFrame[i].pos.x -= (starFrame[i].nowWH.x - presfw) / 2.0f;
-				if (starFrame[i].nowWH.x >= 64 * 2) {
-					starFrame[i].nowWH.x = 64 * 2;
-					starFrame[i].pos.x = 300 + i * 200;
+				if (starFrame[i].nowWH.x >= 64.f * 2.f) {
+					starFrame[i].nowWH.x = 64.f * 2.f;
+					starFrame[i].pos.x = 300.f + i * 200.f;
 				}
 			}
 			if (starFrame[i].nowWH.y < 64 * 2) {
 				presfh = starFrame[i].nowWH.y;
 				starFrame[i].nowWH.y = starFrame[i].easeY.bounce.In(starFrame[i].easeY.Time(3), 0.0f, 64 * 2, 3);
 				starFrame[i].pos.y -= (starFrame[i].nowWH.y - presfh) / 2.0f;
-				if (starFrame[i].nowWH.y >= 64 * 2) {
-					starFrame[i].nowWH.y = 64 * 2;
-					starFrame[i].pos.y = 370 - i * 8;
+				if (starFrame[i].nowWH.y >= 64.f * 2.f) {
+					starFrame[i].nowWH.y = 64.f * 2.f;
+					starFrame[i].pos.y = 370.f - i * 8.f;
 				}
 			}
 		}
@@ -173,13 +173,13 @@ void Result::UpDate() {
 				star[i].angle += 15;
 				//X
 				star[i].pos.x = (1 - star[i].bezcnt)*(1 - star[i].bezcnt) * 1280 + 2 * (1 - star[i].bezcnt)*star[i].bezcnt * 1000 + star[i].bezcnt * star[i].bezcnt * (300 + i * 200);
-				if (star[i].pos.x <= 300 + i * 200) {
-					star[i].pos.x = 300 + i * 200;
+				if (star[i].pos.x <= 300.f + i * 200.f) {
+					star[i].pos.x = 300.f + i * 200.f;
 				}
 				//Y
 				star[i].pos.y = (1 - star[i].bezcnt)*(1 - star[i].bezcnt) * 300 + 2 * (1 - star[i].bezcnt)*star[i].bezcnt * 0 + star[i].bezcnt * star[i].bezcnt * (370 - i * 8);
-				if (star[i].pos.y >= 370 - i * 8) {
-					star[i].pos.y = 370 - i * 8;
+				if (star[i].pos.y >= 370.f - i * 8.f) {
+					star[i].pos.y = 370.f - i * 8.f;
 				}
 				//W,Hèkè¨
 				star[i].nowWH.x = star[i].nowWH.y = star[i].easeX.cubic.Out(star[i].easeX.Time(5), 512, 128 - 512, 5);
@@ -389,7 +389,7 @@ void Result::Render2D() {
 				draw.OffsetSize();
 				Box2D src(256, 0, 256, 256);
 				src.OffsetSize();
-				starTex.Rotate(star[i].angle);
+				starTex.Rotate((float)star[i].angle);
 				starTex.Draw(draw, src);
 			}
 		}

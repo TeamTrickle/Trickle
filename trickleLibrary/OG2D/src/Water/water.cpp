@@ -252,7 +252,7 @@ void Water::Render2D()
 	if (this->currentState == State::LIQUID && this->nowSituation == Situation::Deleteform)
 	{
 		src.y += 256;
-		src.x = (this->nowTime / 6) * 256;
+		src.x = (float)((this->nowTime / 6) * 256);
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
@@ -857,7 +857,7 @@ bool Water::SolidMelt()
 		this->SetSituation(Situation::Normal);
 		//氷が溶けた時のエフェクト
 		auto effect = Effect::Create(
-			Vec2(this->position.x + (this->Scale.x / 2) - (128.f / 2), this->position.y + this->Scale.y - (128.f / 1.5)),
+			Vec2(this->position.x + (this->Scale.x / 2.f) - (128.f / 2.f), this->position.y + this->Scale.y - (128.f / 1.5f)),
 			Vec2(128, 128),
 			Vec2(768, 768),
 			1,

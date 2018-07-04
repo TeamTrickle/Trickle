@@ -197,7 +197,7 @@ void EngineSystem::TaskApplication()
 	//“o˜^—\’è‚Ì‚à‚Ì‚ð“o˜^‚·‚é
 	for (int i = 0; i < this->addTaskObjects.size(); ++i)
 	{
-		std::pair<DWORD, TaskObject::SP> d;
+		std::pair<int, TaskObject::SP> d;
 		d.second = this->addTaskObjects[i];
 		if (d.second->GetNextTask())
 		{

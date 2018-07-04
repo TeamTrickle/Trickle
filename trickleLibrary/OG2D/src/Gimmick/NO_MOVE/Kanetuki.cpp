@@ -48,7 +48,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	//–{‘Ì‚ÌŒü‚«‚É‚æ‚Á‚Ä‰Š‚ÌŒü‚«‚Æ•`‰æ”‚ð•ÏX
 	switch (this->angle) {
 	case UP:
-		this->hotNum = this->Scale.x / 64;
+		this->hotNum = (int)this->Scale.x / 64;
 		this->draw.resize(this->hotNum);
 		for (int i = 0; i < this->hotNum; ++i) {
 			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
@@ -57,7 +57,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 		this->texRotaAng = 0.0f;
 		break;
 	case RIGHT:
-		this->hotNum = this->Scale.y / 64;
+		this->hotNum = (int)this->Scale.y / 64;
 		this->draw.resize(this->hotNum);
 		for (int i = 0; i < this->hotNum; ++i) {
 			draw[i] = Box2D(position.x, position.y + (64 * i), Scale.x, 64.f);
@@ -69,7 +69,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 		//Œ»Žž“_‚Å‘¶Ý‚µ‚È‚¢‚Ì‚Å—ª
 		break;
 	case BOTTOM:
-		this->hotNum = this->Scale.x / 64;
+		this->hotNum = (int)this->Scale.x / 64;
 		this->draw.resize(this->hotNum);
 		for (int i = 0; i < this->hotNum; ++i) {
 			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);

@@ -65,8 +65,8 @@ void Goal::UpDate()
 		if (this->WaterHit())
 		{
 			//カメラ移動終了地点を設定
-			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5.f);
-			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5.f);
+			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5);
+			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5);
 			//移動前のカメラの位置とサイズを保存しておく
 			this->precmPos = new Vec2(OGge->camera->GetPos());
 			this->precmSize = new Vec2(OGge->camera->GetSize());
@@ -242,8 +242,8 @@ void Goal::CameraAnim::Set(const Vec2& start, const Vec2& end, const unsigned in
 Vec2 Goal::CameraAnim::Move()
 {
 	return Vec2(
-		this->easing_x.sine.InOut(this->easing_x.Time(this->time), this->startPos.x, this->endPos.x, this->time),
-		this->easing_y.sine.InOut(this->easing_y.Time(this->time), this->startPos.y, this->endPos.y, this->time));
+		this->easing_x.sine.InOut(this->easing_x.Time((float)this->time), this->startPos.x, this->endPos.x, (float)this->time),
+		this->easing_y.sine.InOut(this->easing_y.Time((float)this->time), this->startPos.y, this->endPos.y, (float)this->time));
 }
 bool Goal::CameraAnim::isPlay()
 {
