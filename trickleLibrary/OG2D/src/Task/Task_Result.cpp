@@ -230,6 +230,7 @@ void Result::UpDate() {
 			}
 		}
 		if (star[this->maxTrueNumber].pos == Vec2(300 + this->maxTrueNumber * 200, 370 - this->maxTrueNumber * 8) && star[this->maxTrueNumber].nowWH == Vec2(128, 128)) {
+			cnt = 0;
 			this->nowMode = Mode5;
 		}
 		break;
@@ -299,7 +300,8 @@ void Result::UpDate() {
 			//ƒNƒŠƒAUIoŒ»(–¢ŽÀ‘•)
 		}
 		else {
-			if (OGge->in->down(Input::in::B2))
+			++cnt;
+			if (OGge->in->down(Input::in::B2) || cnt > 1800)
 			{
 				npc->MoveReset();
 				npc->Set(npc->position, Vec2(1500.f, npc->position.y), 30.f);

@@ -83,6 +83,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 }
 void Kanetuki::UpDate() {
 	if (active) {
+		++animCnt;
 		toSteam();
 	}
 	//ƒTƒEƒ“ƒhŠÖŒW
@@ -126,7 +127,6 @@ void Kanetuki::UpDate() {
 void Kanetuki::Render2D() {
 	
 	if (active) {
-		++animCnt;
 		Box2D src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
 		src.OffsetSize();
 
