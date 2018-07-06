@@ -22,6 +22,8 @@ class Pause :public TaskObject
 
 	int selectPos = 0;
 
+	unsigned int gearAng;
+
 	//サウンドのファイル名格納
 	std::string cursorsoundname;
 	std::string dicisionsoundname;

@@ -33,6 +33,8 @@ bool Pause::Initialize()
 	//決定音
 	decisionsound.create(dicisionsoundname, false);
 
+	gearAng = 0;
+
 	__super::Init((std::string)"pause");
 	__super::SetDrawOrder(1.f);		//画像表示順位
 	return true;
@@ -105,6 +107,7 @@ void Pause::Pause_draw()
 				draw.OffsetSize();
 				Box2D src(0, 0, 200, 200);
 				src.OffsetSize();
+				texCursor.Rotate((float)gearAng);
 				texCursor.Draw(draw, src);
 			}
 			//Restart
@@ -155,46 +158,13 @@ Pause::SP Pause::Create(bool flag_)
 //--------------------------------------------------------------------------------------
 void Pause::PauseUpDate()
 {
+	++gearAng;
+	if (gearAng > 360) { gearAng = 0; }
 	//選択肢の表示はカメラによって位置が変更
 	auto NowCameraPos = OGge->camera->GetPos();
 	auto NowCameraSize = OGge->camera->GetSize();
 	auto map = OGge->GetTask<Map>("map");
-	float NewPos = NowCameraSize.x + NowCameraPos.x;
 	transparentbackPos = OGge->camera->GetPos();
-
-	//選択し位置
-	ReturnPos = Vec2(NewPos - 64 * 12, NowCameraPos.y + NowCameraSize.y - 300.f);
-	RestartPos = Vec2(NewPos - 64 * 8, NowCameraPos.y + NowCameraSize.y - 200.f);
-	stageselectPos = Vec2(NewPos - 64*19 + 50,NowCameraPos.y + NowCameraSize.y - 100.f);
-
-	//矢印の移動
-	if (OGge->in->down(Input::CU) || OGge->in->down(In::LU)) {
-		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
-		//サウンドの再生
-		cursorsound.play();
-	}
-	if (OGge->in->down(Input::CD) || OGge->in->down(In::LD)) {
-		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
-		//サウンドの再生
-		cursorsound.play();
-	}
-	Vec2 cPosTable[3] = { Vec2(ReturnPos.x - 80, ReturnPos.y),
-							Vec2(RestartPos.x - 80,RestartPos.y),
-							Vec2(stageselectPos.x - 80,stageselectPos.y)
-							 };
-	cursorPos = cPosTable[selectPos];
-	select = Select::Return;
-
-	//選択し
-	if (cursorPos.y == RestartPos.y){
-		select = Restart;
-	}
-	if (cursorPos.y == stageselectPos.y){
-		select = Stage;
-	}
-	if (cursorPos.y == ReturnPos.y){
-		select = Return;
-	}
 
 	//選択しの決定処理
 	if (OGge->in->down(In::B2)){
@@ -255,4 +225,43 @@ void Pause::PauseUpDate()
 			OGge->camera->MovePos(Vec2(0.0f, 2.5f));
 		}
 	}
+
+	NowCameraPos = OGge->camera->GetPos();
+	NowCameraSize = OGge->camera->GetSize();
+
+	//選択し位置
+	float NewPos = OGge->camera->GetSize().x + OGge->camera->GetPos().x;
+	ReturnPos = Vec2(NewPos - 64 * 12, OGge->camera->GetPos().y + OGge->camera->GetSize().y - 300.f);
+	RestartPos = Vec2(NewPos - 64 * 8, OGge->camera->GetPos().y + OGge->camera->GetSize().y - 200.f);
+	stageselectPos = Vec2(NewPos - 64 * 19 + 50, OGge->camera->GetPos().y + OGge->camera->GetSize().y - 100.f);
+
+	//矢印の移動
+	if (OGge->in->down(Input::CU) || OGge->in->down(In::LU)) {
+		selectPos = (selectPos <= 0) ? selectPos : --selectPos;
+		//サウンドの再生
+		cursorsound.play();
+	}
+	if (OGge->in->down(Input::CD) || OGge->in->down(In::LD)) {
+		selectPos = (selectPos >= 2) ? selectPos : ++selectPos;
+		//サウンドの再生
+		cursorsound.play();
+	}
+	Vec2 cPosTable[3] = { Vec2(ReturnPos.x - 80, ReturnPos.y),
+		Vec2(RestartPos.x - 80,RestartPos.y),
+		Vec2(stageselectPos.x - 80,stageselectPos.y)
+	};
+	cursorPos = cPosTable[selectPos];
+	select = Select::Return;
+
+	//選択し
+	if (cursorPos.y == RestartPos.y) {
+		select = Restart;
+	}
+	if (cursorPos.y == stageselectPos.y) {
+		select = Stage;
+	}
+	if (cursorPos.y == ReturnPos.y) {
+		select = Return;
+	}
+
 }

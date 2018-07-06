@@ -50,6 +50,8 @@ Game::~Game()
 //-------------------------------------------------------------------------------------------------
 bool Game::Initialize()
 {
+	OGge->camera->SetSize(Vec2(1280, 720));
+
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
 	//Pauseƒ^ƒXƒN‚Ì¶¬
 	auto pause = Pause::Create();

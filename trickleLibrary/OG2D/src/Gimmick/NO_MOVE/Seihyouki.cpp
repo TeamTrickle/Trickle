@@ -31,6 +31,7 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 }
 void Seihyouki::UpDate() {
 	if (active) {
+		++animCnt;
 		toIce();
 	}
 }
@@ -39,7 +40,6 @@ void Seihyouki::Render2D() {
 	//デバッグ用
 	if (active) {
 		LineDraw();
-		++animCnt;
 		//Box2D drawRL,srcR;
 		if (angle==RIGHT)
 		{
