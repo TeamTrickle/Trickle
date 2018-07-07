@@ -46,16 +46,17 @@ class Goal : public GameObject, public TaskObject
 public:
 	explicit Goal(const Vec2& pos);
 	virtual ~Goal();
-	void SetColor(const Paint::PaintColor&);
-	bool ColorCheck() const;
-	void UpDate() override;
-	void Render2D() override;
-	bool GetClear() const;
-	void SetTexture(Texture*);
-	bool WaterHit();
-	bool GetLock() const;
-	unsigned int GetID() const;
-	typedef std::shared_ptr<Goal> SP;
-	static SP Create(const Vec2& pos, bool = true);
+	void SetColor(const Paint::PaintColor&);	//ゴールのカラーを指定する
+	Paint::PaintColor GetColor() const;			//ゴールに指定されている色を返す
+	bool ColorCheck() const;					//色が正しいかを判定する
+	void UpDate() override;						//更新
+	void Render2D() override;					//描画
+	bool GetClear() const;						//クリアしているかを返す
+	void SetTexture(Texture*);					//描画する画像を登録する
+	bool WaterHit();							//水との判定を行う
+	bool GetLock() const;						//カメラの固定状況を返す
+	unsigned int GetID() const;					//登録されているIDを返す
+	typedef std::shared_ptr<Goal> SP;			//スマートポインタ
+	static SP Create(const Vec2& pos, bool = true);	//生成処理
 	Sound sound;     //サウンド生成
 };

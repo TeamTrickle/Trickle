@@ -9,7 +9,7 @@
 
 #include "OGSystem\OGSystem.h"
 #include "Object\Object.h"
-#include "Block\block.h"
+#include "Paint\Paint.h"	//カラー使用をするため
 
 class Bucket : public GameObject, public TaskObject {
 
@@ -17,6 +17,7 @@ private:
 	const Box2D BUCKET_NOTHING = Box2D(0, 0, 256, 256);
 	const Box2D BUCKET_WATER = Box2D(256, 0, 256, 256);
 	const Box2D BUCKET_WATERMAX = Box2D(512, 0, 256, 256);
+	Paint::PaintColor* color;
 	Box2D GetSpriteCrop() const;
 	bool BucketWaterCreate();
 	bool isObjectCollided();
@@ -59,6 +60,7 @@ public:
 
 private:
 	Texture tex;
+
 	std::string putsoundname;     //バケツを置く音
 	std::string dropsoundname;    //水をこぼす音
 	std::string soundname;
