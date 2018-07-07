@@ -15,6 +15,7 @@ class StageSelect : public TaskObject
 	public:
 		Vec2 Move();
 		Vec2 Move(const float time);
+		Vec2 Move(const Easing::Name = Easing::Name::Linear, const Easing::Mode = Easing::Mode::InOut, const float = 10.f);
 		Animation();
 		void Set(Vec2&, Vec2&);
 		bool isPlay() const;
@@ -56,8 +57,9 @@ class StageSelect : public TaskObject
 	void From3();
 	void From4();
 
-	int timeCnt;
+	unsigned __int64 timeCnt;
 	int nowPos;
+	unsigned __int8 doorNumber;			//ê›íuÇ∑ÇÈÉhÉAÇÃñáêî
 	void ModeCheck();
 	bool CheckTime(int);
 	void GateClose();
@@ -68,15 +70,19 @@ public:
 	StageSelect();
 	virtual ~StageSelect();
 	bool Initialize();
-	void UpDate();
-	void Render2D();
+	void UpDate() override;
+	void PauseUpDate() override;
+	void Render2D() override;
 	bool Finalize();
 
 	enum State
 	{
-		Tutorial,
+		Tutorial1,
+		Tutorial2,
+		Tutorial3,
 		Stage1,
 		Stage2,
+		Stage3,
 		ToTitle,
 	};
 	State state;

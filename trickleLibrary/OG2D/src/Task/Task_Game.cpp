@@ -301,7 +301,12 @@ void Game::UpDate()
 			}
 		}
 	}
-
+	auto waters = OGge->GetTasks<Water>("water");
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		std::cout << (*id)->GetID() << ":" << (*id)->GetWaterVolume() << "	";
+	}
+	std::cout << std::endl;
 	//UI
 	UImng_->UpDate();
 }

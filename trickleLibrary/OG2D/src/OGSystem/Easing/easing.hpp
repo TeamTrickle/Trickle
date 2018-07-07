@@ -7,6 +7,14 @@ private:
 	float cnt;
 	bool toplay = false;
 public:
+	enum Name
+	{
+		Back,Bounce,Circ,Cubic,Elastic,Expo,Linear,Quad,Quart,Quint,Sine
+	};
+	enum Mode
+	{
+		In,Out,InOut
+	};
 	Easing() { cnt = 0; this->toplay = true; };
 	void Init() {
 		cnt = 0;
