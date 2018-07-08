@@ -139,8 +139,8 @@ void StageAlert::positioning()
 
 	previewer->setSize(
 		Box2D(
-			int(position.x + windowSize.x + 50),
-			int(position.y + windowSize.y + 300),
+			int(position.x + 200),
+			int(position.y + 350),
 			int(windowSize.w - 100),
 			int(windowSize.h - 325)
 		));

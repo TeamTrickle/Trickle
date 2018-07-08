@@ -339,7 +339,7 @@ void StageSelect::From3()
 					{
 						(*id)->SetStageData(curStageName);
 						if (nowPos / 3 < 1) {
-							
+							(*id)->setPosition(Vec2(350, 0));
 						}
 					}
 				}
@@ -402,6 +402,9 @@ void StageSelect::From3()
 					if ((*id)->isExist(curStageName))
 					{
 						(*id)->SetStageData(curStageName);
+						if (nowPos / 3 > 0) {
+							(*id)->setPosition(Vec2(1350, 0));
+						}
 					}
 				}
 			}
