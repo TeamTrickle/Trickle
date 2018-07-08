@@ -3,6 +3,7 @@
 #include "Block\block.h"
 #include "Player\Player.h"
 #include "Effect\Effect.h"
+#include "Gimmick\NO_MOVE\Door.h"
 //#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
 	:MAX_FALL(15.f), GRAVITY((9.8f / 60.f / 60.f*32.f) * 5), FIN_SPEED(1.0f), RAIN_TIME(180)
@@ -358,6 +359,17 @@ bool Water::FootCheck(std::string& objtag, int n)
 			}
 		}
 	}
+	auto doors = OGge->GetTasks<Door>("Door");
+	for (auto id = doors->begin(); id != doors->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (this->CubeHit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
 	if (this->currentState == State::SOLID)
 	{
 		auto buckets = OGge->GetTasks<Bucket>("bucket");
@@ -390,7 +402,7 @@ bool Water::FootSolidCheck()
 			{
 				if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					if (foot.hit(*(*id)))
+					if (foot.CubeHit(*(*id)))
 					{
 						return true;
 					}
@@ -404,6 +416,7 @@ bool Water::FootSolidCheck()
 void Water::MoveWATERCheck(Vec2& est)
 {
 	auto map = OGge->GetTask<Map>("map");
+	auto doors = OGge->GetTasks<Door>("Door");
 	if (!map)
 	{
 		this->position += est;
@@ -432,6 +445,17 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.x = preX;
 			break;
 		}
+		for (auto id = doors->begin(); id != doors->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
+				}
+			}
+		}
 	}
 	while (est.y != 0.f)
 	{
@@ -456,12 +480,24 @@ void Water::MoveWATERCheck(Vec2& est)
 			this->position.y = preY;
 			break;
 		}
+		for (auto id = doors->begin(); id != doors->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
+				}
+			}
+		}
 	}
 }
 
 void Water::MoveGASCheck(Vec2& est)
 {
 	auto map = OGge->GetTask<Map>("map");
+	auto doors = OGge->GetTasks<Door>("Door");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -485,6 +521,17 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.x = preX;
 			break;
 		}
+		for (auto id = doors->begin(); id != doors->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
+				}
+			}
+		}
 	}
 	while (est.y != 0.f)
 	{
@@ -509,6 +556,17 @@ void Water::MoveGASCheck(Vec2& est)
 			this->position.y = preY;
 			break;
 		}
+		for (auto id = doors->begin(); id != doors->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -517,6 +575,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 	auto map = OGge->GetTask<Map>("map");
 	auto waters = OGge->GetTasks<Water>("water");
 	auto blocks = OGge->GetTasks<Block>("block");
+	auto doors = OGge->GetTasks<Door>("Door");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -558,6 +617,17 @@ void Water::MoveSOILDCheck(Vec2& est)
 			}
 		}
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
+				}
+			}
+		}
+		for (auto id = doors->begin(); id != doors->end(); ++id)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
@@ -610,6 +680,17 @@ void Water::MoveSOILDCheck(Vec2& est)
 			}
 		}
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
+				}
+			}
+		}
+		for (auto id = doors->begin(); id != doors->end(); ++id)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{

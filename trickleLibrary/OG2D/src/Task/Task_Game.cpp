@@ -21,6 +21,7 @@
 #include "Effect\Effect.h"
 #include "Map\Ornament.h"
 #include "Load\LoadLogo.h"
+#include "Gimmick\NO_MOVE\Door.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -29,8 +30,6 @@ Game::Game()
 {
 	gamesoundname = "game.wav";
 	tutorialsoundname = "tutorial.wav";
-	//this->ResetKillCount();
-	OGge->camera->SetSize(Vec2(1920, 1080));
 }
 
 Game::~Game()
@@ -42,7 +41,6 @@ Game::~Game()
 	}
 	//解放処理と次のsceneの生成
 	this->Finalize();
-	//OGge->DeleteTasks();
 	OGge->ChengeTask();
 	
 }
@@ -76,6 +74,7 @@ bool Game::Initialize()
 	rm->SetTextureData(std::string("steam"), &this->texSteam);
 	this->goalTex.Create("goal.png");
 	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
+	doorTex.Create("door.png");
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -98,6 +97,12 @@ bool Game::Initialize()
 		sound.volume(1.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
+		
+		for (int i = 0; i < 3; ++i)
+		{
+			auto door = Door::Create(Vec2(32 * i + 800, 1300), Vec2(32, 64 * i + 64), i);
+			door->SetTexture(&doorTex);
+		}
 	}
 	break;
 	case 2:		//チュートリアル２
@@ -253,22 +258,12 @@ bool Game::Initialize()
 		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
 		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
-
 	//水が自動で降ってくる時間の初期化
 	this->timecnt = 0;
 	//水の生成
 	auto water = Water::Create(_waterpos);
 	//画像を渡す
 	water->SetTexture(&this->waterTex);
-	switch (*MapNum)
-	{
-	case 3:
-		//プレイヤーの位置を変更
-	//	player->SetPos(Vec2(200, 400));
-		break;
-	default:
-		break;
-	}
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
 	//ゲームクリア判定を生成
@@ -301,12 +296,6 @@ void Game::UpDate()
 			}
 		}
 	}
-	auto waters = OGge->GetTasks<Water>("water");
-	for (auto id = waters->begin(); id != waters->end(); ++id)
-	{
-		std::cout << (*id)->GetID() << ":" << (*id)->GetWaterVolume() << "	";
-	}
-	std::cout << std::endl;
 	//UI
 	UImng_->UpDate();
 }
@@ -408,6 +397,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto doors = OGge->GetTasks<Door>("Door");
+	for (auto id = doors->begin(); id != doors->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
@@ -430,6 +424,7 @@ bool Game::Finalize()
 	this->Effectsond.Finalize();
 	this->texSteam.Finalize();
 	this->goalTex.Finalize();
+	this->doorTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
