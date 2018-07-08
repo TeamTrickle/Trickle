@@ -1,5 +1,5 @@
 #include "Door.h"
-
+#include "Player\Player.h"
 Door::Door(const Vec2& pos, const Vec2& size, const bool isOpen)
 {
 	this->objectTag = "Door";
@@ -36,9 +36,24 @@ void Door::UpDate()
 	if (this->isOpen != this->preIsOpen)
 	{
 		this->isMove = true;
+		//ŠJ‚¯‚é
 		if (this->isOpen)
 		{
 			this->timeCnt -= 0.01f;
+			this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+			auto players = OGge->GetTasks<Player>("Player");
+			for (auto id = players->begin(); id != players->end(); ++id)
+			{
+				if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+				{
+					if (this->CubeHit(*(*id)))
+					{
+						//Œ³‚É–ß‚·
+						this->timeCnt += 0.01f;
+						this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+					}
+				}
+			}
 			if (this->timeCnt <= 0.01f)
 			{
 				this->timeCnt = 0.01f;
@@ -46,9 +61,24 @@ void Door::UpDate()
 				this->isMove = false;
 			}
 		}
+		//•Â‚ß‚é
 		else
 		{
 			this->timeCnt += 0.01f;
+			this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+			auto players = OGge->GetTasks<Player>("Player");
+			for (auto id = players->begin(); id != players->end(); ++id)
+			{
+				if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+				{
+					if (this->CubeHit(*(*id)))
+					{
+						//Œ³‚É–ß‚·
+						this->timeCnt -= 0.01f;
+						this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+					}
+				}
+			}
 			if (this->timeCnt >= 1.0f)
 			{
 				this->timeCnt = 1.0f;
@@ -56,7 +86,7 @@ void Door::UpDate()
 				this->isMove = false;
 			}
 		}
-		this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+		
 	}
 }
 void Door::Render2D()

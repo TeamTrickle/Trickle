@@ -753,6 +753,17 @@ bool Water::HeadSolidCheck()
 			}
 		}
 	}
+	auto doors = OGge->GetTasks<Door>("Door");
+	for (auto id = doors->begin(); id != doors->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (this->CubeHit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
 	return false;
 }
 

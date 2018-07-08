@@ -2,7 +2,6 @@
 ///constructor	pos = 位置,size = 大きさ,isOpen = 開いているか(true = 開いている,false = 閉じている)
 ///ToOpenで開(成功true,失敗false)、ToCloseで閉(成功true,失敗false)、IsOpen(開true,閉false)で開いているかを返す
 ///GetIDでDoorに設定されているIDを返す、IDは生成時に決定される
-///
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
