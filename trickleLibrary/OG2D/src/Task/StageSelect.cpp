@@ -338,6 +338,9 @@ void StageSelect::From3()
 					if ((*id)->isExist(curStageName))
 					{
 						(*id)->SetStageData(curStageName);
+						if (nowPos / 3 < 1) {
+							
+						}
 					}
 				}
 			}
