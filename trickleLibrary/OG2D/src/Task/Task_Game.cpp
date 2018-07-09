@@ -97,12 +97,6 @@ bool Game::Initialize()
 		sound.volume(1.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
-		
-		for (int i = 0; i < 3; ++i)
-		{
-			auto door = Door::Create(Vec2(32 * i + 800, 1300), Vec2(32, 64 * i + 64), i);
-			door->SetTexture(&doorTex);
-		}
 	}
 	break;
 	case 2:		//チュートリアル２
