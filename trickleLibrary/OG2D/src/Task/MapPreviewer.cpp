@@ -114,3 +114,13 @@ void MapPreviewer::setVisible(const bool& v) {
 bool MapPreviewer::isVisible() const {
 	return this->visible;
 }
+
+void MapPreviewer::setSize(const Box2D& s)
+{
+	windowSize = s;
+}
+
+Box2D MapPreviewer::getSize() const
+{
+	return windowSize;
+}

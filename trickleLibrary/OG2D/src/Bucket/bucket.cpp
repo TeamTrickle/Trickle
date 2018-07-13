@@ -2,6 +2,7 @@
 #include "Water\water.h"
 #include "Map\Map.h"
 #include "Player\Player.h"
+#include "Block\block.h"
 Bucket::Bucket() {
 	this->invi = 0;
 }
@@ -13,6 +14,7 @@ Bucket::Bucket(Vec2& pos) {
 	putsoundname = "bucket-put1.wav";
 	dropsoundname = "spoil.wav";
 	soundname = "water-drop3.wav";
+	this->color = nullptr;
 }
 
 Bucket::~Bucket() {
@@ -89,6 +91,7 @@ void Bucket::UpDate() {
 			water->SetSituation(Water::Situation::Normal);
 			water->SetScale(Vec2(64, 64));
 			water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
+		
 			this->capacity = 0.f;
 			//70カウント中は次の水を引き受けない
 			this->invi = 70;
@@ -100,6 +103,12 @@ void Bucket::UpDate() {
 			else
 			{
 				water->Kill();
+			}
+			if (this->color)
+			{
+				water->SetColor(*this->color);
+				delete this->color;
+				this->color = nullptr;
 			}
 			this->IsOutCheck = false;
 			this->WaterOutTime = 0;
@@ -117,6 +126,23 @@ void Bucket::Render2D() {
 	Box2D draw(this->position, this->Scale);
 	draw.OffsetSize();
 	Box2D src(GetSpriteCrop());
+	if (this->color)
+	{
+		switch (*this->color)
+		{
+		case Paint::PaintColor::Blue:
+			src.y += 768;
+			break;
+		case Paint::PaintColor::Red:
+			src.y += 512;
+			break;
+		case Paint::PaintColor::Purple:
+			src.y += 256;
+			break;
+		default:
+			break;
+		}
+	}
 	src.OffsetSize();
 	tex.Rotate(this->angle);
 	tex.Draw(draw, src);
@@ -124,6 +150,11 @@ void Bucket::Render2D() {
 
 bool Bucket::Finalize() {
 	tex.Finalize();
+	if (this->color)
+	{
+		delete this->color;
+		this->color = nullptr;
+	}
 	return true;
 }
 
@@ -270,6 +301,49 @@ void Bucket::WaterIsHitCheck()
 			float cap = (*waters)[i]->waterMove();
 			if (cap > 0.0f)
 			{
+				
+				if (this->color)
+				{
+					if (*this->color == Paint::PaintColor::Purple)
+					{
+						//紫なら色の変化を行わない
+					}
+					else if (*this->color == Paint::PaintColor::Blue && (*waters)[i]->GetColor() == Paint::PaintColor::Red)
+					{
+						//青と赤で紫へ
+						if (this->color)
+						{
+							delete this->color;
+						}
+						this->color = new Paint::PaintColor;
+						*this->color = Paint::PaintColor::Purple;
+					}
+					else if (*this->color == Paint::PaintColor::Red && (*waters)[i]->GetColor() == Paint::PaintColor::Blue)
+					{
+						//赤と青で紫へ
+						if (this->color)
+						{
+							delete this->color;
+						}
+						this->color = new Paint::PaintColor;
+						*this->color = Paint::PaintColor::Purple;
+					}
+					else
+					{
+						//それ以外はそのまま変化させる
+						if (this->color)
+						{
+							delete this->color;
+						}
+						this->color = new Paint::PaintColor;
+						*this->color = (*waters)[i]->GetColor();
+					}
+				}
+				else
+				{
+					this->color = new Paint::PaintColor;
+					*this->color = (*waters)[i]->GetColor();
+				}
 				sound.play();
 				this->capacity += cap;
 			}

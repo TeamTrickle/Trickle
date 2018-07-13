@@ -24,6 +24,7 @@ private:
 	bool preloadResource(const std::string&);
 	inline Box2D GetFixedCameraCoord(const Box2D&) const;
 	Box2D OptimizeForWindowSize(const Box2D&) const;
+	void positioning();
 
 public:
 	explicit StageAlert() {}
@@ -52,12 +53,16 @@ public:
 	void setActive(const bool&);
 	bool isActive() const;
 
+	void setPosition(const Vec2&);
+	Vec2 getPosition() const;
+
 	typedef std::shared_ptr<StageAlert> SP;
 	static SP Create(bool, const Box2D&);
 
 private:
 	bool													active = false;
 
+	Vec2													position;
 	Box2D													titleDraw;
 	std::array<Box2D, StageInfoRes::MAX_ACHIEVEMENT>		starFixedDraw;
 	std::array<Box2D, StageInfoRes::MAX_ACHIEVEMENT>		achievementFixedDraw;

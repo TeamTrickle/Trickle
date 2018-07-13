@@ -318,8 +318,8 @@
     <ClCompile Include="src\Task\StageInfoRes.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\GoalDirectionUI.cpp">
-      <Filter>ソースファイル\Task\UI</Filter>
+    <ClCompile Include="src\Gimmick\NO_MOVE\Door.cpp">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -491,8 +491,8 @@
     <ClInclude Include="src\Task\StageInfoRes.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\GoalDirectionUI.h">
-      <Filter>ソースファイル\Task\UI</Filter>
+    <ClInclude Include="src\Gimmick\NO_MOVE\Door.h">
+      <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

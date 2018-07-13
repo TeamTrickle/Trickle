@@ -52,6 +52,11 @@ void Goal::SetColor(const Paint::PaintColor & color)
 	this->termsColor = color;
 }
 
+Paint::PaintColor Goal::GetColor() const
+{
+	return this->termsColor;
+}
+
 bool Goal::ColorCheck() const
 {
 	return this->termsColor == this->color ? true : false;
@@ -105,6 +110,7 @@ void Goal::UpDate()
 		if (this->animCnt >= 99)
 		{
 			//元のカメラ位置に戻す
+			//ここでプレイヤーの座標からカメラの位置を計算して求めてSetにいれれば問題解決できる気がする。
 			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 6);
 			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 6);
 			delete this->precmPos;

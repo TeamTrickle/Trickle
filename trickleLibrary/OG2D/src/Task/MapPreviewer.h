@@ -31,6 +31,9 @@ public:
 	void setVisible(const bool&);
 	bool isVisible() const;
 
+	void setSize(const Box2D&);
+	Box2D getSize() const;
+
 	typedef std::shared_ptr<MapPreviewer> SP;
 	static SP Create(bool, const Box2D&);
 
