@@ -22,6 +22,8 @@
 #include "Map\Ornament.h"
 #include "Load\LoadLogo.h"
 
+#include "UI/GoalDirectionUI.h"
+
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
 
@@ -76,6 +78,9 @@ bool Game::Initialize()
 	rm->SetTextureData(std::string("steam"), &this->texSteam);
 	this->goalTex.Create("goal.png");
 	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
+	this->goalDirectionTex.Create(std::string("goalarrow.png"));
+	rm->SetTextureData((std::string)"goalDirectionTex",&this->goalDirectionTex);
+
 	//ui¶¬
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -194,6 +199,11 @@ bool Game::Initialize()
 		{
 			auto block = Block::Create(Vec2(1536, 70));
 		}
+
+		{
+			
+		}
+
 	}
 	break;
 	case 6:
@@ -414,6 +424,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto goalDirection = OGge->GetTasks<GoalDirection>("GoalDirection");
+	for (auto id = goalDirection->begin(); id != goalDirection->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
@@ -425,6 +440,7 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"steam");
 	rm->DeleteTexture((std::string)"goalTex");
 	rm->DeleteTexture((std::string)"fireIce");
+	rm->DeleteTexture((std::string)"goalDirectionTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -436,6 +452,7 @@ bool Game::Finalize()
 	this->Effectsond.Finalize();
 	this->texSteam.Finalize();
 	this->goalTex.Finalize();
+	this->goalDirectionTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------

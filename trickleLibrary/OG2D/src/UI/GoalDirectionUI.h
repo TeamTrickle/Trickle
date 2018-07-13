@@ -28,20 +28,27 @@ public:
 	//ƒƒ“ƒoŠÖ”
 	GoalDirection();
 	virtual ~GoalDirection();
-	static GoalDirection::SP Create(std::vector<std::shared_ptr<GameObject>>, bool = true);
-	bool Initialize(std::vector<std::shared_ptr<GameObject>>);
-	
+	static GoalDirection::SP Create(std::shared_ptr<GameObject>, bool = true);
+	bool Initialize(std::shared_ptr<GameObject>);
+
+	void SetTextrue(Texture*);
 private:
+	//ƒƒ“ƒo•Ï”
 	std::string taskName;
-	std::vector<std::shared_ptr<GameObject>> targets;
-	Texture image;
+
+	std::shared_ptr<GameObject> target;
+
+	Texture* image;
 	const Box2D srcbase = {0,0,256,256};
+
+	//ƒƒ“ƒoŠÖ”
 
 	bool Finalize();
 	void UpDate()override;
 	void Render2D()override;
 
 	void SetPos(Vec2&);
+	
 	bool WindowOuterCheck();
 	void TargetDirecition();
 	void CameraPosUpDate();
