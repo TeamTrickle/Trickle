@@ -1,29 +1,17 @@
 #pragma once
 #include "OGSystem/OGsystem.h"
 #include "Object/Object.h"
+#include "Paint/Paint.h"
 
 /*
 *  ゴールの進行方向を示すUIクラスです
 */
 class GoalDirection : public GameObject , public TaskObject
 {
-	enum DrawPattrn
-	{
-		ULeft,
-		URight,
-		UCenter,
-		CLeft,
-		CRight,
-		CCenter,
-		DLeft,
-		DRight,
-		DCenter,
-	};
 public:
 	//メンバ変数
 
 	typedef std::shared_ptr<GoalDirection> SP;
-	DrawPattrn drawPattrn;
 
 	//メンバ関数
 	GoalDirection();
@@ -31,7 +19,7 @@ public:
 	static GoalDirection::SP Create(std::shared_ptr<GameObject>, bool = true);
 	bool Initialize(std::shared_ptr<GameObject>);
 
-	void SetTextrue(Texture*);
+	void SetTextrue(Texture*,Texture*);
 private:
 	//メンバ変数
 	std::string taskName;
@@ -39,7 +27,9 @@ private:
 	std::shared_ptr<GameObject> target;
 
 	Texture* image;
+	Texture* flower;
 	const Box2D srcbase = {0,0,256,256};
+	const Box2D srcflower = {0,0,256,256};
 
 	//メンバ関数
 
@@ -51,6 +41,6 @@ private:
 	
 	bool WindowOuterCheck();
 	void TargetDirecition();
-	void CameraPosUpDate();
+	Vec2 CameraPosUpDate();
 	float ToDeg(float radian);
 };

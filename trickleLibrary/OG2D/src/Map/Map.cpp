@@ -200,7 +200,7 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
 		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"));
+		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
 		return;
 	}
 	if (text == "gred")
@@ -209,7 +209,7 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		goal->SetColor(Paint::PaintColor::Red);
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"));
+		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
 		return;
 	}
 	if (text == "gblue")
@@ -218,7 +218,7 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		goal->SetColor(Paint::PaintColor::Blue);
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"));
+		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
 		return;
 	}
 	if (text == "gpurple")
@@ -227,7 +227,7 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
 		goal->SetColor(Paint::PaintColor::Purple);
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"));
+		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
 		return;
 	}
 	if (text == "t") 

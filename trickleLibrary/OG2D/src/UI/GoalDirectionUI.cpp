@@ -15,47 +15,73 @@ bool GoalDirection::Initialize(std::shared_ptr<GameObject> target_)
 {
 	this->Init(this->taskName);
 
-	this->CreateObject(Cube, OGge->camera->GetPos(), Vec2(192 ,192), 0.f);
+	this->CreateObject(Cube, OGge->camera->GetPos(), Vec2(192, 192), 0.f);
 	this->target = target_;
 
-	this->drawPattrn = DLeft;
-	this->SetDrawOrder(1.0f);
+	this->SetDrawOrder(0.9f);
 
 	return true;
 }
 bool GoalDirection::Finalize()
 {
 	this->image->Finalize();
+	this->flower->Finalize();
 	return true;
 }
 void GoalDirection::SetPos(Vec2& pos)
 {
 	this->position = pos;
 }
-void GoalDirection::SetTextrue(Texture* image_)
+void GoalDirection::SetTextrue(Texture* image_ , Texture* flower)
 {
 	this->image = image_;
+	this->flower = flower;
 }
 void GoalDirection::UpDate()
 {
-	if (!OGge->GetPause() || !(std::static_pointer_cast<Goal>(target))->GetClear())
+	if (!(std::static_pointer_cast<Goal>(target))->GetClear())
 	{
-		this->CameraPosUpDate();
 		//ゴールの角度を求めます
 		this->TargetDirecition();
+		this->position = this->CameraPosUpDate();
 	}
+	
 }
 void GoalDirection::Render2D()
 {
-	if (!OGge->GetPause() || !(std::static_pointer_cast<Goal>(target))->GetClear())
+	
+	if (!(std::static_pointer_cast<Goal>(target))->GetClear())
 	{
-		if (!this->WindowOuterCheck())
+		if (!this->WindowOuterCheck() || OGge->GetPause())
 		{
-			Box2D draw = { this->position,this->Scale };
-			draw.OffsetSize();
-			Box2D src = this->srcbase;
-			this->image->Rotate(this->angle);
-			this->image->Draw(draw, src);
+			{
+				Box2D draw = { this->position,this->Scale };
+				draw.OffsetSize();
+				Box2D src = this->srcbase;
+				this->image->Rotate(this->angle);
+				this->image->Draw(draw, src);
+			}
+			{
+				Box2D draw = { this->position , this->Scale };
+				draw.OffsetSize();
+				Box2D src = this->srcflower;
+				switch (std::static_pointer_cast<Goal>(target)->GetColor())
+				{
+				case Paint::PaintColor::Red:
+					src.x = 256;
+					break;
+				case Paint::PaintColor::Blue:
+					src.x = 256 * 2;
+					break;
+				case Paint::PaintColor::Purple:
+					src.x = 256 * 3;
+					break;
+				default:
+					break;
+				}
+				src.OffsetSize();
+				this->flower->Draw(draw, src);
+			}
 		}
 	}
 }
@@ -70,6 +96,7 @@ bool GoalDirection::WindowOuterCheck()
 		return false;
 	}
 	return windowsize.CubeHit(*this->target);
+
 }
 //ゴールの角度を求めます
 void GoalDirection::TargetDirecition()
@@ -91,38 +118,16 @@ float GoalDirection::ToDeg(float radian)
 	}
 	return d;
 }
-void GoalDirection::CameraPosUpDate()
+Vec2 GoalDirection::CameraPosUpDate()
 {
-	switch (this->drawPattrn)
-	{
-	case DrawPattrn::ULeft:
-		this->position = { OGge->camera->GetPos() };
-		break;
-	case DrawPattrn::URight:
-		this->position = { OGge->camera->GetPos().x + OGge->camera->GetSize().x - this->Scale.x, OGge->camera->GetPos().y };
-		break;
-	case DrawPattrn::UCenter:
-		this->position = { OGge->camera->GetPos().x + OGge->camera->GetSize().x / 2 - this->Scale.y, OGge->camera->GetPos().y };
-		break;
-	case DrawPattrn::CLeft:
-		this->position = { OGge->camera->GetPos().x, OGge->camera->GetPos().y + OGge->camera->GetSize().y / 2 - this->Scale.y };
-		break;
-	case DrawPattrn::CCenter:
-		this->position = { OGge->camera->GetPos().x + OGge->camera->GetSize().x / 2 - this->Scale.x, OGge->camera->GetPos().y + OGge->camera->GetSize().y / 2 - this->Scale.y };
-		break;
-	case DrawPattrn::CRight:
-		this->position = { OGge->camera->GetPos().x + OGge->camera->GetSize().x - this->Scale.x, OGge->camera->GetPos().y + OGge->camera->GetSize().y - this->Scale.y };
-		break;
-	case DrawPattrn::DLeft:
-		this->position = { OGge->camera->GetPos().x, OGge->camera->GetPos().y + OGge->camera->GetSize().y - this->Scale.y };
-		break;
-	case DrawPattrn::DRight:
-		this->position = { OGge->camera->GetPos().x + OGge->camera->GetSize().x - this->Scale.x, OGge->camera->GetPos().y + OGge->camera->GetSize().y - this->Scale.y };
-		break;
-	case DrawPattrn::DCenter:
-		this->position = { OGge->camera->GetPos().x + OGge->camera->GetSize().x / 2 - this->Scale.x, OGge->camera->GetPos().y + OGge->camera->GetSize().y / 2 - this->Scale.y };
-		break;
-	}
+	//座標を調整するための計算
+	Vec2 offset = { std::sinf(OG::ToRadian(this->angle)) , -std::cosf(OG::ToRadian(this->angle)) };
+	//ウィンドウの真ん中
+	Vec2 windowsenter = { (OGge->camera->GetPos().x + OGge->camera->GetSize().x / 2  - this->Scale.x / 2 ), OGge->camera->GetPos().y + OGge->camera->GetSize().y / 2 - this->Scale.y / 2 };
+	//ウィンドウサイズ * 角度座標
+	windowsenter.x += OGge->window->GetSize().x / 2 * offset.x;
+	windowsenter.y += OGge->window->GetSize().y / 2 * offset.y;
+	return windowsenter;
 }
 GoalDirection::SP GoalDirection::Create(std::shared_ptr<GameObject> target, bool flag)
 {
