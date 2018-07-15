@@ -2,6 +2,7 @@
 
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
+#include "VolumeControl/volumeControl.h"
 
 class StageSelect : public TaskObject
 {
@@ -66,6 +67,8 @@ class StageSelect : public TaskObject
 	Easing camera_x;
 	Easing camera_y;
 
+	bool canVolControl;
+
 public:
 	StageSelect();
 	virtual ~StageSelect();
@@ -88,6 +91,7 @@ public:
 	State state;
 	Sound* sound;
 	Sound decisionsound;
+	VolumeControl volControl;
 
 	typedef std::shared_ptr<StageSelect> SP;
 	static SP Create(bool = true);

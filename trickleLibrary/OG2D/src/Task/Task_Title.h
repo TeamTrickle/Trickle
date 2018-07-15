@@ -5,6 +5,7 @@
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
 #include "CameraManager\CameraManager.h"
+#include "VolumeControl/volumeControl.h"
 
 class Title :public TaskObject
 {
@@ -107,6 +108,9 @@ public:
 	Sound cursorsound;
 	Sound decisionsound;
 	Sound flowersound;
+	VolumeControl volControl;
+
+	bool canVolControl;
 
 	bool soundstart;
 
