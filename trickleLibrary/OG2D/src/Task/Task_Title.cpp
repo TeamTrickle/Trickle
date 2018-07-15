@@ -8,6 +8,7 @@
 #include "Load\LoadLogo.h"
 #include "Effect\Effect.h"
 #include "GameProcessManagement\GameProcessManagement.h"
+
 Title::Title()
 {
 	this->mode = Non;
@@ -62,6 +63,8 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
+
+	this->canVolControl = false;     //BGMのフェードインに使用
 	
 	
 	this->effect03.Create("starteffect.png");
@@ -71,7 +74,7 @@ bool Title::Initialize()
 	sound = new Sound();
 	sound->create(soundname, true);
 	rm->SetSoundData((std::string)"titleBGM", sound);
-	//カーゾルの移動音
+	//カーソルの移動音
 	cursorsound.create(soundcursorname,false);
 	cursorsound.volume(1.0f);
 	//決定音
@@ -119,6 +122,13 @@ void Title::UpDate()
 	{
 		this->Skip();
 	}
+
+	//BGMのフェードイン
+	if (canVolControl)
+	{
+		sound->volume(volControl.FadeIn(canVolControl));
+	}
+
 	//カメラの自動移動
 	this->cm.move();
 	//ギアを回す場合
@@ -177,6 +187,7 @@ void Title::UpDate()
 		if (this->flowerVolume >= 1.0f)
 		{
 			//花が咲いた時点でサウンドの再生を始める
+			this->canVolControl = true;
 			sound->play();
 			soundstart = true;      //花の咲く効果音で使用
 
@@ -389,6 +400,7 @@ bool Title::Finalize()
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
 	this->effect03.Finalize();
+	this->canVolControl = false;
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)

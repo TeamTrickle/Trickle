@@ -7,6 +7,10 @@ VolumeControl::VolumeControl()
 	this->distance = 0.0f;
 	this->playerPos = nullptr;
 	this->soundPos = Vec2(0, 0);
+	//フェードイン関連
+	this->timer = 0;
+	this->fadeinBGM = 0.0f;
+	this->fadeoutBGM = 1.0f;
 	//std::cout << "ボリューム調節クラス生成" << std::endl;
 }
 VolumeControl::~VolumeControl()
@@ -131,4 +135,46 @@ void VolumeControl::Play(Vec2* pos, float maxDis, float maxVol, Sound& sound)   
 	this->GetPlPos();
 	this->GetDistance(pos);
 	sound.volume(this->VolSet());
+}
+
+float VolumeControl::FadeIn(bool canControl)
+{
+	if (canControl)
+	{
+		this->timer++;
+		if (fadeinBGM <= 10.0f)
+		{
+			if (this->timer % 10 == 0)
+			{
+				fadeinBGM += 0.1f;
+			}
+		}
+		if (this->timer == 100)
+		{
+			this->timer = 0;
+		}
+		return fadeinBGM;
+	}
+	return 0.0f;
+}
+
+float VolumeControl::FadeOut(bool canControl)
+{
+	if (canControl)
+	{
+		this->timer++;
+		if (fadeoutBGM >=0.0f)
+		{
+			if (this->timer % 10 == 0)
+			{
+				fadeoutBGM -= 0.1f;
+			}
+		}
+		if (this->timer == 100)
+		{
+			this->timer = 0;
+		}
+		return fadeoutBGM;
+	}
+	return 1.0f;
 }

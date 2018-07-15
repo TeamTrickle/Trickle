@@ -30,6 +30,7 @@ class Goal : public GameObject, public TaskObject
 	unsigned int animCnt;
 	unsigned int ID;
 	Texture* image;
+	Texture lightTex;
 	GameObject foot;
 	Box2D draw;
 	Box2D src;
@@ -42,7 +43,7 @@ class Goal : public GameObject, public TaskObject
 	Vec2* precmSize;
 	bool isGoalCheck();
 	std::string soundname;   //サウンドのファイル名格納
-
+	bool testClear;
 public:
 	explicit Goal(const Vec2& pos);
 	virtual ~Goal();
@@ -59,4 +60,7 @@ public:
 	typedef std::shared_ptr<Goal> SP;			//スマートポインタ
 	static SP Create(const Vec2& pos, bool = true);	//生成処理
 	Sound sound;     //サウンド生成
+	bool lightCreate;
+	Vec2 lightscale;
+	void TestGoal();
 };

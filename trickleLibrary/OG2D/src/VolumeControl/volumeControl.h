@@ -9,6 +9,10 @@ class VolumeControl :public Sound
 	float distance;         //音源とプレイヤの直線距離
 	float maxdis;
 	float maxvol;
+	//フェードイン関連に使用する
+	int timer;
+	float fadeinBGM;
+	float fadeoutBGM;
 public:
 	VolumeControl();
 	~VolumeControl();
@@ -16,4 +20,6 @@ public:
 	float VolSet();                        //音量を距離によって変更させる
 	void GetPlPos();                       //プレイヤの位置を求める
 	void Play(Vec2* pos, float maxDis, float maxVol, Sound&sound);
+	float FadeIn(bool canControl);         //BGMのフェードイン
+	float FadeOut(bool canControl);        //BGMのフェードアウト
 };

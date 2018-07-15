@@ -16,6 +16,7 @@ StageSelect::StageSelect()
 	this->nowPos = -1;
 	this->soundname = "title.wav";      //ƒTƒEƒ“ƒh‚Ìƒtƒ@ƒCƒ‹–¼Ši”[
 	this->decisionsoundname = "decision.wav";
+	this->canVolControl = false;
 }
 
 StageSelect::~StageSelect()
@@ -70,6 +71,7 @@ bool StageSelect::Initialize()
 
 		sound->create(soundname, true);
 		rm->SetSoundData((std::string)"titleBGM", sound);
+		//this->canVolControl = true;
 		sound->play();
 	}
 	//Œˆ’è‰¹
@@ -106,6 +108,18 @@ bool StageSelect::Initialize()
 
 void StageSelect::UpDate()
 {
+	if (canVolControl)
+	{
+		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
+		{
+			sound->volume(volControl.FadeOut(this->canVolControl));
+		}
+		else
+		{
+			sound = rm->GetSoundData((std::string)"titleBGM");
+			sound->volume(volControl.FadeOut(this->canVolControl));
+		}
+	}
 	switch (this->mode)
 	{
 	case Mode::from1:	//¶¬‚©‚ç—Ž‰º‚Æd’¼
@@ -126,6 +140,7 @@ void StageSelect::UpDate()
 	case Mode::from4:	//Œˆ’èŒãˆ—
 	{
 		this->From4();
+		this->canVolControl = true;
 	}
 	break;
 	case Mode::End:		//ŽŸ‚Ö
