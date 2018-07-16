@@ -60,6 +60,15 @@ Water::Water(Vec2 pos)
 	__super::Init((std::string)"water");
 	//•`‰æ—Dæ“x‚ÌÝ’è
 	__super::SetDrawOrder(0.2f);
+	//d‚³Ý’è‰¼
+	if (this->volume < 1.0f)
+	{
+		this->mass = 0.5f;
+	}
+	else if(this->volume>=1.0f)
+	{
+		this->mass = 1.0f;
+	}
 }
 
 Water::~Water()

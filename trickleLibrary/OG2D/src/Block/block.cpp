@@ -9,6 +9,7 @@ Block::Block() {
 Block::Block(Vec2& pos) {
 	this->position = pos;
 	this->soundname = "blockMove.wav";
+	this->mass = 3.0f;        //‰¼
 }
 
 Block::~Block() {

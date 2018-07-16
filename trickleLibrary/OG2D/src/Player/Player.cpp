@@ -12,6 +12,7 @@ Player::Player()
 	this->isInputAuto = false;
 	this->isInput = false;
 	this->haveAddPos = { 0,0 };
+	this->mass = 1.0f;      //‰¼
 }
 Player::~Player()
 {

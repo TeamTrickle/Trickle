@@ -10,6 +10,7 @@ Bucket::Bucket() {
 Bucket::Bucket(Vec2& pos) {
 	this->position = pos;
 	this->invi = 0;
+	this->mass = 1.0f;       //仮
 	//サウンドのファイル名
 	putsoundname = "bucket-put1.wav";
 	dropsoundname = "spoil.wav";
