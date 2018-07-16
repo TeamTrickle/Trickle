@@ -81,6 +81,19 @@ void Chara::UpDate()
 		}
 		
 	}
+
+	if (player) {
+		float tilt = player->GetCurrentStickTilt(In::AXIS_LEFT_X);
+		if (tilt < 0.f) {
+			this->move.x = tilt * 5.f;
+			this->direction = Direction::LEFT;
+		}
+		if (tilt > 0.f) {
+			this->move.x = tilt * 5.f;
+			this->direction = Direction::RIGHT;
+		}
+	}
+
 	if (this->motion != Happy_N && this->motion != Happy_J && this->motion != Happy_F) {
 		if (this->move.x == 0) { this->motion = Normal; }
 		else { this->motion = Walk; }
@@ -437,6 +450,7 @@ void Chara::SetRecordEnable()
 	this->isAutoOff = true;
 	recorder = Recorder::Create("./data/TitleMovement.txt", true);
 	recorder->ActivateKeyRecord(OGge->in);
+	recorder->RecordJoysticks();
 	(*recorder) >> Input::in::CL;
 	(*recorder) >> Input::in::CR;
 	(*recorder) >> Input::in::B1;

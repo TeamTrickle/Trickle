@@ -110,27 +110,16 @@ void Recorder::RecordeButton() {
 }
 
 void Recorder::RecordeSticks() {
-	static In::AXIS sticks[]{
-		In::AXIS_LEFT_X,
-		In::AXIS_LEFT_Y,
-		In::AXIS_RIGHT_X,
-		In::AXIS_RIGHT_Y
-	};
-	static std::map<In::AXIS, std::string> sticksName = {
-		{ In::AXIS_LEFT_X, "LeftX" },
-		{ In::AXIS_LEFT_Y, "LeftY" },
-		{ In::AXIS_RIGHT_X, "RightX" },
-		{ In::AXIS_RIGHT_Y, "RightY" }
-	};
 	auto isRecordeable = [&](const In::AXIS& b) -> bool {
-		return inputListener->axis(b) > 0.f;
+		return inputListener->axis(b) != 0.f;
 	};
 
 	for (auto& s : sticks) {
 		if (isRecordeable(s)) {
+			std::string curTime = std::to_string(gameTimer->GetTime());
 			std::string stickName = sticksName[s];
 			std::string tilt = std::to_string(inputListener->axis(s));
-			std::string msg = "StickInput/" + stickName + "/" + tilt;
+			std::string msg = curTime + "/" + "StickInput/" + stickName + "/" + tilt;
 			fileWriter << msg.c_str() << std::endl;
 			printLog(msg);
 		}
