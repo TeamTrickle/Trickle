@@ -14,6 +14,9 @@ Goal::Goal(const Vec2& pos)
 	this->cameraLock = true;
 	this->animCnt = 0;
 	this->image = nullptr;
+	this->lightTex.Create((std::string)"goallight.png");      //光のエフェクト生成
+	this->lightCreate = false;                                //光のエフェクトを生成するかどうか
+	this->lightscale = Vec2(0.f, 0.f);
 	this->color = Paint::PaintColor::Normal;
 	this->termsColor = Paint::PaintColor::Normal;
 	this->mode = Mode::Non;
@@ -30,11 +33,13 @@ Goal::Goal(const Vec2& pos)
 	this->ID = count;
 	this->soundname = "flower.wav";         //サウンドのファイル名格納
 	sound.create(soundname, false);
+	this->testClear = false;
 }
 
 Goal::~Goal()
 {
 	this->image = nullptr;
+	this->lightTex.Finalize();
 	if (this->precmPos)
 	{
 		delete this->precmPos;
@@ -52,6 +57,11 @@ void Goal::SetColor(const Paint::PaintColor & color)
 	this->termsColor = color;
 }
 
+Paint::PaintColor Goal::GetColor() const
+{
+	return this->termsColor;
+}
+
 bool Goal::ColorCheck() const
 {
 	return this->termsColor == this->color ? true : false;
@@ -62,11 +72,11 @@ void Goal::UpDate()
 	switch (this->mode)
 	{
 	case Mode::Non:
-		if (this->WaterHit())
+		if (this->WaterHit() || this->testClear)
 		{
 			//カメラ移動終了地点を設定
-			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5.f);
-			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5.f);
+			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5);
+			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5);
 			//移動前のカメラの位置とサイズを保存しておく
 			this->precmPos = new Vec2(OGge->camera->GetPos());
 			this->precmSize = new Vec2(OGge->camera->GetSize());
@@ -88,6 +98,7 @@ void Goal::UpDate()
 			this->isCheck = true;
 			//サウンドの再生
 			sound.play();
+			this->lightCreate = true;
 
 			this->mode = Mode::Form2;
 			if (this->isGoalCheck())
@@ -105,6 +116,7 @@ void Goal::UpDate()
 		if (this->animCnt >= 99)
 		{
 			//元のカメラ位置に戻す
+			//ここでプレイヤーの座標からカメラの位置を計算して求めてSetにいれれば問題解決できる気がする。
 			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 6);
 			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 6);
 			delete this->precmPos;
@@ -139,6 +151,24 @@ void Goal::UpDate()
 	case Mode::End:
 		this->isClear = true;
 		break;
+	}
+
+	if (lightCreate)
+	{
+		//縦移動完成版  使用していない
+		/*if (lightscale.x < 1.0f)
+		{
+		this->lightscale.x += 0.05f;
+		}
+		if (lightscale.y < 1.0f)
+		{
+		this->lightscale.y += 0.05f;
+		}*/
+		//横移動版
+		if (this->lightscale.x < 150)
+		{
+			this->lightscale.x += 5;
+		}
 	}
 }
 
@@ -188,9 +218,25 @@ void Goal::Render2D()
 				break;
 			}
 		}
-		
+
 		this->src.OffsetSize();
 		this->image->Draw(this->draw, this->src);
+
+		//光の描画
+		if (this->lightCreate)
+		{
+			//縦移動完成版 使用していない
+			//Box2D draw(Vec2(this->position.x - (this->Scale.x - 30.0f), this->position.y - (this->Scale.y + 245.0f)), Vec2(100.0f, this->lightscale.y * 400));         //srcを拡大させて出現
+			//横移動版
+			Box2D draw(Vec2((this->position.x + 15) - (this->lightscale.x / 2.0f), this->position.y - (this->Scale.y + 245.0f)), Vec2(10.0f + this->lightscale.x, 400.0f));
+			draw.OffsetSize();
+			//縦移動完成版 使用していない
+			//Box2D src(0.0f, 0.0f, 512.0f, 1024 * this->lightscale.x);
+			//横移動版
+			Box2D src(0.0f, 0.0f, 512.0f, 1024.0f);
+			src.OffsetSize();
+			lightTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
+		}
 	}
 }
 
@@ -242,8 +288,8 @@ void Goal::CameraAnim::Set(const Vec2& start, const Vec2& end, const unsigned in
 Vec2 Goal::CameraAnim::Move()
 {
 	return Vec2(
-		this->easing_x.sine.InOut(this->easing_x.Time(this->time), this->startPos.x, this->endPos.x, this->time),
-		this->easing_y.sine.InOut(this->easing_y.Time(this->time), this->startPos.y, this->endPos.y, this->time));
+		this->easing_x.sine.InOut(this->easing_x.Time((float)this->time), this->startPos.x, this->endPos.x, (float)this->time),
+		this->easing_y.sine.InOut(this->easing_y.Time((float)this->time), this->startPos.y, this->endPos.y, (float)this->time));
 }
 bool Goal::CameraAnim::isPlay()
 {
@@ -271,7 +317,12 @@ bool Goal::isGoalCheck()
 	return true;
 }
 
-Goal::SP Goal::Create(const Vec2& pos,bool flag)
+void Goal::TestGoal()
+{
+	this->testClear = true;
+}
+
+Goal::SP Goal::Create(const Vec2& pos, bool flag)
 {
 	Goal::SP to = Goal::SP(new Goal(pos));
 	if (to)

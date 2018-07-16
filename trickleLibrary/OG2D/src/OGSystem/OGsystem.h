@@ -149,7 +149,7 @@ private:
 	void Task_Render_AF();		//タスク描画処理
 	void TaskKillCheck();		//削除予定のタスクを削除
 	void AllTaskDelete();		//登録タスク全削除
-	std::vector<std::pair<DWORD, TaskObject::SP>> taskobjects;	//タスクオブジェクト達
+	std::vector<std::pair<int, TaskObject::SP>> taskobjects;	//タスクオブジェクト達
 	std::vector<TaskObject::SP> addTaskObjects;	//登録予定タスク達
 };
 

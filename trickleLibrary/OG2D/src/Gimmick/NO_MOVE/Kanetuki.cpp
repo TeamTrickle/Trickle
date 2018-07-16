@@ -48,7 +48,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	//本体の向きによって炎の向きと描画数を変更
 	switch (this->angle) {
 	case UP:
-		this->hotNum = this->Scale.x / 64;
+		this->hotNum = (int)this->Scale.x / 64;
 		this->draw.resize(this->hotNum);
 		for (int i = 0; i < this->hotNum; ++i) {
 			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
@@ -57,7 +57,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 		this->texRotaAng = 0.0f;
 		break;
 	case RIGHT:
-		this->hotNum = this->Scale.y / 64;
+		this->hotNum = (int)this->Scale.y / 64;
 		this->draw.resize(this->hotNum);
 		for (int i = 0; i < this->hotNum; ++i) {
 			draw[i] = Box2D(position.x, position.y + (64 * i), Scale.x, 64.f);
@@ -69,7 +69,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 		//現時点で存在しないので略
 		break;
 	case BOTTOM:
-		this->hotNum = this->Scale.x / 64;
+		this->hotNum = (int)this->Scale.x / 64;
 		this->draw.resize(this->hotNum);
 		for (int i = 0; i < this->hotNum; ++i) {
 			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
@@ -83,6 +83,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 }
 void Kanetuki::UpDate() {
 	if (active) {
+		++animCnt;
 		toSteam();
 	}
 	//サウンド関係
@@ -126,7 +127,6 @@ void Kanetuki::UpDate() {
 void Kanetuki::Render2D() {
 	
 	if (active) {
-		++animCnt;
 		Box2D src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
 		src.OffsetSize();
 

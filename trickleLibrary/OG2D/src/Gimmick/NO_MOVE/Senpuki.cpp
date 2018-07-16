@@ -160,7 +160,7 @@ void Fan::Render2D() {
 	src.OffsetSize();
 	if (this->dir == Fan::Dir::LEFT)
 	{
-		int k = src.w;
+		float k = src.w;
 		src.w = src.x;
 		src.x = k;
 	}
@@ -183,7 +183,7 @@ void Fan::SendWind() {
 			{
 				if ((*id)->GetState() == Water::State::GAS)
 				{
-					(*id)->MovePos_x(this->strength);
+					(*id)->MovePos_x((float)this->strength);
 				}
 			}
 		}

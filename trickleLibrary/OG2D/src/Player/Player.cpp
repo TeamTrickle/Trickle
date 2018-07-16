@@ -4,6 +4,7 @@
 #include "Map\Map.h"
 #include "Block\block.h"
 #include "Gimmick\NO_MOVE\Switch.h"
+#include "Gimmick\NO_MOVE\Door.h"
 
 Player::Player()
 {
@@ -97,6 +98,10 @@ void Player::UpDate()
 		//ブロックを押す
 		this->motion = Motion::Block_M;
 	}
+	if (this->state == State::BUCKET)
+	{
+		this->HaveObjectPosMove();
+	}
 }
 void Player::Render2D()
 {
@@ -118,7 +123,7 @@ void Player::Render2D()
 
 	//左向きなら画像を逆にする
 	if (direction == Direction::RIGHT) {
-		int k = src.w;
+		float k = src.w;
 		src.w = src.x;
 		src.x = k;
 	}
@@ -154,6 +159,17 @@ bool Player::HeadCheck()
 		if (this->head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
 			if (this->head.CubeHit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
+	auto door = OGge->GetTasks<Door>("Door");
+	for (auto id = door->begin(); id != door->end(); ++id)
+	{
+		if (head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (head.CubeHit(*(*id)))
 			{
 				return true;
 			}
@@ -347,7 +363,7 @@ void Player::MoveCheck(Vec2& est)
 	auto blocks = OGge->GetTasks<Block>("block");
 	auto waters = OGge->GetTasks<Water>("water");
 	auto block = OGge->GetTask<Block>("block");
-
+	auto door = OGge->GetTasks<Door>("Door");
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -370,6 +386,17 @@ void Player::MoveCheck(Vec2& est)
 		{
 			this->position.x = preX;
 			break;
+		}
+		for (auto id = door->begin(); id != door->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
+				}
+			}
 		}
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
 		{
@@ -431,6 +458,17 @@ void Player::MoveCheck(Vec2& est)
 		{
 			this->position.y = preY;
 			break;
+		}
+		for (auto id = door->begin(); id != door->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
+				}
+			}
 		}
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
 		{
@@ -1224,6 +1262,32 @@ bool Player::PutCheck()
 			}
 		}
 	}
+	auto doors = OGge->GetTasks<Door>("Door");
+	for (auto id = doors->begin(); id != doors->end(); ++id)
+	{
+		if (this->direction == Direction::LEFT)
+		{
+			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
+			if ((*id)->IsObjectDistanceCheck(left.position, left.Scale))
+			{
+				if ((*id)->CubeHit(left))
+				{
+					return false;
+				}
+			}
+		}
+		else
+		{
+			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
+			if ((*id)->IsObjectDistanceCheck(right.position, right.Scale))
+			{
+				if ((*id)->CubeHit(right))
+				{
+					return false;
+				}
+			}
+		}
+	}
 	return true;
 }
 void Player::SetMotion(Motion motion_)
@@ -1283,7 +1347,7 @@ void Player::StateUpDate()
 		break;
 	case State::BUCKET:
 		//バケツの値を自分に合わせる
-		this->HaveObjectPosMove();
+		//this->HaveObjectPosMove();
 		//バケツを置く動作
 		if (this->InputB2down() && this->FootCheck())
 		{

@@ -160,6 +160,7 @@
     <ClCompile Include="src\Effect\Effect.cpp" />
     <ClCompile Include="src\GameProcessManagement\GameProcessManagement.cpp" />
     <ClCompile Include="src\Gate\Gate.cpp" />
+    <ClCompile Include="src\Gimmick\NO_MOVE\Door.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Seihyouki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Kanetuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="src\Effect\Effect.h" />
     <ClInclude Include="src\GameProcessManagement\GameProcessManagement.h" />
     <ClInclude Include="src\Gate\Gate.h" />
+    <ClInclude Include="src\Gimmick\NO_MOVE\Door.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Seihyouki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Kanetuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h" />

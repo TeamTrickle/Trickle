@@ -16,6 +16,7 @@ StageSelect::StageSelect()
 	this->nowPos = -1;
 	this->soundname = "title.wav";      //サウンドのファイル名格納
 	this->decisionsoundname = "decision.wav";
+	this->canVolControl = false;
 }
 
 StageSelect::~StageSelect()
@@ -49,22 +50,28 @@ bool StageSelect::Initialize()
 	chara->SetDirection(Chara::Direction::RIGHT);
 	chara->SetAutoFlag(true);
 	//背景の描画
-	auto back = Back::Create(std::string("back.png"), Vec2(1920 + 200, 1080));
+	auto back = Back::Create(std::string("back.png"), Vec2(1920 * 2 + 200, 1080));
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.5f);
 	//ステージ概要表示用案内板
 	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
+	//auto board2 = StageAlert::Create(true, Box2D(500 + 1280, 50, 1328, 550));
 	(*board) << "./data/monitor0.txt";
 	(*board) << "./data/monitor1.txt";
 	(*board) << "./data/monitor2.txt";
+	//(*board2) << "./data/monitor0.txt";
+	//(*board2) << "./data/monitor1.txt";
+	//(*board2) << "./data/monitor2.txt";
 	//サウンドの生成
 	//BGM
 	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
 	{
 		sound = new Sound();
+
 		sound->create(soundname, true);
 		rm->SetSoundData((std::string)"titleBGM", sound);
+		//this->canVolControl = true;
 		sound->play();
 	}
 	//決定音
@@ -79,20 +86,40 @@ bool StageSelect::Initialize()
 	//テスト処理
 	OGge->camera->SetSize(Vec2(1920, 1080));
 	OGge->camera->SetPos(Vec2(100, 0));
+	this->doorNumber = 6;
 	//停止位置の設定
-	for (int i = 1; i <= 3; ++i)
+	for (int i = 1; i <= this->doorNumber / 2; ++i)
 	{
 		auto gate = Gate::Create((490.f * i) + 100.f, 640.f);      //元データ(490.f*i)+450.f
 		gate->SetTexture(&this->Testdoor);
 		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
-	this->Entrance.emplace_back(LEFT, 31.f * 64.f - chara->Scale.x);
+	for (int i = 1; i <= this->doorNumber / 2; ++i)
+	{
+		auto gate = Gate::Create((490.f * i) + 100.f + 1920.f, 640.f);      //元データ(490.f*i)+450.f
+		gate->SetTexture(&this->Testdoor);
+		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
+		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
+	}
+	this->Entrance.emplace_back(LEFT, 31.f * 64.f + 1920.f - chara->Scale.x);
 	return true;
 }
 
 void StageSelect::UpDate()
 {
+	if (canVolControl)
+	{
+		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
+		{
+			sound->volume(volControl.FadeOut(this->canVolControl));
+		}
+		else
+		{
+			sound = rm->GetSoundData((std::string)"titleBGM");
+			sound->volume(volControl.FadeOut(this->canVolControl));
+		}
+	}
 	switch (this->mode)
 	{
 	case Mode::from1:	//生成から落下と硬直
@@ -113,6 +140,7 @@ void StageSelect::UpDate()
 	case Mode::from4:	//決定後処理
 	{
 		this->From4();
+		this->canVolControl = true;
 	}
 	break;
 	case Mode::End:		//次へ
@@ -124,6 +152,16 @@ void StageSelect::UpDate()
 		break;
 	}
 	this->ModeCheck();
+}
+
+void StageSelect::PauseUpDate()
+{
+	OGge->camera->SetPos(this->camera_anim.Move(10.f));
+	if (!this->camera_anim.isPlay())
+	{
+		this->timeCnt++;
+		OGge->SetPause(false);
+	}
 }
 
 void StageSelect::Render2D()
@@ -139,7 +177,7 @@ void StageSelect::Render2D()
 	}
 	for (int i = 0; i < 8; ++i)
 	{
-		Box2D draw(31.f*64.f, i * 128.f, 128.f, 128.f);
+		Box2D draw(31.f*64.f + 1920.f, i * 128.f, 128.f, 128.f);
 		draw.OffsetSize();
 		Box2D src(768, 256, 256, 256);
 		src.OffsetSize();
@@ -234,10 +272,15 @@ void StageSelect::From2()
 	//移動が終了したら
 	if (!this->camera_anim.isPlay())
 	{
-		auto board = OGge->GetTask<StageAlert>("stagealert");
-		if (board) {
-			board->setActive(true);
-			board->SetStageData("./data/monitor0.txt");
+		auto board = OGge->GetTasks<StageAlert>("stagealert");
+		//if (board) {
+		//	board->setActive(true);
+		//	board->SetStageData("./data/monitor0.txt");
+		//}
+		for (auto id = board->begin(); id != board->end(); ++id)
+		{
+			(*id)->setActive(true);
+			(*id)->SetStageData("./data/monitor0.txt");
 		}
 		//次へ移動
 		this->mode = Mode::from3;
@@ -293,11 +336,27 @@ void StageSelect::From3()
 						(*id)->ToOpen();
 					}
 				}
-				auto board = OGge->GetTask<StageAlert>("stagealert");
+				//画面が変わるならばカメラを移動する
+				if (this->nowPos == 5)
+				{
+					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(200.f, 0.f));
+					this->timeCnt = 0;
+				}
+				auto board = OGge->GetTasks<StageAlert>("stagealert");
 				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
-				if (board && board->isExist(curStageName)) {
-					//board->AnimPlay();
-					board->SetStageData(curStageName);
+				//if (board && board->isExist(curStageName)) {
+				//	//board->AnimPlay();
+				//	board->SetStageData(curStageName);
+				//}
+				for (auto id = board->begin(); id != board->end(); ++id)
+				{
+					if ((*id)->isExist(curStageName))
+					{
+						(*id)->SetStageData(curStageName);
+						if (nowPos / 3 < 1) {
+							(*id)->setPosition(Vec2(350, 0));
+						}
+					}
 				}
 			}
 			//right入力
@@ -306,7 +365,7 @@ void StageSelect::From3()
 				auto gates = OGge->GetTasks<Gate>("gate");
 				if (chara->nowDirection() == Chara::Direction::RIGHT)
 				{
-					if (this->nowPos < 6)
+					if (this->nowPos < this->doorNumber * 2)
 					{
 						for (auto id = gates->begin(); id != gates->end(); ++id)
 						{
@@ -321,7 +380,7 @@ void StageSelect::From3()
 				}
 				else
 				{
-					if (this->nowPos < 6)
+					if (this->nowPos < this->doorNumber * 2)
 					{
 						for (auto id = gates->begin(); id != gates->end(); ++id)
 						{
@@ -341,11 +400,27 @@ void StageSelect::From3()
 						(*id)->ToOpen();
 					}
 				}
-				auto board = OGge->GetTask<StageAlert>("stagealert");
+				//画面が変わるならカメラの移動
+				if (this->nowPos == 6)
+				{
+					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetSize().x + 200.f, 0.f));
+					this->timeCnt = 0;
+				}
+				auto board = OGge->GetTasks<StageAlert>("stagealert");
 				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
-				if (board && board->isExist(curStageName)) {
-					//board->AnimPlay();
-					board->SetStageData(curStageName);
+				//if (board && board->isExist(curStageName)) {
+				//	//board->AnimPlay();
+				//	board->SetStageData(curStageName);
+				//}
+				for (auto id = board->begin(); id != board->end(); ++id)
+				{
+					if ((*id)->isExist(curStageName))
+					{
+						(*id)->SetStageData(curStageName);
+						if (nowPos / 3 > 0) {
+							(*id)->setPosition(Vec2(1350, 0));
+						}
+					}
 				}
 			}
 			//決定入力
@@ -358,23 +433,37 @@ void StageSelect::From3()
 				{
 				case 0:
 				case 1:
-					this->state = State::Tutorial;
+					this->state = State::Tutorial1;
 					*MapNum = 1;
 					break;
 				case 2:
 				case 3:
-					this->state = State::Stage1;
+					this->state = State::Tutorial2;
 					*MapNum = 5;
 					break;
 				case 4:
 				case 5:
-					this->state = State::Stage2;
+					this->state = State::Tutorial3;
 					*MapNum = 6;
 					break;
 				case 6:
+				case 7:
 					//梯子を上る
-					this->state = State::ToTitle;
+					this->state = State::Stage1;
+					*MapNum = 1;
 					break;
+				case 8:
+				case 9:
+					this->state = State::Stage2;
+					*MapNum = 5;
+					break;
+				case 10:
+				case 11:
+					this->state = State::Stage3;
+					*MapNum = 6;
+					break;
+				case 12:
+					this->state = State::ToTitle;
 				default:
 					this->state = State::ToTitle;
 					break;
@@ -406,6 +495,13 @@ void StageSelect::From3()
 				this->mode = Mode::from4;
 			}
 		}
+		else
+		{
+			if (this->timeCnt == 60)
+			{
+				OGge->SetPause(true);
+			}
+		}
 	}
 }
 void StageSelect::From4()
@@ -416,7 +512,7 @@ void StageSelect::From4()
 	{
 		if (!chara->isAutoPlay())
 		{
-			if (this->nowPos == 6)
+			if (this->nowPos == 12)
 			{
 				this->nowPos += 1;
 				chara->Set(chara->position, Vec2(chara->position.x, -200.f), 30.f);
@@ -472,6 +568,8 @@ void StageSelect::Animation::Set(Vec2& start_, Vec2& end_)
 {
 	this->StartPos = start_;
 	this->EndPos = end_ - start_;
+	this->easing_x.ResetTime();
+	this->easing_y.ResetTime();
 }
 
 Vec2 StageSelect::Animation::Move()
@@ -481,16 +579,42 @@ Vec2 StageSelect::Animation::Move()
 
 Vec2 StageSelect::Animation::Move(const float time)
 {
+	return Vec2(this->easing_x.sine.Out(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, 10), this->easing_y.linear.In(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
+}
+
+Vec2 StageSelect::Animation::Move(const Easing::Name name, const Easing::Mode mode, const float time)
+{
+	switch (name)
+	{
+	case Easing::Name::Back:
+		break;
+	case Easing::Name::Bounce:
+		break;
+	case Easing::Name::Circ:
+		break;
+	case Easing::Name::Cubic:
+		break;
+	case Easing::Name::Elastic:
+		break;
+	case Easing::Name::Expo:
+		break;
+	case Easing::Name::Quad:
+		break;
+	case Easing::Name::Quart:
+		break;
+	case Easing::Name::Quint:
+		break;
+	case Easing::Name::Sine:
+		break;
+	default:
+		break;
+	}
 	return Vec2(this->easing_x.sine.In(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
 }
 
 bool StageSelect::Animation::isPlay() const
 {
-	if (this->easing_x.isplay() || this->easing_y.isplay())
-	{
-		return true;
-	}
-	return false;
+	return this->easing_x.isplay() || this->easing_y.isplay() ? true : false;
 }
 
 bool StageSelect::CheckTime(int t)
