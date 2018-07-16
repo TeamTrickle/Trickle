@@ -14,4 +14,5 @@ namespace RecDef {
 		RELEASE
 	};
 	typedef std::pair<Input::in, KeyState> WatchKey;
+	typedef std::pair<In::AXIS, KeyState> WatchStick;
 }

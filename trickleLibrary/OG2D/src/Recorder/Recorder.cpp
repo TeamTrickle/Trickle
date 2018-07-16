@@ -69,6 +69,10 @@ void Recorder::RecordStart() {
 	recThread = std::thread(&Recorder::Recorde, this);
 }
 
+void Recorder::RecordJoysticks() {
+	isRecordSticks = true;
+}
+
 void Recorder::Recorde() {
 	Time localTimer;
 	gameTimer = &localTimer;
@@ -84,6 +88,8 @@ void Recorder::Recorde() {
 		}
 		if (isKeyListenable())
 			RecordeButton();
+		if (isRecordSticks)
+			RecordeSticks();
 	}
 }
 
@@ -97,6 +103,34 @@ void Recorder::RecordeButton() {
 			std::string button  = std::to_string(k.first);
 			std::string status	= std::to_string(k.second);
 			std::string msg = curTime + "/" + button + "/" + status;
+			fileWriter << msg.c_str() << std::endl;
+			printLog(msg);
+		}
+	}
+}
+
+void Recorder::RecordeSticks() {
+	static In::AXIS sticks[]{
+		In::AXIS_LEFT_X,
+		In::AXIS_LEFT_Y,
+		In::AXIS_RIGHT_X,
+		In::AXIS_RIGHT_Y
+	};
+	static std::map<In::AXIS, std::string> sticksName = {
+		{ In::AXIS_LEFT_X, "LeftX" },
+		{ In::AXIS_LEFT_Y, "LeftY" },
+		{ In::AXIS_RIGHT_X, "RightX" },
+		{ In::AXIS_RIGHT_Y, "RightY" }
+	};
+	auto isRecordeable = [&](const In::AXIS& b) -> bool {
+		return inputListener->axis(b) > 0.f;
+	};
+
+	for (auto& s : sticks) {
+		if (isRecordeable(s)) {
+			std::string stickName = sticksName[s];
+			std::string tilt = std::to_string(inputListener->axis(s));
+			std::string msg = "StickInput/" + stickName + "/" + tilt;
 			fileWriter << msg.c_str() << std::endl;
 			printLog(msg);
 		}
