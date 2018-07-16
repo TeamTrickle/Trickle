@@ -94,7 +94,6 @@ void WeightSwitch::Getmass()
 				if(canIcehitCheck==false)
 				{
 					canIcehitCheck = true;                    //変数をオブジェクトごとに変えたほうがいいかも
-					//this->totalmass = premass;          //外に出たら重さを元に戻す
 					this->totalmass -= (*id)->mass;
 					//デバッグ用
 					//std::cout << this->totalmass << std::endl;
@@ -123,7 +122,7 @@ void WeightSwitch::Getmass()
 			if (canBuckethitCheck == false)
 			{
 				canBuckethitCheck = true;
-				this->totalmass = premass;          //外に出たら重さを元に戻す
+				this->totalmass -= (*id)->mass;      //外に出たら重さを元に戻す
 				//デバッグ用
 				//std::cout << this->totalmass << std::endl;
 			}
@@ -150,7 +149,7 @@ void WeightSwitch::Getmass()
 			if (canBlockhitCheck == false)
 			{
 				canBlockhitCheck = true;
-				this->totalmass = premass;          //外に出たら重さを元に戻す
+				this->totalmass -= (*id)->mass;      //外に出たら重さを元に戻す
 				//デバッグ用
 				//std::cout << this->totalmass << std::endl;
 			}
@@ -175,7 +174,6 @@ void WeightSwitch::Getmass()
 		if (canPlhitCheck == false)
 		{
 			this->canPlhitCheck = true;
-			//this->totalmass = premass;          //外に出たら重さを元に戻す
 			this->totalmass -= player->mass;
 			//デバッグ用
 			//std::cout << this->totalmass << std::endl;
