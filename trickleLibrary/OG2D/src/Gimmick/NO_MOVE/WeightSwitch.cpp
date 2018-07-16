@@ -19,6 +19,7 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	this->maxmass = mass_;                   //扉が開く重さを格納
 	this->totalmass = 0.0f;                  //乗っているものの総合の重さ格納
 	this->nowActive = false;                 //今扉が開けるか
+	this->premass = 0.0f;
 	//今そのオブジェクトと当たり判定をしてよいか
 	this->canPlhitCheck = true;         //プレイヤ
 	this->canBlockhitCheck = true;      //ブロック
@@ -69,27 +70,35 @@ void WeightSwitch::Render2D()
 //当たっているオブジェクトの重さを取得
 void WeightSwitch::Getmass()
 {
-	float premass = 0.0f;
+	std::cout <<"現在の重さ"<< totalmass << std::endl;
 	//氷の重さの取得---------------------------------------------------------
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
 		//水との当たり判定
-		if ((*id)->CubeHit(*this))
+		if ((*id)->GetState() == Water::State::SOLID)
 		{
-			if ((*id)->GetState() == Water::State::SOLID)
+			if ((*id)->CubeHit(*this))
 			{
 				if (canIcehitCheck == true)
 				{
 					premass = totalmass;            //加算する前の重さを格納
 					this->totalmass += (*id)->mass;
 					canIcehitCheck = false;
+					//デバッグ用
+					//std::cout << this->totalmass << std::endl;
 				}
 			}
 			else
 			{
-				canIcehitCheck = true;                    //変数をオブジェクトごとに変えたほうがいいかも
-				this->totalmass = premass;          //外に出たら重さを元に戻す
+				if(canIcehitCheck==false)
+				{
+					canIcehitCheck = true;                    //変数をオブジェクトごとに変えたほうがいいかも
+					//this->totalmass = premass;          //外に出たら重さを元に戻す
+					this->totalmass -= (*id)->mass;
+					//デバッグ用
+					//std::cout << this->totalmass << std::endl;
+				}
 			}
 		}
 	}
@@ -105,12 +114,19 @@ void WeightSwitch::Getmass()
 				premass = totalmass;            //加算する前の重さを格納
 				this->totalmass += (*id)->mass;
 				canBuckethitCheck = false;
+				//デバッグ用
+				//std::cout << this->totalmass << std::endl;
 			}
 		}
 		else
 		{
-			canBuckethitCheck = true;
-			this->totalmass = premass;          //外に出たら重さを元に戻す
+			if (canBuckethitCheck == false)
+			{
+				canBuckethitCheck = true;
+				this->totalmass = premass;          //外に出たら重さを元に戻す
+				//デバッグ用
+				//std::cout << this->totalmass << std::endl;
+			}
 		}
 	}
 	//ブロックの重さ取得--------------------------------------------------------
@@ -125,12 +141,19 @@ void WeightSwitch::Getmass()
 				premass = totalmass;            //加算する前の重さを格納
 				this->totalmass += (*id)->mass;
 				canBlockhitCheck = false;
+				//デバッグ用
+				//std::cout << this->totalmass << std::endl;
 			}
 		}
 		else
 		{
-			canBlockhitCheck = true;
-			this->totalmass = premass;          //外に出たら重さを元に戻す
+			if (canBlockhitCheck == false)
+			{
+				canBlockhitCheck = true;
+				this->totalmass = premass;          //外に出たら重さを元に戻す
+				//デバッグ用
+				//std::cout << this->totalmass << std::endl;
+			}
 		}
 	}
 	//プレイヤの重さ取得---------------------------------------------------------
@@ -143,12 +166,20 @@ void WeightSwitch::Getmass()
 			premass = totalmass;            //加算する前の重さを格納
 			this->totalmass += player->mass;
 			canPlhitCheck = false;
+			//デバッグ用
+			//std::cout << this->totalmass << std::endl;
 		}
 	}
 	else
 	{
-		this->canPlhitCheck = true;
-		this->totalmass = premass;          //外に出たら重さを元に戻す
+		if (canPlhitCheck == false)
+		{
+			this->canPlhitCheck = true;
+			//this->totalmass = premass;          //外に出たら重さを元に戻す
+			this->totalmass -= player->mass;
+			//デバッグ用
+			//std::cout << this->totalmass << std::endl;
+		}
 	}
 }
 

@@ -17,6 +17,7 @@ class WeightSwitch :public GameObject, public TaskObject
 	bool canIcehitCheck;        //氷と当たり判定をしてよいか
 	bool canBlockhitCheck;      //ブロックと当たり判定をしてよいか
 	bool canBuckethitCheck;     //バケツと当たり判定をしてよいか
+	float premass;
 
 public:
 	typedef std::shared_ptr<WeightSwitch> SP;
