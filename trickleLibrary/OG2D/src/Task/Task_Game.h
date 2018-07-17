@@ -48,7 +48,8 @@ private:
 	Texture Effectsond;
 	Texture texSteam;
 	Texture goalTex;
-	Texture doorTex;
+	Texture goalDirectionTex;
+	Texture arrowflower;
 	std::string gamesoundname;
 	std::string tutorialsoundname;
 
