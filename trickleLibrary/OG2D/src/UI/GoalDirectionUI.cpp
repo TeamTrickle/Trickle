@@ -15,7 +15,7 @@ bool GoalDirection::Initialize(std::shared_ptr<GameObject> target_)
 {
 	this->Init(this->taskName);
 
-	this->CreateObject(Cube, OGge->camera->GetPos(), Vec2(192, 192), 0.f);
+	this->CreateObject(Cube, OGge->camera->GetPos(), Vec2(96, 96), 0.f);
 	this->target = target_;
 
 	this->SetDrawOrder(0.9f);
@@ -89,7 +89,7 @@ bool GoalDirection::WindowOuterCheck()
 {
 	/* ウィンドウとゴールの当たり判定をします */
 	GameObject windowsize;
-	windowsize.CreateObject(Cube, OGge->camera->GetPos(), Vec2(OGge->camera->GetSize().x - this->target->Scale.x, OGge->camera->GetSize().y - this->target->Scale.y), 0);
+	windowsize.CreateObject(Cube, OGge->camera->GetPos(), /*Vec2(OGge->camera->GetSize().x - this->target->Scale.x, OGge->camera->GetSize().y - this->target->Scale.y)*/OGge->camera->GetSize(), 0);
 	//おおまかな当たり判定実装
 	if (!windowsize.IsObjectDistanceCheck(this->target->position, this->target->Scale))
 	{
@@ -105,7 +105,7 @@ void GoalDirection::TargetDirecition()
 
 	if (player != nullptr && this->target != nullptr)
 	{
-		float rad = std::atan2f(player->position.x - this->target->position.x, player->position.y - this->target->position.y);
+		float rad = std::atan2f(player->position.x - (this->target->position.x + this->target->Scale.x / 2), player->position.y - (this->target->position.y + this->target->Scale.y));
 		this->angle = this->ToDeg(-rad);
 	}
 }
@@ -125,8 +125,10 @@ Vec2 GoalDirection::CameraPosUpDate()
 	//ウィンドウの真ん中
 	Vec2 windowsenter = { (OGge->camera->GetPos().x + OGge->camera->GetSize().x / 2  - this->Scale.x / 2 ), OGge->camera->GetPos().y + OGge->camera->GetSize().y / 2 - this->Scale.y / 2 };
 	//ウィンドウサイズ * 角度座標
-	windowsenter.x += OGge->window->GetSize().x / 2 * offset.x;
-	windowsenter.y += OGge->window->GetSize().y / 2 * offset.y;
+	//windowsenter.x += OGge->window->GetSize().x / 2 * offset.x;
+	//windowsenter.y += OGge->window->GetSize().y / 2 * offset.y;
+	windowsenter.x += (OGge->camera->GetSize().x / 2 - this->Scale.x / 2) * offset.x;
+	windowsenter.y += (OGge->camera->GetSize().y / 2 - this->Scale.y / 2) * offset.y;
 	return windowsenter;
 }
 GoalDirection::SP GoalDirection::Create(std::shared_ptr<GameObject> target, bool flag)
