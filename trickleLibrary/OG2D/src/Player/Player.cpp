@@ -1606,6 +1606,15 @@ bool Player::MotionLadderUpDate()
 			return false;
 		}
 	}
+	if (this->InputLeft() || this->InputRight() || this->AxisLX() > 0.8f || this->AxisLX() < -0.8f)
+	{
+		if (this->LadderJumpCheck())
+		{
+			this->motion = Fall;
+			this->animation.animCnt = 0;
+			this->moveCnt = 0;
+		}
+	}
 	return true;
 }
 bool Player::MotionWalkUpDate()
