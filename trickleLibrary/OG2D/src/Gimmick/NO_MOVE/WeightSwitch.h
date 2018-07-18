@@ -32,6 +32,7 @@ public:
 		Riding         //乗っている状態
 	};
 	State state;
+	GameObject head;       //他のオブジェクトとの当たり判定用
 
 	void UpDate();
 	void Render2D();

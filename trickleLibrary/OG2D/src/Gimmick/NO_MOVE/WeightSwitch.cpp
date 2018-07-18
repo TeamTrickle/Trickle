@@ -16,6 +16,7 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	auto WSwitch = OGge->GetTasks<WeightSwitch>(this->objectTag);
 
 	CreateObject(Cube, pos_, size_);         //オブジェクトを生成
+	head.CreateObject(Cube, Vec2(pos_.x, pos_.y - 1.0f), Vec2(size_.x, 1.0f));     //ほかのオブジェクトとの当たり判定用オブジェクトの生成
 	this->maxmass = mass_;                   //扉が開く重さを格納
 	this->totalmass = 0.0f;                  //乗っているものの総合の重さ格納
 	this->nowActive = false;                 //今扉が開けるか
@@ -70,7 +71,9 @@ void WeightSwitch::Render2D()
 //当たっているオブジェクトの重さを取得
 void WeightSwitch::Getmass()
 {
-	std::cout <<"現在の重さ"<< totalmass << std::endl;
+	//デバッグ用
+	//std::cout <<"現在の重さ"<< totalmass << std::endl;
+
 	//氷の重さの取得---------------------------------------------------------
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
@@ -78,7 +81,7 @@ void WeightSwitch::Getmass()
 		//水との当たり判定
 		if ((*id)->GetState() == Water::State::SOLID)
 		{
-			if ((*id)->CubeHit(*this))
+			if ((*id)->CubeHit(this->head))
 			{
 				if (canIcehitCheck == true)
 				{
@@ -106,7 +109,7 @@ void WeightSwitch::Getmass()
 	for (auto id = (*buckets).begin(); id != (*buckets).end(); ++id)
 	{
 		//バケツとの当たり判定
-		if ((*id)->CubeHit(*this))
+		if ((*id)->CubeHit(this->head))
 		{
 			if (canBuckethitCheck == true)
 			{
@@ -133,7 +136,7 @@ void WeightSwitch::Getmass()
 	for (auto id = (*blocks).begin(); id != (*blocks).end(); ++id)
 	{
 		//ブロックとの当たり判定
-		if ((*id)->CubeHit(*this))
+		if ((*id)->CubeHit(this->head))
 		{
 			if (canBlockhitCheck == true)
 			{
@@ -158,7 +161,7 @@ void WeightSwitch::Getmass()
 	//プレイヤの重さ取得---------------------------------------------------------
 	auto player = OGge->GetTask<Player>("Player");
 	//プレイヤとの当たり判定
-	if (player->CubeHit(*this))
+	if (player->CubeHit(this->head))
 	{
 		if (canPlhitCheck == true)
 		{
