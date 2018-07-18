@@ -29,8 +29,8 @@ bool Credit::Initialize()
 	Map::Create((std::string) "credit.csv");
 	//チャラタスク生成
 	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
-	npc->SetDirection(Chara::Direction::RIGHT);
-	npc->Set(Vec2(-120, 64 * 8), Vec2(1280, 64 * 8), 50.f);
+	npc->SetDirection(Chara::Direction::RIGHT); 
+	npc->Set(Vec2(-120, 64 * 8), Vec2(64 * 2, 64 * 8), 15.f);
 
 	this->nowMode = Non;
 	return true;
@@ -60,7 +60,11 @@ void Credit::Render2D()
 {
 	//背景
 	{
-//		backTex.Draw(Box2D(0, 0, 1280, 720), Box2D(0, 0, 1280, 720));
+		//backTex.Draw(Box2D(0, 0, 1280, 720), Box2D(0, 0, 1280, 720));
+	}
+	//フレーム
+	{
+		frameTex.Draw(Box2D(0, 0, 1000, 585), Box2D(0, 0, 1000,585));
 	}
 }
 
