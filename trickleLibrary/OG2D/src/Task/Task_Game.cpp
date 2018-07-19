@@ -21,7 +21,7 @@
 #include "Effect\Effect.h"
 #include "Map\Ornament.h"
 #include "Load\LoadLogo.h"
-
+#include "Gimmick\NO_MOVE\Door.h"
 #include "UI/GoalDirectionUI.h"
 
 #define ADD_FUNCTION(a) \
@@ -41,11 +41,12 @@ Game::~Game()
 	{
 		auto load = Load::Create();
 		load->Draw();
+		OGge->ChengeTask();
 	}
 	//解放処理と次のsceneの生成
 	this->Finalize();
 	//OGge->DeleteTasks();
-	OGge->ChengeTask();
+	
 	
 }
 
@@ -81,7 +82,7 @@ bool Game::Initialize()
 	rm->SetTextureData((std::string)"goalDirectionTex",&this->goalDirectionTex);
 	this->arrowflower.Create((std::string)"arrowflower.png");
 	rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
-
+	this->doorTex.Create("door.png");
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -200,11 +201,6 @@ bool Game::Initialize()
 		{
 			auto block = Block::Create(Vec2(1536, 70));
 		}
-
-		{
-			
-		}
-
 	}
 	break;
 	case 6:
@@ -271,15 +267,7 @@ bool Game::Initialize()
 	auto water = Water::Create(_waterpos);
 	//画像を渡す
 	water->SetTexture(&this->waterTex);
-	switch (*MapNum)
-	{
-	case 3:
-		//プレイヤーの位置を変更
-	//	player->SetPos(Vec2(200, 400));
-		break;
-	default:
-		break;
-	}
+	
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
 	//ゲームクリア判定を生成
@@ -315,17 +303,6 @@ void Game::UpDate()
 
 	//UI
 	UImng_->UpDate();
-
-	if (OGge->in->key.down(In::E))
-	{
-		auto player = OGge->GetTask<Player>("Player");
-		if (player)
-		{
-			auto effect = Effect::Create(player->position, Vec2(64, 64), Vec2(64, 64), 13, 60, 5);
-			effect->SetTexture(rm->GetTextureData((std::string)"Effect"));
-			effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 200));
-		}
-	}
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
@@ -430,6 +407,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto doors = OGge->GetTasks<Door>("Door");
+	for (auto id = doors->begin(); id != doors->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
@@ -456,6 +438,7 @@ bool Game::Finalize()
 	this->goalTex.Finalize();
 	this->goalDirectionTex.Finalize();
 	this->arrowflower.Finalize();
+	this->doorTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 #include "Door.h"
 #include "Player\Player.h"
-Door::Door(const Vec2& pos, const Vec2& size, const bool isOpen)
+Door::Door(const Vec2& pos, const Vec2& size, const bool isOpen,const Direction& di)
 {
 	this->objectTag = "Door";
 	__super::Init(this->objectTag);
@@ -24,8 +24,25 @@ Door::Door(const Vec2& pos, const Vec2& size, const bool isOpen)
 	{
 		this->timeCnt = 1.f;
 	}
-	this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+	//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
 	this->isMove = false;
+	this->direction = di;
+	if (this->direction == Direction::HEIGHT)
+	{
+		//c‚Ìê‡yÀ•W‚ğ“o˜^
+		this->ch_Value[0] = &this->position.y;
+		this->ch_Value[1] = &this->originPos.y;
+		this->ch_Value[2] = &this->Scale.y;
+	}
+	else
+	{
+		//‰¡‚Ìê‡xÀ•W‚ğ“o˜^
+		this->ch_Value[0] = &this->position.x;
+		this->ch_Value[1] = &this->originPos.x;
+		this->ch_Value[2] = &this->Scale.y;
+		this->angle = 90;
+	}
+	*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 }
 Door::~Door()
 {
@@ -40,7 +57,8 @@ void Door::UpDate()
 		if (this->isOpen)
 		{
 			this->timeCnt -= 0.01f;
-			this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+			//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+			*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 			auto players = OGge->GetTasks<Player>("Player");
 			for (auto id = players->begin(); id != players->end(); ++id)
 			{
@@ -50,7 +68,8 @@ void Door::UpDate()
 					{
 						//Œ³‚É–ß‚·
 						this->timeCnt += 0.01f;
-						this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+						//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+						*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 					}
 				}
 			}
@@ -65,7 +84,8 @@ void Door::UpDate()
 		else
 		{
 			this->timeCnt += 0.01f;
-			this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+			//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+			*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 			auto players = OGge->GetTasks<Player>("Player");
 			for (auto id = players->begin(); id != players->end(); ++id)
 			{
@@ -75,7 +95,8 @@ void Door::UpDate()
 					{
 						//Œ³‚É–ß‚·
 						this->timeCnt -= 0.01f;
-						this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+						//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+						*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 					}
 				}
 			}
@@ -98,6 +119,7 @@ void Door::Render2D()
 		draw.OffsetSize();
 		this->src = { 0.f,0.f,this->image->GetTextureSize().x,this->image->GetTextureSize().y };
 		src.OffsetSize();
+		this->image->Rotate(this->angle);
 		this->image->Draw(this->draw, this->src);
 		this->LineDraw();
 	}
@@ -134,12 +156,11 @@ bool Door::IsMove() const
 {
 	return this->isMove;
 }
-Door::SP Door::Create(const Vec2& pos,const Vec2& size,const bool isOpen)
+Door::SP Door::Create(const Vec2& pos,const Vec2& size,const bool isOpen,const Direction& di)
 {
-	Door::SP to = Door::SP(new Door(pos, size, isOpen));
+	Door::SP to = Door::SP(new Door(pos, size, isOpen, di));
 	if (to)
 	{
-
 		to->me = to;
 		OGge->SetTaskObject(to);
 		return to;
