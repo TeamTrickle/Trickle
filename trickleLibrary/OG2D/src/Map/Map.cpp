@@ -271,9 +271,12 @@ void Map::Render2D()
 		{
 			if (this->hitBase[y][x].Getarr() != 0)
 			{
-				Box2D draw(this->hitBase[y][x].position, this->DrawSize);
-				draw.OffsetSize();
-				this->mapimg.Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
+				if (this->hitBase[y][x].IsObjectDistanceCheck(OGge->camera->GetPos(), OGge->camera->GetSize()))
+				{
+					Box2D draw(this->hitBase[y][x].position, this->DrawSize);
+					draw.OffsetSize();
+					this->mapimg.Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
+				}
 			}
 		}
 	}
