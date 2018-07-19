@@ -2,6 +2,8 @@
 #include "Player\Player.h"
 #include "Map\Map.h"
 #include "Effect\Effect.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
+
 Block::Block() {
 	this->Cnt = 0;
 }
@@ -63,33 +65,6 @@ void Block::UpDate() {
 	leftBase.position = Vec2(this->position.x - 1.f, this->position.y);
 	rightBase.position = Vec2(this->position.x + this->Scale.x, this->position.y);
 	//------------------------------------------------------------------------------------
-
-	//現在の状態確認用
-	/*if (maphitF)
-	{
-	std::cout << "足下接触" << std::endl;
-	}
-	if (maphitH)
-	{
-	std::cout << "頭上接触" << std::endl;
-
-	}
-	if (maphitL)
-	{
-	std::cout << "左側接触" << std::endl;
-
-	}
-	if (maphitR)
-	{
-	std::cout << "右側接触" << std::endl;
-	}
-
-	std::cout << "this->GameObject=" << position.x << "," << position.y << "," << Scale.x << "," << Scale.y << std::endl;
-	std::cout << "headBase=" << headBase.position.x << "," << headBase.position.y << "," << headBase.Scale.x << "," << headBase.Scale.y << std::endl;
-	std::cout << "footBase=" << footBase.position.x << "," << footBase.position.y << "," << footBase.Scale.x << "," << footBase.Scale.y << std::endl;
-	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
-	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
-	*/
 	auto p = OGge->GetTask<Player>("Player");
 	if (p)
 	{
@@ -303,6 +278,18 @@ bool Block::isCollideSomething()
 				{
 					return true;
 				}
+			}
+		}
+	}
+	//テスト追加
+	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+	for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (this->CubeHit(*(*id)))
+			{
+				return true;
 			}
 		}
 	}

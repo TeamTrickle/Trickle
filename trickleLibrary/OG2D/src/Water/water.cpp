@@ -4,6 +4,7 @@
 #include "Player\Player.h"
 #include "Effect\Effect.h"
 #include "Gimmick\NO_MOVE\Door.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
 //#include "Paint\Paint.h"
 Water::Water(Vec2 pos)
 	:MAX_FALL(15.f), GRAVITY((9.8f / 60.f / 60.f*32.f) * 5), FIN_SPEED(1.0f), RAIN_TIME(180)
@@ -585,6 +586,9 @@ void Water::MoveSOILDCheck(Vec2& est)
 	auto waters = OGge->GetTasks<Water>("water");
 	auto blocks = OGge->GetTasks<Block>("block");
 	auto doors = OGge->GetTasks<Door>("Door");
+	//テスト用追加
+	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -647,6 +651,19 @@ void Water::MoveSOILDCheck(Vec2& est)
 				}
 			}
 		}
+		//テスト用追加
+		for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
+				}
+			}
+		}
+
 	}
 	while (est.y != 0.f)
 	{
@@ -710,6 +727,19 @@ void Water::MoveSOILDCheck(Vec2& est)
 				}
 			}
 		}
+		//テスト用追加
+		for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					break;
+				}
+			}
+		}
+
 	}
 }
 
