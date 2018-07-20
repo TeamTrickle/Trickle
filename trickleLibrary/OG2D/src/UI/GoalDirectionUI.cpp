@@ -43,9 +43,8 @@ void GoalDirection::UpDate()
 	{
 		//ÉSÅ[ÉãÇÃäpìxÇãÅÇﬂÇ‹Ç∑
 		this->TargetDirecition();
-		this->position = this->CameraPosUpDate();
+		this->CameraPosUpDate();
 	}
-	
 }
 void GoalDirection::Render2D()
 {
@@ -81,18 +80,7 @@ void GoalDirection::Render2D()
 				}
 				src.OffsetSize();
 				this->flower->Draw(draw, src);
-
 			}
-			auto player = OGge->GetTask<Player>("Player");
-			//PlayerÇ∆ÉSÅ[ÉãÇÃç∑ÇãÅÇﬂÇÈ
-			Vec2 inside = { (target->position.x + target->Scale.x / 2) - (player->position.x + player->Scale.x / 2) , (target->position.y + target->Scale.y / 2) - (player->position.y + player->Scale.y / 2) };
-			//ï`âÊîªíËãÈå`Çê∂ê¨
-			Box2D drawchecker = { OGge->camera->GetPos().x + target->Scale.x / 2 , OGge->camera->GetPos().y + target->Scale.y / 2 , OGge->camera->GetSize().x - target->Scale.x , OGge->camera->GetSize().y - target->Scale.y };
-			drawchecker.OffsetSize();
-			OG::LineHitDraw(&drawchecker);
-
-
-
 		}
 	}
 }
@@ -129,32 +117,52 @@ float GoalDirection::ToDeg(float radian)
 	}
 	return d;
 }
-Vec2 GoalDirection::CameraPosUpDate()
+void GoalDirection::CameraPosUpDate()
 {
 	auto player = OGge->GetTask<Player>("Player");
 	//PlayerÇ∆ÉSÅ[ÉãÇÃç∑ÇãÅÇﬂÇÈ
-	Vec2 inside = { (target->position.x + target->Scale.x / 2) - (player->position.x + player->Scale.x / 2) , (target->position.y + target->Scale.y / 2) - (player->position.y + player->Scale.y / 2) };
+	Vec2 inside =
+	{
+		(player->position.x + player->Scale.x / 2) - (target->position.x + target->Scale.x / 2)  ,
+		(player->position.y + player->Scale.y / 2) - (target->position.y + target->Scale.y / 2)
+	};
+
 	//ï`âÊîªíËãÈå`Çê∂ê¨
 	Box2D drawchecker = { OGge->camera->GetPos().x + target->Scale.x / 2 , OGge->camera->GetPos().y + target->Scale.y / 2 , OGge->camera->GetSize().x - target->Scale.x , OGge->camera->GetSize().y - target->Scale.y };
 	drawchecker.OffsetSize();
 	OG::LineHitDraw(&drawchecker);
 
+	//ïΩï˚ç™ÇãÅÇﬂÇÈ
 	float xx = inside.x*inside.x;
 	float yy = inside.y*inside.y;
 	float r = sqrt(xx + yy);
 
-	float nowx;
-	float nowy;
-	for (int i = 0; i < r; i++) {
-		nowx += xx / r;
-		nowy += xx / r;
+	//ê¸ï™Çà¯Ç≠äÓèÄ
+	float nowx = target->position.x + target->Scale.x / 2;
+	float nowy = target->position.y + target->Scale.y;
+
+	Vec2 pos;
+	for (int i = 0; i < r; i++) 
+	{
+		//èôÅXÇ…PlayerÇÃï˚å¸Ç÷ê¸ï™Çà¯Ç¢ÇƒÇ¢Ç≠
+		nowx += inside.x / r;
+		nowy += inside.y / r;
 		Box2D d = { nowx ,nowy, 4.0f, 4.0f };
 		d.OffsetSize();
 		OG::LineHitDraw(&d);
 
+		//ìñÇΩÇËîªíË
+		if (d.x >= drawchecker.x && d.y >= drawchecker.y)
+		{
+			if (d.w <= drawchecker.w && d.h <= drawchecker.h)
+			{
+				pos.x = nowx - this->Scale.x / 2;
+				pos.y = nowy - this->Scale.y / 2;
+				this->position = pos;
+				return;
+			}
+		}
 	}
-
-	return inside;
 }
 GoalDirection::SP GoalDirection::Create(std::shared_ptr<GameObject> target, bool flag)
 {
@@ -187,10 +195,6 @@ bool GoalDirection::Intersectionhit(Box2D& windowdraw ,Vec2& pos)
 	object.CreateObject(Cube, Vec2(windowdraw.x, windowdraw.y), Vec2(windowdraw.h, windowdraw.w),0);
 
 	return false;
-}
-float GoalDirection::OuterProduct(const Vec2& a, const Vec2& b , const Vec2& c , const Vec2& d)
-{
-	return 0.0f;
 }
 
 
