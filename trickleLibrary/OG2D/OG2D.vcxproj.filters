@@ -322,7 +322,7 @@
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\GoalDirectionUI.cpp">
-      <Filter>リソース ファイル</Filter>
+      <Filter>ソースファイル\Goal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -498,7 +498,7 @@
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\GoalDirectionUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソースファイル\Goal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
