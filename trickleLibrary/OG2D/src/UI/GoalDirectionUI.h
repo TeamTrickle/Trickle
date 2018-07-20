@@ -41,6 +41,7 @@ private:
 	
 	bool WindowOuterCheck();
 	void TargetDirecition();
-	Vec2 CameraPosUpDate();
+	void CameraPosUpDate();
 	float ToDeg(float radian);
+	bool Intersectionhit(Box2D&,Vec2&);
 };

@@ -43,9 +43,8 @@ void GoalDirection::UpDate()
 	{
 		//ゴールの角度を求めます
 		this->TargetDirecition();
-		this->position = this->CameraPosUpDate();
+		this->CameraPosUpDate();
 	}
-	
 }
 void GoalDirection::Render2D()
 {
@@ -89,7 +88,7 @@ bool GoalDirection::WindowOuterCheck()
 {
 	/* ウィンドウとゴールの当たり判定をします */
 	GameObject windowsize;
-	windowsize.CreateObject(Cube, OGge->camera->GetPos(), /*Vec2(OGge->camera->GetSize().x - this->target->Scale.x, OGge->camera->GetSize().y - this->target->Scale.y)*/OGge->camera->GetSize(), 0);
+	windowsize.CreateObject(Cube, OGge->camera->GetPos(),OGge->camera->GetSize(), 0);
 	//おおまかな当たり判定実装
 	if (!windowsize.IsObjectDistanceCheck(this->target->position, this->target->Scale))
 	{
@@ -118,18 +117,52 @@ float GoalDirection::ToDeg(float radian)
 	}
 	return d;
 }
-Vec2 GoalDirection::CameraPosUpDate()
+void GoalDirection::CameraPosUpDate()
 {
-	//座標を調整するための計算
-	Vec2 offset = { std::sinf(OG::ToRadian(this->angle)) , -std::cosf(OG::ToRadian(this->angle)) };
-	//ウィンドウの真ん中
-	Vec2 windowsenter = { (OGge->camera->GetPos().x + OGge->camera->GetSize().x / 2  - this->Scale.x / 2 ), OGge->camera->GetPos().y + OGge->camera->GetSize().y / 2 - this->Scale.y / 2 };
-	//ウィンドウサイズ * 角度座標
-	//windowsenter.x += OGge->window->GetSize().x / 2 * offset.x;
-	//windowsenter.y += OGge->window->GetSize().y / 2 * offset.y;
-	windowsenter.x += (OGge->camera->GetSize().x / 2 - this->Scale.x / 2) * offset.x;
-	windowsenter.y += (OGge->camera->GetSize().y / 2 - this->Scale.y / 2) * offset.y;
-	return windowsenter;
+	auto player = OGge->GetTask<Player>("Player");
+	//Playerとゴールの差を求める
+	Vec2 inside =
+	{
+		(player->position.x + player->Scale.x / 2) - (target->position.x + target->Scale.x / 2)  ,
+		(player->position.y + player->Scale.y / 2) - (target->position.y + target->Scale.y / 2)
+	};
+
+	//描画判定矩形を生成
+	Box2D drawchecker = { OGge->camera->GetPos().x + target->Scale.x / 2 , OGge->camera->GetPos().y + target->Scale.y / 2 , OGge->camera->GetSize().x - target->Scale.x , OGge->camera->GetSize().y - target->Scale.y };
+	drawchecker.OffsetSize();
+	OG::LineHitDraw(&drawchecker);
+
+	//平方根を求める
+	float xx = inside.x*inside.x;
+	float yy = inside.y*inside.y;
+	float r = sqrt(xx + yy);
+
+	//線分を引く基準
+	float nowx = target->position.x + target->Scale.x / 2;
+	float nowy = target->position.y + target->Scale.y;
+
+	Vec2 pos;
+	for (int i = 0; i < r; i++) 
+	{
+		//徐々にPlayerの方向へ線分を引いていく
+		nowx += inside.x / r;
+		nowy += inside.y / r;
+		Box2D d = { nowx ,nowy, 4.0f, 4.0f };
+		d.OffsetSize();
+		OG::LineHitDraw(&d);
+
+		//当たり判定
+		if (d.x >= drawchecker.x && d.y >= drawchecker.y)
+		{
+			if (d.w <= drawchecker.w && d.h <= drawchecker.h)
+			{
+				pos.x = nowx - this->Scale.x / 2;
+				pos.y = nowy - this->Scale.y / 2;
+				this->position = pos;
+				return;
+			}
+		}
+	}
 }
 GoalDirection::SP GoalDirection::Create(std::shared_ptr<GameObject> target, bool flag)
 {
@@ -149,8 +182,20 @@ GoalDirection::SP GoalDirection::Create(std::shared_ptr<GameObject> target, bool
 	}
 	return nullptr;
 }
+bool GoalDirection::Intersectionhit(Box2D& windowdraw ,Vec2& pos)
+{
+	auto player = OGge->GetTask<Player>("Player");
+	Box2D draw(player->position.x + player->Scale.x / 2, player->position.y + player->Scale.y / 2, pos.x, pos.y);
+	draw.OffsetSize();
+	//矩形をオブジェクト生成する
+	GameObject hitobject;
+	hitobject.CreateObject(Cube, Vec2(player->position.x + player->Scale.x / 2, player->position.y + player->Scale.y / 2), Vec2(pos.x, pos.y), 0);
 
+	GameObject object;
+	object.CreateObject(Cube, Vec2(windowdraw.x, windowdraw.y), Vec2(windowdraw.h, windowdraw.w),0);
 
+	return false;
+}
 
 
 
