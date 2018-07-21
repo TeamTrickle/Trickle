@@ -14,6 +14,7 @@ Map::Map()
 	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
 	__super::Init((std::string)"map");
+	__super::SetDrawOrder(0.2f);
 }
 
 Map::~Map()
