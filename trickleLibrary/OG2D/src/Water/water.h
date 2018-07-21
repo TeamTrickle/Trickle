@@ -43,6 +43,8 @@ private:
 	Vec2 maxSize;
 	Vec2 move;
 	Vec2 nowMove;
+	GameObject* left;
+	GameObject* right;
 	Paint::PaintColor color;
 	int setTime;
 	bool hold;
@@ -74,6 +76,7 @@ private:
 	void MoveSOILDCheck(Vec2&);
 	bool HeadCheck(std::string&, int = 0);
 	void CheckState();
+	bool SolidExtrusion();
 public:
 	explicit Water(Vec2 pos);
 	virtual ~Water();

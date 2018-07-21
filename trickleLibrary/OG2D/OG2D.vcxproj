@@ -203,6 +203,7 @@
     <ClCompile Include="src\Task\Task_StageAlert.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
     <ClCompile Include="src\Task\Task_TitleMovement.cpp" />
+    <ClCompile Include="src\UI\GoalDirectionUI.cpp" />
     <ClCompile Include="src\UI\UI.cpp" />
     <ClCompile Include="src\VolumeControl\volumeControl.cpp" />
     <ClCompile Include="src\Water\water.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="src\Task\Task_StageAlert.h" />
     <ClInclude Include="src\Task\Task_Title.h" />
     <ClInclude Include="src\Task\Task_TitleMovement.h" />
+    <ClInclude Include="src\UI\GoalDirectionUI.h" />
     <ClInclude Include="src\UI\UI.h" />
     <ClInclude Include="src\VolumeControl\volumeControl.h" />
     <ClInclude Include="src\Water\water.h" />
