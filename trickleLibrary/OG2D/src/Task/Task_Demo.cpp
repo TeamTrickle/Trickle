@@ -24,6 +24,8 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 		std::cout << "デモプレイファイルオープンエラー!" << std::endl;
 		return false;
 	}
+	Vec2 winSize = OGge->window->GetSize();
+	draw = Box2D(0, 0, (int)winSize.x, (int)winSize.y);
 	return true;
 }
 
@@ -32,19 +34,17 @@ void Demo::UpDate() {
 	cap >> frame;
 
 	if (frame.empty()) {
-		return;
+		this->Kill();
 	}
 
-	cv::imshow("Frame", frame);
-	char c = (char)cv::waitKey(25);
-	if (c == 27) {
-		return;
-	}
+	Texture tmpTex;
+	tmpTex.Create(frame);
+	tmpTex.Draw(draw, Box2D(0, 0, frame.cols, frame.rows));
+	tmpTex.Finalize();
 }
 
 bool Demo::Finalize()
 {
 	cap.release();
-	cv::destroyAllWindows();
 	return true;
 }
