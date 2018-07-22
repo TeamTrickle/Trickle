@@ -26,7 +26,7 @@ void OGTK::StartTaskObject()
 	rm->SetTextureData((std::string)"fontui", fontTex);
 
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
-	auto TopTask = Demo::Create("./data/test.mp4");
+	auto TopTask = Title::Create();
 	//*MapNum = 6;
 	//Game::Create();
 	//GameManager::ResetData();

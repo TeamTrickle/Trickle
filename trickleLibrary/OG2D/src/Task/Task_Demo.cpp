@@ -1,4 +1,5 @@
 #include "Task_Demo.h"
+#include "Task_Title.h"
 
 Demo::SP Demo::Create(const std::string& fp_, bool flag_) {
 	auto to = Demo::SP(new Demo());
@@ -65,5 +66,8 @@ bool Demo::Finalize()
 {
 	tex.Finalize();
 	cap.release();
+	auto title = Title::Create();
+	delete rm->GetSoundData((std::string)"titleBGM");
+	rm->DeleteSound((std::string)"titleBGM");
 	return true;
 }

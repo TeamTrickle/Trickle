@@ -1,6 +1,7 @@
 #include "Task_Title.h"
 #include "Task\Task_Option.h"
 #include "Task\StageSelect.h"
+#include "Task\Task_Demo.h"
 #include "Water\water.h"
 #include "Map\Map.h"
 #include "Back\Back.h"
@@ -63,6 +64,7 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
+	this->forTransform.Create("TransparentBack.png");
 
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
@@ -260,6 +262,7 @@ void Title::UpDate()
 		this->cursor_a += 0.01f;
 		if (this->cursor_a >= 1.0f)
 		{
+			demoTimer.Start();
 			this->mode = from6;
 		}
 	}
@@ -267,6 +270,11 @@ void Title::UpDate()
 	case from6:	//決定待ち状態
 	{
 		CursorMove();
+
+		if (demoTimer.GetTime() >= DEMO_LIMIT) {
+			this->mode = Mode::form8;
+			break;
+		}
 
 		if (OGge->in->down(Input::in::B2))
 		{
@@ -313,6 +321,15 @@ void Title::UpDate()
 		auto chara = OGge->GetTask<Chara>("Chara");
 		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
 		{
+			this->mode = Mode::End;
+		}
+	}
+	break;
+	case form8: // Demo画面に移動するとき
+	{
+		trans_a += 0.01f;
+		if (trans_a >= 1.f) {
+			cursorNum = 9;
 			this->mode = Mode::End;
 		}
 	}
@@ -389,6 +406,15 @@ void Title::Render2D()
 		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
+	//画面転換用黒いやつ
+	if (this->trans_a > 0.f) {
+		Vec2 windowSize = OGge->window->GetSize();
+		Box2D draw(0, 0, (int)windowSize.x, (int)windowSize.y);
+		draw.OffsetSize();
+		Box2D src(0, 0, (int)windowSize.x, (int)windowSize.y);
+		src.OffsetSize();
+		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
+	}
 }
 
 bool Title::Finalize()
@@ -400,6 +426,7 @@ bool Title::Finalize()
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
 	this->effect03.Finalize();
+	this->forTransform.Finalize();
 	this->canVolControl = false;
 
 	auto back = OGge->GetTask<Back>("back");
@@ -443,6 +470,11 @@ bool Title::Finalize()
 		case 1:
 			OGge->GameEnd();
 			break;
+		case 9:
+		{
+			auto demo = Demo::Create("./data/test.mp4");
+		}
+		break;
 		default:
 			break;
 		}
