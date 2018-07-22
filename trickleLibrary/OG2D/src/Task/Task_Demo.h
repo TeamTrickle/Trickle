@@ -3,6 +3,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "OGSystem/OGsystem.h"
+#include "OGSystem/Timer/glTimer.h"
 
 /**
 	@brief	ƒfƒ‚ƒvƒŒƒC‚ğÄ¶‚µ‚Ü‚·
@@ -11,6 +12,8 @@
  */
 
 class Demo : public TaskObject {
+
+	void Fadeout();
 
 public:
 	explicit Demo() {}
@@ -24,9 +27,13 @@ public:
 	static SP Create(const std::string&, bool = true);
 
 private:
+	bool						deadFlag = false;
 	cv::VideoCapture			cap;
 	Box2D						draw;
-	int							videoFPS;
-	int							frameCnt = 0;
+	float						videoFPS;
+	float						delay;
+	float						startTime;
+	Color						texColor;
 	Texture						tex;
+	Time						timer;
 };
