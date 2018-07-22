@@ -24,6 +24,7 @@
 #include "Gimmick\NO_MOVE\Door.h"
 #include "UI/GoalDirectionUI.h"
 #include "VolumeControl/volumeControl.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -86,6 +87,8 @@ bool Game::Initialize()
 	this->arrowflower.Create((std::string)"arrowflower.png");
 	rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
 	this->doorTex.Create("door.png");
+	rm->SetTextureData((std::string)"WswitchTex", &this->WswitchTex);
+	this->WswitchTex.Create("Collision.png");
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -176,6 +179,10 @@ bool Game::Initialize()
 		//水の位置
 		_waterpos.x = 64 * 4 - 25;
 		_waterpos.y = 64 * 2;
+
+		//テスト追加重さで反応するswitchのscale.yは30規定でお願いします
+		//auto wswitch = WeightSwitch::Create(Vec2(400, 920), Vec2(200, 30), 1.0f);
+		//wswitch->SetTexture(&WswitchTex);
 
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);

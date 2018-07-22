@@ -55,6 +55,7 @@ private:
 	Texture goalDirectionTex;
 	Texture arrowflower;
 	Texture doorTex;
+	Texture WswitchTex;
 	std::string gamesoundname;
 	std::string tutorialsoundname;
 
