@@ -18,17 +18,34 @@ public:
 	void UpDate();
 	//ï`âÊèàóù
 	void Render2D();
-	void Finalize();
+	void Finalize(); 
+	void Fade();
 
 private:
-	enum Mode {
-		Non,
-		Mode1,
-	};
-	Mode nowMode;
+	const int NON = 0;
+	const int MODE1 = 1;
+	const int MODE2 = 2;
+	const int MODE3 = 3;
+	const int MODE4 = 4;
+	const int MODE5 = 5;
+	const int MODE6 = 6;
+	const int MODE7 = 7;
+	const int MODE8 = 8;
+	int nowMode;
+
+	//enum Mode {
+	//	Non,
+	//	Mode1,
+	//	Mode2,
+	//	Mode3,
+	//	Mode4,
+	//	Mode5,
+	//	Mode6,
+	//	Mode7,
+	//};
+	//Mode nowMode;
 
 
-	Texture backTex;
 	Texture frameTex;
 	Texture nameTex;
 
@@ -38,6 +55,7 @@ private:
 	};
 	creditUI frame;
 
-	int cnt;
+	int timeCnt;
+	float alpha;
 
 };
