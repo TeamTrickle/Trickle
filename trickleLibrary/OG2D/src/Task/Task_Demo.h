@@ -26,4 +26,7 @@ public:
 private:
 	cv::VideoCapture			cap;
 	Box2D						draw;
+	int							videoFPS;
+	int							frameCnt = 0;
+	Texture						tex;
 };
