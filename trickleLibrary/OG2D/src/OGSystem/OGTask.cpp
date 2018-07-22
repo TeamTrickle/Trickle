@@ -4,6 +4,7 @@
 #include "Task\Task_TitleMovement.h"
 #include "Task\StageSelect.h"
 #include "Task\Task_Result.h"
+#include "Task\Task_Demo.h"
 #include "GameProcessManagement\GameProcessManagement.h"
 
 void OGTK::_myGameInitialize()
@@ -25,7 +26,7 @@ void OGTK::StartTaskObject()
 	rm->SetTextureData((std::string)"fontui", fontTex);
 
 	//ƒ^ƒXƒN‚Ì‰Šú‰»
-	auto TopTask = Title::Create();
+	auto TopTask = Demo::Create("./data/test.mp4");
 	//*MapNum = 6;
 	//Game::Create();
 	//GameManager::ResetData();
