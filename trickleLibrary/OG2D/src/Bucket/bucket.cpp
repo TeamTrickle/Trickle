@@ -3,6 +3,7 @@
 #include "Map\Map.h"
 #include "Player\Player.h"
 #include "Block\block.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
 Bucket::Bucket() {
 	this->invi = 0;
 }
@@ -10,6 +11,7 @@ Bucket::Bucket() {
 Bucket::Bucket(Vec2& pos) {
 	this->position = pos;
 	this->invi = 0;
+	this->mass = 1.0f;       //仮
 	//サウンドのファイル名
 	putsoundname = "bucket-put1.wav";
 	dropsoundname = "spoil.wav";
@@ -225,6 +227,14 @@ void Bucket::CheckMove(Vec2 &e_)
 		if (isObjectCollided())
 		{
 			this->position.y = preY;
+			auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+			if (Wswitch != nullptr)
+			{
+				for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+				{
+					this->position.y += (*id)->SetSwitchUpPos();
+				}
+			}
 			break;
 		}
 	}
@@ -233,8 +243,12 @@ void Bucket::CheckMove(Vec2 &e_)
 bool Bucket::isObjectCollided() {
 	bool hitMap = false;
 	bool hitBlock = false;
+	//テスト追加
+	bool hitWswitch = false;
 	auto map = OGge->GetTask<Map>("map");
 	auto block = OGge->GetTask<Block>("block");
+	//テスト追加
+	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
 	if (map) {
 		hitMap = map->HitCheck(*this, 1);
 		if (hitMap == true)
@@ -249,7 +263,19 @@ bool Bucket::isObjectCollided() {
 	if (block) {
 		hitBlock = block->CubeHit(*this);
 	}
-	return hitMap || hitBlock;
+	//テスト追加
+	for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (this->CubeHit(*(*id)))
+			{
+				hitWswitch = true;
+			}
+		}
+	}
+
+	return hitMap || hitBlock || hitWswitch;
 }
 
 void Bucket::HoldCheck(bool flag)
