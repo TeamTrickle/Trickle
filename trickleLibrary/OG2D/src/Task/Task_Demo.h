@@ -17,7 +17,7 @@ class Demo : public TaskObject {
 
 public:
 	explicit Demo() {}
-	virtual ~Demo() { this->Finalize(); }
+	~Demo() { this->Finalize(); }
 
 	bool Initialize(const std::string&);
 	void UpDate() override;

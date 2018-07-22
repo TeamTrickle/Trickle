@@ -410,9 +410,7 @@ void Title::Render2D()
 	if (this->trans_a > 0.f) {
 		Vec2 windowSize = OGge->window->GetSize();
 		Box2D draw(0, 0, (int)windowSize.x, (int)windowSize.y);
-		draw.OffsetSize();
 		Box2D src(0, 0, (int)windowSize.x, (int)windowSize.y);
-		src.OffsetSize();
 		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
 	}
 }
