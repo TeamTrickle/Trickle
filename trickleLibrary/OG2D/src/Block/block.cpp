@@ -255,6 +255,15 @@ void Block::CheckMove(Vec2 &e_)
 		{
 			backmove.y = position.y - preY;
 			this->position.y = preY;
+
+			auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+			if (Wswitch != nullptr)
+			{
+				for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+				{
+					this->position.y += (*id)->SetSwitchUpPos();
+				}
+			}
 			break;
 		}
 	}

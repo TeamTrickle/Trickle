@@ -21,6 +21,7 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	this->totalmass = 0.0f;                  //乗っているものの総合の重さ格納
 	this->nowActive = false;                 //今扉が開けるか
 	this->premass = 0.0f;
+	this->isPushed = false;                  //一度でもスイッチが押されたか
 
 	//今そのオブジェクトと当たり判定をしてよいか
 	this->canPlhitCheck = true;         //プレイヤ
@@ -48,6 +49,7 @@ void WeightSwitch::UpDate()
 			this->position.y += 20.0f;
 		}
 		this->state = Riding;
+		this->isPushed = true;
 	}
 	else                                      //まだ軽い
 	{
@@ -207,6 +209,20 @@ bool WeightSwitch::SetnowState()
 void WeightSwitch::SetTexture(Texture* tex)
 {
 	this->image = tex;
+}
+
+//スイッチが押されていない状態になったときポジションを戻す値を返す
+float WeightSwitch::SetSwitchUpPos()
+{
+	if (isPushed)
+	{
+		if (nowActive == false)
+		{
+			isPushed = false;
+			return -20.0f;
+		}
+	}
+	return 0.0f;
 }
 
 //スイッチの生成について

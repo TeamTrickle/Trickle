@@ -748,6 +748,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 				if (this->CubeHit(*(*id)))
 				{
 					this->position.y = preY;
+					this->position.y += (*id)->SetSwitchUpPos();
 					break;
 				}
 			}

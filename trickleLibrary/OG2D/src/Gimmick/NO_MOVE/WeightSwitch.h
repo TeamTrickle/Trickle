@@ -40,6 +40,8 @@ public:
 	void Getmass();
 	bool SetnowState();             //今のスイッチの状態を返す
 	void SetTexture(Texture*);      //画像のセット
+	float SetSwitchUpPos();         //スイッチが元の大きさに戻った時にめり込まないようにする処理
+	bool isPushed;
 	static SP Create(const Vec2& pos, const Vec2& size, const float mass);
 };
 
