@@ -321,6 +321,9 @@
     <ClCompile Include="src\Gimmick\NO_MOVE\Door.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\GoalDirectionUI.cpp">
+      <Filter>ソースファイル\Goal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -493,6 +496,9 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Door.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\GoalDirectionUI.h">
+      <Filter>ソースファイル\Goal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

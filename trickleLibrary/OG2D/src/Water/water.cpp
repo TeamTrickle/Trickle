@@ -56,6 +56,9 @@ Water::Water(Vec2 pos)
 	this->hold = false;
 	//当たり判定を制限
 	this->Radius = { 0.5f,0.9f };
+	//左右判定を初期化
+	this->left = nullptr;
+	this->right = nullptr;
 	//タグの指定
 	__super::Init((std::string)"water");
 	//描画優先度の設定
@@ -64,7 +67,16 @@ Water::Water(Vec2 pos)
 
 Water::~Water()
 {
-
+	if (this->left)
+	{
+		delete this->left;
+		this->left = nullptr;
+	}
+	if (this->right)
+	{
+		delete this->right;
+		this->right = nullptr;
+	}
 }
 
 
@@ -179,6 +191,7 @@ void Water::UpDate()
 			this->Friction();	
 			this->nowMove = this->move;
 			this->MoveSOILDCheck(this->nowMove);
+			this->SolidExtrusion();
 		}
 		break;
 	}
@@ -968,6 +981,78 @@ void Water::SetScale(const Vec2& s)
 unsigned int Water::GetID() const
 {
 	return this->id;
+}
+bool Water::SolidExtrusion()
+{
+	auto waters = OGge->GetTasks<Water>("water");
+	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
+	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
+	for (auto id = waters->begin(); id != waters->end(); ++id)
+	{
+		//自分以外でありかつ相手が氷であるとき
+		if (this->id != (*id)->id && (*id)->objectTag == "SOLID")
+		{
+			//自分の周辺に相手が存在する場合
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				//移動値がプラスなら
+				if(this->move.x > 0)
+				{
+					//左方向の当たり判定が存在しないなら生成
+					if (!this->right)
+					{
+						this->right = new GameObject();
+						right->CreateObject(Cube,
+							Vec2(this->position.x + (x_ / 2.f) + (this->Scale.x * this->Radius.x), this->position.y + (y_ / 2.f)),
+							Vec2(1.0f, this->Scale.y - y_));
+					}
+					//当たっているか確認
+					if (right->CubeHit(*(*id)))
+					{
+						//相手を移動させる
+						((*id))->MoveSolid(this->move);
+						delete this->right;
+						this->right = nullptr;
+						this->move.x = 0.f;
+						return true;
+					}
+				}
+				//移動値がマイナスなら
+				if (this->move.x < 0)
+				{
+					//右方向の当たり判定が存在しないなら生成
+					if (!this->left)
+					{
+						this->left = new GameObject();
+						left->CreateObject(Cube,
+							Vec2(this->position.x + (x_ / 2.f) - 1.0f, this->position.y + (y_ / 2.f)),
+							Vec2(1.0f, this->Scale.y - y_));
+					}
+					//当たっているか確認
+					if (left->CubeHit(*(*id)))
+					{
+						//相手を移動させる
+						((*id))->MoveSolid(this->move);
+						delete this->left;
+						this->left = nullptr;
+						this->move.x = 0.f;
+						return true;
+					}
+				}
+			}
+		}
+	}
+	if (this->left)
+	{
+		delete this->left;
+		this->left = nullptr;
+	}
+	if (this->right)
+	{
+		delete this->right;
+		this->right = nullptr;
+	}
+	return false;
 }
 Water::SP Water::Create(Vec2& pos, bool flag_)
 {

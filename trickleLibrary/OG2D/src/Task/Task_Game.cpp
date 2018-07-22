@@ -22,6 +22,7 @@
 #include "Map\Ornament.h"
 #include "Load\LoadLogo.h"
 #include "Gimmick\NO_MOVE\Door.h"
+#include "UI/GoalDirectionUI.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -30,6 +31,8 @@ Game::Game()
 {
 	gamesoundname = "game.wav";
 	tutorialsoundname = "tutorial.wav";
+	//this->ResetKillCount();
+	OGge->camera->SetSize(Vec2(1920, 1080));
 }
 
 Game::~Game()
@@ -38,10 +41,12 @@ Game::~Game()
 	{
 		auto load = Load::Create();
 		load->Draw();
+		OGge->ChengeTask();
 	}
 	//‰ð•úˆ—‚ÆŽŸ‚Ìscene‚Ì¶¬
 	this->Finalize();
-	OGge->ChengeTask();
+	//OGge->DeleteTasks();
+	
 	
 }
 
@@ -49,8 +54,8 @@ Game::~Game()
 bool Game::Initialize()
 {
 	OGge->camera->SetSize(Vec2(1280, 720));
-
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
+	
 	//Pauseƒ^ƒXƒN‚Ì¶¬
 	auto pause = Pause::Create();
 
@@ -74,7 +79,11 @@ bool Game::Initialize()
 	rm->SetTextureData(std::string("steam"), &this->texSteam);
 	this->goalTex.Create("goal.png");
 	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
-	doorTex.Create("door.png");
+	this->goalDirectionTex.Create((std::string)"goalarrow.png");
+	rm->SetTextureData((std::string)"goalDirectionTex",&this->goalDirectionTex);
+	this->arrowflower.Create((std::string)"arrowflower.png");
+	rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
+	this->doorTex.Create("door.png");
 	//ui¶¬
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -252,12 +261,16 @@ bool Game::Initialize()
 		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
 		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
+	auto back2Img = Back::Create("back2Test.png", 1920, 1080);
+	back2Img->SetScroll();
+	back2Img->SetDrawOrder(0.0f);
 	//…‚ªŽ©“®‚Å~‚Á‚Ä‚­‚éŽžŠÔ‚Ì‰Šú‰»
 	this->timecnt = 0;
 	//…‚Ì¶¬
 	auto water = Water::Create(_waterpos);
 	//‰æ‘œ‚ð“n‚·
 	water->SetTexture(&this->waterTex);
+	
 	//ƒ^ƒXƒN‚É–¼‘O‚ð“o˜^
 	__super::Init((std::string)"game");
 	//ƒQ[ƒ€ƒNƒŠƒA”»’è‚ð¶¬
@@ -290,6 +303,7 @@ void Game::UpDate()
 			}
 		}
 	}
+
 	//UI
 	UImng_->UpDate();
 }
@@ -391,6 +405,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto goalDirection = OGge->GetTasks<GoalDirection>("GoalDirection");
+	for (auto id = goalDirection->begin(); id != goalDirection->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	auto doors = OGge->GetTasks<Door>("Door");
 	for (auto id = doors->begin(); id != doors->end(); ++id)
 	{
@@ -407,6 +426,8 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"steam");
 	rm->DeleteTexture((std::string)"goalTex");
 	rm->DeleteTexture((std::string)"fireIce");
+	rm->DeleteTexture((std::string)"goalDirectionTex");
+	rm->DeleteTexture((std::string)"arrowflowerTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -418,6 +439,8 @@ bool Game::Finalize()
 	this->Effectsond.Finalize();
 	this->texSteam.Finalize();
 	this->goalTex.Finalize();
+	this->goalDirectionTex.Finalize();
+	this->arrowflower.Finalize();
 	this->doorTex.Finalize();
 	return true;
 }
