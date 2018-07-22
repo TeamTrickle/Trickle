@@ -1,7 +1,9 @@
-#include "Block/block.h"   //•ÏX‚µ‚½
+#include "Block/block.h"   //å¤‰æ›´ã—ãŸ
 #include "Player\Player.h"
 #include "Map\Map.h"
 #include "Effect\Effect.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
+
 Block::Block() {
 	this->Cnt = 0;
 }
@@ -9,6 +11,7 @@ Block::Block() {
 Block::Block(Vec2& pos) {
 	this->position = pos;
 	this->soundname = "blockMove.wav";
+	this->mass = 3.0f;        //ä»®
 	__super::SetDrawOrder(0.3f);
 }
 
@@ -22,27 +25,27 @@ Block::~Block() {
 
 bool Block::Initialize(Vec2& pos) {
 	//speed = 0.0f;
-	//‰¡ˆÚ“®‰Šú’l
+	//æ¨ªç§»å‹•åˆæœŸå€¤
 	speed.x = 0.0f;
-	speed.y = 0.0f;    //•s—v
-					   //d—Í‰Šú’l
-	gravity.x = 0.0f;  //•s—v
+	speed.y = 0.0f;    //ä¸è¦
+					   //é‡åŠ›åˆæœŸå€¤
+	gravity.x = 0.0f;  //ä¸è¦
 	gravity.y = 0.0f;
 
 	this->plhit = false;
 
-	//ƒvƒŒƒCƒ„‚Æ‚Ì“–‚½‚è”»’èƒtƒ‰ƒbƒO@g‚í‚È‚­‚È‚Á‚½
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ã¨ã®å½“ãŸã‚Šåˆ¤å®šãƒ•ãƒ©ãƒƒã‚°ã€€ä½¿ã‚ãªããªã£ãŸ
 	plhitH = false;
 	plhitF = false;
 	plhitL = false;
 	plhitR = false;
 
-	//ƒTƒEƒ“ƒh‚Ì¶¬
+	//ã‚µã‚¦ãƒ³ãƒ‰ã®ç”Ÿæˆ
 	sound.create(soundname, false);
 	sound.volume(1.0f);
 	this->soundstart = true;
 
-	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f);       //ƒIƒuƒWƒFƒNƒg‚Ì¶¬
+	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f);       //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
 	GameObject::objectTag = "Block";
 	/*GameObject::CollisionProcess = [&](const GameObject& o_) {
 
@@ -57,39 +60,12 @@ bool Block::Initialize(Vec2& pos) {
 }
 
 void Block::UpDate() {
-	//’Ç‰Á‚µ‚½----------------------------------------------------------------------------
+	//è¿½åŠ ã—ãŸ----------------------------------------------------------------------------
 	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
 	headBase.position = Vec2(this->position.x, this->position.y - 1.f);
 	leftBase.position = Vec2(this->position.x - 1.f, this->position.y);
 	rightBase.position = Vec2(this->position.x + this->Scale.x, this->position.y);
 	//------------------------------------------------------------------------------------
-
-	//Œ»İ‚Ìó‘ÔŠm”F—p
-	/*if (maphitF)
-	{
-	std::cout << "‘«‰ºÚG" << std::endl;
-	}
-	if (maphitH)
-	{
-	std::cout << "“ªãÚG" << std::endl;
-
-	}
-	if (maphitL)
-	{
-	std::cout << "¶‘¤ÚG" << std::endl;
-
-	}
-	if (maphitR)
-	{
-	std::cout << "‰E‘¤ÚG" << std::endl;
-	}
-
-	std::cout << "this->GameObject=" << position.x << "," << position.y << "," << Scale.x << "," << Scale.y << std::endl;
-	std::cout << "headBase=" << headBase.position.x << "," << headBase.position.y << "," << headBase.Scale.x << "," << headBase.Scale.y << std::endl;
-	std::cout << "footBase=" << footBase.position.x << "," << footBase.position.y << "," << footBase.Scale.x << "," << footBase.Scale.y << std::endl;
-	std::cout << "rightBase=" << rightBase.position.x << "," << rightBase.position.y << "," << rightBase.Scale.x << "," << rightBase.Scale.y << std::endl;
-	std::cout << "leftBase=" << leftBase.position.x << "," << leftBase.position.y << "," << leftBase.Scale.x << "," << leftBase.Scale.y << std::endl;
-	*/
 	auto p = OGge->GetTask<Player>("Player");
 	if (p)
 	{
@@ -98,7 +74,7 @@ void Block::UpDate() {
 		{
 			if (p->position.x < this->position.x)
 			{
-				//speed.x = 5.0f;‚ÍƒeƒXƒg—p‚Éİ’è
+				//speed.x = 5.0f;ã¯ãƒ†ã‚¹ãƒˆç”¨ã«è¨­å®š
 				//speed.x = 5.0f;
 				//CheckMove(speed);
 			}
@@ -139,20 +115,20 @@ bool Block::Finalize() {
 	return true;
 }
 
-Vec2 Block::GetMove(Vec2& move)       //move‚ÉƒvƒŒƒCƒ„‚©‚çó‚¯æ‚éˆÚ“®—Ê‚ğ“ü‚ê‚é
+Vec2 Block::GetMove(Vec2& move)       //moveã«ãƒ—ãƒ¬ã‚¤ãƒ¤ã‹ã‚‰å—ã‘å–ã‚‹ç§»å‹•é‡ã‚’å…¥ã‚Œã‚‹
 {
 	speed.x = move.x;
 	this->CheckMove(speed);
 	return speed;
 }
-//‚ß‚è‚ñ‚¾’l‚ğ•Ô‚·ˆ—
+//ã‚ã‚Šè¾¼ã‚“ã å€¤ã‚’è¿”ã™å‡¦ç†
 Vec2 Block::BackMove()
 {
 	return backmove;
 }
 
 
-//ƒvƒŒƒCƒ„‚Æ‚Ì“–‚½‚è”»’è‚É‚Â‚¢‚Ä g‚í‚È‚­‚È‚Á‚½
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ã¨ã®å½“ãŸã‚Šåˆ¤å®šã«ã¤ã„ã¦ ä½¿ã‚ãªããªã£ãŸ
 //--------------------------------------------------------------------------------------------------------------
 void Block::PlCheckHitF(GameObject &p)
 {
@@ -180,13 +156,13 @@ void Block::PlCheckHit(GameObject &p)
 }
 
 //-----------------------------------------------------------------------------------------------
-//‚ß‚è‚Ü‚È‚¢ˆ—
+//ã‚ã‚Šè¾¼ã¾ãªã„å‡¦ç†
 void Block::CheckMove(Vec2 &e_)
 {
 	float dir = 0;
 	isPushed = false;
 
-	//x²‚É‚Â‚¢‚Ä
+	//xè»¸ã«ã¤ã„ã¦
 	while (e_.x != 0.0f)
 	{
 		float preX = this->position.x;
@@ -220,7 +196,7 @@ void Block::CheckMove(Vec2 &e_)
 		}
 		else
 		{
-			//ƒGƒtƒFƒNƒg•\¦ˆ—
+			//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¡¨ç¤ºå‡¦ç†
 			if (this->footCheck())
 			{
 				if (this->Cnt > 30)
@@ -255,7 +231,7 @@ void Block::CheckMove(Vec2 &e_)
 			isPushed = true;
 		}
 	}
-	//y²‚É‚Â‚¢‚Ä
+	//yè»¸ã«ã¤ã„ã¦
 	while (e_.y != 0.0f)
 	{
 		float preY = this->position.y;
@@ -280,6 +256,15 @@ void Block::CheckMove(Vec2 &e_)
 		{
 			backmove.y = position.y - preY;
 			this->position.y = preY;
+
+			auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+			if (Wswitch != nullptr)
+			{
+				for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+				{
+					this->position.y += (*id)->SetSwitchUpPos();
+				}
+			}
 			break;
 		}
 	}
@@ -303,6 +288,18 @@ bool Block::isCollideSomething()
 				{
 					return true;
 				}
+			}
+		}
+	}
+	//ãƒ†ã‚¹ãƒˆè¿½åŠ 
+	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+	for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (this->CubeHit(*(*id)))
+			{
+				return true;
 			}
 		}
 	}
