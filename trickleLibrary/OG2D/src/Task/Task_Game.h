@@ -6,6 +6,7 @@
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
 #include "UI\UI.h"
+#include "VolumeControl/volumeControl.h"
 
 class UI;
 
@@ -25,7 +26,10 @@ public:
 	//☆☆☆☆//
 	int timecnt;
 
+	//サウンド関連
 	Sound sound;
+	VolumeControl volControl;
+	bool canvolControl;
 private:
 	//---------------------------------------------------------------------
 	//メンバー関数

@@ -2,6 +2,7 @@
 #include "Water\water.h"
 #include "Player\Player.h"
 #include "Map\Map.h"
+#include "Task/Task_Game.h"
 
 Goal::Goal(const Vec2& pos)
 {
@@ -140,6 +141,13 @@ void Goal::UpDate()
 		if (!this->cm_Pos.isPlay() && !this->cm_Size.isPlay())
 		{
 			this->cameraLock = true;
+
+			auto game = OGge->GetTask<Game>("game");
+			if (game != nullptr)
+			{
+				game->canvolControl = false;
+			}
+
 			auto player = OGge->GetTasks<Player>("Player");
 			for (auto id = player->begin(); id != player->end(); ++id)
 			{
