@@ -23,6 +23,7 @@
 #include "Load\LoadLogo.h"
 #include "Gimmick\NO_MOVE\Door.h"
 #include "UI/GoalDirectionUI.h"
+#include "VolumeControl/volumeControl.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -31,6 +32,8 @@ Game::Game()
 {
 	gamesoundname = "game.wav";
 	tutorialsoundname = "tutorial.wav";
+
+	this->canvolControl = true;
 	//this->ResetKillCount();
 	OGge->camera->SetSize(Vec2(1920, 1080));
 }
@@ -102,7 +105,7 @@ bool Game::Initialize()
 		_waterpos.y = 64 * 15;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 	}
@@ -116,10 +119,9 @@ bool Game::Initialize()
 		_waterpos.y = 64 * 10;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
-
 	}
 	break;
 	case 3:		//チュートリアル３
@@ -131,7 +133,7 @@ bool Game::Initialize()
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
 			//チュートリアルのサウンドに使用
 			sound.create(tutorialsoundname, true);
-			sound.volume(1.0f);
+			sound.volume(0.0f);
 			OGge->soundManager->SetSound(&sound);
 			sound.play();
 
@@ -153,9 +155,10 @@ bool Game::Initialize()
 		_waterpos.y = 64 * 4;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
+
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64), Vec2(64, 64), Kanetuki::Angle::RIGHT, false);
 		//製氷機生成
@@ -176,7 +179,7 @@ bool Game::Initialize()
 
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
@@ -213,7 +216,7 @@ bool Game::Initialize()
 
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
@@ -301,6 +304,18 @@ void Game::UpDate()
 		}
 	}
 
+	//フェードアウト
+	//フェードイン
+	if (canvolControl)
+	{
+		sound.volume(volControl.FadeIn(canvolControl));
+	}
+	if (canvolControl == false)
+	{
+		sound.volume(volControl.FadeOut(true));
+	}
+
+
 	//UI
 	UImng_->UpDate();
 }
@@ -311,7 +326,6 @@ void Game::Render2D()
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
 {
-	//各オブジェクトが存在している場合にKillする。
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
 	{
@@ -475,7 +489,6 @@ void Game::Camera_move()
 			//カメラの座標を更新
 			NowCameraPos.x = camera_x;
 			NowCameraPos.y = camera_y;
-
 
 			//左右のスクロール範囲の設定(サイズの10分の1)
 			float Boundary = NowCameraSize.x / 10.0f;
