@@ -3,6 +3,22 @@
 
 class Credit : public TaskObject
 {
+	class Animation
+	{
+		Easing easing_x;
+		Easing easing_y;
+		Vec2 StartPos;
+		Vec2 EndPos;
+	public:
+		Vec2 Move();
+		Vec2 Move(const float time);
+		Vec2 Move(const Easing::Name = Easing::Name::Linear, const Easing::Mode = Easing::Mode::InOut, const float = 10.f);
+		Animation();
+		void Set(Vec2&, Vec2&);
+		bool isPlay() const;
+	};
+	Animation camera_anim;
+
 public:
 	std::string taskName;
 	//シェアポインタ宣言
@@ -33,29 +49,13 @@ private:
 	const int MODE8 = 8;
 	int nowMode;
 
-	//enum Mode {
-	//	Non,
-	//	Mode1,
-	//	Mode2,
-	//	Mode3,
-	//	Mode4,
-	//	Mode5,
-	//	Mode6,
-	//	Mode7,
-	//};
-	//Mode nowMode;
-
 
 	Texture frameTex;
 	Texture nameTex;
 
-	struct creditUI {
-		Vec2 pos;
-		float alpha;
-	};
-	creditUI frame;
 
 	int timeCnt;
 	float alpha;
 
+	bool CheckTime(int);
 };

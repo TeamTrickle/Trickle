@@ -50,7 +50,8 @@ void Credit::UpDate()
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
 	
-	if (nowMode == NON) { 
+	if (nowMode == NON) {
+		OGge->camera->SetPos(this->camera_anim.Move(10.f));
 		npc->AutoMove();
 		if (!npc->isAutoPlay()) {
 			nowMode = MODE1;
@@ -149,7 +150,60 @@ void Credit::Fade()
 
 }
 
+Credit::Animation::Animation()
+{
 
+}
+
+Vec2 Credit::Animation::Move()
+{
+	return Vec2(this->easing_x.sine.In(this->easing_x.Time(10), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(10), this->StartPos.y, this->EndPos.y, 10));
+}
+
+Vec2 Credit::Animation::Move(const float time)
+{
+	return Vec2(this->easing_x.sine.Out(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, 10), this->easing_y.linear.In(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
+}
+
+Vec2 Credit::Animation::Move(const Easing::Name name, const Easing::Mode mode, const float time)
+{
+	switch (name)
+	{
+	case Easing::Name::Back:
+		break;
+	case Easing::Name::Bounce:
+		break;
+	case Easing::Name::Circ:
+		break;
+	case Easing::Name::Cubic:
+		break;
+	case Easing::Name::Elastic:
+		break;
+	case Easing::Name::Expo:
+		break;
+	case Easing::Name::Quad:
+		break;
+	case Easing::Name::Quart:
+		break;
+	case Easing::Name::Quint:
+		break;
+	case Easing::Name::Sine:
+		break;
+	default:
+		break;
+	}
+	return Vec2(this->easing_x.sine.In(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
+}
+
+bool Credit::Animation::isPlay() const
+{
+	return this->easing_x.isplay() || this->easing_y.isplay() ? true : false;
+}
+
+bool Credit::CheckTime(int t)
+{
+	return this->timeCnt > t ? true : false;
+}
 
 Credit::SP Credit::Create(bool flag)
 {
