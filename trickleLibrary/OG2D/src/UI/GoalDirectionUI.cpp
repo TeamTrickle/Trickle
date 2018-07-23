@@ -51,7 +51,7 @@ void GoalDirection::Render2D()
 	
 	if (!(std::static_pointer_cast<Goal>(target))->GetClear())
 	{
-		if (!this->WindowOuterCheck() || OGge->GetPause())
+		if (!this->WindowOuterCheck() && !OGge->GetPause())
 		{
 			{
 				Box2D draw = { this->position,this->Scale };
