@@ -33,14 +33,16 @@ Door::Door(const Vec2& pos, const Vec2& size, const bool isOpen,const Direction&
 		this->ch_Value[0] = &this->position.y;
 		this->ch_Value[1] = &this->originPos.y;
 		this->ch_Value[2] = &this->Scale.y;
+		this->rotate = 0.f;
 	}
 	else
 	{
 		//‰¡‚Ìê‡xÀ•W‚ð“o˜^
 		this->ch_Value[0] = &this->position.x;
 		this->ch_Value[1] = &this->originPos.x;
-		this->ch_Value[2] = &this->Scale.y;
-		this->angle = 90;
+		this->ch_Value[2] = &this->Scale.x;
+		//this->rotate = 90.f;
+		this->rotate = 0.f;
 	}
 	*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 }
@@ -50,7 +52,7 @@ Door::~Door()
 }
 void Door::UpDate()
 {
-	if (this->isOpen != this->preIsOpen)
+	//if (this->isOpen != this->preIsOpen)
 	{
 		this->isMove = true;
 		//ŠJ‚¯‚é
@@ -64,7 +66,7 @@ void Door::UpDate()
 			{
 				if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					if (this->CubeHit(*(*id)))
+					if (this->hit(*(*id)))
 					{
 						//Œ³‚É–ß‚·
 						this->timeCnt += 0.01f;
@@ -91,7 +93,7 @@ void Door::UpDate()
 			{
 				if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					if (this->CubeHit(*(*id)))
+					if (this->hit(*(*id)))
 					{
 						//Œ³‚É–ß‚·
 						this->timeCnt -= 0.01f;
@@ -119,7 +121,7 @@ void Door::Render2D()
 		draw.OffsetSize();
 		this->src = { 0.f,0.f,this->image->GetTextureSize().x,this->image->GetTextureSize().y };
 		src.OffsetSize();
-		this->image->Rotate(this->angle);
+		this->image->Rotate(this->rotate);
 		this->image->Draw(this->draw, this->src);
 		this->LineDraw();
 	}
@@ -139,6 +141,11 @@ bool Door::ToClose()
 		this->isOpen = false;
 	}
 	return false;
+}
+bool Door::changeIsOpen()
+{
+	this->isOpen = !this->isOpen;
+	return this->isOpen;
 }
 bool Door::IsOpen() const
 {

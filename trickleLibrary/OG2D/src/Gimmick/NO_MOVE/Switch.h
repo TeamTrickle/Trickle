@@ -27,9 +27,9 @@
 class Switch : public GameObject, public TaskObject {
 public:
 	enum class TargetType {
-		Fan,
 		Heater,
 		IceMachine,
+		Fan,
 	};
 private:
 	Texture image;

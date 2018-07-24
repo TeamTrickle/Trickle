@@ -1,8 +1,8 @@
-#include "Block/block.h"   //変更した
+#include "Block\block.h"   
 #include "Player\Player.h"
 #include "Map\Map.h"
 #include "Effect\Effect.h"
-#include "Gimmick/NO_MOVE/WeightSwitch.h"
+#include "Gimmick\NO_MOVE\WeightSwitch.h"
 
 Block::Block() {
 	this->Cnt = 0;
@@ -11,7 +11,7 @@ Block::Block() {
 Block::Block(Vec2& pos) {
 	this->position = pos;
 	this->soundname = "blockMove.wav";
-	this->mass = 3.0f;        //仮
+	this->mass = 3.0f;
 	__super::SetDrawOrder(0.3f);
 }
 
@@ -24,32 +24,25 @@ Block::~Block() {
 }
 
 bool Block::Initialize(Vec2& pos) {
-	//speed = 0.0f;
-	//横移動初期値
 	speed.x = 0.0f;
-	speed.y = 0.0f;    //不要
-					   //重力初期値
-	gravity.x = 0.0f;  //不要
+	speed.y = 0.0f;    
+					   
+	gravity.x = 0.0f;  
 	gravity.y = 0.0f;
 
 	this->plhit = false;
 
-	//プレイヤとの当たり判定フラッグ　使わなくなった
 	plhitH = false;
 	plhitF = false;
 	plhitL = false;
 	plhitR = false;
 
-	//サウンドの生成
 	sound.create(soundname, false);
 	sound.volume(1.0f);
 	this->soundstart = true;
 
-	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f);       //オブジェクトの生成
+	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f); 
 	GameObject::objectTag = "Block";
-	/*GameObject::CollisionProcess = [&](const GameObject& o_) {
-
-	};*/
 
 	tex.Create((std::string)"block.png");
 	__super::Init((std::string)"block");
@@ -60,28 +53,21 @@ bool Block::Initialize(Vec2& pos) {
 }
 
 void Block::UpDate() {
-	//追加した----------------------------------------------------------------------------
 	footBase.position = Vec2(this->position.x, this->position.y + this->Scale.y);
 	headBase.position = Vec2(this->position.x, this->position.y - 1.f);
 	leftBase.position = Vec2(this->position.x - 1.f, this->position.y);
 	rightBase.position = Vec2(this->position.x + this->Scale.x, this->position.y);
-	//------------------------------------------------------------------------------------
+
 	auto p = OGge->GetTask<Player>("Player");
 	if (p)
 	{
-		//this->PlCheckHit(*p);
 		if (isPushed)
 		{
 			if (p->position.x < this->position.x)
 			{
-				//speed.x = 5.0f;はテスト用に設定
-				//speed.x = 5.0f;
-				//CheckMove(speed);
 			}
 			if (p->position.x > this->position.x)
 			{
-				//speed.x = -5.0f;
-				//CheckMove(speed);
 			}
 
 			if (soundstart)
@@ -115,21 +101,18 @@ bool Block::Finalize() {
 	return true;
 }
 
-Vec2 Block::GetMove(Vec2& move)       //moveにプレイヤから受け取る移動量を入れる
+Vec2 Block::GetMove(Vec2& move)
 {
 	speed.x = move.x;
 	this->CheckMove(speed);
 	return speed;
 }
-//めり込んだ値を返す処理
 Vec2 Block::BackMove()
 {
 	return backmove;
 }
 
 
-//プレイヤとの当たり判定について 使わなくなった
-//--------------------------------------------------------------------------------------------------------------
 void Block::PlCheckHitF(GameObject &p)
 {
 	plhitF = footBase.hit(p);
@@ -155,14 +138,11 @@ void Block::PlCheckHit(GameObject &p)
 	}
 }
 
-//-----------------------------------------------------------------------------------------------
-//めり込まない処理
 void Block::CheckMove(Vec2 &e_)
 {
 	float dir = 0;
 	isPushed = false;
 
-	//x軸について
 	while (e_.x != 0.0f)
 	{
 		float preX = this->position.x;
@@ -196,7 +176,6 @@ void Block::CheckMove(Vec2 &e_)
 		}
 		else
 		{
-			//エフェクト表示処理
 			if (this->footCheck())
 			{
 				if (this->Cnt > 30)
@@ -231,7 +210,6 @@ void Block::CheckMove(Vec2 &e_)
 			isPushed = true;
 		}
 	}
-	//y軸について
 	while (e_.y != 0.0f)
 	{
 		float preY = this->position.y;
@@ -291,7 +269,6 @@ bool Block::isCollideSomething()
 			}
 		}
 	}
-	//テスト追加
 	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
 	for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
 	{

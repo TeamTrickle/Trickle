@@ -254,6 +254,38 @@ bool Game::Initialize()
 		auto block2 = Block::Create(Vec2(64 * 33, 64 * 11));
 		break;
 	}
+	case 7:
+	{
+		//map生成
+		auto mapload = Map::Create((std::string)"stage3.csv");
+		//水の位置
+		_waterpos.x = 64 * 4 + 32;
+		_waterpos.y = 64 * 1;
+		//ゲームのサウンドに使用
+		sound.create(gamesoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
+		//扇風機
+		Fan::Create(Vec2(64 * 16, 64 * 4), 7, Fan::Dir::RIGHT, 7, true);
+		//加熱器
+		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64), Kanetuki::Angle::UP, true);
+		//製氷機
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 4), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT);
+		//switch
+		Switch::Create(Vec2(64 * 2, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
+		//横向き扉
+		auto door1 = Door::Create(Vec2(64 * 3, 64 * 11), Vec2(64*3,32), false, Door::Direction::WIDTH);
+		auto door2 = Door::Create(Vec2(64 * 3, 64 * 13), Vec2(64*3,32), false, Door::Direction::WIDTH);
+		door1->SetTexture(&doorTex);
+		door2->SetTexture(&doorTex);
+		//重さスイッチ
+		auto ws1 = WeightSwitch::Create(Vec2(64, 64 * 9 + 34), Vec2(64, 30), 1, std::vector<std::shared_ptr<GameObject>>{door2});
+		ws1->SetTexture(&WswitchTex);
+		//WeightSwitch::Create(Vec2())
+		break;
+	}
 	//case 5:	//チュートリアル５
 	//{
 	//auto mapload = Map::Create((std::string)"tutorial5.csv");

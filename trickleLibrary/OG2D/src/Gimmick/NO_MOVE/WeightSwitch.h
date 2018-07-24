@@ -18,11 +18,16 @@ class WeightSwitch :public GameObject, public TaskObject
 	bool canBlockhitCheck;      //ブロックと当たり判定をしてよいか
 	bool canBuckethitCheck;     //バケツと当たり判定をしてよいか
 	float premass;
+	std::vector<std::shared_ptr<GameObject>> targets;
+
+	void changeActive();	//自身のオンオフを切り替える(未使用)
+	void ToOpen();			//ターゲットを開ける
+	void ToClose();			//ターゲットを閉じる
 
 public:
 	typedef std::shared_ptr<WeightSwitch> SP;
 
-	explicit WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass_);      //座標、大きさ、必要な重さ
+	explicit WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass_, std::vector<std::shared_ptr<GameObject>> targets_);      //座標、大きさ、必要な重さ
 	virtual ~WeightSwitch();
 
 	//物が乗っているかどうかの状態判断に使う
@@ -42,6 +47,6 @@ public:
 	void SetTexture(Texture*);      //画像のセット
 	float SetSwitchUpPos();         //スイッチが元の大きさに戻った時にめり込まないようにする処理
 	bool isPushed;
-	static SP Create(const Vec2& pos, const Vec2& size, const float mass);
+	static SP Create(const Vec2& pos, const Vec2& size, const float mass, std::vector<std::shared_ptr<GameObject>> targets_);
 };
 

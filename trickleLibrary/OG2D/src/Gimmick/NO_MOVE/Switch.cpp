@@ -67,6 +67,15 @@ void Switch::Render2D() {
 	src.OffsetSize();
 	image.Draw(draw, src);
 
+	//�Ŕ̐ݒu
+	{
+		Box2D signD(this->position.x, this->position.y + 64.0f, 64.0f, 64.0f);
+		signD.OffsetSize();
+		Box2D signS(256*((int)this->ttype), 256 * 3, 256, 256);
+		signS.OffsetSize();
+		this->image.Draw(signD, signS);
+	}
+
 }
 bool Switch::Finalize() {
 	return image.Finalize();

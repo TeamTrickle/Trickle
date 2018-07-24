@@ -472,9 +472,11 @@ void Water::MoveWATERCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				//if (this->hit(*(*id)))
+				if((*id)->hit(*this))
 				{
-					this->position.x = preX;
+					this->nowSituation = Water::Situation::Deleteform;
+					this->nowTime = 0;
 					break;
 				}
 			}
@@ -507,9 +509,10 @@ void Water::MoveWATERCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if ((*id)->hit(*this))
 				{
-					this->position.y = preY;
+					this->nowSituation = Water::Situation::Deleteform;
+					this->nowTime = 0;
 					break;
 				}
 			}

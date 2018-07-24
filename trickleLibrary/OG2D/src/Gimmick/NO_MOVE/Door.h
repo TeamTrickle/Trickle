@@ -25,6 +25,7 @@ private:
 	Box2D src;
 	Direction direction;
 	float* ch_Value[3];
+	float rotate;
 public:
 	Door(const Vec2& pos, const Vec2& size, const bool isOpen, const Direction&);
 	virtual ~Door();
@@ -34,6 +35,7 @@ public:
 	void Render2D() override;
 	bool ToOpen();	
 	bool ToClose();
+	bool changeIsOpen();
 	bool IsOpen() const;
 	bool IsMove() const;
 	void SetTexture(Texture*);

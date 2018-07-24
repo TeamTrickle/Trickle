@@ -5,8 +5,31 @@
 #include "Bucket/bucket.h"
 #include "Water/water.h"
 #include "Player/Player.h"
+#include "Door.h"
 
-WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass_)     //座標、大きさ、必要な重さ
+void WeightSwitch::changeActive()
+{
+	//ターゲットのオンオフを変えさせる
+	for (auto target : targets) {
+		std::static_pointer_cast<Door>(target)->changeIsOpen();
+	}
+}
+
+void WeightSwitch::ToOpen()
+{
+	for (auto target : targets) {
+		std::static_pointer_cast<Door>(target)->ToOpen();
+	}
+}
+
+void WeightSwitch::ToClose()
+{
+	for (auto target : targets) {
+		std::static_pointer_cast<Door>(target)->ToClose();
+	}
+}
+
+WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass_, std::vector<std::shared_ptr<GameObject>> targets_)     //座標、大きさ、必要な重さ
 {
 	std::cout << "スイッチ生成" << std::endl;
 	this->objectTag = "WeightSwitch";
@@ -28,6 +51,9 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	this->canBlockhitCheck = true;      //ブロック
 	this->canIcehitCheck = true;        //氷
 	this->canBuckethitCheck = true;     //バケツ
+
+	//ターゲット
+	this->targets = targets_;
 }
 WeightSwitch::~WeightSwitch()
 {
@@ -61,6 +87,13 @@ void WeightSwitch::UpDate()
 		}
 		this->state = Nomal;
 	}
+
+	if (this->isPushed) {
+		ToOpen();
+	}
+	else {
+		ToClose();
+	}
 }
 void WeightSwitch::Render2D()
 {
@@ -86,6 +119,7 @@ void WeightSwitch::Render2D()
 //当たっているオブジェクトの重さを取得
 void WeightSwitch::Getmass()
 {
+	this->totalmass = 0.0f;
 	//デバッグ用
 	std::cout <<"現在の重さ"<< totalmass << std::endl;
 
@@ -98,7 +132,7 @@ void WeightSwitch::Getmass()
 		{
 			if ((*id)->CubeHit(this->head))
 			{
-				if (canIcehitCheck == true)
+				//if (canIcehitCheck == true)
 				{
 					premass = totalmass;            //加算する前の重さを格納
 					this->totalmass += (*id)->mass;
@@ -111,8 +145,9 @@ void WeightSwitch::Getmass()
 			{
 				if(canIcehitCheck==false)
 				{
-					canIcehitCheck = true;                    //変数をオブジェクトごとに変えたほうがいいかも
-					this->totalmass -= (*id)->mass;
+					//canIcehitCheck = true;                    //変数をオブジェクトごとに変えたほうがいいかも
+					//this->totalmass -= (*id)->mass;
+
 					//デバッグ用
 					//std::cout << this->totalmass << std::endl;
 				}
@@ -126,7 +161,7 @@ void WeightSwitch::Getmass()
 		//バケツとの当たり判定
 		if ((*id)->CubeHit(this->head))
 		{
-			if (canBuckethitCheck == true)
+			//if (canBuckethitCheck == true)
 			{
 				premass = totalmass;            //加算する前の重さを格納
 				this->totalmass += (*id)->mass;
@@ -139,8 +174,8 @@ void WeightSwitch::Getmass()
 		{
 			if (canBuckethitCheck == false)
 			{
-				canBuckethitCheck = true;
-				this->totalmass -= (*id)->mass;      //外に出たら重さを元に戻す
+				//canBuckethitCheck = true;
+				//this->totalmass -= (*id)->mass;      //外に出たら重さを元に戻す
 				//デバッグ用
 				//std::cout << this->totalmass << std::endl;
 			}
@@ -153,7 +188,7 @@ void WeightSwitch::Getmass()
 		//ブロックとの当たり判定
 		if ((*id)->CubeHit(this->head))
 		{
-			if (canBlockhitCheck == true)
+			//if (canBlockhitCheck == true)
 			{
 				premass = totalmass;            //加算する前の重さを格納
 				this->totalmass += (*id)->mass;
@@ -166,8 +201,8 @@ void WeightSwitch::Getmass()
 		{
 			if (canBlockhitCheck == false)
 			{
-				canBlockhitCheck = true;
-				this->totalmass -= (*id)->mass;      //外に出たら重さを元に戻す
+				//canBlockhitCheck = true;
+				//this->totalmass -= (*id)->mass;      //外に出たら重さを元に戻す
 				//デバッグ用
 				//std::cout << this->totalmass << std::endl;
 			}
@@ -176,25 +211,28 @@ void WeightSwitch::Getmass()
 	//プレイヤの重さ取得---------------------------------------------------------
 	auto player = OGge->GetTask<Player>("Player");
 	//プレイヤとの当たり判定
-	if (player->CubeHit(this->head))
+	if (player)
 	{
-		if (canPlhitCheck == true)
+		if (player->CubeHit(this->head))
 		{
-			premass = totalmass;            //加算する前の重さを格納
-			this->totalmass += player->mass;
-			canPlhitCheck = false;
-			//デバッグ用
-			//std::cout << this->totalmass << std::endl;
+			//if (canPlhitCheck == true)
+			{
+				premass = totalmass;            //加算する前の重さを格納
+				this->totalmass += player->mass;
+				canPlhitCheck = false;
+				//デバッグ用
+				//std::cout << this->totalmass << std::endl;
+			}
 		}
-	}
-	else
-	{
-		if (canPlhitCheck == false)
+		else
 		{
-			this->canPlhitCheck = true;
-			this->totalmass -= player->mass;
-			//デバッグ用
-			//std::cout << this->totalmass << std::endl;
+			if (canPlhitCheck == false)
+			{
+				//this->canPlhitCheck = true;
+				//this->totalmass -= player->mass;
+				//デバッグ用
+				//std::cout << this->totalmass << std::endl;
+			}
 		}
 	}
 }
@@ -226,9 +264,9 @@ float WeightSwitch::SetSwitchUpPos()
 }
 
 //スイッチの生成について
-WeightSwitch::SP WeightSwitch::Create(const Vec2& pos, const Vec2& size, const float mass)
+WeightSwitch::SP WeightSwitch::Create(const Vec2& pos, const Vec2& size, const float mass, std::vector<std::shared_ptr<GameObject>> targets_)
 {
-	WeightSwitch::SP to = WeightSwitch::SP(new WeightSwitch(pos, size, mass));
+	WeightSwitch::SP to = WeightSwitch::SP(new WeightSwitch(pos, size, mass, targets_));
 	if (to)
 	{
 		to->me = to;
