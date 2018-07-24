@@ -35,7 +35,8 @@ public:
 	//ï`âÊèàóù
 	void Render2D();
 	void Finalize(); 
-	void Fade();
+	void Next();
+	bool LoadSize();
 
 private:
 	const int NON = 0;
@@ -53,8 +54,17 @@ private:
 	Texture frameTex;
 	Texture nameTex;
 
+	struct IMAGE {
+		Box2D draw;
+		Box2D src;
+		Texture tex;
+		float angle;
+	};
+	IMAGE name[7];
+	IMAGE frame[2];
 
 	int timeCnt;
+	int WAITTIME;
 	float alpha;
 
 	bool CheckTime(int);

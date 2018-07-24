@@ -1,3 +1,5 @@
+#include <fstream>
+#include <iostream>
 #include "Task_Credit.h"
 #include "Chara/Chara.h"
 #include "Task/Task_Title.h"
@@ -37,61 +39,96 @@ bool Credit::Initialize()
 
 	this->nowMode = 0;
 	this->timeCnt = 0;
-	this->alpha = 0.f;
+	this->WAITTIME = 50;
+	
+	for (int i = 0; i < 7; ++i) {
+		name[i].draw = { i*200, 300, 256, 256 };
+	}
+	
+	frame[0].draw = { 200,50,1000,585 };
+	frame[0].draw.OffsetSize();
+	frame[1].draw = { 1500,50,1000,585 };
+	frame[1].draw.OffsetSize();
+	
+	for (int i = 0; i < 7; ++i) {
+		name[i].draw = name[i].draw;
+		name[i].draw.OffsetSize();
+		name[i].src = { i * 256,0,256,256 };
+		name[i].src.OffsetSize();
+	}
+	
 	return true;
 }
 
 void Credit::UpDate()
 {
-	if (nowMode != Non) {
-		++this->timeCnt;
-	}
 
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
-	
+	if (OGge->in->key.down(In::T))
+	{
+		npc->AutoJump();
+	}
 	if (nowMode == NON) {
-		OGge->camera->SetPos(this->camera_anim.Move(10.f));
-		npc->AutoMove();
+		npc->AutoMoveX();
 		if (!npc->isAutoPlay()) {
-			nowMode = MODE1;
+			this->nowMode = MODE1;
 		}
 	}
 
 	if (nowMode == MODE1) {
-		Fade();
+		++timeCnt;
+		if (timeCnt >= WAITTIME) {
+			npc->SetX(64 * 2, 1700, 30.f);
+			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 0.f));
+			Next();
+		}
 	}
 
 	if (nowMode == MODE2) {
-		Fade();
+		npc->AutoMoveX();
+		OGge->camera->SetPos(this->camera_anim.Move(30.f));
+		if (!npc->isAutoPlay()) {
+			++timeCnt;
+			if (timeCnt >= WAITTIME) {
+				npc->SetX(1700, 2000, 10.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 500.f));
+				Next();
+			}
+		}
 	}
 	if (nowMode == MODE3) {
-		Fade();
+		++timeCnt;
+		if (timeCnt < 1) {
+			npc->AutoJump();
+		}
+		npc->AutoMoveX();
+		OGge->camera->SetPos(this->camera_anim.Move(10.f));
 	}
 
 	if (nowMode == MODE4) {
 		npc->Jump();
-		Fade();
+		//Next();
 	}
 
 	if (nowMode == MODE5) {
-		Fade();
+		//Next();
 	}
 
 	if (nowMode == MODE6) {
-		Fade();
+		//Next();
 	}
 
 	if (nowMode == MODE7) {
-		Fade();
-		npc->Set(npc->position, Vec2(1500.f, npc->position.y), 30.f);
+		//npc->Set(npc->position, Vec2(1500.f, npc->position.y), 30.f);
+		//Next();
 	}
 
 	if (nowMode == MODE8) {
-		npc->AutoMove();
-		if (npc->position.x >= 1450) {
+		//npc->AutoMove();
+		//if (npc->position.x >= 1450) {
 			this->Kill();
-		}
+		//}
 	}
 
 }
@@ -99,22 +136,18 @@ void Credit::UpDate()
 void Credit::Render2D()
 {
 	//フレーム
+	for (int i = 0; i < 2; ++i)
 	{
-		Box2D draw(200, 50, 1000, 585);
-		draw.OffsetSize();
-		Box2D src = Box2D(0, 0, 1000, 585);
-		src.OffsetSize();
-		frameTex.Draw(draw, src);
+		frame[i].src = { 0, 0, 1000, 585 };
+		frame[i].src.OffsetSize();
+		frameTex.Draw(frame[i].draw, frame[i].src);
+	//	frameTex.Rotate(frame[i].angle);
 	}
 	//名前
+	/*for (int i = 0; i < 7; ++i)
 	{
-		Box2D draw(500, 300, 256, 256);
-		draw.OffsetSize();
-		Box2D src = Box2D(256 * (nowMode - 1), 0, 256, 256);
-		src.OffsetSize();
-		Color color(1.f, 1.f, 1.f, alpha);
-		nameTex.Draw(draw, src, color);
-	}
+		nameTex.Draw(name[i].draw, name[i].src);
+	}*/
 }
 
 void Credit::Finalize()
@@ -131,23 +164,11 @@ void Credit::Finalize()
 	if (map) { map->Kill(); }
 }
 
-void Credit::Fade()
+void Credit::Next()
 {
-	//フェードイン
-	if (this->timeCnt < 20) {
-		this->alpha += 0.05f;
-	}
-	//フェードアウト
-	if (this->timeCnt > 60) {
-		this->alpha -= 0.05f;
-	}
 	//次のモードに行く
-	if (this->timeCnt > 80) {
-		this->alpha = 0;
-		this->timeCnt = 0;
-		++this->nowMode;
-	}
-
+	this->timeCnt = 0;
+	++this->nowMode;
 }
 
 Credit::Animation::Animation()
@@ -155,14 +176,22 @@ Credit::Animation::Animation()
 
 }
 
+void Credit::Animation::Set(Vec2& start_, Vec2& end_)
+{
+	this->StartPos = start_;
+	this->EndPos = end_ - start_;
+	this->easing_x.ResetTime();
+	this->easing_y.ResetTime();
+}
+
 Vec2 Credit::Animation::Move()
 {
-	return Vec2(this->easing_x.sine.In(this->easing_x.Time(10), this->StartPos.x, this->EndPos.x, 10), this->easing_y.sine.In(this->easing_y.Time(10), this->StartPos.y, this->EndPos.y, 10));
+	return Vec2(this->easing_x.quad.InOut(this->easing_x.Time(10), this->StartPos.x, this->EndPos.x, 10), this->easing_y.quad.InOut(this->easing_y.Time(10), this->StartPos.y, this->EndPos.y, 10));
 }
 
 Vec2 Credit::Animation::Move(const float time)
 {
-	return Vec2(this->easing_x.sine.Out(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, 10), this->easing_y.linear.In(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
+	return Vec2(this->easing_x.quad.InOut(this->easing_x.Time(time), this->StartPos.x, this->EndPos.x, time), this->easing_y.quad.InOut(this->easing_y.Time(time), this->StartPos.y, this->EndPos.y, time));
 }
 
 Vec2 Credit::Animation::Move(const Easing::Name name, const Easing::Mode mode, const float time)
@@ -222,4 +251,19 @@ Credit::SP Credit::Create(bool flag)
 		return to;
 	}
 	return nullptr;
+}
+
+
+bool Credit::LoadSize()
+{
+	std::ifstream ifs("./data/Credit.txt");
+
+	if (!ifs)
+	{
+		std::cout << "読み込みエラー" << std::endl;
+		return false;
+	}
+
+
+	ifs.close();
 }
