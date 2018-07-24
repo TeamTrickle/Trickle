@@ -50,6 +50,8 @@ public:
 	 */
 	bool isExist(const std::string&);
 
+	void SelectFirstElement();
+
 	void setActive(const bool&);
 	bool isActive() const;
 
@@ -78,7 +80,7 @@ private:
 
 	Texture													background;
 	Texture													clearFlag;
-	Texture													clearStarTex;
-	Texture													normalStarTex;
+	Texture*												clearStarTex;
+	Texture*												normalStarTex;
 	MapPreviewer::SP										previewer;
 };

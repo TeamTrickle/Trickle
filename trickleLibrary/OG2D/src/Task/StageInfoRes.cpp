@@ -107,8 +107,10 @@ StageInfoRes::~StageInfoRes() {
 		rm->DeleteTexture(atlasFileName);
 	}
 	for (int i = 0; i < mapInfo.size(); ++i) {
-		mapInfo[i]->Finalize();
-		delete mapInfo[i];
+		if (rm->GetTextureData(mapInfoName[i]) != nullptr) {
+			rm->DeleteTexture(mapInfoName[i]);
+			delete mapInfo[i];
+		}
 		rm->DeleteTexture(mapInfoName[i]);
 	}
 }
