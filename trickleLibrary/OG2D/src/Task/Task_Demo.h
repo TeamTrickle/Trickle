@@ -21,6 +21,7 @@ public:
 
 	bool Initialize(const std::string&);
 	void UpDate() override;
+	void Render2D() override;
 	bool Finalize();
 
 	typedef std::shared_ptr<Demo> SP;

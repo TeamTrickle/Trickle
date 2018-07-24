@@ -34,7 +34,8 @@ class Title :public TaskObject
 		from5,
 		from6,
 		from7,
-		form8,
+		from8,
+		from9,
 		End,
 	};
 	Texture texCursor;
@@ -103,6 +104,7 @@ public:
 	int timeCnt;
 
 	void CursorMove();
+	void SetPauseEveryChild(const bool&);
 
 	enum State
 	{

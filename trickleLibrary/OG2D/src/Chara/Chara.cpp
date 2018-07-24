@@ -9,7 +9,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);	//オブジェクト生成
 	this->taskName = "Chara";	//タスク名決定
 	__super::Init(this->taskName);	//タスク名をオブジェクトにも反映
-	__super::SetDrawOrder(1.0f);	//描画順を登録
+	__super::SetDrawOrder(0.99f);	//描画順を登録
 	this->objectTag = this->taskName;	//タグを登録
 	this->direction = Direction::LEFT;	//向きを設定
 	this->AnimCnt = 0;					//アニメーションカウントを初期化

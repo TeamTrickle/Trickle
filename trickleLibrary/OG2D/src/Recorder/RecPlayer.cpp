@@ -125,6 +125,18 @@ void RecPlayer::Play() {
 				}
 			}
 		}
+		else if (isRepeat) {
+			// CallbackŠÖ”‚ª‘¶İ‚·‚éê‡
+			if (endCallback) {
+				if (endCallback()) {
+					Reset();
+				}
+			}
+			// ‚È‚¢‚Æ‚½‚¾ŒJ‚è•Ô‚·
+			else {
+				Reset();
+			}
+		}
 
 		if (!isAxisEnded()) {
 			auto curActivity = recStick.front();
@@ -133,18 +145,6 @@ void RecPlayer::Play() {
 			}
 		}
 		
-	}
-	else if (isRepeat) {
-		// CallbackŠÖ”‚ª‘¶İ‚·‚éê‡
-		if (endCallback) {
-			if (endCallback()) {
-				Reset();
-			}
-		}
-		// ‚È‚¢‚Æ‚½‚¾ŒJ‚è•Ô‚·
-		else {
-			Reset();
-		}
 	}
 }
 

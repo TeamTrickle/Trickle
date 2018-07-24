@@ -1,5 +1,6 @@
 #include "Task_Demo.h"
 #include "Task_Title.h"
+#include "Chara\Chara.h"
 
 Demo::SP Demo::Create(const std::string& fp_, bool flag_) {
 	auto to = Demo::SP(new Demo());
@@ -28,9 +29,13 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 	videoFPS = (float)cap.get(CV_CAP_PROP_FPS);
 	delay = 0.3f / videoFPS;
 	Vec2 winSize = OGge->window->GetSize();
-	draw = Box2D(0, 0, (int)winSize.x, (int)winSize.y);
+	draw = Box2D(OGge->camera->GetPos(), OGge->camera->GetSize());
+	draw.OffsetSize();
 	texColor = Color(1.f, 1.f, 1.f, 1.f);
 	timer.Start();
+
+	__super::Init((std::string)"demo");
+	__super::SetDrawOrder(1.1f);
 	return true;
 }
 
@@ -52,6 +57,11 @@ void Demo::UpDate() {
 	if (OGge->in->down(In::B1)) {
 		deadFlag = true;
 	}
+	
+}
+
+void Demo::Render2D()
+{
 	tex.Draw(draw, Box2D(0, 0, (int)tex.GetTextureSize().x, (int)tex.GetTextureSize().y), texColor);
 }
 
@@ -66,8 +76,7 @@ bool Demo::Finalize()
 {
 	tex.Finalize();
 	cap.release();
-	auto title = Title::Create();
-	delete rm->GetSoundData((std::string)"titleBGM");
-	rm->DeleteSound((std::string)"titleBGM");
+	auto title = OGge->GetTask<Title>((std::string)"title");
+	if (title) title->SetPauseEveryChild(false);
 	return true;
 }

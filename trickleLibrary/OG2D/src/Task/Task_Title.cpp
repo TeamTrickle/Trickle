@@ -30,6 +30,7 @@ Title::Title()
 	this->skipInoutFlag = false;
 	//タグ設定
 	__super::Init((std::string)"title");
+	__super::SetDrawOrder(0.98f);
 }
 
 Title::~Title()
@@ -105,7 +106,7 @@ bool Title::Initialize()
 	this->gierCnt = 0;
 
 	//描画順の決定
-	__super::SetDrawOrder(0.5f);
+	__super::SetDrawOrder(1.f);
 	//カメラの中心のターゲットを登録
 	this->cm.SetObject(&(*water));
 	//カメラのサイズと位置を調整
@@ -272,7 +273,7 @@ void Title::UpDate()
 		CursorMove();
 
 		if (demoTimer.GetTime() >= DEMO_LIMIT) {
-			this->mode = Mode::form8;
+			this->mode = Mode::from8;
 			break;
 		}
 
@@ -325,12 +326,25 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case form8: // Demo画面に移動するとき
+	case from8: // Demo画面に移動するとき
 	{
 		trans_a += 0.01f;
 		if (trans_a >= 1.f) {
-			cursorNum = 9;
-			this->mode = Mode::End;
+			trans_a = 1.f;
+			auto demo = Demo::Create("./data/test.mp4");
+			this->mode = Mode::from9;
+			this->demoTimer.Stop();
+			this->SetPauseEveryChild(true);
+		}
+	}
+	break;
+	case from9: // Demo画面から戻ってきたとき
+	{
+		trans_a -= 0.01f;
+		if (trans_a <= 0.0f) {
+			trans_a = 0.f;
+			this->demoTimer.Start();
+			this->mode = Mode::from6;
 		}
 	}
 	break;
@@ -408,9 +422,8 @@ void Title::Render2D()
 	}
 	//画面転換用黒いやつ
 	if (this->trans_a > 0.f) {
-		Vec2 windowSize = OGge->window->GetSize();
-		Box2D draw(0, 0, (int)windowSize.x, (int)windowSize.y);
-		Box2D src(0, 0, (int)windowSize.x, (int)windowSize.y);
+		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
+		Box2D src(0, 0, 1, 1);
 		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
 	}
 }
@@ -468,11 +481,6 @@ bool Title::Finalize()
 		case 1:
 			OGge->GameEnd();
 			break;
-		case 9:
-		{
-			auto demo = Demo::Create("./data/test.mp4");
-		}
-		break;
 		default:
 			break;
 		}
@@ -512,6 +520,42 @@ void Title::CursorMove()
 	{
 		this->cursorNum = 1;
 	}
+}
+
+void Title::SetPauseEveryChild(const bool& p)
+{
+	auto back = OGge->GetTask<Back>("back");
+	if (back)
+	{
+		back->SetDraw(!p);
+		back->SetPause(p);
+	}
+	auto water = OGge->GetTasks<Water>("water");
+	for (auto id = (*water).begin(); id != (*water).end(); ++id)
+	{
+		(*id)->SetDraw(!p);
+		(*id)->SetPause(p);
+	}
+	auto map = OGge->GetTask<Map>("map");
+	if (map)
+	{
+		(*map).SetDraw(!p);
+		(*map).SetPause(p);
+	}
+	auto Npc = OGge->GetTasks<Chara>("Chara");
+	for (auto id = Npc->begin(); id != Npc->end(); ++id)
+	{
+		(*id)->SetPause(p);
+		(*id)->SetDraw(!p);
+	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->SetDraw(!p);
+		(*id)->SetPause(p);
+	}
+	this->SetDraw(!p);
+	this->SetPause(p);
 }
 
 void Title::ModeCheck()
@@ -583,6 +627,7 @@ void Title::BackTitleSkip()
 
 void Title::SkipMove()
 {
+	demoTimer.Start();
 	this->mode = Mode::from6;
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
