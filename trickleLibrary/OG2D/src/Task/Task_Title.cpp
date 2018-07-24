@@ -1,6 +1,7 @@
 #include "Task_Title.h"
 #include "Task\Task_Option.h"
 #include "Task\StageSelect.h"
+#include "Task\Task_Demo.h"
 #include "Water\water.h"
 #include "Map\Map.h"
 #include "Back\Back.h"
@@ -29,6 +30,7 @@ Title::Title()
 	this->skipInoutFlag = false;
 	//タグ設定
 	__super::Init((std::string)"title");
+	__super::SetDrawOrder(0.98f);
 }
 
 Title::~Title()
@@ -63,6 +65,7 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
+	this->forTransform.Create("TransparentBack.png");
 
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
@@ -103,7 +106,7 @@ bool Title::Initialize()
 	this->gierCnt = 0;
 
 	//描画順の決定
-	__super::SetDrawOrder(0.5f);
+	__super::SetDrawOrder(1.f);
 	//カメラの中心のターゲットを登録
 	this->cm.SetObject(&(*water));
 	//カメラのサイズと位置を調整
@@ -260,6 +263,7 @@ void Title::UpDate()
 		this->cursor_a += 0.01f;
 		if (this->cursor_a >= 1.0f)
 		{
+			demoTimer.Start();
 			this->mode = from6;
 		}
 	}
@@ -267,6 +271,11 @@ void Title::UpDate()
 	case from6:	//決定待ち状態
 	{
 		CursorMove();
+
+		if (demoTimer.GetTime() >= DEMO_LIMIT) {
+			this->mode = Mode::from8;
+			break;
+		}
 
 		if (OGge->in->down(Input::in::B2))
 		{
@@ -314,6 +323,28 @@ void Title::UpDate()
 		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
 		{
 			this->mode = Mode::End;
+		}
+	}
+	break;
+	case from8: // Demo画面に移動するとき
+	{
+		trans_a += 0.01f;
+		if (trans_a >= 1.f) {
+			trans_a = 1.f;
+			auto demo = Demo::Create("./data/test.mp4");
+			this->mode = Mode::from9;
+			this->demoTimer.Stop();
+			this->SetPauseEveryChild(true);
+		}
+	}
+	break;
+	case from9: // Demo画面から戻ってきたとき
+	{
+		trans_a -= 0.01f;
+		if (trans_a <= 0.0f) {
+			trans_a = 0.f;
+			this->demoTimer.Start();
+			this->mode = Mode::from6;
 		}
 	}
 	break;
@@ -389,6 +420,12 @@ void Title::Render2D()
 		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
+	//画面転換用黒いやつ
+	if (this->trans_a > 0.f) {
+		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
+		Box2D src(0, 0, 1, 1);
+		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
+	}
 }
 
 bool Title::Finalize()
@@ -400,6 +437,7 @@ bool Title::Finalize()
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
 	this->effect03.Finalize();
+	this->forTransform.Finalize();
 	this->canVolControl = false;
 
 	auto back = OGge->GetTask<Back>("back");
@@ -484,6 +522,36 @@ void Title::CursorMove()
 	}
 }
 
+void Title::SetPauseEveryChild(const bool& p)
+{
+	auto back = OGge->GetTask<Back>("back");
+	if (back)
+	{
+		back->SetPause(p);
+	}
+	auto water = OGge->GetTasks<Water>("water");
+	for (auto id = (*water).begin(); id != (*water).end(); ++id)
+	{
+		(*id)->SetPause(p);
+	}
+	auto map = OGge->GetTask<Map>("map");
+	if (map)
+	{
+		(*map).SetPause(p);
+	}
+	auto Npc = OGge->GetTasks<Chara>("Chara");
+	for (auto id = Npc->begin(); id != Npc->end(); ++id)
+	{
+		(*id)->SetPause(p);
+	}
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->SetPause(p);
+	}
+	this->SetPause(p);
+}
+
 void Title::ModeCheck()
 {
 	if (this->preMode != this->mode)
@@ -553,6 +621,7 @@ void Title::BackTitleSkip()
 
 void Title::SkipMove()
 {
+	demoTimer.Start();
 	this->mode = Mode::from6;
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)

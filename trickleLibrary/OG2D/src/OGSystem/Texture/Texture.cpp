@@ -39,6 +39,33 @@ bool Texture::Create(const std::string& path)
 	this->angle = 0.f;
 	return true;
 }
+bool Texture::Create(const cv::Mat& mat) 
+{
+	//GLuint id;
+	//テクスチャを1つだけ生成する
+	glGenTextures(1, &this->_TexId);
+	//テクスチャをバインドする
+	glBindTexture(GL_TEXTURE_2D, this->_TexId);
+	//画像を読み込む
+	int width = mat.cols;
+	int height = mat.rows;
+	//画像データをOpenGLへ送る
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, mat.ptr());
+	this->TextureSize = Vec2(width, height);
+	//表示用設定
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	this->_materix[0] = { 0,0 };
+	this->_materix[1] = { width,0 };
+	this->_materix[2] = { width,height };
+	this->_materix[3] = { 0,height };
+	this->angle = 0.f;
+	return true;
+}
 Texture::Texture()
 {
 

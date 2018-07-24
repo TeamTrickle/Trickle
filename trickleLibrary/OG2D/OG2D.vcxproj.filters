@@ -153,6 +153,9 @@
     <Filter Include="ソースファイル\OGSystem\System\Icon">
       <UniqueIdentifier>{b752a1f7-d8d9-467f-939c-7f74e9922062}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\Demo">
+      <UniqueIdentifier>{78e87df9-0c80-4b4d-a085-755a2223352c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -326,6 +329,9 @@
     </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\WeightSwitch.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Demo.cpp">
+      <Filter>ソースファイル\Task\Demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -505,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\WeightSwitch.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Demo.h">
+      <Filter>ソースファイル\Task\Demo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

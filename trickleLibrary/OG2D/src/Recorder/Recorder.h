@@ -23,6 +23,7 @@ private:
 	bool isAlreadyRecorded(const RecDef::WatchKey&, const RecDef::KeyState&) const;
 	void Recorde();
 	void RecordeButton();
+	void RecordeSticks();
 
 public:
 	/**
@@ -62,7 +63,14 @@ public:
 	 */
 	void RecordStart();
 
+	/**
+	 *	@brief	JoyStick‚à‹L˜^‚µ‚Ü‚·
+	 */
+	void RecordJoysticks();
+
+
 private:
+	bool							isRecordSticks = false;
 	bool							isLogging = false;
 	Time*							gameTimer;
 	Input*							inputListener;

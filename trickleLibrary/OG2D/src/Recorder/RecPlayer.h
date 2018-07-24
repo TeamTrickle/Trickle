@@ -18,6 +18,8 @@ private:
 
 	typedef RecDef::WatchKey KeyState;
 	typedef std::pair<float, RecDef::WatchKey> KeyEventTimeline;
+	typedef std::pair<In::AXIS, float> StickState;
+	typedef std::pair<float, StickState> StickEventTimeline;
 
 	explicit RecPlayer() {}
 	virtual ~RecPlayer() {}
@@ -63,6 +65,12 @@ public:
 	bool isEnded() const;
 
 	/**
+	 *	@brief	まだプレイするスティック記録が残っているか
+	 *	@return	true 残っている
+	 */
+	bool isAxisEnded() const;
+
+	/**
 	 *	@brief	リプレイを反復するかを選択
 	 *	@param	bool値
 	 */
@@ -73,6 +81,11 @@ public:
 	 @param		呼ばれるbool型を返す関数、trueが呼ばれる前まで繰り返す
 	 */
 	void SetEndCallback(const std::function<bool()>&);
+
+	/**
+	 @return	スティックの傾き(データがない場合には0を返す)
+	 */
+	float GetCurrentStickTilt(const In::AXIS&);
 
 	void SetPause();
 	void SetPlay();
@@ -85,6 +98,8 @@ private:
 	std::string										fileName;
 	std::queue<KeyEventTimeline>					recData;
 	std::queue<KeyEventTimeline>					backupData;
+	std::queue<StickEventTimeline>					recStick;
+	std::queue<StickEventTimeline>					backupStick;
 	std::map<KeyState, std::function<void()>>		events;
 	std::map<Input::in, RecDef::KeyState>			playerKeyState;
 	std::function<bool()>							endCallback;

@@ -112,6 +112,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>Windows\lib\Debug</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -198,6 +199,7 @@
     <ClCompile Include="src\Task\MapPreviewer.cpp" />
     <ClCompile Include="src\Task\StageInfoRes.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
+    <ClCompile Include="src\Task\Task_Demo.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Pause.cpp" />
     <ClCompile Include="src\Task\Task_Result.cpp" />
@@ -259,6 +261,7 @@
     <ClInclude Include="src\Task\MapPreviewer.h" />
     <ClInclude Include="src\Task\StageInfoRes.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
+    <ClInclude Include="src\Task\Task_Demo.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Pause.h" />
     <ClInclude Include="src\Task\Task_Result.h" />
