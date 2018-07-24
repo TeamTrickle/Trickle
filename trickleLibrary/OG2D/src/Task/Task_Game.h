@@ -6,6 +6,7 @@
 //|____________________________|//
 #include "OGSystem\OGsystem.h"
 #include "UI\UI.h"
+#include "VolumeControl/volumeControl.h"
 
 class UI;
 
@@ -25,7 +26,10 @@ public:
 	//☆☆☆☆//
 	int timecnt;
 
+	//サウンド関連
 	Sound sound;
+	VolumeControl volControl;
+	bool canvolControl;
 private:
 	//---------------------------------------------------------------------
 	//メンバー関数
@@ -48,7 +52,10 @@ private:
 	Texture Effectsond;
 	Texture texSteam;
 	Texture goalTex;
+	Texture goalDirectionTex;
+	Texture arrowflower;
 	Texture doorTex;
+	Texture WswitchTex;
 	std::string gamesoundname;
 	std::string tutorialsoundname;
 

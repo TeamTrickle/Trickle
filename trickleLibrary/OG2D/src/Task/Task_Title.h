@@ -34,6 +34,8 @@ class Title :public TaskObject
 		from5,
 		from6,
 		from7,
+		from8,
+		from9,
 		End,
 	};
 	Texture texCursor;
@@ -45,6 +47,8 @@ class Title :public TaskObject
 	Texture flowerLogo;
 
 	Texture texLogo;
+
+	Texture forTransform;
 	
 
 	std::string soundname;
@@ -67,6 +71,10 @@ class Title :public TaskObject
 
 	Mode mode;
 	Mode preMode;
+
+	Time demoTimer;
+	const float DEMO_LIMIT = 10.f;
+	float trans_a = 0.f;
 
 	void ModeCheck();
 
@@ -96,6 +104,7 @@ public:
 	int timeCnt;
 
 	void CursorMove();
+	void SetPauseEveryChild(const bool&);
 
 	enum State
 	{

@@ -7,6 +7,13 @@
 #include "Object\Object.h"
 class Door :public GameObject, public TaskObject
 {
+public:
+	enum Direction
+	{
+		WIDTH,
+		HEIGHT,
+	};
+private:
 	unsigned __int8 id;
 	bool isOpen;
 	bool isMove;
@@ -16,15 +23,19 @@ class Door :public GameObject, public TaskObject
 	Texture* image;
 	Box2D draw;
 	Box2D src;
+	Direction direction;
+	float* ch_Value[3];
+	float rotate;
 public:
-	Door(const Vec2& pos,const Vec2& size,const bool isOpen);
+	Door(const Vec2& pos, const Vec2& size, const bool isOpen, const Direction&);
 	virtual ~Door();
 	typedef std::shared_ptr<Door> SP;
-	static SP Create(const Vec2& pos,const Vec2& size,const bool isOpen);
+	static SP Create(const Vec2& pos,const Vec2& size,const bool isOpen,const Direction&);
 	void UpDate() override;
 	void Render2D() override;
 	bool ToOpen();	
 	bool ToClose();
+	bool changeIsOpen();
 	bool IsOpen() const;
 	bool IsMove() const;
 	void SetTexture(Texture*);

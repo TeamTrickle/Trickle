@@ -22,6 +22,9 @@
 #include "Map\Ornament.h"
 #include "Load\LoadLogo.h"
 #include "Gimmick\NO_MOVE\Door.h"
+#include "UI/GoalDirectionUI.h"
+#include "VolumeControl/volumeControl.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
 
 #define ADD_FUNCTION(a) \
 	[](std::vector<GameObject*>* objs_) { a(objs_); }
@@ -30,6 +33,10 @@ Game::Game()
 {
 	gamesoundname = "game.wav";
 	tutorialsoundname = "tutorial.wav";
+
+	this->canvolControl = true;
+	//this->ResetKillCount();
+	OGge->camera->SetSize(Vec2(1920, 1080));
 }
 
 Game::~Game()
@@ -38,10 +45,12 @@ Game::~Game()
 	{
 		auto load = Load::Create();
 		load->Draw();
+		OGge->ChengeTask();
 	}
 	//解放処理と次のsceneの生成
 	this->Finalize();
-	OGge->ChengeTask();
+	//OGge->DeleteTasks();
+	
 	
 }
 
@@ -49,8 +58,8 @@ Game::~Game()
 bool Game::Initialize()
 {
 	OGge->camera->SetSize(Vec2(1280, 720));
-
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
+	
 	//Pauseタスクの生成
 	auto pause = Pause::Create();
 
@@ -74,7 +83,13 @@ bool Game::Initialize()
 	rm->SetTextureData(std::string("steam"), &this->texSteam);
 	this->goalTex.Create("goal.png");
 	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
-	doorTex.Create("door.png");
+	this->goalDirectionTex.Create((std::string)"goalarrow.png");
+	rm->SetTextureData((std::string)"goalDirectionTex",&this->goalDirectionTex);
+	this->arrowflower.Create((std::string)"arrowflower.png");
+	rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
+	this->doorTex.Create("door.png");
+	rm->SetTextureData((std::string)"WswitchTex", &this->WswitchTex);
+	this->WswitchTex.Create("Collision.png");
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -94,7 +109,7 @@ bool Game::Initialize()
 		_waterpos.y = 64 * 15;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 	}
@@ -108,10 +123,9 @@ bool Game::Initialize()
 		_waterpos.y = 64 * 10;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
-
 	}
 	break;
 	case 3:		//チュートリアル３
@@ -123,7 +137,7 @@ bool Game::Initialize()
 			auto mapload = Map::Create((std::string)"tutorial3.csv");
 			//チュートリアルのサウンドに使用
 			sound.create(tutorialsoundname, true);
-			sound.volume(1.0f);
+			sound.volume(0.0f);
 			OGge->soundManager->SetSound(&sound);
 			sound.play();
 
@@ -145,9 +159,10 @@ bool Game::Initialize()
 		_waterpos.y = 64 * 4;
 		//チュートリアルのサウンドに使用
 		sound.create(tutorialsoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
+
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64), Vec2(64, 64), Kanetuki::Angle::RIGHT, false);
 		//製氷機生成
@@ -166,9 +181,13 @@ bool Game::Initialize()
 		_waterpos.x = 64 * 4 - 25;
 		_waterpos.y = 64 * 2;
 
+		//テスト追加重さで反応するswitchのscale.yは30規定でお願いします
+		//auto wswitch = WeightSwitch::Create(Vec2(400, 920), Vec2(200, 30), 1.0f);
+		//wswitch->SetTexture(&WswitchTex);
+
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
@@ -205,7 +224,7 @@ bool Game::Initialize()
 
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);
-		sound.volume(1.0f);
+		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
@@ -235,6 +254,147 @@ bool Game::Initialize()
 		auto block2 = Block::Create(Vec2(64 * 33, 64 * 11));
 		break;
 	}
+	case 7:
+	{
+		//map生成
+		auto mapload = Map::Create((std::string)"stage3.csv");
+		//水の位置
+		_waterpos.x = 64 * 4 + 32;
+		_waterpos.y = 64 * 1;
+		//ゲームのサウンドに使用
+		sound.create(gamesoundname, true);
+		sound.volume(1.0f);
+		OGge->soundManager->SetSound(&sound);
+		sound.play();
+
+		//扇風機
+		Fan::Create(Vec2(64 * 16, 64 * 4), 7, Fan::Dir::RIGHT, 7, true);
+		//加熱器
+		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64), Kanetuki::Angle::UP, true);
+		//製氷機
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 4), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT);
+		//switch
+		Switch::Create(Vec2(64 * 2, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
+		//横向き扉
+		auto door1 = Door::Create(Vec2(64 * 3, 64 * 11), Vec2(64*3,32), false, Door::Direction::WIDTH);
+		auto door2 = Door::Create(Vec2(64 * 3, 64 * 13), Vec2(64*3,32), false, Door::Direction::WIDTH);
+		door1->SetTexture(&doorTex);
+		door2->SetTexture(&doorTex);
+		//重さスイッチ
+		auto ws1 = WeightSwitch::Create(Vec2(64, 64 * 9 + 34), Vec2(64, 30), 1, std::vector<std::shared_ptr<GameObject>>{door2});
+		ws1->SetTexture(&WswitchTex);
+		//WeightSwitch::Create(Vec2())
+		break;
+	}
+	//case 5:	//チュートリアル５
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial5.csv");
+	//}
+	//break;
+	//case 6:	//チュートリアル６
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial6.csv");
+	//}
+	//break;
+	//case 7:	//チュートリアル７
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial7.csv");
+	//}
+	//break;
+	//case 8:	//チュートリアル８
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial8.csv");
+	//}
+	//break;
+	//case 9:	//チュートリアル９
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial9.csv");
+	//}
+	//break;
+	//case 10:	//チュートリアル１０
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial10.csv");
+	//}
+	//break;
+	//case 11:	//チュートリアル１１
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial11.csv");
+	//}
+	//break;
+	//case 12:	//チュートリアル１２
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial12.csv");
+	//}
+	//break;
+	//case 13:	//ステージ１
+	//{
+	//auto mapload = Map::Create((std::string)"stage1.csv");
+	//}
+	//break;
+	//case 14:	//ステージ２
+	//{
+	//auto mapload = Map::Create((std::string)"stage2.csv");
+	//}
+	//break;
+	//case 15:	//ステージ３
+	//{
+	//auto mapload = Map::Create((std::string)"stage3.csv");
+	//}
+	//break;//case 5:	//チュートリアル５
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial5.csv");
+	//}
+	//break;
+	//case 6:	//チュートリアル６
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial6.csv");
+	//}
+	//break;
+	//case 7:	//チュートリアル７
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial7.csv");
+	//}
+	//break;
+	//case 8:	//チュートリアル８
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial8.csv");
+	//}
+	//break;
+	//case 9:	//チュートリアル９
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial9.csv");
+	//}
+	//break;
+	//case 10:	//チュートリアル１０
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial10.csv");
+	//}
+	//break;
+	//case 11:	//チュートリアル１１
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial11.csv");
+	//}
+	//break;
+	//case 12:	//チュートリアル１２
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial12.csv");
+	//}
+	//break;
+	//case 13:	//ステージ１
+	//{
+	//auto mapload = Map::Create((std::string)"stage1.csv");
+	//}
+	//break;
+	//case 14:	//ステージ２
+	//{
+	//auto mapload = Map::Create((std::string)"stage2.csv");
+	//}
+	//break;
+	//case 15:	//ステージ３
+	//{
+	//auto mapload = Map::Create((std::string)"stage3.csv");
+	//}
+	//break;
 	default:
 		std::cout << "マップ番号が存在しません" << std::endl;
 		break;
@@ -252,12 +412,16 @@ bool Game::Initialize()
 		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
 		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
+	auto back2Img = Back::Create("back2Test.png", 1920, 1080);
+	back2Img->SetScroll();
+	back2Img->SetDrawOrder(0.0f);
 	//水が自動で降ってくる時間の初期化
 	this->timecnt = 0;
 	//水の生成
 	auto water = Water::Create(_waterpos);
 	//画像を渡す
 	water->SetTexture(&this->waterTex);
+	
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
 	//ゲームクリア判定を生成
@@ -290,6 +454,19 @@ void Game::UpDate()
 			}
 		}
 	}
+
+	//フェードアウト
+	//フェードイン
+	if (canvolControl)
+	{
+		sound.volume(volControl.FadeIn(canvolControl));
+	}
+	if (canvolControl == false)
+	{
+		sound.volume(volControl.FadeOut(true));
+	}
+
+
 	//UI
 	UImng_->UpDate();
 }
@@ -300,7 +477,6 @@ void Game::Render2D()
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
 {
-	//各オブジェクトが存在している場合にKillする。
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
 	{
@@ -391,6 +567,11 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto goalDirection = OGge->GetTasks<GoalDirection>("GoalDirection");
+	for (auto id = goalDirection->begin(); id != goalDirection->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	auto doors = OGge->GetTasks<Door>("Door");
 	for (auto id = doors->begin(); id != doors->end(); ++id)
 	{
@@ -407,6 +588,8 @@ bool Game::Finalize()
 	rm->DeleteTexture((std::string)"steam");
 	rm->DeleteTexture((std::string)"goalTex");
 	rm->DeleteTexture((std::string)"fireIce");
+	rm->DeleteTexture((std::string)"goalDirectionTex");
+	rm->DeleteTexture((std::string)"arrowflowerTex");
 	this->waterTex.Finalize();
 	this->playerTex.Finalize();
 	this->fanTex.Finalize();
@@ -418,6 +601,8 @@ bool Game::Finalize()
 	this->Effectsond.Finalize();
 	this->texSteam.Finalize();
 	this->goalTex.Finalize();
+	this->goalDirectionTex.Finalize();
+	this->arrowflower.Finalize();
 	this->doorTex.Finalize();
 	return true;
 }
@@ -455,7 +640,6 @@ void Game::Camera_move()
 			//カメラの座標を更新
 			NowCameraPos.x = camera_x;
 			NowCameraPos.y = camera_y;
-
 
 			//左右のスクロール範囲の設定(サイズの10分の1)
 			float Boundary = NowCameraSize.x / 10.0f;

@@ -10,7 +10,7 @@ Ornament::Ornament()
 	this->gearSrc = Box2D(0, 0, 195, 195);
 	this->pipeBoxSrc = Box2D(0, 0, 1024, 768);
 	__super::Init((std::string)"Ornament");
-	__super::SetDrawOrder(0.7f);
+	__super::SetDrawOrder(0.5f);
 }
 
 

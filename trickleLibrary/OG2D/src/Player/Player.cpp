@@ -5,6 +5,7 @@
 #include "Block\block.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "Gimmick\NO_MOVE\Door.h"
+#include "Gimmick/NO_MOVE/WeightSwitch.h"
 
 Player::Player()
 {
@@ -12,6 +13,7 @@ Player::Player()
 	this->isInputAuto = false;
 	this->isInput = false;
 	this->haveAddPos = { 0,0 };
+	this->mass = 1.0f;      //仮
 }
 Player::~Player()
 {
@@ -299,6 +301,20 @@ bool Player::FootCheck()
 			}
 		}
 	}
+
+	//テスト追加
+	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+	for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+	{
+		if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (foot.CubeHit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
+
 	return false;
 }
 bool Player::FootMapCheck(std::string& objname_, bool flag)
@@ -364,6 +380,9 @@ void Player::MoveCheck(Vec2& est)
 	auto waters = OGge->GetTasks<Water>("water");
 	auto block = OGge->GetTask<Block>("block");
 	auto door = OGge->GetTasks<Door>("Door");
+	//テスト追加
+	auto Wswitch = OGge->GetTasks<WeightSwitch>("WeightSwitch");
+
 	while (est.x != 0.f)
 	{
 		float preX = this->position.x;
@@ -398,6 +417,19 @@ void Player::MoveCheck(Vec2& est)
 				}
 			}
 		}
+		//テスト追加
+		for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.x = preX;
+					break;
+				}
+			}
+		}
+
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
@@ -470,6 +502,20 @@ void Player::MoveCheck(Vec2& est)
 				}
 			}
 		}
+		//テスト追加
+		for (auto id = Wswitch->begin(); id != Wswitch->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (this->CubeHit(*(*id)))
+				{
+					this->position.y = preY;
+					this->position.y += (*id)->SetSwitchUpPos();
+					break;
+				}
+			}
+		}
+
 		for (auto id = blocks->begin(); id != blocks->end(); ++id)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
@@ -1605,6 +1651,15 @@ bool Player::MotionLadderUpDate()
 		{
 			//重力処理を行わないのでここで終了
 			return false;
+		}
+	}
+	if (this->InputLeft() || this->InputRight() || this->AxisLX() > 0.8f || this->AxisLX() < -0.8f)
+	{
+		if (this->LadderJumpCheck())
+		{
+			this->motion = Fall;
+			this->animation.animCnt = 0;
+			this->moveCnt = 0;
 		}
 	}
 	return true;

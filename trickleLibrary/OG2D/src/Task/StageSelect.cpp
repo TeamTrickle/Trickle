@@ -55,14 +55,14 @@ bool StageSelect::Initialize()
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.5f);
 	//ステージ概要表示用案内板
-	auto board = StageAlert::Create(true, Box2D(500, 50, 1328, 550));
-	//auto board2 = StageAlert::Create(true, Box2D(500 + 1280, 50, 1328, 550));
+	auto board = StageAlert::Create(true, Box2D(400, 0, 1328, 550));
+	auto board2 = StageAlert::Create(true, Box2D(400 + ((int)OGge->window->GetSize().x * 2), 0, 1328, 550));
 	(*board) << "./data/monitor0.txt";
 	(*board) << "./data/monitor1.txt";
 	(*board) << "./data/monitor2.txt";
-	//(*board2) << "./data/monitor0.txt";
-	//(*board2) << "./data/monitor1.txt";
-	//(*board2) << "./data/monitor2.txt";
+	(*board2) << "./data/monitor3.txt";
+	(*board2) << "./data/monitor4.txt";
+	(*board2) << "./data/monitor5.txt";
 	//サウンドの生成
 	//BGM
 	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
@@ -280,7 +280,7 @@ void StageSelect::From2()
 		for (auto id = board->begin(); id != board->end(); ++id)
 		{
 			(*id)->setActive(true);
-			(*id)->SetStageData("./data/monitor0.txt");
+			(*id)->SelectFirstElement();
 		}
 		//次へ移動
 		this->mode = Mode::from3;
@@ -353,9 +353,6 @@ void StageSelect::From3()
 					if ((*id)->isExist(curStageName))
 					{
 						(*id)->SetStageData(curStageName);
-						if (nowPos / 3 < 1) {
-							(*id)->setPosition(Vec2(350, 0));
-						}
 					}
 				}
 			}
@@ -417,9 +414,6 @@ void StageSelect::From3()
 					if ((*id)->isExist(curStageName))
 					{
 						(*id)->SetStageData(curStageName);
-						if (nowPos / 3 > 0) {
-							(*id)->setPosition(Vec2(1350, 0));
-						}
 					}
 				}
 			}
@@ -445,22 +439,26 @@ void StageSelect::From3()
 				case 5:
 					this->state = State::Tutorial3;
 					*MapNum = 6;
+					//*MapNum = 9;
 					break;
 				case 6:
 				case 7:
 					//梯子を上る
 					this->state = State::Stage1;
 					*MapNum = 1;
+					//*MapNum = 13;
 					break;
 				case 8:
 				case 9:
 					this->state = State::Stage2;
 					*MapNum = 5;
+					//*MapNum = 14;
 					break;
 				case 10:
 				case 11:
 					this->state = State::Stage3;
 					*MapNum = 6;
+					//*MapNum = 15;
 					break;
 				case 12:
 					this->state = State::ToTitle;

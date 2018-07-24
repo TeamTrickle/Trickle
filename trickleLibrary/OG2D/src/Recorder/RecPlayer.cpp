@@ -40,11 +40,20 @@ bool RecPlayer::Initialize(const std::string& fName) {
 			recData.push(KeyEventTimeline::pair(time, RecDef::WatchKey::pair(key, state)));
 			printLog("Read Successful - " + buf);
 		}
+
+		// スティック関連イベント
+		if (commands.size() == 4) {
+			In::AXIS axis = RecDef::getAxisWithString(commands[2]);
+			float tilt = std::stof(commands[3]);
+			recStick.push(StickEventTimeline::pair(time, StickState::pair(axis, tilt)));
+			printLog("Read Successful - " + buf);
+		}
 	}
 	fileReader.close();
 	printLog("=== File closed ===");
 
 	backupData = recData;
+	backupStick = recStick;
 	timer.Start();
 
 	return true;
@@ -60,6 +69,7 @@ bool RecPlayer::isEventExist(const KeyState& s) {
 
 void RecPlayer::Reset() {
 	recData = backupData;
+	recStick = backupStick;
 	timer.Stop();
 	timer.Start();
 	printLog("RecPlayer --- Repeat!");
@@ -91,9 +101,10 @@ void RecPlayer::Destroy() {
 }
 
 void RecPlayer::Play() {
-	if (!isEnded()) {
-		if (isPlayable()) {
-			float curTime = timer.GetTime();
+	if (isPlayable()) {
+		float curTime = timer.GetTime();
+
+		if (!isEnded()) {
 			auto curActivity = recData.front();
 			if (curTime >= curActivity.first) {
 				printLog("Read from file - " +
@@ -110,22 +121,30 @@ void RecPlayer::Play() {
 				if (keyEvent.second == RecDef::KeyState::PRESS) {
 					auto pressingKey = KeyState::pair(keyEvent.first, RecDef::KeyState::PRESS);
 					if (isEventExist(pressingKey))
-					events[pressingKey]();
+						events[pressingKey]();
 				}
 			}
 		}
-	}
-	else if (isRepeat) {
-		// Callback関数が存在する場合
-		if (endCallback) {
-			if (endCallback()) {
+		else if (isRepeat) {
+			// Callback関数が存在する場合
+			if (endCallback) {
+				if (endCallback()) {
+					Reset();
+				}
+			}
+			// ないとただ繰り返す
+			else {
 				Reset();
 			}
 		}
-		// ないとただ繰り返す
-		else {
-			Reset();
+
+		if (!isAxisEnded()) {
+			auto curActivity = recStick.front();
+			if (curTime >= curActivity.first) {
+				recStick.pop();
+			}
 		}
+		
 	}
 }
 
@@ -140,12 +159,27 @@ bool RecPlayer::isEnded() const {
 	return recData.empty();
 }
 
+bool RecPlayer::isAxisEnded() const {
+	return recStick.empty();
+}
+
 void RecPlayer::SetRepeat(const bool& r) {
 	isRepeat = r;
 }
 
 void RecPlayer::SetEndCallback(const std::function<bool()>& cb) {
 	endCallback = cb;
+}
+
+float RecPlayer::GetCurrentStickTilt(const In::AXIS& axis) {
+	if (!isAxisEnded() && isPlayable()) {
+		auto& curActivity = recStick.front();
+		if (curActivity.first <= timer.GetTime() &&
+			curActivity.second.first == axis) {
+			return curActivity.second.second;
+		}
+	}
+	return 0.f;
 }
 
 void RecPlayer::SetPause() {

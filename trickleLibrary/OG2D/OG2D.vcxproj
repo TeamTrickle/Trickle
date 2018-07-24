@@ -112,6 +112,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>Windows\lib\Debug</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -166,6 +167,7 @@
     <ClCompile Include="src\Gimmick\NO_MOVE\Senpuki.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\Switch.cpp" />
     <ClCompile Include="src\Gimmick\NO_MOVE\TimeSign.cpp" />
+    <ClCompile Include="src\Gimmick\NO_MOVE\WeightSwitch.cpp" />
     <ClCompile Include="src\Goal\Goal.cpp" />
     <ClCompile Include="src\Load\LoadLogo.cpp" />
     <ClCompile Include="src\Map\Map.cpp" />
@@ -198,12 +200,14 @@
     <ClCompile Include="src\Task\StageInfoRes.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
     <ClCompile Include="src\Task\Task_Credit.cpp" />
+    <ClCompile Include="src\Task\Task_Demo.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Pause.cpp" />
     <ClCompile Include="src\Task\Task_Result.cpp" />
     <ClCompile Include="src\Task\Task_StageAlert.cpp" />
     <ClCompile Include="src\Task\Task_Title.cpp" />
     <ClCompile Include="src\Task\Task_TitleMovement.cpp" />
+    <ClCompile Include="src\UI\GoalDirectionUI.cpp" />
     <ClCompile Include="src\UI\UI.cpp" />
     <ClCompile Include="src\VolumeControl\volumeControl.cpp" />
     <ClCompile Include="src\Water\water.cpp" />
@@ -224,6 +228,7 @@
     <ClInclude Include="src\Gimmick\NO_MOVE\Senpuki.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\Switch.h" />
     <ClInclude Include="src\Gimmick\NO_MOVE\TimeSign.h" />
+    <ClInclude Include="src\Gimmick\NO_MOVE\WeightSwitch.h" />
     <ClInclude Include="src\Goal\Goal.h" />
     <ClInclude Include="src\Load\LoadLogo.h" />
     <ClInclude Include="src\Map\Map.h" />
@@ -258,12 +263,14 @@
     <ClInclude Include="src\Task\StageInfoRes.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
     <ClInclude Include="src\Task\Task_Credit.h" />
+    <ClInclude Include="src\Task\Task_Demo.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Pause.h" />
     <ClInclude Include="src\Task\Task_Result.h" />
     <ClInclude Include="src\Task\Task_StageAlert.h" />
     <ClInclude Include="src\Task\Task_Title.h" />
     <ClInclude Include="src\Task\Task_TitleMovement.h" />
+    <ClInclude Include="src\UI\GoalDirectionUI.h" />
     <ClInclude Include="src\UI\UI.h" />
     <ClInclude Include="src\VolumeControl\volumeControl.h" />
     <ClInclude Include="src\Water\water.h" />
