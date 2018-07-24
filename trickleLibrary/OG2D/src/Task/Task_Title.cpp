@@ -527,34 +527,28 @@ void Title::SetPauseEveryChild(const bool& p)
 	auto back = OGge->GetTask<Back>("back");
 	if (back)
 	{
-		back->SetDraw(!p);
 		back->SetPause(p);
 	}
 	auto water = OGge->GetTasks<Water>("water");
 	for (auto id = (*water).begin(); id != (*water).end(); ++id)
 	{
-		(*id)->SetDraw(!p);
 		(*id)->SetPause(p);
 	}
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
 	{
-		(*map).SetDraw(!p);
 		(*map).SetPause(p);
 	}
 	auto Npc = OGge->GetTasks<Chara>("Chara");
 	for (auto id = Npc->begin(); id != Npc->end(); ++id)
 	{
 		(*id)->SetPause(p);
-		(*id)->SetDraw(!p);
 	}
 	auto effects = OGge->GetTasks<Effect>("effect");
 	for (auto id = effects->begin(); id != effects->end(); ++id)
 	{
-		(*id)->SetDraw(!p);
 		(*id)->SetPause(p);
 	}
-	this->SetDraw(!p);
 	this->SetPause(p);
 }
 
