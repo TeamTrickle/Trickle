@@ -254,6 +254,115 @@ bool Game::Initialize()
 		auto block2 = Block::Create(Vec2(64 * 33, 64 * 11));
 		break;
 	}
+	//case 5:	//チュートリアル５
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial5.csv");
+	//}
+	//break;
+	//case 6:	//チュートリアル６
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial6.csv");
+	//}
+	//break;
+	//case 7:	//チュートリアル７
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial7.csv");
+	//}
+	//break;
+	//case 8:	//チュートリアル８
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial8.csv");
+	//}
+	//break;
+	//case 9:	//チュートリアル９
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial9.csv");
+	//}
+	//break;
+	//case 10:	//チュートリアル１０
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial10.csv");
+	//}
+	//break;
+	//case 11:	//チュートリアル１１
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial11.csv");
+	//}
+	//break;
+	//case 12:	//チュートリアル１２
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial12.csv");
+	//}
+	//break;
+	//case 13:	//ステージ１
+	//{
+	//auto mapload = Map::Create((std::string)"stage1.csv");
+	//}
+	//break;
+	//case 14:	//ステージ２
+	//{
+	//auto mapload = Map::Create((std::string)"stage2.csv");
+	//}
+	//break;
+	//case 15:	//ステージ３
+	//{
+	//auto mapload = Map::Create((std::string)"stage3.csv");
+	//}
+	//break;//case 5:	//チュートリアル５
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial5.csv");
+	//}
+	//break;
+	//case 6:	//チュートリアル６
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial6.csv");
+	//}
+	//break;
+	//case 7:	//チュートリアル７
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial7.csv");
+	//}
+	//break;
+	//case 8:	//チュートリアル８
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial8.csv");
+	//}
+	//break;
+	//case 9:	//チュートリアル９
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial9.csv");
+	//}
+	//break;
+	//case 10:	//チュートリアル１０
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial10.csv");
+	//}
+	//break;
+	//case 11:	//チュートリアル１１
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial11.csv");
+	//}
+	//break;
+	//case 12:	//チュートリアル１２
+	//{
+	//auto mapload = Map::Create((std::string)"tutorial12.csv");
+	//}
+	//break;
+	//case 13:	//ステージ１
+	//{
+	//auto mapload = Map::Create((std::string)"stage1.csv");
+	//}
+	//break;
+	//case 14:	//ステージ２
+	//{
+	//auto mapload = Map::Create((std::string)"stage2.csv");
+	//}
+	//break;
+	//case 15:	//ステージ３
+	//{
+	//auto mapload = Map::Create((std::string)"stage3.csv");
+	//}
+	//break;
 	default:
 		std::cout << "マップ番号が存在しません" << std::endl;
 		break;
