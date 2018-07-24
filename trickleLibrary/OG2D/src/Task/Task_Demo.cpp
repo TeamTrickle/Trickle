@@ -52,6 +52,7 @@ void Demo::UpDate() {
 		}
 		tex.Finalize();
 		tex.Create(frame);
+		frame.release();
 		startTime = timer.GetTime();
 	}
 	if (OGge->in->down(In::B1)) {
