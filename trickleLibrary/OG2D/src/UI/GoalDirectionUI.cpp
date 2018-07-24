@@ -139,7 +139,7 @@ void GoalDirection::CameraPosUpDate()
 
 	//ü•ª‚ðˆø‚­Šî€
 	float nowx = target->position.x + target->Scale.x / 2;
-	float nowy = target->position.y + target->Scale.y;
+	float nowy = target->position.y + target->Scale.y / 2;
 
 	Vec2 pos;
 	for (int i = 0; i < r; i++) 
