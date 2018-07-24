@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="42" height="36" tilewidth="256" tileheight="256" infinite="0" nextobjectid="1">
- <tileset firstgid="1" source="trickle2.tsx"/>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="42" height="36" tilewidth="256" tileheight="256" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" source="../tileset/trickle.tsx"/>
  <layer name="タイル・レイヤー1" width="42" height="36">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,
