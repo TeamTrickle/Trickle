@@ -1,0 +1,18 @@
+diff a/trickleLibrary/OG2D/src/OGSystem/OGTask.cpp b/trickleLibrary/OG2D/src/OGSystem/OGTask.cpp	(rejected hunks)
+@@ -4,13 +4,14 @@
+ #include "Task\Task_TitleMovement.h"
+ #include "Task\StageSelect.h"
+ #include "Task\Task_Result.h"
++#include "Task\Task_Credit.h"
+ #include "GameProcessManagement\GameProcessManagement.h"
+ 
+ void OGTK::_myGameInitialize()
+ {
+ 	//��������Window���
+-	//OGge->SetWindow(960, 540, "WindowName", false);	
+-	OGge->SetWindow(1920, 1080, "Trickel", true);
++	OGge->SetWindow(960, 540, "WindowName", false);	
++//	OGge->SetWindow(1920, 1080, "Trickel", true);
+ 	OGge->SetWindowPos(Vec2(0, 0));
+ 	//�}�E�X�J�[�\���s��
+ 	OGge->SetCursorOn(false);

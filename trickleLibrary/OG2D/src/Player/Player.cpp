@@ -868,6 +868,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 		else if (this->animationVec.y >= 0.f && motion_ == Motion::Switch_M)
 		{
 			//スイッチのアニメーションを実行する
+			player->direction = Direction::RIGHT;
 			auto switchs = OGge->GetTasks<Switch>("Switch");
 			for (auto id = switchs->begin(); id != switchs->end(); ++id)
 			{

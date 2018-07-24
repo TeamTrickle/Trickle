@@ -199,6 +199,7 @@
     <ClCompile Include="src\Task\MapPreviewer.cpp" />
     <ClCompile Include="src\Task\StageInfoRes.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
+    <ClCompile Include="src\Task\Task_Credit.cpp" />
     <ClCompile Include="src\Task\Task_Demo.cpp" />
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Pause.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="src\Task\MapPreviewer.h" />
     <ClInclude Include="src\Task\StageInfoRes.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
+    <ClInclude Include="src\Task\Task_Credit.h" />
     <ClInclude Include="src\Task\Task_Demo.h" />
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Pause.h" />

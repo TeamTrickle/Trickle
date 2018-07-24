@@ -9,23 +9,25 @@
 
 void OGTK::_myGameInitialize()
 {
-	//¶¬‚·‚éWindowî•ñ
-	OGge->SetWindow(960, 540, "WindowName", false);	
+	//ç”Ÿæˆã™ã‚‹Windowæƒ…å ±
+  //OGge->SetWindow(960, 540, "WindowName", false);	
+	OGge->SetWindow(1920, 1080, "Trickel", true);
+	OGge->SetWindowPos(Vec2(0, 0));
 	//OGge->SetWindow(1920, 1080, "Trickel", true);
 	//OGge->SetWindowPos(Vec2(0, 0));
-	//ƒ}ƒEƒXƒJ[ƒ\ƒ‹•s‰Â‹
+	//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ä¸å¯è¦–
 	OGge->SetCursorOn(false);
 }
 
 void OGTK::StartTaskObject()
 {
-	//g—pƒtƒHƒ“ƒg‚Ì“Ç‚İ‚İ
+	//ä½¿ç”¨ãƒ•ã‚©ãƒ³ãƒˆã®èª­ã¿è¾¼ã¿
 	Texture* fontTex;
 	fontTex = new Texture();
 	fontTex->Create("fontui.png");
 	rm->SetTextureData((std::string)"fontui", fontTex);
 
-	//ƒ^ƒXƒN‚Ì‰Šú‰»
+	//ã‚¿ã‚¹ã‚¯ã®åˆæœŸåŒ–
 	auto TopTask = Title::Create();
 	//*MapNum = 6;
 	//Game::Create();
