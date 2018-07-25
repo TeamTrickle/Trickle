@@ -24,8 +24,6 @@ bool GoalDirection::Initialize(std::shared_ptr<GameObject> target_)
 }
 bool GoalDirection::Finalize()
 {
-	this->image->Finalize();
-	this->flower->Finalize();
 	return true;
 }
 void GoalDirection::SetPos(Vec2& pos)
