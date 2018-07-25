@@ -1,5 +1,4 @@
 #include <fstream>
-#include <iostream>
 #include "Task_Credit.h"
 #include "Chara/Chara.h"
 #include "Task/Task_Title.h"
@@ -38,31 +37,21 @@ bool Credit::Initialize()
 	OGge->camera->SetSize(Vec2(1280, 720));
 
 	this->nowMode = 0;
+	this->jumpTimeCnt = 0;
 	this->timeCnt = 0;
 	this->WAITTIME = 50;
-	
-	for (int i = 0; i < 7; ++i) {
-		name[i].draw = { i*200, 300, 256, 256 };
+	if (LoadSize())
+	{
+		SetSize();
 	}
 	
-	frame[0].draw = { 200,50,1000,585 };
-	frame[0].draw.OffsetSize();
-	frame[1].draw = { 1500,50,1000,585 };
-	frame[1].draw.OffsetSize();
 	
-	for (int i = 0; i < 7; ++i) {
-		name[i].draw = name[i].draw;
-		name[i].draw.OffsetSize();
-		name[i].src = { i * 256,0,256,256 };
-		name[i].src.OffsetSize();
-	}
 	
 	return true;
 }
 
 void Credit::UpDate()
 {
-
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
 	if (OGge->in->key.down(In::T))
@@ -98,16 +87,25 @@ void Credit::UpDate()
 		}
 	}
 	if (nowMode == MODE3) {
-		++timeCnt;
-		if (timeCnt < 1) {
+		++jumpTimeCnt;
+		if (jumpTimeCnt > 30 && jumpTimeCnt < 36) {
 			npc->AutoJump();
 		}
 		npc->AutoMoveX();
 		OGge->camera->SetPos(this->camera_anim.Move(10.f));
+		if (!npc->isAutoPlay()) {
+			++timeCnt;
+			if (timeCnt >= WAITTIME) {
+				npc->SetX(2000, 2300, 30.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2200.f, 500.f));
+				Next();
+			}
+		}
 	}
 
 	if (nowMode == MODE4) {
-		npc->Jump();
+		npc->AutoMoveX();
+		OGge->camera->SetPos(this->camera_anim.Move(30.f));
 		//Next();
 	}
 
@@ -136,18 +134,10 @@ void Credit::UpDate()
 void Credit::Render2D()
 {
 	//フレーム
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < FRAME_NUM+1; ++i)
 	{
-		frame[i].src = { 0, 0, 1000, 585 };
-		frame[i].src.OffsetSize();
 		frameTex.Draw(frame[i].draw, frame[i].src);
-	//	frameTex.Rotate(frame[i].angle);
 	}
-	//名前
-	/*for (int i = 0; i < 7; ++i)
-	{
-		nameTex.Draw(name[i].draw, name[i].src);
-	}*/
 }
 
 void Credit::Finalize()
@@ -168,6 +158,7 @@ void Credit::Next()
 {
 	//次のモードに行く
 	this->timeCnt = 0;
+	this->jumpTimeCnt = 0;
 	++this->nowMode;
 }
 
@@ -263,7 +254,51 @@ bool Credit::LoadSize()
 		std::cout << "読み込みエラー" << std::endl;
 		return false;
 	}
+	//読み込んだデータを入れておく変数
+	std::string line;
+	//改行か終了地点までの文字の文字列をlineにいれる
+	std::getline(ifs, line);
+	//文字列を操作するための入力class、直接アクセスできる
+	std::istringstream _is(line);
+	//一字書き込み変数
+	std::string text;
+	//_isに入っている文字列から','までの文字をtextにいれる
+	std::getline(_is, text, '\t');
 
+	for (int i = 0; i < FRAME_NUM+1; ++i) {
+		std::string lineText;
+		std::getline(ifs, lineText);
+		std::istringstream  ss_lt(lineText);
+		for (int j = 0; j < 4; ++j)
+		{
+			std::string  text;
+			std::getline(ss_lt, text, '\t');
+			if (text == "\r")
+			{
+				continue;
+			}
+			(std::stringstream)text >> frame[i].imageSize[j];
+
+		}
+	}
 
 	ifs.close();
+	return true;
+}
+void Credit::SetSize()
+{
+	for (int i = 0; i < FRAME_NUM + 1; ++i) {
+		frame[i].draw.x = (float)frame[i].imageSize[frame->DRAW_X];
+		frame[i].draw.y = (float)frame[i].imageSize[frame->DRAW_Y];
+		frame[i].draw.w = (float)frame[i].imageSize[frame->DRAW_W];
+		frame[i].draw.h = (float)frame[i].imageSize[frame->DRAW_H];
+		frame[i].draw.OffsetSize();
+
+		frame[i].src.x = 0;
+		frame[i].src.y = 0;
+		frame[i].src.w = (float)frame[i].imageSize[frame->DRAW_W];
+		frame[i].src.h = (float)frame[i].imageSize[frame->DRAW_H];
+		frame[i].src.OffsetSize();
+	}
+
 }
