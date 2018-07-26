@@ -28,7 +28,8 @@ bool TimeSign::Initialize(const std::string& basePath, const Box2D& pos) {
 	for (auto& t : timerDraws)
 		t = Box2D(0.f, 0.f, 0.f, 0.f);
 
-	base.Create(basePath);
+	//base.Create(basePath);
+	base = rm->GetTextureData((std::string)basePath);
 	originPos = pos;
 
 	__super::Init((std::string)"timesign");
@@ -61,10 +62,10 @@ void TimeSign::Render2D() {
 		{
 			Box2D draw = originPos;
 			draw.OffsetSize();
-			Vec2 srcRange = base.GetTextureSize();
+			Vec2 srcRange = base->GetTextureSize();
 			Box2D src(0.f, 0.f, srcRange.x, srcRange.y);
 			src.OffsetSize();
-			base.Draw(draw, src);
+			base->Draw(draw, src);
 		}
 
 		// ”Žš
@@ -80,18 +81,18 @@ void TimeSign::Render2D() {
 			else if (i == 2) continue;
 			draw.OffsetSize();
 			src.OffsetSize();
-			numberAtlas.Draw(draw, src);
+			numberAtlas->Draw(draw, src);
 		}
 	}
 }
 
 void TimeSign::Finalize() {
 	ClearNumberAtlas();
-	base.Finalize();
+	//base.Finalize();
 }
 
 void TimeSign::ClearNumberAtlas() {
-	numberAtlas.Finalize();
+	//numberAtlas.Finalize();
 	numberSrcs.clear();
 }
 
@@ -103,8 +104,8 @@ void TimeSign::setAtlas(const std::string& path,
 						const Box2D& lettersize, 
 						const Box2D& initPos = Box2D(0, 0, 0, 0)) {
 	ClearNumberAtlas();
-	numberAtlas.Create(path);
-
+	//numberAtlas.Create(path);
+	numberAtlas = rm->GetTextureData((std::string)path);
 	timerDraws[0] = initPos;
 	timerDraws[0].x = originPos.x + initPos.x;
 	timerDraws[0].y = originPos.y + initPos.y;
@@ -124,7 +125,7 @@ void TimeSign::setAtlas(const std::string& path,
 
 void TimeSign::setAtlasAngle(const float& a) {
 	rotateAngle = a;
-	numberAtlas.Rotate(a);
+	numberAtlas->Rotate(a);
 
 	for (int i = 1; i < timerDraws.size(); ++i) {
 		auto prevDraw = timerDraws[i - 1];

@@ -63,8 +63,8 @@ private:
 	bool							activate = true;
 	Box2D							originPos;
 	
-	Texture							base;
-	Texture							numberAtlas;
+	Texture*							base;
+	Texture*							numberAtlas;
 	std::map<char, Box2D>			numberSrcs;
 	std::array<Box2D, 5>			timerDraws;
 	std::array<int, 5>				currentTime;

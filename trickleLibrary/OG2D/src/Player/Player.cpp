@@ -1614,6 +1614,7 @@ bool Player::MotionLadderUpDate()
 			this->motion = Motion::Jump;
 			this->animation.animCnt = 0;
 			this->moveCnt = 0;
+			return true;
 		}
 	}
 	if (this->InputUp())
