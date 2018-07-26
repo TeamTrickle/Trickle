@@ -30,6 +30,7 @@ bool Credit::Initialize()
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
 	//マップ生成
 	Map::Create((std::string) "credit.csv");
+	this->LadderTex.Create("mapchip2.png");
 	//チャラタスク生成
 	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
 	npc->SetDirection(Chara::Direction::RIGHT); 
@@ -88,28 +89,41 @@ void Credit::UpDate()
 	}
 	if (nowMode == MODE3) {
 		++jumpTimeCnt;
-		if (jumpTimeCnt > 30 && jumpTimeCnt < 36) {
-			npc->AutoJump();
-		}
+		CreditJump(30, 6);
 		npc->AutoMoveX();
 		OGge->camera->SetPos(this->camera_anim.Move(10.f));
+
 		if (!npc->isAutoPlay()) {
 			++timeCnt;
 			if (timeCnt >= WAITTIME) {
-				npc->SetX(2000, 2300, 30.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2200.f, 500.f));
+				npc->SetX(2000, 2800, 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 500.f));
 				Next();
 			}
 		}
 	}
 
 	if (nowMode == MODE4) {
+		++jumpTimeCnt;
+		CreditJump(50, 10);
+		CreditJump(85, 10);
+		CreditJump(130, 10);
 		npc->AutoMoveX();
-		OGge->camera->SetPos(this->camera_anim.Move(30.f));
-		//Next();
+		OGge->camera->SetPos(this->camera_anim.Move(20.f));
+
+		if (!npc->isAutoPlay()) {
+			++timeCnt;
+			if (timeCnt >= WAITTIME) {
+				npc->Set(npc->position, Vec2(npc->position.x, -200.f), 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, -200.f));
+				Next();
+			}
+		}
 	}
 
 	if (nowMode == MODE5) {
+		npc->AutoMove();
+		OGge->camera->SetPos(this->camera_anim.Move(20.f));
 		//Next();
 	}
 
@@ -138,6 +152,22 @@ void Credit::Render2D()
 	{
 		frameTex.Draw(frame[i].draw, frame[i].src);
 	}
+	//梯子
+	for (int i = 0; i < 8; ++i)
+	{
+		Box2D draw(2800.f, i*128.f, 128.f, 128.f);
+		draw.OffsetSize();
+		Box2D src(768, 256, 256, 256);
+		src.OffsetSize();
+		this->LadderTex.Draw(draw, src);
+	}
+	{
+		Box2D draw(2800.f, 6*128.f, 128.f, 128.f);
+		draw.OffsetSize();
+		Box2D src(256*4, 256*1, 256, 256);
+		src.OffsetSize();
+		this->LadderTex.Draw(draw, src);
+	}
 }
 
 void Credit::Finalize()
@@ -147,6 +177,7 @@ void Credit::Finalize()
 	this->nameTex.Finalize();
 	auto map = OGge->GetTask<Map>("map");
 	auto back = OGge->GetTask<Back>("back");
+	this->LadderTex.Finalize();
 	if (back)
 	{
 		back->Kill();
@@ -301,4 +332,13 @@ void Credit::SetSize()
 		frame[i].src.OffsetSize();
 	}
 
+}
+
+void Credit::CreditJump(int start, int time)
+{
+	auto npc = OGge->GetTask<Chara>("Chara");
+	//ジャンプが始まるフレームと終わるフレームを指定
+	if (jumpTimeCnt > start && jumpTimeCnt < start+time) {
+		npc->AutoJump();
+	}
 }
