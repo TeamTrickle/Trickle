@@ -1089,7 +1089,7 @@ bool Player::TohaveObjectHit()
 				(*id)->PlCheckHit(left);
 				if (this->est.x < 0)
 				{
-					(*id)->GetMove(this->est);
+					(*id)->GetMove(this->est * 0.5f);
 					return true;
 				}
 			}
@@ -1101,7 +1101,7 @@ bool Player::TohaveObjectHit()
 				(*id)->PlCheckHit(right);
 				if (this->est.x > 0)
 				{
-					(*id)->GetMove(this->est);
+					(*id)->GetMove(this->est * 0.5f);
 					return true;
 				}
 			}

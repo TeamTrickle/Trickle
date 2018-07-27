@@ -51,6 +51,8 @@ private:
 	unsigned int id;
 	std::string soundname;      //サウンドのファイル名格納
 	Color color_a;
+	unsigned int fireCnt;
+	unsigned int iceCnt;
 public:
 	bool active;
 	//水量
@@ -116,4 +118,8 @@ public:
 	bool SolidMelt();
 	void SetScale(const Vec2&);
 	unsigned int GetID() const;
+	void SetFireCnt(const unsigned int&);
+	unsigned int GetFireCnt() const;
+	void SetIceCnt(const unsigned int&);
+	unsigned int GetIceCnt() const;
 };

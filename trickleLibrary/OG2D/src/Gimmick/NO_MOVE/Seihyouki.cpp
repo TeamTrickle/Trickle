@@ -15,7 +15,6 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 	this->taskName = "Seihyouki";	//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 
-	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
 	this->active = false;
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
@@ -101,11 +100,11 @@ void Seihyouki::toIce() {
 		{
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
-				changeStateCnt++;
-				if (changeStateCnt >= maxChangeTime)
+				(*id)->SetIceCnt((*id)->GetIceCnt() + 1);
+				if ((*id)->GetIceCnt() >= maxChangeTime)
 				{
 					(*id)->SetState(Water::State::SOLID);
-					changeStateCnt = 0;
+					(*id)->SetIceCnt(0);
 					break;
 				}
 			}
