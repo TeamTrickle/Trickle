@@ -61,7 +61,7 @@ void Credit::UpDate()
 	}
 	if (nowMode == NON) {
 		npc->AutoMoveX();
-		if (!npc->isAutoPlay()) {
+		if (!npc->isAutoPlayX()) {
 			this->nowMode = MODE1;
 		}
 	}
@@ -78,11 +78,11 @@ void Credit::UpDate()
 	if (nowMode == MODE2) {
 		npc->AutoMoveX();
 		OGge->camera->SetPos(this->camera_anim.Move(30.f));
-		if (!npc->isAutoPlay()) {
+		if (!npc->isAutoPlayX()) {
 			++timeCnt;
 			if (timeCnt >= WAITTIME) {
 				npc->SetX(1700, 2000, 10.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 500.f));
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 800.f));
 				Next();
 			}
 		}
@@ -93,11 +93,11 @@ void Credit::UpDate()
 		npc->AutoMoveX();
 		OGge->camera->SetPos(this->camera_anim.Move(10.f));
 
-		if (!npc->isAutoPlay()) {
+		if (!npc->isAutoPlayX()) {
 			++timeCnt;
 			if (timeCnt >= WAITTIME) {
 				npc->SetX(2000, 2800, 20.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 500.f));
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 800.f));
 				Next();
 			}
 		}
@@ -111,11 +111,11 @@ void Credit::UpDate()
 		npc->AutoMoveX();
 		OGge->camera->SetPos(this->camera_anim.Move(20.f));
 
-		if (!npc->isAutoPlay()) {
+		if (!npc->isAutoPlayX()) {
 			++timeCnt;
 			if (timeCnt >= WAITTIME) {
-				npc->Set(npc->position, Vec2(npc->position.x, -200.f), 20.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, -200.f));
+				npc->Set(npc->position, Vec2(npc->position.x, 0.f), 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 0.f));
 				Next();
 			}
 		}
@@ -124,7 +124,14 @@ void Credit::UpDate()
 	if (nowMode == MODE5) {
 		npc->AutoMove();
 		OGge->camera->SetPos(this->camera_anim.Move(20.f));
-		//Next();
+		if (npc->isAutoPlay()) {
+			npc->SetCollisionNow(0);
+		}
+		else {
+			npc->SetCollisionNow(1);
+			Next();
+		}
+
 	}
 
 	if (nowMode == MODE6) {
@@ -148,23 +155,23 @@ void Credit::UpDate()
 void Credit::Render2D()
 {
 	//ƒtƒŒ[ƒ€
-	for (int i = 0; i < FRAME_NUM+1; ++i)
+	for (int i = 0; i < FRAME_NUM + 1; ++i)
 	{
 		frameTex.Draw(frame[i].draw, frame[i].src);
 	}
 	//’òq
-	for (int i = 0; i < 8; ++i)
+	for (int i = 2; i < 10; ++i)
 	{
 		Box2D draw(2800.f, i*128.f, 128.f, 128.f);
 		draw.OffsetSize();
-		Box2D src(768, 256, 256, 256);
+		Box2D src(256*3, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
 	}
 	{
-		Box2D draw(2800.f, 6*128.f, 128.f, 128.f);
+		Box2D draw(2800.f, 1*128.f, 128.f, 128.f);
 		draw.OffsetSize();
-		Box2D src(256*4, 256*1, 256, 256);
+		Box2D src(256*2, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
 	}
