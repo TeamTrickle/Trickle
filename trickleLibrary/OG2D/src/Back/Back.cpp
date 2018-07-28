@@ -58,17 +58,18 @@ Back::~Back()
 
 void Back::UpDate()
 {
-	if (this->texPos)
-	{
-		//画像の描画位置をマップサイズとカメラの位置とカメラのサイズから求める
-		*this->texPos = Vec2(OGge->camera->GetPos().x - ((OGge->camera->GetPos().x / *this->Xsize) * *this->Tsize), OGge->camera->GetPos().y - (this->size.y - OGge->camera->GetSize().y));
-	}
 }
 
 void Back::Render2D()
 {
 	if (this->isScroll)
 	{
+
+		if (this->texPos)
+		{
+			//画像の描画位置をマップサイズとカメラの位置とカメラのサイズから求める
+			*this->texPos = Vec2(OGge->camera->GetPos().x - ((OGge->camera->GetPos().x / *this->Xsize) * *this->Tsize), OGge->camera->GetPos().y - (this->size.y - OGge->camera->GetSize().y) + 320);
+		}
 		Box2D draw(this->texPos->x, this->texPos->y, this->size.x, this->size.y);
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, this->backImg.GetTextureSize().x, this->backImg.GetTextureSize().y);
@@ -121,7 +122,7 @@ void Back::SetScroll(bool flag)
 			this->Xsize = new float;
 			*this->Xsize = *this->Center - (OGge->camera->GetSize().x / 2.0f);
 			//テクスチャのサイズを計算で作成
-			this->size.x = this->mapSize->x + OGge->camera->GetSize().x / 2.f;
+			this->size.x = this->mapSize->x + OGge->camera->GetSize().x / 4.f;
 			this->size.y = this->size.x * 9.f / 16.f;
 			//テクスチャのサイズとカメラのサイズの差を計算
 			this->Tsize = new float;
