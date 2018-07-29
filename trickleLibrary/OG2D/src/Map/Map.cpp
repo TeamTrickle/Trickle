@@ -14,7 +14,7 @@ Map::Map()
 	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
 	__super::Init((std::string)"map");
-	__super::SetDrawOrder(0.2f);
+	__super::SetDrawOrder(0.4f);
 }
 
 Map::~Map()
@@ -131,9 +131,20 @@ bool Map::LoadMap(std::string& path_, Format format)
 				break;
 			case 14:
 				this->hitBase[y][x].Scale.y = 12.0f;		//‰¼ˆ—Aã•ûŒü‹à–Ô‚Ì‚Ý“–‚½‚è”»’è‚Ì‚‚³‚ð20‚É§ŒÀ
-			case 15:
-			case 16:
-			case 17:
+				this->hitBase[y][x].SetID(1);
+				break;
+			case 15:	//bug
+				this->hitBase[y][x].position.x += 64 - 12;
+				this->hitBase[y][x].Scale.x = 12.f;
+				this->hitBase[y][x].SetID(1);
+				break;
+			case 16:	//bug
+				this->hitBase[y][x].position.y += 64 - 12;
+				this->hitBase[y][x].Scale.y = 12.f;
+				this->hitBase[y][x].SetID(1);
+				break;
+			case 17:	//bug
+				this->hitBase[y][x].Scale.x = 12.f;
 				this->hitBase[y][x].SetID(1);
 				this->hitBase[y][x].objectTag = "Net";
 				break;
@@ -257,6 +268,14 @@ void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
 		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
 		return;
 	}
+	if (text == "w") {
+		this->waterPos = Vec2(this->DrawSize.x * x_index - 25, this->DrawSize.y * y_index);
+	}
+}
+
+Vec2 Map::getWaterPos()
+{
+	return this->waterPos;
 }
 
 void Map::UpDate()

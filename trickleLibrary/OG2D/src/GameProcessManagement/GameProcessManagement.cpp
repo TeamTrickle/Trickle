@@ -20,27 +20,29 @@ GameManager::~GameManager()
 {
 	if (this->isclear)
 	{
-		if (*MapNum == 5 || *MapNum == 6)
-		{
-			OGge->ChengeTask();
-			Result::Create();
-		}
-		else
-		{
-			if (*MapNum < 4)
-			{
-				*MapNum = *MapNum + 1;
-				auto next = Game::Create();
-			}
-			//次にチュートリアルを控えているものは次のチュートリアルへ移動
-			else if (*MapNum == 4)
-			{
-				//チュートリアル終了でセレクトに戻る
-				auto next = StageSelect::Create();
-			}
-		}
+	//	if (*MapNum == 5 || *MapNum == 6)
+	//	{
+	//		OGge->ChengeTask();
+	//		Result::Create();
+	//	}
+	//	else
+	//	{
+	//		if (*MapNum < 4)
+	//		{
+	//			*MapNum = *MapNum + 1;
+	//			auto next = Game::Create();
+	//		}
+	//		//次にチュートリアルを控えているものは次のチュートリアルへ移動
+	//		else if (*MapNum == 4)
+	//		{
+	//			//チュートリアル終了でセレクトに戻る
+	//			auto next = StageSelect::Create();
+	//		}
+	//	}
+
+
 		//ステージ増築用
-		/*switch (*MapNum)
+		switch (*MapNum)
 		{
 		case 1:
 		case 2:
@@ -67,7 +69,7 @@ GameManager::~GameManager()
 			break;
 		default:
 			break;
-		}*/
+		}
 	}
 	
 }

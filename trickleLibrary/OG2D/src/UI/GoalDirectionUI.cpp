@@ -18,7 +18,7 @@ bool GoalDirection::Initialize(std::shared_ptr<GameObject> target_)
 	this->CreateObject(Cube, OGge->camera->GetPos(), Vec2(96, 96), 0.f);
 	this->target = target_;
 
-	this->SetDrawOrder(0.9f);
+	this->SetDrawOrder(1.f);
 
 	return true;
 }

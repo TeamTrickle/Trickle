@@ -17,8 +17,9 @@ public:
 
 private:
 	std::string taskName;
-	const unsigned int maxChangeTimeLiquid;	//水が水蒸気になるフレーム数
-	const unsigned int maxChangeTimeSolid;	//氷が水になるフレーム数
+	int changeStateCnt;				//水を水蒸気にするまでの時間カウンタ
+	const int maxChangeTimeLiquid;	//水が水蒸気になるフレーム数
+	const int maxChangeTimeSolid;	//氷が水になるフレーム数
 	GameObject hitBase;				//水との当たり判定用
 	bool active;					//稼働中かどうか
 	//サウンドのファイル名格納

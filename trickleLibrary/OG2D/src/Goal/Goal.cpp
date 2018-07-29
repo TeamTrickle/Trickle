@@ -9,7 +9,7 @@ Goal::Goal(const Vec2& pos)
 	this->CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
 	this->objectTag = "Goal";
 	__super::Init(this->objectTag);
-	__super::SetDrawOrder(0.8f);
+	__super::SetDrawOrder(0.6f);
 	this->isClear = false;
 	this->isCheck = false;
 	this->cameraLock = true;

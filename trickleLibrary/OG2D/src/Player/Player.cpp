@@ -27,7 +27,7 @@ bool Player::Initialize(Vec2& pos)
 {
 	this->taskName = "Player";
 	__super::Init(this->taskName);
-	__super::SetDrawOrder(0.4f);
+	__super::SetDrawOrder(0.45f);
 	//オブジェクトの初期化
 	this->CreateObject(Cube, pos, Vec2(64.0f, 80.f), 0.0f);
 	this->objectTag = "Player";

@@ -26,7 +26,9 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	this->taskName = "Kanetuki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
+	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
+	SetDrawOrder(0.5f);
 	this->active = active;
 
 	//サウンドに関する情報
@@ -65,7 +67,13 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 		this->texRotaAng = 90.0f;
 		break;
 	case LEFT:
-		//現時点で存在しないので略
+		this->hotNum = (int)this->Scale.y / 64;
+		this->draw.resize(this->hotNum);
+		for (int i = 0; i < this->hotNum; ++i) {
+			draw[i] = Box2D(position.x + 32.0f + (64 * i), position.y - 32.0f, 64.f, Scale.y*2.0f);
+			draw[i].OffsetSize();
+		}
+		this->texRotaAng = -90.0f;
 		break;
 	case BOTTOM:
 		this->hotNum = (int)this->Scale.x / 64;
@@ -150,21 +158,28 @@ void Kanetuki::toSteam() {
 		{	//　個体　⇒　液体
 			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() == Water::Situation::Normal)
 			{
-				(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
+				changeStateCnt++;
 				//一定の時間が経ったら・・・
-				if ((*id)->GetFireCnt() >= maxChangeTimeSolid)
+				if (changeStateCnt >= maxChangeTimeSolid)
 				{
 					//液体にする
+					//auto water = Water::Create((*id)->position);
+					//Texture watertex;
+					//auto game = OGge->GetTask<Game>("game");
+					//water->SetTexture(&game->getWaterTex());
+					//(*id)->SetState(Water::State::LIQUID);
+					//(*id)->SetSituation(Water::Situation::Newfrom);
 					(*id)->SolidMelt();
-					(*id)->SetFireCnt(0);
+					//					(*id)->Kill();
+					changeStateCnt = 0;
 				}
 			}
 			//液体　⇒　水蒸気
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
-				(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
+				changeStateCnt++;
 				//一定の時間が経ったら・・・
-				if ((*id)->GetFireCnt() >= maxChangeTimeLiquid)
+				if (changeStateCnt >= maxChangeTimeLiquid)
 				{
 					//水蒸気にする
 					if ((*id)->GetWaterVolume() < 0.5f)
@@ -176,7 +191,7 @@ void Kanetuki::toSteam() {
 						(*id)->SetState(Water::State::GAS);
 						(*id)->position.y -= 10.f;
 					}
-					(*id)->SetFireCnt(0);
+					changeStateCnt = 0;
 				}
 			}
 		}

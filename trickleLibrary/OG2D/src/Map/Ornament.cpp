@@ -202,18 +202,18 @@ void Ornament::UpDate() {
 	}
 }
 void Ornament::Render2D() {
-	pipeTex.Draw(pipe.draw, pipeSrc);
+	//pipeTex.Draw(pipe.draw, pipeSrc);
 	for (int i = 0; i < gear.size(); ++i) {
 		gearTex.Rotate((float)gear[i].angle);
-		gearTex.Draw(gear[i].draw, gearSrc);
+		//gearTex.Draw(gear[i].draw, gearSrc);
 	}
 	for (int i = 0; i < gear_nomove.size(); ++i) {
 		gearTex.Rotate((float)gear_nomove[i].angle);
-		gearTex.Draw(gear_nomove[i].draw, gearSrc);
+		//gearTex.Draw(gear_nomove[i].draw, gearSrc);
 	}
 	for (int i = 0; i < pipeBox.size(); ++i) {
 		pipeBoxTex.Rotate((float)pipeBox[i].angle);
-		pipeBoxTex.Draw(pipeBox[i].draw, pipeBoxSrc);
+		//pipeBoxTex.Draw(pipeBox[i].draw, pipeBoxSrc);
 	}
 }
 void Ornament::Finalize() {

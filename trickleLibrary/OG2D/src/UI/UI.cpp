@@ -31,6 +31,7 @@ bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, i
 	}
 	this->CreateObject(Cube, Vec2(coll.x, coll.y), Vec2(coll.w, coll.h), 0.0f);
 	__super::Init((std::string)"UI");
+	__super::SetDrawOrder(1.0f);
 	return true;
 }
 

@@ -266,4 +266,5 @@ bool Credit::LoadSize()
 
 
 	ifs.close();
+	return true;
 }

@@ -12,7 +12,7 @@ Block::Block(Vec2& pos) {
 	this->position = pos;
 	this->soundname = "blockMove.wav";
 	this->mass = 3.0f;
-	__super::SetDrawOrder(0.3f);
+	__super::SetDrawOrder(0.5f);
 }
 
 Block::~Block() {

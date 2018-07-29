@@ -8,7 +8,7 @@ Switch::Switch()
 	this->objectTag = "Switch";
 	//タグ検索を検知可能にする
 	this->Init(taskName);
-	__super::SetDrawOrder(0.6f);
+	__super::SetDrawOrder(0.5f);
 }
 
 Switch::~Switch()

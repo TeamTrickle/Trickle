@@ -13,6 +13,7 @@ Fan::~Fan() {}
 bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,*/float effectdis, bool active) {
 	this->taskName = "Senpuki";			//検索時に使うための名を登録する
 	__super::Init(taskName);			//TaskObject内の処理を行う
+	SetDrawOrder(0.5f);
 
 										//アニメーションのリセットをする
 	animetion.AnimetionReset();

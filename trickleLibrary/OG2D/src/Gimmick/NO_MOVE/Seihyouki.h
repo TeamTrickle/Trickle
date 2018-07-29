@@ -15,7 +15,8 @@ public:
 	};
 private:
 	std::string taskName;
-	const unsigned int maxChangeTime;	//水が氷になるフレーム数
+	int changeStateCnt;			//水を氷にするまでの時間カウンタ
+	const int maxChangeTime;	//水が氷になるフレーム数
 	GameObject hitBase;			//水との当たり判定用	なぜ加熱器はないのに製氷機にはあるのか……後に描画もこのクラスで行うことを考えて一応残す
 	bool active;				//稼働中かどうか
 	Texture* coldImg;			//画像データ
