@@ -70,7 +70,6 @@ bool ResourceManager::DeleteTexture(std::string& name)
 	{
 		if ((*id).first == name)
 		{
-			(*id).second->Finalize();
 			this->textureData.erase(id);
 			return true;
 		}

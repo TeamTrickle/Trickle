@@ -47,7 +47,7 @@ void Chara::UpDate()
 	{
 		//キャラに登録されているオート移動を行う
 		//ここで実際は外部ファイルより情報を得てオート操作をさせたい
-		this->AutoMove();
+		//this->AutoMove();
 	}
 	else if (recorder) {
 		if (OGge->in->on(Input::in::CL)) {
@@ -327,6 +327,23 @@ void Chara::AutoMove()
 			player->Play();
 		}
 	}
+}void Chara::AutoMoveX()
+{
+	//オートモードがtrueなら設定してある移動を行う
+	if (this->isAutoMode)
+	{
+		this->move.x = this->easing_x.quad.InOut(this->easing_x.Time(this->time), this->startPos.x, this->EndPos.x, this->time) - this->position.x;
+		this->isAutoMode = this->easing_x.isplay();
+		this->isAutoOff = !this->easing_x.isplay();
+	}
+	else
+	{
+		//そうでなければ元々用意されている移動を行う
+		if (player) {
+			player->SetPlay();
+			player->Play();
+		}
+	}
 }
 void Chara::ManualMove(Vec2& est)
 {
@@ -385,10 +402,29 @@ void Chara::Set(const Vec2& start_, const Vec2& end_,const float time_)
 	this->SetAutoMode(true);
 	this->SetAutoFlag(false);
 }
+void Chara::SetX(const float start_, const float end_, const float time_)
+{
+	//開始位置を登録
+	this->startPos.x = start_;
+	//終了位置を登録
+	this->EndPos.x = end_;
+	//移動時間を登録
+	this->time = time_;
+	//終了位置からの移動値に上書き
+	this->EndPos.x -= this->startPos.x;
+	this->easing_x.ResetTime();
+	this->SetAutoMode(true);
+	this->SetAutoFlag(false);
+}
 bool Chara::isAutoPlay() const
 {
 	//イージングの移動を行っているかを返す
 	return this->easing_x.isplay() || this->easing_y.isplay();
+}
+bool Chara::isAutoPlayX() const
+{
+	//イージングの移動を行っているかを返す
+	return this->easing_x.isplay();
 }
 Chara::Direction Chara::nowDirection() const
 {
@@ -506,4 +542,9 @@ Box2D Chara::returnSrc(Motion motion)
 		break;
 	}
 	return src;
+}
+
+void Chara::SetCollisionNow(__int8 now)
+{
+	isCollisionNow = now;
 }

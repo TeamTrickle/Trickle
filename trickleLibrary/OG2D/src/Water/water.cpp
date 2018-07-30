@@ -73,6 +73,9 @@ Water::Water(Vec2 pos)
 	{
 		this->mass = 1.0f;
 	}
+	//カウンター初期化
+	this->iceCnt = 0;
+	this->fireCnt = 0;
 }
 
 Water::~Water()
@@ -1114,4 +1117,20 @@ Water::SP Water::Create(Vec2& pos, bool flag_)
 		return to;
 	}
 	return nullptr;
+}
+void Water::SetIceCnt(const unsigned int& n)
+{
+	this->iceCnt = n;
+}
+unsigned int Water::GetIceCnt() const
+{
+	return this->iceCnt;
+}
+void Water::SetFireCnt(const unsigned int& n)
+{
+	this->fireCnt = n;
+}
+unsigned int Water::GetFireCnt() const
+{
+	return this->fireCnt;
 }

@@ -26,7 +26,6 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	this->taskName = "Kanetuki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//Taskwaterect内の処理を行う
 
-	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
 	this->active = active;
 
@@ -151,28 +150,21 @@ void Kanetuki::toSteam() {
 		{	//　個体　⇒　液体
 			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() == Water::Situation::Normal)
 			{
-				changeStateCnt++;
+				(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
 				//一定の時間が経ったら・・・
-				if (changeStateCnt >= maxChangeTimeSolid)
+				if ((*id)->GetFireCnt() >= maxChangeTimeSolid)
 				{
 					//液体にする
-					//auto water = Water::Create((*id)->position);
-					//Texture watertex;
-					//auto game = OGge->GetTask<Game>("game");
-					//water->SetTexture(&game->getWaterTex());
-					//(*id)->SetState(Water::State::LIQUID);
-					//(*id)->SetSituation(Water::Situation::Newfrom);
 					(*id)->SolidMelt();
-					//					(*id)->Kill();
-					changeStateCnt = 0;
+					(*id)->SetFireCnt(0);
 				}
 			}
 			//液体　⇒　水蒸気
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
-				changeStateCnt++;
+				(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
 				//一定の時間が経ったら・・・
-				if (changeStateCnt >= maxChangeTimeLiquid)
+				if ((*id)->GetFireCnt() >= maxChangeTimeLiquid)
 				{
 					//水蒸気にする
 					if ((*id)->GetWaterVolume() < 0.5f)
@@ -184,7 +176,7 @@ void Kanetuki::toSteam() {
 						(*id)->SetState(Water::State::GAS);
 						(*id)->position.y -= 10.f;
 					}
-					changeStateCnt = 0;
+					(*id)->SetFireCnt(0);
 				}
 			}
 		}

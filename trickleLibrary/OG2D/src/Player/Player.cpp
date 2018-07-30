@@ -255,7 +255,7 @@ bool Player::SolidHitCheck()
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{
-		if ((*id)->objectTag == "SOLID")
+		if ((*id)->objectTag == "SOLID" && !(*id)->GetHold())
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
@@ -868,6 +868,7 @@ Vec2 Player::Animation::Move(Motion motion_)
 		else if (this->animationVec.y >= 0.f && motion_ == Motion::Switch_M)
 		{
 			//スイッチのアニメーションを実行する
+			player->direction = Direction::RIGHT;
 			auto switchs = OGge->GetTasks<Switch>("Switch");
 			for (auto id = switchs->begin(); id != switchs->end(); ++id)
 			{
@@ -1088,7 +1089,7 @@ bool Player::TohaveObjectHit()
 				(*id)->PlCheckHit(left);
 				if (this->est.x < 0)
 				{
-					(*id)->GetMove(this->est);
+					(*id)->GetMove(this->est * 0.5f);
 					return true;
 				}
 			}
@@ -1100,7 +1101,7 @@ bool Player::TohaveObjectHit()
 				(*id)->PlCheckHit(right);
 				if (this->est.x > 0)
 				{
-					(*id)->GetMove(this->est);
+					(*id)->GetMove(this->est * 0.5f);
 					return true;
 				}
 			}
@@ -1535,7 +1536,8 @@ bool Player::MotionNormalUpDate()
 			}
 		}
 	}
-	if (this->state != State::BUCKET) {
+	//if (this->state != State::BUCKET) 
+	{
 		if (this->InputDown())
 		{
 			if (this->FootMapCheck((std::string)"Ladder", true) && !this->SolidFootCheck())
@@ -1548,6 +1550,11 @@ bool Player::MotionNormalUpDate()
 				this->moveCnt = 0;
 				//移動値をすべてリセット
 				this->est = { 0.f,0.f };
+				//バケツをおろす
+				if (this->hold)
+				{
+					this->ReleaseHold();
+				}
 				return false;
 			}
 		}
@@ -1559,6 +1566,10 @@ bool Player::MotionNormalUpDate()
 				this->state = State::ANIMATION;
 				this->moveCnt = 0;
 				this->est = { 0.f,0.f };
+				if (this->hold)
+				{
+					this->ReleaseHold();
+				}
 				return false;
 			}
 		}
@@ -1613,6 +1624,7 @@ bool Player::MotionLadderUpDate()
 			this->motion = Motion::Jump;
 			this->animation.animCnt = 0;
 			this->moveCnt = 0;
+			return true;
 		}
 	}
 	if (this->InputUp())

@@ -1,31 +1,37 @@
-#include "OGSystem\OGTask.h"
+ï»¿#include "OGSystem\OGTask.h"
 #include "Task\Task_Title.h"
 #include "Task\Task_Game.h"
 #include "Task\Task_TitleMovement.h"
 #include "Task\StageSelect.h"
 #include "Task\Task_Result.h"
 #include "Task\Task_Demo.h"
+#include "Task\Task_Credit.h"
 #include "GameProcessManagement\GameProcessManagement.h"
 
 void OGTK::_myGameInitialize()
 {
-	//¶¬‚·‚éWindowî•ñ
-	OGge->SetWindow(960, 540, "WindowName", false);	
-	//OGge->SetWindow(1920, 1080, "Trickel", true);
-	//OGge->SetWindowPos(Vec2(0, 0));
-	//ƒ}ƒEƒXƒJ[ƒ\ƒ‹•s‰ÂŽ‹
+	//ç”Ÿæˆã™ã‚‹Windowæƒ…å ±
+	//OGge->SetWindow(960, 540, "WindowName", false);	
+	OGge->SetWindow(1920, 1080, "Trickel", true);
+	OGge->SetWindowPos(Vec2(0, 0));
+	//ãƒžã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ä¸å¯è¦–
 	OGge->SetCursorOn(false);
 }
 
 void OGTK::StartTaskObject()
 {
-	//Žg—pƒtƒHƒ“ƒg‚Ì“Ç‚Ýž‚Ý
+	//ä½¿ç”¨ãƒ•ã‚©ãƒ³ãƒˆã®èª­ã¿è¾¼ã¿
 	Texture* fontTex;
 	fontTex = new Texture();
 	fontTex->Create("fontui.png");
 	rm->SetTextureData((std::string)"fontui", fontTex);
-
-	//ƒ^ƒXƒN‚Ì‰Šú‰»
+	Texture* frameTex = new Texture();
+	frameTex->Create("frame.png");
+	rm->SetTextureData((std::string)"frame.png", frameTex);
+	Texture* numberTex = new Texture();
+	numberTex->Create("number.png");
+	rm->SetTextureData((std::string)"number.png", numberTex);
+	//ã‚¿ã‚¹ã‚¯ã®åˆæœŸåŒ–
 	auto TopTask = Title::Create();
 	//*MapNum = 6;
 	//Game::Create();
@@ -36,7 +42,20 @@ OGTK::~OGTK()
 {
 	if (rm->GetTextureData((std::string)"fontui"))
 	{
+		rm->GetTextureData((std::string)"fontui")->Finalize();
 		delete rm->GetTextureData((std::string)"fontui");
 		rm->DeleteTexture((std::string)"fontui");
+	}
+	if (rm->GetTextureData((std::string)"frame.png"))
+	{
+		rm->GetTextureData((std::string)"frame.png")->Finalize();
+		delete rm->GetTextureData((std::string)"frame.png");
+		rm->DeleteTexture((std::string)"frame.png");
+	}
+	if (rm->GetTextureData((std::string)"number.png"))
+	{
+		rm->GetTextureData((std::string)"number.png")->Finalize();
+		delete rm->GetTextureData((std::string)"number.png");
+		rm->DeleteTexture((std::string)"number.png");
 	}
 }

@@ -24,8 +24,6 @@ bool GoalDirection::Initialize(std::shared_ptr<GameObject> target_)
 }
 bool GoalDirection::Finalize()
 {
-	this->image->Finalize();
-	this->flower->Finalize();
 	return true;
 }
 void GoalDirection::SetPos(Vec2& pos)
@@ -139,7 +137,7 @@ void GoalDirection::CameraPosUpDate()
 
 	//ü•ª‚ðˆø‚­Šî€
 	float nowx = target->position.x + target->Scale.x / 2;
-	float nowy = target->position.y + target->Scale.y;
+	float nowy = target->position.y + target->Scale.y / 2;
 
 	Vec2 pos;
 	for (int i = 0; i < r; i++) 

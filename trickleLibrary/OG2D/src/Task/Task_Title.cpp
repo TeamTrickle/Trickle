@@ -1,7 +1,6 @@
 #include "Task_Title.h"
 #include "Task\Task_Option.h"
 #include "Task\StageSelect.h"
-#include "Task\Task_Demo.h"
 #include "Water\water.h"
 #include "Map\Map.h"
 #include "Back\Back.h"
@@ -65,7 +64,7 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
-	this->forTransform.Create("TransparentBack.png");
+	//this->forTransform.Create("TransparentBack.png");
 
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
@@ -263,7 +262,7 @@ void Title::UpDate()
 		this->cursor_a += 0.01f;
 		if (this->cursor_a >= 1.0f)
 		{
-			demoTimer.Start();
+			//demoTimer.Start();
 			this->mode = from6;
 		}
 	}
@@ -272,10 +271,10 @@ void Title::UpDate()
 	{
 		CursorMove();
 
-		if (demoTimer.GetTime() >= DEMO_LIMIT) {
+		/*if (demoTimer.GetTime() >= DEMO_LIMIT) {
 			this->mode = Mode::from8;
 			break;
-		}
+		}*/
 
 		if (OGge->in->down(Input::in::B2))
 		{
@@ -326,27 +325,27 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from8: // Demo画面に移動するとき
-	{
-		trans_a += 0.01f;
-		if (trans_a >= 1.f) {
-			trans_a = 1.f;
-			auto demo = Demo::Create("./data/test.mp4");
-			this->mode = Mode::from9;
-			this->demoTimer.Stop();
-			this->SetPauseEveryChild(true);
-		}
-	}
-	break;
-	case from9: // Demo画面から戻ってきたとき
-	{
-		trans_a -= 0.01f;
-		if (trans_a <= 0.0f) {
-			trans_a = 0.f;
-			this->demoTimer.Start();
-			this->mode = Mode::from6;
-		}
-	}
+	//case from8: // Demo画面に移動するとき
+	//{
+	//	trans_a += 0.01f;
+	//	if (trans_a >= 1.f) {
+	//		trans_a = 1.f;
+	//		auto demo = Demo::Create("./data/test.mp4");
+	//		this->mode = Mode::from9;
+	//		this->demoTimer.Stop();
+	//		this->SetPauseEveryChild(true);
+	//	}
+	//}
+	//break;
+	//case from9: // Demo画面から戻ってきたとき
+	//{
+	//	trans_a -= 0.01f;
+	//	if (trans_a <= 0.0f) {
+	//		trans_a = 0.f;
+	//		this->demoTimer.Start();
+	//		this->mode = Mode::from6;
+	//	}
+	//}
 	break;
 	case End:	//Selectの読み込みと自身の破棄
 	{
@@ -420,12 +419,12 @@ void Title::Render2D()
 		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	}
-	//画面転換用黒いやつ
-	if (this->trans_a > 0.f) {
-		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
-		Box2D src(0, 0, 1, 1);
-		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
-	}
+	////画面転換用黒いやつ
+	//if (this->trans_a > 0.f) {
+	//	Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
+	//	Box2D src(0, 0, 1, 1);
+	//	forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
+	//}
 }
 
 bool Title::Finalize()
@@ -437,7 +436,7 @@ bool Title::Finalize()
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
 	this->effect03.Finalize();
-	this->forTransform.Finalize();
+	//this->forTransform.Finalize();
 	this->canVolControl = false;
 
 	auto back = OGge->GetTask<Back>("back");

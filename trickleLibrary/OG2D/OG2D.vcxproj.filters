@@ -153,6 +153,9 @@
     <Filter Include="ソースファイル\OGSystem\System\Icon">
       <UniqueIdentifier>{b752a1f7-d8d9-467f-939c-7f74e9922062}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\Credit">
+      <UniqueIdentifier>{2b5af848-f153-4022-ab4a-1df6c4bcf3b7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソースファイル\Task\Demo">
       <UniqueIdentifier>{78e87df9-0c80-4b4d-a085-755a2223352c}</UniqueIdentifier>
     </Filter>
@@ -323,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="src\Gimmick\NO_MOVE\Door.cpp">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_Credit.cpp">
+      <Filter>ソースファイル\Task\Credit</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\GoalDirectionUI.cpp">
       <Filter>ソースファイル\Goal</Filter>
@@ -505,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="src\Gimmick\NO_MOVE\Door.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\Task_Credit.h">
+      <Filter>ソースファイル\Task\Credit</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\GoalDirectionUI.h">
       <Filter>ソースファイル\Goal</Filter>

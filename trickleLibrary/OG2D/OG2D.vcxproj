@@ -199,7 +199,11 @@
     <ClCompile Include="src\Task\MapPreviewer.cpp" />
     <ClCompile Include="src\Task\StageInfoRes.cpp" />
     <ClCompile Include="src\Task\StageSelect.cpp" />
-    <ClCompile Include="src\Task\Task_Demo.cpp" />
+    <ClCompile Include="src\Task\Task_Credit.cpp" />
+    <ClCompile Include="src\Task\Task_Demo.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Task\Task_Game.cpp" />
     <ClCompile Include="src\Task\Task_Pause.cpp" />
     <ClCompile Include="src\Task\Task_Result.cpp" />
@@ -261,7 +265,11 @@
     <ClInclude Include="src\Task\MapPreviewer.h" />
     <ClInclude Include="src\Task\StageInfoRes.h" />
     <ClInclude Include="src\Task\StageSelect.h" />
-    <ClInclude Include="src\Task\Task_Demo.h" />
+    <ClInclude Include="src\Task\Task_Credit.h" />
+    <ClInclude Include="src\Task\Task_Demo.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="src\Task\Task_Game.h" />
     <ClInclude Include="src\Task\Task_Pause.h" />
     <ClInclude Include="src\Task\Task_Result.h" />

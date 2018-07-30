@@ -58,7 +58,7 @@ Game::~Game()
 bool Game::Initialize()
 {
 	OGge->camera->SetSize(Vec2(1280, 720));
-	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
+	auto backImage = Back::Create(std::string("back1.png"), 1920, 1080);
 	
 	//Pauseƒ^ƒXƒN‚Ì¶¬
 	auto pause = Pause::Create();
@@ -412,7 +412,7 @@ bool Game::Initialize()
 		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
 		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
-	auto back2Img = Back::Create("back2Test.png", 1920, 1080);
+	auto back2Img = Back::Create("back2.png", 1920, 1080);
 	back2Img->SetScroll();
 	back2Img->SetDrawOrder(0.0f);
 	//…‚ªŽ©“®‚Å~‚Á‚Ä‚­‚éŽžŠÔ‚Ì‰Šú‰»
