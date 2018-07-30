@@ -5,6 +5,7 @@
 #include "Task\StageSelect.h"
 #include "Task\Task_Result.h"
 #include "Task\Task_Demo.h"
+#include "Task\Task_Credit.h"
 #include "GameProcessManagement\GameProcessManagement.h"
 
 void OGTK::_myGameInitialize()

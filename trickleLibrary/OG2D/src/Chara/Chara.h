@@ -81,9 +81,11 @@ public:
 	void SetX(const float, const float, const float = 15.f);		//開始位置と終了位置を登録する
 	void SetRestriction(const float);			//描画の制限を設定する
 	bool isAutoPlay() const;				//オート移動を行っているかを返す
+	bool isAutoPlayX() const;				//オート移動を行っているかを返す
 	Direction nowDirection() const;			//現在の向きを返す
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };	//Normal状態のアニメーション
 	int walk[9] = { 0,1,2,3,4,5,6,7,8 };	//Walk状態のアニメーション
 	int ladder[2] = { 0,1 };				//ladder_ani状態のアニメーション
+	void SetCollisionNow(__int8 now);
 	Box2D returnSrc(Motion motion);			//motionによってsrcを返す
 };

@@ -419,7 +419,12 @@ void Chara::SetX(const float start_, const float end_, const float time_)
 bool Chara::isAutoPlay() const
 {
 	//イージングの移動を行っているかを返す
-	return this->easing_x.isplay()/* || this->easing_y.isplay()*/;
+	return this->easing_x.isplay() || this->easing_y.isplay();
+}
+bool Chara::isAutoPlayX() const
+{
+	//イージングの移動を行っているかを返す
+	return this->easing_x.isplay();
 }
 Chara::Direction Chara::nowDirection() const
 {
@@ -537,4 +542,9 @@ Box2D Chara::returnSrc(Motion motion)
 		break;
 	}
 	return src;
+}
+
+void Chara::SetCollisionNow(__int8 now)
+{
+	isCollisionNow = now;
 }
