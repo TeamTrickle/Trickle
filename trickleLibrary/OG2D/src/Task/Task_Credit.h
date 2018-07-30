@@ -37,6 +37,8 @@ public:
 	void Finalize(); 
 	void Next();
 	bool LoadSize();
+	void SetSize();
+	void CreditJump(int start, int time);
 
 private:
 	const int NON = 0;
@@ -53,17 +55,25 @@ private:
 
 	Texture frameTex;
 	Texture nameTex;
+	Texture LadderTex;
 
 	struct IMAGE {
+		const int DRAW_X = 0;
+		const int DRAW_Y = 1;
+		const int DRAW_W = 2;
+		const int DRAW_H = 3;
+		int imageSize[4];
+
 		Box2D draw;
 		Box2D src;
 		Texture tex;
-		float angle;
 	};
-	IMAGE name[7];
-	IMAGE frame[2];
+
+	int FRAME_NUM = 2;
+	IMAGE frame[3];
 
 	int timeCnt;
+	int jumpTimeCnt;
 	int WAITTIME;
 	float alpha;
 
