@@ -25,7 +25,7 @@ private:
 	std::vector<Box2D> draw;	//•X‚Ì‰æ‘œ
 
 
-	bool Initialize(Vec2& , Vec2 range, Angle ang);		//‰Šú‰»ˆ—
+	bool Initialize(Vec2& , Vec2 range, Angle ang, bool active);		//‰Šú‰»ˆ—
 	void UpDate();				//XVˆ—
 	void Render2D();			//•`‰æˆ—
 	bool Finalize();			//‰ğ•úˆ—
@@ -36,7 +36,7 @@ private:
 public:
 	Angle angle;
 	typedef std::shared_ptr<Seihyouki> SP;
-	static Seihyouki::SP Create(Vec2& pos, Vec2 range, Angle ,bool flag = true);
+	static Seihyouki::SP Create(Vec2& pos, Vec2 range, Angle, bool active, bool flag = true);
 	void SetTexture(Texture*);
 
 	void changeActive();				//©g‚Ì‰Ò“­ó‘Ô‚ğ”½“]‚³‚¹‚é

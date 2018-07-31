@@ -11,14 +11,14 @@ Seihyouki::Seihyouki()
 {}
 
 
-bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
+bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	this->taskName = "Seihyouki";	//ŒŸõŽž‚ÉŽg‚¤‚½‚ß‚Ì–¼‚ð“o˜^‚·‚é
 	__super::Init(taskName);		//TaskObject“à‚Ìˆ—‚ðs‚¤
 	SetDrawOrder(0.5f);
 
 	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
-	this->active = false;
+	this->active = active;
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 
 	this->animCnt = 0;
@@ -120,7 +120,7 @@ void Seihyouki::SetTexture(Texture* tex)
 {
 	this->coldImg = tex;
 }
-Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, bool flag_) {
+Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, bool active, bool flag_) {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
 	if (to)
 	{
@@ -129,7 +129,7 @@ Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, boo
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, range, ang))
+		if (!to->Initialize(pos, range, ang, active))
 		{
 			to->Kill();
 		}

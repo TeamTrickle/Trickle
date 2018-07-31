@@ -167,7 +167,7 @@ bool Game::Initialize()
 		//加熱器生成
 		auto kanetuki = Kanetuki::Create(Vec2(17 * 64, 18 * 64), Vec2(64, 64), Kanetuki::Angle::RIGHT, false);
 		//製氷機生成
-		auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 10 * 64), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT);
+		auto seihyouki = Seihyouki::Create(Vec2(4 * 64, 10 * 64), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT, false);
 		//製氷機用スイッチ生成
 		auto iceSwitch = Switch::Create(Vec2(64 * 7, 64 * 8), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//加熱器用スイッチ生成
@@ -189,7 +189,7 @@ bool Game::Initialize()
 		//加熱器
 		Kanetuki::Create(Vec2(64 * 21, 64 * 8), Vec2(64 * 2, 64), Kanetuki::Angle::LEFT, true);
 		//製氷機
-		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 6), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT);
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 6), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT, false);
 		//製氷機スイッチ
 		Switch::Create(Vec2(64 * 13, 64 * 4), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 
@@ -211,7 +211,7 @@ bool Game::Initialize()
 		Kanetuki::Create(Vec2(64 * 9, 64 * 6), Vec2(64 * 5, 64 * 2), Kanetuki::Angle::BOTTOM, true);
 		Kanetuki::Create(Vec2(64 * 23, 64 * 7), Vec2(64 * 3, 64 * 2), Kanetuki::Angle::BOTTOM, true);
 		//製氷機
-		auto seihyouki = Seihyouki::Create(Vec2(64 * 4, 64 * 4), Vec2(64 * 2.5f, 64.f), Seihyouki::Angle::RIGHT);
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 4, 64 * 4), Vec2(64 * 2.5f, 64.f), Seihyouki::Angle::RIGHT, false);
 		//製氷機スイッチ
 		Switch::Create(Vec2(64 * 3, 64 * 8), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 
@@ -232,7 +232,7 @@ bool Game::Initialize()
 		//加熱器
 		//Kanetuki::Create(Vec2(64 * 17, 64 * 5), Vec2(64, 64 * 2), Kanetuki::Angle::BOTTOM, true);
 		//製氷機
-		auto seihyouki = Seihyouki::Create(Vec2(64 * 6, 64 * 5), Vec2(64 * 2.5f, 64.f), Seihyouki::Angle::RIGHT);
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 6, 64 * 5), Vec2(64 * 2.5f, 64.f), Seihyouki::Angle::RIGHT, false);
 		//製氷機スイッチ
 		Switch::Create(Vec2(64 * 5, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//重さドア
@@ -279,9 +279,9 @@ bool Game::Initialize()
 		Kanetuki::Create(Vec2(64 * 9, 64 * 19 - 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
 		//扇風機
 		auto fan1 = Fan::Create(Vec2(64 * 8, 64 * 15), 8, Fan::Dir::RIGHT, 64, true);
-		auto fan2 = Fan::Create(Vec2(64 * 17, 64 * 11), 9, Fan::Dir::LEFT, 64, false);
+		auto fan2 = Fan::Create(Vec2(64 * 17, 64 * 11), 9, Fan::Dir::LEFT, 64*9, false);
 		auto fan3 = Fan::Create(Vec2(64 * 8, 64 * 5), 9, Fan::Dir::RIGHT, 64, false);
-		auto fan4 = Fan::Create(Vec2(64 * 17, 64), 13, Fan::Dir::LEFT, 64, true);
+		auto fan4 = Fan::Create(Vec2(64 * 17, 64), 13, Fan::Dir::LEFT, 64*13, true);
 		//扇風機スイッチ
 		Switch::Create(Vec2(64 * 12, 64 * 12), std::vector<std::shared_ptr<GameObject>>{fan1, fan2}, Switch::TargetType::Fan);
 		Switch::Create(Vec2(64 * 13, 64 * 6), std::vector<std::shared_ptr<GameObject>>{fan3, fan4}, Switch::TargetType::Fan);
@@ -300,6 +300,15 @@ bool Game::Initialize()
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
 
+		//加熱器
+		Kanetuki::Create(Vec2(64 * 10, 64 * 10 - 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
+		//製氷機
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 2, 64 * 7), Vec2(64 * 1.5f, 64.f), Seihyouki::Angle::RIGHT, false);
+		//扇風機
+		Fan::Create(Vec2(64 * 5, 64 * 2), 8.5f, Fan::Dir::RIGHT, 64, true);
+		//製氷機スイッチ
+		Switch::Create(Vec2(64 * 4, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
+
 		break;
 	}
 	case 12:	//蒸気4
@@ -313,6 +322,11 @@ bool Game::Initialize()
 		sound.volume(0.0f);
 		OGge->soundManager->SetSound(&sound);
 		sound.play();
+
+		//加熱器
+		Kanetuki::Create(Vec2(64 * 12, 64 * 15 - 20), Vec2(64 * 3, 64 + 20), Kanetuki::Angle::UP, true);
+		//扇風機
+		Fan::Create(Vec2(64 * 11, 64 * 2), 8, Fan::Dir::RIGHT, 64, true);
 
 		break;
 	}
@@ -339,7 +353,7 @@ bool Game::Initialize()
 		//加熱器生成
 		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 19, 64 * 15 - 32), Vec2(64 * 2, 84), Kanetuki::Angle::UP, false);
 		//製氷機生成
-		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT);
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 6, 64 * 7), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT, false);
 
 		//スイッチの生成
 		//扇風機用
@@ -373,7 +387,7 @@ bool Game::Initialize()
 		//加熱器
 		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64), Kanetuki::Angle::UP, true);
 		//製氷機
-		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 4), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT);
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 4), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT, false);
 		//switch
 		Switch::Create(Vec2(64 * 2, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//横向き扉
@@ -412,8 +426,8 @@ bool Game::Initialize()
 		auto kanetsuki4 = Kanetuki::Create(Vec2(64 * 18, 64 * 29), Vec2(64 * 5, 64 + 32), Kanetuki::Angle::BOTTOM, true);
 		auto kanetsuki9 = Kanetuki::Create(Vec2(64 * 33, 64 * 32 - 20), Vec2(64 * 2, 84), Kanetuki::Angle::UP, true);
 		//製氷機
-		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT);
-		auto seihyouki3 = Seihyouki::Create(Vec2(64 * 9, 64 * 22), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT);
+		auto seihyouki1 = Seihyouki::Create(Vec2(64 * 9, 64 * 12), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT, false);
+		auto seihyouki3 = Seihyouki::Create(Vec2(64 * 9, 64 * 22), Vec2(64 * 2, 64), Seihyouki::Angle::LEFT, false);
 		//扇風機スイッチ
 		auto fanSwitch1 = Switch::Create(Vec2(64 * 19, 64 * 12), std::vector<std::shared_ptr<GameObject>>{fan2, fan3}, Switch::TargetType::Fan);
 		auto fanSwitch2 = Switch::Create(Vec2(64 * 31, 64 * 31), std::vector<std::shared_ptr<GameObject>>{fan4, fan5}, Switch::TargetType::Fan);
@@ -466,7 +480,7 @@ bool Game::Initialize()
 		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
 		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
-	auto back2Img = Back::Create("back2Test.png", 1920, 1080);
+	auto back2Img = Back::Create("back2.png", 1920, 1080);
 	back2Img->SetScroll();
 	back2Img->SetDrawOrder(0.0f);
 	//水が自動で降ってくる時間の初期化
@@ -731,7 +745,6 @@ void Game::Camera_move()
 			if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
 				NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
 			}
-
 			OGge->camera->SetPos(NowCameraPos);
 		}
 	}
