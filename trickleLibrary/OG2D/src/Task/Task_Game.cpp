@@ -278,7 +278,13 @@ bool Game::Initialize()
 		//加熱器生成
 		Kanetuki::Create(Vec2(64 * 9, 64 * 19 - 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
 		//扇風機
-		//auto fan1 = Fan::Create(Vec2(),)
+		auto fan1 = Fan::Create(Vec2(64 * 8, 64 * 15), 8, Fan::Dir::RIGHT, 64, true);
+		auto fan2 = Fan::Create(Vec2(64 * 17, 64 * 11), 9, Fan::Dir::LEFT, 64, false);
+		auto fan3 = Fan::Create(Vec2(64 * 8, 64 * 5), 9, Fan::Dir::RIGHT, 64, false);
+		auto fan4 = Fan::Create(Vec2(64 * 17, 64), 13, Fan::Dir::LEFT, 64, true);
+		//扇風機スイッチ
+		Switch::Create(Vec2(64 * 12, 64 * 12), std::vector<std::shared_ptr<GameObject>>{fan1, fan2}, Switch::TargetType::Fan);
+		Switch::Create(Vec2(64 * 13, 64 * 6), std::vector<std::shared_ptr<GameObject>>{fan3, fan4}, Switch::TargetType::Fan);
 
 		break;
 	}
