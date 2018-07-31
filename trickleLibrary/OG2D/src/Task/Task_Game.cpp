@@ -634,6 +634,11 @@ bool Game::Finalize()
 	for (auto id = ws->begin(); id != ws->end(); ++id) {
 		(*id)->Kill();
 	}
+	auto paints = OGge->GetTasks<Paint>("Paint");
+	for (auto id = paints->begin(); id != paints->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
