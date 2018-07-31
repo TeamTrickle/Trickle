@@ -41,7 +41,7 @@ void GoalDirection::UpDate()
 	{
 		//ƒS[ƒ‹‚ÌŠp“x‚ð‹‚ß‚Ü‚·
 		this->TargetDirecition();
-		//this->CameraPosUpDate();
+		this->CameraPosUpDate();
 	}
 }
 void GoalDirection::Render2D()
@@ -79,7 +79,6 @@ void GoalDirection::Render2D()
 				src.OffsetSize();
 				this->flower->Draw(draw, src);
 			}
-			this->CameraPosUpDate();
 		}
 	}
 }
