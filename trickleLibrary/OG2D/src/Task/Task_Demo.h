@@ -1,7 +1,12 @@
 #pragma once
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#define __STDC_CONSTANT_MACROS
+#define __STDC_LIMIT_MACROS
+extern "C" {
+#include <ffmpeg/libavutil/imgutils.h>
+#include <ffmpeg/libavutil/frame.h>
+#include <ffmpeg/libavcodec/avcodec.h>
+#include <ffmpeg/libavformat/avformat.h>
+}
 #include "OGSystem/OGsystem.h"
 #include "OGSystem/Timer/glTimer.h"
 
@@ -28,8 +33,12 @@ public:
 	static SP Create(const std::string&, bool = true);
 
 private:
+	AVFormatContext*			format_context = nullptr;
+	AVCodecContext*				codec_context = nullptr;
+	AVStream*					videoStream = nullptr;
+	AVFrame*					frame = nullptr;
+	AVPacket					packet;
 	bool						deadFlag = false;
-	cv::VideoCapture			cap;
 	Box2D						draw;
 	float						videoFPS;
 	float						delay;

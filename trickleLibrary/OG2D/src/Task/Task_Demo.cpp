@@ -21,13 +21,47 @@ Demo::SP Demo::Create(const std::string& fp_, bool flag_) {
 }
 
 bool Demo::Initialize(const std::string& demoVideoPath) {
-	cap.open(demoVideoPath);
-	if (!cap.isOpened()) {
-		std::cout << "デモプレイファイルオープンエラー!" << std::endl;
+	av_register_all();
+	format_context = nullptr;
+	if (avformat_open_input(&format_context, demoVideoPath.c_str(), nullptr, nullptr)) {
+		std::cout << "Demo: Failed to read video file!" << std::endl;
 		return false;
 	}
-	videoFPS = (float)cap.get(CV_CAP_PROP_FPS);
-	delay = 0.3f / videoFPS;
+
+	if (avformat_find_stream_info(format_context, nullptr)) {
+		std::cout << "Demo: Failed to find context!" << std::endl;
+		return false;
+	}
+
+	for (int i = 0; i < (int)format_context->nb_streams; ++i) {
+		if (format_context->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+			videoStream = format_context->streams[i];
+			break;
+		}
+	}
+
+	if (!videoStream) {
+		std::cout << "Demo: Failed to find stream!" << std::endl;
+		return false;
+	}
+
+	AVCodec* codec = avcodec_find_decoder(videoStream->codecpar->codec_id);
+	if (!codec) {
+		std::cout << "Demo: Failed to find codec!" << std::endl;
+		return false;
+	}
+
+	codec_context = avcodec_alloc_context3(codec);
+	if (!codec_context) {
+		std::cout << "Demo: Failed to find codec context! " << std::endl;
+		return false;
+	}
+
+	avcodec_parameters_to_context(codec_context, videoStream->codecpar);
+	avcodec_open2(codec_context, codec, nullptr);
+	frame = av_frame_alloc();
+	packet = AVPacket();
+
 	Vec2 winSize = OGge->window->GetSize();
 	draw = Box2D(OGge->camera->GetPos(), OGge->camera->GetSize());
 	draw.OffsetSize();
@@ -40,25 +74,9 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 }
 
 void Demo::UpDate() {
-	if (deadFlag) {
-		Fadeout();
+	if (av_read_frame(format_context, &packet) != 0) {
+		
 	}
-	else if (timer.GetTime() - startTime >= delay) {
-		cv::Mat frame;
-		cap >> frame;
-		if (frame.empty()) {
-			deadFlag = true;
-			return;
-		}
-		tex.Finalize();
-		tex.Create(frame);
-		frame.release();
-		startTime = timer.GetTime();
-	}
-	if (OGge->in->down(In::B1)) {
-		deadFlag = true;
-	}
-	
 }
 
 void Demo::Render2D()
@@ -75,8 +93,8 @@ void Demo::Fadeout() {
 
 bool Demo::Finalize()
 {
-	tex.Finalize();
-	cap.release();
+	avcodec_free_context(&codec_context);
+	avformat_close_input(&format_context);
 	auto title = OGge->GetTask<Title>((std::string)"title");
 	if (title) title->SetPauseEveryChild(false);
 	return true;

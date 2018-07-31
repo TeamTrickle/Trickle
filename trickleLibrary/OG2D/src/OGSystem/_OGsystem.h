@@ -19,7 +19,9 @@
 #pragma comment(lib, "OPENGL32.lib")
 #pragma comment(lib, "GLU32.lib")
 #pragma comment(lib, "Win64/OpenAL32.lib")
-//#pragma comment(lib, "freetype.lib")
+#pragma comment(lib, "avutil.lib")
+#pragma comment(lib, "avcodec.lib")
+#pragma comment(lib, "avformat.lib")
 
 #if defined(_MSC_VER)
 // Windows:外部ライブラリのリンク指定
