@@ -118,7 +118,10 @@ void Player::Render2D()
 		draw = { this->position.x - 8.f, this->position.y, this->Scale.x + 8.f, this->Scale.y };
 		draw.OffsetSize();
 	}
-
+	{
+		draw.y += 2.f;
+		draw.h += 2.f;
+	}
 	Box2D src = this->animation.returnSrc(this->motion, this->state, this->direction);
 	//ƒ‚-ƒVƒ‡ƒ“‚ðŽó‚¯src‚ðreturn‚·‚é
 	src.OffsetSize();
@@ -690,6 +693,10 @@ void Player::HaveObjectPosMove()
 				}
 			}
 			else if (this->motion == Motion::Lift) {
+				if (this->animation.animCnt == 0)
+				{
+					this->animation.animCnt = 5;
+				}
 				if (this->direction == Direction::LEFT)
 				{
 					switch (animation.animCnt / 8 % 2) {
@@ -738,7 +745,14 @@ void Player::HaveObjectPosMove()
 				}
 			}
 			else {
-				(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 60.f };
+				if (this->direction == Direction::RIGHT)
+				{
+					(*id)->position = { this->position.x,this->position.y - (*id)->Scale.y + 60.f };
+				}
+				else
+				{
+					(*id)->position = { this->position.x - 8.f,this->position.y - (*id)->Scale.y + 60.f };
+				}
 				(*id)->angle = 0;
 			}
 		}
@@ -749,6 +763,10 @@ void Player::HaveObjectPosMove()
 		if ((*id)->GetHold())
 		{
 			if (this->motion == Motion::Lift) {
+				if (this->animation.animCnt == 0)
+				{
+					this->animation.animCnt = 5;
+				}
 				if (this->direction == Direction::LEFT)
 				{
 					switch (animation.animCnt / 8 % 2) {
@@ -797,7 +815,14 @@ void Player::HaveObjectPosMove()
 				}
 			}
 			else {
-				(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y + 30.f };
+				if (this->direction == Direction::RIGHT)
+				{
+					(*id)->position = { this->position.x,this->position.y - this->haveAddPos.y + 35.f };
+				}
+				else
+				{
+					(*id)->position = { this->position.x - 8.f,this->position.y - this->haveAddPos.y + 35.f };
+				}
 			}
 		}
 	}
@@ -1193,11 +1218,11 @@ bool Player::ReleaseHold()
 				{
 					if (this->direction == Direction::LEFT)
 					{
-						(*id)->position.x = this->position.x - 72;
+						(*id)->position.x = this->position.x - 60;
 					}
 					else
 					{
-						(*id)->position.x = this->position.x + 72;
+						(*id)->position.x = this->position.x + 60;
 					}
 					(*id)->HoldCheck(false);
 					(*id)->ResetMove();

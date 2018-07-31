@@ -126,6 +126,10 @@ void Bucket::UpDate() {
 
 void Bucket::Render2D() {
 	Box2D draw(this->position, this->Scale);
+	if (!this->hold)
+	{
+		draw.y += 2.0f;
+	}
 	draw.OffsetSize();
 	Box2D src(GetSpriteCrop());
 	if (this->color)

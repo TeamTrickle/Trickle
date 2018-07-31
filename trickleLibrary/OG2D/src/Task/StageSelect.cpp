@@ -103,6 +103,8 @@ bool StageSelect::Initialize()
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
 	this->Entrance.emplace_back(LEFT, 31.f * 64.f + 1920.f - chara->Scale.x);
+	auto load = OGge->GetTask<Load>("load");
+	load->Set(Load::Fead::Out);
 	return true;
 }
 

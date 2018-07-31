@@ -37,8 +37,6 @@ Title::~Title()
 	//ロードの生成を行い強制描画を行う
 	if (!OGge->GetDeleteEngine())
 	{
-		auto load = Load::Create();
-		load->Draw();
 	}
 	this->Finalize();
 }
@@ -349,7 +347,9 @@ void Title::UpDate()
 	break;
 	case End:	//Selectの読み込みと自身の破棄
 	{
-		this->Kill();
+		//this->Kill();
+		auto load = Load::Create();
+		load->AddObject(this->GetTaskName());
 	}
 	break;
 	default:

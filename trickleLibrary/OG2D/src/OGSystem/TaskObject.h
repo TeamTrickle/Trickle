@@ -31,5 +31,7 @@ public:
 	std::string GetTaskName() const;		//ƒ^ƒXƒN–¼‚ð•Ô‚·
 	bool GetPause() const;
 	void SetPause(const bool);
+	void Stop(const bool = true);
+	bool GetIsStop() const;
 private:
 };
