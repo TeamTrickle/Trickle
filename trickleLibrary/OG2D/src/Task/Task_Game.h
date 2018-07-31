@@ -56,6 +56,7 @@ private:
 	Texture arrowflower;
 	Texture doorTex;
 	Texture WswitchTex;
+	Texture pipeTex;
 	std::string gamesoundname;
 	std::string tutorialsoundname;
 

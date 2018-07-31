@@ -88,6 +88,7 @@ bool Game::Initialize()
 	this->doorTex.Create("door.png");
 	rm->SetTextureData((std::string)"WswitchTex", &this->WswitchTex);
 	this->WswitchTex.Create("Collision.png");
+	this->pipeTex.Create("pipe.png");
 	//ui生成
 	UImng_.reset(new UImanager());
 	UImng_->Initialize(*MapNum);
@@ -440,30 +441,6 @@ bool Game::Initialize()
 		auto block2 = Block::Create(Vec2(64 * 33, 64 * 11));
 		break;
 	}
-	//case 9:	//チュートリアル９
-	//{
-	//	//位置変更
-	//	_waterpos.x = 6 * 64 - 25;
-	//	_waterpos.y = 64 * 12;
-	//	{
-	//		//map生成
-	//		auto mapload = Map::Create((std::string)"water3.csv");
-	//		//チュートリアルのサウンドに使用
-	//		sound.create(tutorialsoundname, true);
-	//		sound.volume(0.0f);
-	//		OGge->soundManager->SetSound(&sound);
-	//		sound.play();
-
-	//		//加熱器生成
-	//		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 21, 64 * 17), Vec2(64 * 2, 64), Kanetuki::Angle::UP, false);
-	//		//auto kanetuki2 = Kanetuki::Create(Vec2(64 * 22, 64 * 17), false);
-	//		//扇風機生成
-	//		auto fan = Fan::Create(Vec2(64 * 14, 64 * 7), 13, Fan::Dir::RIGHT, 64 * 5, true);
-	//		//加熱器用スイッチ生成
-	//		auto swich = Switch::Create(Vec2(64 * 18, 64 * 16), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
-	//		break;
-	//	}
-	//}
 	default:
 		std::cout << "マップ番号が存在しません" << std::endl;
 		break;
@@ -492,6 +469,7 @@ bool Game::Initialize()
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
+	__super::SetDrawOrder(0.25f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
 	//装飾
@@ -542,6 +520,12 @@ void Game::UpDate()
 void Game::Render2D()
 {
 	//水生成位置のパイプ
+	{
+		Box2D draw(_waterpos.x - 103, _waterpos.y - 150, 256.f, 171.f);
+		draw.OffsetSize();
+		Box2D src(0, 0, 768, 512);
+		pipeTex.Draw(draw, src);
+	}
 }
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
