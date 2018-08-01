@@ -23,7 +23,8 @@ private:
 	int animCnt;				//アニメーションカウント
 	int coldNum;				//横幅によって増える画像の数
 	std::vector<Box2D> draw;	//氷の画像
-
+	unsigned short timeCnt;		//起動時のタイム計測
+	const unsigned short maxCnt;	//最大計測数	
 
 	bool Initialize(Vec2& , Vec2 range, Angle ang, bool active);		//初期化処理
 	void UpDate();				//更新処理

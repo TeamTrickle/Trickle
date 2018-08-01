@@ -7,7 +7,7 @@ using namespace std;
 
 Seihyouki::Seihyouki()
 	:
-	maxChangeTime(5)
+	maxChangeTime(5),maxCnt(30)
 {}
 
 
@@ -23,6 +23,7 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 
 	this->animCnt = 0;
 	this->coldNum = 0;
+	this->timeCnt = 0;
 	draw.clear();
 	draw.resize(1);
 
@@ -31,15 +32,34 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	return true;
 }
 void Seihyouki::UpDate() {
+	this->animCnt++;
+	if (this->animCnt > 150)
+	{
+		this->animCnt = 0;
+	}
 	if (active) {
-		++animCnt;
 		toIce();
+	}
+	if (this->active)
+	{
+		if (this->timeCnt < this->maxCnt)
+		{
+			++this->timeCnt;
+		}
+	}
+	else
+	{
+		if (this->timeCnt > 0)
+		{
+			--this->timeCnt;
+		}
 	}
 }
 
 void Seihyouki::Render2D() {
 	//デバッグ用
-	if (active) {
+	//if (active) 
+	{
 		LineDraw();
 		//Box2D drawRL,srcR;
 		if (angle==RIGHT)
@@ -48,6 +68,11 @@ void Seihyouki::Render2D() {
 					float angle = 90.0f;
 					for (int i = 0; i < coldNum; ++i) {
 						draw[i] = Box2D(position.x+15 + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
+						Vec2 origin = Vec2(draw[i].w, draw[i].h);
+						draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+						draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+						draw[i].y += (origin.y - draw[i].h) / 2.f;
+						draw[i].x -= (origin.x - draw[i].w) / 2.f;
 						draw[i].OffsetSize();
 					}
 					Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
@@ -64,6 +89,11 @@ void Seihyouki::Render2D() {
 			float angle = 270.0f;
 			for (int i = 0; i < coldNum; ++i) {
 				draw[i] = Box2D(position.x+32.0f + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].y += (origin.y - draw[i].h) / 2.f;
+				draw[i].x += (origin.x - draw[i].w) * 1.5f;
 				draw[i].OffsetSize();
 			}
 			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
