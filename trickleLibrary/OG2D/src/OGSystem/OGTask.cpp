@@ -7,12 +7,13 @@
 #include "Task\Task_Demo.h"
 #include "Task\Task_Credit.h"
 #include "GameProcessManagement\GameProcessManagement.h"
+#include "Task\JecLogo.h"
 
 void OGTK::_myGameInitialize()
 {
 	//生成するWindow情報
-	OGge->SetWindow(960, 540, "WindowName", false);	
-	//OGge->SetWindow(1920, 1080, "Trickel", true);
+	//OGge->SetWindow(960, 540, "WindowName", false);	
+	OGge->SetWindow(1920, 1080, "Trickel", true);
 	OGge->SetWindowPos(Vec2(0, 0));
 	//マウスカーソル不可視
 	OGge->SetCursorOn(false);
@@ -32,9 +33,9 @@ void OGTK::StartTaskObject()
 	numberTex->Create("number.png");
 	rm->SetTextureData((std::string)"number.png", numberTex);
 	//タスクの初期化
-	//auto TopTask = Title::Create();
-	*MapNum = 10;
-	Game::Create();
+	auto TopTask = LogoTask::Create();
+	//*MapNum = 6;
+	//Game::Create();
 	//GameManager::ResetData();
 }
 

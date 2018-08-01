@@ -159,6 +159,9 @@
     <Filter Include="ソースファイル\Task\Demo">
       <UniqueIdentifier>{78e87df9-0c80-4b4d-a085-755a2223352c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Task\JecLogo">
+      <UniqueIdentifier>{780d195c-7f0b-4d1a-83a4-bd521a4efadf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -338,6 +341,9 @@
     </ClCompile>
     <ClCompile Include="src\Task\Task_Demo.cpp">
       <Filter>ソースファイル\Task\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\JecLogo.cpp">
+      <Filter>ソースファイル\Task\JecLogo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,6 +529,9 @@
     </ClInclude>
     <ClInclude Include="src\Task\Task_Demo.h">
       <Filter>ソースファイル\Task\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Task\JecLogo.h">
+      <Filter>ソースファイル\Task\JecLogo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

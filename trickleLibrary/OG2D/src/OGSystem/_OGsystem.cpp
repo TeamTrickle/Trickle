@@ -114,3 +114,11 @@ namespace OG {
 		(_b + 3)->y = (_b + 3)->y + Center.y;
 	}
 }
+void OG::BackColor(const Color& color)
+{
+	glClearColor((GLclampf)color.red, (GLclampf)color.green, (GLclampf)color.blue, (GLclampf)color.alpha);
+}
+void OG::BackColor(const float& red, const float& green, const float& blue, const float& alpha)
+{
+	glClearColor((GLclampf)red, (GLclampf)green, (GLclampf)blue, (GLclampf)alpha);
+}

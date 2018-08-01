@@ -69,4 +69,6 @@ namespace OG {
 	void LineHitDraw(Vec2*);
 	void LineHitDraw(Vec2*, Color&);
 	void LineHitDraw(Box2D*);
+	void BackColor(const Color& color);
+	void BackColor(const float&red, const float&green, const float&blue, const float&alpha);
 }
