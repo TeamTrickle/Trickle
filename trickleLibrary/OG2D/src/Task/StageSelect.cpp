@@ -147,7 +147,8 @@ void StageSelect::UpDate()
 	break;
 	case Mode::End:		//Ÿ‚Ö
 	{
-		this->Kill();
+		auto load = Load::Create();
+		load->AddObject(this->GetTaskName());
 	}
 	break;
 	default:

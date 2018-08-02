@@ -113,6 +113,11 @@ bool Title::Initialize()
 	this->cm.SetSize(Box2D(Vec2(0, 0), OGge->window->GetSize() * 2));
 	//開始時のモード設定
 	this->mode = Mode::from1;
+	auto load = OGge->GetTask<Load>("load");
+	if (load)
+	{
+		load->Set(Load::Fead::Out);
+	}
 	return true;
 }
 

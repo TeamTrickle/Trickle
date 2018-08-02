@@ -72,11 +72,15 @@ bool Result::Initialize() {
 	cnt = 0;
 	this->maxTrueNumber = -1;
 	this->RoadData();
-
+	OGge->camera->SetSize(Vec2(1280, 720));
+	auto load = OGge->GetTask<Load>("load");
+	if (load)
+	{
+		load->Set(Load::Fead::Out);
+	}
 	return true;
 }
 void Result::UpDate() {
-	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
 	float pretimew = 0, pretimeh = 0;
 	float prestarw[3] = {}, prestarh[3] = {};
@@ -315,7 +319,8 @@ void Result::UpDate() {
 		npc->AutoMove();
 		if (npc->position.x >= 1450) {
 			this->nowMode = Non;
-			this->Kill();
+			auto load = Load::Create();
+			load->AddObject(this->GetTaskName());
 		}
 		break;
 	case Non:

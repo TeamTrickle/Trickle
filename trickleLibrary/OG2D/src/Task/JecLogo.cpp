@@ -1,5 +1,6 @@
 #include "JecLogo.h"
 #include "Task_Title.h"
+#include "Load\LoadLogo.h"
 LogoTask::LogoTask()
 {
 	this->logo = new Texture();
@@ -7,6 +8,7 @@ LogoTask::LogoTask()
 	this->logo_a = 0.f;
 	this->back = Color(0, 0, 0, 0);
 	this->mode = Mode::form1;
+	__super::Init("LoadLogo");
 }
 LogoTask::~LogoTask()
 {
@@ -51,7 +53,8 @@ void LogoTask::UpDate()
 			}
 			break;
 		case Mode::end:
-			this->Kill();
+			auto load = Load::Create();
+			load->AddObject(this->GetTaskName());
 			break;
 	}
 }

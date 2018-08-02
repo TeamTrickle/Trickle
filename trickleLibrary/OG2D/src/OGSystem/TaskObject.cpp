@@ -7,7 +7,7 @@ TaskObject::TaskObject()
 	this->order = 0.0f;
 	this->isPause = false;
 }
-bool TaskObject::Init(std::string& name_)
+bool TaskObject::Init(const std::string& name_)
 {
 	this->taskName = name_;
 	return true;

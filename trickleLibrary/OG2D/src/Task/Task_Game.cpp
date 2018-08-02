@@ -43,8 +43,6 @@ Game::~Game()
 {
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto load = Load::Create();
-		load->Draw();
 		OGge->ChengeTask();
 	}
 	//‰ğ•úˆ—‚ÆŸ‚Ìscene‚Ì¶¬
@@ -474,6 +472,12 @@ bool Game::Initialize()
 	auto gameprocess = GameManager::Create();
 	//‘•ü
 	auto ornament = Ornament::Create();
+	//ƒ[ƒh‰æ–ÊŠÖŒW
+	auto load = OGge->GetTask<Load>("load");
+	if (load)
+	{
+		load->Set(Load::Fead::Out);
+	}
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
