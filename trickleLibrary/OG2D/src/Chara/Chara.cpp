@@ -47,7 +47,7 @@ void Chara::UpDate()
 	{
 		//キャラに登録されているオート移動を行う
 		//ここで実際は外部ファイルより情報を得てオート操作をさせたい
-		//this->AutoMove();
+		this->AutoMove();
 	}
 	else if (recorder) {
 		if (OGge->in->on(Input::in::CL)) {

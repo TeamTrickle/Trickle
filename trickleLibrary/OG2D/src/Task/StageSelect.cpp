@@ -17,6 +17,7 @@ StageSelect::StageSelect()
 	this->soundname = "title.wav";      //サウンドのファイル名格納
 	this->decisionsoundname = "decision.wav";
 	this->canVolControl = false;
+	this->isPause = false;
 }
 
 StageSelect::~StageSelect()
@@ -104,12 +105,16 @@ bool StageSelect::Initialize()
 	}
 	this->Entrance.emplace_back(LEFT, 31.f * 64.f + 1920.f - chara->Scale.x);
 	auto load = OGge->GetTask<Load>("load");
-	load->Set(Load::Fead::Out);
+	if (load)
+	{
+		load->Set(Load::Fead::Out);
+	}
 	return true;
 }
 
 void StageSelect::UpDate()
 {
+	std::cout << this->nowPos << ":" << this->timeCnt << std::endl;
 	if (canVolControl)
 	{
 		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
@@ -164,6 +169,7 @@ void StageSelect::PauseUpDate()
 	{
 		this->timeCnt++;
 		OGge->SetPause(false);
+		this->isPause = false;
 	}
 }
 
@@ -344,6 +350,7 @@ void StageSelect::From3()
 				{
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(200.f, 0.f));
 					this->timeCnt = 0;
+					this->isPause = true;
 				}
 				auto board = OGge->GetTasks<StageAlert>("stagealert");
 				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
@@ -405,6 +412,7 @@ void StageSelect::From3()
 				{
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetSize().x + 200.f, 0.f));
 					this->timeCnt = 0;
+					this->isPause = true;
 				}
 				auto board = OGge->GetTasks<StageAlert>("stagealert");
 				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
@@ -498,7 +506,7 @@ void StageSelect::From3()
 		}
 		else
 		{
-			if (this->timeCnt == 60)
+			if(chara->position.x >= 2016.f && chara->position.x <= 2144.f && this->isPause)
 			{
 				OGge->SetPause(true);
 			}
@@ -537,6 +545,10 @@ void StageSelect::ModeCheck()
 	else
 	{
 		this->timeCnt++;
+		if (this->timeCnt >= 10000)
+		{
+			this->timeCnt = 1000;
+		}
 	}
 }
 
