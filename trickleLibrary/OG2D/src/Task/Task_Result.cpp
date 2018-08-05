@@ -422,8 +422,6 @@ bool Result::Finalize() {
 	//ステージセレクトに戻る
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto load = Load::Create();
-		load->Draw();
 		OGge->ChengeTask();
 		StageSelect::Create();
 	}

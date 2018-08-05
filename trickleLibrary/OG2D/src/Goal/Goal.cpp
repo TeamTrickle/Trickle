@@ -246,6 +246,7 @@ void Goal::Render2D()
 			lightTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
 		}
 	}
+	this->foot.LineDraw();
 }
 
 bool Goal::GetClear() const
@@ -260,7 +261,7 @@ void Goal::SetTexture(Texture* tex)
 
 bool Goal::WaterHit()
 {
-	this->foot.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
+	this->foot.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y - 5.0f), Vec2(this->Scale.x, 5.0f), 0.0f);
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{

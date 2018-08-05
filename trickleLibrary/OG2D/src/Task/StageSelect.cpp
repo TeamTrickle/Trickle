@@ -446,27 +446,27 @@ void StageSelect::From3()
 				case 4:
 				case 5:
 					this->state = State::Tutorial3;
-					*MapNum = 6;
-					//*MapNum = 9;
+					//*MapNum = 6;
+					*MapNum = 9;
 					break;
 				case 6:
 				case 7:
 					//’òŽq‚ðã‚é
 					this->state = State::Stage1;
-					*MapNum = 1;
-					//*MapNum = 13;
+					//*MapNum = 1;
+					*MapNum = 13;
 					break;
 				case 8:
 				case 9:
 					this->state = State::Stage2;
-					*MapNum = 5;
-					//*MapNum = 14;
+					//*MapNum = 5;
+					*MapNum = 14;
 					break;
 				case 10:
 				case 11:
 					this->state = State::Stage3;
-					*MapNum = 6;
-					//*MapNum = 15;
+					//*MapNum = 6;
+					*MapNum = 15;
 					break;
 				case 12:
 					this->state = State::ToTitle;
