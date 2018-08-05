@@ -25,8 +25,6 @@ StageSelect::~StageSelect()
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto load = Load::Create();
-		load->Draw();
 		if (state == State::ToTitle)
 		{
 			auto nexttask = Title::Create();
@@ -114,7 +112,6 @@ bool StageSelect::Initialize()
 
 void StageSelect::UpDate()
 {
-	std::cout << this->nowPos << ":" << this->timeCnt << std::endl;
 	if (canVolControl)
 	{
 		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
