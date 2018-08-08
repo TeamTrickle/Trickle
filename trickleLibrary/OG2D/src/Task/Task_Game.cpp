@@ -493,7 +493,7 @@ void Game::UpDate()
 	}
 	//ƒJƒƒ‰ˆ—
 	Camera_move();
-
+	ce.CameraMove();
 	// Pauseˆ—
 	auto player = OGge->GetTask<Player>("Player");
 	if (player)
@@ -692,7 +692,7 @@ void Game::Camera_move()
 	{
 		if (!player->GetInputAuto())
 		{
-			OGge->camera->MovePos(player->GetEst());
+			//OGge->camera->MovePos(player->GetEst());
 
 			//ƒJƒƒ‰ˆ—
 			Vec2 NowCameraPos = OGge->camera->GetPos();
@@ -739,9 +739,14 @@ void Game::Camera_move()
 			if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
 				NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
 			}
-			OGge->camera->SetPos(NowCameraPos);
+			//OGge->camera->SetPos(NowCameraPos);
+			this->CameraSetPos(NowCameraPos);
 		}
 	}
+}
+void Game::CameraSetPos(const Vec2& pos)
+{
+	ce.Set(pos);
 }
 
 Game::SP Game::Create(bool flag_)

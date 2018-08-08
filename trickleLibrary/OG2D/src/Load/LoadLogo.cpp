@@ -8,7 +8,6 @@ Load::Load()
 	this->tex.Create("EffectTest.png");
 	this->color = new Color(1, 1, 1, 0);
 	this->mode = Fead::In;
-	OGge->AllStop(true);
 	this->Stop(false);
 }
 
@@ -117,7 +116,14 @@ void Load::Render2D()
 void Load::Set(const Fead& fead)
 {
 	this->mode = fead;
-	OGge->AllStop(true);
+	if (this->mode == Fead::Out)
+	{
+
+	}
+	else
+	{
+		OGge->AllStop(true);
+	}
 	this->Stop(false);
 }
 
@@ -131,8 +137,18 @@ void Load::AddObject(const std::string& d)
 	this->deleteObject.push_back(d);
 }
 
+void Load::ALLTaskUpDateStop(const bool flag)
+{
+	OGge->AllStop(flag);
+	this->Stop(false);
+}
+
 Load::SP Load::Create(bool flag)
 {
+	if (OGge->GetTask<Load>("load"))
+	{
+		return nullptr;
+	}
 	Load::SP to = Load::SP(new Load());
 	if (to)
 	{

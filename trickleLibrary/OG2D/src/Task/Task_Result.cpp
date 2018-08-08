@@ -318,10 +318,15 @@ void Result::UpDate() {
 		//ƒvƒŒƒCƒ„‘Þê
 		npc->AutoMove();
 		if (npc->position.x >= 1450) {
-			this->nowMode = Non;
+			this->nowMode = Mode::Mode7;
 			auto load = Load::Create();
-			load->AddObject(this->GetTaskName());
+			if (load)
+			{
+				load->AddObject(this->GetTaskName());
+			}
 		}
+		break;
+	case Mode7:
 		break;
 	case Non:
 	default:

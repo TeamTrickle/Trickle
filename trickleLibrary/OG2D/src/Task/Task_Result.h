@@ -34,6 +34,7 @@ private:
 		Mode4,		//星出現からはまるまで
 		Mode5,		//プレイヤ喜び、CLEARUI出現から停止まで
 		Mode6,		//プレイヤ退場、終了
+		Mode7,		//退場後でも星と時間表示をとどまらせておく
 	};
 	Mode nowMode;
 

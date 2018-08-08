@@ -7,7 +7,7 @@
 #include "OGSystem\OGsystem.h"
 #include "UI\UI.h"
 #include "VolumeControl/volumeControl.h"
-
+#include "CameraManager\CameraManager.h"
 class UI;
 
 class Game : public TaskObject
@@ -62,4 +62,7 @@ private:
 
 	//UI----------------------------------------
 	std::shared_ptr<UImanager> UImng_;
+	//ƒJƒƒ‰‚Ì‘¦ˆÚ“®–h~‚Ì‚½‚ß‚ÌŠg’£‹@”\
+	void CameraSetPos(const Vec2&);
+	CameraEasing ce;
 };
