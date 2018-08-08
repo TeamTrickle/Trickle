@@ -75,6 +75,11 @@ void Goal::UpDate()
 	case Mode::Non:
 		if (this->WaterHit() || this->testClear)
 		{
+			auto game = OGge->GetTask<Game>("game");
+			if (game)
+			{
+				game->ce.MoveEnd();
+			}
 			//カメラ移動終了地点を設定
 			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5);
 			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5);

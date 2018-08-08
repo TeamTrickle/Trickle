@@ -168,3 +168,16 @@ bool CameraEasing::IsPlay()
 {
 	return this->easing_x.isplay() || this->easing_y.isplay() ? true : false;
 }
+void CameraEasing::MoveEnd()
+{
+	if (this->start)
+	{
+		delete this->start;
+		this->start = nullptr;
+	}
+	if (this->end)
+	{
+		delete this->end;
+		this->end = nullptr;
+	}
+}

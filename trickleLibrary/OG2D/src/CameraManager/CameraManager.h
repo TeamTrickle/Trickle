@@ -33,5 +33,5 @@ public:
 	void Set(const Vec2& end);
 	void CameraMove();
 	bool IsPlay();
-public:
+	void MoveEnd();	//ˆÚ“®ˆ—‚ğ‹­§“I‚É~‚ß‚é
 };
