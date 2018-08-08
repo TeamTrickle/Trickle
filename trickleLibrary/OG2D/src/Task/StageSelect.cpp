@@ -106,6 +106,7 @@ bool StageSelect::Initialize()
 	if (load)
 	{
 		load->Set(Load::Fead::Out);
+		load->ALLTaskUpDateStop();
 	}
 	return true;
 }
@@ -150,7 +151,10 @@ void StageSelect::UpDate()
 	case Mode::End:		//Ÿ‚Ö
 	{
 		auto load = Load::Create();
-		load->AddObject(this->GetTaskName());
+		if (load)
+		{
+			load->AddObject(this->GetTaskName());
+		}
 	}
 	break;
 	default:

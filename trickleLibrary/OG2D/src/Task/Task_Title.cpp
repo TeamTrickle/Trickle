@@ -117,6 +117,7 @@ bool Title::Initialize()
 	if (load)
 	{
 		load->Set(Load::Fead::Out);
+		load->ALLTaskUpDateStop();
 	}
 	return true;
 }
@@ -354,7 +355,10 @@ void Title::UpDate()
 	{
 		//this->Kill();
 		auto load = Load::Create();
-		load->AddObject(this->GetTaskName());
+		if (load)
+		{
+			load->AddObject(this->GetTaskName());
+		}
 	}
 	break;
 	default:
