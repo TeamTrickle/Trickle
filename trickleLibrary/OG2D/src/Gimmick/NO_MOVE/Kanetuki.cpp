@@ -9,7 +9,7 @@ using namespace std;
 Kanetuki::Kanetuki()
 	:
 	maxChangeTimeLiquid(7),
-	maxChangeTimeSolid(120),
+	maxChangeTimeSolid(60),
 	maxCnt(30)
 {
 	//サウンドファイル名	
