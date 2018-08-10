@@ -49,6 +49,8 @@ class Title :public TaskObject
 	Texture texLogo;
 
 	Texture forTransform;
+	//テスト追加
+	Texture monitorTex;
 	
 
 	std::string soundname;
@@ -56,10 +58,38 @@ class Title :public TaskObject
 	std::string sounddecisionname;
 	std::string soundflowername;
 
+	//選択肢の文字の場所について
 	Vec2 startPos;
 	Vec2 closePos;
 	Box2D textPos[2];
 	Box2D cursorPos[3];
+
+	//テスト追加
+	Vec2 creditpos;      //クレジットに文字の位置
+	Vec2 dataDeletepos;  //データを消す文字の位置
+	Vec2 startsize;
+	Vec2 closesize;
+	Vec2 creditsize;
+	Vec2 dataDeletesize;
+	Vec2 yespos;         //データを消すときの選択肢の位置
+	Vec2 nopos;
+	float monitorSpos;    //モニターの左端の位置
+	float monitorEpos;    //モニターの右端の位置
+
+	enum nowmove
+	{
+		in,
+		out
+	};
+
+	nowmove start;
+	nowmove close;
+	nowmove credit;
+	nowmove dataDelete;
+
+	Box2D intextsrc;
+	Box2D outtextsrc;
+
 
 	Texture waterTex;
 
@@ -82,7 +112,7 @@ class Title :public TaskObject
 
 	float tex_a;
 	float cursor_a;
-	__int8 cursorNum;
+	__int8 cursorNum;      //0=start,1=credit,2=delete,3=exit,
 
 	int gierCnt;
 	bool isGierAng;
@@ -102,6 +132,16 @@ public:
 	void Skip();
 	void BackTitleSkip();
 	int timeCnt;
+
+	//テスト追加
+	bool PressB();          //Bキーを押していたらtrueを返す
+	bool pressB;
+	Vec2 TextMoveout(Vec2 pos);        //選択肢の文字の移動について
+	Vec2 TextMovein(Vec2 pos);
+	Vec2 TextSizeout(Vec2 pos, Vec2 size);
+	Vec2 TextSizein(Vec2 pos,Vec2 size);
+	bool nowmoveL;
+	bool nowmoveR;
 
 	void CursorMove();
 	void SetPauseEveryChild(const bool&);

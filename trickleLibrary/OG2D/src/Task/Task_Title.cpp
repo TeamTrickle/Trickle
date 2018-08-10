@@ -27,6 +27,12 @@ Title::Title()
 	this->soundstart = true;
 	this->sound = nullptr;
 	this->skipInoutFlag = false;
+
+	//Bキーを押したかどうかの判断
+	//テスト追加
+	this->pressB = false;
+	this->nowmoveL = false;
+	this->nowmoveR = false;
 	//タグ設定
 	__super::Init((std::string)"title");
 	__super::SetDrawOrder(0.98f);
@@ -50,7 +56,25 @@ bool Title::Initialize()
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
 	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 30.f);
-	closePos = Vec2(720.f - 128.f, 624.f + 258.f + 30.f);
+	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
+	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+	//テスト追加
+	//仮サイズ
+	this->startsize = Vec2(320.f, 64.f);
+	this->closesize = Vec2(0.f, 64.f);
+	this->creditsize = Vec2(0.f, 64.f);
+	this->dataDeletesize = Vec2(0.f, 64.f);
+	//仮位置
+	//this->dataDeletepos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
+	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
+	this->monitorSpos = 165.f;
+	this->monitorEpos = 1345.f;
+	this->yespos = Vec2();
+	this->nopos = Vec2();
+
+
+
 	this->textPos[0] = { this->startPos,Vec2(256,64) };
 	this->textPos[1] = { this->closePos,Vec2(256,64) };
 	//配列管理を行う
@@ -62,6 +86,10 @@ bool Title::Initialize()
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
+
+	//テスト追加
+	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
+
 	//this->forTransform.Create("TransparentBack.png");
 
 	this->canVolControl = false;     //BGMのフェードインに使用
@@ -188,7 +216,7 @@ void Title::UpDate()
 	break;
 	case from2:	//花咲き開始から終了まで
 	{
-		//テスト用10フレーム後移動
+		//10フレーム後移動
 		if (this->flowerVolume >= 1.0f)
 		{
 			//花が咲いた時点でサウンドの再生を始める
@@ -270,21 +298,126 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from6:	//決定待ち状態
-	{
-		CursorMove();
 
-		/*if (demoTimer.GetTime() >= DEMO_LIMIT) {
-			this->mode = Mode::from8;
+	//テスト追加
+	case from6:	//Bキー入力待ち状態
+	{
+		//テスト追加
+		if (PressB() == false)
+		{
 			break;
+		}
+		else
+		{
+			this->mode = Mode::from7;
+		}
+	}
+	break;
+
+	case from7:	//決定待ち状態
+	{
+		//左へ
+		if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
+		{
+			this->nowmoveL = true;
+			if (startsize.x <= 0.0f)
+			{
+				startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+			}
+			if (closesize.x < 0.0f)
+			{
+				closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+			}
+			if (dataDeletesize.x < 0.0f)
+			{
+				dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+			}
+			if (creditsize.x < 0.0f)
+			{
+				creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+			}
+		}
+		//右へ
+		if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
+		{
+			this->nowmoveR = true;
+		}
+		//CursorMove();
+		//テスト追加
+		switch (cursorNum)
+		{
+		case 0:          //選択肢がstart
+		{
+			startPos = TextMoveout(startPos);
+			startsize = TextSizeout(startPos, startsize);
+			if (nowmoveL)
+			{
+				start = out;
+
+				credit = in;
+				creditpos = TextMovein(creditpos);
+				creditsize = TextSizein(creditpos, creditsize);
+			}
+		}
+			break;
+		case 1:           //選択肢がcredit
+		{
+			creditpos = TextMoveout(creditpos);
+			creditsize = TextSizeout(creditpos, creditsize);
+			if (nowmoveL)
+			{
+				credit = out;
+
+				dataDelete = in;
+				dataDeletepos = TextMovein(dataDeletepos);
+				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
+			}
+			//TextMove();
+		}
+			break;
+		case 2:            //選択肢がdelete
+		{
+			dataDeletepos = TextMoveout(dataDeletepos);
+			dataDeletesize = TextSizeout(dataDeletepos, dataDeletesize);
+			if (nowmoveL)
+			{
+				dataDelete = out;
+
+				close = in;
+				closePos = TextMovein(closePos);
+				closesize = TextSizein(closePos, closesize);
+			}
+		}
+			break;
+		case 3:            //選択肢がexit
+		{
+			closePos = TextMoveout(closePos);
+			closesize = TextSizeout(closePos, closesize);
+			if (nowmoveL)
+			{
+				close = out;
+
+				start = in;
+				startPos = TextMovein(startPos);
+				startsize = TextSizein(startPos, startsize);
+			}
+		}
+			break;
+		}
+		/*if (demoTimer.GetTime() >= DEMO_LIMIT) {
+		this->mode = Mode::from8;
+		break;
 		}*/
 
+		//テスト追加
+		//決定して次へ
 		if (OGge->in->down(Input::in::B2))
 		{
 			//決定音の再生
 			decisionsound.play();
 			switch (this->cursorNum)
 			{
+				//ステージセレクトに進む
 			case 0:
 			{
 				auto chara = OGge->GetTask<Chara>("Chara");
@@ -298,13 +431,28 @@ void Title::UpDate()
 				}
 				chara->Jump();
 				//this->cm.SetObject(&(*chara));
-				this->mode = from7;
+				this->mode = from8;
 			}
 			break;
+			//クレジットに進む
 			case 1:
+			{
+				OGge->GameEnd();
+			}
+				break;
+				//データ消去
+			case 2:
+			{
+				OGge->GameEnd();
+			}
+				break;
+				//終了
+			case 3:
 				OGge->GameEnd();
 				break;
 			}
+
+
 			auto effect03 = Effect::Create(
 				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2 + 50), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
 				Vec2(0, 0),
@@ -318,7 +466,8 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from7:	//ジャンプからselectまでの移動
+
+	case from8:  //ジャンプからselectまでの移動
 	{
 		//降りたらロードを挟みセレクトへ移行する行動
 		auto chara = OGge->GetTask<Chara>("Chara");
@@ -393,37 +542,136 @@ void Title::Render2D()
 		Box2D src(0.f, 768 - (768 * (this->flowerVolume / 1.f)), 1280.f, 768.f);
 		this->flowerLogo.Draw(draw, src);
 	}
-	//カーソルの表示
+
+	//テスト追加
+	//モニターの表示
 	{
-		//表示位置、大きさは仮ゲームスタート
-		Box2D draw(cursorPos[this->cursorNum].x, cursorPos[this->cursorNum].y, 64.0f, 64.0f);
+		//マジックナンバーやめること
+		Box2D draw(Vec2(165.f, 783.f), Vec2(1180.f, 256.f));
 		draw.OffsetSize();
-		Box2D src(0, 0, 195, 195);
-		src.OffsetSize();
-		this->texCursor.Rotate((float)this->gierCnt);
-		texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-		Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + cursorPos[this->cursorNum].w, cursorPos[this->cursorNum].y, 64.f, 64.f);
-		draw2.OffsetSize();
-		texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
+		this->monitorTex.Draw(draw, src);
 	}
-	//終了
+
+	//テスト追加
+	//文字表示
+	if (pressB)
 	{
-		Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
-		draw.OffsetSize();
-		Box2D src(0, 64, 64*4, 64);
-		src.OffsetSize();
-		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		//start
+		{
+			Box2D draw(startPos.x, startPos.y + 80.f, startsize.x, startsize.y);
+			draw.OffsetSize();
+			Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
+			//一番初めは真ん中にstartを表示
+			if (start == in)
+			{
+				if (intextsrc.w != 0.f)
+				{
+					src = intextsrc;
+				}
+			}
+			else
+			{
+				if (outtextsrc.w != 0.f)
+				{
+					src = outtextsrc;
+				}
+			}
+
+			src.OffsetSize();
+			rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		}
+		//credit
+		{
+			Box2D draw(creditpos.x, creditpos.y + 80.f, creditsize.x, creditsize.y);
+			draw.OffsetSize();
+			if (credit == in)
+			{
+				Box2D src = intextsrc;
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+			else
+			{
+				Box2D src = outtextsrc;
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+		}
+		//delete
+		{
+			Box2D draw(dataDeletepos.x, dataDeletepos.y + 80.f, dataDeletesize.x, dataDeletesize.y);
+			draw.OffsetSize();
+			//Box2D src((64.f*5.f - dataDeletesize.x), 0.f, dataDeletesize.x, 64.f);
+			if (dataDelete == in)
+			{
+				Box2D src = intextsrc;
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+			else
+			{
+				Box2D src = outtextsrc;
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+		}
+		//exit
+		{
+			//仮処理
+			//Box2D draw(closePos.x, closePos.y + 80.f, 320.f, 64.f);
+			Box2D draw(closePos.x, closePos.y + 80.f, closesize.x, closesize.y);
+			draw.OffsetSize();
+			//Box2D src(0, 64, 64 * 4, 64);
+			if (close == in)
+			{
+				Box2D src = intextsrc;
+				src.y = 64.f;                  //読み込む画像を変える
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+			else
+			{
+				Box2D src = outtextsrc;
+				src.y = 64.f;                  //読み込む画像を変える
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+		}
 	}
-	//スタート
-	{
-		//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
-		Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
-		draw.OffsetSize();
-		Box2D src(0, 0, 64*5, 64);
-		src.OffsetSize();
-		//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-		rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-	}
+
+	////カーソルの表示
+	//{
+	//	//表示位置、大きさは仮ゲームスタート
+	//	Box2D draw(cursorPos[this->cursorNum].x, cursorPos[this->cursorNum].y, 64.0f, 64.0f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 195, 195);
+	//	src.OffsetSize();
+	//	this->texCursor.Rotate((float)this->gierCnt);
+	//	texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+	//	Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + cursorPos[this->cursorNum].w, cursorPos[this->cursorNum].y, 64.f, 64.f);
+	//	draw2.OffsetSize();
+	//	texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+	//}
+	////終了
+	//{
+	//	Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 64, 64*4, 64);
+	//	src.OffsetSize();
+	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+	//}
+	////スタート
+	//{
+	//	//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
+	//	Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 64*5, 64);
+	//	src.OffsetSize();
+	//	//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+	//}
+
 	////画面転換用黒いやつ
 	//if (this->trans_a > 0.f) {
 	//	Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
@@ -498,31 +746,134 @@ bool Title::Finalize()
 			this->sound = nullptr;
 		}
 	}
-
 	return true;
 }
 
+//テスト追加
+//Bキーが押されたかの判定に使用
+bool Title::PressB()
+{
+	if (OGge->in->down(Input::in::B2))
+	{
+		this->pressB = true;
+		return true;
+	}
+	return false;
+}
+
+
+//文字の移動について---------------------------------------------------------------------------
+//テスト追加
+Vec2 Title::TextMoveout(Vec2 pos)
+{
+	if (this->nowmoveL)
+	{
+		if (pos.x >= this->monitorSpos + 120.f)
+		{
+			pos.x -= 15.f;
+		}
+	}
+	return pos;
+}
+
+Vec2 Title::TextMovein(Vec2 pos)
+{
+	if (this->nowmoveL)
+	{
+		if (pos.x >= (monitorEpos - monitorSpos) / 2.f)
+		{
+			pos.x -=15;
+		}
+		if (pos.x < (monitorEpos - monitorSpos) / 2.f)
+		{
+			if (cursorNum < 3)
+			{
+				cursorNum++;
+			}
+			else
+			{
+				cursorNum = 0;
+			}
+			nowmoveL = false;
+		}
+	}
+
+	if (this->nowmoveR)
+	{
+		if (pos.x <= (monitorEpos - monitorSpos) / 2.f)
+		{
+			pos.x += 15;
+		}
+		if (pos.x > (monitorEpos - monitorSpos) / 2.f)
+		{
+			cursorNum--;
+			nowmoveR = false;
+		}
+	}
+	return pos;
+}
+
+Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
+{
+	if (this->nowmoveL)
+	{
+		if(pos.x<this->monitorSpos+120.f)
+		{
+			if (size.x >= 0.0f)
+			{
+				size.x -= 15;
+			}
+		}
+		if (size.x == 0.0f)
+		{
+			pos.x = (monitorSpos - size.x);
+		}
+		this->outtextsrc = Box2D((64.f*5.f - size.x), 0.f, size.x, 64.f);
+	}
+	if (this->nowmoveR)
+	{
+	}
+	return size;
+}
+
+Vec2 Title::TextSizein(Vec2 pos, Vec2 size)
+{
+	if (this->nowmoveL)
+	{
+		if (size.x <= 320.f)
+		{
+			size.x +=15;
+		}
+	}
+	intextsrc=Box2D(0.f, 0.f, size.x, 64.f);
+	return size;
+}
+
+//-----------------------------------------------------------------------------------------
+
 void Title::CursorMove()
 {
-	if (OGge->in->down(In::CU) || OGge->in->down(In::LU))
+	//左へ
+	if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 	{
 		//カーソルの移動音再生
 		cursorsound.play();
 		this->cursorNum--;
 	}
-	if (OGge->in->down(In::CD) || OGge->in->down(In::LD))
+	//右へ
+	if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 	{
 		//カーソルの移動音再生
 		cursorsound.play();
 		this->cursorNum++;
 	}
-	if (this->cursorNum > 1)
+	if (this->cursorNum > 3)
 	{
 		this->cursorNum = 0;
 	}
 	if (this->cursorNum < 0)
 	{
-		this->cursorNum = 1;
+		this->cursorNum = 3;
 	}
 }
 
