@@ -23,6 +23,7 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
 	this->Restriction_x = nullptr;
+	this->creditFlag = false;			
 }
 Chara::~Chara()
 {
@@ -43,7 +44,7 @@ void Chara::UpDate()
 {
 	++AnimCnt;				//アニメーションカウントを増やす
 	//オート機能を切っていない状態でオート動作をするならば
-	if (this->isAuto && !this->isAutoOff)
+	if (this->isAuto && !this->isAutoOff && !this->creditFlag)
 	{
 		//キャラに登録されているオート移動を行う
 		//ここで実際は外部ファイルより情報を得てオート操作をさせたい
@@ -82,6 +83,7 @@ void Chara::UpDate()
 		
 	}
 
+	std::cout << move.y << std::endl;
 	if (player) {
 		float tilt = player->GetCurrentStickTilt(In::AXIS_LEFT_X);
 		if (tilt < 0.f) {
@@ -318,6 +320,7 @@ void Chara::AutoMove()
 		this->move.y = this->easing_y.quad.InOut(this->easing_y.Time(this->time), this->startPos.y, this->EndPos.y, this->time) - this->position.y;
 		this->isAutoMode = this->easing_x.isplay() || this->easing_y.isplay();
 		this->isAutoOff = !this->easing_x.isplay() || !this->easing_y.isplay();
+			
 	}
 	else
 	{
@@ -327,7 +330,8 @@ void Chara::AutoMove()
 			player->Play();
 		}
 	}
-}void Chara::AutoMoveX()
+}
+void Chara::AutoMoveX()
 {
 	//オートモードがtrueなら設定してある移動を行う
 	if (this->isAutoMode)
@@ -496,6 +500,7 @@ bool Chara::AutoJump()
 {
 	//ジャンプ値を移動値にいれる
 	this->move.y = this->JUMP_POWER;
+	this->EndPos.y = 0;
 	return true;
 }
 void Chara::SetRestriction(const float x_)

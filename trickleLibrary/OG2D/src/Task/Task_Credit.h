@@ -50,6 +50,7 @@ private:
 	const int MODE6 = 6;
 	const int MODE7 = 7;
 	const int MODE8 = 8;
+	const int MODE9 = 9;
 	int nowMode;
 
 
@@ -69,8 +70,8 @@ private:
 		Texture tex;
 	};
 
-	int FRAME_NUM = 2;
-	IMAGE frame[3];
+	int FRAME_NUM = 8;
+	IMAGE frame[9];
 
 	int timeCnt;
 	int jumpTimeCnt;
