@@ -750,7 +750,7 @@ void Game::Camera_move()
 }
 void Game::CameraSetPos(const Vec2& pos)
 {
-	ce.Set(pos);
+	ce.SetEndPos(pos);
 }
 
 Game::SP Game::Create(bool flag_)

@@ -18,12 +18,12 @@ void CameraManager::SetObject(GameObject* object)
 	this->target = object;
 }
 
-void CameraManager::SetRange(Box2D& range_)
+void CameraManager::SetRange(const Box2D& range_)
 {
 	this->Range = range_;
 }
 
-void CameraManager::SetSize(Box2D& size_)
+void CameraManager::SetSize(const Box2D& size_)
 {
 	this->Size = size_;
 }
@@ -119,7 +119,7 @@ CameraEasing::~CameraEasing()
 		delete this->end;
 	}
 }
-void CameraEasing::Set(const Vec2& end)
+void CameraEasing::SetEndPos(const Vec2& end)
 {
 	//I—¹’n“_‚ª“o˜^‚³‚ê‚Ä‚¢‚éê‡
 	if (this->end)
