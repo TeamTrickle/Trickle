@@ -1,6 +1,28 @@
 #pragma once
 
 #include "OGSystem\OGsystem.h"
+#include "Object\Object.h"
+
+/**
+* @brief 背景に流れる雲クラス
+* @author 横田
+* @date 2018.8.10
+*/
+class Cloud : public GameObject {
+	//! 雲のテクスチャ
+	Texture cloudImg;
+	//! 雲画像の表示位置
+	Vec2 cloudPos[2];
+	//! 移動スピード
+	float speed;
+public:
+	Cloud(const std::string& path, float speed);
+	~Cloud();
+	void Initialize(const std::string& path, float speed);
+	void Update();
+	void Render();
+};
+
 
 class Back : public TaskObject
 {
@@ -13,6 +35,7 @@ class Back : public TaskObject
 	float* Center;
 	float* Xsize;
 	float* Tsize;
+	Cloud** cloud;
 public:
 	Back(const std::string&,Vec2&);
 	Back(const std::string&, float, float);
@@ -26,3 +49,4 @@ public:
 	void SetScroll(bool = true);
 	virtual ~Back();
 };
+
