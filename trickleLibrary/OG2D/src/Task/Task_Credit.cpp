@@ -11,7 +11,7 @@ Credit::Credit()
 	this->taskName = "Credit";	//タスク名決定
 	__super::Init(this->taskName);	//タスク名をオブジェクトにも反映
 	//描画順の登録
-	__super::SetDrawOrder(1.0f);
+	__super::SetDrawOrder(0.98f);
 	//初期化処理
 }
 

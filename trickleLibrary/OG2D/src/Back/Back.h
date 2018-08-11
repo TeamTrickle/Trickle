@@ -8,7 +8,7 @@
 * @author 横田
 * @date 2018.8.10
 */
-class Cloud : public GameObject {
+class Cloud : public GameObject, public TaskObject {
 	//! 雲のテクスチャ
 	Texture cloudImg;
 	//! 雲画像の表示位置
@@ -18,9 +18,11 @@ class Cloud : public GameObject {
 public:
 	Cloud(const std::string& path, float speed);
 	~Cloud();
+	static std::shared_ptr<Cloud> Create(const std::string& path, float speed);
+
 	void Initialize(const std::string& path, float speed);
-	void Update();
-	void Render();
+	void UpDate() override;
+	void Render2D() override;
 };
 
 
@@ -35,7 +37,6 @@ class Back : public TaskObject
 	float* Center;
 	float* Xsize;
 	float* Tsize;
-	Cloud** cloud;
 public:
 	Back(const std::string&,Vec2&);
 	Back(const std::string&, float, float);

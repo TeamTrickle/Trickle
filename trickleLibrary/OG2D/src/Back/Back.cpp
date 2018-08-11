@@ -15,10 +15,8 @@ Back::Back(const std::string& path, float size_x, float size_y)
 
 Back::Back(const std::string& path, int size_x, int size_y)
 {
-	cloud = new Cloud*[2];
-	for (int i = 0; i < 2; ++i) {
-		cloud[i] = new Cloud("cloud" + std::to_string(i+1) + ".png", 0.5f + i);
-	}
+	Cloud::Create("cloud1.png", 0.5f);
+	Cloud::Create("cloud2.png", 1.5f);
 	this->size = { size_x,size_y };
 	this->Init(path);
 }
@@ -59,18 +57,10 @@ Back::~Back()
 	{
 		delete this->texPos;
 	}
-	for (int i = 0; i < 2; ++i) {
-		delete cloud[i];
-	}
-	delete[] cloud;
 }
 
 void Back::UpDate()
-{
-	for (int i = 0; i < 2; ++i) {
-		cloud[i]->Update();
-	}
-}
+{}
 
 void Back::Render2D()
 {
@@ -93,10 +83,6 @@ void Back::Render2D()
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, this->backImg.GetTextureSize().x, this->backImg.GetTextureSize().y);
 		this->backImg.Draw(draw, src);
-	}
-	//‰_
-	for (int i = 0; i < 2; ++i) {
-		cloud[i]->Render();
 	}
 
 }
@@ -196,19 +182,33 @@ Back::SP Back::Create(const std::string& path, int x, int y, bool flag)
 }
 
 Cloud::Cloud(const std::string & path, float speed) {
-	Initialize(path, speed);
 }
 
 Cloud::~Cloud() {}
+
+std::shared_ptr<Cloud> Cloud::Create(const std::string & path, float speed)
+{
+	auto obj = std::shared_ptr<Cloud>(new Cloud(path, speed));
+	if (obj) {
+		obj->me = obj;
+		obj->Initialize(path, speed);
+		std::shared_ptr<Cloud> o(obj);
+		OGge->SetTaskObject(o);
+		return o;
+	}
+	return nullptr;
+}
 
 void Cloud::Initialize(const std::string & path, float speed) {
 	cloudImg.Create(path);
 	cloudPos[0] = Vec2(0, 0);
 	cloudPos[1] = Vec2(-1920, 0);
 	this->speed = speed;
+	SetDrawOrder(0.01f);
+	Init("cloud");
 }
 
-void Cloud::Update() {
+void Cloud::UpDate() {
 	for (int i = 0; i < 2; ++i) {
 		cloudPos[i].x += speed;
 		if (cloudPos[i].x >= 1920) {
@@ -217,7 +217,7 @@ void Cloud::Update() {
 	}
 }
 
-void Cloud::Render() {
+void Cloud::Render2D() {
 	for (int i = 0; i < 2; ++i) {
 		Box2D draw(cloudPos[i].x, cloudPos[i].y, 1920.f, 1080.f);
 		draw.OffsetSize();

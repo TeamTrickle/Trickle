@@ -50,6 +50,9 @@ bool StageSelect::Initialize()
 	chara->SetAutoFlag(true);
 	//”wŒi‚Ì•`‰æ
 	auto back = Back::Create(std::string("back.png"), Vec2(1920 * 2 + 200, 1080));
+	//‰_
+	Cloud::Create("cloud1.png", 0.5f);
+	Cloud::Create("cloud2.png", 1.5f);
 	//ƒ}ƒbƒv¶¬
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.5f);
@@ -227,6 +230,11 @@ bool StageSelect::Finalize()
 	}
 	auto alert = OGge->GetTasks<StageAlert>("stagealert");
 	for (auto id = alert->begin(); id != alert->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id)
 	{
 		(*id)->Kill();
 	}
