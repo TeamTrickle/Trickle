@@ -24,6 +24,7 @@ public:
 		Happy_F,
 	};
 	int happyCnt;			//喜ぶアニメーションカウント
+	bool creditFlag;		//クレジットの時はAutoMove()を使わないようにする変数
 private:
 	Texture Image;		//使用画像
 	Vec2 move;			//移動値

@@ -24,7 +24,14 @@ Credit::~Credit()
 bool Credit::Initialize()
 {
 	//‰æ‘œ¶¬
-	this->frameTex.Create((std::string)"selectframe2.png");
+	this->frame[0].tex.Create((std::string)"credit1.png");
+	this->frame[1].tex.Create((std::string)"credit2.png");
+	this->frame[2].tex.Create((std::string)"credit3.png");
+	this->frame[3].tex.Create((std::string)"credit4.png");
+	this->frame[4].tex.Create((std::string)"credit5.png");
+	this->frame[5].tex.Create((std::string)"credit6.png");
+	this->frame[6].tex.Create((std::string)"credit7.png");
+	this->frame[7].tex.Create((std::string)"credit8.png");
 	this->nameTex.Create((std::string)"name.png");
 	//”wŒi¶¬
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
@@ -40,7 +47,7 @@ bool Credit::Initialize()
 	this->nowMode = 0;
 	this->jumpTimeCnt = 0;
 	this->timeCnt = 0;
-	this->WAITTIME = 50;
+	this->WAITTIME = 200;
 	if (LoadSize())
 	{
 		SetSize();
@@ -55,6 +62,7 @@ void Credit::UpDate()
 {
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
+	npc->creditFlag = true;
 	if (OGge->in->key.down(In::T))
 	{
 		npc->AutoJump();
@@ -69,7 +77,7 @@ void Credit::UpDate()
 	if (nowMode == MODE1) {
 		++timeCnt;
 		if (timeCnt >= WAITTIME) {
-			npc->SetX(64 * 2, 1700, 30.f);
+			npc->SetX(npc->position.x, 1700, 30.f);
 			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 0.f));
 			Next();
 		}
@@ -81,23 +89,23 @@ void Credit::UpDate()
 		if (!npc->isAutoPlayX()) {
 			++timeCnt;
 			if (timeCnt >= WAITTIME) {
-				npc->SetX(1700, 2000, 10.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 800.f));
+				npc->SetX(npc->position.x, 2800, 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 750.f));
 				Next();
 			}
 		}
 	}
 	if (nowMode == MODE3) {
 		++jumpTimeCnt;
-		CreditJump(30, 6);
+		CreditJump(120, 6);
 		npc->AutoMoveX();
-		OGge->camera->SetPos(this->camera_anim.Move(10.f));
+		OGge->camera->SetPos(this->camera_anim.Move(20.f));
 
 		if (!npc->isAutoPlayX()) {
 			++timeCnt;
 			if (timeCnt >= WAITTIME) {
-				npc->SetX(2000, 2800, 20.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 800.f));
+				npc->SetX(npc->position.x, 3800, 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(3500.f, 750.f));
 				Next();
 			}
 		}
@@ -112,12 +120,9 @@ void Credit::UpDate()
 		OGge->camera->SetPos(this->camera_anim.Move(20.f));
 
 		if (!npc->isAutoPlayX()) {
-			++timeCnt;
-			if (timeCnt >= WAITTIME) {
-				npc->Set(npc->position, Vec2(npc->position.x, 0.f), 20.f);
-				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(2700.f, 0.f));
-				Next();
-			}
+			npc->Set(npc->position, Vec2(npc->position.x, 190.f), 20.f);
+			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(3500.f, 0.f));
+			Next();
 		}
 	}
 
@@ -128,26 +133,65 @@ void Credit::UpDate()
 			npc->SetCollisionNow(0);
 		}
 		else {
+			++jumpTimeCnt;
+			++timeCnt;
+			CreditJump(0, 10);
 			npc->SetCollisionNow(1);
-			Next();
+			if (timeCnt > 10) {
+				npc->SetX(npc->position.x, 4500, 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(4000.f, 0.f));
+				Next();
+			}
 		}
 
 	}
 
 	if (nowMode == MODE6) {
-		//Next();
+		npc->AutoMoveX();
+		OGge->camera->SetPos(this->camera_anim.Move(20.f));
+		if (!npc->isAutoPlayX()) {
+			++timeCnt;
+			if (timeCnt >= WAITTIME) {
+				npc->SetX(npc->position.x, 5800, 20.f);
+				this->camera_anim.Set(OGge->camera->GetPos(), Vec2(5700.f, 550.f));
+				Next();
+			}
+		}
 	}
 
 	if (nowMode == MODE7) {
-		//npc->Set(npc->position, Vec2(1500.f, npc->position.y), 30.f);
-		//Next();
+		++jumpTimeCnt;
+		CreditJump(70, 10);
+		npc->AutoMoveX();
+		OGge->camera->SetPos(this->camera_anim.Move(20.f));
+		if (!npc->isAutoPlayX()) {
+			npc->SetX(npc->position.x, 7500, 40.f);
+			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(7400.f, 550.f));
+			Next();
+		}
 	}
 
 	if (nowMode == MODE8) {
-		//npc->AutoMove();
-		//if (npc->position.x >= 1450) {
+		npc->AutoMoveX();
+		OGge->camera->SetPos(this->camera_anim.Move(40.f));
+		if (!npc->isAutoPlayX()) {
+			npc->Happy(7);
+		}
+
+		if (npc->happyCnt >= 7) {
+			++timeCnt;
+			if (timeCnt > WAITTIME) {
+				npc->SetX(npc->position.x, 9000, 20.f);
+				Next();
+			}
+		}
+	}
+
+	if (nowMode == MODE9) {
+		npc->AutoMoveX();
+		if (!npc->isAutoPlayX()) {
 			this->Kill();
-		//}
+		}
 	}
 
 }
@@ -157,19 +201,19 @@ void Credit::Render2D()
 	//ƒtƒŒ[ƒ€
 	for (int i = 0; i < FRAME_NUM + 1; ++i)
 	{
-		frameTex.Draw(frame[i].draw, frame[i].src);
+		frame[i].tex.Draw(frame[i].draw, frame[i].src);
 	}
 	//’òq
 	for (int i = 2; i < 10; ++i)
 	{
-		Box2D draw(2800.f, i*128.f, 128.f, 128.f);
+		Box2D draw(3800.f, i*128.f, 128.f, 128.f);
 		draw.OffsetSize();
 		Box2D src(256*3, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
 	}
 	{
-		Box2D draw(2800.f, 1*128.f, 128.f, 128.f);
+		Box2D draw(3800.f, 1*128.f, 128.f, 128.f);
 		draw.OffsetSize();
 		Box2D src(256*2, 256, 256, 256);
 		src.OffsetSize();
