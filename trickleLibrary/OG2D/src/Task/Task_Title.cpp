@@ -27,10 +27,8 @@ Title::Title()
 	this->soundstart = true;
 	this->sound = nullptr;
 	this->skipInoutFlag = false;
-
-	//BƒL[‚ğ‰Ÿ‚µ‚½‚©‚Ç‚¤‚©‚Ì”»’f
-	//ƒeƒXƒg’Ç‰Á
-	this->pressB = false;
+	
+	this->pressB = false;           //BƒL[‚ğ‰Ÿ‚µ‚½‚©‚Ç‚¤‚©‚Ì”»’f
 	this->nowmoveL = false;
 	this->nowmoveR = false;
 	//ƒ^ƒOİ’è
@@ -58,41 +56,39 @@ bool Title::Initialize()
 	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 30.f);
 	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-	//ƒeƒXƒg’Ç‰Á
-	start = non;
-	del = no;
-	//‰¼ƒTƒCƒY
+
+	start = non;          //start‚Ì•¶š‚ÌŒ»İ‚Ìó‘Ô
+	del = no;             //ƒf[ƒ^‚ğÁ‚·‚©‚Ç‚¤‚©‚Ì‘I‘ğ(Å‰‚Íno)
+
+	//Œ»İ‚Ìg—p‚·‚é•¶š‚ÌƒTƒCƒYŠi”[
 	this->startsize = Vec2(320.f, 64.f);
 	this->closesize = Vec2(0.f, 64.f);
 	this->creditsize = Vec2(0.f, 64.f);
 	this->dataDeletesize = Vec2(0.f, 64.f);
-	//‰æ‘œ‚Ì‰¡ƒTƒCƒY‚ğŠi”[
+	//•¶š‚ÌÅ‘å‰¡ƒTƒCƒY‚ğŠi”[
 	this->startmax = 64.f * 5;
 	this->closemax = 64.f * 4;
 	this->creditmax = 64.f * 6;
 	this->datadeletemax = 64.f * 11;
-	//‰¼ˆÊ’u
-	//this->dataDeletepos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
+	//•¶š‚Ì‰ŠúˆÊ’uw’è
 	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
 	this->monitorSpos = 165.f;
 	this->monitorEpos = 1345.f;
-	this->yespos = Vec2();
-	this->nopos = Vec2();
 
-	this->textPos[0] = { this->startPos,Vec2(256,64) };
-	this->textPos[1] = { this->closePos,Vec2(256,64) };
-	//”z—ñŠÇ—‚ğs‚¤
-	this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y ,320.f,64.f };
-	this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y ,64.f*4.f,64.f };
+	//g‚í‚È‚­‚È‚Á‚Ä‚é
+	//this->textPos[0] = { this->startPos,Vec2(256,64) };
+	//this->textPos[1] = { this->closePos,Vec2(256,64) };
+	////”z—ñŠÇ—‚ğs‚¤
+	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y ,320.f,64.f };
+	//this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y ,64.f*4.f,64.f };
+
 	//‰æ‘œ“Ç‚İ‚İ
 	texCursor.Create("gear3.png");
 	this->texLogo.Create("logo.png");
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
-
-	//ƒeƒXƒg’Ç‰Á
 	this->monitorTex.Create("selectframe.png");     //ƒ‚ƒjƒ^[‚Ì‰æ‘œ’Ç‰Á
 	this->fontTex.Create("Font_new.png");           //•¶šƒtƒHƒ“ƒg‚Ì‰æ‘œ’Ç‰Á
 
@@ -135,7 +131,8 @@ bool Title::Initialize()
 	this->gierCnt = 0;
 
 	//•`‰æ‡‚ÌŒˆ’è
-	__super::SetDrawOrder(1.f);
+	//__super::SetDrawOrder(1.f);
+	__super::SetDrawOrder(0.98f);
 	//ƒJƒƒ‰‚Ì’†S‚Ìƒ^[ƒQƒbƒg‚ğ“o˜^
 	this->cm.SetObject(&(*water));
 	//ƒJƒƒ‰‚ÌƒTƒCƒY‚ÆˆÊ’u‚ğ’²®
@@ -302,11 +299,8 @@ void Title::UpDate()
 		}
 	}
 	break;
-
-	//ƒeƒXƒg’Ç‰Á
 	case from6:	//BƒL[“ü—Í‘Ò‚¿ó‘Ô
 	{
-		//ƒeƒXƒg’Ç‰Á
 		if (PressB() == false)
 		{
 			break;
@@ -326,6 +320,10 @@ void Title::UpDate()
 			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
 				this->nowmoveL = true;
+				//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+				cursorsound.play();
+
+				//•¶š‚ğ‘Ò‹@ˆÊ’u‚ÉˆÚ“®‚³‚¹‚éˆ—(ƒ‚ƒjƒ^[‰E’[‚Ö)
 				if (startsize.x <= 0.0f)
 				{
 					startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
@@ -342,22 +340,6 @@ void Title::UpDate()
 				{
 					creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 				}
-				//if (startPos.x <= monitorSpos+120.f)
-				//{
-				//	startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-				//}
-				//if (closePos.x <= monitorSpos + 120.f)
-				//{
-				//	closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-				//}
-				//if (dataDeletepos.x <= monitorSpos + 120.f)
-				//{
-				//	dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-				//}
-				//if (creditsize.x <= monitorSpos + 120.f)
-				//{
-				//	creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-				//}
 			}
 		}
 		//‰E‚Ö
@@ -366,6 +348,10 @@ void Title::UpDate()
 			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 			{
 				this->nowmoveR = true;
+				//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+				cursorsound.play();
+
+				//•¶š‚ğ‘Ò‹@ˆÊ’u‚ÉˆÚ“®‚³‚¹‚éˆ—(ƒ‚ƒjƒ^[¶’[‚Ö)
 				if (startsize.x <= 0.0f)
 				{
 					startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
@@ -382,25 +368,10 @@ void Title::UpDate()
 				{
 					creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
 				}
-				//if (startPos.x >= monitorEpos-120.f)
-				//{
-				//	startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
-				//}
-				//if (closePos.x >= monitorEpos-120.f)
-				//{
-				//	closePos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
-				//}
-				//if (dataDeletepos.x >= monitorEpos-120.f)
-				//{
-				//	dataDeletepos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
-				//}
-				//if (creditpos.x >= monitorEpos-120.f)
-				//{
-				//	creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
-				//}
 			}
 		}
-		//ƒeƒXƒg’Ç‰Á
+
+		//•¶š‚ÌˆÚ“®ˆ—--------------------------------------------------------------
 		switch (cursorNum)
 		{
 		case 0:          //‘I‘ğˆ‚ªstart
@@ -491,13 +462,13 @@ void Title::UpDate()
 			}
 		}
 			break;
+			//------------------------------------------------------------------------------------
 		}
 		/*if (demoTimer.GetTime() >= DEMO_LIMIT) {
 		this->mode = Mode::from8;
 		break;
 		}*/
 
-		//ƒeƒXƒg’Ç‰Á
 		//Œˆ’è‚µ‚ÄŸ‚Ö
 		if (OGge->in->down(Input::in::B2))
 		{
@@ -505,7 +476,7 @@ void Title::UpDate()
 			decisionsound.play();
 			switch (this->cursorNum)
 			{
-				//ƒXƒe[ƒWƒZƒŒƒNƒg‚Éi‚Ş
+			//ƒXƒe[ƒWƒZƒŒƒNƒg‚Éi‚Ş
 			case 0:
 			{
 				auto chara = OGge->GetTask<Chara>("Chara");
@@ -525,17 +496,18 @@ void Title::UpDate()
 			//ƒNƒŒƒWƒbƒg‚Éi‚Ş
 			case 1:
 			{
+				//–¢À‘•‚Ì‚½‚ßAƒQ[ƒ€‚ğ•Â‚¶‚é
 				OGge->GameEnd();
 			}
 				break;
-				//ƒf[ƒ^Á‹
+			//ƒf[ƒ^Á‹
 			case 2:
 			{
 				//yes,no‚ğ‘I‘ğ‚·‚éƒ‚[ƒh‚ÉØ‚è‘Ö‚¦‚é
 				this->mode = from9;
 			}
 				break;
-				//I—¹
+			//I—¹
 			case 3:
 				OGge->GameEnd();
 				break;
@@ -569,6 +541,9 @@ void Title::UpDate()
 	case from9:            //datadelete‚Ìyes‚©no‚©‚ğ‘I‘ğ‚·‚é
 		if (OGge->in->down(In::CL) || OGge->in->down(In::LL) || OGge->in->down(In::CR) || OGge->in->down(In::LR))
 		{
+			//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+			cursorsound.play();
+
 			if (del == no)
 			{
 				del = yes;
@@ -582,6 +557,9 @@ void Title::UpDate()
 		}
 		if (OGge->in->down(Input::in::B2))
 		{
+			//Œˆ’è‰¹‚ÌÄ¶
+			decisionsound.play();
+
 			if (del == no)
 			{
 				this->mode = from7;
@@ -589,6 +567,7 @@ void Title::UpDate()
 			if (del == yes)
 			{
 				//ƒf[ƒ^íœ‚Ìˆ—
+				GameManager::ResetData();
 				this->mode = from7;
 			}
 		}
@@ -660,17 +639,15 @@ void Title::Render2D()
 		this->flowerLogo.Draw(draw, src);
 	}
 
-	//ƒeƒXƒg’Ç‰Á
 	//ƒ‚ƒjƒ^[‚Ì•\¦
 	{
-		//ƒ}ƒWƒbƒNƒiƒ“ƒo[‚â‚ß‚é‚±‚Æ
 		Box2D draw(Vec2(165.f, 783.f), Vec2(1180.f, 256.f));
 		draw.OffsetSize();
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
+
 		this->monitorTex.Draw(draw, src);
 	}
 
-	//ƒeƒXƒg’Ç‰Á
 	//•¶š•\¦
 	if (pressB)
 	{
@@ -744,10 +721,8 @@ void Title::Render2D()
 		//exit
 		{
 			//‰¼ˆ—
-			//Box2D draw(closePos.x, closePos.y + 80.f, 320.f, 64.f);
 			Box2D draw(closePos.x, closePos.y + 80.f, closesize.x, closesize.y);
 			draw.OffsetSize();
-			//Box2D src(0, 64, 64 * 4, 64);
 			if (close == in)
 			{
 				Box2D src = intextsrc;
@@ -767,12 +742,28 @@ void Title::Render2D()
 		{
 			if (del == yes || del == no)
 			{
-				Box2D draw = Box2D(monitorSpos+390,850.f,64.f*6,64.f);
+				Box2D draw = Box2D(monitorSpos + 390, 850.f, 64.f * 6, 64.f);
 				draw.OffsetSize();
 				Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
 				src.OffsetSize();
 
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+			//ƒJ[ƒ\ƒ‹‚Ì•\¦
+			Box2D src(0, 0, 195, 195);
+			src.OffsetSize();
+			this->texCursor.Rotate((float)this->gierCnt);
+			if (del == yes)
+			{
+				Box2D draw(monitorSpos + 390 - 64.f, 850.f, 64.0f, 64.0f);
+				draw.OffsetSize();
+				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+			}
+			if (del == no)
+			{
+				Box2D draw(monitorSpos + 390 + 64.f*3, 850.f, 64.0f, 64.0f);
+				draw.OffsetSize();
+				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 			}
 		}
 	}
@@ -809,12 +800,12 @@ void Title::Render2D()
 	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	//}
 
-	////‰æ–Ê“]Š·—p•‚¢‚â‚Â
-	//if (this->trans_a > 0.f) {
-	//	Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
-	//	Box2D src(0, 0, 1, 1);
-	//	forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
-	//}
+	//‰æ–Ê“]Š·—p•‚¢‚â‚Â
+	if (this->trans_a > 0.f) {
+		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
+		Box2D src(0, 0, 1, 1);
+		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
+	}
 }
 
 bool Title::Finalize()
@@ -828,8 +819,6 @@ bool Title::Finalize()
 	this->effect03.Finalize();
 	//this->forTransform.Finalize();
 	this->canVolControl = false;
-
-	//ƒeƒXƒg’Ç‰Á
 	this->monitorTex.Finalize();
 	this->fontTex.Finalize();
 
@@ -890,12 +879,14 @@ bool Title::Finalize()
 	return true;
 }
 
-//ƒeƒXƒg’Ç‰Á
 //BƒL[‚ª‰Ÿ‚³‚ê‚½‚©‚Ì”»’è‚Ég—p
 bool Title::PressB()
 {
 	if (OGge->in->down(Input::in::B2))
 	{
+		//Œˆ’è‰¹‚ÌÄ¶
+		decisionsound.play();
+
 		this->pressB = true;
 		return true;
 	}
@@ -904,7 +895,6 @@ bool Title::PressB()
 
 
 //•¶š‚ÌˆÚ“®‚É‚Â‚¢‚Ä---------------------------------------------------------------------------
-//ƒeƒXƒg’Ç‰Á
 //text‚ªƒ‚ƒjƒ^[‚ÌŠO‚Éo‚Ä‚¢‚­“®‚«
 Vec2 Title::TextMoveout(Vec2 pos)
 {
@@ -919,7 +909,7 @@ Vec2 Title::TextMoveout(Vec2 pos)
 	{
 		if (pos.x < monitorEpos-120.f)
 		{
-			pos.x += 15.f;           //’²®’†
+			pos.x += 15.f;
 		}
 	}
 	return pos;
@@ -935,7 +925,6 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //•K—
 			pos.x -=15;
 		}
 		if (pos.x < ((monitorEpos - monitorSpos) - (maxsize)/2.f) / 2.f + 40.f && outsize.x<=0.0f)
-		//if(pos.x+(maxsize/2)<(monitorEpos-monitorSpos)/2.f)
 		{
 			if (cursorNum < 3)
 			{
@@ -955,7 +944,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //•K—
 		{
 			if (size.x >= maxsize)
 			{
-				pos.x += 15.f;                //’²®’†
+				pos.x += 15.f;
 			}
 		}
 		if (pos.x >= ((monitorEpos - monitorSpos)- (maxsize/2.f)) / 2.f && outsize.x <= 0.0f )
@@ -974,6 +963,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //•K—
 	return pos;
 }
 
+//text‚Ìo‚Ä‚¢‚­‚Æ‚«‚Ì‰¡ƒTƒCƒY•ÏXˆ—
 Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 {
 	if (this->nowmoveL)
@@ -999,7 +989,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 		{
 			if (size.x >= 0.0f)
 			{
-				size.x -= 15;         //’²®’†
+				size.x -= 15; 
 			}
 			if (size.x < 15)
 			{
@@ -1015,6 +1005,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 	return size;
 }
 
+//text‚Ì‰¡ƒTƒCƒY
 Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //•K—vÅ‘åƒTƒCƒYw’è—p
 {
 	if (this->nowmoveL)
@@ -1029,7 +1020,7 @@ Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //•K—vÅ‘åƒTƒC
 	{
 		if (size.x <= maxsize)
 		{
-			size.x += 15.f;        //’²®’†
+			size.x += 15.f;
 		}
 		intextsrc = Box2D((maxsize - size.x), 0.f, size.x, 64.f);
 	}

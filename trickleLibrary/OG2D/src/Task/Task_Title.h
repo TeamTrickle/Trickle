@@ -68,38 +68,36 @@ class Title :public TaskObject
 	//テスト追加
 	Vec2 creditpos;      //クレジットに文字の位置
 	Vec2 dataDeletepos;  //データを消す文字の位置
-	Vec2 startsize;
+	//表示するサイズ格納
+	Vec2 startsize;      
 	Vec2 closesize;
 	Vec2 creditsize;
 	Vec2 dataDeletesize;
-	Vec2 yespos;         //データを消すときの選択肢の位置
+	//データを消すときの選択肢の位置
+	Vec2 yespos;         
 	Vec2 nopos;
 	float monitorSpos;    //モニターの左端の位置
 	float monitorEpos;    //モニターの右端の位置
-
-	enum nowmove
+	enum nowmove          //モニター内の文字の動き
 	{
-		in,
-		out,
-		non
+		in,       //入ってくる
+		out,      //出ていく
+		non       //待機中
 	};
 	nowmove start;
 	nowmove close;
 	nowmove credit;
 	nowmove dataDelete;
 
-	enum Del
+	enum Del             //データを消すか消さないかの最終確認用
 	{
 		yes,
 		no,
-		yet
 	};
-
 	Del del;
-	bool yesnoMode;
 
-	Box2D intextsrc;
-	Box2D outtextsrc;
+	Box2D intextsrc;      //モニターに入ってくるときのsrcの挙動
+	Box2D outtextsrc;     //モニターから出ていくときのsrcの挙動
 
 
 	Texture waterTex;
@@ -147,18 +145,22 @@ public:
 	//テスト追加
 	bool PressB();          //Bキーを押していたらtrueを返す
 	bool pressB;
-	Vec2 TextMoveout(Vec2 pos);        //選択肢の文字の移動について
+	//選択肢の文字の移動について
+	Vec2 TextMoveout(Vec2 pos);        
 	Vec2 TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize);
 	Vec2 TextSizeout(Vec2 pos, Vec2 size, float maxsize);
 	Vec2 TextSizein(Vec2 pos,Vec2 size,float maxsize);
-	bool nowmoveL;
-	bool nowmoveR;
+
+	bool nowmoveL;        //現在左に動いているか
+	bool nowmoveR;        //現在右に動いているか
+	//文字の最大横サイズ格納
 	float startmax;
 	float closemax;
 	float creditmax;
 	float datadeletemax;
 
-	void CursorMove();
+	void CursorMove();      //使わなくなって削除予定
+
 	void SetPauseEveryChild(const bool&);
 
 	enum State
