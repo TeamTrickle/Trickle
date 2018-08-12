@@ -148,11 +148,15 @@ public:
 	bool PressB();          //BƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
 	bool pressB;
 	Vec2 TextMoveout(Vec2 pos);        //‘I‘ğˆ‚Ì•¶š‚ÌˆÚ“®‚É‚Â‚¢‚Ä
-	Vec2 TextMovein(Vec2 pos,Vec2 size,Vec2 outsize);
-	Vec2 TextSizeout(Vec2 pos, Vec2 size);
-	Vec2 TextSizein(Vec2 pos,Vec2 size);
+	Vec2 TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize);
+	Vec2 TextSizeout(Vec2 pos, Vec2 size, float maxsize);
+	Vec2 TextSizein(Vec2 pos,Vec2 size,float maxsize);
 	bool nowmoveL;
 	bool nowmoveR;
+	float startmax;
+	float closemax;
+	float creditmax;
+	float datadeletemax;
 
 	void CursorMove();
 	void SetPauseEveryChild(const bool&);

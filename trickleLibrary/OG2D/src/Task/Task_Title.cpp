@@ -66,6 +66,11 @@ bool Title::Initialize()
 	this->closesize = Vec2(0.f, 64.f);
 	this->creditsize = Vec2(0.f, 64.f);
 	this->dataDeletesize = Vec2(0.f, 64.f);
+	//画像の横サイズを格納
+	this->startmax = 64.f * 5;
+	this->closemax = 64.f * 4;
+	this->creditmax = 64.f * 6;
+	this->datadeletemax = 64.f * 11;
 	//仮位置
 	//this->dataDeletepos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
@@ -154,10 +159,6 @@ void Title::UpDate()
 	{
 		this->Skip();
 	}
-
-	//テスト追加
-	//デバッグ用
-	std::cout << "現在の番号" << (int)cursorNum << std::endl;
 
 	//BGMのフェードイン
 	if (canVolControl)
@@ -405,88 +406,88 @@ void Title::UpDate()
 		case 0:          //選択肢がstart
 		{
 			startPos = TextMoveout(startPos);
-			startsize = TextSizeout(startPos, startsize);
+			startsize = TextSizeout(startPos, startsize,startmax);
 			if (nowmoveL)
 			{
 				start = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos,creditsize,startsize);
-				creditsize = TextSizein(creditpos, creditsize);
+				creditpos = TextMovein(creditpos,creditsize,startsize,creditmax);
+				creditsize = TextSizein(creditpos, creditsize,creditmax);
 			}
 			if (nowmoveR)
 			{
 				start = out;
 
 				close = in;
-				closePos = TextMovein(closePos,closesize,startsize);
-				closesize = TextSizein(closePos, closesize);
+				closePos = TextMovein(closePos,closesize,startsize,closemax);
+				closesize = TextSizein(closePos, closesize,closemax);
 			}
 		}
 			break;
 		case 1:           //選択肢がcredit
 		{
 			creditpos = TextMoveout(creditpos);
-			creditsize = TextSizeout(creditpos, creditsize);
+			creditsize = TextSizeout(creditpos, creditsize,creditmax);
 			if (nowmoveL)
 			{
 				credit = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,creditsize);
-				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,creditsize,datadeletemax);
+				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize,datadeletemax);
 			}
 			if (nowmoveR)
 			{
 				credit = out;
 
 				start = in;
-				startPos = TextMovein(startPos,startsize,creditsize);
-				startsize = TextSizein(startPos, startsize);
+				startPos = TextMovein(startPos,startsize,creditsize,startmax);
+				startsize = TextSizein(startPos, startsize,startmax);
 			}
 		}
 			break;
 		case 2:            //選択肢がdelete
 		{
 			dataDeletepos = TextMoveout(dataDeletepos);
-			dataDeletesize = TextSizeout(dataDeletepos, dataDeletesize);
+			dataDeletesize = TextSizeout(dataDeletepos, dataDeletesize,datadeletemax);
 			if (nowmoveL)
 			{
 				dataDelete = out;
 
 				close = in;
-				closePos = TextMovein(closePos,closesize,dataDeletesize);
-				closesize = TextSizein(closePos, closesize);
+				closePos = TextMovein(closePos,closesize,dataDeletesize,closemax);
+				closesize = TextSizein(closePos, closesize,closemax);
 			}
 			if (nowmoveR)
 			{
 				dataDelete = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos,creditsize,dataDeletesize);
-				creditsize = TextSizein(creditpos, creditsize);
+				creditpos = TextMovein(creditpos,creditsize,dataDeletesize,creditmax);
+				creditsize = TextSizein(creditpos, creditsize,creditmax);
 			}
 		}
 			break;
 		case 3:            //選択肢がexit
 		{
 			closePos = TextMoveout(closePos);
-			closesize = TextSizeout(closePos, closesize);
+			closesize = TextSizeout(closePos, closesize,closemax);
 			if (nowmoveL)
 			{
 				close = out;
 
 				start = in;
-				startPos = TextMovein(startPos,startsize,closesize);
-				startsize = TextSizein(startPos, startsize);
+				startPos = TextMovein(startPos,startsize,closesize,startmax);
+				startsize = TextSizein(startPos, startsize,startmax);
 			}
 			if (nowmoveR)
 			{
 				close = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,closesize);
-				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,closesize,datadeletemax);
+				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize,datadeletemax);
 			}
 		}
 			break;
@@ -681,6 +682,7 @@ void Title::Render2D()
 			{
 				Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
 				src.OffsetSize();
+				
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			//一番初めは真ん中にstartを表示
@@ -924,15 +926,16 @@ Vec2 Title::TextMoveout(Vec2 pos)
 }
 
 //textがモニターの内側に入ってくる動き
-Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize)
+Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //必要止める場所指定用
 {
 	if (this->nowmoveL)
 	{
-		if (pos.x >= (monitorEpos - monitorSpos) / 2.f)
+		if (pos.x >= ((monitorEpos - monitorSpos)- (maxsize/2.f)) / 2.f + 40.f)
 		{
 			pos.x -=15;
 		}
-		if (pos.x < (monitorEpos - monitorSpos) / 2.f && outsize.x<=0.0f)
+		if (pos.x < ((monitorEpos - monitorSpos) - (maxsize)/2.f) / 2.f + 40.f && outsize.x<=0.0f)
+		//if(pos.x+(maxsize/2)<(monitorEpos-monitorSpos)/2.f)
 		{
 			if (cursorNum < 3)
 			{
@@ -948,14 +951,14 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize)
 
 	if (this->nowmoveR)
 	{
-		if (pos.x <= (monitorEpos - monitorSpos) / 2.f)
+		if (pos.x <= ((monitorEpos - monitorSpos) - (maxsize/2.f)) / 2.f )
 		{
-			if (size.x >= 320.f)
+			if (size.x >= maxsize)
 			{
 				pos.x += 15.f;                //調整中
 			}
 		}
-		if (pos.x >= (monitorEpos - monitorSpos) / 2.f && outsize.x <= 0.0f)
+		if (pos.x >= ((monitorEpos - monitorSpos)- (maxsize/2.f)) / 2.f && outsize.x <= 0.0f )
 		{
 			if (cursorNum > 0)
 			{
@@ -971,7 +974,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize)
 	return pos;
 }
 
-Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
+Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 {
 	if (this->nowmoveL)
 	{
@@ -987,7 +990,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
 		{
 			pos.x = (monitorSpos - size.x);
 		}
-		this->outtextsrc = Box2D((64.f*5.f - size.x), 0.f, size.x, 64.f);
+		this->outtextsrc = Box2D((maxsize - size.x), 0.f, size.x, 64.f);
 	}
 	if (this->nowmoveR)
 	{
@@ -1012,11 +1015,11 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
 	return size;
 }
 
-Vec2 Title::TextSizein(Vec2 pos, Vec2 size)
+Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //必要最大サイズ指定用
 {
 	if (this->nowmoveL)
 	{
-		if (size.x <= 320.f)
+		if (size.x <= maxsize)
 		{
 			size.x +=15.f;
 		}
@@ -1024,11 +1027,11 @@ Vec2 Title::TextSizein(Vec2 pos, Vec2 size)
 	}
 	if (this->nowmoveR)
 	{
-		if (size.x <= 320.f)
+		if (size.x <= maxsize)
 		{
 			size.x += 15.f;        //調整中
 		}
-		intextsrc = Box2D((64.f*5.f - size.x), 0.f, size.x, 64.f);
+		intextsrc = Box2D((maxsize - size.x), 0.f, size.x, 64.f);
 	}
 	return size;
 }
