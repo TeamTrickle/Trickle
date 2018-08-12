@@ -718,22 +718,25 @@ void Title::Render2D()
 		}
 		//delete
 		{
-			Box2D draw(dataDeletepos.x, dataDeletepos.y + 80.f, dataDeletesize.x, dataDeletesize.y);
-			draw.OffsetSize();
-			//Box2D src((64.f*5.f - dataDeletesize.x), 0.f, dataDeletesize.x, 64.f);
-			if (dataDelete == in)
+			if (mode != from9)
 			{
-				Box2D src = intextsrc;
-				src.y = 64.f * 13;
-				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-			}
-			else
-			{
-				Box2D src = outtextsrc;
-				src.y = 64.f * 13;
-				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				Box2D draw(dataDeletepos.x, dataDeletepos.y + 80.f, dataDeletesize.x, dataDeletesize.y);
+				draw.OffsetSize();
+				//Box2D src((64.f*5.f - dataDeletesize.x), 0.f, dataDeletesize.x, 64.f);
+				if (dataDelete == in)
+				{
+					Box2D src = intextsrc;
+					src.y = 64.f * 13;
+					src.OffsetSize();
+					this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				}
+				else
+				{
+					Box2D src = outtextsrc;
+					src.y = 64.f * 13;
+					src.OffsetSize();
+					this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				}
 			}
 		}
 		//exit
@@ -755,6 +758,18 @@ void Title::Render2D()
 				Box2D src = outtextsrc;
 				src.y = 64.f;                  //“Ç‚Ýž‚Þ‰æ‘œ‚ð•Ï‚¦‚é
 				src.OffsetSize();
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+		}
+		if (mode == from9)                      //yes,no‚Ì•\Ž¦
+		{
+			if (del == yes || del == no)
+			{
+				Box2D draw = Box2D(monitorSpos+390,850.f,64.f*6,64.f);
+				draw.OffsetSize();
+				Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
+				src.OffsetSize();
+
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
