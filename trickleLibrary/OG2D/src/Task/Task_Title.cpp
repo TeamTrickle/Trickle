@@ -89,6 +89,7 @@ bool Title::Initialize()
 
 	//テスト追加
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
+	this->fontTex.Create("Font_new.png");           //文字フォントの画像追加
 
 	//this->forTransform.Create("TransparentBack.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
@@ -328,18 +329,34 @@ void Title::UpDate()
 				{
 					startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 				}
-				if (closesize.x < 0.0f)
+				if (closesize.x <= 0.0f)
 				{
 					closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 				}
-				if (dataDeletesize.x < 0.0f)
+				if (dataDeletesize.x <= 0.0f)
 				{
 					dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 				}
-				if (creditsize.x < 0.0f)
+				if (creditsize.x <= 0.0f)
 				{
 					creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 				}
+				//if (startPos.x <= monitorSpos+120.f)
+				//{
+				//	startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				//}
+				//if (closePos.x <= monitorSpos + 120.f)
+				//{
+				//	closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				//}
+				//if (dataDeletepos.x <= monitorSpos + 120.f)
+				//{
+				//	dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				//}
+				//if (creditsize.x <= monitorSpos + 120.f)
+				//{
+				//	creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				//}
 			}
 		}
 		//右へ
@@ -364,6 +381,22 @@ void Title::UpDate()
 				{
 					creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
 				}
+				//if (startPos.x >= monitorEpos-120.f)
+				//{
+				//	startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				//}
+				//if (closePos.x >= monitorEpos-120.f)
+				//{
+				//	closePos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				//}
+				//if (dataDeletepos.x >= monitorEpos-120.f)
+				//{
+				//	dataDeletepos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				//}
+				//if (creditpos.x >= monitorEpos-120.f)
+				//{
+				//	creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				//}
 			}
 		}
 		//テスト追加
@@ -378,7 +411,7 @@ void Title::UpDate()
 				start = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos,creditsize);
+				creditpos = TextMovein(creditpos,creditsize,startsize);
 				creditsize = TextSizein(creditpos, creditsize);
 			}
 			if (nowmoveR)
@@ -386,7 +419,7 @@ void Title::UpDate()
 				start = out;
 
 				close = in;
-				closePos = TextMovein(closePos,closesize);
+				closePos = TextMovein(closePos,closesize,startsize);
 				closesize = TextSizein(closePos, closesize);
 			}
 		}
@@ -400,7 +433,7 @@ void Title::UpDate()
 				credit = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,creditsize);
 				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
 			}
 			if (nowmoveR)
@@ -408,7 +441,7 @@ void Title::UpDate()
 				credit = out;
 
 				start = in;
-				startPos = TextMovein(startPos,startsize);
+				startPos = TextMovein(startPos,startsize,creditsize);
 				startsize = TextSizein(startPos, startsize);
 			}
 		}
@@ -422,7 +455,7 @@ void Title::UpDate()
 				dataDelete = out;
 
 				close = in;
-				closePos = TextMovein(closePos,closesize);
+				closePos = TextMovein(closePos,closesize,dataDeletesize);
 				closesize = TextSizein(closePos, closesize);
 			}
 			if (nowmoveR)
@@ -430,7 +463,7 @@ void Title::UpDate()
 				dataDelete = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos,creditsize);
+				creditpos = TextMovein(creditpos,creditsize,dataDeletesize);
 				creditsize = TextSizein(creditpos, creditsize);
 			}
 		}
@@ -444,7 +477,7 @@ void Title::UpDate()
 				close = out;
 
 				start = in;
-				startPos = TextMovein(startPos,startsize);
+				startPos = TextMovein(startPos,startsize,closesize);
 				startsize = TextSizein(startPos, startsize);
 			}
 			if (nowmoveR)
@@ -452,7 +485,7 @@ void Title::UpDate()
 				close = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,closesize);
 				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
 			}
 		}
@@ -648,20 +681,20 @@ void Title::Render2D()
 			{
 				Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			//一番初めは真ん中にstartを表示
 			if (start == in)
 			{
 				Box2D src = intextsrc;
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			if(start == out)
 			{
 				Box2D src = outtextsrc;
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 		//credit
@@ -671,14 +704,16 @@ void Title::Render2D()
 			if (credit == in)
 			{
 				Box2D src = intextsrc;
+				src.y = 64.f * 12;
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
 			{
 				Box2D src = outtextsrc;
+				src.y = 64.f * 12;
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 		//delete
@@ -689,14 +724,16 @@ void Title::Render2D()
 			if (dataDelete == in)
 			{
 				Box2D src = intextsrc;
+				src.y = 64.f * 13;
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
 			{
 				Box2D src = outtextsrc;
+				src.y = 64.f * 13;
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 		//exit
@@ -711,14 +748,14 @@ void Title::Render2D()
 				Box2D src = intextsrc;
 				src.y = 64.f;                  //読み込む画像を変える
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
 			{
 				Box2D src = outtextsrc;
 				src.y = 64.f;                  //読み込む画像を変える
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 	}
@@ -774,6 +811,10 @@ bool Title::Finalize()
 	this->effect03.Finalize();
 	//this->forTransform.Finalize();
 	this->canVolControl = false;
+
+	//テスト追加
+	this->monitorTex.Finalize();
+	this->fontTex.Finalize();
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)
@@ -847,9 +888,9 @@ bool Title::PressB()
 
 //文字の移動について---------------------------------------------------------------------------
 //テスト追加
+//textがモニターの外に出ていく動き
 Vec2 Title::TextMoveout(Vec2 pos)
 {
-
 	if (this->nowmoveL)
 	{
 		if (pos.x >= this->monitorSpos + 120.f)
@@ -861,13 +902,14 @@ Vec2 Title::TextMoveout(Vec2 pos)
 	{
 		if (pos.x < monitorEpos-120.f)
 		{
-			pos.x += 19.f;           //調整中
+			pos.x += 15.f;           //調整中
 		}
 	}
 	return pos;
 }
 
-Vec2 Title::TextMovein(Vec2 pos,Vec2 size)
+//textがモニターの内側に入ってくる動き
+Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize)
 {
 	if (this->nowmoveL)
 	{
@@ -875,7 +917,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size)
 		{
 			pos.x -=15;
 		}
-		if (pos.x < (monitorEpos - monitorSpos) / 2.f)
+		if (pos.x < (monitorEpos - monitorSpos) / 2.f && outsize.x<=0.0f)
 		{
 			if (cursorNum < 3)
 			{
@@ -898,7 +940,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size)
 				pos.x += 15.f;                //調整中
 			}
 		}
-		if (pos.x >= (monitorEpos - monitorSpos) / 2.f)
+		if (pos.x >= (monitorEpos - monitorSpos) / 2.f && outsize.x <= 0.0f)
 		{
 			if (cursorNum > 0)
 			{
@@ -925,6 +967,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
 				size.x -= 16;
 			}
 		}
+
 		if (size.x == 0.0f)
 		{
 			pos.x = (monitorSpos - size.x);
@@ -933,11 +976,16 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
 	}
 	if (this->nowmoveR)
 	{
-		if (pos.x+size.x>this->monitorEpos-115.f)
+		//この位置より右側に入ってもsizeが0になっていない
+		if (pos.x+size.x > this->monitorEpos-115.f)       //ここでひっかかってる
 		{
 			if (size.x >= 0.0f)
 			{
-				size.x -= 19;         //調整中
+				size.x -= 15;         //調整中
+			}
+			if (size.x < 15)
+			{
+				size.x = 0;
 			}
 		}
 		if (size.x == 0.0f)
@@ -961,7 +1009,7 @@ Vec2 Title::TextSizein(Vec2 pos, Vec2 size)
 	}
 	if (this->nowmoveR)
 	{
-		if (size.x <= 320)
+		if (size.x <= 320.f)
 		{
 			size.x += 15.f;        //調整中
 		}

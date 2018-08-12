@@ -51,6 +51,7 @@ class Title :public TaskObject
 	Texture forTransform;
 	//テスト追加
 	Texture monitorTex;
+	Texture fontTex;
 	
 
 	std::string soundname;
@@ -147,7 +148,7 @@ public:
 	bool PressB();          //Bキーを押していたらtrueを返す
 	bool pressB;
 	Vec2 TextMoveout(Vec2 pos);        //選択肢の文字の移動について
-	Vec2 TextMovein(Vec2 pos,Vec2 size);
+	Vec2 TextMovein(Vec2 pos,Vec2 size,Vec2 outsize);
 	Vec2 TextSizeout(Vec2 pos, Vec2 size);
 	Vec2 TextSizein(Vec2 pos,Vec2 size);
 	bool nowmoveL;
