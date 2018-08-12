@@ -79,13 +79,23 @@ class Title :public TaskObject
 	enum nowmove
 	{
 		in,
-		out
+		out,
+		non
 	};
-
 	nowmove start;
 	nowmove close;
 	nowmove credit;
 	nowmove dataDelete;
+
+	enum Del
+	{
+		yes,
+		no,
+		yet
+	};
+
+	Del del;
+	bool yesnoMode;
 
 	Box2D intextsrc;
 	Box2D outtextsrc;
@@ -137,7 +147,7 @@ public:
 	bool PressB();          //BƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
 	bool pressB;
 	Vec2 TextMoveout(Vec2 pos);        //‘I‘ğˆ‚Ì•¶š‚ÌˆÚ“®‚É‚Â‚¢‚Ä
-	Vec2 TextMovein(Vec2 pos);
+	Vec2 TextMovein(Vec2 pos,Vec2 size);
 	Vec2 TextSizeout(Vec2 pos, Vec2 size);
 	Vec2 TextSizein(Vec2 pos,Vec2 size);
 	bool nowmoveL;

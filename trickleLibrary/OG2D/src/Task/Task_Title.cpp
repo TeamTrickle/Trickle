@@ -59,6 +59,8 @@ bool Title::Initialize()
 	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 	//テスト追加
+	start = non;
+	del = no;
 	//仮サイズ
 	this->startsize = Vec2(320.f, 64.f);
 	this->closesize = Vec2(0.f, 64.f);
@@ -72,8 +74,6 @@ bool Title::Initialize()
 	this->monitorEpos = 1345.f;
 	this->yespos = Vec2();
 	this->nopos = Vec2();
-
-
 
 	this->textPos[0] = { this->startPos,Vec2(256,64) };
 	this->textPos[1] = { this->closePos,Vec2(256,64) };
@@ -91,9 +91,7 @@ bool Title::Initialize()
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
 
 	//this->forTransform.Create("TransparentBack.png");
-
 	this->canVolControl = false;     //BGMのフェードインに使用
-	
 	
 	this->effect03.Create("starteffect.png");
 	
@@ -155,6 +153,10 @@ void Title::UpDate()
 	{
 		this->Skip();
 	}
+
+	//テスト追加
+	//デバッグ用
+	std::cout << "現在の番号" << (int)cursorNum << std::endl;
 
 	//BGMのフェードイン
 	if (canVolControl)
@@ -317,32 +319,53 @@ void Title::UpDate()
 	case from7:	//決定待ち状態
 	{
 		//左へ
-		if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
+		if (nowmoveR == false)
 		{
-			this->nowmoveL = true;
-			if (startsize.x <= 0.0f)
+			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
-				startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-			}
-			if (closesize.x < 0.0f)
-			{
-				closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-			}
-			if (dataDeletesize.x < 0.0f)
-			{
-				dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-			}
-			if (creditsize.x < 0.0f)
-			{
-				creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				this->nowmoveL = true;
+				if (startsize.x <= 0.0f)
+				{
+					startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				}
+				if (closesize.x < 0.0f)
+				{
+					closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				}
+				if (dataDeletesize.x < 0.0f)
+				{
+					dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				}
+				if (creditsize.x < 0.0f)
+				{
+					creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+				}
 			}
 		}
 		//右へ
-		if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
+		if (nowmoveL == false)
 		{
-			this->nowmoveR = true;
+			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
+			{
+				this->nowmoveR = true;
+				if (startsize.x <= 0.0f)
+				{
+					startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				}
+				if (closesize.x <= 0.0f)
+				{
+					closePos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				}
+				if (dataDeletesize.x <= 0.0f)
+				{
+					dataDeletepos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				}
+				if (creditsize.x <= 0.0f)
+				{
+					creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				}
+			}
 		}
-		//CursorMove();
 		//テスト追加
 		switch (cursorNum)
 		{
@@ -355,8 +378,16 @@ void Title::UpDate()
 				start = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos);
+				creditpos = TextMovein(creditpos,creditsize);
 				creditsize = TextSizein(creditpos, creditsize);
+			}
+			if (nowmoveR)
+			{
+				start = out;
+
+				close = in;
+				closePos = TextMovein(closePos,closesize);
+				closesize = TextSizein(closePos, closesize);
 			}
 		}
 			break;
@@ -369,10 +400,17 @@ void Title::UpDate()
 				credit = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize);
 				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
 			}
-			//TextMove();
+			if (nowmoveR)
+			{
+				credit = out;
+
+				start = in;
+				startPos = TextMovein(startPos,startsize);
+				startsize = TextSizein(startPos, startsize);
+			}
 		}
 			break;
 		case 2:            //選択肢がdelete
@@ -384,8 +422,16 @@ void Title::UpDate()
 				dataDelete = out;
 
 				close = in;
-				closePos = TextMovein(closePos);
+				closePos = TextMovein(closePos,closesize);
 				closesize = TextSizein(closePos, closesize);
+			}
+			if (nowmoveR)
+			{
+				dataDelete = out;
+
+				credit = in;
+				creditpos = TextMovein(creditpos,creditsize);
+				creditsize = TextSizein(creditpos, creditsize);
 			}
 		}
 			break;
@@ -398,8 +444,16 @@ void Title::UpDate()
 				close = out;
 
 				start = in;
-				startPos = TextMovein(startPos);
+				startPos = TextMovein(startPos,startsize);
 				startsize = TextSizein(startPos, startsize);
+			}
+			if (nowmoveR)
+			{
+				close = out;
+
+				dataDelete = in;
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize);
+				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize);
 			}
 		}
 			break;
@@ -443,7 +497,8 @@ void Title::UpDate()
 				//データ消去
 			case 2:
 			{
-				OGge->GameEnd();
+				//yes,noを選択するモードに切り替える
+				this->mode = from9;
 			}
 				break;
 				//終了
@@ -451,7 +506,6 @@ void Title::UpDate()
 				OGge->GameEnd();
 				break;
 			}
-
 
 			auto effect03 = Effect::Create(
 				Vec2(this->textPos[this->cursorNum].x + (this->textPos[this->cursorNum].w / 2 + 50), this->textPos[this->cursorNum].y + (this->textPos[this->cursorNum].h / 2)),
@@ -477,6 +531,35 @@ void Title::UpDate()
 		}
 	}
 	break;
+
+	case from9:            //datadeleteのyesかnoかを選択する
+		if (OGge->in->down(In::CL) || OGge->in->down(In::LL) || OGge->in->down(In::CR) || OGge->in->down(In::LR))
+		{
+			if (del == no)
+			{
+				del = yes;
+				break;
+			}
+			if (del == yes)
+			{
+				del = no;
+				break;
+			}
+		}
+		if (OGge->in->down(Input::in::B2))
+		{
+			if (del == no)
+			{
+				this->mode = from7;
+			}
+			if (del == yes)
+			{
+				//データ削除の処理
+				this->mode = from7;
+			}
+		}
+		break;
+
 	//case from8: // Demo画面に移動するとき
 	//{
 	//	trans_a += 0.01f;
@@ -561,25 +644,25 @@ void Title::Render2D()
 		{
 			Box2D draw(startPos.x, startPos.y + 80.f, startsize.x, startsize.y);
 			draw.OffsetSize();
-			Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
+			if (start == non)
+			{
+				Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
 			//一番初めは真ん中にstartを表示
 			if (start == in)
 			{
-				if (intextsrc.w != 0.f)
-				{
-					src = intextsrc;
-				}
+				Box2D src = intextsrc;
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
-			else
+			if(start == out)
 			{
-				if (outtextsrc.w != 0.f)
-				{
-					src = outtextsrc;
-				}
+				Box2D src = outtextsrc;
+				src.OffsetSize();
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
-
-			src.OffsetSize();
-			rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 		}
 		//credit
 		{
@@ -766,17 +849,25 @@ bool Title::PressB()
 //テスト追加
 Vec2 Title::TextMoveout(Vec2 pos)
 {
+
 	if (this->nowmoveL)
 	{
 		if (pos.x >= this->monitorSpos + 120.f)
 		{
-			pos.x -= 15.f;
+			pos.x -= 16.f;
+		}
+	}
+	if (this->nowmoveR)
+	{
+		if (pos.x < monitorEpos-120.f)
+		{
+			pos.x += 19.f;           //調整中
 		}
 	}
 	return pos;
 }
 
-Vec2 Title::TextMovein(Vec2 pos)
+Vec2 Title::TextMovein(Vec2 pos,Vec2 size)
 {
 	if (this->nowmoveL)
 	{
@@ -802,11 +893,21 @@ Vec2 Title::TextMovein(Vec2 pos)
 	{
 		if (pos.x <= (monitorEpos - monitorSpos) / 2.f)
 		{
-			pos.x += 15;
+			if (size.x >= 320.f)
+			{
+				pos.x += 15.f;                //調整中
+			}
 		}
-		if (pos.x > (monitorEpos - monitorSpos) / 2.f)
+		if (pos.x >= (monitorEpos - monitorSpos) / 2.f)
 		{
-			cursorNum--;
+			if (cursorNum > 0)
+			{
+				cursorNum--;
+			}
+			else
+			{
+				cursorNum = 3;
+			}
 			nowmoveR = false;
 		}
 	}
@@ -821,7 +922,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
 		{
 			if (size.x >= 0.0f)
 			{
-				size.x -= 15;
+				size.x -= 16;
 			}
 		}
 		if (size.x == 0.0f)
@@ -832,6 +933,18 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size)
 	}
 	if (this->nowmoveR)
 	{
+		if (pos.x+size.x>this->monitorEpos-115.f)
+		{
+			if (size.x >= 0.0f)
+			{
+				size.x -= 19;         //調整中
+			}
+		}
+		if (size.x == 0.0f)
+		{
+			pos.x = (monitorEpos + size.x);
+		}
+		this->outtextsrc = Box2D(0.f, 0.f, size.x, 64.f);
 	}
 	return size;
 }
@@ -842,10 +955,18 @@ Vec2 Title::TextSizein(Vec2 pos, Vec2 size)
 	{
 		if (size.x <= 320.f)
 		{
-			size.x +=15;
+			size.x +=15.f;
 		}
+		intextsrc = Box2D(0.f, 0.f, size.x, 64.f);
 	}
-	intextsrc=Box2D(0.f, 0.f, size.x, 64.f);
+	if (this->nowmoveR)
+	{
+		if (size.x <= 320)
+		{
+			size.x += 15.f;        //調整中
+		}
+		intextsrc = Box2D((64.f*5.f - size.x), 0.f, size.x, 64.f);
+	}
 	return size;
 }
 
