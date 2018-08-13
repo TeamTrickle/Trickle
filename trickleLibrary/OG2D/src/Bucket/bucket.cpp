@@ -85,15 +85,15 @@ void Bucket::UpDate() {
 		this->WaterOutTime++;
 		if (this->WaterOutTime > 10)
 		{
-			
+
 			//水をこぼす音の再生
 			soundD.play();
 
-			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) -32.f, this->position.y - 20.f));
+			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) - 32.f, this->position.y - 20.f));
 			water->SetSituation(Water::Situation::Normal);
 			water->SetScale(Vec2(64, 64));
 			water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
-		
+
 			this->capacity = 0.f;
 			//70カウント中は次の水を引き受けない
 			this->invi = 70;
@@ -121,6 +121,22 @@ void Bucket::UpDate() {
 	if (!hold)
 	{
 		CheckMove(gravity);
+	}
+	//バケツの重さの変化について
+	//一滴の重さ
+	if (capacity > 0.f && capacity < 1.0f)
+	{
+		this->mass = 1.5f;
+	}
+	//二滴の重さ
+	if (capacity >= 1.0f)
+	{
+		this->mass = 2.0f;
+	}
+	//空の重さ
+	if (capacity == 0.0f)
+	{
+		this->mass = 1.0f;
 	}
 }
 
