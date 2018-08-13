@@ -8,6 +8,7 @@
 
 #include "UI/GoalDirectionUI.h"
 Map::Map()
+	:_FilePath("./data/map/")
 {
 	this->chip.resize(45);
 	this->chipimgname = "mapchip2.png";
@@ -194,7 +195,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 	return true;
 }
 
-void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
+void Map::ObjectCreateCheck(const std::string& text, int x_index, int y_index)
 {
 	if (text == "p")
 	{
@@ -351,16 +352,13 @@ bool Map::HitCheck(GameObject &p, const std::string name)
 	return false;
 }
 
-Map::SP Map::Create(std::string& path, Format format, bool flag_)
+Map::SP Map::Create(std::string& path, Format format)
 {
 	auto to = Map::SP(new Map());
 	if (to)
 	{
 		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
+		OGge->SetTaskObject(to);
 		if (!to->LoadMap(path, format))
 		{
 			to->Kill();

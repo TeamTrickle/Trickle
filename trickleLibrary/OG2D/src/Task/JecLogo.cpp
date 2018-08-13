@@ -56,7 +56,7 @@ void LogoTask::UpDate()
 			auto load = Load::Create();
 			if (load)
 			{
-				load->AddObject(this->GetTaskName());
+				load->AddDeleteObjectName(this->GetTaskName());
 				load->ALLTaskUpDateStop();
 			}
 			break;

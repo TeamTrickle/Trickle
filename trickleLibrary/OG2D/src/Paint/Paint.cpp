@@ -26,16 +26,13 @@ void Paint::Render2D()
 		this->image->Draw(this->draw, this->src);
 	}
 }
-Paint::SP Paint::Create(const Vec2 & pos, const Vec2 & size, const PaintColor & color_, bool flag)
+Paint::SP Paint::Create(const Vec2 & pos, const Vec2 & size, const PaintColor & color_)
 {
 	Paint::SP to = Paint::SP(new Paint(pos, size, color_));
 	if (to)
 	{
 		to->me = to;
-		if (flag)
-		{
-			OGge->SetTaskObject(to);
-		}
+		OGge->SetTaskObject(to);
 		return to;
 	}
 	return nullptr;

@@ -177,7 +177,7 @@ void Pause::PauseUpDate()
 			auto load = Load::Create();
 			if (load)
 			{
-				load->AddObject(OGge->GetTask<Game>("game")->GetTaskName());
+				load->AddDeleteObjectName(OGge->GetTask<Game>("game")->GetTaskName());
 				load->ALLTaskUpDateStop();
 			}
 		}

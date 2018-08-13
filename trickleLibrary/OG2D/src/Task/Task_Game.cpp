@@ -477,7 +477,7 @@ bool Game::Initialize()
 	auto load = OGge->GetTask<Load>("load");
 	if (load)
 	{
-		load->Set(Load::Fead::Out);
+		load->SetFead(Load::Fead::Out);
 	}
 	return true;
 }

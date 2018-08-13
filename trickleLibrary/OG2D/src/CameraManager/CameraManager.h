@@ -86,7 +86,7 @@ public:
 	void CameraMove();
 	/**
 	*@brief	:ƒJƒƒ‰‚ğˆÚ“®‚³‚¹‚Ä‚¢‚é‚©‚Ç‚¤‚©
-	*@return:“®‚¢‚Ä‚¢‚éÅ’†‚Å‚ ‚ê‚Îtrue
+	*@return:bool “®‚¢‚Ä‚¢‚éÅ’†‚Å‚ ‚ê‚Îtrue
 	*/
 	bool IsPlay();
 	/**

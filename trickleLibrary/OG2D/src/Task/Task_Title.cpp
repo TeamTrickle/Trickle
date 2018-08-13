@@ -145,7 +145,7 @@ bool Title::Initialize()
 	auto load = OGge->GetTask<Load>("load");
 	if (load)
 	{
-		load->Set(Load::Fead::Out);
+		load->SetFead(Load::Fead::Out);
 		load->ALLTaskUpDateStop();
 	}
 	return true;
@@ -602,7 +602,7 @@ void Title::UpDate()
 		auto load = Load::Create();
 		if (load)
 		{
-			load->AddObject(this->GetTaskName());
+			load->AddDeleteObjectName(this->GetTaskName());
 		}
 	}
 	break;
