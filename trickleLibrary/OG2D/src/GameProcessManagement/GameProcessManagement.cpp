@@ -108,7 +108,10 @@ void GameManager::UpDate()
 			if (game)
 			{
 				auto load = Load::Create();
-				load->AddObject(game->GetTaskName());
+				if (load)
+				{
+					load->AddObject(game->GetTaskName());
+				}
 				//Œ»İ‚Ì‹L˜^‚ğ•Û‘¶
 				this->OutData();
 				//Œ»İ‚ÌÅ‘å‹L˜^‚Æ‚Ì”äŠr

@@ -27,6 +27,7 @@ public:
 	void PauseUpDate() override;
 	void UpDate() override;
 	void Set(const Fead&);
+	void ALLTaskUpDateStop(const bool = true);
 	Fead Get() const;
 	void AddObject(const std::string&);
 };

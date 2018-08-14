@@ -54,7 +54,11 @@ void LogoTask::UpDate()
 			break;
 		case Mode::end:
 			auto load = Load::Create();
-			load->AddObject(this->GetTaskName());
+			if (load)
+			{
+				load->AddObject(this->GetTaskName());
+				load->ALLTaskUpDateStop();
+			}
 			break;
 	}
 }

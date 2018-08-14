@@ -75,6 +75,11 @@ void Goal::UpDate()
 	case Mode::Non:
 		if (this->WaterHit() || this->testClear)
 		{
+			auto game = OGge->GetTask<Game>("game");
+			if (game)
+			{
+				game->ce.MoveEnd();
+			}
 			//カメラ移動終了地点を設定
 			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5);
 			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5);
@@ -118,6 +123,59 @@ void Goal::UpDate()
 		{
 			//元のカメラ位置に戻す
 			//ここでプレイヤーの座標からカメラの位置を計算して求めてSetにいれれば問題解決できる気がする。
+			auto player = OGge->GetTask<Player>("Player");
+			auto map = OGge->GetTask<Map>("map");
+			if (player && map)
+			{
+				OGge->camera->MovePos(player->GetEst());
+				//カメラ処理
+				Vec2 NowCameraPos = *this->precmPos;
+				Vec2 NowCameraSize = *this->precmSize;
+
+				//プレイヤーを画面中央
+				float PlayerCenter_x = NowCameraSize.x / 2.0f;
+				float PlayerCenter_y = NowCameraSize.y / 2.0f;
+				//カメラ座標を求める
+				float camera_x = float(player->GetPos().x) - PlayerCenter_x;
+				float camera_y = float(player->GetPos().y) - PlayerCenter_y;
+				//カメラの座標を更新
+				NowCameraPos.x = camera_x;
+				NowCameraPos.y = camera_y;
+
+				//左右のスクロール範囲の設定(サイズの10分の1)
+				float Boundary = NowCameraSize.x / 10.0f;
+				//現在スクロール値とプレイヤーの座標の差を修正
+				Vec2 NowPlayerPos = { player->GetPos().x - NowCameraPos.x,player->GetPos().y - NowCameraPos.y };
+				//x座標
+				if (NowPlayerPos.x < Boundary) {
+					NowCameraPos.x = NowPlayerPos.x - Boundary;
+				}
+				if (NowPlayerPos.x > NowCameraSize.x - Boundary) {
+					NowCameraPos.x = (NowPlayerPos.x + NowCameraPos.x) - NowPlayerPos.x + Boundary;
+				}
+				//y座標
+				if (NowPlayerPos.y < Boundary) {
+					NowCameraPos.y = NowPlayerPos.y - Boundary;
+				}
+				if (NowPlayerPos.y > NowCameraSize.y - Boundary) {
+					NowCameraPos.y = (NowCameraSize.y + NowCameraPos.y) - NowPlayerPos.y + Boundary;
+				}
+				//画面外処理
+				if (NowCameraPos.x < 0) {
+					NowCameraPos.x = 0;
+				}
+				if (NowCameraPos.x + NowCameraSize.x > map->mapSize.x * map->DrawSize.x) {
+					NowCameraPos.x = (map->mapSize.x * map->DrawSize.x) - NowCameraSize.x;
+				}
+				if (NowCameraPos.y < 0) {
+					NowCameraPos.y = 0;
+				}
+				if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
+					NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
+				}
+				//OGge->camera->SetPos(NowCameraPos);
+				*this->precmPos = NowCameraPos;
+			}
 			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 6);
 			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 6);
 			delete this->precmPos;
@@ -246,6 +304,7 @@ void Goal::Render2D()
 			lightTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
 		}
 	}
+	this->foot.LineDraw();
 }
 
 bool Goal::GetClear() const
@@ -260,7 +319,7 @@ void Goal::SetTexture(Texture* tex)
 
 bool Goal::WaterHit()
 {
-	this->foot.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y - 1.0f), Vec2(this->Scale.x, 1.0f), 0.0f);
+	this->foot.CreateObject(Cube, Vec2(this->position.x, this->position.y + this->Scale.y - 5.0f), Vec2(this->Scale.x, 5.0f), 0.0f);
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = waters->begin(); id != waters->end(); ++id)
 	{

@@ -25,8 +25,6 @@ StageSelect::~StageSelect()
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto load = Load::Create();
-		load->Draw();
 		if (state == State::ToTitle)
 		{
 			auto nexttask = Title::Create();
@@ -108,13 +106,13 @@ bool StageSelect::Initialize()
 	if (load)
 	{
 		load->Set(Load::Fead::Out);
+		load->ALLTaskUpDateStop();
 	}
 	return true;
 }
 
 void StageSelect::UpDate()
 {
-	std::cout << this->nowPos << ":" << this->timeCnt << std::endl;
 	if (canVolControl)
 	{
 		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
@@ -153,7 +151,10 @@ void StageSelect::UpDate()
 	case Mode::End:		//ŽŸ‚Ö
 	{
 		auto load = Load::Create();
-		load->AddObject(this->GetTaskName());
+		if (load)
+		{
+			load->AddObject(this->GetTaskName());
+		}
 	}
 	break;
 	default:
@@ -449,27 +450,27 @@ void StageSelect::From3()
 				case 4:
 				case 5:
 					this->state = State::Tutorial3;
-					*MapNum = 6;
-					//*MapNum = 9;
+					//*MapNum = 6;
+					*MapNum = 9;
 					break;
 				case 6:
 				case 7:
 					//’òŽq‚ðã‚é
 					this->state = State::Stage1;
-					*MapNum = 1;
-					//*MapNum = 13;
+					//*MapNum = 1;
+					*MapNum = 13;
 					break;
 				case 8:
 				case 9:
 					this->state = State::Stage2;
-					*MapNum = 5;
-					//*MapNum = 14;
+					//*MapNum = 5;
+					*MapNum = 14;
 					break;
 				case 10:
 				case 11:
 					this->state = State::Stage3;
-					*MapNum = 6;
-					//*MapNum = 15;
+					//*MapNum = 6;
+					*MapNum = 15;
 					break;
 				case 12:
 					this->state = State::ToTitle;

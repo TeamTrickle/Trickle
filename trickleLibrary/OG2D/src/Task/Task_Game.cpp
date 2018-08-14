@@ -382,9 +382,9 @@ bool Game::Initialize()
 		sound.play();
 
 		//扇風機
-		Fan::Create(Vec2(64 * 16, 64 * 4), 7, Fan::Dir::RIGHT, 7, true);
+		Fan::Create(Vec2(64 * 16, 64 * 4), 6, Fan::Dir::RIGHT, 7, true);
 		//加熱器
-		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64), Kanetuki::Angle::UP, true);
+		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
 		//製氷機
 		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 4), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT, false);
 		//switch
@@ -395,9 +395,10 @@ bool Game::Initialize()
 		door1->SetTexture(&doorTex);
 		door2->SetTexture(&doorTex);
 		//重さスイッチ
-		auto ws1 = WeightSwitch::Create(Vec2(64, 64 * 9 + 34), Vec2(64, 30), 1, std::vector<std::shared_ptr<GameObject>>{door2});
+		auto ws1 = WeightSwitch::Create(Vec2(64, 64 * 9 + 30), Vec2(64, 30), 1, std::vector<std::shared_ptr<GameObject>>{door2});
 		ws1->SetTexture(&WswitchTex);
-		//WeightSwitch::Create(Vec2())
+		auto ws2 = WeightSwitch::Create(Vec2(64*22, 64*12+30), Vec2(64, 30), 2, std::vector<std::shared_ptr<GameObject>>{door1});
+		ws2->SetTexture(&WswitchTex);
 		break;
 	}
 	case 15:	//ステージ3
@@ -492,7 +493,7 @@ void Game::UpDate()
 	}
 	//カメラ処理
 	Camera_move();
-
+	ce.CameraMove();
 	// Pause処理
 	auto player = OGge->GetTask<Player>("Player");
 	if (player)
@@ -691,7 +692,7 @@ void Game::Camera_move()
 	{
 		if (!player->GetInputAuto())
 		{
-			OGge->camera->MovePos(player->GetEst());
+			//OGge->camera->MovePos(player->GetEst());
 
 			//カメラ処理
 			Vec2 NowCameraPos = OGge->camera->GetPos();
@@ -738,9 +739,14 @@ void Game::Camera_move()
 			if (NowCameraPos.y + NowCameraSize.y > map->mapSize.y * map->DrawSize.y) {
 				NowCameraPos.y = (map->mapSize.y * map->DrawSize.y) - NowCameraSize.y;
 			}
-			OGge->camera->SetPos(NowCameraPos);
+			//OGge->camera->SetPos(NowCameraPos);
+			this->CameraSetPos(NowCameraPos);
 		}
 	}
+}
+void Game::CameraSetPos(const Vec2& pos)
+{
+	ce.Set(pos);
 }
 
 Game::SP Game::Create(bool flag_)

@@ -7,7 +7,7 @@
 #include "OGSystem\OGsystem.h"
 #include "UI\UI.h"
 #include "VolumeControl/volumeControl.h"
-
+#include "CameraManager\CameraManager.h"
 class UI;
 
 class Game : public TaskObject
@@ -30,6 +30,8 @@ public:
 	Sound sound;
 	VolumeControl volControl;
 	bool canvolControl;
+
+	CameraEasing ce;
 private:
 	//---------------------------------------------------------------------
 	//メンバー関数
@@ -62,4 +64,6 @@ private:
 
 	//UI----------------------------------------
 	std::shared_ptr<UImanager> UImng_;
+	//カメラの即移動防止のための拡張機能
+	void CameraSetPos(const Vec2&);
 };

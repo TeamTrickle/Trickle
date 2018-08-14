@@ -19,3 +19,19 @@ public:
 	void move();
 	void DeleteObject();
 };
+
+//ƒJƒƒ‰‚Ì‘¦ˆÚ“®–h~‚Ì‚½‚ß‚ÌŠg’£‹@”\
+class CameraEasing
+{
+	Easing easing_x;
+	Easing easing_y;
+	Vec2* start;
+	Vec2* end;
+public:
+	CameraEasing();
+	~CameraEasing();
+	void Set(const Vec2& end);
+	void CameraMove();
+	bool IsPlay();
+	void MoveEnd();	//ˆÚ“®ˆ—‚ğ‹­§“I‚É~‚ß‚é
+};
