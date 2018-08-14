@@ -78,7 +78,7 @@ void Credit::UpDate()
 		++timeCnt;
 		if (timeCnt >= WAITTIME) {
 			npc->SetX(npc->position.x, 1700, 30.f);
-			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 0.f));
+			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1500.f, 0.f));
 			Next();
 		}
 	}
