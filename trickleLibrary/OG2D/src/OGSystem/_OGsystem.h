@@ -19,6 +19,8 @@
 #pragma comment(lib, "OPENGL32.lib")
 #pragma comment(lib, "GLU32.lib")
 #pragma comment(lib, "Win64/OpenAL32.lib")
+#pragma comment(lib, "opencv_core342.lib")
+#pragma comment(lib, "opencv_videoio342.lib")
 //#pragma comment(lib, "freetype.lib")
 
 #if defined(_MSC_VER)
@@ -26,19 +28,9 @@
 #if defined (_DEBUG)
 #pragma comment(lib, "glew32sd.lib")
 #pragma comment(lib, "glfw3d.lib")
-#pragma comment(lib, "opencv_core342d.lib")
-#pragma comment(lib, "opencv_highgui342d.lib")
-#pragma comment(lib, "opencv_imgcodecs342d.lib")
-#pragma comment(lib, "opencv_imgproc342d.lib")
-#pragma comment(lib, "opencv_videoio342d.lib")
 #else
 #pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "glfw3.lib")
-#pragma comment(lib, "opencv_core342.lib")
-#pragma comment(lib, "opencv_highgui342.lib")
-#pragma comment(lib, "opencv_imgcodecs342.lib")
-#pragma comment(lib, "opencv_imgproc342.lib")
-#pragma comment(lib, "opencv_videoio342.lib")
 #endif
 #endif
 
