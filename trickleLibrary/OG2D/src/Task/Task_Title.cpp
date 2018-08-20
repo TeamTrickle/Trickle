@@ -93,7 +93,7 @@ bool Title::Initialize()
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
 	this->fontTex.Create("Font_new.png");           //文字フォントの画像追加
 
-	//this->forTransform.Create("TransparentBack.png");
+	this->forTransform.Create("TransparentBack.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
 	this->effect03.Create("starteffect.png");
@@ -296,7 +296,6 @@ void Title::UpDate()
 		this->cursor_a += 0.01f;
 		if (this->cursor_a >= 1.0f)
 		{
-			demoTimer.Start();
 			this->mode = from6;
 		}
 	}
@@ -316,6 +315,7 @@ void Title::UpDate()
 
 	case from7:	//決定待ち状態
 	{
+		demoTimer.Start();
 		//左へ
 		if (nowmoveR == false)
 		{
@@ -578,10 +578,10 @@ void Title::UpDate()
 	case from10: // Demo画面に移動するとき
 	{
 		trans_a += 0.01f;
-		if (trans_a >= 1.f) {
+		if (trans_a > 1.f) {
 			trans_a = 1.f;
 			auto demo = Demo::Create("./data/test.mp4");
-			this->mode = Mode::from9;
+			this->mode = Mode::from11;
 			this->demoTimer.Stop();
 			this->SetPauseEveryChild(true);
 		}
@@ -593,7 +593,7 @@ void Title::UpDate()
 		if (trans_a <= 0.0f) {
 			trans_a = 0.f;
 			this->demoTimer.Start();
-			this->mode = Mode::from6;
+			this->mode = Mode::from7;
 		}
 	}
 	break;
@@ -822,7 +822,7 @@ bool Title::Finalize()
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
 	this->effect03.Finalize();
-	//this->forTransform.Finalize();
+	this->forTransform.Finalize();
 	this->canVolControl = false;
 	this->monitorTex.Finalize();
 	this->fontTex.Finalize();
