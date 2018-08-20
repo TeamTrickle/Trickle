@@ -93,7 +93,7 @@ bool Title::Initialize()
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
 	this->fontTex.Create("Font_new.png");           //文字フォントの画像追加
 
-	this->forTransform.Create("TransparentBack.png");
+	this->forTransform.Create("TransparentBackTitle.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
 	this->effect03.Create("starteffect.png");
