@@ -609,9 +609,15 @@ void Title::UpDate()
 	break;
 	case from11: // Demo‰æ–Ê‚©‚ç–ß‚Á‚Ä‚«‚½‚Æ‚«
 	{
+		auto Npc = OGge->GetTasks<Chara>("Chara");
+		for (auto id = Npc->begin(); id != Npc->end(); ++id)
+		{
+			(*id)->MoveReset();
+		}
 		trans_a -= 0.01f;
 		if (trans_a <= 0.0f) {
 			trans_a = 0.f;
+			
 			this->demoTimer.Start();
 			this->mode = Mode::from7;
 		}
