@@ -36,6 +36,8 @@ class Title :public TaskObject
 		from7,
 		from8,
 		from9,
+		from10,
+		from11,
 		End,
 	};
 	Texture texCursor;

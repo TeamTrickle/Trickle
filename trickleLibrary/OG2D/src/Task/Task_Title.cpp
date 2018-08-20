@@ -1,4 +1,5 @@
 #include "Task_Title.h"
+#include "Task\Task_Demo.h"
 #include "Task\Task_Option.h"
 #include "Task\StageSelect.h"
 #include "Water\water.h"
@@ -295,7 +296,7 @@ void Title::UpDate()
 		this->cursor_a += 0.01f;
 		if (this->cursor_a >= 1.0f)
 		{
-			//demoTimer.Start();
+			demoTimer.Start();
 			this->mode = from6;
 		}
 	}
@@ -465,10 +466,10 @@ void Title::UpDate()
 			break;
 			//------------------------------------------------------------------------------------
 		}
-		/*if (demoTimer.GetTime() >= DEMO_LIMIT) {
-		this->mode = Mode::from8;
+		if (demoTimer.GetTime() >= DEMO_LIMIT) {
+		this->mode = Mode::from10;
 		break;
-		}*/
+		}
 
 		//Œˆ’è‚µ‚ÄŸ‚Ö
 		if (OGge->in->down(Input::in::B2))
@@ -574,27 +575,27 @@ void Title::UpDate()
 		}
 		break;
 
-	//case from8: // Demo‰æ–Ê‚ÉˆÚ“®‚·‚é‚Æ‚«
-	//{
-	//	trans_a += 0.01f;
-	//	if (trans_a >= 1.f) {
-	//		trans_a = 1.f;
-	//		auto demo = Demo::Create("./data/test.mp4");
-	//		this->mode = Mode::from9;
-	//		this->demoTimer.Stop();
-	//		this->SetPauseEveryChild(true);
-	//	}
-	//}
-	//break;
-	//case from9: // Demo‰æ–Ê‚©‚ç–ß‚Á‚Ä‚«‚½‚Æ‚«
-	//{
-	//	trans_a -= 0.01f;
-	//	if (trans_a <= 0.0f) {
-	//		trans_a = 0.f;
-	//		this->demoTimer.Start();
-	//		this->mode = Mode::from6;
-	//	}
-	//}
+	case from10: // Demo‰æ–Ê‚ÉˆÚ“®‚·‚é‚Æ‚«
+	{
+		trans_a += 0.01f;
+		if (trans_a >= 1.f) {
+			trans_a = 1.f;
+			auto demo = Demo::Create("./data/test.mp4");
+			this->mode = Mode::from9;
+			this->demoTimer.Stop();
+			this->SetPauseEveryChild(true);
+		}
+	}
+	break;
+	case from11: // Demo‰æ–Ê‚©‚ç–ß‚Á‚Ä‚«‚½‚Æ‚«
+	{
+		trans_a -= 0.01f;
+		if (trans_a <= 0.0f) {
+			trans_a = 0.f;
+			this->demoTimer.Start();
+			this->mode = Mode::from6;
+		}
+	}
 	break;
 	case End:	//Select‚Ì“Ç‚İ‚İ‚Æ©g‚Ì”jŠü
 	{
