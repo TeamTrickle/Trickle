@@ -10,6 +10,15 @@
 #include "Effect\Effect.h"
 #include "GameProcessManagement\GameProcessManagement.h"
 
+
+
+const std::string Title::DEMO_VIDEOS[]{
+	"./data/test.mp4",
+	"./data/test1.mp4"
+};
+
+
+
 Title::Title()
 {
 	this->mode = Non;
@@ -302,8 +311,13 @@ void Title::UpDate()
 	break;
 	case from6:	//BƒL[“ü—Í‘Ò‚¿ó‘Ô
 	{
+		demoTimer.Start();
 		if (PressB() == false)
 		{
+			if (demoTimer.GetTime() >= DEMO_LIMIT) {
+				this->mode = Mode::from10;
+				break;
+			}
 			break;
 		}
 		else
@@ -315,7 +329,9 @@ void Title::UpDate()
 
 	case from7:	//Œˆ’è‘Ò‚¿ó‘Ô
 	{
-		demoTimer.Start();
+		if (!demoTimer.isplay()) {
+			demoTimer.Start();
+		}
 		//¶‚Ö
 		if (nowmoveR == false)
 		{
@@ -467,8 +483,8 @@ void Title::UpDate()
 			//------------------------------------------------------------------------------------
 		}
 		if (demoTimer.GetTime() >= DEMO_LIMIT) {
-		this->mode = Mode::from10;
-		break;
+			this->mode = Mode::from10;
+			break;
 		}
 
 		//Œˆ’è‚µ‚ÄŽŸ‚Ö
@@ -580,7 +596,11 @@ void Title::UpDate()
 		trans_a += 0.01f;
 		if (trans_a > 1.f) {
 			trans_a = 1.f;
-			auto demo = Demo::Create("./data/test.mp4");
+			if (curPlayVideo >= _countof(DEMO_VIDEOS)) {
+				curPlayVideo = 0;
+			}
+			auto demo = Demo::Create(DEMO_VIDEOS[curPlayVideo]);
+			this->curPlayVideo += 1;
 			this->mode = Mode::from11;
 			this->demoTimer.Stop();
 			this->SetPauseEveryChild(true);

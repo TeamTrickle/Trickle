@@ -40,6 +40,7 @@ class Title :public TaskObject
 		from11,
 		End,
 	};
+
 	Texture texCursor;
 
 	Texture texEffect;
@@ -114,6 +115,8 @@ class Title :public TaskObject
 	Mode preMode;
 
 	Time demoTimer;
+	int curPlayVideo = 0;
+	const static std::string DEMO_VIDEOS[];
 	const float DEMO_LIMIT = 10.f;
 	float trans_a = 0.f;
 
