@@ -18,14 +18,12 @@ bool GoalDirection::Initialize(std::shared_ptr<GameObject> target_)
 	this->CreateObject(Cube, OGge->camera->GetPos(), Vec2(96, 96), 0.f);
 	this->target = target_;
 
-	this->SetDrawOrder(0.9f);
+	this->SetDrawOrder(1.f);
 
 	return true;
 }
 bool GoalDirection::Finalize()
 {
-	this->image->Finalize();
-	this->flower->Finalize();
 	return true;
 }
 void GoalDirection::SetPos(Vec2& pos)
@@ -104,7 +102,7 @@ void GoalDirection::TargetDirecition()
 
 	if (player != nullptr && this->target != nullptr)
 	{
-		float rad = std::atan2f(player->position.x - (this->target->position.x + this->target->Scale.x / 2), player->position.y - (this->target->position.y + this->target->Scale.y));
+		float rad = std::atan2f(player->position.x + player->Scale.x / 2 - (this->target->position.x + this->target->Scale.x / 2), player->position.y + player->Scale.y / 2 - (this->target->position.y + this->target->Scale.y));
 		this->angle = this->ToDeg(-rad);
 	}
 }
@@ -128,7 +126,7 @@ void GoalDirection::CameraPosUpDate()
 	};
 
 	//•`‰æ”»’è‹éŒ`‚ð¶¬
-	Box2D drawchecker = { OGge->camera->GetPos().x + target->Scale.x / 2 , OGge->camera->GetPos().y + target->Scale.y / 2 , OGge->camera->GetSize().x - target->Scale.x , OGge->camera->GetSize().y - target->Scale.y };
+	Box2D drawchecker = { OGge->camera->GetPos().x + target->Scale.x / 2 + target->Scale.x * 0.15f, OGge->camera->GetPos().y + target->Scale.y / 2 + target->Scale.y * 0.15f , OGge->camera->GetSize().x - target->Scale.x - target->Scale.x * 0.3f, OGge->camera->GetSize().y - target->Scale.y - target->Scale.y * 0.3f};
 	drawchecker.OffsetSize();
 	OG::LineHitDraw(&drawchecker);
 
@@ -139,7 +137,7 @@ void GoalDirection::CameraPosUpDate()
 
 	//ü•ª‚ðˆø‚­Šî€
 	float nowx = target->position.x + target->Scale.x / 2;
-	float nowy = target->position.y + target->Scale.y;
+	float nowy = target->position.y + target->Scale.y / 2;
 
 	Vec2 pos;
 	for (int i = 0; i < r; i++) 
@@ -147,19 +145,20 @@ void GoalDirection::CameraPosUpDate()
 		//™X‚ÉPlayer‚Ì•ûŒü‚Öü•ª‚ðˆø‚¢‚Ä‚¢‚­
 		nowx += inside.x / r;
 		nowy += inside.y / r;
-		Box2D d = { nowx ,nowy, 4.0f, 4.0f };
+		Box2D d = { nowx ,nowy, 5.0f, 5.0f };
 		d.OffsetSize();
 		OG::LineHitDraw(&d);
-
-		//“–‚½‚è”»’è
-		if (d.x >= drawchecker.x && d.y >= drawchecker.y)
 		{
-			if (d.w <= drawchecker.w && d.h <= drawchecker.h)
+			//“–‚½‚è”»’è
+			if (d.x >= drawchecker.x && d.y >= drawchecker.y)
 			{
-				pos.x = nowx - this->Scale.x / 2;
-				pos.y = nowy - this->Scale.y / 2;
-				this->position = pos;
-				return;
+				if (d.w <= drawchecker.w && d.h <= drawchecker.h)
+				{
+					pos.x = nowx - this->Scale.x / 2;
+					pos.y = nowy - this->Scale.y / 2;
+					this->position = pos;
+					return;
+				}
 			}
 		}
 	}

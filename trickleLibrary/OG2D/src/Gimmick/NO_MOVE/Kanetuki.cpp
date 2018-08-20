@@ -9,7 +9,8 @@ using namespace std;
 Kanetuki::Kanetuki()
 	:
 	maxChangeTimeLiquid(7),
-	maxChangeTimeSolid(120)
+	maxChangeTimeSolid(60),
+	maxCnt(30)
 {
 	//サウンドファイル名	
 	startsoundname = "fire1.wav";
@@ -28,6 +29,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 
 	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
+	SetDrawOrder(0.5f);
 	this->active = active;
 
 	//サウンドに関する情報
@@ -42,49 +44,37 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 	this->animCnt = 0;
+	this->timeCnt = 0;
 	draw.clear();
 	//this->hotNum = 0;
 	this->angle = ang;
-	//本体の向きによって炎の向きと描画数を変更
-	switch (this->angle) {
-	case UP:
-		this->hotNum = (int)this->Scale.x / 64;
-		this->draw.resize(this->hotNum);
-		for (int i = 0; i < this->hotNum; ++i) {
-			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
-			draw[i].OffsetSize();
-		}
-		this->texRotaAng = 0.0f;
-		break;
-	case RIGHT:
-		this->hotNum = (int)this->Scale.y / 64;
-		this->draw.resize(this->hotNum);
-		for (int i = 0; i < this->hotNum; ++i) {
-			draw[i] = Box2D(position.x, position.y + (64 * i), Scale.x, 64.f);
-			draw[i].OffsetSize();
-		}
-		this->texRotaAng = 90.0f;
-		break;
-	case LEFT:
-		//現時点で存在しないので略
-		break;
-	case BOTTOM:
-		this->hotNum = (int)this->Scale.x / 64;
-		this->draw.resize(this->hotNum);
-		for (int i = 0; i < this->hotNum; ++i) {
-			draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
-			draw[i].OffsetSize();
-		}
-		this->texRotaAng = 180.0f;
-		break;
-	}
+	
 
 	return true;
 }
 void Kanetuki::UpDate() {
 	if (active) {
-		++animCnt;
 		toSteam();
+	}
+	++this->animCnt;
+	if (this->animCnt > 150)
+	{
+		this->animCnt = 0;
+	}
+
+	if (this->active)
+	{
+		if (this->timeCnt < this->maxCnt)
+		{
+			++this->timeCnt;
+		}
+	}
+	else
+	{
+		if (this->timeCnt > 0)
+		{
+			--this->timeCnt;
+		}
 	}
 	//サウンド関係
 	//炎の音声再生
@@ -126,7 +116,63 @@ void Kanetuki::UpDate() {
 }
 void Kanetuki::Render2D() {
 	
-	if (active) {
+	//if (active) 
+	{
+		//本体の向きによって炎の向きと描画数を変更
+		switch (this->angle) {
+		case UP:
+			this->hotNum = (int)this->Scale.x / 64;
+			this->draw.resize(this->hotNum);
+			for (int i = 0; i < this->hotNum; ++i) {
+				draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].y += (origin.y - draw[i].h);
+				draw[i].x += (origin.x - draw[i].w) / 2.f;
+				draw[i].OffsetSize();
+			}
+			this->texRotaAng = 0.0f;
+			break;
+		case RIGHT:
+			this->hotNum = (int)this->Scale.y / 64;
+			this->draw.resize(this->hotNum);
+			for (int i = 0; i < this->hotNum; ++i) {
+				draw[i] = Box2D(position.x, position.y + (64 * i), Scale.x, 64.f);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].OffsetSize();
+			}
+			this->texRotaAng = 90.0f;
+			break;
+		case LEFT:
+			this->hotNum = (int)this->Scale.y / 64;
+			this->draw.resize(this->hotNum);
+			for (int i = 0; i < this->hotNum; ++i) {
+				draw[i] = Box2D(position.x + 32.0f + (64 * i), position.y - 32.0f, 64.f, Scale.y*2.0f);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].y += (origin.y - draw[i].h) / 2.f;
+				draw[i].x += (origin.x - draw[i].w) * 1.5f;
+				draw[i].OffsetSize();
+			}
+			this->texRotaAng = -90.0f;
+			break;
+		case BOTTOM:
+			this->hotNum = (int)this->Scale.x / 64;
+			this->draw.resize(this->hotNum);
+			for (int i = 0; i < this->hotNum; ++i) {
+				draw[i] = Box2D(position.x + (64 * i), position.y, 64.f, Scale.y);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].OffsetSize();
+			}
+			this->texRotaAng = 180.0f;
+			break;
+		}
 		Box2D src = { 256 * (animCnt / 5 % 3), 0, 256, 256 };
 		src.OffsetSize();
 

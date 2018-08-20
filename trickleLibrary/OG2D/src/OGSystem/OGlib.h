@@ -1,3 +1,4 @@
+///各型class
 #pragma once
 #include <cmath>
 #define PI 3.1415926f
@@ -16,53 +17,52 @@ class Circle
 public:
 	float center_x, center_y, r;
 	Circle();
-	Circle(float, float, float);
-	Circle(int, int, int);
-	Circle(Circle&);
+	Circle(const float, const float, const float);
+	Circle(const int, const int, const int);
+	Circle(const Circle&);
 };
 class Vec3 {
 public:
 	float x, y, z;
 	Vec3();
-	Vec3(float, float, float);
-	Vec3(int, int, int);
+	Vec3(const float, const float, const float);
+	Vec3(const int, const int, const int);
 };
 class Vec2
 {
 public:
 	float x, y;
 	Vec2();
-	Vec2(float, float);
-	Vec2(int, int);
-	//Vec2(Vec2&);
+	Vec2(const float, const float);
+	Vec2(const int, const int);
 	void Normalize();
 	float GetLength();
 
-	Vec2 operator+(Vec2&);
-	Vec2 operator-(Vec2&);
-	Vec2 operator*(float);
-	void operator+=(Vec2&);
-	void operator*=(float);
-	void operator-=(Vec2&);
-	bool operator==(Vec2&);
+	Vec2 operator+(const Vec2&);
+	Vec2 operator-(const Vec2&);
+	Vec2 operator*(const float);
+	void operator+=(const Vec2&);
+	void operator*=(const float);
+	void operator-=(const Vec2&);
+	bool operator==(const Vec2&);
 };
 class Mat4 {
 public:
 	float mat4[4];
-	Mat4(float, float, float, float);
-	Mat4(int, int, int, int);
+	Mat4(const float, const float, const float, const float);
+	Mat4(const int, const int, const int, const int);
 };
 class Mat4x4 {
 public:
 	float mat4[16];
-	Mat4x4(float ex, float ey, float ez, float ew,
-		float sx, float sy, float sz, float sw,
-		float dx, float dy, float dz, float dw,
-		float rx, float ry, float rz, float rw);
-	Mat4x4(int ex, int ey, int ez, int ew,
-		int sx, int sy, int sz, int sw,
-		int dx, int dy, int dz, int dw,
-		int rx, int ry, int rz, int rw);
+	Mat4x4(const float ex, const float ey, const float ez, const float ew,
+		const float sx, const float sy, const float sz, const float sw,
+		const float dx, const float dy, const float dz, const float dw,
+		const float rx, const float ry, const float rz, const float rw);
+	Mat4x4(const int ex, const int ey, const int ez, const int ew,
+		const int sx, const int sy, const int sz, const int sw,
+		const int dx, const int dy, const int dz, const int dw,
+		const int rx, const int ry, const int rz, const int rw);
 };
 
 
@@ -70,31 +70,30 @@ class Box3D {
 public:
 	float x, y, z, w, h, d;
 	Box3D();
-	//座標とサイズ
-	Box3D(float ex, float ey, float ez, float ew, float eh, float ed);
+	Box3D(const float ex, const float ey, const float ez, const float ew, const float eh, const float ed);
 	Box3D(const Box3D &_e);
 private:
-	int IsOdd(int n, int a, int b);
-	int InOdd(int n, int a, int b);
-	int IfOdd(int n, int a, int b);
+	int IsOdd(const int n, const int a, const int b);
+	int InOdd(const int n, const int a, const int b);
+	int IfOdd(const int n, const int a, const int b);
 };
 class Box2D {
 public:
 	float x, y, w, h;
 	Box2D();
-	Box2D(float x_, float y_, float w_, float h_);
-	Box2D(int x_, int y_, int w_, int h_);
+	Box2D(const float x_, const float y_, const float w_, const float h_);
+	Box2D(const int x_, const int y_, const int w_, const int h_);
 	Box2D(const Box2D& b_);
 	Box2D(const Vec2& p, const Vec2& s);
-	void Offset(float x_, float y_);
-	void Offset(int x_, int y_);
+	void Offset(const float x_, const float y_);
+	void Offset(const int x_, const int y_);
 	void OffsetSize();
-	Box2D operator+(Box2D& b);
-	Box2D operator-(Box2D& b);
-	Box2D operator*(Box2D& b);
-	void operator+=(Box2D& b);
-	void operator-=(Box2D& b);
-	void operator*=(Box2D& b);
+	Box2D operator+(const Box2D& b);
+	Box2D operator-(const Box2D& b);
+	Box2D operator*(const Box2D& b);
+	void operator+=(const Box2D& b);
+	void operator-=(const Box2D& b);
+	void operator*=(const Box2D& b);
 };
 class Color
 {
@@ -104,27 +103,26 @@ public:
 	Color(const float r, const float g, const float b, const float a);
 	Color(const int r, const int g, const int b, const int a);
 	unsigned int Getcolor() const;
-	void operator+=(Color& b);
-	void operator*=(Color& b);
-	void operator-=(Color& b);
-	//void operator=(Color& b);
-	Color operator+(Color&);
-	Color operator-(Color&);
-	Color operator*(Color&);
+	void operator+=(const Color& b);
+	void operator*=(const Color& b);
+	void operator-=(const Color& b);
+	Color operator+(const Color&);
+	Color operator-(const Color&);
+	Color operator*(const Color&);
 };
 
 namespace OG
 {
 	float ToRadian(const  float  degree_);
 	void Cross(float*, float*, float*);
-	float inner(Vec2&, Vec2&);
-	float inner(float, float, float, float);
-	float inner(int, int, int, int);
-	float cross(Vec2&, Vec2&);
-	float cross(float, float, float, float);
-	float cross(int, int, int, int);
-	float doubleinner(Vec2&);
-	float doubleinner(float, float);
-	float doubleinner(int, int);
-	float get_distance(float, float, float, float, float, float);
+	float inner(const Vec2&, const Vec2&);
+	float inner(const float, const float, const float, const float);
+	float inner(const int, const int, const int, const int);
+	float cross(const Vec2&, const Vec2&);
+	float cross(const float, const float, const float, const float);
+	float cross(const int, const int, const int, const int);
+	float doubleinner(const Vec2&);
+	float doubleinner(const float, const float);
+	float doubleinner(const int, const int);
+	float get_distance(const float, const float, const float, const float, const float, const float);
 }

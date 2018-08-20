@@ -61,6 +61,7 @@ class StageSelect : public TaskObject
 	unsigned __int64 timeCnt;
 	int nowPos;
 	unsigned __int8 doorNumber;			//İ’u‚·‚éƒhƒA‚Ì–‡”
+	bool isPause;
 	void ModeCheck();
 	bool CheckTime(int);
 	void GateClose();

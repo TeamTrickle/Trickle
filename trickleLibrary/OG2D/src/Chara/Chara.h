@@ -24,6 +24,7 @@ public:
 		Happy_F,
 	};
 	int happyCnt;			//喜ぶアニメーションカウント
+	bool creditFlag;		//クレジットの時はAutoMove()を使わないようにする変数
 private:
 	Texture Image;		//使用画像
 	Vec2 move;			//移動値
@@ -68,6 +69,7 @@ public:
 	void Happy(int count);			//喜ぶモーションを行う
 	bool AutoJump();
 	void AutoMove();		//オート移動
+	void AutoMoveX();		//オート移動
 	void ManualMove(Vec2&);	//手動移動
 	void IsCollisionCheck();	//当たり判定カウントを増やす
 	bool CollisionNumCheck(__int8);	//当たり判定カウントが引数と同じかを返す
@@ -77,11 +79,14 @@ public:
 	void SetAutoMode(const bool);			//オート処理を任意のものかを設定
 	Vec2 GetMove() const;					//移動値を返す
 	void Set(const Vec2&, const Vec2&,const float = 15.f);		//開始位置と終了位置を登録する
+	void SetX(const float, const float, const float = 15.f);		//開始位置と終了位置を登録する
 	void SetRestriction(const float);			//描画の制限を設定する
 	bool isAutoPlay() const;				//オート移動を行っているかを返す
+	bool isAutoPlayX() const;				//オート移動を行っているかを返す
 	Direction nowDirection() const;			//現在の向きを返す
 	int idle[10] = { 0,0,0,0,0,0,0,1,1,1 };	//Normal状態のアニメーション
 	int walk[9] = { 0,1,2,3,4,5,6,7,8 };	//Walk状態のアニメーション
 	int ladder[2] = { 0,1 };				//ladder_ani状態のアニメーション
+	void SetCollisionNow(__int8 now);
 	Box2D returnSrc(Motion motion);			//motionによってsrcを返す
 };

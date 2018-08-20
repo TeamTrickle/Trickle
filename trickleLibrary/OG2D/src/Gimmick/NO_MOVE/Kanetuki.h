@@ -29,6 +29,8 @@ private:
 	Texture* hotImg;			//画像データ
 	int animCnt;				//アニメーションカウント
 	int hotNum;				//横幅によって増える画像の数
+	unsigned short timeCnt;		//起動時のタイム計測
+	const unsigned short maxCnt;	//最大計測数	
 	std::vector<Box2D> draw;
 	Angle angle;
 	float texRotaAng;

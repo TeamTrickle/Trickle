@@ -1,13 +1,11 @@
 #pragma once
 #include "OGSystem\_OGsystem.h"
-#include <opencv2/imgcodecs.hpp>
 
 class Texture {
 public:
 	Texture();							//コンストラクタ
 	~Texture();							//デストラクタ	
 	bool Create(const std::string&);			//画像データの生成
-	bool Create(const cv::Mat&);
 	void Draw(							//描画処理
 		Box2D&, 
 		Box2D&,

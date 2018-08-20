@@ -15,7 +15,7 @@ private:
 	bool isPause;							//呼ばれる更新分岐
 public:
 	TaskObject();
-	bool Init(std::string&);				//初期化処理
+	bool Init(const std::string&);				//初期化処理
 	void T_UpDate();						//更新処理
 	void T_Render();						//描画処理
 	void T_Pause();							//停止処理
@@ -31,5 +31,7 @@ public:
 	std::string GetTaskName() const;		//タスク名を返す
 	bool GetPause() const;
 	void SetPause(const bool);
+	void Stop(const bool = true);
+	bool GetIsStop() const;
 private:
 };

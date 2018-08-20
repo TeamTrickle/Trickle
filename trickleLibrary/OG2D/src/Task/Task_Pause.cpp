@@ -2,6 +2,7 @@
 #include "Task_Title.h"
 #include "Task\StageSelect.h"
 #include "Task_Game.h"
+#include "Load\LoadLogo.h"
 Pause::Pause()
 {
 	__super::SetDrawOrder(1.0f);
@@ -172,7 +173,13 @@ void Pause::PauseUpDate()
 		decisionsound.play();
 		OGge->SetPause(false);
 		if (select != Return) {
-			OGge->GetTask<Game>("game")->Kill();
+			//OGge->GetTask<Game>("game")->Kill();
+			auto load = Load::Create();
+			if (load)
+			{
+				load->AddDeleteObjectName(OGge->GetTask<Game>("game")->GetTaskName());
+				load->ALLTaskUpDateStop();
+			}
 		}
 	}
 	if (OGge->in->down(In::D2))

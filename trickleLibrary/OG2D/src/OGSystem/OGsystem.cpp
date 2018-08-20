@@ -101,7 +101,7 @@ void EngineSystem::Task_Render_AF()
 	//描画順にDraw2Dを実行する
 	for (int i = 0; i < this->taskobjects.size(); ++i)
 	{
-		if (this->taskobjects[this->Orders[i].id].second->GetKillCount() == 0)
+		if (this->taskobjects[this->Orders[i].id].second->GetKillCount() <= 0)
 		{
 			this->taskobjects[this->Orders[i].id].second->T_Render();
 		}
@@ -216,10 +216,6 @@ void EngineSystem::TaskKillCheck()
 		{
 			if (id->second->GetKillCount() > 0)
 			{
-				if (id->second->GetTaskName() == "Goal")
-				{
-					int a = 0;
-				}
 				this->taskobjects.erase(id);
 				this->TaskApplication();
 				id = this->taskobjects.begin();
@@ -281,16 +277,22 @@ void EngineSystem::DeleteTasks()
 	this->TaskKillCheck();		//削除予定のタスクを削除する
 	this->ConfigDrawOrder();	//タスクの集合体の変更後に描画順を設定する
 }
-//template <class T> std::shared_ptr<T> EngineSystem::GetTask(const std::string& taskName)
-//{
-//	for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
-//	{
-//		if ((*id).second->taskName == taskName)
-//		{
-//			return std::static_pointer_cast<T>((*id).second);
-//		}
-//	}
-//	return nullptr;
-//}
+void EngineSystem::AllStop(const bool flag)
+{
+	for (auto id = taskobjects.begin(); id != taskobjects.end(); ++id)
+	{
+		if (id->second)
+		{
+			id->second->Stop(flag);
+		}
+	}
+	for (auto id = addTaskObjects.begin(); id != addTaskObjects.end(); ++id)
+	{
+		if ((*id))
+		{
+			(*id)->Stop(flag);
+		}
+	}
+}
 EngineSystem* OGge;
 ResourceManager* rm;

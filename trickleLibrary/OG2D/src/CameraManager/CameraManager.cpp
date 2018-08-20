@@ -18,12 +18,12 @@ void CameraManager::SetObject(GameObject* object)
 	this->target = object;
 }
 
-void CameraManager::SetRange(Box2D& range_)
+void CameraManager::SetRange(const Box2D& range_)
 {
 	this->Range = range_;
 }
 
-void CameraManager::SetSize(Box2D& size_)
+void CameraManager::SetSize(const Box2D& size_)
 {
 	this->Size = size_;
 }
@@ -101,4 +101,83 @@ void CameraManager::move()
 void CameraManager::DeleteObject()
 {
 	this->target = nullptr;
+}
+
+CameraEasing::CameraEasing()
+{
+	this->start = nullptr;
+	this->end = nullptr;
+}
+CameraEasing::~CameraEasing()
+{
+	if (this->start)
+	{
+		delete this->start;
+	}
+	if (this->end)
+	{
+		delete this->end;
+	}
+}
+void CameraEasing::SetEndPos(const Vec2& end)
+{
+	//終了地点が登録されている場合
+	if (this->end)
+	{
+		//前回と現在が同じならなにも行わない
+		if (*this->end == end)
+		{
+			//終了
+			return;
+		}
+		else
+		{
+			//別なら前回のデータを削除しておく
+			delete this->end;
+			this->end = nullptr;
+			if (this->start)
+			{
+				delete this->start;
+				this->start = nullptr;
+			}
+		}
+	}
+	//タイムの初期化
+	this->easing_x.ResetTime();
+	this->easing_y.ResetTime();
+	//スタート地点は今の位置
+	this->start = new Vec2(OGge->camera->GetPos());
+	//終了地点を登録
+	this->end = new Vec2(end);
+	//終了の位置のベクトルを求める
+	*this->end = *this->end - *this->start;
+}
+void CameraEasing::CameraMove()
+{
+	if (this->end && this->start)
+	{
+		OGge->camera->SetPos(
+			Vec2(
+				this->easing_x.linear.In(this->easing_x.Time(1), this->start->x, this->end->x, 1), 
+				this->easing_y.linear.In(this->easing_y.Time(1), this->start->y, this->end->y, 1)
+			)
+		);
+	}
+}
+bool CameraEasing::IsPlay()
+{
+	return this->easing_x.isplay() || this->easing_y.isplay() ? true : false;
+}
+void CameraEasing::MoveEnd()
+{
+	if (this->start)
+	{
+		delete this->start;
+		this->start = nullptr;
+	}
+	if (this->end)
+	{
+		delete this->end;
+		this->end = nullptr;
+	}
 }

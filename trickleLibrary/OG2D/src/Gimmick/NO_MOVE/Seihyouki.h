@@ -23,9 +23,10 @@ private:
 	int animCnt;				//アニメーションカウント
 	int coldNum;				//横幅によって増える画像の数
 	std::vector<Box2D> draw;	//氷の画像
+	unsigned short timeCnt;		//起動時のタイム計測
+	const unsigned short maxCnt;	//最大計測数	
 
-
-	bool Initialize(Vec2& , Vec2 range, Angle ang);		//初期化処理
+	bool Initialize(Vec2& , Vec2 range, Angle ang, bool active);		//初期化処理
 	void UpDate();				//更新処理
 	void Render2D();			//描画処理
 	bool Finalize();			//解放処理
@@ -36,7 +37,7 @@ private:
 public:
 	Angle angle;
 	typedef std::shared_ptr<Seihyouki> SP;
-	static Seihyouki::SP Create(Vec2& pos, Vec2 range, Angle ,bool flag = true);
+	static Seihyouki::SP Create(Vec2& pos, Vec2 range, Angle, bool active, bool flag = true);
 	void SetTexture(Texture*);
 
 	void changeActive();				//自身の稼働状態を反転させる

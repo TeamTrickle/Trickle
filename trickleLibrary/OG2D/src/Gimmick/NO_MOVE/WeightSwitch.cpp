@@ -121,7 +121,7 @@ void WeightSwitch::Getmass()
 {
 	this->totalmass = 0.0f;
 	//デバッグ用
-	std::cout <<"現在の重さ"<< totalmass << std::endl;
+	//std::cout <<"現在の重さ"<< totalmass << std::endl;
 
 	//氷の重さの取得---------------------------------------------------------
 	auto waters = OGge->GetTasks<Water>("water");

@@ -7,21 +7,23 @@ using namespace std;
 
 Seihyouki::Seihyouki()
 	:
-	maxChangeTime(5)
+	maxChangeTime(5),maxCnt(30)
 {}
 
 
-bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
+bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	this->taskName = "Seihyouki";	//検索時に使うための名を登録する
 	__super::Init(taskName);		//TaskObject内の処理を行う
+	SetDrawOrder(0.5f);
 
 	changeStateCnt = 0;
 	CreateObject(Cube, pos, range, 0);
-	this->active = false;
+	this->active = active;
 	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
 
 	this->animCnt = 0;
 	this->coldNum = 0;
+	this->timeCnt = 0;
 	draw.clear();
 	draw.resize(1);
 
@@ -30,15 +32,34 @@ bool Seihyouki::Initialize(Vec2& pos, Vec2 range, Angle ang) {
 	return true;
 }
 void Seihyouki::UpDate() {
+	this->animCnt++;
+	if (this->animCnt > 150)
+	{
+		this->animCnt = 0;
+	}
 	if (active) {
-		++animCnt;
 		toIce();
+	}
+	if (this->active)
+	{
+		if (this->timeCnt < this->maxCnt)
+		{
+			++this->timeCnt;
+		}
+	}
+	else
+	{
+		if (this->timeCnt > 0)
+		{
+			--this->timeCnt;
+		}
 	}
 }
 
 void Seihyouki::Render2D() {
 	//デバッグ用
-	if (active) {
+	//if (active) 
+	{
 		LineDraw();
 		//Box2D drawRL,srcR;
 		if (angle==RIGHT)
@@ -47,6 +68,11 @@ void Seihyouki::Render2D() {
 					float angle = 90.0f;
 					for (int i = 0; i < coldNum; ++i) {
 						draw[i] = Box2D(position.x+15 + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
+						Vec2 origin = Vec2(draw[i].w, draw[i].h);
+						draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+						draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+						draw[i].y += (origin.y - draw[i].h) / 2.f;
+						draw[i].x -= (origin.x - draw[i].w) / 2.f;
 						draw[i].OffsetSize();
 					}
 					Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
@@ -63,6 +89,11 @@ void Seihyouki::Render2D() {
 			float angle = 270.0f;
 			for (int i = 0; i < coldNum; ++i) {
 				draw[i] = Box2D(position.x+32.0f + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].y += (origin.y - draw[i].h) / 2.f;
+				draw[i].x += (origin.x - draw[i].w) * 1.5f;
 				draw[i].OffsetSize();
 			}
 			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
@@ -119,7 +150,7 @@ void Seihyouki::SetTexture(Texture* tex)
 {
 	this->coldImg = tex;
 }
-Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, bool flag_) {
+Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, bool active, bool flag_) {
 	Seihyouki::SP to = Seihyouki::SP(new Seihyouki());
 	if (to)
 	{
@@ -128,7 +159,7 @@ Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, boo
 		{
 			OGge->SetTaskObject(to);
 		}
-		if (!to->Initialize(pos, range, ang))
+		if (!to->Initialize(pos, range, ang, active))
 		{
 			to->Kill();
 		}

@@ -73,6 +73,9 @@ Water::Water(Vec2 pos)
 	{
 		this->mass = 1.0f;
 	}
+	//カウンター初期化
+	this->iceCnt = 0;
+	this->fireCnt = 0;
 }
 
 Water::~Water()
@@ -244,12 +247,8 @@ Water::Situation Water::UpNormal()
 	
 	Water::Situation now = this->nowSituation;
 	auto map = OGge->GetTask<Map>("map");
-	if ((map && map->HitCheck(*this, 0) || this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil") || this->FootCheck((std::string)"Ladder")))
-	{
-		now = Water::Situation::Deleteform;
-		this->nowTime = 0;
-	}
-	else
+	
+	//else
 	{
 		this->Friction();
 	}
@@ -277,6 +276,8 @@ void Water::Render2D()
 	{
 		src.y += 256;
 		src.x = (float)((this->nowTime / 6) * 256);
+		draw.y += 2.0f;
+		draw.h += 2.0f;
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
@@ -361,7 +362,7 @@ bool Water::FootCheck(std::string& objtag, int n)
 	GameObject foot;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
 	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
-	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f) + 0.1f), Vec2(this->Scale.x - x_, 0.9f), 0.0f);
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f)), Vec2(this->Scale.x - x_, 0.1f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	if (!map)
 	{
@@ -517,6 +518,11 @@ void Water::MoveWATERCheck(Vec2& est)
 				}
 			}
 		}
+	}
+	if ((map && map->HitCheck(*this, 0) || this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil") || this->FootCheck((std::string)"Ladder")))
+	{
+		this->nowSituation = Water::Situation::Deleteform;
+		this->nowTime = 0;
 	}
 }
 
@@ -820,6 +826,20 @@ bool Water::HeadSolidCheck()
 			}
 		}
 	}
+	if (!this->hold)
+	{
+		auto player = OGge->GetTasks<Player>("Player");
+		for (auto id = player->begin(); id != player->end(); ++id)
+		{
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+			{
+				if (head.CubeHit(*(*id)))
+				{
+					return true;
+				}
+			}
+		}
+	}
 	return false;
 }
 
@@ -1114,4 +1134,20 @@ Water::SP Water::Create(Vec2& pos, bool flag_)
 		return to;
 	}
 	return nullptr;
+}
+void Water::SetIceCnt(const unsigned int& n)
+{
+	this->iceCnt = n;
+}
+unsigned int Water::GetIceCnt() const
+{
+	return this->iceCnt;
+}
+void Water::SetFireCnt(const unsigned int& n)
+{
+	this->fireCnt = n;
+}
+unsigned int Water::GetFireCnt() const
+{
+	return this->fireCnt;
 }

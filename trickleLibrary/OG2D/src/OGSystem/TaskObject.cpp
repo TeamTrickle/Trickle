@@ -7,7 +7,7 @@ TaskObject::TaskObject()
 	this->order = 0.0f;
 	this->isPause = false;
 }
-bool TaskObject::Init(std::string& name_)
+bool TaskObject::Init(const std::string& name_)
 {
 	this->taskName = name_;
 	return true;
@@ -30,6 +30,10 @@ void TaskObject::T_Render()
 void TaskObject::Kill(bool on)
 {
 	this->NextTask = on;
+	if (this->KillCount < 0)
+	{
+		this->KillCount++;
+	}
 	this->KillCount++;
 }
 int TaskObject::GetKillCount()
@@ -86,4 +90,24 @@ void TaskObject::SetPause(const bool flag)
 bool TaskObject::GetPause() const
 {
 	return this->isPause;
+}
+
+void TaskObject::Stop(const bool flag)
+{
+	if (this->KillCount > 0)
+	{
+		return;
+	}
+	if (flag)
+	{
+		this->KillCount = -1;
+	}
+	else
+	{
+		this->KillCount = 0;
+	}
+}
+bool TaskObject::GetIsStop() const
+{
+	return this->KillCount == 0 ? true : false;
 }

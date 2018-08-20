@@ -17,6 +17,7 @@ StageSelect::StageSelect()
 	this->soundname = "title.wav";      //ƒTƒEƒ“ƒh‚Ìƒtƒ@ƒCƒ‹–¼Ši”[
 	this->decisionsoundname = "decision.wav";
 	this->canVolControl = false;
+	this->isPause = false;
 }
 
 StageSelect::~StageSelect()
@@ -24,8 +25,6 @@ StageSelect::~StageSelect()
 	this->Finalize();
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
-		auto load = Load::Create();
-		load->Draw();
 		if (state == State::ToTitle)
 		{
 			auto nexttask = Title::Create();
@@ -51,6 +50,9 @@ bool StageSelect::Initialize()
 	chara->SetAutoFlag(true);
 	//”wŒi‚Ì•`‰æ
 	auto back = Back::Create(std::string("back.png"), Vec2(1920 * 2 + 200, 1080));
+	//‰_
+	Cloud::Create("cloud1.png", 0.5f);
+	Cloud::Create("cloud2.png", 1.5f);
 	//ƒ}ƒbƒv¶¬
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.5f);
@@ -103,6 +105,12 @@ bool StageSelect::Initialize()
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
 	this->Entrance.emplace_back(LEFT, 31.f * 64.f + 1920.f - chara->Scale.x);
+	auto load = OGge->GetTask<Load>("load");
+	if (load)
+	{
+		load->SetFead(Load::Fead::Out);
+		load->ALLTaskUpDateStop();
+	}
 	return true;
 }
 
@@ -145,7 +153,11 @@ void StageSelect::UpDate()
 	break;
 	case Mode::End:		//ŽŸ‚Ö
 	{
-		this->Kill();
+		auto load = Load::Create();
+		if (load)
+		{
+			load->AddDeleteObjectName(this->GetTaskName());
+		}
 	}
 	break;
 	default:
@@ -161,6 +173,7 @@ void StageSelect::PauseUpDate()
 	{
 		this->timeCnt++;
 		OGge->SetPause(false);
+		this->isPause = false;
 	}
 }
 
@@ -217,6 +230,11 @@ bool StageSelect::Finalize()
 	}
 	auto alert = OGge->GetTasks<StageAlert>("stagealert");
 	for (auto id = alert->begin(); id != alert->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id)
 	{
 		(*id)->Kill();
 	}
@@ -341,6 +359,7 @@ void StageSelect::From3()
 				{
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(200.f, 0.f));
 					this->timeCnt = 0;
+					this->isPause = true;
 				}
 				auto board = OGge->GetTasks<StageAlert>("stagealert");
 				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
@@ -402,6 +421,7 @@ void StageSelect::From3()
 				{
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetSize().x + 200.f, 0.f));
 					this->timeCnt = 0;
+					this->isPause = true;
 				}
 				auto board = OGge->GetTasks<StageAlert>("stagealert");
 				std::string curStageName = "./data/monitor" + std::to_string(this->nowPos / 2) + ".txt";
@@ -438,27 +458,27 @@ void StageSelect::From3()
 				case 4:
 				case 5:
 					this->state = State::Tutorial3;
-					*MapNum = 6;
-					//*MapNum = 9;
+					//*MapNum = 6;
+					*MapNum = 9;
 					break;
 				case 6:
 				case 7:
 					//’òŽq‚ðã‚é
 					this->state = State::Stage1;
-					*MapNum = 1;
-					//*MapNum = 13;
+					//*MapNum = 1;
+					*MapNum = 13;
 					break;
 				case 8:
 				case 9:
 					this->state = State::Stage2;
-					*MapNum = 5;
-					//*MapNum = 14;
+					//*MapNum = 5;
+					*MapNum = 14;
 					break;
 				case 10:
 				case 11:
 					this->state = State::Stage3;
-					*MapNum = 6;
-					//*MapNum = 15;
+					//*MapNum = 6;
+					*MapNum = 15;
 					break;
 				case 12:
 					this->state = State::ToTitle;
@@ -495,7 +515,7 @@ void StageSelect::From3()
 		}
 		else
 		{
-			if (this->timeCnt == 60)
+			if(chara->position.x >= 2016.f && chara->position.x <= 2144.f && this->isPause)
 			{
 				OGge->SetPause(true);
 			}
@@ -534,6 +554,10 @@ void StageSelect::ModeCheck()
 	else
 	{
 		this->timeCnt++;
+		if (this->timeCnt >= 10000)
+		{
+			this->timeCnt = 1000;
+		}
 	}
 }
 
