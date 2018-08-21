@@ -577,6 +577,11 @@ void StageSelect::GateClose()
 	if (this->timeCnt > 40)
 	{
 		this->mode = Mode::End;
+		auto charas = OGge->GetTasks<Chara>("Chara");
+		for (auto id = charas->begin(); id != charas->end(); ++id)
+		{
+			(*id)->Kill();
+		}
 	}
 }
 

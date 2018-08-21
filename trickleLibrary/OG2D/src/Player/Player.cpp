@@ -582,7 +582,7 @@ bool Player::HaveObjectHit()
 		return false;
 	}
 	//‚·‚Å‚ÉŽ‚Á‚Ä‚¢‚é‚È‚ç‚Î“®‚©‚È‚¢
-	if (this->hold)
+	if (this->hold || this->motion == Motion::Switch_M)
 	{
 		return false;
 	}
