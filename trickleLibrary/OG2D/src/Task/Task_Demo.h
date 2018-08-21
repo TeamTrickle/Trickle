@@ -30,6 +30,7 @@ public:
 private:
 	bool						deadFlag = false;
 	cv::VideoCapture			cap;
+	cv::Mat						frame;
 	Box2D						draw;
 	float						videoFPS;
 	float						delay;

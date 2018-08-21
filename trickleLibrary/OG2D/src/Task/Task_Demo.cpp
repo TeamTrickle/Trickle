@@ -40,11 +40,13 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 }
 
 void Demo::UpDate() {
+	if (OGge->in->down(In::B1)) {
+		deadFlag = true;
+	}
 	if (deadFlag) {
 		Fadeout();
 	}
 	else if (timer.GetTime() - startTime >= delay) {
-		cv::Mat frame;
 		cap >> frame;
 		if (frame.empty()) {
 			deadFlag = true;
@@ -52,13 +54,8 @@ void Demo::UpDate() {
 		}
 		tex.Finalize();
 		tex.Create(frame);
-		frame.release();
 		startTime = timer.GetTime();
 	}
-	if (OGge->in->down(In::B1)) {
-		deadFlag = true;
-	}
-	
 }
 
 void Demo::Render2D()
@@ -76,8 +73,11 @@ void Demo::Fadeout() {
 bool Demo::Finalize()
 {
 	tex.Finalize();
+	frame.release();
 	cap.release();
 	auto title = OGge->GetTask<Title>((std::string)"title");
-	if (title) title->SetPauseEveryChild(false);
+	if (title) {
+		title->SetPauseEveryChild(false);
+	}
 	return true;
 }

@@ -19,6 +19,8 @@
 #pragma comment(lib, "OPENGL32.lib")
 #pragma comment(lib, "GLU32.lib")
 #pragma comment(lib, "Win64/OpenAL32.lib")
+#pragma comment(lib, "opencv_core342.lib")
+#pragma comment(lib, "opencv_videoio342.lib")
 //#pragma comment(lib, "freetype.lib")
 
 #if defined(_MSC_VER)

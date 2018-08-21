@@ -1,4 +1,5 @@
 #include "Task_Title.h"
+#include "Task\Task_Demo.h"
 #include "Task\Task_Option.h"
 #include "Task\StageSelect.h"
 #include "Water\water.h"
@@ -8,6 +9,15 @@
 #include "Load\LoadLogo.h"
 #include "Effect\Effect.h"
 #include "GameProcessManagement\GameProcessManagement.h"
+
+
+
+const std::string Title::DEMO_VIDEOS[]{
+	"./data/test.mp4",
+	"./data/test1.mp4"
+};
+
+
 
 Title::Title()
 {
@@ -92,7 +102,7 @@ bool Title::Initialize()
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
 	this->fontTex.Create("Font_new.png");           //文字フォントの画像追加
 
-	//this->forTransform.Create("TransparentBack.png");
+	this->forTransform.Create("TransparentBackTitle.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
 	this->effect03.Create("starteffect.png");
@@ -295,15 +305,19 @@ void Title::UpDate()
 		this->cursor_a += 0.01f;
 		if (this->cursor_a >= 1.0f)
 		{
-			//demoTimer.Start();
 			this->mode = from6;
 		}
 	}
 	break;
 	case from6:	//Bキー入力待ち状態
 	{
+		demoTimer.Start();
 		if (PressB() == false)
 		{
+			if (demoTimer.GetTime() >= DEMO_LIMIT) {
+				this->mode = Mode::from10;
+				break;
+			}
 			break;
 		}
 		else
@@ -315,6 +329,9 @@ void Title::UpDate()
 
 	case from7:	//決定待ち状態
 	{
+		if (!demoTimer.isplay()) {
+			demoTimer.Start();
+		}
 		//左へ
 		if (nowmoveR == false)
 		{
@@ -465,10 +482,10 @@ void Title::UpDate()
 			break;
 			//------------------------------------------------------------------------------------
 		}
-		/*if (demoTimer.GetTime() >= DEMO_LIMIT) {
-		this->mode = Mode::from8;
-		break;
-		}*/
+		if (demoTimer.GetTime() >= DEMO_LIMIT) {
+			this->mode = Mode::from10;
+			break;
+		}
 
 		//決定して次へ
 		if (OGge->in->down(Input::in::B2))
@@ -574,27 +591,37 @@ void Title::UpDate()
 		}
 		break;
 
-	//case from8: // Demo画面に移動するとき
-	//{
-	//	trans_a += 0.01f;
-	//	if (trans_a >= 1.f) {
-	//		trans_a = 1.f;
-	//		auto demo = Demo::Create("./data/test.mp4");
-	//		this->mode = Mode::from9;
-	//		this->demoTimer.Stop();
-	//		this->SetPauseEveryChild(true);
-	//	}
-	//}
-	//break;
-	//case from9: // Demo画面から戻ってきたとき
-	//{
-	//	trans_a -= 0.01f;
-	//	if (trans_a <= 0.0f) {
-	//		trans_a = 0.f;
-	//		this->demoTimer.Start();
-	//		this->mode = Mode::from6;
-	//	}
-	//}
+	case from10: // Demo画面に移動するとき
+	{
+		trans_a += 0.01f;
+		if (trans_a > 1.f) {
+			trans_a = 1.f;
+			if (curPlayVideo >= _countof(DEMO_VIDEOS)) {
+				curPlayVideo = 0;
+			}
+			auto demo = Demo::Create(DEMO_VIDEOS[curPlayVideo]);
+			this->curPlayVideo += 1;
+			this->mode = Mode::from11;
+			this->demoTimer.Stop();
+			this->SetPauseEveryChild(true);
+		}
+	}
+	break;
+	case from11: // Demo画面から戻ってきたとき
+	{
+		auto Npc = OGge->GetTasks<Chara>("Chara");
+		for (auto id = Npc->begin(); id != Npc->end(); ++id)
+		{
+			(*id)->MoveReset();
+		}
+		trans_a -= 0.01f;
+		if (trans_a <= 0.0f) {
+			trans_a = 0.f;
+			
+			this->demoTimer.Start();
+			this->mode = Mode::from7;
+		}
+	}
 	break;
 	case End:	//Selectの読み込みと自身の破棄
 	{
@@ -821,7 +848,7 @@ bool Title::Finalize()
 	this->flowerLogo.Finalize();
 	this->texEffect.Finalize();
 	this->effect03.Finalize();
-	//this->forTransform.Finalize();
+	this->forTransform.Finalize();
 	this->canVolControl = false;
 	this->monitorTex.Finalize();
 	this->fontTex.Finalize();

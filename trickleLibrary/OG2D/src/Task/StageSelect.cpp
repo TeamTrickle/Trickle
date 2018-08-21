@@ -58,7 +58,7 @@ bool StageSelect::Initialize()
 	map->SetDrawOrder(0.5f);
 	//ステージ概要表示用案内板
 	auto board = StageAlert::Create(true, Box2D(400, 0, 1328, 550));
-	auto board2 = StageAlert::Create(true, Box2D(400 + ((int)OGge->window->GetSize().x * 2), 0, 1328, 550));
+	auto board2 = StageAlert::Create(true, Box2D(400 + 1920, 0, 1328, 550));
 	(*board) << "./data/monitor0.txt";
 	(*board) << "./data/monitor1.txt";
 	(*board) << "./data/monitor2.txt";
