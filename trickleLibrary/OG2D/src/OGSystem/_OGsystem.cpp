@@ -18,7 +18,7 @@ namespace OG {
 		v[1] *= m;
 		v[2] *= m;
 	}
-	void LineHitDraw(Vec2* _b, Color& color_) {
+	void LineHitDraw(Vec2* _b, const Color& color_) {
 		glColor4f(color_.red, color_.green, color_.blue, color_.alpha);
 		glBegin(GL_LINES);
 		glVertex2f((_b)->x, (_b)->y);
@@ -68,7 +68,7 @@ namespace OG {
 		glEnd();
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
-	void _Rotate(float _ang, Vec2* _b)
+	void _Rotate(const float _ang, Vec2* _b)
 	{
 		//ラジアンの値に変更
 		float tora = OG::ToRadian(_ang);
@@ -121,4 +121,28 @@ void OG::BackColor(const Color& color)
 void OG::BackColor(const float& red, const float& green, const float& blue, const float& alpha)
 {
 	glClearColor((GLclampf)red, (GLclampf)green, (GLclampf)blue, (GLclampf)alpha);
+}
+int OG::mbclen(const char* c)
+{
+	if ((*c & 0xc0) == 0x80)
+	{
+		return 2;
+	}
+	else if ((*c & 0x80) == 0)
+	{
+		return 1;
+	}
+	return 0;
+}
+void OG::cout(const Box2D& b)
+{
+	std::cout << "x " << b.x << ":y " << b.y << ":w " << b.w << ":h " << b.h << "\n";
+}
+void OG::cout(const Vec2& v)
+{
+	std::cout << "x " << v.x << ":y " << v.y << "\n";
+}
+void OG::cout(const Color& c)
+{
+	std::cout << "red " << c.red << ":green " << c.green << ":blue " << c.blue << ":alpha " << c.alpha << "\n";
 }

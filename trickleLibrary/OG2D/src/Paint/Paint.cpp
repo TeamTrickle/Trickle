@@ -7,6 +7,7 @@ Paint::Paint(const Vec2 & pos, const Vec2 & size, const PaintColor & color_)
 	this->objectTag = "Paint";
 	this->image = nullptr;
 	__super::Init(this->objectTag);
+	__super::SetDrawOrder(0.1f);
 }
 Paint::~Paint()
 {

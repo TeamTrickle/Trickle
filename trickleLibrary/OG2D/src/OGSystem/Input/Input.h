@@ -55,6 +55,10 @@ namespace In
 		AXIS_RIGHT_X,
 		//! 右スティックY値
 		AXIS_RIGHT_Y,
+		//!	R2
+		AXIS_R2,
+		//! L2
+		AXIS_L2,
 		AXIS_BUTTON_NUM,
 	};
 	enum
@@ -75,6 +79,11 @@ namespace In
 		RSTICK_UP,
 		//! 右スティック下入力
 		RSTICK_DOWN,
+		//! R2
+		BUTTON_R2,
+		//! L2
+		BUTTON_L2,
+		//! スティック数
 		STICK_NUM,
 	};
 	/**
@@ -105,6 +114,8 @@ namespace In
 		RU,
 		RR,
 		RL,
+		L2,
+		R2,
 	};
 	/**
 	*enum
@@ -169,6 +180,8 @@ public:
 		RU,
 		RR,
 		RL,
+		L2,
+		R2,
 	};
 	/**
 	*@brief	:ゲームパッド入力
@@ -203,10 +216,18 @@ public:
 		*仮装コントローラの入力設定
 		*/
 		enum AXIS {
-			AXIS_LEFT_X,		//左スティックX値
-			AXIS_LEFT_Y,		//左スティックY値
-			AXIS_RIGHT_X,		//右スティックX値
-			AXIS_RIGHT_Y,		//右スティックY値
+			//! 左スティックX値
+			AXIS_LEFT_X,
+			//! 左スティックY値
+			AXIS_LEFT_Y,
+			//! 右スティックX値
+			AXIS_RIGHT_X,
+			//! 右スティックY値
+			AXIS_RIGHT_Y,
+			//!	R2
+			AXIS_R2,
+			//! L2
+			AXIS_L2,
 			AXIS_BUTTON_NUM,
 		};
 		/**
@@ -215,14 +236,27 @@ public:
 		*/
 		enum AXISBUTTON
 		{
+			//! 左スティック左入力
 			LSTICK_LEFT,
+			//! 左スティック右入力
 			LSTICK_RIGHT,
+			//! 左スティック上入力
 			LSTICK_UP,
+			//! 左スティック下入力
 			LSTICK_DOWN,
+			//! 右スティック左入力
 			RSTICK_LEFT,
+			//! 右スティっク右入力
 			RSTICK_RIGHT,
+			//! 右スティック上入力	
 			RSTICK_UP,
+			//! 右スティック下入力
 			RSTICK_DOWN,
+			//! R2
+			BUTTON_R2,
+			//! L2
+			BUTTON_L2,
+			//! スティック数
 			STICK_NUM,
 		};
 		/**
@@ -311,6 +345,11 @@ public:
 		*/
 		bool registAxisButton(
 			const float axis_threshold_);
+		/**
+		*@brief	:ゲームパッド名を返す
+		*@return:char* ゲームパッド名
+		*/
+		const char* GetName() const;
 	private:
 		//! ゲームパッド複数個に対応させるために１つ１つにidを振り分ける
 		int id_;
@@ -336,6 +375,8 @@ public:
 		std::vector<u_char> axis_button_down;
 		//! axisのupを格納する変数
 		std::vector<u_char> axis_button_up;
+		//! コントローラ名
+		const char* name;
 		/**
 		*@brief	:ボタン数を返す
 		*@return:int ボタン数
@@ -590,7 +631,6 @@ public:
 	*@return:1つ以上入力されているとtrue
 	*/
 	bool EitherUp() const;
-
 	/**
 	*@brief	:入力状態をリセット
 	*/
@@ -605,5 +645,5 @@ private:
 	//! マウス初期化
 	Mouse initMouse();
 	//! in分のデータ
-	InputData inputdata[22];
+	InputData inputdata[24];
 };

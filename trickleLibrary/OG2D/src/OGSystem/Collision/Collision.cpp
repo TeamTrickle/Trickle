@@ -116,7 +116,7 @@ bool CollisionCircle::hitBox(const CollisionBox& b)
 	{ b.hitBase.x,b.hitBase.h }
 	};
 	//Box型の回転の適用
-	OG::_Rotate(b.angle, _v);
+	OG::_Rotate(b.Rotate(), _v);
 	//円の中に頂点が存在する場合TRUEを返す
 	if ((((_v[1].x - _v[0].x)*(_ver[0].y - _v[0].y)) - ((_ver[0].x - _v[0].x)*(_v[1].y - _v[0].y))) <= hitBase.r*hitBase.r &&
 		(((_v[2].x - _v[1].x)*(_ver[0].y - _v[1].y)) - ((_ver[0].x - _v[1].x)*(_v[2].y - _v[1].y))) <= hitBase.r*hitBase.r &&
@@ -146,11 +146,11 @@ bool CollisionCircle::hitCircle(const CollisionCircle& b)
 	}
 	return false;
 }
-//描画確認用(多分使わない)
-void CollisionBox::hitdraw() {
-
-}
 void CollisionBox::Rotate(const float _angle) {
 	//回転の値を格納
 	this->angle = _angle;
+}
+float CollisionBox::Rotate() const
+{
+	return this->angle;
 }

@@ -87,7 +87,7 @@ void Load::Draw()
 {
 	OGge->camera->SetSize(Vec2(1920, 1080));
 	OGge->camera->SetPos(Vec2(0, 0));
-	OGge->camera->CameraUpdate();
+	OGge->camera->UpDate();
 	unsigned int time = 0;
 	while (this->color->alpha <= 1.0)
 	{

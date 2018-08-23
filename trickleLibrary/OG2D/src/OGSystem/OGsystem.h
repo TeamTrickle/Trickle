@@ -11,7 +11,7 @@
 #include "Input\Input.h"
 #include "Texture\Texture.h"
 #include "Collision\Collision.h"
-#include "Font\Font.h"
+#include "Font\TextureFont.h"
 #include "Audio\SoundManager.h"
 #include "Timer\glTimer.h"
 #include "Easing\easing.hpp"

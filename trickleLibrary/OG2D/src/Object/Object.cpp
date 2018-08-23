@@ -8,7 +8,7 @@ GameObject::GameObject() {
 	this->Radius = { 1.0f,1.0f };
 	this->isCheck = false;
 }
-GameObject::GameObject(const Objform& form,const Vec2& _posi,const  Vec2& _Sca,const float _ang)
+GameObject::GameObject(const Objform& form, const Vec2& _posi, const  Vec2& _Sca, const float _ang)
 {
 	//各値をセットする
 	this->objform = form;
@@ -24,11 +24,10 @@ GameObject::GameObject(const Objform& form,const Vec2& _posi,const  Vec2& _Sca,c
 		break;
 	}
 	this->angle = _ang;
-	this->CheckON();
+	this->HitCheck();
 }
 GameObject::~GameObject()
 {
-
 }
 void GameObject::CreateObject(const Objform& form, const Vec2& _posi, const  Vec2& _Sca, const float _ang)
 {
@@ -46,7 +45,7 @@ void GameObject::CreateObject(const Objform& form, const Vec2& _posi, const  Vec
 		break;
 	}
 	this->angle = _ang;
-	this->CheckON();
+	this->HitCheck();
 }
 bool GameObject::hit(GameObject& o)
 {
@@ -99,7 +98,7 @@ bool GameObject::hit(GameObject& o)
 		}
 		}
 	}
-		break;
+	break;
 	case Objform::Ball:			//自分が円の時
 	{
 		//位置とサイズから当たり判定を生成する
@@ -175,7 +174,6 @@ bool GameObject::CubeHit(GameObject &o)
 
 void GameObject::LineDraw()
 {
-#if(_DEBUG)
 	switch (this->objform)
 	{
 	case Objform::Cube:		//自分が矩形の時
@@ -192,13 +190,13 @@ void GameObject::LineDraw()
 		this->collisionCube.Rotate(this->angle);
 		//Collision内で使用しているVec2配列型に変更
 		Vec2 _v[4] = {
-		{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.y },
+			{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.y },
 		{ this->collisionCube.hitBase.w - 1,this->collisionCube.hitBase.y },
 		{ this->collisionCube.hitBase.w - 1,this->collisionCube.hitBase.h - 1 },
 		{ this->collisionCube.hitBase.x,this->collisionCube.hitBase.h - 1 }
 		};
 		//その値を回転を適用させた値に変更する
-		OG::_Rotate(this->collisionCube.angle, _v);
+		OG::_Rotate(this->collisionCube.Rotate(), _v);
 		//４つの頂点を線で結ぶ
 		OG::LineHitDraw(_v);
 		break;
@@ -208,12 +206,11 @@ void GameObject::LineDraw()
 	case Objform::Non:
 		break;
 	}
-#endif
 }
 
-void GameObject::CheckON()
+void GameObject::HitCheck(bool flag)
 {
-	this->isCheck = true;
+	this->isCheck = flag;
 }
 
 bool GameObject::IsObjectDistanceCheck(const Vec2& pos, const Vec2& size)
@@ -232,4 +229,14 @@ void GameObject::LineDistanceDraw()
 {
 	Box2D d(this->position.x - this->Scale.x, this->position.y - this->Scale.y, this->position.x + (this->Scale.x * 2), this->position.y + (this->Scale.y * 2));
 	OG::LineHitDraw(&d);
+}
+
+void GameObject::Move()
+{
+
+}
+
+void GameObject::Friction()
+{
+
 }

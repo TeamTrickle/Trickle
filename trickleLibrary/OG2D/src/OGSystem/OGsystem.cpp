@@ -110,7 +110,7 @@ void EngineSystem::Task_Render_AF()
 void EngineSystem::TaskGameUpDate()
 {
 	this->Task_UpDate();		//XVˆ—
-	this->camera->CameraUpdate();
+	this->camera->UpDate();
 	this->Task_Render_AF();		//•`‰æˆ—
 	if (this->CheckAddTask() || this->CheckKillTask())
 	{

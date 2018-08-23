@@ -54,6 +54,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <utility>
 
 #include "OGlib.h"
@@ -73,4 +74,8 @@ namespace OG {
 	void LineHitDraw(Box2D*);
 	void BackColor(const Color& color);
 	void BackColor(const float&red, const float&green, const float&blue, const float&alpha);
+	int mbclen(const char* c);
+	void cout(const Box2D&);
+	void cout(const Vec2&);
+	void cout(const Color&);
 }
