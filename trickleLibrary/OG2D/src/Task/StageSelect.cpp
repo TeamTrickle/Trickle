@@ -84,7 +84,7 @@ bool StageSelect::Initialize()
 	//描画順指定
 	__super::SetDrawOrder(0.3f);
 	//初期モード設定
-	this->mode = Mode::from1;
+	this->mode = Mode::createTask;
 	//テスト処理
 	OGge->camera->SetSize(Vec2(1920, 1080));
 	OGge->camera->SetPos(Vec2(100, 0));
@@ -130,24 +130,24 @@ void StageSelect::UpDate()
 	}
 	switch (this->mode)
 	{
-	case Mode::from1:	//生成から落下と硬直
+	case Mode::createTask:	//生成から落下と硬直
 	{
-		this->From1();
+		this->CreateTask();
 	}
 	break;
-	case Mode::from2:	//キャラとカメラの横移動
+	case Mode::objectMoveTask:	//キャラとカメラの横移動
 	{
-		this->From2();
+		this->ObjectMoveTask();
 	}
 	break;
-	case Mode::from3:	//決定待ち
+	case Mode::waitTask:	//決定待ち
 	{
-		this->From3();
+		this->WaitTask();
 	}
 	break;
-	case Mode::from4:	//決定後処理
+	case Mode::afterMoveTask:	//決定後処理
 	{
-		this->From4();
+		this->AfterMoveTask();
 		this->canVolControl = true;
 	}
 	break;
@@ -182,11 +182,13 @@ void StageSelect::Render2D()
 
 	//壁の描画
 	{
-		Box2D draw = Box2D(450, 600, 1500, 300);
-		draw.OffsetSize();
-		Box2D src = Box2D(0.f, 0.f, Wall.GetTextureSize().x, Wall.GetTextureSize().y);
-		this->Wall.Draw(draw, src);
-		//OG::LineHitDraw(&draw);
+		for (int i = 0; i < 2; ++i)
+		{
+			Box2D draw = Box2D(450 + (i * 1920), 600, 1500, 300);
+			draw.OffsetSize();
+			Box2D src = Box2D(0.f, 0.f, Wall.GetTextureSize().x, Wall.GetTextureSize().y);
+			this->Wall.Draw(draw, src);
+		}
 	}
 	for (int i = 0; i < 8; ++i)
 	{
@@ -243,7 +245,7 @@ bool StageSelect::Finalize()
 	return true;
 }
 
-void StageSelect::From1()
+void StageSelect::CreateTask()
 {
 	//キャラを検索
 	auto chara = OGge->GetTask<Chara>("Chara");
@@ -260,7 +262,7 @@ void StageSelect::From1()
 				if (this->CheckTime(30))
 				{
 					//次へ移動
-					this->mode = Mode::from2;
+					this->mode = Mode::objectMoveTask;
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetPos().x + 100, OGge->camera->GetPos().y));
 					this->nowPos = 0;
 					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
@@ -283,7 +285,7 @@ void StageSelect::From1()
 	}
 }
 
-void StageSelect::From2()
+void StageSelect::ObjectMoveTask()
 {
 	//カメラの位置を送る
 	OGge->camera->SetPos(this->camera_anim.Move(10.f));
@@ -301,10 +303,10 @@ void StageSelect::From2()
 			(*id)->SelectFirstElement();
 		}
 		//次へ移動
-		this->mode = Mode::from3;
+		this->mode = Mode::waitTask;
 	}
 }
-void StageSelect::From3()
+void StageSelect::WaitTask()
 {
 	auto chara = OGge->GetTask<Chara>("Chara");
 	if (chara)
@@ -510,7 +512,7 @@ void StageSelect::From3()
 						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second + chara->Scale.x, chara->position.y), 5.f);
 					}
 				}
-				this->mode = Mode::from4;
+				this->mode = Mode::afterMoveTask;
 			}
 		}
 		else
@@ -522,7 +524,7 @@ void StageSelect::From3()
 		}
 	}
 }
-void StageSelect::From4()
+void StageSelect::AfterMoveTask()
 {
 	auto chara = OGge->GetTask<Chara>("Chara");
 	

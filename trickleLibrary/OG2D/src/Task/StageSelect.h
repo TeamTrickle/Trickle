@@ -44,19 +44,19 @@ class StageSelect : public TaskObject
 	enum Mode
 	{
 		Non,
-		from1,
-		from2,
-		from3,
-		from4,
+		createTask,
+		objectMoveTask,
+		waitTask,
+		afterMoveTask,
 		End,
 	};
 	Mode mode;
 	Mode preMode;
 	//Šeˆ—ŠÖ”
-	void From1();
-	void From2();
-	void From3();
-	void From4();
+	void CreateTask();
+	void ObjectMoveTask();
+	void WaitTask();
+	void AfterMoveTask();
 
 	unsigned __int64 timeCnt;
 	int nowPos;
