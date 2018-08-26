@@ -88,7 +88,7 @@ void WeightSwitch::UpDate()
 		this->state = Nomal;
 	}
 
-	if (this->isPushed) {
+	if (this->nowActive) {
 		ToOpen();
 	}
 	else {
