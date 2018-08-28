@@ -70,21 +70,26 @@ class Map : public TaskObject
 		*/
 		int* GetID() const;
 	};
-public:
-	//!	描画するマップチップの数
-	Vec2 mapSize;
+private:
+	//! ファイルパス
+	const std::string _FilePath;
+	//! 画像のファイル名
+	std::string chipimgname;
 	//!	描画マップ配列
 	std::vector<Box2D> chip;
-	//!	オブジェクト情報
-	std::vector<std::vector<Base>> hitBase;
 	//!	使用画像情報
 	Texture mapimg;
 	//!	元画像の縦横サイズ
 	Vec2 chipsize;
-	//!	描画の縦横サイズ
-	Vec2 DrawSize;
 	//!	スマートポインタ
 	typedef std::shared_ptr<Map> SP;
+public:
+	//!	描画するマップチップの数
+	Vec2 mapSize;
+	//!	オブジェクト情報
+	std::vector<std::vector<Base>> hitBase;
+	//!	描画の縦横サイズ
+	Vec2 DrawSize;
 	/**
 	*@brief	:constructor
 	*/
@@ -107,7 +112,7 @@ public:
 	*@param	:Format	format ファイル形式
 	*@return:読み込みに成功すればtrue
 	*/
-	bool LoadMap(std::string& _path, Format format);
+	bool LoadMap(const std::string& _path, const Format& format);
 public:
 	/**
 	*@brief	:destructor
@@ -118,7 +123,7 @@ public:
 	*@param	:string path ファイル名
 	*@param	:Format format ファイルフォーマット
 	*/
-	static SP Create(std::string& path, Format format = csv);
+	static SP Create(const std::string& path, const Format& format = csv);
 	/**
 	*@brief	:マップとの当たり判定
 	*@param	:GameObject p 判定したいオブジェクト
@@ -132,12 +137,7 @@ public:
 	*@param	:string name 指定名のみ判定を行う
 	*@return:当たっていればtrue
 	*/
-	bool HitCheck(GameObject &p, const std::string name);
-private:
-	//! ファイルパス
-	const std::string _FilePath;
-	//! 画像のファイル名
-	std::string chipimgname;
+	bool HitCheck(GameObject &p, const std::string& name);
 private:
 	/**
 	*@brief	:読み込みに応じたオブジェクトの生成を行う

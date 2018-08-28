@@ -27,7 +27,7 @@ Map::~Map()
 	}
 }
 
-bool Map::LoadMap(std::string& path_, Format format)
+bool Map::LoadMap(const std::string& path_, const Format& format)
 {
 	if (Format::csv != format)
 	{
@@ -331,7 +331,7 @@ bool Map::HitCheck(GameObject &p, const int id)
 	}
 	return false;
 }
-bool Map::HitCheck(GameObject &p, const std::string name)
+bool Map::HitCheck(GameObject &p, const std::string& name)
 {
 	for (int y = 0; y < this->mapSize.y; ++y)
 	{
@@ -352,7 +352,7 @@ bool Map::HitCheck(GameObject &p, const std::string name)
 	return false;
 }
 
-Map::SP Map::Create(std::string& path, Format format)
+Map::SP Map::Create(const std::string& path, const Format& format)
 {
 	auto to = Map::SP(new Map());
 	if (to)
