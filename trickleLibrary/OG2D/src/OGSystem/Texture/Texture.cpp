@@ -204,3 +204,7 @@ Texture::~Texture()
 {
 	//glDeleteTextures(1, &this->_TexId);
 }
+GLuint Texture::GetID() const
+{
+	return this->_TexId;
+}

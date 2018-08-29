@@ -53,6 +53,11 @@ public:
 	*@return:Vec2 画像の大きさ
 	*/
 	Vec2 GetTextureSize() const;
+	/**
+	*@brief	:登録されているIDを返す
+	*@return:GLuint ID
+	*/
+	GLuint GetID() const;
 private:
 	//! テクスチャのID
 	GLuint _TexId;
