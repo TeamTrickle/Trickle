@@ -19,6 +19,7 @@ namespace OG {
 		v[2] *= m;
 	}
 	void LineHitDraw(Vec2* _b, const Color& color_) {
+#if(_DEBUG)
 		glColor4f(color_.red, color_.green, color_.blue, color_.alpha);
 		glBegin(GL_LINES);
 		glVertex2f((_b)->x, (_b)->y);
@@ -34,8 +35,10 @@ namespace OG {
 		glVertex2f((_b)->x, (_b)->y);
 		glEnd();
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+#endif
 	}
 	void LineHitDraw(Vec2* _b) {
+#if(_DEBUG)
 		glBegin(GL_LINES);
 		glVertex2f((_b)->x, (_b)->y);
 		glVertex2f((_b + 1)->x, (_b + 1)->y);
@@ -50,9 +53,11 @@ namespace OG {
 		glVertex2f((_b)->x, (_b)->y);
 		glEnd();
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+#endif
 	}
 	void LineHitDraw(Box2D* _b)
 	{
+#if(_DEBUG)
 		glBegin(GL_LINES);
 		glVertex2f((_b)->x, (_b)->y);
 		glVertex2f((_b)->w, (_b)->y);
@@ -67,6 +72,7 @@ namespace OG {
 		glVertex2f((_b)->x, (_b)->y);
 		glEnd();
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+#endif
 	}
 	void _Rotate(const float _ang, Vec2* _b)
 	{
