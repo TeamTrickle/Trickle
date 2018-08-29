@@ -25,7 +25,7 @@ bool Texture::Create(const std::string& path)
 			throw data;
 		}
 	}
-	catch (unsigned char* d)
+	catch (...)
 	{
 		std::cout << "Texture Create Error!" << path << "\n";
 		OG::OutDebugData("TextureErrorPath.txt", path + "\n");
@@ -104,7 +104,7 @@ Texture::Texture(const std::string& path)
 			throw data;
 		}
 	}
-	catch (unsigned char* d)
+	catch (...)
 	{
 		std::cout << "Texture Create Error!" << path << "\n";
 		OG::OutDebugData("TextureErrorPath.txt", path + "\n");
