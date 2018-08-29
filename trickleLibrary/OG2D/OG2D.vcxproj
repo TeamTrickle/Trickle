@@ -250,6 +250,7 @@
     <ClInclude Include="src\OGSystem\OGlib.h" />
     <ClInclude Include="src\OGSystem\OGsystem.h" />
     <ClInclude Include="src\OGSystem\OGTask.h" />
+    <ClInclude Include="src\OGSystem\randmais.h" />
     <ClInclude Include="src\OGSystem\Random\Random.h" />
     <ClInclude Include="src\OGSystem\ResourceManager\ResourceManager.h" />
     <ClInclude Include="src\OGSystem\TaskObject.h" />

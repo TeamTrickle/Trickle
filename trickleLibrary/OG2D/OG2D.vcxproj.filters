@@ -533,6 +533,9 @@
     <ClInclude Include="src\OGSystem\Font\TextureFont.h">
       <Filter>ソースファイル\OGSystem\System\Font</Filter>
     </ClInclude>
+    <ClInclude Include="src\OGSystem\randmais.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="data\image\testicon.ico">
