@@ -205,6 +205,7 @@ void OG::OutDebugData(const std::string& out_path, const std::string& text)
 	if (!ofs)
 	{
 		std::cout << "ファイルが存在しない/生成に失敗しました\n";
+		return;
 	}
 	ofs << text;
 	ofs.close();
@@ -215,6 +216,7 @@ void OG::DataClear(const std::string& path)
 	if (!ofs)
 	{
 		std::cout << "ファイルは存在しません\n";
+		return;
 	}
 	ofs.close();
 }
