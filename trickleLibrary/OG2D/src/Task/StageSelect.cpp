@@ -83,7 +83,7 @@ bool StageSelect::Initialize()
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定
-	__super::SetDrawOrder(0.3f);
+	__super::SetDrawOrder(0.6f);
 	//初期モード設定
 	this->mode = Mode::createTask;
 	//テスト処理
