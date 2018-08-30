@@ -52,6 +52,10 @@ bool Player::Initialize(Vec2& pos)
 void Player::UpDate()
 {
 	++animation.timeCnt;
+	if (this->animation.timeCnt >= 300000)
+	{
+		this->animation.timeCnt = 0;
+	}
 	//アニメーションカウントを増やす
 	this->StateUpDate();
 	//各状態での処理と別状態への移行
@@ -67,7 +71,7 @@ void Player::UpDate()
 
 		//スイッチはすぐモーションが変わらないのでanimation中の状態を持ってくる
 		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M &&
-			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill) {
+			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill && this->motion != Motion::NoLower) {
 			if (this->InputLeft())
 			{
 				this->est.x = -this->MOVE_SPEED;
@@ -956,6 +960,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 			src = Box2D(this->walk[this->timeCnt / 3 % 9] * this->srcX, 9 * this->srcY, this->srcX, this->srcY);
 			break;
 		case Motion::Switch_M:
+		{
 			auto switchs = OGge->GetTasks<Switch>("Switch");
 			for (auto id = switchs->begin(); id != switchs->end(); ++id) {
 				if ((*id)->hit(*player)) {
@@ -981,7 +986,8 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 					}
 				}
 			}
-			break;
+		}
+		break;
 		}
 	}
 	if (state == ANIMATION)
@@ -1018,7 +1024,9 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 			break;
 		case Motion::Spill:
 			src = Box2D(this->spill[this->animCnt / 8 % 3] * this->srcX, 6 * this->srcY, this->srcX, this->srcY);
-
+			break;
+		case Motion::NoLower:
+			src = Box2D(2 * this->srcX, 4 * this->srcY, this->srcX, this->srcY);
 			break;
 		}
 	}
@@ -1235,6 +1243,11 @@ bool Player::ReleaseHold()
 			this->haveAddPos = { 0,0 };
 			return true;
 		}
+		else
+		{
+			this->animation.animCnt = 0;
+			this->motion = Motion::NoLower;
+		}
 	}
 	return false;
 }
@@ -1420,11 +1433,16 @@ void Player::StateUpDate()
 		//バケツの値を自分に合わせる
 		//this->HaveObjectPosMove();
 		//バケツを置く動作
-		if (this->InputB2down() && this->FootCheck())
+		if (this->InputB2down() && this->FootCheck() && this->motion != Motion::NoLower)
 		{
 			if (this->PutCheck() && this->motion != Motion::Spill)
 			{
 				this->motion = Motion::Lower;
+			}
+			else
+			{
+				this->animation.animCnt = 0;
+				this->motion = Motion::NoLower;
 			}
 		}
 		break;
@@ -1529,6 +1547,12 @@ bool Player::MotionUpDate()
 		if (this->animation.animCnt > 23) {
 			this->motion = Motion::Normal;
 			this->animation.animCnt = 0;
+		}
+		break;
+	case NoLower:
+		if (!this->MotionNoLowerUpDate())
+		{
+			return false;
 		}
 		break;
 	}
@@ -1646,10 +1670,10 @@ bool Player::MotionLadderUpDate()
 	{
 		if (this->LadderJumpCheck())
 		{
-			this->motion = Motion::Jump;
-			this->animation.animCnt = 0;
-			this->moveCnt = 0;
-			return true;
+		this->motion = Motion::Jump;
+		this->animation.animCnt = 0;
+		this->moveCnt = 0;
+		return true;
 		}
 	}
 	if (this->InputUp())
@@ -1741,6 +1765,16 @@ bool Player::MotionWalkUpDate()
 	if (this->HeadSolidCheck())
 	{
 		this->state = State::BUCKET;
+	}
+	return true;
+}
+bool Player::MotionNoLowerUpDate()
+{
+	this->animation.animCnt++;
+	if (this->animation.animCnt >= 20)
+	{
+		this->motion = Motion::Normal;
+		this->animation.animCnt = 0;
 	}
 	return true;
 }
