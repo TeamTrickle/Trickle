@@ -18,6 +18,19 @@ bool Texture::Create(const std::string& path)
 	std::string filepath = FileName + path;
 	//画像データを読み込む
 	unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
+	try
+	{
+		if (data == NULL)
+		{
+			throw data;
+		}
+	}
+	catch (...)
+	{
+		std::cout << "Texture Create Error!" << path << "\n";
+		OG::OutDebugData("TextureErrorPath.txt", path + "\n");
+		return false;
+	}
 	//データ形式を選ぶ
 	GLint type = (comp == 3) ? GL_RGB : GL_RGBA;
 	//画像データをOpenGLへ送る
@@ -84,6 +97,19 @@ Texture::Texture(const std::string& path)
 	std::string filepath = FileName + path;
 	//画像データを読み込む
 	unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
+	try
+	{
+		if (data == NULL)
+		{
+			throw data;
+		}
+	}
+	catch (...)
+	{
+		std::cout << "Texture Create Error!" << path << "\n";
+		OG::OutDebugData("TextureErrorPath.txt", path + "\n");
+		return;
+	}
 	//データ形式を選ぶ
 	GLint type = (comp == 3) ? GL_RGB : GL_RGBA;
 	//画像データをOpenGLへ送る
@@ -203,4 +229,21 @@ Vec2 Texture::GetTextureSize() const
 Texture::~Texture()
 {
 	//glDeleteTextures(1, &this->_TexId);
+}
+GLuint Texture::GetID() const
+{
+	return this->_TexId;
+}
+GLuint Texture::CreateID(const GLsizei& size)
+{
+	glGenTextures(size, &this->_TexId);
+	return this->_TexId;
+}
+void Texture::DeleteID(const GLsizei& size)
+{
+	glDeleteTextures(size, &this->_TexId);
+}
+void Texture::Bind(const GLuint& id)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
 }

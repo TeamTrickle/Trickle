@@ -58,6 +58,7 @@
 #include <utility>
 
 #include "OGlib.h"
+#include "randmais.h"
 
 #define PI 3.1415926f
 typedef unsigned char u_char;
@@ -78,4 +79,8 @@ namespace OG {
 	void cout(const Box2D&);
 	void cout(const Vec2&);
 	void cout(const Color&);
+	bool Data_Cipher(const std::string& in_path, const std::string& out_path);
+	std::string Data_Composite(std::ifstream& ifs);
+	void OutDebugData(const std::string& out_path, const std::string& text);
+	void DataClear(const std::string& path);
 }
