@@ -58,6 +58,23 @@ public:
 	*@return:GLuint ID
 	*/
 	GLuint GetID() const;
+	/**
+	*@brief	:テクスチャIDを生成する
+	*@param	:GLsizei size 生成数
+	*@return:GLuint ID
+	*/
+	GLuint CreateID(const GLsizei& size);
+	/**
+	*@brief	:テクスチャIDを削除する
+	*@param	:GLsizei size 削除数
+	*/
+	void DeleteID(const GLsizei& size);
+	/**
+	*@brief	:テクスチャをバインドする
+	*@param	:GLuint id バインドするID
+	*0指定で対象を無にする
+	*/
+	void Bind(const GLuint& id);
 private:
 	//! テクスチャのID
 	GLuint _TexId;

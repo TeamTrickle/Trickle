@@ -234,3 +234,16 @@ GLuint Texture::GetID() const
 {
 	return this->_TexId;
 }
+GLuint Texture::CreateID(const GLsizei& size)
+{
+	glGenTextures(size, &this->_TexId);
+	return this->_TexId;
+}
+void Texture::DeleteID(const GLsizei& size)
+{
+	glDeleteTextures(size, &this->_TexId);
+}
+void Texture::Bind(const GLuint& id)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+}
