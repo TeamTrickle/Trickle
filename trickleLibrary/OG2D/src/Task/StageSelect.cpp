@@ -44,6 +44,7 @@ bool StageSelect::Initialize()
 	this->Testdoor.Create((std::string)"door.png");
 	this->Wall.Create((std::string)"wall2.PNG");
 	this->LadderTex.Create("mapchip2.png");
+	this->totitleTex.Create("totitle.png");
 	//プレイヤーNPCの生成
 	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
@@ -190,6 +191,7 @@ void StageSelect::Render2D()
 			this->Wall.Draw(draw, src);
 		}
 	}
+	//ハシゴ
 	for (int i = 0; i < 8; ++i)
 	{
 		Box2D draw(31.f*64.f + 1920.f, i * 128.f, 128.f, 128.f);
@@ -197,6 +199,13 @@ void StageSelect::Render2D()
 		Box2D src(768, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
+	}
+	//totitle看板
+	{
+		Box2D draw(1920 * 2 - 500 + 200+167, 1080 - 250+83, 333, 167);
+		draw.OffsetSize();
+		Box2D src(0, 0, 1000, 500);
+		this->totitleTex.Draw(draw, src);
 	}
 }
 
@@ -206,6 +215,7 @@ bool StageSelect::Finalize()
 	this->Testdoor.Finalize();
 	this->Wall.Finalize();
 	this->LadderTex.Finalize();
+	this->totitleTex.Finalize();
 	//サウンドの解放
 	delete rm->GetSoundData((std::string)"titleBGM");
 	rm->DeleteSound((std::string)"titleBGM");
