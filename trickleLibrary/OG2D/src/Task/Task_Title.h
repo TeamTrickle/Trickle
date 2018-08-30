@@ -127,6 +127,8 @@ class Title :public TaskObject
 	float tex_a;
 	float cursor_a;
 	__int8 cursorNum;      //0=start,1=credit,2=delete,3=exit,
+	float press_a;
+	float press_delta_a;
 
 	int gierCnt;
 	bool isGierAng;

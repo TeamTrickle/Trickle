@@ -85,6 +85,9 @@ bool Title::Initialize()
 	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
 	this->monitorSpos = 165.f;
 	this->monitorEpos = 1345.f;
+	//•¶Žšƒ¿’l
+	this->press_a = 0;
+	this->press_delta_a = 0.01f;
 
 	//Žg‚í‚È‚­‚È‚Á‚Ä‚é
 	//this->textPos[0] = { this->startPos,Vec2(256,64) };
@@ -314,6 +317,10 @@ void Title::UpDate()
 		demoTimer.Start();
 		if (PressB() == false)
 		{
+			this->press_a += this->press_delta_a;
+			if (this->press_a < 0 || this->press_a >= 1.0f) {
+				this->press_delta_a *= -1;
+			}
 			if (demoTimer.GetTime() >= DEMO_LIMIT) {
 				this->mode = Mode::from10;
 				break;
@@ -677,6 +684,16 @@ void Title::Render2D()
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
 
 		this->monitorTex.Draw(draw, src);
+	}
+	//PressAnyButton
+	{
+		if (this->mode == from6) {
+			Box2D draw(this->startPos.x - 275, this->startPos.y + 60, 64.f * 15, 64.f);
+			draw.OffsetSize();
+			Box2D src(0.f, 64.f * 16, 64.f * 15, 64.f);
+			src.OffsetSize();
+			rm->GetTextureData(std::string("fontui"))->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->press_a));
+		}
 	}
 
 	//•¶Žš•\Ž¦
