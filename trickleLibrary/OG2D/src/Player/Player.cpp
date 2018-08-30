@@ -987,10 +987,7 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 				}
 			}
 		}
-			break;
-		case Motion::NoLower:
-			src = Box2D(2 * this->srcX, 4 * this->srcY, this->srcX, this->srcY);
-			break;
+		break;
 		}
 	}
 	if (state == ANIMATION)
@@ -1001,9 +998,6 @@ Box2D Player::Animation::returnSrc(Motion motion, State state, Direction dir)
 			break;
 		case Motion::Ladder:
 			src = Box2D(0 * this->srcX, 3 * this->srcY, this->srcX, this->srcY);
-			break;
-		case Motion::NoLower:
-			src = Box2D(2 * this->srcX, 4 * this->srcY, this->srcX, this->srcY);
 			break;
 		}
 	}
@@ -1439,7 +1433,7 @@ void Player::StateUpDate()
 		//バケツの値を自分に合わせる
 		//this->HaveObjectPosMove();
 		//バケツを置く動作
-		if (this->InputB2down() && this->FootCheck())
+		if (this->InputB2down() && this->FootCheck() && this->motion != Motion::NoLower)
 		{
 			if (this->PutCheck() && this->motion != Motion::Spill)
 			{
@@ -1777,7 +1771,7 @@ bool Player::MotionWalkUpDate()
 bool Player::MotionNoLowerUpDate()
 {
 	this->animation.animCnt++;
-	if (this->animation.animCnt > 20)
+	if (this->animation.animCnt >= 20)
 	{
 		this->motion = Motion::Normal;
 		this->animation.animCnt = 0;
