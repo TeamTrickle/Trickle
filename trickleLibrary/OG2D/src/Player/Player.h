@@ -41,6 +41,7 @@ public:
 		Lift,		//‚¿‚ ‚°‚é
 		Lower,		//‚¿‚¨‚ë‚·
 		Spill,		//ˆì‚·
+		NoLower,	//‚¨‚ë‚¹‚È‚¢
 	};
 private:
 	class Animation
@@ -121,6 +122,7 @@ private:
 	bool MotionJumpUpDate();
 	bool MotionLadderUpDate();
 	bool MotionWalkUpDate();
+	bool MotionNoLowerUpDate();
 	void StateClearUpdate();
 	//“ü—Íˆ—ŠÈ—ª‰»
 	bool InputLeft();
