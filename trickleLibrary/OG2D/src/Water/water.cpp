@@ -56,7 +56,7 @@ Water::Water(const Vec2& pos)
 	//ŠŽó‘Ô‚Ì‰Šú‰»
 	this->hold = false;
 	//“–‚½‚è”»’è‚ð§ŒÀ
-	this->Radius = { 0.5f,0.9f };
+	this->Radius = { 0.5f,1.f };
 	//¶‰E”»’è‚ð‰Šú‰»
 	this->left = nullptr;
 	this->right = nullptr;
@@ -271,8 +271,6 @@ void Water::Render2D()
 	{
 		src.y += 256;
 		src.x = (float)((this->nowTime / 6) * 256);
-		draw.y += 2.0f;
-		draw.h += 2.0f;
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
@@ -357,7 +355,7 @@ bool Water::FootCheck(const std::string& objtag, const int n)
 	GameObject foot;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
 	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
-	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f)), Vec2(this->Scale.x - x_, 0.1f), 0.0f);
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f)), Vec2(this->Scale.x - x_, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	if (!map)
 	{
@@ -520,6 +518,7 @@ void Water::MoveWATERCheck(Vec2& est)
 	{
 		this->nowSituation = Water::Situation::Deleteform;
 		this->nowTime = 0;
+		this->move = { 0,0 };
 	}
 }
 
