@@ -246,12 +246,7 @@ Water::Situation Water::UpNormal()
 {
 	
 	Water::Situation now = this->nowSituation;
-	auto map = OGge->GetTask<Map>("map");
-	
-	//else
-	{
-		this->Friction();
-	}
+	this->Friction();
 	return now;
 }
 
@@ -386,9 +381,9 @@ bool Water::FootCheck(const std::string& objtag, const int n)
 	auto doors = OGge->GetTasks<Door>("Door");
 	for (auto id = doors->begin(); id != doors->end(); ++id)
 	{
-		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			if (this->CubeHit(*(*id)))
+			if (foot.hit(*(*id)))
 			{
 				return true;
 			}
@@ -476,8 +471,7 @@ void Water::MoveWATERCheck(Vec2& est)
 				//if (this->hit(*(*id)))
 				if((*id)->hit(*this))
 				{
-					this->nowSituation = Water::Situation::Deleteform;
-					this->nowTime = 0;
+					this->position.x = preX;
 					break;
 				}
 			}
@@ -512,14 +506,17 @@ void Water::MoveWATERCheck(Vec2& est)
 			{
 				if ((*id)->hit(*this))
 				{
-					this->nowSituation = Water::Situation::Deleteform;
-					this->nowTime = 0;
+					this->position.y = preY;
 					break;
 				}
 			}
 		}
 	}
-	if ((map && map->HitCheck(*this, 0) || this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil") || this->FootCheck((std::string)"Ladder")))
+	if ((map && map->HitCheck(*this, 0) || 
+		this->FootCheck((std::string)"Floor") || 
+		this->FootCheck((std::string)"Soil") || 
+		this->FootCheck((std::string)"Ladder") ||
+		this->FootCheck("door")))
 	{
 		this->nowSituation = Water::Situation::Deleteform;
 		this->nowTime = 0;
