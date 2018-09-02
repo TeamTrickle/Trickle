@@ -135,12 +135,12 @@ bool Map::LoadMap(const std::string& path_, const Format& format)
 				this->hitBase[y][x].SetID(1);
 				break;
 			case 15:	//bug
-				this->hitBase[y][x].position.x += 64 - 12;
+				//this->hitBase[y][x].position.x += 64 - 12;
 				this->hitBase[y][x].Scale.x = 12.f;
 				this->hitBase[y][x].SetID(1);
 				break;
 			case 16:	//bug
-				this->hitBase[y][x].position.y += 64 - 12;
+				//this->hitBase[y][x].position.y += 64 - 12;
 				this->hitBase[y][x].Scale.y = 12.f;
 				this->hitBase[y][x].SetID(1);
 				break;
