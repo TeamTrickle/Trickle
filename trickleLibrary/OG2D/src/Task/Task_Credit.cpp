@@ -4,6 +4,7 @@
 #include "Task/Task_Title.h"
 #include "Map/Map.h"
 #include "Back/Back.h"
+#include "Load/LoadLogo.h"
 
 Credit::Credit()
 {
@@ -11,7 +12,7 @@ Credit::Credit()
 	this->taskName = "Credit";	//タスク名決定
 	__super::Init(this->taskName);	//タスク名をオブジェクトにも反映
 	//描画順の登録
-	__super::SetDrawOrder(0.98f);
+	__super::SetDrawOrder(0.95f);
 	//初期化処理
 }
 
@@ -19,6 +20,9 @@ Credit::~Credit()
 {
 	//解放処理
 	this->Finalize();
+	if (!OGge->GetDeleteEngine()) {
+		Title::Create();
+	}
 }
 
 bool Credit::Initialize()
@@ -190,7 +194,11 @@ void Credit::UpDate()
 	if (nowMode == MODE9) {
 		npc->AutoMoveX();
 		if (!npc->isAutoPlayX()) {
-			this->Kill();
+			auto load = Load::Create();
+			if (load)
+			{
+				load->AddDeleteObjectName(this->GetTaskName());
+			}
 		}
 	}
 
@@ -204,7 +212,7 @@ void Credit::Render2D()
 		frame[i].tex.Draw(frame[i].draw, frame[i].src);
 	}
 	//梯子
-	for (int i = 2; i < 10; ++i)
+	for (int i = 2; i < 11; ++i)
 	{
 		Box2D draw(3800.f, i*128.f, 128.f, 128.f);
 		draw.OffsetSize();

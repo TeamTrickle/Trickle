@@ -32,7 +32,7 @@ void Load::FeadInUpDate()
 {
 	if (this->color->alpha < 1.f)
 	{
-		this->color->alpha += 0.005f;
+		this->color->alpha += 0.02f;
 	}
 	else
 	{
@@ -53,7 +53,7 @@ void Load::FeadOutUpDate()
 {
 	if (this->color->alpha > 0)
 	{
-		this->color->alpha -= 0.01f;
+		this->color->alpha -= 0.03f;
 	}
 	else
 	{

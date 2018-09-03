@@ -25,28 +25,28 @@ void LogoTask::UpDate()
 	switch (this->mode)
 	{
 		case Mode::form1:
-			this->back.alpha += 0.01f;
+			this->back.alpha += 0.03f;
 			if (this->back.alpha > 1.0f)
 			{
 				this->mode = Mode::form2;
 			}
 			break;
 		case Mode::form2:
-			this->logo_a += 0.01f;
+			this->logo_a += 0.03f;
 			if (this->logo_a > 2.f)
 			{
 				this->mode = Mode::form3;
 			}
 			break;
 		case Mode::form3:
-			this->logo_a -= 0.01f;
+			this->logo_a -= 0.03f;
 			if(this->logo_a <= 0.f)
 			{
 				this->mode = Mode::form4;
 			}
 			break;
 		case Mode::form4:
-			this->back.alpha -= 0.01f;
+			this->back.alpha -= 0.03f;
 			if (this->back.alpha <= 0.f)
 			{
 				this->mode = Mode::end;
