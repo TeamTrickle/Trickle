@@ -1666,16 +1666,6 @@ bool Player::MotionJumpUpDate()
 }
 bool Player::MotionLadderUpDate()
 {
-	if (this->InputB1down())
-	{
-		if (this->LadderJumpCheck())
-		{
-		this->motion = Motion::Jump;
-		this->animation.animCnt = 0;
-		this->moveCnt = 0;
-		return true;
-		}
-	}
 	if (this->InputUp())
 	{
 		++this->animation.animCnt;
