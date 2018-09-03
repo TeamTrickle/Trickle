@@ -18,6 +18,7 @@ private:
 	const Box2D BUCKET_WATER = Box2D(256, 0, 256, 256);
 	const Box2D BUCKET_WATERMAX = Box2D(512, 0, 256, 256);
 	Paint::PaintColor* color;
+	GameObject WaterHitObj;
 	Box2D GetSpriteCrop() const;
 	bool BucketWaterCreate();
 	bool isObjectCollided();

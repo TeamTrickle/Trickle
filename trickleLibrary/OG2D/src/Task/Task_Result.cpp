@@ -73,11 +73,6 @@ bool Result::Initialize() {
 	this->maxTrueNumber = -1;
 	this->RoadData();
 	OGge->camera->SetSize(Vec2(1280, 720));
-	auto load = OGge->GetTask<Load>("load");
-	if (load)
-	{
-		load->SetFead(Load::Fead::Out);
-	}
 	return true;
 }
 void Result::UpDate() {

@@ -1,6 +1,6 @@
 #include "ResourceManager.h"
 
-void ResourceManager::SetSoundData(std::string& dataname,Sound* sound)
+void ResourceManager::SetSoundData(const std::string& dataname,Sound* sound)
 {
 	for (auto id = this->soundData.begin(); id != soundData.end(); ++id)
 	{
@@ -15,7 +15,7 @@ void ResourceManager::SetSoundData(std::string& dataname,Sound* sound)
 	this->soundData.push_back(d);
 }
 
-void ResourceManager::SetTextureData(std::string& dataname, Texture* texture)
+void ResourceManager::SetTextureData(const std::string& dataname, Texture* texture)
 {
 	for (auto id = this->textureData.begin(); id != this->textureData.end(); ++id)
 	{
@@ -30,7 +30,7 @@ void ResourceManager::SetTextureData(std::string& dataname, Texture* texture)
 	this->textureData.push_back(d);
 }
 
-Sound* ResourceManager::GetSoundData(std::string& dataname)
+Sound* ResourceManager::GetSoundData(const std::string& dataname)
 {
 	for (auto id = this->soundData.begin(); id != this->soundData.end(); ++id)
 	{
@@ -42,7 +42,7 @@ Sound* ResourceManager::GetSoundData(std::string& dataname)
 	return nullptr;
 }
 
-Texture* ResourceManager::GetTextureData(std::string& dataname)
+Texture* ResourceManager::GetTextureData(const std::string& dataname)
 {
 	for (auto id = this->textureData.begin(); id != this->textureData.end(); ++id)
 	{
@@ -64,7 +64,7 @@ ResourceManager::~ResourceManager()
 	this->textureData.clear();
 }
 
-bool ResourceManager::DeleteTexture(std::string& name)
+bool ResourceManager::DeleteTexture(const std::string& name)
 {
 	for (auto id = this->textureData.begin(); id != this->textureData.end(); ++id)
 	{
@@ -77,7 +77,7 @@ bool ResourceManager::DeleteTexture(std::string& name)
 	return false;
 }
 
-bool ResourceManager::DeleteSound(std::string& name)
+bool ResourceManager::DeleteSound(const std::string& name)
 {
 	for (auto id = this->soundData.begin(); id != this->soundData.end(); ++id)
 	{

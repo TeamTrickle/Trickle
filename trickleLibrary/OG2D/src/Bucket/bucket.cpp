@@ -56,6 +56,7 @@ bool Bucket::Initialize(Vec2& pos)
 	__super::SetDrawOrder(0.5f);
 	this->IsOutCheck = false;
 	this->WaterOutTime = 0;
+	this->WaterHitObj.CreateObject(Cube, pos, Vec2(64, 32), 0.f);
 	return true;
 }
 
@@ -168,6 +169,7 @@ void Bucket::Render2D() {
 	src.OffsetSize();
 	tex.Rotate(this->angle);
 	tex.Draw(draw, src);
+	this->WaterHitObj.LineDraw();
 }
 
 bool Bucket::Finalize() {
@@ -339,59 +341,63 @@ void Bucket::WaterIsHitCheck()
 	{
 		return;
 	}
+	this->WaterHitObj.position = this->position;
 	auto waters = OGge->GetTasks<Water>("water");
 	for (int i = 0; i < (*waters).size(); ++i)
 	{
-		if (this->CubeHit(*(*waters)[i]))
+		if (this->IsObjectDistanceCheck((*waters)[i]->position, (*waters)[i]->Scale))
 		{
-			float cap = (*waters)[i]->waterMove();
-			if (cap > 0.0f)
+			if (this->WaterHitObj.hit(*(*waters)[i]))
 			{
-				
-				if (this->color)
+				float cap = (*waters)[i]->waterMove();
+				if (cap > 0.0f)
 				{
-					if (*this->color == Paint::PaintColor::Purple)
+
+					if (this->color)
 					{
-						//紫なら色の変化を行わない
-					}
-					else if (*this->color == Paint::PaintColor::Blue && (*waters)[i]->GetColor() == Paint::PaintColor::Red)
-					{
-						//青と赤で紫へ
-						if (this->color)
+						if (*this->color == Paint::PaintColor::Purple)
 						{
-							delete this->color;
+							//紫なら色の変化を行わない
 						}
-						this->color = new Paint::PaintColor;
-						*this->color = Paint::PaintColor::Purple;
-					}
-					else if (*this->color == Paint::PaintColor::Red && (*waters)[i]->GetColor() == Paint::PaintColor::Blue)
-					{
-						//赤と青で紫へ
-						if (this->color)
+						else if (*this->color == Paint::PaintColor::Blue && (*waters)[i]->GetColor() == Paint::PaintColor::Red)
 						{
-							delete this->color;
+							//青と赤で紫へ
+							if (this->color)
+							{
+								delete this->color;
+							}
+							this->color = new Paint::PaintColor;
+							*this->color = Paint::PaintColor::Purple;
 						}
-						this->color = new Paint::PaintColor;
-						*this->color = Paint::PaintColor::Purple;
+						else if (*this->color == Paint::PaintColor::Red && (*waters)[i]->GetColor() == Paint::PaintColor::Blue)
+						{
+							//赤と青で紫へ
+							if (this->color)
+							{
+								delete this->color;
+							}
+							this->color = new Paint::PaintColor;
+							*this->color = Paint::PaintColor::Purple;
+						}
+						else
+						{
+							//それ以外はそのまま変化させる
+							if (this->color)
+							{
+								delete this->color;
+							}
+							this->color = new Paint::PaintColor;
+							*this->color = (*waters)[i]->GetColor();
+						}
 					}
 					else
 					{
-						//それ以外はそのまま変化させる
-						if (this->color)
-						{
-							delete this->color;
-						}
 						this->color = new Paint::PaintColor;
 						*this->color = (*waters)[i]->GetColor();
 					}
+					sound.play();
+					this->capacity += cap;
 				}
-				else
-				{
-					this->color = new Paint::PaintColor;
-					*this->color = (*waters)[i]->GetColor();
-				}
-				sound.play();
-				this->capacity += cap;
 			}
 		}
 	}

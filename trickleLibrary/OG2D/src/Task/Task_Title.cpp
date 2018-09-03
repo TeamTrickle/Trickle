@@ -158,7 +158,6 @@ bool Title::Initialize()
 	auto load = OGge->GetTask<Load>("load");
 	if (load)
 	{
-		load->SetFead(Load::Fead::Out);
 		load->ALLTaskUpDateStop();
 	}
 	return true;

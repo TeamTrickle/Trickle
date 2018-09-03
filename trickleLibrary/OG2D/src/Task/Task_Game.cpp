@@ -473,12 +473,6 @@ bool Game::Initialize()
 	auto gameprocess = GameManager::Create();
 	//‘•ü
 	auto ornament = Ornament::Create();
-	//ƒ[ƒh‰æ–ÊŠÖŒW
-	auto load = OGge->GetTask<Load>("load");
-	if (load)
-	{
-		load->SetFead(Load::Fead::Out);
-	}
 	return true;
 }
 //-------------------------------------------------------------------------------------------------

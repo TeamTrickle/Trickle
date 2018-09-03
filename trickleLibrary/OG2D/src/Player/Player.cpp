@@ -8,6 +8,11 @@
 #include "Gimmick/NO_MOVE/WeightSwitch.h"
 
 Player::Player()
+	:MOVE_SPEED(5.0f),
+	JUMP_POWER(-13.0f),
+	MAX_FALL(15.0f),
+	GRAVITY((9.8f/60.0f/60.0f*32.0f)*10.0f),
+	FIN_SPEED(0.5f)
 {
 	this->hold = false;
 	this->isInputAuto = false;
@@ -866,15 +871,15 @@ Vec2 Player::Animation::Move(Motion motion_)
 			player->direction = Player::Direction::LEFT;
 		}
 		player->motion = Motion::Walk;
-		if (this->animationVec.x >= 1.0f)
+		if (this->animationVec.x >= 5.0f)
 		{
-			move.x += 1.0f;
-			this->animationVec.x -= 1.0f;
+			move.x += 5.0f;
+			this->animationVec.x -= 5.0f;
 		}
-		else if (this->animationVec.x <= -1.0f)
+		else if (this->animationVec.x <= -5.0f)
 		{
-			move.x -= 1.0f;
-			this->animationVec.x += 1.0f;
+			move.x -= 5.0f;
+			this->animationVec.x += 5.0f;
 		}
 		else
 		{
@@ -1585,49 +1590,12 @@ bool Player::MotionNormalUpDate()
 			}
 		}
 	}
-	//if (this->state != State::BUCKET) 
-	{
-		if (this->InputDown())
-		{
-			if (this->FootMapCheck((std::string)"Ladder", true) && !this->SolidFootCheck())
-			{
-				//移動が終わったら梯子モーションをするように設定
-				this->animation.animMo = Motion::Ladder;
-				//アニメーション状態に移行
-				this->state = State::ANIMATION;
-				//カウントリセット
-				this->moveCnt = 0;
-				//移動値をすべてリセット
-				this->est = { 0.f,0.f };
-				//バケツをおろす
-				if (this->hold)
-				{
-					this->ReleaseHold();
-				}
-				return false;
-			}
-		}
-		if (this->InputUp())
-		{
-			if (this->MapHitCheck((std::string)"Ladder") && !this->SolidHitCheck())
-			{
-				this->animation.animMo = Motion::Ladder;
-				this->state = State::ANIMATION;
-				this->moveCnt = 0;
-				this->est = { 0.f,0.f };
-				if (this->hold)
-				{
-					this->ReleaseHold();
-				}
-				return false;
-			}
-		}
-	}
 	if (this->InputLeft() || this->InputRight() || this->AxisLX() != 0)
 	{
 		//NORMALの時、左右ボタンを押すとWALKに変わる
 		this->motion = Motion::Walk;
 	}
+	this->LadderCheck();
 	if (!this->FootCheck())
 	{
 		//地面がない場合に落下処理に移行
@@ -1897,4 +1865,46 @@ void Player::SetInput(bool b)
 bool Player::GetInput() const
 {
 	return this->isInput;
+}
+bool Player::LadderCheck()
+{
+	if (this->InputDown())
+	{
+		if (this->FootMapCheck((std::string)"Ladder", true) && !this->SolidFootCheck())
+		{
+			//移動が終わったら梯子モーションをするように設定
+			this->animation.animMo = Motion::Ladder;
+			//アニメーション状態に移行
+			this->state = State::ANIMATION;
+			//カウントリセット
+			this->moveCnt = 0;
+			//移動値をすべてリセット
+			this->est = { 0.f,0.f };
+			//バケツをおろす
+			if (this->hold)
+			{
+				this->ReleaseHold();
+			}
+			return false;
+		}
+	}
+	if (this->InputUp())
+	{
+		if (this->MapHitCheck((std::string)"Ladder") && !this->SolidHitCheck())
+		{
+			if (this->hold)
+			{
+				if (!this->ReleaseHold())
+				{
+					return false;
+				}
+			}
+			this->animation.animMo = Motion::Ladder;
+			this->state = State::ANIMATION;
+			this->moveCnt = 0;
+			this->est = { 0.f,0.f };
+			return true;
+		}
+	}
+	return false;
 }

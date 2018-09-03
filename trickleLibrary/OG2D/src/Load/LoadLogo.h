@@ -12,22 +12,34 @@ public:
 	*/
 	enum Fead
 	{
-		//!	フェードイン
-		In,
-		//!	フェードアウト
-		Out
+		//!	ロゴのフェードイン
+		LogoIn,
+		//!	ロゴのフェードアウト
+		LogoOut,
+		//! 背景のフェードイン
+		BackIn,
+		//! 背景のフェードアウト
+		BackOut,
 	};
 private:
-	//!	画像データ
-	Texture image;
+	//!	ロゴデータ
+	Texture* logoimage;
+	//! 背景データ
+	Texture* backimage;
 	//! 描画位置
 	Box2D draw;
 	//!	描画画像位置
 	Box2D src;
-	//! 画像の色データ
-	Color* color;
+	//! 背景の色データ
+	Color* backcolor;
+	//! ロゴの色データ
+	Color* logocolor;
 	//! 現在のモード
 	Fead mode;
+	//! フェードアウトのタイム
+	const float feadOutTime;
+	//! フェードインのタイム
+	const float feadInTime;
 	//!	削除を行うタスクの文字列
 	std::vector<std::string> deleteObjectName;
 	//!	スマートポインタ
@@ -49,13 +61,21 @@ private:
 	*/
 	Load();
 	/**
-	*@brief	:フェードアウト処理
+	*@brief	:ロゴフェードアウト処理
 	*/
-	void FeadOutUpDate();
+	void FeadLogoOutUpDate();
 	/**
-	*@brief	:フェードイン処理
+	*@brief	:ロゴフェードイン処理
 	*/
-	void FeadInUpDate();
+	void FeadLogoInUpDate();
+	/**
+	*@brief	:背景フェードアウト処理
+	*/
+	void FeadBackOutUpDate();
+	/**
+	*@brief	:背景フェードイン処理
+	*/
+	void FeadBackInUpDate();
 public:
 	/**
 	*@brief	:destructor
