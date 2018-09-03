@@ -32,7 +32,6 @@ bool Credit::Initialize()
 	this->frame[5].tex.Create((std::string)"credit6.png");
 	this->frame[6].tex.Create((std::string)"credit7.png");
 	this->frame[7].tex.Create((std::string)"credit8.png");
-	this->nameTex.Create((std::string)"name.png");
 	//”wŒi¶¬
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
 	//ƒ}ƒbƒv¶¬
@@ -224,16 +223,18 @@ void Credit::Render2D()
 void Credit::Finalize()
 {
 	//‰ð•úˆ—
-	this->frameTex.Finalize();
-	this->nameTex.Finalize();
+
 	auto map = OGge->GetTask<Map>("map");
-	auto back = OGge->GetTask<Back>("back");
-	this->LadderTex.Finalize();
-	if (back)
-	{
-		back->Kill();
-	}
 	if (map) { map->Kill(); }
+
+	auto back = OGge->GetTask<Back>("back");
+	if (back) { back->Kill(); }
+
+	this->LadderTex.Finalize();
+
+	for (int i = 0; i < 7; ++i) {
+		this->frame[i].tex.Finalize();
+	}
 }
 
 void Credit::Next()

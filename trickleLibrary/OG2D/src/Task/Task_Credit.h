@@ -35,10 +35,12 @@ public:
 	//描画処理
 	void Render2D();
 	void Finalize(); 
-	void Next();
-	bool LoadSize();
-	void SetSize();
-	void CreditJump(int start, int time);
+
+	void Next();		//次のモードに移る
+	bool LoadSize();	//テキストファイルに書いているサイズを読み込む
+	void SetSize();		//読み込んだサイズを指定する
+	void CreditJump(int start, int time);	//
+	bool CheckTime(int);					//
 
 private:
 	const int NON = 0;
@@ -54,8 +56,6 @@ private:
 	int nowMode;
 
 
-	Texture frameTex;
-	Texture nameTex;
 	Texture LadderTex;
 
 	struct IMAGE {
@@ -78,5 +78,4 @@ private:
 	int WAITTIME;
 	float alpha;
 
-	bool CheckTime(int);
 };
