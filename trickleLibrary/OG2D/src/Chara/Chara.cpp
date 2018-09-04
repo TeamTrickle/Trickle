@@ -84,7 +84,6 @@ void Chara::UpDate()
 		
 	}
 
-	std::cout << move.y << std::endl;
 	if (player) {
 		float tilt = player->GetCurrentStickTilt(In::AXIS_LEFT_X);
 		if (tilt < 0.f) {

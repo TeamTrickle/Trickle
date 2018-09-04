@@ -76,6 +76,13 @@ private:
 	int timeCnt;
 	int jumpTimeCnt;
 	int WAITTIME;
-	float alpha;
 
+	//エフェクトのカウント
+	int effCounter;
+	//花びらのエフェクト
+	Texture petalTex1;
+	Texture petalTex2;
+	Texture petalTex3;
+	Texture petalTex4;
+	Texture petalTex5;
 };

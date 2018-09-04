@@ -8,7 +8,8 @@ class WeightSwitch :public GameObject, public TaskObject
 {
 	float totalmass;        //スイッチに乗っている物の合計質量を格納
 	float maxmass;          //扉が開く重さ
-	Texture* image;
+	Texture switch1;
+	Texture switch2;
 	std::string taskName;
 	Box2D draw;
 	Box2D src;
@@ -18,6 +19,7 @@ class WeightSwitch :public GameObject, public TaskObject
 	bool canBlockhitCheck;      //ブロックと当たり判定をしてよいか
 	bool canBuckethitCheck;     //バケツと当たり判定をしてよいか
 	float premass;
+	float posY;					//スイッチの動かないパーツを固定する
 	std::vector<std::shared_ptr<GameObject>> targets;
 
 	void changeActive();	//自身のオンオフを切り替える(未使用)
