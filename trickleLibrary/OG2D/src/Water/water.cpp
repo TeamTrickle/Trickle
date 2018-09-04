@@ -6,8 +6,8 @@
 #include "Gimmick\NO_MOVE\Door.h"
 #include "Gimmick/NO_MOVE/WeightSwitch.h"
 //#include "Paint\Paint.h"
-Water::Water(Vec2 pos)
-	:MAX_FALL(15.f), GRAVITY((9.8f / 60.f / 60.f*32.f) * 5), FIN_SPEED(1.0f), RAIN_TIME(180)
+Water::Water(const Vec2& pos)
+	:maxFall(15.f), gravity((9.8f / 60.f / 60.f*32.f) * 5), finSpeed(1.0f), rainTime(180)
 {
 	//ƒ^ƒOÝ’è
 	this->objectTag = "water";
@@ -56,7 +56,7 @@ Water::Water(Vec2 pos)
 	//ŠŽó‘Ô‚Ì‰Šú‰»
 	this->hold = false;
 	//“–‚½‚è”»’è‚ð§ŒÀ
-	this->Radius = { 0.5f,0.9f };
+	this->Radius = { 0.5f,1.f };
 	//¶‰E”»’è‚ð‰Šú‰»
 	this->left = nullptr;
 	this->right = nullptr;
@@ -150,7 +150,7 @@ void Water::UpDate()
 				}
 			}
 			//ÃŽ~ŽžŠÔ‚ª‰J‚ð~‚ç‚·ŽžŠÔ•ª‚ð’´‚¦‚½‚Æ‚«
-			if (this->RAIN_TIME < this->nowTime)
+			if (this->rainTime < this->nowTime)
 			{
 				this->nowSituation = Situation::Rainfrom;
 				this->nowTime = 0;
@@ -246,12 +246,7 @@ Water::Situation Water::UpNormal()
 {
 	
 	Water::Situation now = this->nowSituation;
-	auto map = OGge->GetTask<Map>("map");
-	
-	//else
-	{
-		this->Friction();
-	}
+	this->Friction();
 	return now;
 }
 
@@ -276,8 +271,6 @@ void Water::Render2D()
 	{
 		src.y += 256;
 		src.x = (float)((this->nowTime / 6) * 256);
-		draw.y += 2.0f;
-		draw.h += 2.0f;
 	}
 	src.OffsetSize();
 	this->tex->Draw(draw, src, color_a);
@@ -339,17 +332,17 @@ void Water::Friction()
 {
 	if (this->move.x > 0)
 	{
-		this->move.x = std::max(this->move.x - this->FIN_SPEED, 0.f);
+		this->move.x = std::max(this->move.x - this->finSpeed, 0.f);
 	}
 	else
 	{
-		this->move.x = std::min(this->move.x + this->FIN_SPEED, 0.f);
+		this->move.x = std::min(this->move.x + this->finSpeed, 0.f);
 	}
 	if (this->currentState != State::GAS)
 	{
 		if (!this->FootCheck(std::string("Floor")) || !this->FootSolidCheck() || this->move.y < 0)
 		{
-			this->move.y = std::min(this->move.y + this->GRAVITY, this->MAX_FALL);
+			this->move.y = std::min(this->move.y + this->gravity, this->maxFall);
 		}
 		else
 		{
@@ -357,12 +350,12 @@ void Water::Friction()
 		}
 	}
 }
-bool Water::FootCheck(std::string& objtag, int n)
+bool Water::FootCheck(const std::string& objtag, const int n)
 {
 	GameObject foot;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
 	float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
-	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f)), Vec2(this->Scale.x - x_, 0.1f), 0.0f);
+	foot.CreateObject(Objform::Cube, Vec2(this->position.x + (x_ / 2.f), this->position.y + this->Scale.y + (y_ / 2.f)), Vec2(this->Scale.x - x_, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	if (!map)
 	{
@@ -386,9 +379,9 @@ bool Water::FootCheck(std::string& objtag, int n)
 	auto doors = OGge->GetTasks<Door>("Door");
 	for (auto id = doors->begin(); id != doors->end(); ++id)
 	{
-		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			if (this->CubeHit(*(*id)))
+			if (foot.hit(*(*id)))
 			{
 				return true;
 			}
@@ -476,8 +469,7 @@ void Water::MoveWATERCheck(Vec2& est)
 				//if (this->hit(*(*id)))
 				if((*id)->hit(*this))
 				{
-					this->nowSituation = Water::Situation::Deleteform;
-					this->nowTime = 0;
+					this->position.x = preX;
 					break;
 				}
 			}
@@ -512,17 +504,21 @@ void Water::MoveWATERCheck(Vec2& est)
 			{
 				if ((*id)->hit(*this))
 				{
-					this->nowSituation = Water::Situation::Deleteform;
-					this->nowTime = 0;
+					this->position.y = preY;
 					break;
 				}
 			}
 		}
 	}
-	if ((map && map->HitCheck(*this, 0) || this->FootCheck((std::string)"Floor") || this->FootCheck((std::string)"Soil") || this->FootCheck((std::string)"Ladder")))
+	if ((map && map->HitCheck(*this, 0) || 
+		this->FootCheck((std::string)"Floor") || 
+		this->FootCheck((std::string)"Soil") || 
+		this->FootCheck((std::string)"Ladder") ||
+		this->FootCheck("door")))
 	{
 		this->nowSituation = Water::Situation::Deleteform;
 		this->nowTime = 0;
+		this->move = { 0,0 };
 	}
 }
 
@@ -766,7 +762,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 	}
 }
 
-bool Water::HeadCheck(std::string& objtag, int n)
+bool Water::HeadCheck(const std::string& objtag, const int n)
 {
 	GameObject head;
 	float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
@@ -892,7 +888,7 @@ Paint::PaintColor Water::GetColor() const
 	return this->color;
 }
 
-void Water::MovePos(Vec2& est)
+void Water::MovePos(const Vec2& est)
 {
 	this->move = est;
 }
@@ -907,7 +903,7 @@ bool Water::IsBucket()
 	return this->GetSituation() == Water::Situation::Normal && this->GetState() == Water::State::LIQUID && this->invi <= 0;
 }
 
-void Water::SetMaxSize(Vec2& max)
+void Water::SetMaxSize(const Vec2& max)
 {
 	this->maxSize = max;
 }
@@ -960,12 +956,12 @@ void Water::CheckState()
 			this->objectTag = "GAS";
 			this->Radius = { 0.5f,0.8f };
 			this->nowSituation = Situation::Normal;
-			this->FIN_SPEED = 1.0f;
+			this->finSpeed = 1.0f;
 			break;
 		case State::LIQUID:
 			this->Radius = { 0.5f,0.9f };
 			this->objectTag = "LIQUID";
-			this->FIN_SPEED = 1.0f;
+			this->finSpeed = 1.0f;
 			break;
 		case State::SOLID:
 			this->Scale = this->maxSize;
@@ -995,7 +991,7 @@ void Water::CheckState()
 			this->objectTag = "SOLID";
 			this->Radius = { 0.7f,0.7f };
 			this->nowSituation = Situation::Normal;
-			this->FIN_SPEED = 0.05f;
+			this->finSpeed = 0.05f;
 			break;
 		}
 	}
@@ -1006,7 +1002,7 @@ void Water::MovePos_x(float est)
 	this->move.x = est;
 }
 
-bool Water::SolidMelt()
+void Water::SolidMelt()
 {
 	if (this->currentState == State::SOLID)
 	{
@@ -1035,7 +1031,6 @@ bool Water::SolidMelt()
 		//effect->SetMaxSize(Vec2(80, 80));
 		effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 200), 30);
 	}
-	return false;
 }
 void Water::SetScale(const Vec2& s)
 {
@@ -1117,16 +1112,13 @@ bool Water::SolidExtrusion()
 	}
 	return false;
 }
-Water::SP Water::Create(Vec2& pos, bool flag_)
+Water::SP Water::Create(const Vec2& pos)
 {
 	auto to = Water::SP(new Water(pos));
 	if (to)
 	{
 		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
+		OGge->SetTaskObject(to);
 		if (!to->Initialize())
 		{
 			to->Kill();

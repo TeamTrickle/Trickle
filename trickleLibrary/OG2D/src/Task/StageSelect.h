@@ -34,6 +34,7 @@ class StageSelect : public TaskObject
 	Texture Testdoor;		//ドアの画像
 	Texture Wall;           //壁の画像
 	Texture LadderTex;
+	Texture totitleTex;		//タイトルに戻る看板
 
 	//サウンドのファイル名格納
 	std::string soundname;     
@@ -44,19 +45,19 @@ class StageSelect : public TaskObject
 	enum Mode
 	{
 		Non,
-		from1,
-		from2,
-		from3,
-		from4,
+		createTask,
+		objectMoveTask,
+		waitTask,
+		afterMoveTask,
 		End,
 	};
 	Mode mode;
 	Mode preMode;
 	//各処理関数
-	void From1();
-	void From2();
-	void From3();
-	void From4();
+	void CreateTask();
+	void ObjectMoveTask();
+	void WaitTask();
+	void AfterMoveTask();
 
 	unsigned __int64 timeCnt;
 	int nowPos;

@@ -23,7 +23,8 @@ Chara::Chara(std::string& path, Vec2& pos)
 	this->isAutoOff = false;			//オート移動チェックを初期化
 	this->isAutoMode = false;			//オートモードを初期化
 	this->Restriction_x = nullptr;
-	this->creditFlag = false;			
+	this->creditFlag = false;
+	__super::SetDrawOrder(0.97f);
 }
 Chara::~Chara()
 {

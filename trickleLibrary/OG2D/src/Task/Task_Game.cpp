@@ -473,12 +473,6 @@ bool Game::Initialize()
 	auto gameprocess = GameManager::Create();
 	//‘•ü
 	auto ornament = Ornament::Create();
-	//ƒ[ƒh‰æ–ÊŠÖŒW
-	auto load = OGge->GetTask<Load>("load");
-	if (load)
-	{
-		load->Set(Load::Fead::Out);
-	}
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -644,6 +638,10 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id) {
+		(*id)->Kill();
+	}
 	rm->DeleteTexture((std::string)"playerTex");
 	rm->DeleteTexture((std::string)"waterTex");
 	rm->DeleteTexture((std::string)"Effect");
@@ -746,7 +744,7 @@ void Game::Camera_move()
 }
 void Game::CameraSetPos(const Vec2& pos)
 {
-	ce.Set(pos);
+	ce.SetEndPos(pos);
 }
 
 Game::SP Game::Create(bool flag_)

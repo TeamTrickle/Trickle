@@ -56,6 +56,7 @@ bool Bucket::Initialize(Vec2& pos)
 	__super::SetDrawOrder(0.5f);
 	this->IsOutCheck = false;
 	this->WaterOutTime = 0;
+	this->WaterHitObj.CreateObject(Cube, pos, Vec2(64, 32), 0.f);
 	return true;
 }
 
@@ -85,15 +86,15 @@ void Bucket::UpDate() {
 		this->WaterOutTime++;
 		if (this->WaterOutTime > 10)
 		{
-			
+
 			//水をこぼす音の再生
 			soundD.play();
 
-			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) -32.f, this->position.y - 20.f));
+			auto water = Water::Create(Vec2(this->position.x + (this->Scale.x / 2) - 32.f, this->position.y - 20.f));
 			water->SetSituation(Water::Situation::Normal);
 			water->SetScale(Vec2(64, 64));
 			water->SetWaterVolume(capacity);     //生成する水の量に、バケツに入っていた水の量を反映させる
-		
+
 			this->capacity = 0.f;
 			//70カウント中は次の水を引き受けない
 			this->invi = 70;
@@ -121,6 +122,22 @@ void Bucket::UpDate() {
 	if (!hold)
 	{
 		CheckMove(gravity);
+	}
+	//バケツの重さの変化について
+	//一滴の重さ
+	if (capacity > 0.f && capacity < 1.0f)
+	{
+		this->mass = 1.5f;
+	}
+	//二滴の重さ
+	if (capacity >= 1.0f)
+	{
+		this->mass = 2.0f;
+	}
+	//空の重さ
+	if (capacity == 0.0f)
+	{
+		this->mass = 1.0f;
 	}
 }
 
@@ -152,6 +169,7 @@ void Bucket::Render2D() {
 	src.OffsetSize();
 	tex.Rotate(this->angle);
 	tex.Draw(draw, src);
+	this->WaterHitObj.LineDraw();
 }
 
 bool Bucket::Finalize() {
@@ -323,59 +341,63 @@ void Bucket::WaterIsHitCheck()
 	{
 		return;
 	}
+	this->WaterHitObj.position = this->position;
 	auto waters = OGge->GetTasks<Water>("water");
 	for (int i = 0; i < (*waters).size(); ++i)
 	{
-		if (this->CubeHit(*(*waters)[i]))
+		if (this->IsObjectDistanceCheck((*waters)[i]->position, (*waters)[i]->Scale))
 		{
-			float cap = (*waters)[i]->waterMove();
-			if (cap > 0.0f)
+			if (this->WaterHitObj.hit(*(*waters)[i]))
 			{
-				
-				if (this->color)
+				float cap = (*waters)[i]->waterMove();
+				if (cap > 0.0f)
 				{
-					if (*this->color == Paint::PaintColor::Purple)
+
+					if (this->color)
 					{
-						//紫なら色の変化を行わない
-					}
-					else if (*this->color == Paint::PaintColor::Blue && (*waters)[i]->GetColor() == Paint::PaintColor::Red)
-					{
-						//青と赤で紫へ
-						if (this->color)
+						if (*this->color == Paint::PaintColor::Purple)
 						{
-							delete this->color;
+							//紫なら色の変化を行わない
 						}
-						this->color = new Paint::PaintColor;
-						*this->color = Paint::PaintColor::Purple;
-					}
-					else if (*this->color == Paint::PaintColor::Red && (*waters)[i]->GetColor() == Paint::PaintColor::Blue)
-					{
-						//赤と青で紫へ
-						if (this->color)
+						else if (*this->color == Paint::PaintColor::Blue && (*waters)[i]->GetColor() == Paint::PaintColor::Red)
 						{
-							delete this->color;
+							//青と赤で紫へ
+							if (this->color)
+							{
+								delete this->color;
+							}
+							this->color = new Paint::PaintColor;
+							*this->color = Paint::PaintColor::Purple;
 						}
-						this->color = new Paint::PaintColor;
-						*this->color = Paint::PaintColor::Purple;
+						else if (*this->color == Paint::PaintColor::Red && (*waters)[i]->GetColor() == Paint::PaintColor::Blue)
+						{
+							//赤と青で紫へ
+							if (this->color)
+							{
+								delete this->color;
+							}
+							this->color = new Paint::PaintColor;
+							*this->color = Paint::PaintColor::Purple;
+						}
+						else
+						{
+							//それ以外はそのまま変化させる
+							if (this->color)
+							{
+								delete this->color;
+							}
+							this->color = new Paint::PaintColor;
+							*this->color = (*waters)[i]->GetColor();
+						}
 					}
 					else
 					{
-						//それ以外はそのまま変化させる
-						if (this->color)
-						{
-							delete this->color;
-						}
 						this->color = new Paint::PaintColor;
 						*this->color = (*waters)[i]->GetColor();
 					}
+					sound.play();
+					this->capacity += cap;
 				}
-				else
-				{
-					this->color = new Paint::PaintColor;
-					*this->color = (*waters)[i]->GetColor();
-				}
-				sound.play();
-				this->capacity += cap;
 			}
 		}
 	}

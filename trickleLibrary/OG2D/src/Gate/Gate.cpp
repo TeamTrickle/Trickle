@@ -4,14 +4,14 @@
 Gate::Gate(const Vec2& pos)
 {
 	//オブジェクトを生成
-	this->CreateObject(Cube, pos, Vec2(230, 320), 0.0f);     //460,512,70    元データx192,y384    比率変更x345,y384
+	this->CreateObject(Cube, pos, Vec2(230, 260), 0.0f);     //460,512,70    元データx192,y384    比率変更x345,y384
 															 //ドア位置を登録
 	this->door_x = this->position.x + 35;
 	this->door_w = this->position.x + this->Scale.x - 35;
 	//タグを指定、スーパークラスに登録
 	this->objectTag = "gate";
 	__super::Init(this->objectTag);
-	__super::SetDrawOrder(0.4f);
+	__super::SetDrawOrder(0.7f);
 	//画像データ初期化
 	this->image = nullptr;
 	//サウンドのファイル名初期化

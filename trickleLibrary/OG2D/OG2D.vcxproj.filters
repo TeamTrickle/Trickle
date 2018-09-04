@@ -191,9 +191,6 @@
     <ClCompile Include="src\OGSystem\Input\Input.cpp">
       <Filter>ソースファイル\OGSystem\System\Input</Filter>
     </ClCompile>
-    <ClCompile Include="src\OGSystem\Font\Font.cpp">
-      <Filter>ソースファイル\OGSystem\System\Font</Filter>
-    </ClCompile>
     <ClCompile Include="src\OGSystem\Window\Window.cpp">
       <Filter>ソースファイル\OGSystem\System\Window</Filter>
     </ClCompile>
@@ -345,6 +342,9 @@
     <ClCompile Include="src\Task\JecLogo.cpp">
       <Filter>ソースファイル\Task\JecLogo</Filter>
     </ClCompile>
+    <ClCompile Include="src\OGSystem\Font\TextureFont.cpp">
+      <Filter>ソースファイル\OGSystem\System\Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -373,9 +373,6 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\Input\Input.h">
       <Filter>ソースファイル\OGSystem\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OGSystem\Font\Font.h">
-      <Filter>ソースファイル\OGSystem\System\Font</Filter>
     </ClInclude>
     <ClInclude Include="src\OGSystem\Window\Window.h">
       <Filter>ソースファイル\OGSystem\System\Window</Filter>
@@ -532,6 +529,12 @@
     </ClInclude>
     <ClInclude Include="src\Task\JecLogo.h">
       <Filter>ソースファイル\Task\JecLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\Font\TextureFont.h">
+      <Filter>ソースファイル\OGSystem\System\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGSystem\randmais.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,19 +8,19 @@ void random::Init()
 	engine.seed(device());
 }
 
-int random::GetRand(int min_,int max_)
+int random::GetRand(const int min_, const int max_)
 {
-	std::uniform_int_distribution<int> range(min_,max_);
+	std::uniform_int_distribution<int> range(min_, max_);
 	return range(engine);
 }
 
-float random::GetRand(float min_,float max_)
+float random::GetRand(const float min_, const float max_)
 {
-	std::uniform_real_distribution<float> range(min_,max_);
+	std::uniform_real_distribution<float> range(min_, max_);
 	return range(engine);
 }
 
-std::string random::GetRand(const std::string& text, std::size_t size)
+std::string random::GetRand(const std::string& text, const std::size_t size)
 {
 	if (text.empty())
 	{

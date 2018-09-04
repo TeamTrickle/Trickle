@@ -36,6 +36,8 @@ bool Pause::Initialize()
 
 	gearAng = 0;
 
+	imageFlag = true;
+
 	__super::Init((std::string)"pause");
 	__super::SetDrawOrder(1.f);		//画像表示順位
 	return true;
@@ -93,15 +95,108 @@ bool Pause::Finalize()
 void Pause::Pause_draw()
 {
 	if (OGge->GetPause()) {
-		{
-			//背景
+		if (imageFlag == true) {
 			{
-				Box2D draw(transparentbackPos.x - 16, transparentbackPos.y - 9, 1920.f + 16.f*2.f, 1080.f + 9.f*2.f);
-				draw.OffsetSize();
-				Box2D src(0, 0, 1280, 720);
-				src.OffsetSize();
-				texTransparentBack.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.5f));
+				//背景
+				{
+					Box2D draw(transparentbackPos.x - 16, transparentbackPos.y - 9, 1920.f + 16.f*2.f, 1080.f + 9.f*2.f);
+					draw.OffsetSize();
+					Box2D src(0, 0, 1280, 720);
+					src.OffsetSize();
+					texTransparentBack.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
+				}
+				//カーソルの表示
+				{
+					Box2D draw(cursorPos.x, cursorPos.y, 64.0f, 64.0f);
+					draw.OffsetSize();
+					Box2D src(0, 0, 200, 200);
+					src.OffsetSize();
+					texCursor.Rotate((float)gearAng);
+					texCursor.Draw(draw, src);
+				}
+				//Restart
+				{
+					Box2D draw(RestartPos.x, RestartPos.y, 64.f * 7, 64.0f);
+					draw.OffsetSize();
+					Box2D src(0, 64 * 8, 64 * 7, 64);
+					src.OffsetSize();
+					rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
+				}
+				//Return
+				{
+					Box2D draw(ReturnPos.x, ReturnPos.y, 64.f * 11, 64.0f);
+					draw.OffsetSize();
+					Box2D src(0, 64 * 9, 64 * 11, 64);
+					src.OffsetSize();
+					rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
+				}
+				//stageselect
+				{
+					Box2D draw(stageselectPos.x, stageselectPos.y, 64.f * 18, 64.0f);
+					draw.OffsetSize();
+					Box2D src(0, 64 * 7, 64 * 19, 64);
+					src.OffsetSize();
+					rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
+				}
+				//選択肢が目立つ処理
+				if (cursorPos.y == RestartPos.y) {
+					//stageselect
+					{
+						Box2D draw(stageselectPos.x, stageselectPos.y, 64.f * 18, 64.0f);
+						draw.OffsetSize();
+						Box2D src(0, 64 * 7, 64 * 19, 64);
+						src.OffsetSize();
+						rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.1f, 0.1f, 0.1f, 0.8f));
+					}
+					//Return
+					{
+						Box2D draw(ReturnPos.x, ReturnPos.y, 64.f * 11, 64.0f);
+						draw.OffsetSize();
+						Box2D src(0, 64 * 9, 64 * 11, 64);
+						src.OffsetSize();
+						rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.1f, 0.1f, 0.1f, 0.8f));
+					}
+				}
+				if (cursorPos.y == stageselectPos.y) {
+					//Restart
+					{
+						Box2D draw(RestartPos.x, RestartPos.y, 64.f * 7, 64.0f);
+						draw.OffsetSize();
+						Box2D src(0, 64 * 8, 64 * 7, 64);
+						src.OffsetSize();
+						rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.1f, 0.1f, 0.1f, 0.8f));
+					}
+					//Return
+					{
+						Box2D draw(ReturnPos.x, ReturnPos.y, 64.f * 11, 64.0f);
+						draw.OffsetSize();
+						Box2D src(0, 64 * 9, 64 * 11, 64);
+						src.OffsetSize();
+						rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.1f, 0.1f, 0.1f, 0.8f));
+					}
+				}
+				if (cursorPos.y == ReturnPos.y) {
+					//Restart
+					{
+						Box2D draw(RestartPos.x, RestartPos.y, 64.f * 7, 64.0f);
+						draw.OffsetSize();
+						Box2D src(0, 64 * 8, 64 * 7, 64);
+						src.OffsetSize();
+						rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.1f, 0.1f, 0.1f, 0.8f));
+					}
+					//stageselect
+					{
+						Box2D draw(stageselectPos.x, stageselectPos.y, 64.f * 18, 64.0f);
+						draw.OffsetSize();
+						Box2D src(0, 64 * 7, 64 * 19, 64);
+						src.OffsetSize();
+						rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.1f, 0.1f, 0.1f, 0.8f));
+					}
+				}
 			}
+		}
+		//カメラが移動すると選択しが透明化処理
+		else {
 			//カーソルの表示
 			{
 				Box2D draw(cursorPos.x, cursorPos.y, 64.0f, 64.0f);
@@ -109,33 +204,32 @@ void Pause::Pause_draw()
 				Box2D src(0, 0, 200, 200);
 				src.OffsetSize();
 				texCursor.Rotate((float)gearAng);
-				texCursor.Draw(draw, src);
+				texCursor.Draw(draw, src, Color(1.f, 1.f, 1.f, 0.1f));
 			}
 			//Restart
 			{
-				Box2D draw(RestartPos.x, RestartPos.y, 64.f*7, 64.0f);
+				Box2D draw(RestartPos.x, RestartPos.y, 64.f * 7, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 64*8, 64*7, 64);
+				Box2D src(0, 64 * 8, 64 * 7, 64);
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.f, 0.f, 0.f, 0.1f));
 			}
 			//Return
 			{
-				Box2D draw(ReturnPos.x, ReturnPos.y, 64.f*11, 64.0f);
+				Box2D draw(ReturnPos.x, ReturnPos.y, 64.f * 11, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 64*9, 64*11, 64);
+				Box2D src(0, 64 * 9, 64 * 11, 64);
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.f, 0.f, 0.f, 0.1f));
 			}
 			//stageselect
 			{
-				Box2D draw(stageselectPos.x, stageselectPos.y, 64.f*18, 64.0f);
+				Box2D draw(stageselectPos.x, stageselectPos.y, 64.f * 18, 64.0f);
 				draw.OffsetSize();
-				Box2D src(0, 64*7, 64*19, 64);
+				Box2D src(0, 64 * 7, 64 * 19, 64);
 				src.OffsetSize();
-				rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
+				rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(0.f, 0.f, 0.f, 0.1f));
 			}
-
 		}
 	}
 }
@@ -177,7 +271,7 @@ void Pause::PauseUpDate()
 			auto load = Load::Create();
 			if (load)
 			{
-				load->AddObject(OGge->GetTask<Game>("game")->GetTaskName());
+				load->AddDeleteObjectName(OGge->GetTask<Game>("game")->GetTaskName());
 				load->ALLTaskUpDateStop();
 			}
 		}
@@ -207,30 +301,42 @@ void Pause::PauseUpDate()
 
 	if (isCameraInStageX(originCam + Vec2(stickSlopeX * 5.f, 0.f))) {
 		OGge->camera->MovePos(Vec2(stickSlopeX * 5.f, 0.f));
+		imageFlag = false;
 	}
+
 	if (isCameraInStageY(originCam + Vec2(0.f, stickSlopeY * 5.f))) {
 		OGge->camera->MovePos(Vec2(0.f, stickSlopeY * 5.f));
+		imageFlag = false;
 	}
 
 	if (InputLeft()) {
 		if (NowCameraPos.x > 0) {
 			OGge->camera->MovePos(Vec2(-2.5f, 0.0f));
 		}
+		imageFlag = false;
 	}
+	else {
+		imageFlag = true;
+	}
+
 	if (InputRight()) {
 		if (NowCameraPos.x + NowCameraSize.x<map->mapSize.x * map->DrawSize.x) {
 			OGge->camera->MovePos(Vec2(+2.5f, 0.0f));
 		}
+		imageFlag = false;
 	}
+
 	if (InputUp()) {
 		if (NowCameraPos.y > 0) {
 			OGge->camera->MovePos(Vec2(0.0f, -2.5f));
 		}
+		imageFlag = false;
 	}
 	if (InputDown()) {
 		if (NowCameraPos.y + NowCameraSize.y < map->mapSize.y * map->DrawSize.y) {
 			OGge->camera->MovePos(Vec2(0.0f, 2.5f));
 		}
+		imageFlag = false;
 	}
 
 	NowCameraPos = OGge->camera->GetPos();
@@ -270,5 +376,4 @@ void Pause::PauseUpDate()
 	if (cursorPos.y == ReturnPos.y) {
 		select = Return;
 	}
-
 }

@@ -12,7 +12,7 @@ class WeightSwitch :public GameObject, public TaskObject
 	std::string taskName;
 	Box2D draw;
 	Box2D src;
-	bool nowActive;          //今扉を開けるかどうか
+	bool nowActive;             //今扉を開けるかどうか
 	bool canPlhitCheck;         //プレイヤと当たり判定をして良いか
 	bool canIcehitCheck;        //氷と当たり判定をしてよいか
 	bool canBlockhitCheck;      //ブロックと当たり判定をしてよいか
@@ -46,7 +46,7 @@ public:
 	bool SetnowState();             //今のスイッチの状態を返す
 	void SetTexture(Texture*);      //画像のセット
 	float SetSwitchUpPos();         //スイッチが元の大きさに戻った時にめり込まないようにする処理
-	bool isPushed;
+	bool isPushed;                  //一度扉が開いたかどうか
 	static SP Create(const Vec2& pos, const Vec2& size, const float mass, std::vector<std::shared_ptr<GameObject>> targets_);
 };
 

@@ -19,6 +19,8 @@
 #pragma comment(lib, "OPENGL32.lib")
 #pragma comment(lib, "GLU32.lib")
 #pragma comment(lib, "Win64/OpenAL32.lib")
+#pragma comment(lib, "opencv_core342.lib")
+#pragma comment(lib, "opencv_videoio342.lib")
 //#pragma comment(lib, "freetype.lib")
 
 #if defined(_MSC_VER)
@@ -52,9 +54,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <utility>
 
 #include "OGlib.h"
+#include "randmais.h"
 
 #define PI 3.1415926f
 typedef unsigned char u_char;
@@ -71,4 +75,12 @@ namespace OG {
 	void LineHitDraw(Box2D*);
 	void BackColor(const Color& color);
 	void BackColor(const float&red, const float&green, const float&blue, const float&alpha);
+	int mbclen(const char* c);
+	void cout(const Box2D&);
+	void cout(const Vec2&);
+	void cout(const Color&);
+	bool Data_Cipher(const std::string& in_path, const std::string& out_path);
+	std::string Data_Composite(std::ifstream& ifs);
+	void OutDebugData(const std::string& out_path, const std::string& text);
+	void DataClear(const std::string& path);
 }

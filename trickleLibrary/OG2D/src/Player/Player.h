@@ -41,6 +41,7 @@ public:
 		Lift,		//持ちあげる
 		Lower,		//持ちおろす
 		Spill,		//溢す
+		NoLower,	//おろせない
 	};
 private:
 	class Animation
@@ -72,12 +73,12 @@ private:
 		int srcX = 586, srcY = 575;									//プレイヤ画像の元々のサイズ
 	};
 private:
-	const float MOVE_SPEED = 5.f;								//移動スピード
+	const float MOVE_SPEED;								//移動スピード
 	//const float JUMP_POWER = -30.f;							//ジャンプパワー(test)
-	const float JUMP_POWER = -13.f;								//ジャンプパワー
-	const float MAX_FALL = 15.f;								//落下最大速度
-	const float GRAVITY = (9.8f / 60.f / 60.f * 32) * 10;		//重力加速度
-	const float FIN_SPEED = 0.5f;								//摩擦
+	const float JUMP_POWER;								//ジャンプパワー
+	const float MAX_FALL;								//落下最大速度
+	const float GRAVITY;		//重力加速度
+	const float FIN_SPEED;								//摩擦
 	bool CheckJump;												//ジャンプ判定
 	bool CheckGravity;											//重力加速度判定
 	int moveCnt;												//移動カウント
@@ -121,7 +122,9 @@ private:
 	bool MotionJumpUpDate();
 	bool MotionLadderUpDate();
 	bool MotionWalkUpDate();
+	bool MotionNoLowerUpDate();
 	void StateClearUpdate();
+	bool LadderCheck();
 	//入力処理簡略化
 	bool InputLeft();
 	bool InputRight();

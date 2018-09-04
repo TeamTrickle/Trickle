@@ -6,7 +6,7 @@ Camera2D::Camera2D()
 {
 
 }
-Camera2D::Camera2D(Box2D& pos)
+Camera2D::Camera2D(const Box2D& pos)
 {
 	//各値をセットする
 	this->cameraPos = pos;
@@ -17,14 +17,14 @@ Camera2D::~Camera2D()
 {
 
 }
-void Camera2D::Initialize(Box2D& pos)
+void Camera2D::Initialize(const Box2D& pos)
 {
 	//各値をセットする
 	this->cameraPos = pos;
-	this->position = {0,0 };
+	this->position = { 0,0 };
 	this->Scale = { pos.w,pos.h };
 }
-void Camera2D::CameraUpdate() const
+void Camera2D::UpDate() const
 {
 	//行列をプロジェクションモードに変更
 	glMatrixMode(GL_PROJECTION);
@@ -61,19 +61,19 @@ void Camera2D::MoveSize(Vec2& size_)
 	//サイズを加算する
 	this->Scale += size_;
 }
-void Camera2D::SetPos_x(float x_)
+void Camera2D::SetPos_x(const float& x_)
 {
 	this->position.x = x_;
 }
-void Camera2D::SetPos_y(float y_)
+void Camera2D::SetPos_y(const float& y_)
 {
 	this->position.y = y_;
 }
-void Camera2D::SetSize_w(float w_)
+void Camera2D::SetSize_w(const float& w_)
 {
 	this->Scale.x = w_;
 }
-void Camera2D::SetSize_h(float h_)
+void Camera2D::SetSize_h(const float& h_)
 {
 	this->Scale.y = h_;
 }

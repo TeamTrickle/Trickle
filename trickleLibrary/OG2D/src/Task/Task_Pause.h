@@ -8,12 +8,13 @@
 
 class Pause :public TaskObject
 {
+	//画像変数
 	Texture texCursor;
 	Texture texRestart;
 	Texture texReturn;
 	Texture texStageSelect;
 	Texture texTransparentBack;
-
+	//位置変数
 	Vec2 RestartPos;
 	Vec2 ReturnPos;
 	Vec2 stageselectPos;
@@ -35,9 +36,11 @@ public:
 	void UpDate();
 	void Render2D();
 	bool Finalize();
-	//☆☆☆☆//
+	//メソッド
 	void Pause_draw();
 	void PauseUpDate();
+	bool imageFlag;
+	//選択肢の状態フラグ
 	enum Select {
 		Restart, Stage, Return,
 	};

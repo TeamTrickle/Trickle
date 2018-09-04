@@ -44,18 +44,22 @@ bool StageSelect::Initialize()
 	this->Testdoor.Create((std::string)"door.png");
 	this->Wall.Create((std::string)"wall2.PNG");
 	this->LadderTex.Create("mapchip2.png");
+	this->totitleTex.Create("totitle.png");
 	//プレイヤーNPCの生成
 	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
 	chara->SetAutoFlag(true);
 	//背景の描画
 	auto back = Back::Create(std::string("back.png"), Vec2(1920 * 2 + 200, 1080));
+	//雲
+	Cloud::Create("cloud1.png", 0.5f);
+	Cloud::Create("cloud2.png", 1.5f);
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.5f);
 	//ステージ概要表示用案内板
 	auto board = StageAlert::Create(true, Box2D(400, 0, 1328, 550));
-	auto board2 = StageAlert::Create(true, Box2D(400 + ((int)OGge->window->GetSize().x * 2), 0, 1328, 550));
+	auto board2 = StageAlert::Create(true, Box2D(400 + 1920, 0, 1328, 550));
 	(*board) << "./data/monitor0.txt";
 	(*board) << "./data/monitor1.txt";
 	(*board) << "./data/monitor2.txt";
@@ -79,9 +83,9 @@ bool StageSelect::Initialize()
 	//タグ指定
 	__super::Init((std::string)"select");
 	//描画順指定
-	__super::SetDrawOrder(0.3f);
+	__super::SetDrawOrder(0.6f);
 	//初期モード設定
-	this->mode = Mode::from1;
+	this->mode = Mode::createTask;
 	//テスト処理
 	OGge->camera->SetSize(Vec2(1920, 1080));
 	OGge->camera->SetPos(Vec2(100, 0));
@@ -105,7 +109,6 @@ bool StageSelect::Initialize()
 	auto load = OGge->GetTask<Load>("load");
 	if (load)
 	{
-		load->Set(Load::Fead::Out);
 		load->ALLTaskUpDateStop();
 	}
 	return true;
@@ -127,24 +130,24 @@ void StageSelect::UpDate()
 	}
 	switch (this->mode)
 	{
-	case Mode::from1:	//生成から落下と硬直
+	case Mode::createTask:	//生成から落下と硬直
 	{
-		this->From1();
+		this->CreateTask();
 	}
 	break;
-	case Mode::from2:	//キャラとカメラの横移動
+	case Mode::objectMoveTask:	//キャラとカメラの横移動
 	{
-		this->From2();
+		this->ObjectMoveTask();
 	}
 	break;
-	case Mode::from3:	//決定待ち
+	case Mode::waitTask:	//決定待ち
 	{
-		this->From3();
+		this->WaitTask();
 	}
 	break;
-	case Mode::from4:	//決定後処理
+	case Mode::afterMoveTask:	//決定後処理
 	{
-		this->From4();
+		this->AfterMoveTask();
 		this->canVolControl = true;
 	}
 	break;
@@ -153,7 +156,7 @@ void StageSelect::UpDate()
 		auto load = Load::Create();
 		if (load)
 		{
-			load->AddObject(this->GetTaskName());
+			load->AddDeleteObjectName(this->GetTaskName());
 		}
 	}
 	break;
@@ -179,12 +182,15 @@ void StageSelect::Render2D()
 
 	//壁の描画
 	{
-		Box2D draw = Box2D(450, 600, 1500, 300);
-		draw.OffsetSize();
-		Box2D src = Box2D(0.f, 0.f, Wall.GetTextureSize().x, Wall.GetTextureSize().y);
-		this->Wall.Draw(draw, src);
-		//OG::LineHitDraw(&draw);
+		for (int i = 0; i < 2; ++i)
+		{
+			Box2D draw = Box2D(450 + (i * 1920), 600, 1500, 300);
+			draw.OffsetSize();
+			Box2D src = Box2D(0.f, 0.f, Wall.GetTextureSize().x, Wall.GetTextureSize().y);
+			this->Wall.Draw(draw, src);
+		}
 	}
+	//ハシゴ
 	for (int i = 0; i < 8; ++i)
 	{
 		Box2D draw(31.f*64.f + 1920.f, i * 128.f, 128.f, 128.f);
@@ -192,6 +198,13 @@ void StageSelect::Render2D()
 		Box2D src(768, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
+	}
+	//totitle看板
+	{
+		Box2D draw(1920 * 2 - 500 + 200+167, 1080 - 250+83, 333, 167);
+		draw.OffsetSize();
+		Box2D src(0, 0, 1000, 500);
+		this->totitleTex.Draw(draw, src);
 	}
 }
 
@@ -201,6 +214,7 @@ bool StageSelect::Finalize()
 	this->Testdoor.Finalize();
 	this->Wall.Finalize();
 	this->LadderTex.Finalize();
+	this->totitleTex.Finalize();
 	//サウンドの解放
 	delete rm->GetSoundData((std::string)"titleBGM");
 	rm->DeleteSound((std::string)"titleBGM");
@@ -230,12 +244,17 @@ bool StageSelect::Finalize()
 	{
 		(*id)->Kill();
 	}
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	//扉情報すべて削除
 	this->Entrance.clear();
 	return true;
 }
 
-void StageSelect::From1()
+void StageSelect::CreateTask()
 {
 	//キャラを検索
 	auto chara = OGge->GetTask<Chara>("Chara");
@@ -252,7 +271,7 @@ void StageSelect::From1()
 				if (this->CheckTime(30))
 				{
 					//次へ移動
-					this->mode = Mode::from2;
+					this->mode = Mode::objectMoveTask;
 					this->camera_anim.Set(OGge->camera->GetPos(), Vec2(OGge->camera->GetPos().x + 100, OGge->camera->GetPos().y));
 					this->nowPos = 0;
 					chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
@@ -275,7 +294,7 @@ void StageSelect::From1()
 	}
 }
 
-void StageSelect::From2()
+void StageSelect::ObjectMoveTask()
 {
 	//カメラの位置を送る
 	OGge->camera->SetPos(this->camera_anim.Move(10.f));
@@ -293,10 +312,10 @@ void StageSelect::From2()
 			(*id)->SelectFirstElement();
 		}
 		//次へ移動
-		this->mode = Mode::from3;
+		this->mode = Mode::waitTask;
 	}
 }
-void StageSelect::From3()
+void StageSelect::WaitTask()
 {
 	auto chara = OGge->GetTask<Chara>("Chara");
 	if (chara)
@@ -502,7 +521,7 @@ void StageSelect::From3()
 						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second + chara->Scale.x, chara->position.y), 5.f);
 					}
 				}
-				this->mode = Mode::from4;
+				this->mode = Mode::afterMoveTask;
 			}
 		}
 		else
@@ -514,7 +533,7 @@ void StageSelect::From3()
 		}
 	}
 }
-void StageSelect::From4()
+void StageSelect::AfterMoveTask()
 {
 	auto chara = OGge->GetTask<Chara>("Chara");
 	
@@ -569,6 +588,11 @@ void StageSelect::GateClose()
 	if (this->timeCnt > 40)
 	{
 		this->mode = Mode::End;
+		auto charas = OGge->GetTasks<Chara>("Chara");
+		for (auto id = charas->begin(); id != charas->end(); ++id)
+		{
+			(*id)->Kill();
+		}
 	}
 }
 

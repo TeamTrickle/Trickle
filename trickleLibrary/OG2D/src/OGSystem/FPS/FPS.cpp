@@ -7,10 +7,14 @@ FPS::FPS()
 	this->count = 0;
 	//fps計測用
 	this->lastTime = (float)glfwGetTime();
+	this->framerate = 60;
+	this->oneFrameTime = (float)glfwGetTime();
 }
-void FPS::Update() {
+void FPS::Update()
+{
 	//60回動作したらその時の時間と前の時間からfpsを求める
-	if (this->count == 60) {
+	if (this->count == this->framerate) {
+		//std::cout << glfwGetTime() << ":" << this->lastTime << "\n";
 		this->fps = this->count / ((float)glfwGetTime() - this->lastTime);
 #if(_DEBUG)
 		std::cout << this->fps << std::endl;		//デバッグ時のみfpsを出力
@@ -23,4 +27,17 @@ void FPS::Update() {
 FPS::~FPS()
 {
 
+}
+void FPS::SetFrameRate(const int rate)
+{
+	this->framerate = rate;
+}
+bool FPS::FrameCheck()
+{
+	if ((float)glfwGetTime() - this->oneFrameTime >= 1.f / (float)this->framerate)
+	{
+		this->oneFrameTime = (float)glfwGetTime();
+		return true;
+	}
+	return false;
 }

@@ -8,13 +8,14 @@
 
 #include "UI/GoalDirectionUI.h"
 Map::Map()
+	:_FilePath("./data/map/")
 {
 	this->chip.resize(45);
 	this->chipimgname = "mapchip2.png";
 	this->chipsize = { 256,256 };
 	this->DrawSize = { 64,64 };
 	__super::Init((std::string)"map");
-	__super::SetDrawOrder(0.4f);
+	__super::SetDrawOrder(0.1f);
 }
 
 Map::~Map()
@@ -26,7 +27,7 @@ Map::~Map()
 	}
 }
 
-bool Map::LoadMap(std::string& path_, Format format)
+bool Map::LoadMap(const std::string& path_, const Format& format)
 {
 	if (Format::csv != format)
 	{
@@ -134,12 +135,12 @@ bool Map::LoadMap(std::string& path_, Format format)
 				this->hitBase[y][x].SetID(1);
 				break;
 			case 15:	//bug
-				this->hitBase[y][x].position.x += 64 - 12;
+				//this->hitBase[y][x].position.x += 64 - 12;
 				this->hitBase[y][x].Scale.x = 12.f;
 				this->hitBase[y][x].SetID(1);
 				break;
 			case 16:	//bug
-				this->hitBase[y][x].position.y += 64 - 12;
+				//this->hitBase[y][x].position.y += 64 - 12;
 				this->hitBase[y][x].Scale.y = 12.f;
 				this->hitBase[y][x].SetID(1);
 				break;
@@ -194,7 +195,7 @@ bool Map::LoadMap(std::string& path_, Format format)
 	return true;
 }
 
-void Map::ObjectCreateCheck(std::string& text, int x_index, int y_index)
+void Map::ObjectCreateCheck(const std::string& text, int x_index, int y_index)
 {
 	if (text == "p")
 	{
@@ -330,7 +331,7 @@ bool Map::HitCheck(GameObject &p, const int id)
 	}
 	return false;
 }
-bool Map::HitCheck(GameObject &p, const std::string name)
+bool Map::HitCheck(GameObject &p, const std::string& name)
 {
 	for (int y = 0; y < this->mapSize.y; ++y)
 	{
@@ -351,16 +352,13 @@ bool Map::HitCheck(GameObject &p, const std::string name)
 	return false;
 }
 
-Map::SP Map::Create(std::string& path, Format format, bool flag_)
+Map::SP Map::Create(const std::string& path, const Format& format)
 {
 	auto to = Map::SP(new Map());
 	if (to)
 	{
 		to->me = to;
-		if (flag_)
-		{
-			OGge->SetTaskObject(to);
-		}
+		OGge->SetTaskObject(to);
 		if (!to->LoadMap(path, format))
 		{
 			to->Kill();

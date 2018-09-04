@@ -34,7 +34,6 @@ Goal::Goal(const Vec2& pos)
 	this->ID = count;
 	this->soundname = "flower.wav";         //サウンドのファイル名格納
 	sound.create(soundname, false);
-	this->testClear = false;
 }
 
 Goal::~Goal()
@@ -73,7 +72,7 @@ void Goal::UpDate()
 	switch (this->mode)
 	{
 	case Mode::Non:
-		if (this->WaterHit() || this->testClear)
+		if (this->WaterHit())
 		{
 			auto game = OGge->GetTask<Game>("game");
 			if (game)
@@ -81,8 +80,8 @@ void Goal::UpDate()
 				game->ce.MoveEnd();
 			}
 			//カメラ移動終了地点を設定
-			this->cm_Pos.Set(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5);
-			this->cm_Size.Set(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5);
+			this->cm_Pos.SetEasing(OGge->camera->GetPos(), Vec2(this->position.x - (320.f / 2.f), this->position.y - (180.f / 2.f)), 5);
+			this->cm_Size.SetEasing(OGge->camera->GetSize(), /*this->Scale + */Vec2(320, 180), 5);
 			//移動前のカメラの位置とサイズを保存しておく
 			this->precmPos = new Vec2(OGge->camera->GetPos());
 			this->precmSize = new Vec2(OGge->camera->GetSize());
@@ -176,8 +175,8 @@ void Goal::UpDate()
 				//OGge->camera->SetPos(NowCameraPos);
 				*this->precmPos = NowCameraPos;
 			}
-			this->cm_Pos.Set(OGge->camera->GetPos(), *this->precmPos, 6);
-			this->cm_Size.Set(OGge->camera->GetSize(), *this->precmSize, 6);
+			this->cm_Pos.SetEasing(OGge->camera->GetPos(), *this->precmPos, 6);
+			this->cm_Size.SetEasing(OGge->camera->GetSize(), *this->precmSize, 6);
 			delete this->precmPos;
 			delete this->precmSize;
 			this->precmPos = nullptr;
@@ -343,7 +342,7 @@ bool Goal::GetLock() const
 	return this->cameraLock;
 }
 
-void Goal::CameraAnim::Set(const Vec2& start, const Vec2& end, const unsigned int time)
+void Goal::CameraAnim::SetEasing(const Vec2& start, const Vec2& end, const unsigned int time)
 {
 	this->startPos = start;
 	this->endPos = end;
@@ -384,20 +383,12 @@ bool Goal::isGoalCheck()
 	return true;
 }
 
-void Goal::TestGoal()
-{
-	this->testClear = true;
-}
-
-Goal::SP Goal::Create(const Vec2& pos, bool flag)
+Goal::SP Goal::Create(const Vec2& pos)
 {
 	Goal::SP to = Goal::SP(new Goal(pos));
 	if (to)
 	{
-		if (flag)
-		{
-			OGge->SetTaskObject(to);
-		}
+		OGge->SetTaskObject(to);
 		return to;
 	}
 	return nullptr;
