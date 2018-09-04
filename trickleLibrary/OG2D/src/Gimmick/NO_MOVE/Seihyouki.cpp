@@ -62,26 +62,26 @@ void Seihyouki::Render2D() {
 	{
 		LineDraw();
 		//Box2D drawRL,srcR;
-		if (angle==RIGHT)
+		if (angle == RIGHT)
 		{
-					coldNum = 1;
-					float angle = 90.0f;
-					for (int i = 0; i < coldNum; ++i) {
-						draw[i] = Box2D(position.x+15 + (64 * i), position.y-32.0f, 64.f, Scale.y*2.0f);
-						Vec2 origin = Vec2(draw[i].w, draw[i].h);
-						draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
-						draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
-						draw[i].y += (origin.y - draw[i].h) / 2.f;
-						draw[i].x -= (origin.x - draw[i].w) / 2.f;
-						draw[i].OffsetSize();
-					}
-					Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
-					src.OffsetSize();
+			coldNum = 1;
+			float angle = 90.0f;
+			for (int i = 0; i < coldNum; ++i) {
+				draw[i] = Box2D(position.x + 15 + (64 * i), position.y - 32.0f, 64.f, Scale.y*2.0f);
+				Vec2 origin = Vec2(draw[i].w, draw[i].h);
+				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].y += (origin.y - draw[i].h) / 2.f;
+				draw[i].x -= (origin.x - draw[i].w) / 2.f;
+				draw[i].OffsetSize();
+			}
+			Box2D src = { 256 * (animCnt / 5 % 3), 256, 256, 256 };
+			src.OffsetSize();
 
-					coldImg->Rotate(angle);
-					for (auto draw_ : draw) {
-						this->coldImg->Draw(draw_, src);
-					}
+			coldImg->Rotate(angle);
+			for (auto draw_ : draw) {
+				this->coldImg->Draw(draw_, src);
+			}
 		}
 		else if (angle==LEFT)
 		{
@@ -132,14 +132,19 @@ void Seihyouki::toIce() {
 		{
 			if ((*id)->GetState() == Water::State::LIQUID)
 			{
-				changeStateCnt++;
-				if (changeStateCnt >= maxChangeTime)
+				//changeStateCnt++;
+				(*id)->SetIceCnt((*id)->GetIceCnt() + 1);
+				if ((*id)->GetIceCnt() >= maxChangeTime)
 				{
 					(*id)->SetState(Water::State::SOLID);
-					changeStateCnt = 0;
+					(*id)->SetIceCnt(0);
 					break;
 				}
 			}
+		}
+		else
+		{
+			(*id)->SetIceCnt(0);
 		}
 	}
 }

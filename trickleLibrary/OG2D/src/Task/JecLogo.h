@@ -3,23 +3,53 @@
 
 class LogoTask : public TaskObject
 {
+	/**
+	*enum Mode
+	*状態管理
+	*/
 	enum Mode
 	{
-		form1,
-		form2,
-		form3,
-		form4,
+		//! 背景IN
+		back_In,
+		//! ロゴIN
+		logo_In,
+		//! ロゴOUT
+		logo_Out,
+		//! 背景OUT
+		back_Out,
+		//! 終了
 		end,
 	};
+	//! ロゴ画像のポインタ
 	Texture* logo;
+	//! ロゴのα値
 	float logo_a;
+	//! 背景の色
 	Color back;
+	//! 状態
 	Mode mode;
-public:
+	//! スマートポインタ
 	typedef std::shared_ptr<LogoTask> SP;
-	static SP Create();
+	/**
+	*@brief	:constructor
+	*/
 	LogoTask();
-	virtual ~LogoTask();
+	/**
+	*@brief	:更新処理
+	*/
 	void UpDate() override;
+	/**
+	*@brief	:描画処理
+	*/
 	void Render2D() override;
+public:
+	/**
+	*@brief	:タスク生成
+	*@return:失敗した場合nullptr
+	*/
+	static SP Create();
+	/**
+	*@brief	:destructor
+	*/
+	virtual ~LogoTask();
 };

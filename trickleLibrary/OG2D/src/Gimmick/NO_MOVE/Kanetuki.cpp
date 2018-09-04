@@ -142,6 +142,8 @@ void Kanetuki::Render2D() {
 				Vec2 origin = Vec2(draw[i].w, draw[i].h);
 				draw[i].w *= ((float)this->timeCnt / (float)this->maxCnt);
 				draw[i].h *= ((float)this->timeCnt / (float)this->maxCnt);
+				draw[i].y += (origin.y - draw[i].h) / 2.f;
+				draw[i].x -= (origin.x - draw[i].w) / 4.f;
 				draw[i].OffsetSize();
 			}
 			this->texRotaAng = 90.0f;
@@ -192,46 +194,57 @@ void Kanetuki::toSteam() {
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		//水との当たり判定
-		if ((*id)->hit(*this))
-		{	//　個体　⇒　液体
-			if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() == Water::Situation::Normal)
-			{
-				changeStateCnt++;
-				//一定の時間が経ったら・・・
-				if (changeStateCnt >= maxChangeTimeSolid)
+		if(this->IsObjectDistanceCheck((*id)->position,(*id)->Scale))
+		{ 
+			//水との当たり判定
+			if ((*id)->hit(*this))
+			{	//　個体　⇒　液体
+				if ((*id)->GetState() == Water::State::SOLID && (*id)->GetSituation() == Water::Situation::Normal)
 				{
-					//液体にする
-					//auto water = Water::Create((*id)->position);
-					//Texture watertex;
-					//auto game = OGge->GetTask<Game>("game");
-					//water->SetTexture(&game->getWaterTex());
-					//(*id)->SetState(Water::State::LIQUID);
-					//(*id)->SetSituation(Water::Situation::Newfrom);
-					(*id)->SolidMelt();
-					//					(*id)->Kill();
-					changeStateCnt = 0;
+					//changeStateCnt++;
+					(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
+					//一定の時間が経ったら・・・
+					if ((*id)->GetFireCnt() >= maxChangeTimeSolid)
+					{
+						//液体にする
+						//auto water = Water::Create((*id)->position);
+						//Texture watertex;
+						//auto game = OGge->GetTask<Game>("game");
+						//water->SetTexture(&game->getWaterTex());
+						//(*id)->SetState(Water::State::LIQUID);
+						//(*id)->SetSituation(Water::Situation::Newfrom);
+						(*id)->SolidMelt();
+						//					(*id)->Kill();
+						//changeStateCnt = 0;
+						(*id)->SetFireCnt(0);
+					}
+				}
+				//液体　⇒　水蒸気
+				if ((*id)->GetState() == Water::State::LIQUID)
+				{
+					//changeStateCnt++;
+					(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
+					//一定の時間が経ったら・・・
+					if ((*id)->GetFireCnt() >= maxChangeTimeLiquid)
+					{
+						//水蒸気にする
+						if ((*id)->GetWaterVolume() < 0.5f)
+						{
+							(*id)->Kill();
+						}
+						else
+						{
+							(*id)->SetState(Water::State::GAS);
+							(*id)->position.y -= 10.f;
+						}
+						//changeStateCnt = 0;
+						(*id)->SetFireCnt(0);
+					}
 				}
 			}
-			//液体　⇒　水蒸気
-			if ((*id)->GetState() == Water::State::LIQUID)
+			else
 			{
-				changeStateCnt++;
-				//一定の時間が経ったら・・・
-				if (changeStateCnt >= maxChangeTimeLiquid)
-				{
-					//水蒸気にする
-					if ((*id)->GetWaterVolume() < 0.5f)
-					{
-						(*id)->Kill();
-					}
-					else
-					{
-						(*id)->SetState(Water::State::GAS);
-						(*id)->position.y -= 10.f;
-					}
-					changeStateCnt = 0;
-				}
+				(*id)->SetFireCnt(0);
 			}
 		}
 	}
