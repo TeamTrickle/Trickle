@@ -81,6 +81,8 @@ class Title :public TaskObject
 	Vec2 nopos;
 	float monitorSpos;    //モニターの左端の位置
 	float monitorEpos;    //モニターの右端の位置
+	float monitorsize;    //モニターのサイズ
+
 	enum nowmove          //モニター内の文字の動き
 	{
 		in,       //入ってくる
@@ -101,7 +103,7 @@ class Title :public TaskObject
 
 	Box2D intextsrc;      //モニターに入ってくるときのsrcの挙動
 	Box2D outtextsrc;     //モニターから出ていくときのsrcの挙動
-
+	float textspeed;      //選択する文字が動く速さ
 
 	Texture waterTex;
 

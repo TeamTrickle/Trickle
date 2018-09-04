@@ -41,6 +41,8 @@ Title::Title()
 	this->pressB = false;           //BÉLÅ[ÇâüÇµÇΩÇ©Ç«Ç§Ç©ÇÃîªíf
 	this->nowmoveL = false;
 	this->nowmoveR = false;
+	this->textspeed = 0.f;          //ÉeÉLÉXÉgÇÃìÆÇ≠ÉXÉsÅ[ÉhÇ…Ç¬Ç¢Çƒ
+
 	//É^ÉOê›íË
 	__super::Init((std::string)"title");
 	__super::SetDrawOrder(0.98f);
@@ -83,8 +85,6 @@ bool Title::Initialize()
 	//ï∂éöÇÃèâä˙à íuéwíË
 	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
-	this->monitorSpos = 165.f;
-	this->monitorEpos = 1345.f;
 	//ï∂éöÉøíl
 	this->press_a = 0;
 	this->press_delta_a = 0.01f;
@@ -125,6 +125,8 @@ bool Title::Initialize()
 	flowersound.create(soundflowername, false);
 	flowersound.volume(0.1f);
 
+	//ÉÇÉjÉ^Å[ÇÃÉTÉCÉYèâä˙âª
+	this->monitorsize = 1180.f;
 	
 	//ÉJÉÅÉâà íuÇÃà⁄ìÆ
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
@@ -165,6 +167,9 @@ bool Title::Initialize()
 
 void Title::UpDate()
 {
+	this->monitorSpos = ((OGge->camera->GetSize().x / 2) + OGge->camera->GetPos().x - 1180 / 2.f);
+	this->monitorEpos = ((OGge->camera->GetSize().x / 2) + OGge->camera->GetPos().x - 1180 / 2.f) + 1180;
+
 	if (OGge->in->down(In::B2) && !this->skipInoutFlag)
 	{
 		this->Skip();
@@ -350,19 +355,19 @@ void Title::UpDate()
 				//ï∂éöÇë“ã@à íuÇ…à⁄ìÆÇ≥ÇπÇÈèàóù(ÉÇÉjÉ^Å[âEí[Ç÷)
 				if (startsize.x <= 0.0f)
 				{
-					startPos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+					startPos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
 				}
 				if (closesize.x <= 0.0f)
 				{
-					closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+					closePos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
 				}
 				if (dataDeletesize.x <= 0.0f)
 				{
-					dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+					dataDeletepos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
 				}
 				if (creditsize.x <= 0.0f)
 				{
-					creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+					creditpos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
 				}
 			}
 		}
@@ -496,45 +501,48 @@ void Title::UpDate()
 		//åàíËÇµÇƒéüÇ÷
 		if (OGge->in->down(Input::in::B2))
 		{
-			//åàíËâπÇÃçƒê∂
-			decisionsound.play();
-			switch (this->cursorNum)
+			if (this->textspeed == 0.f)    //åªç›ï∂éöÇ™à⁄ìÆíÜÇ≈Ç»ÇØÇÍÇŒ
 			{
-			//ÉXÉeÅ[ÉWÉZÉåÉNÉgÇ…êiÇﬁ
-			case 0:
-			{
-				auto chara = OGge->GetTask<Chara>("Chara");
-				if (chara->position.x > 740)
+				//åàíËâπÇÃçƒê∂
+				decisionsound.play();
+				switch (this->cursorNum)
 				{
-					chara->ManualMove(Vec2(-10.f, 0.0f));
-				}
-				else
+					//ÉXÉeÅ[ÉWÉZÉåÉNÉgÇ…êiÇﬁ
+				case 0:
 				{
-					chara->ManualMove(Vec2(10.f, 0.0f));
+					auto chara = OGge->GetTask<Chara>("Chara");
+					if (chara->position.x > 740)
+					{
+						chara->ManualMove(Vec2(-10.f, 0.0f));
+					}
+					else
+					{
+						chara->ManualMove(Vec2(10.f, 0.0f));
+					}
+					chara->Jump();
+					//this->cm.SetObject(&(*chara));
+					this->mode = from8;
 				}
-				chara->Jump();
-				//this->cm.SetObject(&(*chara));
-				this->mode = from8;
-			}
-			break;
-			//ÉNÉåÉWÉbÉgÇ…êiÇﬁ
-			case 1:
-			{
-				//ñ¢é¿ëïÇÃÇΩÇﬂÅAÉQÅ[ÉÄÇï¬Ç∂ÇÈ
-				OGge->GameEnd();
-			}
 				break;
-			//ÉfÅ[É^è¡ãé
-			case 2:
-			{
-				//yes,noÇëIëÇ∑ÇÈÉÇÅ[ÉhÇ…êÿÇËë÷Ç¶ÇÈ
-				this->mode = from9;
-			}
+				//ÉNÉåÉWÉbÉgÇ…êiÇﬁ
+				case 1:
+				{
+					//ñ¢é¿ëïÇÃÇΩÇﬂÅAÉQÅ[ÉÄÇï¬Ç∂ÇÈ
+					OGge->GameEnd();
+				}
 				break;
-			//èIóπ
-			case 3:
-				OGge->GameEnd();
+				//ÉfÅ[É^è¡ãé
+				case 2:
+				{
+					//yes,noÇëIëÇ∑ÇÈÉÇÅ[ÉhÇ…êÿÇËë÷Ç¶ÇÈ
+					this->mode = from9;
+				}
 				break;
+				//èIóπ
+				case 3:
+					OGge->GameEnd();
+					break;
+				}
 			}
 
 			auto effect03 = Effect::Create(
@@ -625,7 +633,7 @@ void Title::UpDate()
 			trans_a = 0.f;
 			
 			this->demoTimer.Start();
-			this->mode = Mode::from7;
+			this->mode = Mode::from6;
 		}
 	}
 	break;
@@ -678,12 +686,17 @@ void Title::Render2D()
 
 	//ÉÇÉjÉ^Å[ÇÃï\é¶
 	{
-		Box2D draw(Vec2(165.f, 783.f), Vec2(1180.f, 256.f));
+		
+		Box2D draw(Vec2(((OGge->camera->GetSize().x / 2) + OGge->camera->GetPos().x - 1180 / 2.f), 783.f), Vec2(1180.f, 256.f));
+		//Box2D draw(Vec2(monitorSpos, 783.f), Vec2(1180.f, 256.f));
+		std::cout << draw.x << std::endl;
+
 		draw.OffsetSize();
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
 
 		this->monitorTex.Draw(draw, src);
 	}
+
 	//PressAnyButton
 	{
 		if (this->mode == from6) {
@@ -696,7 +709,7 @@ void Title::Render2D()
 	}
 
 	//ï∂éöï\é¶
-	if (pressB)
+	if (this->mode == from7)
 	{
 		//start
 		{
@@ -929,7 +942,7 @@ bool Title::Finalize()
 //BÉLÅ[Ç™âüÇ≥ÇÍÇΩÇ©ÇÃîªíËÇ…égóp
 bool Title::PressB()
 {
-	if (OGge->in->down(Input::in::B2))
+	if (OGge->in->EitherDown())
 	{
 		//åàíËâπÇÃçƒê∂
 		decisionsound.play();
@@ -947,17 +960,23 @@ Vec2 Title::TextMoveout(Vec2 pos)
 {
 	if (this->nowmoveL)
 	{
-		if (pos.x >= this->monitorSpos + 120.f)
+		if (pos.x >= this->monitorSpos+120.f)   //ÉÇÉjÉ^Å[ÇÃÉtÉåÅ[ÉÄï™(120)
 		{
-			pos.x -= 16.f;
+			this->textspeed = 16.f;
+			pos.x -= textspeed;
 		}
 	}
 	if (this->nowmoveR)
 	{
 		if (pos.x < monitorEpos-120.f)
 		{
-			pos.x += 15.f;
+			this->textspeed = 15.f;
+			pos.x += textspeed;
 		}
+	}
+	else
+	{
+		this->textspeed = 0.f;
 	}
 	return pos;
 }
@@ -967,11 +986,17 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //ïKó
 {
 	if (this->nowmoveL)
 	{
-		if (pos.x >= ((monitorEpos - monitorSpos)- (maxsize/2.f)) / 2.f + 40.f)
+		if (pos.x >= monitorSpos + (monitorsize / 2.f) - maxsize / 2)
 		{
-			pos.x -=15;
+			this->textspeed = 15.f;
+			pos.x -= textspeed;
 		}
-		if (pos.x < ((monitorEpos - monitorSpos) - (maxsize)/2.f) / 2.f + 40.f && outsize.x<=0.0f)
+		else
+		{
+			this->textspeed = 0.f;
+		}
+
+		if (pos.x <= monitorSpos + (monitorsize / 2.f) - maxsize / 2 && outsize.x <= 0.f)
 		{
 			if (cursorNum < 3)
 			{
@@ -987,14 +1012,20 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //ïKó
 
 	if (this->nowmoveR)
 	{
-		if (pos.x <= ((monitorEpos - monitorSpos) - (maxsize/2.f)) / 2.f )
+		if(pos.x <= monitorSpos + (monitorsize / 2.f) - maxsize / 2)
 		{
 			if (size.x >= maxsize)
 			{
-				pos.x += 15.f;
+				this->textspeed = 15.f;
+				pos.x += textspeed;
 			}
 		}
-		if (pos.x >= ((monitorEpos - monitorSpos)- (maxsize/2.f)) / 2.f && outsize.x <= 0.0f )
+		else
+		{
+			this->textspeed = 0.f;
+		}
+
+		if(pos.x >= monitorSpos + (monitorsize / 2.f) - maxsize / 2 && outsize.x <= 0.f)
 		{
 			if (cursorNum > 0)
 			{
@@ -1015,7 +1046,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 {
 	if (this->nowmoveL)
 	{
-		if(pos.x<this->monitorSpos+120.f)
+		if(pos.x < this->monitorSpos+120.f)
 		{
 			if (size.x >= 0.0f)
 			{
@@ -1023,7 +1054,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 			}
 		}
 
-		if (size.x == 0.0f)
+		if (size.x <= 0.0f)
 		{
 			pos.x = (monitorSpos - size.x);
 		}
@@ -1032,7 +1063,7 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 	if (this->nowmoveR)
 	{
 		//Ç±ÇÃà íuÇÊÇËâEë§Ç…ì¸Ç¡ÇƒÇ‡sizeÇ™0Ç…Ç»Ç¡ÇƒÇ¢Ç»Ç¢
-		if (pos.x+size.x > this->monitorEpos-115.f)       //Ç±Ç±Ç≈Ç–Ç¡Ç©Ç©Ç¡ÇƒÇÈ
+		if (pos.x+size.x > this->monitorEpos-120.f)       //Ç±Ç±Ç≈Ç–Ç¡Ç©Ç©Ç¡ÇƒÇÈ
 		{
 			if (size.x >= 0.0f)
 			{
