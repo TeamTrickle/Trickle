@@ -38,6 +38,10 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	__super::SetDrawOrder(0.5f);              //描画順を設定
 	auto WSwitch = OGge->GetTasks<WeightSwitch>(this->objectTag);
 
+
+	switch1.Create((std::string)"switch_p1.png");
+	switch2.Create((std::string)"switch_p2.png");
+
 	CreateObject(Cube, pos_, size_);         //オブジェクトを生成
 	head.CreateObject(Cube, Vec2(pos_.x, pos_.y - 1.0f), Vec2(size_.x, 1.0f));     //ほかのオブジェクトとの当たり判定用オブジェクトの生成
 	this->maxmass = mass_;                   //扉が開く重さを格納
@@ -52,13 +56,14 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	this->canIcehitCheck = true;        //氷
 	this->canBuckethitCheck = true;     //バケツ
 
+	this->posY = position.y;
+
 	//ターゲット
 	this->targets = targets_;
 }
 WeightSwitch::~WeightSwitch()
 {
 	std::cout << "スイッチを消去" << std::endl;
-	this->image = nullptr;
 }
 
 
@@ -106,14 +111,23 @@ void WeightSwitch::Render2D()
 	//{
 
 	//}
-
-	//スイッチの描画
-	this->draw = Box2D(this->position, this->Scale);
-	draw.OffsetSize();
-	this->src = Box2D(0, 0, 128, 128);
-	src.OffsetSize();
-	this->image->Draw(draw, src);
-	this->LineDraw();
+	//スイッチの動くパーツの描画
+	{
+		this->draw = Box2D(this->position, this->Scale);
+		draw.OffsetSize();
+		this->src = Box2D(0, 0, 256, 256);
+		src.OffsetSize();
+		this->switch2.Draw(draw, src);
+		this->LineDraw();
+	}
+	//スイッチの動かないバーツの描画
+	{
+		this->draw = Box2D(position.x, posY - 30, this->Scale.x, 64.f);
+		draw.OffsetSize();
+		this->src = Box2D(0, 0, 256, 256);
+		src.OffsetSize();
+		this->switch1.Draw(draw, src);
+	}
 }
 
 //当たっているオブジェクトの重さを取得
@@ -246,7 +260,8 @@ bool WeightSwitch::SetnowState()
 //画像を設定する
 void WeightSwitch::SetTexture(Texture* tex)
 {
-	this->image = tex;
+	/*this->switch1 = tex;
+	this->switch2 = tex;*/
 }
 
 //スイッチが押されていない状態になったときポジションを戻す値を返す

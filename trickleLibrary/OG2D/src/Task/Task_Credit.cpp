@@ -5,6 +5,7 @@
 #include "Map/Map.h"
 #include "Back/Back.h"
 #include "Load/LoadLogo.h"
+#include "Effect/Effect.h"
 
 Credit::Credit()
 {
@@ -36,7 +37,12 @@ bool Credit::Initialize()
 	this->frame[5].tex.Create((std::string)"credit6.png");
 	this->frame[6].tex.Create((std::string)"credit7.png");
 	this->frame[7].tex.Create((std::string)"credit8.png");
-	this->nameTex.Create((std::string)"name.png");
+	//花びらの画像
+	this->petalTex1.Create((std::string)"resultFlower1.PNG");
+	this->petalTex2.Create((std::string)"resultFlower2.PNG");
+	this->petalTex3.Create((std::string)"resultFlower3.PNG");
+	this->petalTex4.Create((std::string)"resultFlower4.PNG");
+	this->petalTex5.Create((std::string)"resultFlower5.PNG");
 	//背景生成
 	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
 	//マップ生成
@@ -51,7 +57,8 @@ bool Credit::Initialize()
 	this->nowMode = 0;
 	this->jumpTimeCnt = 0;
 	this->timeCnt = 0;
-	this->WAITTIME = 200;
+	this->WAITTIME = 30;
+	this->effCounter = 0;
 	if (LoadSize())
 	{
 		SetSize();
@@ -67,10 +74,6 @@ void Credit::UpDate()
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
 	npc->creditFlag = true;
-	if (OGge->in->key.down(In::T))
-	{
-		npc->AutoJump();
-	}
 	if (nowMode == NON) {
 		npc->AutoMoveX();
 		if (!npc->isAutoPlayX()) {
@@ -82,7 +85,7 @@ void Credit::UpDate()
 		++timeCnt;
 		if (timeCnt >= WAITTIME) {
 			npc->SetX(npc->position.x, 1700, 30.f);
-			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1600.f, 0.f));
+			this->camera_anim.Set(OGge->camera->GetPos(), Vec2(1500.f, 0.f));
 			Next();
 		}
 	}
@@ -99,6 +102,7 @@ void Credit::UpDate()
 			}
 		}
 	}
+
 	if (nowMode == MODE3) {
 		++jumpTimeCnt;
 		CreditJump(120, 6);
@@ -180,6 +184,64 @@ void Credit::UpDate()
 		OGge->camera->SetPos(this->camera_anim.Move(40.f));
 		if (!npc->isAutoPlayX()) {
 			npc->Happy(7);
+
+			//花を降らせるエフェクト-----------------------------------------------------
+			if (effCounter < 300)
+			{
+				effCounter++;
+			}
+			else
+			{
+				effCounter = 0;
+			}
+			//一定時間ごとに花びらが出現
+			if (effCounter % 3 == 0)
+			{
+				int x = random::GetRand(-768, 1800);
+
+				auto effect = Effect::Create(Vec2(x+7400, -500 + 550), Vec2(256, 256), Vec2(256, 256), 1, 400);
+				effect->SetMode(Effect::Mode::Down);
+
+				//画像の種類にランダムをかける
+				int anim = rand() % 5 + 1;
+				switch (anim)
+				{
+				case 1:
+					effect->SetTexture(&petalTex1);
+					break;
+				case 2:
+					effect->SetTexture(&petalTex2);
+					break;
+				case 3:
+					effect->SetTexture(&petalTex3);
+					break;
+				case 4:
+					effect->SetTexture(&petalTex4);
+					break;
+				case 5:
+					effect->SetTexture(&petalTex5);
+					break;
+				}
+				//出現した花びらの動きについて
+				if (npc->happyCnt % 3 == 0)
+				{
+					effect->SetMove(Vec2(-15, 5));
+					effect->SetSpeed(10.f, (9.8f / 60.f / 60.f * 32) * 5, 0.1f);
+					effect->SetAngle(3.f, -1);
+				}
+				else if (npc->happyCnt % 3 == 1)
+				{
+					effect->SetMove(Vec2(-15, 5));
+					effect->SetSpeed(10.f, (9.8f / 60.f / 60.f * 32) * 5, 0.1f);
+					effect->SetAngle(2.f, 1);
+				}
+				else
+				{
+					effect->SetMove(Vec2(15, 15));
+					effect->SetSpeed(10.f, (9.8f / 60.f / 60.f * 32) * 15, 0.1f);
+					effect->SetAngle(2.f, 1);
+				}
+			}
 		}
 
 		if (npc->happyCnt >= 7) {
@@ -190,6 +252,7 @@ void Credit::UpDate()
 			}
 		}
 	}
+
 
 	if (nowMode == MODE9) {
 		npc->AutoMoveX();
@@ -212,16 +275,17 @@ void Credit::Render2D()
 		frame[i].tex.Draw(frame[i].draw, frame[i].src);
 	}
 	//梯子
-	for (int i = 2; i < 11; ++i)
+	for (int i = 2; i < 10; ++i)
 	{
-		Box2D draw(3800.f, i*128.f, 128.f, 128.f);
+		Box2D draw(3800.f, i*128.f + 64, 128.f, 128.f);
 		draw.OffsetSize();
 		Box2D src(256*3, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
 	}
+	//梯子の上段
 	{
-		Box2D draw(3800.f, 1*128.f, 128.f, 128.f);
+		Box2D draw(3800.f, 1*128.f+64, 128.f, 128.f);
 		draw.OffsetSize();
 		Box2D src(256*2, 256, 256, 256);
 		src.OffsetSize();
@@ -232,16 +296,18 @@ void Credit::Render2D()
 void Credit::Finalize()
 {
 	//解放処理
-	this->frameTex.Finalize();
-	this->nameTex.Finalize();
+
 	auto map = OGge->GetTask<Map>("map");
-	auto back = OGge->GetTask<Back>("back");
-	this->LadderTex.Finalize();
-	if (back)
-	{
-		back->Kill();
-	}
 	if (map) { map->Kill(); }
+
+	auto back = OGge->GetTask<Back>("back");
+	if (back) { back->Kill(); }
+
+	this->LadderTex.Finalize();
+
+	for (int i = 0; i < 7; ++i) {
+		this->frame[i].tex.Finalize();
+	}
 }
 
 void Credit::Next()
