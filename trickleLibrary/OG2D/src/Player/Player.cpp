@@ -143,7 +143,6 @@ void Player::Render2D()
 	}
 	this->playerimg->Draw(draw, src);
 	this->LineDraw();
-	this->foot.LineDraw();
 }
 bool Player::Finalize()
 {
@@ -208,7 +207,8 @@ bool Player::HeadMapCheck(const std::string& objname_, bool flag)
 					{
 						if (map->hitBase[y][x].objectTag == objname_)
 						{
-							this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+							//this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+							this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - (this->Scale.y - 64.f)));
 							return true;
 						}
 					}
@@ -1466,7 +1466,6 @@ void Player::StateUpDate()
 }
 bool Player::MotionUpDate()
 {
-	this->foot.position = Vec2(this->position.x, this->position.y + this->Scale.y);
 	switch (this->motion)
 	{
 	case Motion::Normal:
@@ -1652,7 +1651,7 @@ bool Player::MotionLadderUpDate()
 		++this->animation.animCnt;
 		Vec2 e = { 0.f,-5.0f };
 		this->LadderMoveCheck(e);
-		if (this->HeadMapCheck("Ladder", false))
+		if (this->HeadMapCheck("LadderTop", true))
 		{
 			//移動が終わったら梯子モーションをするように設定
 			this->animation.animMo = Motion::Normal;
