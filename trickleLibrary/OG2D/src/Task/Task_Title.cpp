@@ -942,7 +942,7 @@ bool Title::Finalize()
 //Bキーが押されたかの判定に使用
 bool Title::PressB()
 {
-	if (OGge->in->down(Input::in::B2))
+	if (OGge->in->EitherDown())
 	{
 		//決定音の再生
 		decisionsound.play();
