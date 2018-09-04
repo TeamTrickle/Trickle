@@ -48,7 +48,8 @@ void Demo::UpDate() {
 	}
 	else if (timer.GetTime() - startTime >= delay) {
 		cap >> frame;
-		if (frame.empty()) {
+		if (frame.empty()) 
+		{
 			deadFlag = true;
 			return;
 		}

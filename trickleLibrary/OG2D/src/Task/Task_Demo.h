@@ -34,7 +34,7 @@ private:
 	Box2D						draw;
 	float						videoFPS;
 	float						delay;
-	float						startTime;
+	float						startTime = 0.f;
 	Color						texColor;
 	Texture						tex;
 	Time						timer;
