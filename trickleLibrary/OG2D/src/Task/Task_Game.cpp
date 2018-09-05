@@ -56,7 +56,7 @@ Game::~Game()
 bool Game::Initialize()
 {
 	OGge->camera->SetSize(Vec2(1280, 720));
-	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
+	auto backImage = Back::Create(std::string("back1.png"), 1920, 1080);
 
 	//Pauseタスクの生成
 	auto pause = Pause::Create();
@@ -468,7 +468,7 @@ bool Game::Initialize()
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
-	__super::SetDrawOrder(0.25f);
+	__super::SetDrawOrder(0.05f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
 	//装飾

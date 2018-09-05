@@ -101,8 +101,8 @@ private:
 private:
 	bool HeadCheck();											//頭の当たり判定
 	bool FootCheck();											//足元の当たり判定
-	bool HeadMapCheck(std::string& objname_,bool = true);			//頭の別オブジェクトへの判定
-	bool FootMapCheck(std::string& objname_,bool = false);			//足元の別オブジェクトへの判定
+	bool HeadMapCheck(const std::string& objname_,bool = true);			//頭の別オブジェクトへの判定
+	bool FootMapCheck(const std::string& objname_,bool = false);			//足元の別オブジェクトへの判定
 	bool SolidFootCheck();
 	bool SolidHitCheck();
 	void MoveCheck(Vec2& est);									//移動判定処理
@@ -111,7 +111,7 @@ private:
 	bool HaveObjectHit();											//バケツとの当たり判定
 	void HaveObjectPosMove();											//所持しているバケツの位置を変える
 	bool TohaveObjectHit();											//ブロックとの当たり判定
-	bool MapHitCheck(std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
+	bool MapHitCheck(const std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
 	void SwitchCheck();											//スイッチとの当たり判定
 	bool LadderJumpCheck();										//梯子中にジャンプを行う際の当たり判定
 	bool PutCheck();											//置く動作を行えるかの判定
@@ -156,8 +156,8 @@ public:
 	bool GetInputAuto() const;
 	bool ReleaseHold();
 	bool ReleaseSolid();						//持っている氷の上に氷が当たった時の処理
-	void SetMotion(Motion motion_);
-	void SetState(State state_);
+	void SetMotion(const Motion& motion_);
+	void SetState(const State& state_);
 	void SetInput(bool);
 	bool GetInput() const;
 };

@@ -191,7 +191,7 @@ bool Player::HeadCheck()
 	}
 	return false;
 }
-bool Player::HeadMapCheck(std::string& objname_, bool flag)
+bool Player::HeadMapCheck(const std::string& objname_, bool flag)
 {
 	this->head.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y - 1.0f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
@@ -207,7 +207,8 @@ bool Player::HeadMapCheck(std::string& objname_, bool flag)
 					{
 						if (map->hitBase[y][x].objectTag == objname_)
 						{
-							this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+							//this->animation.SetAnimaVec(this->position, map->hitBase[y][x].position);
+							this->animation.SetAnimaVec(this->position, Vec2(map->hitBase[y][x].position.x, map->hitBase[y][x].position.y - (this->Scale.y - 64.f)));
 							return true;
 						}
 					}
@@ -329,7 +330,7 @@ bool Player::FootCheck()
 
 	return false;
 }
-bool Player::FootMapCheck(std::string& objname_, bool flag)
+bool Player::FootMapCheck(const std::string& objname_, bool flag)
 {
 	this->foot.CreateObject(Objform::Cube, Vec2(this->position.x + 1.f, this->position.y + this->Scale.y + 1.5f), Vec2(this->Scale.x - 1.f, 1.0f), 0.0f);
 	auto map = OGge->GetTask<Map>("map");
@@ -1091,7 +1092,7 @@ void Player::LadderMoveCheck(Vec2& est)
 		}
 	}
 }
-bool Player::MapHitCheck(std::string& objname_)
+bool Player::MapHitCheck(const std::string& objname_)
 {
 	auto map = OGge->GetTask<Map>("map");
 	for (int y = 0; y < map->mapSize.y; ++y)
@@ -1379,11 +1380,11 @@ bool Player::PutCheck()
 	}
 	return true;
 }
-void Player::SetMotion(Motion motion_)
+void Player::SetMotion(const Motion& motion_)
 {
 	this->motion = motion_;
 }
-void Player::SetState(State state_)
+void Player::SetState(const State& state_)
 {
 	this->state = state_;
 }
@@ -1634,15 +1635,26 @@ bool Player::MotionJumpUpDate()
 }
 bool Player::MotionLadderUpDate()
 {
+	if (this->InputLeft() || this->InputRight() || this->AxisLX() > 0.8f || this->AxisLX() < -0.8f)
+	{
+		if (this->LadderJumpCheck())
+		{
+			this->motion = Normal;
+			this->animation.animCnt = 0;
+			this->moveCnt = 0;
+			this->est = { 0,0 };
+			return true;
+		}
+	}
 	if (this->InputUp())
 	{
 		++this->animation.animCnt;
 		Vec2 e = { 0.f,-5.0f };
 		this->LadderMoveCheck(e);
-		if (this->HeadMapCheck((std::string)"Ladder", false))
+		if (this->HeadMapCheck("LadderTop", true))
 		{
 			//移動が終わったら梯子モーションをするように設定
-			this->animation.animMo = Motion::Ladder;
+			this->animation.animMo = Motion::Normal;
 			//アニメーション状態に移行
 			this->state = State::ANIMATION;
 			//カウントリセット
@@ -1660,7 +1672,7 @@ bool Player::MotionLadderUpDate()
 			e.y += 10.f;
 		}
 		this->LadderMoveCheck(e);
-		if (this->FootMapCheck((std::string)"Ladder", false) || this->SolidFootCheck())
+		if (this->FootMapCheck("Ladder", false) || this->SolidFootCheck())
 		{
 			this->animation.animCnt = 0;
 			this->motion = Motion::Normal;
@@ -1669,15 +1681,6 @@ bool Player::MotionLadderUpDate()
 		{
 			//重力処理を行わないのでここで終了
 			return false;
-		}
-	}
-	if (this->InputLeft() || this->InputRight() || this->AxisLX() > 0.8f || this->AxisLX() < -0.8f)
-	{
-		if (this->LadderJumpCheck())
-		{
-			this->motion = Fall;
-			this->animation.animCnt = 0;
-			this->moveCnt = 0;
 		}
 	}
 	return true;
@@ -1769,7 +1772,7 @@ bool Player::InputUp() {
 	{
 		return false;
 	}
-	return OGge->in->on(Input::CU) || OGge->in->on(In::LU);
+	return OGge->in->on(In::CU) || OGge->in->on(In::LU);
 }
 float Player::AxisLX()
 {
@@ -1857,7 +1860,6 @@ Player::SP Player::Create(Vec2& pos, bool flag)
 	}
 	return nullptr;
 }
-
 void Player::SetInput(bool b)
 {
 	this->isInput = b;
@@ -1868,42 +1870,49 @@ bool Player::GetInput() const
 }
 bool Player::LadderCheck()
 {
-	if (this->InputDown())
+	if (this->FootCheck())
 	{
-		if (this->FootMapCheck((std::string)"Ladder", true) && !this->SolidFootCheck())
+		if (this->InputDown())
 		{
-			//移動が終わったら梯子モーションをするように設定
-			this->animation.animMo = Motion::Ladder;
-			//アニメーション状態に移行
-			this->state = State::ANIMATION;
-			//カウントリセット
-			this->moveCnt = 0;
-			//移動値をすべてリセット
-			this->est = { 0.f,0.f };
-			//バケツをおろす
-			if (this->hold)
+			if (this->FootMapCheck("Ladder", true) && !this->SolidFootCheck())
 			{
-				this->ReleaseHold();
-			}
-			return false;
-		}
-	}
-	if (this->InputUp())
-	{
-		if (this->MapHitCheck((std::string)"Ladder") && !this->SolidHitCheck())
-		{
-			if (this->hold)
-			{
-				if (!this->ReleaseHold())
+				//バケツをおろす
+				if (this->hold)
 				{
-					return false;
+					if (!this->ReleaseHold())
+					{
+						return false;
+					}
+
 				}
+				//移動が終わったら梯子モーションをするように設定
+				this->animation.animMo = Motion::Ladder;
+				//アニメーション状態に移行
+				this->state = State::ANIMATION;
+				//カウントリセット
+				this->moveCnt = 0;
+				//移動値をすべてリセット
+				this->est = { 0.f,0.f };
+				return true;
 			}
-			this->animation.animMo = Motion::Ladder;
-			this->state = State::ANIMATION;
-			this->moveCnt = 0;
-			this->est = { 0.f,0.f };
-			return true;
+		}
+		if (this->InputUp())
+		{
+			if (this->MapHitCheck("Ladder") && !this->SolidHitCheck())
+			{
+				if (this->hold)
+				{
+					if (!this->ReleaseHold())
+					{
+						return false;
+					}
+				}
+				this->animation.animMo = Motion::Ladder;
+				this->state = State::ANIMATION;
+				this->moveCnt = 0;
+				this->est = { 0.f,0.f };
+				return true;
+			}
 		}
 	}
 	return false;
