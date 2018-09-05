@@ -241,7 +241,7 @@ void Goal::Render2D()
 {
 	if (this->image)
 	{
-		this->draw = { this->position, this->Scale };
+		this->draw = { Vec2(this->position.x, this->position.y + 2), this->Scale };
 		if (this->isCheck)
 		{
 			this->draw += Box2D(-32, -60, 64, 64);

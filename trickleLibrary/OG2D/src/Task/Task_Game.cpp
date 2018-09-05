@@ -468,7 +468,7 @@ bool Game::Initialize()
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
-	__super::SetDrawOrder(0.25f);
+	__super::SetDrawOrder(0.05f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
 	//装飾
