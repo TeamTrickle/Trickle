@@ -344,41 +344,14 @@ void Title::UpDate()
 			demoTimer.Start();
 		}
 		//左へ
-		if (nowmoveR == false)
-		{
-			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
-			{
-				this->nowmoveL = true;
-				//カーソルの移動音再生
-				cursorsound.play();
-
-				//文字を待機位置に移動させる処理(モニター右端へ)
-				if (startsize.x <= 0.0f)
-				{
-					startPos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-				if (closesize.x <= 0.0f)
-				{
-					closePos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-				if (dataDeletesize.x <= 0.0f)
-				{
-					dataDeletepos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-				if (creditsize.x <= 0.0f)
-				{
-					creditpos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-			}
-		}
-		//右へ
 		if (nowmoveL == false)
 		{
-			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
+			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
 				this->nowmoveR = true;
 				//カーソルの移動音再生
 				cursorsound.play();
+
 
 				//文字を待機位置に移動させる処理(モニター左端へ)
 				if (startsize.x <= 0.0f)
@@ -396,6 +369,34 @@ void Title::UpDate()
 				if (creditsize.x <= 0.0f)
 				{
 					creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+				}
+			}
+		}
+		//右へ
+		if (nowmoveR == false)
+		{
+			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
+			{
+				this->nowmoveL = true;
+				//カーソルの移動音再生
+				cursorsound.play();
+
+				//文字を待機位置に移動させる処理(モニター右端へ)
+				if (startsize.x <= 0.0f)
+				{
+					startPos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+				if (closesize.x <= 0.0f)
+				{
+					closePos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+				if (dataDeletesize.x <= 0.0f)
+				{
+					dataDeletepos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+				if (creditsize.x <= 0.0f)
+				{
+					creditpos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
 				}
 			}
 		}
@@ -700,7 +701,11 @@ void Title::Render2D()
 	//PressAnyButton
 	{
 		if (this->mode == from6) {
-			Box2D draw(this->startPos.x - 275, this->startPos.y + 60, 64.f * 15, 64.f);
+			//↓draw.xについて
+			//this->monitorSpos !!モニターの左端の位置!!
+			//+ (this->monitorsize/2.f) !!モニターのサイズの半分!! ←ここまででモニターの半分の位置を求めた
+			//-835/2.f !!文字の大きさの半分!! ←文字がモニターの中心に来るように修正
+			Box2D draw(this->monitorSpos + (this->monitorsize / 2.f) - 835 / 2.f, this->startPos.y + 60, 835.f, 64.f);
 			draw.OffsetSize();
 			Box2D src(0.f, 64.f * 16, 64.f * 15, 64.f);
 			src.OffsetSize();
@@ -798,33 +803,35 @@ void Title::Render2D()
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
-		if (mode == from9)                      //yes,noの表示
-		{
-			if (del == yes || del == no)
-			{
-				Box2D draw = Box2D(monitorSpos + 390, 850.f, 64.f * 6, 64.f);
-				draw.OffsetSize();
-				Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
-				src.OffsetSize();
+	}
 
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-			}
-			//カーソルの表示
-			Box2D src(0, 0, 195, 195);
+	//yes,noの表示について
+	if (mode == from9)
+	{
+		if (del == yes || del == no)
+		{
+			Box2D draw = Box2D(monitorSpos + 390, 850.f, 64.f * 6, 64.f);
+			draw.OffsetSize();
+			Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
 			src.OffsetSize();
-			this->texCursor.Rotate((float)this->gierCnt);
-			if (del == yes)
-			{
-				Box2D draw(monitorSpos + 390 - 64.f, 850.f, 64.0f, 64.0f);
-				draw.OffsetSize();
-				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-			}
-			if (del == no)
-			{
-				Box2D draw(monitorSpos + 390 + 64.f*3, 850.f, 64.0f, 64.0f);
-				draw.OffsetSize();
-				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-			}
+
+			this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		}
+		//カーソルの表示
+		Box2D src(0, 0, 195, 195);
+		src.OffsetSize();
+		this->texCursor.Rotate((float)this->gierCnt);
+		if (del == yes)
+		{
+			Box2D draw(monitorSpos + 390 - 64.f, 850.f, 64.0f, 64.0f);
+			draw.OffsetSize();
+			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+		}
+		if (del == no)
+		{
+			Box2D draw(monitorSpos + 390 + 64.f * 3, 850.f, 64.0f, 64.0f);
+			draw.OffsetSize();
+			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 		}
 	}
 
