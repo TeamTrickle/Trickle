@@ -700,9 +700,9 @@ void Title::Render2D()
 	//PressAnyButton
 	{
 		if (this->mode == from6) {
-			Box2D draw(this->startPos.x - 275, this->startPos.y + 60, 64.f * 15, 64.f);
+			Box2D draw(this->startPos.x - 275, this->startPos.y + 60, 835.f, 64.f);
 			draw.OffsetSize();
-			Box2D src(0.f, 64.f * 16, 64.f * 15, 64.f);
+			Box2D src(0.f, 64.f * 16, 835.f, 64.f);
 			src.OffsetSize();
 			rm->GetTextureData(std::string("fontui"))->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->press_a));
 		}
