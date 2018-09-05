@@ -30,7 +30,7 @@ Title::Title()
 	this->isGierAng = false;
 	this->flowerVolume = 0.f;
 	this->isSkip = false;
-	this->soundname = "title.wav";     //ƒTƒEƒ“ƒh‚Ìƒtƒ@ƒCƒ‹–¼	
+	this->soundname = "title.wav";     //ã‚µã‚¦ãƒ³ãƒ‰ã®ãƒ•ã‚¡ã‚¤ãƒ«å	
 	this->soundcursorname = "cursormove.wav";
 	this->sounddecisionname = "decision.wav";
 	this->soundflowername = "flower.wav";
@@ -38,19 +38,19 @@ Title::Title()
 	this->sound = nullptr;
 	this->skipInoutFlag = false;
 	
-	this->pressB = false;           //BƒL[‚ğ‰Ÿ‚µ‚½‚©‚Ç‚¤‚©‚Ì”»’f
+	this->pressAnyKey = false;           //Bã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‹ã©ã†ã‹ã®åˆ¤æ–­
 	this->nowmoveL = false;
 	this->nowmoveR = false;
-	this->textspeed = 0.f;          //ƒeƒLƒXƒg‚Ì“®‚­ƒXƒs[ƒh‚É‚Â‚¢‚Ä
+	this->textspeed = 0.f;          //ãƒ†ã‚­ã‚¹ãƒˆã®å‹•ãã‚¹ãƒ”ãƒ¼ãƒ‰ã«ã¤ã„ã¦
 
-	//ƒ^ƒOİ’è
+	//ã‚¿ã‚°è¨­å®š
 	__super::Init((std::string)"title");
 	__super::SetDrawOrder(0.98f);
 }
 
 Title::~Title()
 {
-	//ƒ[ƒh‚Ì¶¬‚ğs‚¢‹­§•`‰æ‚ğs‚¤
+	//ãƒ­ãƒ¼ãƒ‰ã®ç”Ÿæˆã‚’è¡Œã„å¼·åˆ¶æç”»ã‚’è¡Œã†
 	if (!OGge->GetDeleteEngine())
 	{
 	}
@@ -59,103 +59,103 @@ Title::~Title()
 
 bool Title::Initialize()
 {
-	//”wŒi“Ç‚İ‚İ
+	//èƒŒæ™¯èª­ã¿è¾¼ã¿
 	auto back = Back::Create((std::string)"back.png", 1440, 810);
-	//ƒƒSƒIƒuƒWƒFƒNƒg¶¬
+	//ãƒ­ã‚´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
-	//•¶šˆÊ’uİ’è
+	//æ–‡å­—ä½ç½®è¨­å®š
 	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 30.f);
 	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 
-	start = non;          //start‚Ì•¶š‚ÌŒ»İ‚Ìó‘Ô
-	del = no;             //ƒf[ƒ^‚ğÁ‚·‚©‚Ç‚¤‚©‚Ì‘I‘ğ(Å‰‚Íno)
+	start = non;          //startã®æ–‡å­—ã®ç¾åœ¨ã®çŠ¶æ…‹
+	del = no;             //ãƒ‡ãƒ¼ã‚¿ã‚’æ¶ˆã™ã‹ã©ã†ã‹ã®é¸æŠ(æœ€åˆã¯no)
 
-	//Œ»İ‚Ìg—p‚·‚é•¶š‚ÌƒTƒCƒYŠi”[
+	//ç¾åœ¨ã®ä½¿ç”¨ã™ã‚‹æ–‡å­—ã®ã‚µã‚¤ã‚ºæ ¼ç´
 	this->startsize = Vec2(320.f, 64.f);
 	this->closesize = Vec2(0.f, 64.f);
 	this->creditsize = Vec2(0.f, 64.f);
 	this->dataDeletesize = Vec2(0.f, 64.f);
-	//•¶š‚ÌÅ‘å‰¡ƒTƒCƒY‚ğŠi”[
+	//æ–‡å­—ã®æœ€å¤§æ¨ªã‚µã‚¤ã‚ºã‚’æ ¼ç´
 	this->startmax = 64.f * 5;
 	this->closemax = 64.f * 4;
 	this->creditmax = 64.f * 6;
 	this->datadeletemax = 64.f * 11;
-	//•¶š‚Ì‰ŠúˆÊ’uw’è
+	//æ–‡å­—ã®åˆæœŸä½ç½®æŒ‡å®š
 	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
-	//•¶šƒ¿’l
+	//æ–‡å­—Î±å€¤
 	this->press_a = 0;
 	this->press_delta_a = 0.01f;
 
-	//g‚í‚È‚­‚È‚Á‚Ä‚é
+	//ä½¿ã‚ãªããªã£ã¦ã‚‹
 	//this->textPos[0] = { this->startPos,Vec2(256,64) };
 	//this->textPos[1] = { this->closePos,Vec2(256,64) };
-	////”z—ñŠÇ—‚ğs‚¤
+	////é…åˆ—ç®¡ç†ã‚’è¡Œã†
 	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y ,320.f,64.f };
 	//this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y ,64.f*4.f,64.f };
 
-	//‰æ‘œ“Ç‚İ‚İ
+	//ç”»åƒèª­ã¿è¾¼ã¿
 	texCursor.Create("gear3.png");
 	this->texLogo.Create("logo.png");
 	this->GierLogo.Create("gearofi.png");
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
-	this->monitorTex.Create("selectframe.png");     //ƒ‚ƒjƒ^[‚Ì‰æ‘œ’Ç‰Á
-	this->fontTex.Create("Font_new.png");           //•¶šƒtƒHƒ“ƒg‚Ì‰æ‘œ’Ç‰Á
+	this->monitorTex.Create("selectframe.png");     //ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ç”»åƒè¿½åŠ 
+	this->fontTex.Create("Font_new.png");           //æ–‡å­—ãƒ•ã‚©ãƒ³ãƒˆã®ç”»åƒè¿½åŠ 
 
 	this->forTransform.Create("TransparentBackTitle.png");
-	this->canVolControl = false;     //BGM‚ÌƒtƒF[ƒhƒCƒ“‚Ég—p
+	this->canVolControl = false;     //BGMã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã«ä½¿ç”¨
 	
 	this->effect03.Create("starteffect.png");
 	
-	//ƒTƒEƒ“ƒh‚Ì¶¬
+	//ã‚µã‚¦ãƒ³ãƒ‰ã®ç”Ÿæˆ
 	//BGM
 	sound = new Sound();
 	sound->create(soundname, true);
 	rm->SetSoundData((std::string)"titleBGM", sound);
-	//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹
+	//ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•éŸ³
 	cursorsound.create(soundcursorname,false);
 	cursorsound.volume(1.0f);
-	//Œˆ’è‰¹
+	//æ±ºå®šéŸ³
 	decisionsound.create(sounddecisionname, false);
 	decisionsound.volume(1.0f);
-	//‰Ô‚ªç‚­Œø‰Ê‰¹
+	//èŠ±ãŒå’²ãåŠ¹æœéŸ³
 	flowersound.create(soundflowername, false);
 	flowersound.volume(0.1f);
 
-	//ƒ‚ƒjƒ^[‚ÌƒTƒCƒY‰Šú‰»
+	//ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ã‚µã‚¤ã‚ºåˆæœŸåŒ–
 	this->monitorsize = 1180.f;
 	
-	//ƒJƒƒ‰ˆÊ’u‚ÌˆÚ“®
+	//ã‚«ãƒ¡ãƒ©ä½ç½®ã®ç§»å‹•
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
-	//…“Ç‚İ‚İ‚Æ¶¬
+	//æ°´èª­ã¿è¾¼ã¿ã¨ç”Ÿæˆ
 	auto water = Water::Create(Vec2(500.f, -64.f));
 	waterTex.Create((std::string)"waterTex.png");
 	water->SetTexture(&this->waterTex);
 	water->SetMaxSize(Vec2(128, 128));
 
-	//ƒ}ƒbƒv¶¬(’n–Ê—p)
+	//ãƒãƒƒãƒ—ç”Ÿæˆ(åœ°é¢ç”¨)
 	auto map = Map::Create((std::string)"title.csv");
-	//–îˆó‚ÌˆÊ’u‚Åg—p‚·‚é
+	//çŸ¢å°ã®ä½ç½®ã§ä½¿ç”¨ã™ã‚‹
 	this->nextTaskCheck = 0;
 	auto chara = Chara::Create((std::string)"player.png", Vec2(1600, 628));
 	chara->SetPause(true);
-	//ƒƒS‚Ì•Ô‰ñ“]
+	//ãƒ­ã‚´ã®æ­¯è»Šå›è»¢
 	this->gierCnt = 0;
 
-	//•`‰æ‡‚ÌŒˆ’è
+	//æç”»é †ã®æ±ºå®š
 	//__super::SetDrawOrder(1.f);
 	__super::SetDrawOrder(0.95f);
-	//ƒJƒƒ‰‚Ì’†S‚Ìƒ^[ƒQƒbƒg‚ğ“o˜^
+	//ã‚«ãƒ¡ãƒ©ã®ä¸­å¿ƒã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç™»éŒ²
 	this->cm.SetObject(&(*water));
-	//ƒJƒƒ‰‚ÌƒTƒCƒY‚ÆˆÊ’u‚ğ’²®
+	//ã‚«ãƒ¡ãƒ©ã®ã‚µã‚¤ã‚ºã¨ä½ç½®ã‚’èª¿æ•´
 	OGge->camera->SetSize(Vec2(960 / 2, 540 / 2));
 	OGge->camera->SetPos(Vec2(500 - (480 / 2), 0));
-	//ƒJƒƒ‰‚Ì‰æ–ÊŠOİ’è
+	//ã‚«ãƒ¡ãƒ©ã®ç”»é¢å¤–è¨­å®š
 	this->cm.SetSize(Box2D(Vec2(0, 0), OGge->window->GetSize() * 2));
-	//ŠJn‚Ìƒ‚[ƒhİ’è
+	//é–‹å§‹æ™‚ã®ãƒ¢ãƒ¼ãƒ‰è¨­å®š
 	this->mode = Mode::from1;
 	auto load = OGge->GetTask<Load>("load");
 	if (load)
@@ -175,20 +175,20 @@ void Title::UpDate()
 		this->Skip();
 	}
 
-	//BGM‚ÌƒtƒF[ƒhƒCƒ“
+	//BGMã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
 	if (canVolControl)
 	{
 		sound->volume(volControl.FadeIn(canVolControl));
 	}
 
-	//ƒJƒƒ‰‚Ì©“®ˆÚ“®
+	//ã‚«ãƒ¡ãƒ©ã®è‡ªå‹•ç§»å‹•
 	this->cm.move();
-	//ƒMƒA‚ğ‰ñ‚·ê‡
+	//ã‚®ã‚¢ã‚’å›ã™å ´åˆ
 	if (this->isGierAng)
 	{
-		//’l‚ğ‘‚â‚·
+		//å€¤ã‚’å¢—ã‚„ã™
 		this->gierCnt++;
-		//360“x‚ğ’´‚¦‚½‚ç0“x‚É–ß‚·
+		//360åº¦ã‚’è¶…ãˆãŸã‚‰0åº¦ã«æˆ»ã™
 		if (this->gierCnt > 360)
 		{
 			this->gierCnt = 0;
@@ -200,15 +200,15 @@ void Title::UpDate()
 	}
 	switch (this->mode)
 	{
-	case from1:	//…oŒ»‚©‚ç…Á–Å‚Ü‚Å
+	case from1:	//æ°´å‡ºç¾ã‹ã‚‰æ°´æ¶ˆæ»…ã¾ã§
 	{
-		//…î•ñæ“¾
+		//æ°´æƒ…å ±å–å¾—
 		auto water = OGge->GetTask<Water>("water");
 		if (water)
 		{
 			if (this->Logo.hit(*water) && water->GetSituation() == Water::Situation::Normal)
 			{
-				//…‚ğíœƒ‚[ƒh‚ÖˆÚs
+				//æ°´ã‚’å‰Šé™¤ãƒ¢ãƒ¼ãƒ‰ã¸ç§»è¡Œ
 				water->SetSituation(Water::Situation::Deleteform);
 				this->cm.DeleteObject();
 				//this->mode = from2;
@@ -233,20 +233,20 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from2:	//‰Ôç‚«ŠJn‚©‚çI—¹‚Ü‚Å
+	case from2:	//èŠ±å’²ãé–‹å§‹ã‹ã‚‰çµ‚äº†ã¾ã§
 	{
-		//10ƒtƒŒ[ƒ€ŒãˆÚ“®
+		//10ãƒ•ãƒ¬ãƒ¼ãƒ å¾Œç§»å‹•
 		if (this->flowerVolume >= 1.0f)
 		{
-			//‰Ô‚ªç‚¢‚½“_‚ÅƒTƒEƒ“ƒh‚ÌÄ¶‚ğn‚ß‚é
+			//èŠ±ãŒå’²ã„ãŸæ™‚ç‚¹ã§ã‚µã‚¦ãƒ³ãƒ‰ã®å†ç”Ÿã‚’å§‹ã‚ã‚‹
 			this->canVolControl = true;
 			sound->play();
-			soundstart = true;      //‰Ô‚Ìç‚­Œø‰Ê‰¹‚Åg—p
+			soundstart = true;      //èŠ±ã®å’²ãåŠ¹æœéŸ³ã§ä½¿ç”¨
 
 			this->mode = from3;
-			//•Ô‚ğ‰ñ‚·ˆ—
+			//æ­¯è»Šã‚’å›ã™å‡¦ç†
 
-			//ƒJƒƒ‰‚ÌˆÚ“®’l‚ğ“o˜^
+			//ã‚«ãƒ¡ãƒ©ã®ç§»å‹•å€¤ã‚’ç™»éŒ²
 			this->cameraPos.Set(OGge->camera->GetPos(), Vec2(0, 200));
 			this->cameraSize.Set(OGge->camera->GetSize(), Vec2(1440, 810));
 		}
@@ -265,7 +265,7 @@ void Title::UpDate()
 			}
 			if (this->flowerVolume < 1.f)
 			{
-				//‰Ô‚ªç‚­Œø‰Ê‰¹‚ÌÄ¶------------------------
+				//èŠ±ãŒå’²ãåŠ¹æœéŸ³ã®å†ç”Ÿ------------------------
 				if (soundstart)
 				{
 					flowersound.play();
@@ -277,20 +277,20 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from3:	//ƒJƒƒ‰ƒTƒCƒYˆÚ“®ŠJn‚©‚çI—¹‚Ü‚Å
+	case from3:	//ã‚«ãƒ¡ãƒ©ã‚µã‚¤ã‚ºç§»å‹•é–‹å§‹ã‹ã‚‰çµ‚äº†ã¾ã§
 	{
-		//ˆÚ“®‚ğs‚¤
+		//ç§»å‹•ã‚’è¡Œã†
 		OGge->camera->SetPos(this->cameraPos.Move());
 		OGge->camera->SetSize(this->cameraSize.Move());
-		//—¼•û‚ÌˆÚ“®‚ªŠ®—¹‚µ‚½ê‡
+		//ä¸¡æ–¹ã®ç§»å‹•ãŒå®Œäº†ã—ãŸå ´åˆ
 		if (!this->cameraPos.isPlay() && !this->cameraSize.isPlay())
 		{
-			//Ÿ‚Ö
+			//æ¬¡ã¸
 			this->mode = from4;
 		}
 	}
 	break;
-	case from4:	//•¶šoŒ»
+	case from4:	//æ–‡å­—å‡ºç¾
 	{
 		this->tex_a += 0.01f;
 		if (this->tex_a >= 1.0f)
@@ -302,7 +302,7 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from5:	//–îˆó‚ÆƒvƒŒƒCƒ„[oŒ»
+	case from5:	//çŸ¢å°ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å‡ºç¾
 	{
 		auto Npc = OGge->GetTask<Chara>("Chara");
 		if (Npc)
@@ -316,17 +316,19 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from6:	//BƒL[“ü—Í‘Ò‚¿ó‘Ô
+	case from6:	//Bã‚­ãƒ¼å…¥åŠ›å¾…ã¡çŠ¶æ…‹
 	{
 		demoTimer.Start();
-		if (PressB() == false)
+		if (PressAnyKey() == false)
 		{
+			//push any keyã®é€æ˜åº¦ã«é–¢ã—ãŸå‡¦ç†
 			this->press_a += this->press_delta_a;
-			if (this->press_a < 0 || this->press_a >= 1.0f) {
+			if (this->press_a < 0 || this->press_a >= 1.0f) {      //0~1.0ã®é–“ã‚’å¾€å¾©
 				this->press_delta_a *= -1;
 			}
 			if (demoTimer.GetTime() >= DEMO_LIMIT) {
 				this->mode = Mode::from10;
+				this->press_a = 0.f;
 				break;
 			}
 			break;
@@ -338,49 +340,22 @@ void Title::UpDate()
 	}
 	break;
 
-	case from7:	//Œˆ’è‘Ò‚¿ó‘Ô
+	case from7:	//æ±ºå®šå¾…ã¡çŠ¶æ…‹
 	{
 		if (!demoTimer.isplay()) {
 			demoTimer.Start();
 		}
-		//¶‚Ö
-		if (nowmoveR == false)
+		//å·¦ã¸
+		if (nowmoveL == false)
 		{
 			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
-				this->nowmoveL = true;
-				//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
-				cursorsound.play();
-
-				//•¶š‚ğ‘Ò‹@ˆÊ’u‚ÉˆÚ“®‚³‚¹‚éˆ—(ƒ‚ƒjƒ^[‰E’[‚Ö)
-				if (startsize.x <= 0.0f)
-				{
-					startPos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-				if (closesize.x <= 0.0f)
-				{
-					closePos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-				if (dataDeletesize.x <= 0.0f)
-				{
-					dataDeletepos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-				if (creditsize.x <= 0.0f)
-				{
-					creditpos = Vec2(monitorEpos-120.f, 624.f + 129.f + 30.f);
-				}
-			}
-		}
-		//‰E‚Ö
-		if (nowmoveL == false)
-		{
-			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
-			{
 				this->nowmoveR = true;
-				//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+				//ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•éŸ³å†ç”Ÿ
 				cursorsound.play();
 
-				//•¶š‚ğ‘Ò‹@ˆÊ’u‚ÉˆÚ“®‚³‚¹‚éˆ—(ƒ‚ƒjƒ^[¶’[‚Ö)
+
+				//æ–‡å­—ã‚’å¾…æ©Ÿä½ç½®ã«ç§»å‹•ã•ã›ã‚‹å‡¦ç†(ãƒ¢ãƒ‹ã‚¿ãƒ¼å·¦ç«¯ã¸)
 				if (startsize.x <= 0.0f)
 				{
 					startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
@@ -399,11 +374,39 @@ void Title::UpDate()
 				}
 			}
 		}
+		//å³ã¸
+		if (nowmoveR == false)
+		{
+			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
+			{
+				this->nowmoveL = true;
+				//ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•éŸ³å†ç”Ÿ
+				cursorsound.play();
 
-		//•¶š‚ÌˆÚ“®ˆ—--------------------------------------------------------------
+				//æ–‡å­—ã‚’å¾…æ©Ÿä½ç½®ã«ç§»å‹•ã•ã›ã‚‹å‡¦ç†(ãƒ¢ãƒ‹ã‚¿ãƒ¼å³ç«¯ã¸)
+				if (startsize.x <= 0.0f)
+				{
+					startPos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+				if (closesize.x <= 0.0f)
+				{
+					closePos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+				if (dataDeletesize.x <= 0.0f)
+				{
+					dataDeletepos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+				if (creditsize.x <= 0.0f)
+				{
+					creditpos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+				}
+			}
+		}
+
+		//æ–‡å­—ã®ç§»å‹•å‡¦ç†--------------------------------------------------------------
 		switch (cursorNum)
 		{
-		case 0:          //‘I‘ğˆ‚ªstart
+		case 0:          //é¸æŠè‚¢ãŒstart
 		{
 			startPos = TextMoveout(startPos);
 			startsize = TextSizeout(startPos, startsize,startmax);
@@ -425,7 +428,7 @@ void Title::UpDate()
 			}
 		}
 			break;
-		case 1:           //‘I‘ğˆ‚ªcredit
+		case 1:           //é¸æŠè‚¢ãŒcredit
 		{
 			creditpos = TextMoveout(creditpos);
 			creditsize = TextSizeout(creditpos, creditsize,creditmax);
@@ -447,7 +450,7 @@ void Title::UpDate()
 			}
 		}
 			break;
-		case 2:            //‘I‘ğˆ‚ªdelete
+		case 2:            //é¸æŠè‚¢ãŒdelete
 		{
 			dataDeletepos = TextMoveout(dataDeletepos);
 			dataDeletesize = TextSizeout(dataDeletepos, dataDeletesize,datadeletemax);
@@ -469,7 +472,7 @@ void Title::UpDate()
 			}
 		}
 			break;
-		case 3:            //‘I‘ğˆ‚ªexit
+		case 3:            //é¸æŠè‚¢ãŒexit
 		{
 			closePos = TextMoveout(closePos);
 			closesize = TextSizeout(closePos, closesize,closemax);
@@ -498,16 +501,16 @@ void Title::UpDate()
 			break;
 		}
 
-		//Œˆ’è‚µ‚ÄŸ‚Ö
+		//æ±ºå®šã—ã¦æ¬¡ã¸
 		if (OGge->in->down(Input::in::B2))
 		{
-			if (this->textspeed == 0.f)    //Œ»İ•¶š‚ªˆÚ“®’†‚Å‚È‚¯‚ê‚Î
+			if (this->textspeed == 0.f)    //ç¾åœ¨æ–‡å­—ãŒç§»å‹•ä¸­ã§ãªã‘ã‚Œã°
 			{
-				//Œˆ’è‰¹‚ÌÄ¶
+				//æ±ºå®šéŸ³ã®å†ç”Ÿ
 				decisionsound.play();
 				switch (this->cursorNum)
 				{
-					//ƒXƒe[ƒWƒZƒŒƒNƒg‚Éi‚Ş
+					//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚»ãƒ¬ã‚¯ãƒˆã«é€²ã‚€
 				case 0:
 				{
 					auto chara = OGge->GetTask<Chara>("Chara");
@@ -524,21 +527,21 @@ void Title::UpDate()
 					this->mode = from8;
 				}
 				break;
-				//ƒNƒŒƒWƒbƒg‚Éi‚Ş
+				//ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆã«é€²ã‚€
 				case 1:
 				{
-					//–¢À‘•‚Ì‚½‚ßAƒQ[ƒ€‚ğ•Â‚¶‚é
+					//æœªå®Ÿè£…ã®ãŸã‚ã€ã‚²ãƒ¼ãƒ ã‚’é–‰ã˜ã‚‹
 					OGge->GameEnd();
 				}
 				break;
-				//ƒf[ƒ^Á‹
+				//ãƒ‡ãƒ¼ã‚¿æ¶ˆå»
 				case 2:
 				{
-					//yes,no‚ğ‘I‘ğ‚·‚éƒ‚[ƒh‚ÉØ‚è‘Ö‚¦‚é
+					//yes,noã‚’é¸æŠã™ã‚‹ãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
 					this->mode = from9;
 				}
 				break;
-				//I—¹
+				//çµ‚äº†
 				case 3:
 					OGge->GameEnd();
 					break;
@@ -559,9 +562,9 @@ void Title::UpDate()
 	}
 	break;
 
-	case from8:  //ƒWƒƒƒ“ƒv‚©‚çselect‚Ü‚Å‚ÌˆÚ“®
+	case from8:  //ã‚¸ãƒ£ãƒ³ãƒ—ã‹ã‚‰selectã¾ã§ã®ç§»å‹•
 	{
-		//~‚è‚½‚çƒ[ƒh‚ğ‹²‚İƒZƒŒƒNƒg‚ÖˆÚs‚·‚és“®
+		//é™ã‚ŠãŸã‚‰ãƒ­ãƒ¼ãƒ‰ã‚’æŒŸã¿ã‚»ãƒ¬ã‚¯ãƒˆã¸ç§»è¡Œã™ã‚‹è¡Œå‹•
 		auto chara = OGge->GetTask<Chara>("Chara");
 		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
 		{
@@ -570,10 +573,10 @@ void Title::UpDate()
 	}
 	break;
 
-	case from9:            //datadelete‚Ìyes‚©no‚©‚ğ‘I‘ğ‚·‚é
+	case from9:            //datadeleteã®yesã‹noã‹ã‚’é¸æŠã™ã‚‹
 		if (OGge->in->down(In::CL) || OGge->in->down(In::LL) || OGge->in->down(In::CR) || OGge->in->down(In::LR))
 		{
-			//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+			//ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•éŸ³å†ç”Ÿ
 			cursorsound.play();
 
 			if (del == no)
@@ -589,7 +592,7 @@ void Title::UpDate()
 		}
 		if (OGge->in->down(Input::in::B2))
 		{
-			//Œˆ’è‰¹‚ÌÄ¶
+			//æ±ºå®šéŸ³ã®å†ç”Ÿ
 			decisionsound.play();
 
 			if (del == no)
@@ -598,14 +601,14 @@ void Title::UpDate()
 			}
 			if (del == yes)
 			{
-				//ƒf[ƒ^íœ‚Ìˆ—
+				//ãƒ‡ãƒ¼ã‚¿å‰Šé™¤ã®å‡¦ç†
 				GameManager::ResetData();
 				this->mode = from7;
 			}
 		}
 		break;
 
-	case from10: // Demo‰æ–Ê‚ÉˆÚ“®‚·‚é‚Æ‚«
+	case from10: // Demoç”»é¢ã«ç§»å‹•ã™ã‚‹ã¨ã
 	{
 		trans_a += 0.01f;
 		if (trans_a > 1.f) {
@@ -621,7 +624,7 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case from11: // Demo‰æ–Ê‚©‚ç–ß‚Á‚Ä‚«‚½‚Æ‚«
+	case from11: // Demoç”»é¢ã‹ã‚‰æˆ»ã£ã¦ããŸã¨ã
 	{
 		auto Npc = OGge->GetTasks<Chara>("Chara");
 		for (auto id = Npc->begin(); id != Npc->end(); ++id)
@@ -637,7 +640,7 @@ void Title::UpDate()
 		}
 	}
 	break;
-	case End:	//Select‚Ì“Ç‚İ‚İ‚Æ©g‚Ì”jŠü
+	case End:	//Selectã®èª­ã¿è¾¼ã¿ã¨è‡ªèº«ã®ç ´æ£„
 	{
 		//this->Kill();
 		auto load = Load::Create();
@@ -655,7 +658,7 @@ void Title::UpDate()
 
 void Title::Render2D()
 {
-	//”wŒi•\¦
+	//èƒŒæ™¯è¡¨ç¤º
 	{
 		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
 		draw.OffsetSize();
@@ -663,7 +666,7 @@ void Title::Render2D()
 		src.OffsetSize();
 		this->texLogo.Draw(draw, src, Color(0, 0, 0, 0));
 	}
-	//ƒƒS•\¦
+	//ãƒ­ã‚´è¡¨ç¤º
 	{
 		Box2D draw(this->Logo.position, this->Logo.Scale);
 		draw.OffsetSize();
@@ -684,12 +687,11 @@ void Title::Render2D()
 		this->flowerLogo.Draw(draw, src);
 	}
 
-	//ƒ‚ƒjƒ^[‚Ì•\¦
+	//ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®è¡¨ç¤º
 	{
 		
 		Box2D draw(Vec2(((OGge->camera->GetSize().x / 2) + OGge->camera->GetPos().x - 1180 / 2.f), 783.f), Vec2(1180.f, 256.f));
 		//Box2D draw(Vec2(monitorSpos, 783.f), Vec2(1180.f, 256.f));
-		std::cout << draw.x << std::endl;
 
 		draw.OffsetSize();
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
@@ -700,7 +702,11 @@ void Title::Render2D()
 	//PressAnyButton
 	{
 		if (this->mode == from6) {
-			Box2D draw(this->startPos.x - 275, this->startPos.y + 60, 835.f, 64.f);
+			//â†“draw.xã«ã¤ã„ã¦
+			//this->monitorSpos !!ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®å·¦ç«¯ã®ä½ç½®!!
+			//+ (this->monitorsize/2.f) !!ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ã‚µã‚¤ã‚ºã®åŠåˆ†!! â†ã“ã“ã¾ã§ã§ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®åŠåˆ†ã®ä½ç½®ã‚’æ±‚ã‚ãŸ
+			//-835/2.f !!æ–‡å­—ã®å¤§ãã•ã®åŠåˆ†!! â†æ–‡å­—ãŒãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ä¸­å¿ƒã«æ¥ã‚‹ã‚ˆã†ã«ä¿®æ­£
+			Box2D draw(this->monitorSpos + (this->monitorsize / 2.f) - 835 / 2.f, this->startPos.y + 60, 835.f, 64.f);
 			draw.OffsetSize();
 			Box2D src(0.f, 64.f * 16, 835.f, 64.f);
 			src.OffsetSize();
@@ -708,7 +714,7 @@ void Title::Render2D()
 		}
 	}
 
-	//•¶š•\¦
+	//æ–‡å­—è¡¨ç¤º
 	if (this->mode == from7)
 	{
 		//start
@@ -722,7 +728,7 @@ void Title::Render2D()
 				
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
-			//ˆê”Ô‰‚ß‚Í^‚ñ’†‚Éstart‚ğ•\¦
+			//ä¸€ç•ªåˆã‚ã¯çœŸã‚“ä¸­ã«startã‚’è¡¨ç¤º
 			if (start == in)
 			{
 				Box2D src = intextsrc;
@@ -780,57 +786,59 @@ void Title::Render2D()
 		}
 		//exit
 		{
-			//‰¼ˆ—
+			//ä»®å‡¦ç†
 			Box2D draw(closePos.x, closePos.y + 80.f, closesize.x, closesize.y);
 			draw.OffsetSize();
 			if (close == in)
 			{
 				Box2D src = intextsrc;
-				src.y = 64.f;                  //“Ç‚İ‚Ş‰æ‘œ‚ğ•Ï‚¦‚é
+				src.y = 64.f;                  //èª­ã¿è¾¼ã‚€ç”»åƒã‚’å¤‰ãˆã‚‹
 				src.OffsetSize();
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
 			{
 				Box2D src = outtextsrc;
-				src.y = 64.f;                  //“Ç‚İ‚Ş‰æ‘œ‚ğ•Ï‚¦‚é
+				src.y = 64.f;                  //èª­ã¿è¾¼ã‚€ç”»åƒã‚’å¤‰ãˆã‚‹
 				src.OffsetSize();
 				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-			}
-		}
-		if (mode == from9)                      //yes,no‚Ì•\¦
-		{
-			if (del == yes || del == no)
-			{
-				Box2D draw = Box2D(monitorSpos + 390, 850.f, 64.f * 6, 64.f);
-				draw.OffsetSize();
-				Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
-				src.OffsetSize();
-
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-			}
-			//ƒJ[ƒ\ƒ‹‚Ì•\¦
-			Box2D src(0, 0, 195, 195);
-			src.OffsetSize();
-			this->texCursor.Rotate((float)this->gierCnt);
-			if (del == yes)
-			{
-				Box2D draw(monitorSpos + 390 - 64.f, 850.f, 64.0f, 64.0f);
-				draw.OffsetSize();
-				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-			}
-			if (del == no)
-			{
-				Box2D draw(monitorSpos + 390 + 64.f*3, 850.f, 64.0f, 64.0f);
-				draw.OffsetSize();
-				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 			}
 		}
 	}
 
-	////ƒJ[ƒ\ƒ‹‚Ì•\¦
+	//yes,noã®è¡¨ç¤ºã«ã¤ã„ã¦
+	if (mode == from9)
+	{
+		if (del == yes || del == no)
+		{
+			Box2D draw = Box2D(monitorSpos + 390, 850.f, 64.f * 6, 64.f);
+			draw.OffsetSize();
+			Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
+			src.OffsetSize();
+
+			this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+		}
+		//ã‚«ãƒ¼ã‚½ãƒ«ã®è¡¨ç¤º
+		Box2D src(0, 0, 195, 195);
+		src.OffsetSize();
+		this->texCursor.Rotate((float)this->gierCnt);
+		if (del == yes)
+		{
+			Box2D draw(monitorSpos + 390 - 64.f, 850.f, 64.0f, 64.0f);
+			draw.OffsetSize();
+			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+		}
+		if (del == no)
+		{
+			Box2D draw(monitorSpos + 390 + 64.f * 3, 850.f, 64.0f, 64.0f);
+			draw.OffsetSize();
+			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+		}
+	}
+
+	////ã‚«ãƒ¼ã‚½ãƒ«ã®è¡¨ç¤º
 	//{
-	//	//•\¦ˆÊ’uA‘å‚«‚³‚Í‰¼ƒQ[ƒ€ƒXƒ^[ƒg
+	//	//è¡¨ç¤ºä½ç½®ã€å¤§ãã•ã¯ä»®ã‚²ãƒ¼ãƒ ã‚¹ã‚¿ãƒ¼ãƒˆ
 	//	Box2D draw(cursorPos[this->cursorNum].x, cursorPos[this->cursorNum].y, 64.0f, 64.0f);
 	//	draw.OffsetSize();
 	//	Box2D src(0, 0, 195, 195);
@@ -841,7 +849,7 @@ void Title::Render2D()
 	//	draw2.OffsetSize();
 	//	texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 	//}
-	////I—¹
+	////çµ‚äº†
 	//{
 	//	Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
 	//	draw.OffsetSize();
@@ -849,7 +857,7 @@ void Title::Render2D()
 	//	src.OffsetSize();
 	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	//}
-	////ƒXƒ^[ƒg
+	////ã‚¹ã‚¿ãƒ¼ãƒˆ
 	//{
 	//	//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
 	//	Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
@@ -860,7 +868,7 @@ void Title::Render2D()
 	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 	//}
 
-	//‰æ–Ê“]Š·—p•‚¢‚â‚Â
+	//ç”»é¢è»¢æ›ç”¨é»’ã„ã‚„ã¤
 	if (this->trans_a > 0.f) {
 		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
 		Box2D src(0, 0, 1, 1);
@@ -870,7 +878,7 @@ void Title::Render2D()
 
 bool Title::Finalize()
 {
-	//g—p‰æ‘œ‚Ì‰ğ•ú
+	//ä½¿ç”¨ç”»åƒã®è§£æ”¾
 	texCursor.Finalize();
 	this->texLogo.Finalize();
 	this->GierLogo.Finalize();
@@ -929,7 +937,7 @@ bool Title::Finalize()
 	}
 	else
 	{
-		//Ÿ‚ğ¶¬‚µ‚È‚¢ê‡Soundƒf[ƒ^‚ğ‰ğ•ú‚·‚é
+		//æ¬¡ã‚’ç”Ÿæˆã—ãªã„å ´åˆSoundãƒ‡ãƒ¼ã‚¿ã‚’è§£æ”¾ã™ã‚‹
 		if (this->sound)
 		{
 			delete this->sound;
@@ -939,28 +947,28 @@ bool Title::Finalize()
 	return true;
 }
 
-//BƒL[‚ª‰Ÿ‚³‚ê‚½‚©‚Ì”»’è‚Ég—p
-bool Title::PressB()
+//Bã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‹ã®åˆ¤å®šã«ä½¿ç”¨
+bool Title::PressAnyKey()
 {
 	if (OGge->in->EitherDown())
 	{
-		//Œˆ’è‰¹‚ÌÄ¶
+		//æ±ºå®šéŸ³ã®å†ç”Ÿ
 		decisionsound.play();
 
-		this->pressB = true;
+		this->pressAnyKey = true;
 		return true;
 	}
 	return false;
 }
 
 
-//•¶š‚ÌˆÚ“®‚É‚Â‚¢‚Ä---------------------------------------------------------------------------
-//text‚ªƒ‚ƒjƒ^[‚ÌŠO‚Éo‚Ä‚¢‚­“®‚«
+//æ–‡å­—ã®ç§»å‹•ã«ã¤ã„ã¦---------------------------------------------------------------------------
+//textãŒãƒ¢ãƒ‹ã‚¿ãƒ¼ã®å¤–ã«å‡ºã¦ã„ãå‹•ã
 Vec2 Title::TextMoveout(Vec2 pos)
 {
 	if (this->nowmoveL)
 	{
-		if (pos.x >= this->monitorSpos+120.f)   //ƒ‚ƒjƒ^[‚ÌƒtƒŒ[ƒ€•ª(120)
+		if (pos.x >= this->monitorSpos+120.f)   //ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ãƒ•ãƒ¬ãƒ¼ãƒ åˆ†(120)
 		{
 			this->textspeed = 16.f;
 			pos.x -= textspeed;
@@ -981,8 +989,8 @@ Vec2 Title::TextMoveout(Vec2 pos)
 	return pos;
 }
 
-//text‚ªƒ‚ƒjƒ^[‚Ì“à‘¤‚É“ü‚Á‚Ä‚­‚é“®‚«
-Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //•K—v~‚ß‚éêŠw’è—p
+//textãŒãƒ¢ãƒ‹ã‚¿ãƒ¼ã®å†…å´ã«å…¥ã£ã¦ãã‚‹å‹•ã
+Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //å¿…è¦æ­¢ã‚ã‚‹å ´æ‰€æŒ‡å®šç”¨
 {
 	if (this->nowmoveL)
 	{
@@ -1041,7 +1049,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //•K—
 	return pos;
 }
 
-//text‚Ìo‚Ä‚¢‚­‚Æ‚«‚Ì‰¡ƒTƒCƒY•ÏXˆ—
+//textã®å‡ºã¦ã„ãã¨ãã®æ¨ªã‚µã‚¤ã‚ºå¤‰æ›´å‡¦ç†
 Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 {
 	if (this->nowmoveL)
@@ -1062,8 +1070,8 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 	}
 	if (this->nowmoveR)
 	{
-		//‚±‚ÌˆÊ’u‚æ‚è‰E‘¤‚É“ü‚Á‚Ä‚àsize‚ª0‚É‚È‚Á‚Ä‚¢‚È‚¢
-		if (pos.x+size.x > this->monitorEpos-120.f)       //‚±‚±‚Å‚Ğ‚Á‚©‚©‚Á‚Ä‚é
+		//ã“ã®ä½ç½®ã‚ˆã‚Šå³å´ã«å…¥ã£ã¦ã‚‚sizeãŒ0ã«ãªã£ã¦ã„ãªã„
+		if (pos.x+size.x > this->monitorEpos-120.f)       //ã“ã“ã§ã²ã£ã‹ã‹ã£ã¦ã‚‹
 		{
 			if (size.x >= 0.0f)
 			{
@@ -1083,8 +1091,8 @@ Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 	return size;
 }
 
-//text‚Ì‰¡ƒTƒCƒY
-Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //•K—vÅ‘åƒTƒCƒYw’è—p
+//textã®æ¨ªã‚µã‚¤ã‚º
+Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //å¿…è¦æœ€å¤§ã‚µã‚¤ã‚ºæŒ‡å®šç”¨
 {
 	if (this->nowmoveL)
 	{
@@ -1109,17 +1117,17 @@ Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //•K—vÅ‘åƒTƒC
 
 void Title::CursorMove()
 {
-	//¶‚Ö
+	//å·¦ã¸
 	if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 	{
-		//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+		//ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•éŸ³å†ç”Ÿ
 		cursorsound.play();
 		this->cursorNum--;
 	}
-	//‰E‚Ö
+	//å³ã¸
 	if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 	{
-		//ƒJ[ƒ\ƒ‹‚ÌˆÚ“®‰¹Ä¶
+		//ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•éŸ³å†ç”Ÿ
 		cursorsound.play();
 		this->cursorNum++;
 	}

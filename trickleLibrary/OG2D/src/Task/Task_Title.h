@@ -151,9 +151,8 @@ public:
 	void BackTitleSkip();
 	int timeCnt;
 
-	//テスト追加
-	bool PressB();          //Bキーを押していたらtrueを返す
-	bool pressB;
+	bool PressAnyKey();          //Bキーを押していたらtrueを返す
+	bool pressAnyKey;
 	//選択肢の文字の移動について
 	Vec2 TextMoveout(Vec2 pos);        
 	Vec2 TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize);
