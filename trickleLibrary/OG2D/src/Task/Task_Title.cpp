@@ -38,7 +38,7 @@ Title::Title()
 	this->sound = nullptr;
 	this->skipInoutFlag = false;
 	
-	this->pressB = false;           //Bキーを押したかどうかの判断
+	this->pressAnyKey = false;           //Bキーを押したかどうかの判断
 	this->nowmoveL = false;
 	this->nowmoveR = false;
 	this->textspeed = 0.f;          //テキストの動くスピードについて
@@ -319,14 +319,16 @@ void Title::UpDate()
 	case from6:	//Bキー入力待ち状態
 	{
 		demoTimer.Start();
-		if (PressB() == false)
+		if (PressAnyKey() == false)
 		{
+			//push any keyの透明度に関した処理
 			this->press_a += this->press_delta_a;
-			if (this->press_a < 0 || this->press_a >= 1.0f) {
+			if (this->press_a < 0 || this->press_a >= 1.0f) {      //0~1.0の間を往復
 				this->press_delta_a *= -1;
 			}
 			if (demoTimer.GetTime() >= DEMO_LIMIT) {
 				this->mode = Mode::from10;
+				this->press_a = 0.f;
 				break;
 			}
 			break;
@@ -690,7 +692,6 @@ void Title::Render2D()
 		
 		Box2D draw(Vec2(((OGge->camera->GetSize().x / 2) + OGge->camera->GetPos().x - 1180 / 2.f), 783.f), Vec2(1180.f, 256.f));
 		//Box2D draw(Vec2(monitorSpos, 783.f), Vec2(1180.f, 256.f));
-		std::cout << draw.x << std::endl;
 
 		draw.OffsetSize();
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
@@ -947,14 +948,14 @@ bool Title::Finalize()
 }
 
 //Bキーが押されたかの判定に使用
-bool Title::PressB()
+bool Title::PressAnyKey()
 {
 	if (OGge->in->EitherDown())
 	{
 		//決定音の再生
 		decisionsound.play();
 
-		this->pressB = true;
+		this->pressAnyKey = true;
 		return true;
 	}
 	return false;
