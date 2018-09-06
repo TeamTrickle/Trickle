@@ -39,7 +39,16 @@ public:
 	typedef std::shared_ptr<Seihyouki> SP;
 	static Seihyouki::SP Create(Vec2& pos, Vec2 range, Angle, bool active, bool flag = true);
 	void SetTexture(Texture*);
-
+	/**
+	*@brief	:水が氷になるカウントを返す
+	*@return:unsigned int カウント数
+	*/
+	unsigned int GetChengeSolid() const;
+	/**
+	*@brief	:稼働有無を返す
+	*@return:bool 稼働中true
+	*/
+	bool GetActive() const;
 	void changeActive();				//自身の稼働状態を反転させる
 };
 

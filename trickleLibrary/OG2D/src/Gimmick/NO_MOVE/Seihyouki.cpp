@@ -38,7 +38,7 @@ void Seihyouki::UpDate() {
 		this->animCnt = 0;
 	}
 	if (active) {
-		toIce();
+		//toIce();
 	}
 	if (this->active)
 	{
@@ -128,9 +128,9 @@ void Seihyouki::toIce() {
 	auto waters = OGge->GetTasks<Water>("water");
 	for (auto id = (*waters).begin(); id != (*waters).end(); ++id)
 	{
-		if ((*id)->hit(*this))
+		if ((*id)->GetState() == Water::State::LIQUID)
 		{
-			if ((*id)->GetState() == Water::State::LIQUID)
+			if ((*id)->hit(*this))
 			{
 				//changeStateCnt++;
 				(*id)->SetIceCnt((*id)->GetIceCnt() + 1);
@@ -141,10 +141,6 @@ void Seihyouki::toIce() {
 					break;
 				}
 			}
-		}
-		else
-		{
-			(*id)->SetIceCnt(0);
 		}
 	}
 }
@@ -172,7 +168,14 @@ Seihyouki::SP Seihyouki::Create(Vec2& pos, Vec2 range, Seihyouki::Angle ang, boo
 	}
 	return nullptr;
 }
-
+unsigned int Seihyouki::GetChengeSolid() const
+{
+	return this->maxChangeTime;
+}
+bool Seihyouki::GetActive() const
+{
+	return this->active;
+}
 
 //bool Seihyouki::Initialize(Vec2& pos)
 //{

@@ -5,6 +5,8 @@
 #include "Effect\Effect.h"
 #include "Gimmick\NO_MOVE\Door.h"
 #include "Gimmick/NO_MOVE/WeightSwitch.h"
+#include "Gimmick\NO_MOVE\Seihyouki.h"
+#include "Gimmick\NO_MOVE\Kanetuki.h"
 //#include "Paint\Paint.h"
 Water::Water(const Vec2& pos)
 	:maxFall(15.f), gravity((9.8f / 60.f / 60.f*32.f) * 5), finSpeed(1.0f), rainTime(180)
@@ -201,7 +203,29 @@ void Water::UpDate()
 		}
 		if (!this->hold)
 		{
-			this->Friction();	
+			this->Friction();
+			auto fire = OGge->GetTasks<Kanetuki>("Kanetuki");
+			bool flag = false;
+			for (auto id = fire->begin(); id != fire->end(); ++id)
+			{
+				if ((*id)->GetActive())
+				{
+					if (this->hit(*(*id)))
+					{
+						this->fireCnt++;
+						flag = true;
+						if (this->fireCnt >= (*id)->GetChengeSolid())
+						{
+							this->SolidMelt();
+							this->fireCnt = 0;
+						}
+					}
+				}
+			}
+			if (!flag)
+			{
+				this->fireCnt = 0;
+			}
 			this->nowMove = this->move;
 			this->MoveSOILDCheck(this->nowMove);
 			this->SolidExtrusion();
@@ -244,9 +268,60 @@ Water::Situation Water::UpDeleteform()
 
 Water::Situation Water::UpNormal()
 {
-	
 	Water::Situation now = this->nowSituation;
 	this->Friction();
+	bool flag = false;
+	auto ice = OGge->GetTasks<Seihyouki>("Seihyouki");
+	for (auto id = ice->begin(); id != ice->end(); ++id)
+	{
+		if ((*id)->GetActive())
+		{
+			if (this->hit(*(*id)))
+			{
+				this->iceCnt++;
+				flag = true;
+				if (this->iceCnt >= (*id)->GetChengeSolid())
+				{
+					this->SetState(State::SOLID);
+					this->iceCnt = 0;
+				}
+			}
+		}
+	}
+	if (!flag)
+	{
+		this->iceCnt = 0;
+	}
+	flag = false;
+	auto fire = OGge->GetTasks<Kanetuki>("Kanetuki");
+	for (auto id = fire->begin(); id != fire->end(); ++id)
+	{
+		if ((*id)->GetActive())
+		{
+			if (this->hit(*(*id)))
+			{
+				this->fireCnt++;
+				flag = true;
+				if (this->fireCnt >= (*id)->GetChengeGas())
+				{
+					if (this->GetWaterVolume() < 0.5f)
+					{
+						this->Kill();
+					}
+					else
+					{
+						this->SetState(State::GAS);
+						this->position.y -= 10.f;
+					}
+					this->fireCnt = 0;
+				}
+			}
+		}
+	}
+	if (!flag)
+	{
+		this->fireCnt = 0;
+	}
 	return now;
 }
 
@@ -419,7 +494,7 @@ bool Water::FootSolidCheck()
 			{
 				if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 				{
-					if (foot.CubeHit(*(*id)))
+					if (foot.hit(*(*id)))
 					{
 						return true;
 					}
@@ -553,7 +628,7 @@ void Water::MoveGASCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.x = preX;
 					break;
@@ -588,7 +663,7 @@ void Water::MoveGASCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.y = preY;
 					break;
@@ -638,7 +713,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 				{
 					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						if (this->CubeHit(*(*id)))
+						if (this->hit(*(*id)))
 						{
 							this->position.x = preX;
 							break;
@@ -651,7 +726,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.x = preX;
 					break;
@@ -662,7 +737,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.x = preX;
 					break;
@@ -674,7 +749,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.x = preX;
 					break;
@@ -714,7 +789,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 				{
 					if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 					{
-						if (this->CubeHit(*(*id)))
+						if (this->hit(*(*id)))
 						{
 							this->position.y = preY;
 							break;
@@ -727,7 +802,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.y = preY;
 					break;
@@ -738,7 +813,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.y = preY;
 					break;
@@ -750,7 +825,7 @@ void Water::MoveSOILDCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.y = preY;
 					this->position.y += (*id)->SetSwitchUpPos();
@@ -803,7 +878,7 @@ bool Water::HeadSolidCheck()
 			{
 				if ((*id)->objectTag == "SOLID")
 				{
-					if (head.CubeHit(*(*id)))
+					if (head.hit(*(*id)))
 					{
 						return true;
 					}
@@ -816,7 +891,7 @@ bool Water::HeadSolidCheck()
 	{
 		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			if (this->CubeHit(*(*id)))
+			if (this->hit(*(*id)))
 			{
 				return true;
 			}
@@ -829,7 +904,7 @@ bool Water::HeadSolidCheck()
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (head.CubeHit(*(*id)))
+				if (head.hit(*(*id)))
 				{
 					return true;
 				}
@@ -962,6 +1037,7 @@ void Water::CheckState()
 			this->Radius = { 0.5f,0.9f };
 			this->objectTag = "LIQUID";
 			this->finSpeed = 1.0f;
+			this->position.y -= 32.f;
 			break;
 		case State::SOLID:
 			this->Scale = this->maxSize;
@@ -978,7 +1054,7 @@ void Water::CheckState()
 						if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 						{
 							//当たり判定を行う
-							if (this->CubeHit(*(*id)))
+							if (this->hit(*(*id)))
 							{
 								//相手を水に移行させる
 								(*id)->SetSituation(Situation::Normal);
@@ -1065,7 +1141,7 @@ bool Water::SolidExtrusion()
 							Vec2(1.0f, this->Scale.y - y_));
 					}
 					//当たっているか確認
-					if (right->CubeHit(*(*id)))
+					if (right->hit(*(*id)))
 					{
 						//相手を移動させる
 						((*id))->MoveSolid(this->move);
@@ -1087,7 +1163,7 @@ bool Water::SolidExtrusion()
 							Vec2(1.0f, this->Scale.y - y_));
 					}
 					//当たっているか確認
-					if (left->CubeHit(*(*id)))
+					if (left->hit(*(*id)))
 					{
 						//相手を移動させる
 						((*id))->MoveSolid(this->move);

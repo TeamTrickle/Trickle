@@ -60,6 +60,21 @@ public:
 	bool startflag;       //サウンドを再生していいかのフラッグ
 	bool nowplay;
 	void SetTexture(Texture*);
+	/**
+	*@brief	:氷が水になるカウントを返す
+	*@return:unsigned int カウント数
+	*/
+	unsigned int GetChengeSolid() const;
+	/**
+	*@brief	:水が水蒸気になるカウントを返す
+	*@return:unsigned int カウント数
+	*/
+	unsigned int GetChengeGas() const;
+	/**
+	*@brief	:稼働有無を返す
+	*@return:bool 稼働中true
+	*/
+	bool GetActive() const;
 };
 
 
