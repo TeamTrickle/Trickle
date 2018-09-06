@@ -255,11 +255,11 @@ bool Game::Initialize()
 		sound.play();
 
 		//加熱器生成
-		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 15, 64 * 10 - 32), Vec2(64 * 2, 64+32), Kanetuki::Angle::UP, false);
+		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 12, 64 * 10 - 32), Vec2(64 * 2, 64+32), Kanetuki::Angle::UP, false);
 		//扇風機生成
-		auto fan = Fan::Create(Vec2(64 * 11, 64 * 2), 10, Fan::Dir::RIGHT, 64 * 5, true);
+		auto fan = Fan::Create(Vec2(64 * 10, 64 * 2), 7, Fan::Dir::RIGHT, 64 * 5, true);
 		//加熱器用スイッチ生成
-		auto swich = Switch::Create(Vec2(64 * 13, 64 * 9), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
+		auto swich = Switch::Create(Vec2(64 * 10, 64 * 9), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
 		break;
 	}
 	case 10:	//蒸気2
@@ -468,7 +468,7 @@ bool Game::Initialize()
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
-	__super::SetDrawOrder(0.35f);
+	__super::SetDrawOrder(0.6f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
 	//装飾

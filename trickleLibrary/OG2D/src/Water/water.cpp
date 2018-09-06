@@ -63,7 +63,7 @@ Water::Water(const Vec2& pos)
 	//タグの指定
 	__super::Init((std::string)"water");
 	//描画優先度の設定
-	__super::SetDrawOrder(0.3f);
+	__super::SetDrawOrder(0.5f);
 	//重さ設定仮
 	if (this->volume < 1.0f)
 	{
