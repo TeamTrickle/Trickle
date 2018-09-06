@@ -390,8 +390,8 @@ bool Game::Initialize()
 		//switch
 		Switch::Create(Vec2(64 * 2, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//横向き扉
-		auto door1 = Door::Create(Vec2(64 * 3, 64 * 11), Vec2(64 * 3, 32), false, Door::Direction::WIDTH);
-		auto door2 = Door::Create(Vec2(64 * 3, 64 * 13), Vec2(64 * 3, 32), false, Door::Direction::WIDTH);
+		auto door1 = Door::Create(Vec2(272, 628), Vec2(32, 64 * 3), false, Door::Direction::WIDTH);
+		auto door2 = Door::Create(Vec2(272, 756), Vec2(32, 64 * 3), false, Door::Direction::WIDTH);
 		door1->SetTexture(&doorTex);
 		door2->SetTexture(&doorTex);
 		//重さスイッチ

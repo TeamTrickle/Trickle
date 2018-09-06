@@ -183,7 +183,7 @@ bool Player::HeadCheck()
 	{
 		if (head.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
-			if (head.CubeHit(*(*id)))
+			if (head.hit(*(*id)))
 			{
 				return true;
 			}
@@ -423,7 +423,7 @@ void Player::MoveCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.x = preX;
 					break;
@@ -508,7 +508,7 @@ void Player::MoveCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->CubeHit(*(*id)))
+				if (this->hit(*(*id)))
 				{
 					this->position.y = preY;
 					break;
@@ -1360,7 +1360,7 @@ bool Player::PutCheck()
 			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if ((*id)->IsObjectDistanceCheck(left.position, left.Scale))
 			{
-				if ((*id)->CubeHit(left))
+				if ((*id)->hit(left))
 				{
 					return false;
 				}

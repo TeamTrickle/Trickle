@@ -40,9 +40,9 @@ Door::Door(const Vec2& pos, const Vec2& size, const bool isOpen,const Direction&
 		//‰¡‚Ìê‡xÀ•W‚ð“o˜^
 		this->ch_Value[0] = &this->position.x;
 		this->ch_Value[1] = &this->originPos.x;
-		this->ch_Value[2] = &this->Scale.x;
-		//this->rotate = 90.f;
-		this->rotate = 0.f;
+		this->ch_Value[2] = &this->Scale.y;
+		this->rotate = 90.f;
+		this->angle = 90.f;
 	}
 	*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 }
@@ -53,63 +53,63 @@ Door::~Door()
 void Door::UpDate()
 {
 	//if (this->isOpen != this->preIsOpen)
+	this->originPos.x += OGge->in->axis(In::AXIS_RIGHT_X);
+	this->position.y += OGge->in->axis(In::AXIS_RIGHT_Y) * -1;
+	std::cout << this->position.x << ":" << this->position.y << ":" << (int)this->id << "\n";
+	this->isMove = true;
+	//ŠJ‚¯‚é
+	if (this->isOpen)
 	{
-		this->isMove = true;
-		//ŠJ‚¯‚é
-		if (this->isOpen)
+		this->timeCnt -= 0.01f;
+		//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+		*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
+		auto players = OGge->GetTasks<Player>("Player");
+		for (auto id = players->begin(); id != players->end(); ++id)
 		{
-			this->timeCnt -= 0.01f;
-			//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
-			*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
-			auto players = OGge->GetTasks<Player>("Player");
-			for (auto id = players->begin(); id != players->end(); ++id)
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+				if (this->hit(*(*id)))
 				{
-					if (this->hit(*(*id)))
-					{
-						//Œ³‚É–ß‚·
-						this->timeCnt += 0.01f;
-						//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
-						*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
-					}
+					//Œ³‚É–ß‚·
+					this->timeCnt += 0.01f;
+					//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+					*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 				}
 			}
-			if (this->timeCnt <= 0.01f)
-			{
-				this->timeCnt = 0.01f;
-				this->preIsOpen = this->isOpen;
-				this->isMove = false;
-			}
 		}
+		if (this->timeCnt <= 0.01f)
+		{
+			this->timeCnt = 0.01f;
+			this->preIsOpen = this->isOpen;
+			this->isMove = false;
+		}
+	}
 		//•Â‚ß‚é
-		else
+	else
+	{
+		this->timeCnt += 0.01f;
+		//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+		*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
+		auto players = OGge->GetTasks<Player>("Player");
+		for (auto id = players->begin(); id != players->end(); ++id)
 		{
-			this->timeCnt += 0.01f;
-			//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
-			*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
-			auto players = OGge->GetTasks<Player>("Player");
-			for (auto id = players->begin(); id != players->end(); ++id)
+			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+				if (this->hit(*(*id)))
 				{
-					if (this->hit(*(*id)))
-					{
-						//Œ³‚É–ß‚·
-						this->timeCnt -= 0.01f;
-						//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
-						*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
-					}
+					//Œ³‚É–ß‚·
+					this->timeCnt -= 0.01f;
+					//this->position.y = this->originPos.y - (this->Scale.y * (1.f - this->timeCnt));
+					*this->ch_Value[0] = *this->ch_Value[1] - (*this->ch_Value[2] * (1.f - this->timeCnt));
 				}
 			}
-			if (this->timeCnt >= 1.0f)
-			{
-				this->timeCnt = 1.0f;
-				this->preIsOpen = this->isOpen;
-				this->isMove = false;
-			}
 		}
-		
+		if (this->timeCnt >= 1.0f)
+		{
+			this->timeCnt = 1.0f;
+			this->preIsOpen = this->isOpen;
+			this->isMove = false;
+		}
 	}
 }
 void Door::Render2D()
@@ -119,7 +119,8 @@ void Door::Render2D()
 		//this->draw = { this->position,Vec2(this->Scale.x,this->Scale.y * this->timeCnt) };
 		this->draw = { this->position.x,this->position.y,this->Scale.x,this->Scale.y };
 		draw.OffsetSize();
-		this->src = { 0.f,0.f,this->image->GetTextureSize().x,this->image->GetTextureSize().y };
+		this->src = { this->image->GetTextureSize().x / 8.f,0.f,this->image->GetTextureSize().x / 16.f ,this->image->GetTextureSize().y };
+		//this->src = { 0,256,128,0 };
 		src.OffsetSize();
 		this->image->Rotate(this->rotate);
 		this->image->Draw(this->draw, this->src);
