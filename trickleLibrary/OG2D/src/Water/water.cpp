@@ -201,31 +201,31 @@ void Water::UpDate()
 		{
 			this->SolidMelt();
 		}
-		if (!this->hold)
+		auto fire = OGge->GetTasks<Kanetuki>("Kanetuki");
+		bool flag = false;
+		for (auto id = fire->begin(); id != fire->end(); ++id)
 		{
-			this->Friction();
-			auto fire = OGge->GetTasks<Kanetuki>("Kanetuki");
-			bool flag = false;
-			for (auto id = fire->begin(); id != fire->end(); ++id)
+			if ((*id)->GetActive())
 			{
-				if ((*id)->GetActive())
+				if (this->hit(*(*id)))
 				{
-					if (this->hit(*(*id)))
+					this->fireCnt++;
+					flag = true;
+					if (this->fireCnt >= (*id)->GetChengeSolid())
 					{
-						this->fireCnt++;
-						flag = true;
-						if (this->fireCnt >= (*id)->GetChengeSolid())
-						{
-							this->SolidMelt();
-							this->fireCnt = 0;
-						}
+						this->SolidMelt();
+						this->fireCnt = 0;
 					}
 				}
 			}
-			if (!flag)
-			{
-				this->fireCnt = 0;
-			}
+		}
+		if (!flag)
+		{
+			this->fireCnt = 0;
+		}
+		if (!this->hold)
+		{
+			this->Friction();
 			this->nowMove = this->move;
 			this->MoveSOILDCheck(this->nowMove);
 			this->SolidExtrusion();
