@@ -61,6 +61,7 @@ public:
 	void SetReplayEnable();
 	void SetRecordEnable();
 	void UpDate();		//XVˆ—
+	void PauseUpDate();
 	void Render2D();	//•`‰æˆ—
 	void Friction(Vec2&);	//d—Íˆ—
 	void MoveCheck(Vec2);	//ˆÚ“®ˆ—
