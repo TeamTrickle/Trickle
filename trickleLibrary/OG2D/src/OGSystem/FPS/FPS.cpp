@@ -7,6 +7,8 @@ FPS::FPS()
 	this->count = 0;
 	//fpsŒv‘ª—p
 	this->lastTime = (float)glfwGetTime();
+	this->framerate = 60;
+	this->oneFrameTime = (float)glfwGetTime();
 }
 void FPS::Update() {
 	//60‰ñ“®ì‚µ‚½‚ç‚»‚ÌŽž‚ÌŽžŠÔ‚Æ‘O‚ÌŽžŠÔ‚©‚çfps‚ð‹‚ß‚é
@@ -19,6 +21,16 @@ void FPS::Update() {
 		this->lastTime = (float)glfwGetTime();
 	}
 	this->count++;
+}
+bool FPS::FrameCheck()
+{
+	int a;
+	if ((float)glfwGetTime() - this->oneFrameTime >= 1.f / (float)this->framerate)
+	{
+		this->oneFrameTime = (float)glfwGetTime();
+		return true;
+	}
+	return false;
 }
 FPS::~FPS()
 {

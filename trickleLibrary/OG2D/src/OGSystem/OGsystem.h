@@ -146,11 +146,12 @@ private:
 	bool CheckAddTask();	//登録予定のタスクの有無
 	bool CheckKillTask();	//削除予定のタスクの有無
 	void Task_UpDate();			//タスク更新処理
-	void Task_Render_AF();		//タスク描画処理
 	void TaskKillCheck();		//削除予定のタスクを削除
 	void AllTaskDelete();		//登録タスク全削除
 	std::vector<std::pair<DWORD, TaskObject::SP>> taskobjects;	//タスクオブジェクト達
 	std::vector<TaskObject::SP> addTaskObjects;	//登録予定タスク達
+public:
+	void Task_Render_AF();		//タスク描画処理
 };
 
 extern EngineSystem* OGge;

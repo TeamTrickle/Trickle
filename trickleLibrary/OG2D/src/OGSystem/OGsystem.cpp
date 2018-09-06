@@ -34,9 +34,7 @@ bool EngineSystem::Initialize()
 	this->camera = new Camera2D(Box2D(0, 0, w_wi, w_he));
 	//fpsの設定
 	//※デバッグ時のみ使用する
-#if(_DEBUG)
 	this->fps = new FPS();
-#endif
 	//入力関連の初期化
 	this->in = new Input();
 	this->in->Inputinit(this->window->GetWindow());
@@ -111,7 +109,7 @@ void EngineSystem::TaskGameUpDate()
 {
 	this->Task_UpDate();		//更新処理
 	this->camera->CameraUpdate();
-	this->Task_Render_AF();		//描画処理
+	//this->Task_Render_AF();		//描画処理
 	if (this->CheckAddTask() || this->CheckKillTask())
 	{
 		this->TaskApplication();	//登録予定のタスクを登録する

@@ -126,8 +126,8 @@ int main() {
 	Initialize();
 	//ウィンドウが存在する場合ループ
 	while (!glfwWindowShouldClose(OGge->window->GetWindow())) {
-		//エンジン内の更新処理
-		OGge->Update();
+		//指定したウィンドウのダブルバッファを行う
+		glfwSwapBuffers(OGge->window->GetWindow());
 		//捜査対象の行列をモデルビュー行列に変更
 		glMatrixMode(GL_MODELVIEW);
 		//バッファをクリアして値を設定する
@@ -136,15 +136,24 @@ int main() {
 		glEnable(GL_BLEND);
 		//ピクセル演算を指定する
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (OGge->fps->FrameCheck()) {
+			glfwPollEvents();
+			OGge->Update();
+			if (Update()) {
+				break;
+			}
+			TaskSystem();
+		}
+		OGge->Task_Render_AF();
+		//エンジン内の更新処理
+		//OGge->Update();
 		//更新処理
-		if (Update()) { break; }
-		TaskSystem();
+		//if (Update()) { break; }
+		//TaskSystem();
 		//描画処理
 		TaskRender();
-		//指定したウィンドウのダブルバッファを行う
-		glfwSwapBuffers(OGge->window->GetWindow());
 		//ウィンドウ、マウス、キーボードの入力の状態をアップデートする
-		glfwPollEvents();
+		//glfwPollEvents();
 	}
 	//解放
 	Finalize();
