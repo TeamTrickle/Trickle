@@ -17,19 +17,13 @@ bool Texture::Create(const std::string& path)
 	int comp;
 	std::string filepath = FileName + path;
 	//画像データを読み込む
-	unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
-	try
-	{
-		if (data == NULL)
-		{
-			throw data;
-		}
-	}
-	catch (...)
+	unsigned char *data = NULL;
+	data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
+	if (data == NULL)
 	{
 		std::cout << "Texture Create Error!" << path << "\n";
 		OG::OutDebugData("TextureErrorPath.txt", path + "\n");
-		return false;
+		return true;
 	}
 	//データ形式を選ぶ
 	GLint type = (comp == 3) ? GL_RGB : GL_RGBA;
@@ -50,6 +44,7 @@ bool Texture::Create(const std::string& path)
 	this->_materix[2] = { width,height };
 	this->_materix[3] = { 0,height };
 	this->angle = 0.f;
+	this->srcAngle = 0.f;
 	return true;
 }
 bool Texture::Create(const cv::Mat& mat) 
@@ -77,6 +72,7 @@ bool Texture::Create(const cv::Mat& mat)
 	this->_materix[2] = { width,height };
 	this->_materix[3] = { 0,height };
 	this->angle = 0.f;
+	this->srcAngle = 0.f;
 	return true;
 }
 Texture::Texture()
@@ -96,15 +92,9 @@ Texture::Texture(const std::string& path)
 	int comp;
 	std::string filepath = FileName + path;
 	//画像データを読み込む
-	unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
-	try
-	{
-		if (data == NULL)
-		{
-			throw data;
-		}
-	}
-	catch (...)
+	unsigned char *data = NULL;
+	data = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
+	if (data == NULL)
 	{
 		std::cout << "Texture Create Error!" << path << "\n";
 		OG::OutDebugData("TextureErrorPath.txt", path + "\n");
@@ -129,6 +119,7 @@ Texture::Texture(const std::string& path)
 	this->_materix[2] = { width,height };
 	this->_materix[3] = { 0,height };
 	this->angle = 0.f;
+	this->srcAngle = 0.f;
 }
 void Texture::Draw(const Box2D& draw, const Box2D& src,const Color& color_) {
 	//座標
@@ -141,12 +132,13 @@ void Texture::Draw(const Box2D& draw, const Box2D& src,const Color& color_) {
 	_Rotate(angle, &vtx[0]);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
 	//画像座標
-	const GLfloat texuv[] = {
+	GLfloat texuv[] = {
 		src.x / TextureSize.x,src.h / TextureSize.y,
 		src.w / TextureSize.x,src.h / TextureSize.y,
 		src.w / TextureSize.x,src.y / TextureSize.y,
 		src.x / TextureSize.x,src.y / TextureSize.y,
 	};
+	_Rotate(srcAngle, &texuv[0]);
 	//0.1以下のカラーを表示しない、これで透過されてる部分を切り抜くことで透過された画像になる
 	glAlphaFunc(GL_GREATER, (GLclampf)0.0);
 	glTexCoordPointer(2, GL_FLOAT, 0, texuv);
@@ -176,6 +168,10 @@ bool Texture::Finalize()
 void Texture::Rotate(float radian)
 {
 	this->angle = radian;
+}
+void Texture::SrcRotate(const float radian)
+{
+	this->srcAngle = radian;
 }
 void Texture::_Rotate(float radian, GLfloat *_mate)
 {

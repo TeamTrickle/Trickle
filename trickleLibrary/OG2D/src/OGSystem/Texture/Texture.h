@@ -49,6 +49,11 @@ public:
 	*/
 	void Rotate(const float angle);
 	/**
+	*@brief	:画像の回転の適用
+	*@param	:float angle 回転値
+	*/
+	void SrcRotate(const float angle);
+	/**
 	*@brief	:読み込んだ画像のサイズを返す
 	*@return:Vec2 画像の大きさ
 	*/
@@ -93,4 +98,6 @@ private:
 		GLfloat* materix);
 	//! 回転値
 	float angle;
+	//! 画像回転値
+	float srcAngle;
 };
