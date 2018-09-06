@@ -1,6 +1,6 @@
-stage2_atlas_2.png
-stage2.png
-138,19,662,91
-170,110,655,40
-170,155,655,40
-170,195,655,40
+tutorial3_atlas.png
+steam1.png|steam2.png|steam3.png|steam4.png
+0,0,860,105
+165,105,580,48
+165,153,580,48
+165,201,580,48

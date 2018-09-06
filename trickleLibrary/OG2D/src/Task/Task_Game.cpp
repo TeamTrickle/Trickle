@@ -382,7 +382,7 @@ bool Game::Initialize()
 		sound.play();
 
 		//扇風機
-		Fan::Create(Vec2(64 * 16, 64 * 4), 6, Fan::Dir::RIGHT, 7, true);
+		Fan::Create(Vec2(64 * 16, 64 * 7), 6, Fan::Dir::RIGHT, 7, true);
 		//加熱器
 		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
 		//製氷機
@@ -468,7 +468,7 @@ bool Game::Initialize()
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
-	__super::SetDrawOrder(0.05f);
+	__super::SetDrawOrder(0.35f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
 	//装飾
@@ -520,9 +520,9 @@ void Game::Render2D()
 {
 	//水生成位置のパイプ
 	{
-		Box2D draw(_waterpos.x - 103, _waterpos.y - 150, 256.f, 171.f);
+		Box2D draw(_waterpos.x - 103, _waterpos.y - 65.f, 256.f, 83.3f);
 		draw.OffsetSize();
-		Box2D src(0, 0, 768, 512);
+		Box2D src(0, 0, 768, 250);
 		pipeTex.Draw(draw, src);
 	}
 }

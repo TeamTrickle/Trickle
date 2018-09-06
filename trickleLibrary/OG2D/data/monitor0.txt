@@ -1,6 +1,6 @@
-tutorial_atlas_2.png
-tutorial1.png|tutorial2.png|tutorial3.png|tutorial4.png
-11,17,817,89
-170,110,580,40
-170,155,580,40
-170,195,580,40
+tutorial1_atlas.png
+water1.png|water2.png|water3.png|water4.png
+0,0,860,105
+165,105,580,48
+165,153,580,48
+165,201,580,48
