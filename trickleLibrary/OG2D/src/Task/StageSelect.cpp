@@ -256,6 +256,12 @@ bool StageSelect::Finalize()
 
 void StageSelect::CreateTask()
 {
+	auto board = OGge->GetTasks<StageAlert>("stagealert");
+	for (auto id = board->begin(); id != board->end(); ++id)
+	{
+		(*id)->setActive(true);
+		(*id)->SelectFirstElement();
+	}
 	//ƒLƒƒƒ‰‚ğŒŸõ
 	auto chara = OGge->GetTask<Chara>("Chara");
 	//‘¶İ‚µ‚½ê‡
