@@ -113,6 +113,13 @@ void Chara::UpDate()
 	//移動値から実際の移動を行う
 	this->MoveCheck(this->move);
 }
+void Chara::PauseUpDate()
+{
+	if (player) {
+		player->SetPlay();
+		player->Play();
+	}
+}
 void Chara::Render2D()
 {
 	//描画位置とサイズを指定
