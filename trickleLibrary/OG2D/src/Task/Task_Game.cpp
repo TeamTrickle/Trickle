@@ -255,11 +255,11 @@ bool Game::Initialize()
 		sound.play();
 
 		//加熱器生成
-		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 15, 64 * 10 - 32), Vec2(64 * 2, 64+32), Kanetuki::Angle::UP, false);
+		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 12, 64 * 10 - 32), Vec2(64 * 2, 64+32), Kanetuki::Angle::UP, false);
 		//扇風機生成
-		auto fan = Fan::Create(Vec2(64 * 11, 64 * 2), 10, Fan::Dir::RIGHT, 64 * 5, true);
+		auto fan = Fan::Create(Vec2(64 * 10, 64 * 2), 7, Fan::Dir::RIGHT, 64 * 5, true);
 		//加熱器用スイッチ生成
-		auto swich = Switch::Create(Vec2(64 * 13, 64 * 9), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
+		auto swich = Switch::Create(Vec2(64 * 10, 64 * 9), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
 		break;
 	}
 	case 10:	//蒸気2
@@ -382,7 +382,7 @@ bool Game::Initialize()
 		sound.play();
 
 		//扇風機
-		Fan::Create(Vec2(64 * 16, 64 * 4), 6, Fan::Dir::RIGHT, 7, true);
+		Fan::Create(Vec2(64 * 16, 64 * 7), 6, Fan::Dir::RIGHT, 7, true);
 		//加熱器
 		Kanetuki::Create(Vec2(64 * 16, 64 * 12 + 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
 		//製氷機
@@ -390,8 +390,8 @@ bool Game::Initialize()
 		//switch
 		Switch::Create(Vec2(64 * 2, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//横向き扉
-		auto door1 = Door::Create(Vec2(64 * 3, 64 * 11), Vec2(64 * 3, 32), false, Door::Direction::WIDTH);
-		auto door2 = Door::Create(Vec2(64 * 3, 64 * 13), Vec2(64 * 3, 32), false, Door::Direction::WIDTH);
+		auto door1 = Door::Create(Vec2(272, 628), Vec2(32, 64 * 3), false, Door::Direction::WIDTH);
+		auto door2 = Door::Create(Vec2(272, 756), Vec2(32, 64 * 3), false, Door::Direction::WIDTH);
 		door1->SetTexture(&doorTex);
 		door2->SetTexture(&doorTex);
 		//重さスイッチ
@@ -468,7 +468,7 @@ bool Game::Initialize()
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
-	__super::SetDrawOrder(0.05f);
+	__super::SetDrawOrder(0.6f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
 	//装飾
@@ -520,9 +520,9 @@ void Game::Render2D()
 {
 	//水生成位置のパイプ
 	{
-		Box2D draw(_waterpos.x - 103, _waterpos.y - 150, 256.f, 171.f);
+		Box2D draw(_waterpos.x - 103, _waterpos.y - 65.f, 256.f, 83.3f);
 		draw.OffsetSize();
-		Box2D src(0, 0, 768, 512);
+		Box2D src(0, 0, 768, 250);
 		pipeTex.Draw(draw, src);
 	}
 }

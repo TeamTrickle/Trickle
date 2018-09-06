@@ -54,7 +54,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 }
 void Kanetuki::UpDate() {
 	if (active) {
-		toSteam();
+		//toSteam();
 	}
 	++this->animCnt;
 	if (this->animCnt > 150)
@@ -242,10 +242,6 @@ void Kanetuki::toSteam() {
 					}
 				}
 			}
-			else
-			{
-				(*id)->SetFireCnt(0);
-			}
 		}
 	}
 }
@@ -274,6 +270,18 @@ Kanetuki::SP Kanetuki::Create(Vec2& pos, Vec2 range, Angle ang, bool active, boo
 	return nullptr;
 }
 
+unsigned int Kanetuki::GetChengeSolid() const
+{
+	return this->maxChangeTimeSolid;
+}
+unsigned int Kanetuki::GetChengeGas() const
+{
+	return this->maxChangeTimeLiquid;
+}
+bool Kanetuki::GetActive() const
+{
+	return this->active;
+}
 
 
 //bool Kanetuki::Initialize(Vec2& pos)

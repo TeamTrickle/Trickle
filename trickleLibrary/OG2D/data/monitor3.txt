@@ -1,5 +1,5 @@
-stage4_atlas_2.png
-stage2.png
+stage1_atlas.png
+stage1.png
 138,19,662,91
 170,110,655,40
 170,155,655,40
