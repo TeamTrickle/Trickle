@@ -33,10 +33,7 @@ bool EngineSystem::Initialize()
 	//カメラ2Dの生成
 	this->camera = new Camera2D(Box2D(0, 0, w_wi, w_he));
 	//fpsの設定
-	//※デバッグ時のみ使用する
-#if(_DEBUG)
 	this->fps = new FPS();
-#endif
 	//入力関連の初期化
 	this->in = new Input();
 	this->in->Inputinit(this->window->GetWindow());
@@ -74,9 +71,7 @@ void EngineSystem::Update()
 	//カメラと入力状況の更新
 	
 	this->in->upDate();
-#if(_DEBUG)
 	this->fps->Update();
-#endif
 }
 void EngineSystem::Task_UpDate()
 {
@@ -152,9 +147,7 @@ EngineSystem::~EngineSystem()
 	//生成したclassをdeleteする
 	delete this->audiodevice;
 	delete this->soundManager;
-#if(_DEBUG)
 	delete this->fps;
-#endif
 	delete this->in;
 	delete this->window;
 	delete this->camera;

@@ -89,6 +89,9 @@ int main() {
 	ogtk->_myGameInitialize();
 	//ゲームエンジンの初期化
 	OGge->Initialize();
+	Time* timer = new Time();
+	timer->Start();
+	OG::DataClear("./data/debug/time.og");
 	//使用OpenGLのVersion指定
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -126,25 +129,27 @@ int main() {
 	Initialize();
 	//ウィンドウが存在する場合ループ
 	while (!glfwWindowShouldClose(OGge->window->GetWindow())) {
-		//エンジン内の更新処理
-		OGge->Update();
-		//捜査対象の行列をモデルビュー行列に変更
-		glMatrixMode(GL_MODELVIEW);
-		//バッファをクリアして値を設定する
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//有効になっている場合、計算されたフラグメントカラー値をカラーバッファの値とブレンドします。
-		glEnable(GL_BLEND);
-		//ピクセル演算を指定する
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//更新処理
-		if (Update()) { break; }
-		TaskSystem();
-		//描画処理
-		TaskRender();
-		//指定したウィンドウのダブルバッファを行う
-		glfwSwapBuffers(OGge->window->GetWindow());
-		//ウィンドウ、マウス、キーボードの入力の状態をアップデートする
-		glfwPollEvents();
+		//OG::OutDebugData("time.og", std::to_string(timer->GetTime()) + "\n");
+		if (OGge->fps->FrameCheck())
+		{
+			//エンジン内の更新処理
+			OGge->Update();
+			//捜査対象の行列をモデルビュー行列に変更
+			glMatrixMode(GL_MODELVIEW);
+			//バッファをクリアして値を設定する
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			//有効になっている場合、計算されたフラグメントカラー値をカラーバッファの値とブレンドします。
+			glEnable(GL_BLEND);
+			//ピクセル演算を指定する
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			//更新処理
+			if (Update()) { break; }
+			TaskSystem();
+			//指定したウィンドウのダブルバッファを行う
+			glfwSwapBuffers(OGge->window->GetWindow());
+			//ウィンドウ、マウス、キーボードの入力の状態をアップデートする
+			glfwPollEvents();
+		}
 	}
 	//解放
 	Finalize();
