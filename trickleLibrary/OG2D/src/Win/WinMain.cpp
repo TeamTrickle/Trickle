@@ -154,6 +154,7 @@ int main() {
 	//解放
 	Finalize();
 	//ゲームエンジンの内容を解放
+	delete timer;
 	delete MapNum;
 	delete ogtk;
 	delete OGge;
