@@ -1,69 +1,70 @@
 #pragma once
-//______________________________//
-//|ポーズタスク                 |//
-//|履歴：2018/05/23     劉韋君　|//
-//|____________________________ |//
+
+/*
+* @file Task_Pause.h
+* @brief ポーズタスククラス
+* @author yokota_mariko
+* @date 2018.9.9
+*/
+
 #include "OGSystem\OGsystem.h"
 #include "Map\Map.h"
 
-class Pause :public TaskObject
+class Pause : public TaskObject
 {
-	//画像変数
+	//! 画像、あとでResoureManagerに登録する
 	Texture texCursor;
-	Texture texRestart;
-	Texture texReturn;
-	Texture texStageSelect;
+	Texture* texChoices;
 	Texture texTransparentBack;
-	//位置変数
+	//! テクスチャのカラー
+	Color texColor;
+	//! 位置変数
 	Vec2 RestartPos;
 	Vec2 ReturnPos;
 	Vec2 stageselectPos;
 	Vec2 cursorPos;
-	Vec2 transparentbackPos;
-
-	int selectPos = 0;
-
+	//! カーソル歯車アングル
 	unsigned int gearAng;
-
-	//サウンドのファイル名格納
+	//! カメラが動いているか
+	bool isCameraMoving;
+	//! カーソル位置識別用
+	int stateNum;
+	//! サウンドのファイル名格納
 	std::string cursorsoundname;
 	std::string dicisionsoundname;
+	//! マップタスク
+	std::shared_ptr<Map> map;
 
-public:
 	Pause();
-	virtual ~Pause();
-	bool Initialize();
-	void UpDate();
-	void Render2D();
-	bool Finalize();
-	//メソッド
-	void Pause_draw();
-	void PauseUpDate();
-	bool imageFlag;
-	//選択肢の状態フラグ
-	enum Select {
-		Restart, Stage, Return,
-	};
-	Select select;
-
-	//カメラ移動
-	bool Pause::InputLeft() {
-		return OGge->in->key.on(In::A) || OGge->in->on(In::RL);
-	}
-	bool Pause::InputRight() {
-		return OGge->in->key.on(In::D) || OGge->in->on(In::RR);
-	}
-	bool Pause::InputDown() {
-		return OGge->in->key.on(In::S) || OGge->in->on(In::RD);
-	}
-	bool Pause::InputUp() {
-		return OGge->in->key.on(In::W) || OGge->in->on(In::RU);
-	}
-
-	typedef std::shared_ptr<Pause> SP;
-	static SP Create(bool = true);
-
-	//サウンド生成
+	void ReleasePause();
+	void MoveCamera();
+	void CreateNextTask();
+	void CreateLoad();
+	bool checkCameraHitMap(Vec2 v);
+	void setTexPos();
+	void moveCursor();
+public:
+	//サウンド変数
 	Sound cursorsound;
 	Sound decisionsound;
+	//! 選択肢の状態一覧
+	enum State {
+		Non,			//! 未定義
+		BackToGame,		//! ゲームに戻る
+		Restart,		//! リスタート
+		StageSelect,	//! ステージセレクトに戻る
+	};
+	//! 選択肢の状態
+	State state;
+
+	virtual ~Pause();
+	bool Initialize();
+	void Render2D();
+	bool Finalize();
+	void PauseUpDate();
+	bool imageFlag;
+	//! スマートポインタの別名定義
+	typedef std::shared_ptr<Pause> SP;
+	//! タスク生成メソッド
+	static SP Create(bool flag = true);
 };

@@ -59,7 +59,7 @@ bool Game::Initialize()
 	auto backImage = Back::Create(std::string("back1.png"), 1920, 1080);
 
 	//Pauseƒ^ƒXƒN‚Ì¶¬
-	auto pause = Pause::Create();
+	//auto pause = Pause::Create();
 
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 16,7 };
@@ -493,8 +493,9 @@ void Game::UpDate()
 	if (player)
 	{
 		if (OGge->in->down(In::D2) && !player->GetInput()) {
-			if (!player->GetInputAuto())
+			if (!player->GetInputAuto() && !OGge->GetPause())
 			{
+				Pause::Create();
 				OGge->SetPause(true);
 			}
 		}
