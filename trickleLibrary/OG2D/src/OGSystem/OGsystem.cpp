@@ -287,5 +287,13 @@ void EngineSystem::AllStop(const bool flag)
 		}
 	}
 }
+void EngineSystem::ShowNameAddedObject()
+{
+	for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
+	{
+		std::cout << (*id).second->GetTaskName() << ":";
+	}
+	std::cout << std::endl;
+}
 EngineSystem* OGge;
 ResourceManager* rm;
