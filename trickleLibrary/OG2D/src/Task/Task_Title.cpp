@@ -9,6 +9,7 @@
 #include "Load\LoadLogo.h"
 #include "Effect\Effect.h"
 #include "GameProcessManagement\GameProcessManagement.h"
+#include "Task_Credit.h"
 
 
 
@@ -530,8 +531,12 @@ void Title::UpDate()
 				//クレジットに進む
 				case 1:
 				{
-					//未実装のため、ゲームを閉じる
-					OGge->GameEnd();
+					auto load = Load::Create();
+					if (load)
+					{
+						load->AddDeleteObjectName(this->GetTaskName());
+					}
+					//this->Kill();
 				}
 				break;
 				//データ消去
@@ -929,8 +934,11 @@ bool Title::Finalize()
 		}
 		break;
 		case 1:
-			OGge->GameEnd();
-			break;
+		{
+			auto stage = Credit::Create();
+		}
+		break;
+
 		default:
 			break;
 		}
