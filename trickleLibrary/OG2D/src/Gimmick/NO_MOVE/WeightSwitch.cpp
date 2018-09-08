@@ -64,6 +64,8 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 WeightSwitch::~WeightSwitch()
 {
 	std::cout << "スイッチを消去" << std::endl;
+	this->switch1.Finalize();
+	this->switch2.Finalize();
 }
 
 

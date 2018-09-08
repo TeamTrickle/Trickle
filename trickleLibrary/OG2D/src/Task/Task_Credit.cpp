@@ -303,6 +303,12 @@ void Credit::Finalize()
 	auto back = OGge->GetTask<Back>("back");
 	if (back) { back->Kill(); }
 
+	auto chara = OGge->GetTask<Chara>("chara");
+	if (chara) { chara->Kill(); }
+
+	auto effect = OGge->GetTask<Effect>("effect");
+	if (effect) { effect->Kill(); }
+
 	this->LadderTex.Finalize();
 
 	for (int i = 0; i < 7; ++i) {
