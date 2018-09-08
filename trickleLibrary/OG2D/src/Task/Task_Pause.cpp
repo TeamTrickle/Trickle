@@ -179,7 +179,7 @@ bool Pause::checkCameraHitMap(Vec2 v) {
 }
 void Pause::setTexPos() {
 	Vec2 basePos = OGge->camera->GetSize() + OGge->camera->GetPos();
-	ReturnPos = Vec2(basePos.x - 64 * 11, basePos.y - 300.f);
+	ReturnPos = Vec2(basePos.x - 64 * 12 + 20, basePos.y - 300.f);
 	RestartPos = Vec2(basePos.x - 64 * 8, basePos.y - 200.f);
 	stageselectPos = Vec2(basePos.x - 64 * 19 + 50, basePos.y - 100.f);
 	switch (stateNum) {
