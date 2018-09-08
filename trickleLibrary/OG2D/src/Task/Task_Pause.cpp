@@ -14,7 +14,8 @@
 Pause::Pause()
 	:
 	cursorsoundname("cursormove.wav"),
-	dicisionsoundname("decision.wav")
+	dicisionsoundname("decision.wav"),
+	decisionsound(new Sound())
 {
 	__super::SetDrawOrder(1.0f);
 }
@@ -35,7 +36,8 @@ bool Pause::Initialize() {
 	cursorsound.create(cursorsoundname, false);
 	cursorsound.volume(0.7f);
 	//決定音
-	decisionsound.create(dicisionsoundname, false);
+	decisionsound->create(dicisionsoundname, false);
+	rm->SetSoundData("decision", decisionsound);
 	//歯車角度
 	gearAng = 0;
 	//カーソル位置識別
@@ -69,7 +71,8 @@ void Pause::PauseUpDate() {
 	//Xキー(Bボタン)押下処理
 	if (OGge->in->down(In::B2)) {
 		//決定音再生
-		decisionsound.play();
+		decisionsound->play();
+		//rm->GetSoundData("decision")->play();
 		ReleasePause();
 		state = (State)stateNum;
 		if (state != BackToGame) {
@@ -82,7 +85,8 @@ void Pause::PauseUpDate() {
 	//SPACEキー(STARTボタン)押下処理
 	if (OGge->in->down(In::D2)) {
 		//決定音再生
-		decisionsound.play();
+		decisionsound->play();
+		//rm->GetSoundData("decision")->play();
 		ReleasePause();
 		this->Kill();
 	}

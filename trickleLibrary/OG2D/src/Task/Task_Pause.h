@@ -46,7 +46,7 @@ class Pause : public TaskObject
 public:
 	//サウンド変数
 	Sound cursorsound;
-	Sound decisionsound;
+	Sound* decisionsound;
 	//! 選択肢の状態一覧
 	enum State {
 		Non,			//! 未定義
