@@ -75,7 +75,7 @@ void Player::UpDate()
 		this->Friction();
 
 		//スイッチはすぐモーションが変わらないのでanimation中の状態を持ってくる
-		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M &&
+		if (this->motion != Motion::Ladder && animation.animMo != Motion::Switch_M && this->animation.animMo != Motion::Ladder &&
 			this->motion != Motion::Lift && this->motion != Lower && this->motion != Spill && this->motion != Motion::NoLower) {
 			if (this->InputLeft())
 			{
