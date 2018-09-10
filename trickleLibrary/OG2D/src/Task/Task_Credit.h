@@ -89,5 +89,5 @@ private:
 
 	Sound* sound;
 	VolumeControl volControl;
-
+	bool soundIsplay;
 };
