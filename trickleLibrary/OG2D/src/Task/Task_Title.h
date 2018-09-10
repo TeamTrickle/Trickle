@@ -185,6 +185,8 @@ public:
 	Sound flowersound;
 	VolumeControl volControl;
 
+	bool cursorIsPlay;
+	bool decisionIsPlay;
 	bool canVolControl;
 
 	bool soundstart;
