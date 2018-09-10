@@ -14,8 +14,9 @@
 
 
 const std::string Title::DEMO_VIDEOS[]{
-	"./data/test.mp4",
-	"./data/test1.mp4"
+	"./data/demo1.mp4",
+	"./data/demo2.mp4",
+	"./data/demo3.mp4"
 };
 
 
@@ -104,7 +105,7 @@ bool Title::Initialize()
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
-	this->fontTex.Create("Font_new.png");           //文字フォントの画像追加
+	this->fontTex.Create("fontui.png");           //文字フォントの画像追加
 
 	this->forTransform.Create("TransparentBackTitle.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
@@ -147,7 +148,7 @@ bool Title::Initialize()
 	this->gierCnt = 0;
 
 	//描画順の決定
-	__super::SetDrawOrder(1.f);
+	//__super::SetDrawOrder(1.f);
 	//__super::SetDrawOrder(0.95f);
 	//カメラの中心のターゲットを登録
 	this->cm.SetObject(&(*water));
@@ -319,7 +320,12 @@ void Title::UpDate()
 	break;
 	case from6:	//Bキー入力待ち状態
 	{
-		demoTimer.Start();
+		if (!OGge->in->EitherDown()) {
+			demoTimer.Start();
+		}
+		else {
+			demoTimer.Stop();
+		}
 		if (PressAnyKey() == false)
 		{
 			//push any keyの透明度に関した処理
@@ -343,8 +349,11 @@ void Title::UpDate()
 
 	case from7:	//決定待ち状態
 	{
-		if (!demoTimer.isplay()) {
+		if (!OGge->in->EitherDown()) {
 			demoTimer.Start();
+		}
+		else {
+			demoTimer.Stop();
 		}
 		//左へ
 		if (nowmoveL == false)
@@ -816,9 +825,9 @@ void Title::Render2D()
 	{
 		if (del == yes || del == no)
 		{
-			Box2D draw = Box2D(monitorSpos + 390, 850.f, 64.f * 6, 64.f);
+			Box2D draw = Box2D(monitorSpos + 390 - 64, 850.f, 64.f * 10, 64.f);
 			draw.OffsetSize();
-			Box2D src = Box2D(0, 64 * 14, 64 * 6, 64);
+			Box2D src = Box2D(0, 64 * 14, 64 * 10, 64);
 			src.OffsetSize();
 
 			this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
@@ -829,13 +838,13 @@ void Title::Render2D()
 		this->texCursor.Rotate((float)this->gierCnt);
 		if (del == yes)
 		{
-			Box2D draw(monitorSpos + 390 - 64.f, 850.f, 64.0f, 64.0f);
+			Box2D draw(monitorSpos + 390 - 64.f*2, 850.f, 64.0f, 64.0f);
 			draw.OffsetSize();
 			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 		}
 		if (del == no)
 		{
-			Box2D draw(monitorSpos + 390 + 64.f * 3, 850.f, 64.0f, 64.0f);
+			Box2D draw(monitorSpos + 390 + 64.f * 3.5f, 850.f, 64.0f, 64.0f);
 			draw.OffsetSize();
 			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 		}
