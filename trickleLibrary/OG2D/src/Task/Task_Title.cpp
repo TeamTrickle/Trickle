@@ -45,6 +45,8 @@ Title::Title()
 	this->nowmoveR = false;
 	this->textspeed = 0.f;          //テキストの動くスピードについて
 
+	clearedCnt = 0;
+
 	//タグ設定
 	__super::Init((std::string)"title");
 	__super::SetDrawOrder(0.98f);
@@ -105,8 +107,6 @@ bool Title::Initialize()
 	this->flowerLogo.Create("flower.png");
 	this->texEffect.Create("Effect01.png");
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
-	this->fontTex.Create("fontui.png");           //文字フォントの画像追加
-
 	this->forTransform.Create("TransparentBackTitle.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
 	
@@ -617,8 +617,14 @@ void Title::UpDate()
 			{
 				//データ削除の処理
 				GameManager::ResetData();
-				this->mode = from7;
+				++clearedCnt;
+				//this->mode = from7;
 			}
+		}
+		if (clearedCnt >= 1) { ++clearedCnt; }
+		if (clearedCnt >= 60) { 
+			this->mode = from7;
+			clearedCnt = 0;
 		}
 		break;
 
@@ -740,20 +746,20 @@ void Title::Render2D()
 				Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
 				src.OffsetSize();
 				
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			//一番初めは真ん中にstartを表示
 			if (start == in)
 			{
 				Box2D src = intextsrc;
 				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			if(start == out)
 			{
 				Box2D src = outtextsrc;
 				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 		//credit
@@ -765,14 +771,14 @@ void Title::Render2D()
 				Box2D src = intextsrc;
 				src.y = 64.f * 12;
 				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
 			{
 				Box2D src = outtextsrc;
 				src.y = 64.f * 12;
 				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 		//delete
@@ -787,14 +793,14 @@ void Title::Render2D()
 					Box2D src = intextsrc;
 					src.y = 64.f * 13;
 					src.OffsetSize();
-					this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+					rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 				}
 				else
 				{
 					Box2D src = outtextsrc;
 					src.y = 64.f * 13;
 					src.OffsetSize();
-					this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+					rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 				}
 			}
 		}
@@ -808,14 +814,14 @@ void Title::Render2D()
 				Box2D src = intextsrc;
 				src.y = 64.f;                  //読み込む画像を変える
 				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
 			{
 				Box2D src = outtextsrc;
 				src.y = 64.f;                  //読み込む画像を変える
 				src.OffsetSize();
-				this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
 	}
@@ -823,30 +829,42 @@ void Title::Render2D()
 	//yes,noの表示について
 	if (mode == from9)
 	{
-		if (del == yes || del == no)
-		{
-			Box2D draw = Box2D(monitorSpos + 390 - 64, 850.f, 64.f * 10, 64.f);
-			draw.OffsetSize();
-			Box2D src = Box2D(0, 64 * 14, 64 * 10, 64);
-			src.OffsetSize();
+		if (clearedCnt >= 1) {
+			if((clearedCnt / 10) % 3 != 0)
+			{
+				Box2D draw{ monitorSpos + 390, 850.f,64.f * 5,64.f };
+				draw.OffsetSize();
+				Box2D src{ 0.f,64.f * 11,64.f * 5,64.f };
+				src.OffsetSize();
+				rm->GetTextureData("fontui")->Draw(draw, src);
+			}
+		}
+		else {
+			if (del == yes || del == no)
+			{
+				Box2D draw = Box2D(monitorSpos + 390 - 64, 850.f, 64.f * 10, 64.f);
+				draw.OffsetSize();
+				Box2D src = Box2D(0, 64 * 14, 64 * 10, 64);
+				src.OffsetSize();
 
-			this->fontTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-		}
-		//カーソルの表示
-		Box2D src(0, 0, 195, 195);
-		src.OffsetSize();
-		this->texCursor.Rotate((float)this->gierCnt);
-		if (del == yes)
-		{
-			Box2D draw(monitorSpos + 390 - 64.f*2, 850.f, 64.0f, 64.0f);
-			draw.OffsetSize();
-			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-		}
-		if (del == no)
-		{
-			Box2D draw(monitorSpos + 390 + 64.f * 3.5f, 850.f, 64.0f, 64.0f);
-			draw.OffsetSize();
-			texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+			}
+			//カーソルの表示
+			Box2D src(0, 0, 195, 195);
+			src.OffsetSize();
+			this->texCursor.Rotate((float)this->gierCnt);
+			if (del == yes)
+			{
+				Box2D draw(monitorSpos + 390 - 64.f * 2, 850.f, 64.0f, 64.0f);
+				draw.OffsetSize();
+				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+			}
+			if (del == no)
+			{
+				Box2D draw(monitorSpos + 390 + 64.f * 3.5f, 850.f, 64.0f, 64.0f);
+				draw.OffsetSize();
+				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+			}
 		}
 	}
 
@@ -902,7 +920,6 @@ bool Title::Finalize()
 	this->forTransform.Finalize();
 	this->canVolControl = false;
 	this->monitorTex.Finalize();
-	this->fontTex.Finalize();
 
 	auto back = OGge->GetTask<Back>("back");
 	if (back)

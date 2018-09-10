@@ -54,7 +54,6 @@ class Title :public TaskObject
 	Texture forTransform;
 	//テスト追加
 	Texture monitorTex;
-	Texture fontTex;
 	
 
 	std::string soundname;
@@ -139,6 +138,8 @@ class Title :public TaskObject
 
 	void SkipMove();
 	bool skipInoutFlag;
+
+	int clearedCnt;		//! Clearedを表示するためだけのカウンタ
 
 public:
 	Title();

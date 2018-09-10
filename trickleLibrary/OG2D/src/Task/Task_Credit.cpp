@@ -303,11 +303,13 @@ void Credit::Finalize()
 	auto back = OGge->GetTask<Back>("back");
 	if (back) { back->Kill(); }
 
-	auto chara = OGge->GetTask<Chara>("chara");
+	auto chara = OGge->GetTask<Chara>("Chara");
 	if (chara) { chara->Kill(); }
 
-	auto effect = OGge->GetTask<Effect>("effect");
-	if (effect) { effect->Kill(); }
+	auto effects = OGge->GetTasks<Effect>("effect");
+	for (auto id = effects->begin(); id < effects->end(); ++id) {
+		(*id)->Kill();
+	}
 
 	this->LadderTex.Finalize();
 
