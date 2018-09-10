@@ -44,6 +44,8 @@ Title::Title()
 	this->nowmoveL = false;
 	this->nowmoveR = false;
 	this->textspeed = 0.f;          //テキストの動くスピードについて
+	this->decisionIsPlay = true;
+	this->cursorIsPlay = true;
 
 	clearedCnt = 0;
 
@@ -362,8 +364,12 @@ void Title::UpDate()
 			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
 				this->nowmoveR = true;
-				//カーソルの移動音再生
-				cursorsound.play();
+				if (cursorIsPlay)
+				{
+					//カーソルの移動音再生
+					cursorsound.play();
+					cursorIsPlay = false;
+				}
 
 
 				//文字を待機位置に移動させる処理(モニター左端へ)
@@ -391,8 +397,12 @@ void Title::UpDate()
 			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 			{
 				this->nowmoveL = true;
-				//カーソルの移動音再生
-				cursorsound.play();
+				if (cursorIsPlay)
+				{
+					//カーソルの移動音再生
+					cursorsound.play();
+					cursorIsPlay = false;
+				}
 
 				//文字を待機位置に移動させる処理(モニター右端へ)
 				if (startsize.x <= 0.0f)
@@ -558,6 +568,9 @@ void Title::UpDate()
 				break;
 				//終了
 				case 3:
+					//データ削除の処理
+					GameManager::ResetData();
+
 					OGge->GameEnd();
 					break;
 				}
@@ -1021,9 +1034,10 @@ Vec2 Title::TextMoveout(Vec2 pos)
 			pos.x += textspeed;
 		}
 	}
-	else
+	if(nowmoveL==false && nowmoveR==false)
 	{
 		this->textspeed = 0.f;
+		cursorIsPlay = true;
 	}
 	return pos;
 }
@@ -1041,6 +1055,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //必
 		else
 		{
 			this->textspeed = 0.f;
+			this->cursorIsPlay = true;
 		}
 
 		if (pos.x <= monitorSpos + (monitorsize / 2.f) - maxsize / 2 && outsize.x <= 0.f)
@@ -1070,6 +1085,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //必
 		else
 		{
 			this->textspeed = 0.f;
+			this->cursorIsPlay = true;
 		}
 
 		if(pos.x >= monitorSpos + (monitorsize / 2.f) - maxsize / 2 && outsize.x <= 0.f)

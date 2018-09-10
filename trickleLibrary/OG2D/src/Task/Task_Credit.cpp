@@ -63,9 +63,11 @@ bool Credit::Initialize()
 	{
 		SetSize();
 	}
+	//テスト修正
 	//BGM
 	sound = rm->GetSoundData((std::string)"titleBGM");
-	
+	this->soundIsplay = true;
+
 	
 	return true;
 }
@@ -74,7 +76,11 @@ void Credit::UpDate()
 {
 	//BGMのフェードイン
 	//sound->volume(volControl.FadeIn(true));
-	sound->play();
+	if (soundIsplay)
+	{
+		sound->play();
+		soundIsplay = false;
+	}
 
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
@@ -318,6 +324,9 @@ void Credit::Finalize()
 	}
 
 	this->LadderTex.Finalize();
+	//サウンドの解放
+	//delete rm->GetSoundData((std::string)"titleBGM");
+	//rm->DeleteSound((std::string)"titleBGM");
 
 	for (int i = 0; i < 7; ++i) {
 		this->frame[i].tex.Finalize();
