@@ -87,6 +87,8 @@ private:
 	bool effectStarFlag[3];			//☆エフェクトを出力したかどうかのフラグ
 	float starAngle;
 
+	int petalRate;
+
 	unsigned timer[4];
 	int test1, test2;
 	__int8 maxTrueNumber;

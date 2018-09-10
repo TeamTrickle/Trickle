@@ -72,6 +72,14 @@ bool Result::Initialize() {
 	cnt = 0;
 	this->maxTrueNumber = -1;
 	this->RoadData();
+	//---------------------------------------------
+	petalRate = 3;
+	for (int i = 0; i < 3; ++i) {
+		if (!starFlag[i]) {
+			petalRate *= 2;
+		}
+	}
+	//--------------------------------------------
 	OGge->camera->SetSize(Vec2(1280, 720));
 	return true;
 }
@@ -247,7 +255,7 @@ void Result::UpDate() {
 				effCounter = 0;
 			}
 			//ˆê’èŠÔ‚²‚Æ‚É‰Ô‚Ñ‚ç‚ªoŒ»
-			if (effCounter % 3 == 0)
+			if (effCounter % petalRate/*3*/ == 0)
 			{
 				int x = random::GetRand(-768, 1800);
 
