@@ -114,9 +114,10 @@ bool Title::Initialize()
 	
 	//サウンドの生成
 	//BGM
-	sound = new Sound();
-	sound->create(soundname, true);
-	rm->SetSoundData((std::string)"titleBGM", sound);
+	//sound = new Sound();
+	//sound->create(soundname, true);
+	//rm->SetSoundData((std::string)"titleBGM", sound);
+	sound = rm->GetSoundData("titleBGM");
 	//カーソルの移動音
 	cursorsound.create(soundcursorname,false);
 	cursorsound.volume(1.0f);
@@ -969,15 +970,19 @@ bool Title::Finalize()
 			break;
 		}
 	}
-	else
-	{
+	//else
+	//{
 		//次を生成しない場合Soundデータを解放する
-		if (this->sound)
-		{
-			delete this->sound;
-			this->sound = nullptr;
-		}
+		//9.11 解放ではなく停止にする、解放は~OGTK
+	if (cursorNum != 0) {
+		sound->stop();
+		//if (this->sound)
+		//{
+		//	delete this->sound;
+		//	this->sound = nullptr;
+		//}
 	}
+	//}
 	return true;
 }
 

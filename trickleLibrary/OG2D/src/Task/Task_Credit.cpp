@@ -63,7 +63,8 @@ bool Credit::Initialize()
 	{
 		SetSize();
 	}
-	
+	//BGM
+	sound = rm->GetSoundData((std::string)"titleBGM");
 	
 	
 	return true;
@@ -71,6 +72,10 @@ bool Credit::Initialize()
 
 void Credit::UpDate()
 {
+	//BGMのフェードイン
+	//sound->volume(volControl.FadeIn(true));
+	sound->play();
+
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto npc = OGge->GetTask<Chara>("Chara");
 	npc->creditFlag = true;
@@ -262,6 +267,7 @@ void Credit::UpDate()
 			{
 				load->AddDeleteObjectName(this->GetTaskName());
 			}
+			sound->stop();
 		}
 	}
 

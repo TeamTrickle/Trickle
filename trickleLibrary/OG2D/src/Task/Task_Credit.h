@@ -1,5 +1,6 @@
 #pragma once
 #include "OGSystem/OGSystem.h"
+#include "VolumeControl\volumeControl.h"
 
 class Credit : public TaskObject
 {
@@ -85,4 +86,8 @@ private:
 	Texture petalTex3;
 	Texture petalTex4;
 	Texture petalTex5;
+
+	Sound* sound;
+	VolumeControl volControl;
+
 };

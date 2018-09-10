@@ -40,9 +40,13 @@ void OGTK::StartTaskObject()
 	Sound* pauseSound = new Sound();
 	pauseSound->create("decision.wav");
 	rm->SetSoundData("decision", pauseSound);
+	Sound* titleBGM = new Sound();
+	titleBGM->create("title.wav");
+	rm->SetSoundData("titleBGM", titleBGM);
 	//タスクの初期化
 	GameManager::ResetData();
 	auto TopTask = LogoTask::Create();
+	//Title::Create();
 	//*MapNum = 11;
 	//Game::Create();
 }
@@ -83,5 +87,9 @@ OGTK::~OGTK()
 	{
 		delete rm->GetSoundData("decision");
 		rm->DeleteSound("decision");
+	}
+	if (rm->GetSoundData("titleBGM")) {
+		delete rm->GetSoundData("titleBGM");
+		rm->DeleteSound("titleBGM");
 	}
 }
