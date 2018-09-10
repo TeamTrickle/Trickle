@@ -36,11 +36,15 @@ void OGTK::StartTaskObject()
 	rm->SetTextureData("BrackBackGround", BackBrack);
 	Texture* LoadLogo = new Texture("LoadTest.png");
 	rm->SetTextureData("LoadLogo", LoadLogo);
+
+	Sound* pauseSound = new Sound();
+	pauseSound->create("decision.wav");
+	rm->SetSoundData("decision", pauseSound);
 	//タスクの初期化
+	GameManager::ResetData();
 	auto TopTask = LogoTask::Create();
-	//*MapNum = 15;
+	//*MapNum = 11;
 	//Game::Create();
-	//GameManager::ResetData();
 }
 
 OGTK::~OGTK()
@@ -74,5 +78,10 @@ OGTK::~OGTK()
 		rm->GetTextureData("LoadLogo")->Finalize();
 		delete rm->GetTextureData("LoadLogo");
 		rm->DeleteTexture("LoadLogo");
+	}
+	if (rm->GetSoundData("decision"))
+	{
+		delete rm->GetSoundData("decision");
+		rm->DeleteSound("decision");
 	}
 }

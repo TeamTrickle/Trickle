@@ -66,6 +66,10 @@ public:
 	*/
 	static void ResetData();
 	/**
+	*@brief	:全データの暗号化
+	*/
+	static void DataEncryption();
+	/**
 	*@brief	:destructor	次生成タスクを指定する
 	*/
 	virtual ~GameManager();

@@ -530,10 +530,10 @@ void Game::Render2D()
 //-------------------------------------------------------------------------------------------------
 bool Game::Finalize()
 {
-	auto map = OGge->GetTask<Map>("map");
-	if (map)
+	auto map = OGge->GetTasks<Map>("map");
+	for (auto id = map->begin(); id != map->end(); ++id)
 	{
-		map->Kill();
+		(*id)->Kill();
 	}
 	auto block = OGge->GetTasks<Block>("block");
 	for (auto id = (*block).begin(); id != (*block).end(); ++id)
@@ -595,10 +595,10 @@ bool Game::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto back = OGge->GetTask<Back>("back");
-	if (back)
+	auto back = OGge->GetTasks<Back>("back");
+	for (auto id = back->begin(); id != back->end(); ++id)
 	{
-		back->Kill();
+		(*id)->Kill();
 	}
 	auto switches = OGge->GetTasks<Switch>("Switch");
 	for (auto id = switches->begin(); id != switches->end(); ++id)
