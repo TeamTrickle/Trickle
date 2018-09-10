@@ -935,10 +935,10 @@ bool Title::Finalize()
 	this->canVolControl = false;
 	this->monitorTex.Finalize();
 
-	auto back = OGge->GetTask<Back>("back");
-	if (back)
+	auto back = OGge->GetTasks<Back>("back");
+	for (auto id = back->begin(); id != back->end(); ++id)
 	{
-		back->Kill();
+		(*id)->Kill();
 	}
 	this->waterTex.Finalize();
 
@@ -947,10 +947,10 @@ bool Title::Finalize()
 	{
 		(*id)->Kill();
 	}
-	auto map = OGge->GetTask<Map>("map");
-	if (map)
+	auto map = OGge->GetTasks<Map>("map");
+	for (auto id = map->begin(); id != map->end(); ++id)
 	{
-		(*map).Kill();
+		(*id)->Kill();
 	}
 	auto Npc = OGge->GetTasks<Chara>("Chara");
 	for(auto id = Npc->begin(); id != Npc->end();++id)
@@ -959,6 +959,12 @@ bool Title::Finalize()
 	}
 	auto effects = OGge->GetTasks<Effect>("effect");
 	for (auto id = effects->begin(); id != effects->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id)
 	{
 		(*id)->Kill();
 	}

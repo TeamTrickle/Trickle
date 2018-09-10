@@ -423,10 +423,21 @@ bool Result::Finalize() {
 	{
 		(*id)->Kill();
 	}
-	auto npc = OGge->GetTask<Chara>("Chara");
-	if (npc) { npc->Kill(); }
-	auto map = OGge->GetTask<Map>("map");
-	if (map) { map->Kill(); }
+	auto npc = OGge->GetTasks<Chara>("Chara");
+	for (auto id = npc->begin(); id != npc->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto map = OGge->GetTasks<Map>("map");
+	for (auto id = map->begin(); id != map->end(); ++id)
+	{
+		(*id)->Kill();
+	}
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 	//ステージセレクトに戻る
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{

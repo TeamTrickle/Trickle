@@ -309,17 +309,32 @@ void Credit::Finalize()
 {
 	//‰ð•úˆ—
 
-	auto map = OGge->GetTask<Map>("map");
-	if (map) { map->Kill(); }
+	auto map = OGge->GetTasks<Map>("map");
+	for (auto id = map->begin(); id != map->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 
-	auto back = OGge->GetTask<Back>("back");
-	if (back) { back->Kill(); }
+	auto back = OGge->GetTasks<Back>("back");
+	for (auto id = back->begin(); id != back->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 
-	auto chara = OGge->GetTask<Chara>("Chara");
-	if (chara) { chara->Kill(); }
+	auto chara = OGge->GetTasks<Chara>("Chara");
+	for (auto id = chara->begin(); id != chara->end(); ++id)
+	{
+		(*id)->Kill();
+	}
 
 	auto effects = OGge->GetTasks<Effect>("effect");
-	for (auto id = effects->begin(); id < effects->end(); ++id) {
+	for (auto id = effects->begin(); id != effects->end(); ++id) {
+		(*id)->Kill();
+	}
+
+	auto clouds = OGge->GetTasks<Cloud>("cloud");
+	for (auto id = clouds->begin(); id != clouds->end(); ++id)
+	{
 		(*id)->Kill();
 	}
 
@@ -328,7 +343,7 @@ void Credit::Finalize()
 	//delete rm->GetSoundData((std::string)"titleBGM");
 	//rm->DeleteSound((std::string)"titleBGM");
 
-	for (int i = 0; i < 7; ++i) {
+	for (int i = 0; i < 8; ++i) {
 		this->frame[i].tex.Finalize();
 	}
 }
