@@ -15,7 +15,7 @@ Pause::Pause()
 	:
 	cursorsoundname("cursormove.wav"),
 	dicisionsoundname("decision.wav"),
-	decisionsound(new Sound())
+	decisionsound()
 {
 	__super::SetDrawOrder(1.0f);
 }
@@ -36,8 +36,10 @@ bool Pause::Initialize() {
 	cursorsound.create(cursorsoundname, false);
 	cursorsound.volume(0.7f);
 	//決定音
-	decisionsound->create(dicisionsoundname, false);
-	rm->SetSoundData("decision", decisionsound);
+	/*decisionsound->create(dicisionsoundname, false);
+	rm->SetSoundData("decision", decisionsound);*/
+	decisionsound = rm->GetSoundData("decision");
+	decisionsound->looping(false);
 	//歯車角度
 	gearAng = 0;
 	//カーソル位置識別

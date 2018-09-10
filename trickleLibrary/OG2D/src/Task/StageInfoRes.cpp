@@ -62,9 +62,11 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		if (filePath == "./data/monitor5.txt") saveFilePath = "data/Result/data15.bin";
 		std::ifstream saveFile(saveFilePath, std::ios::in);
 		bool isCleared = saveFile.is_open();
-
+		std::string saveFile_ = OG::Data_Composite(saveFile);
+		std::istringstream iss(saveFile_);
 		if (isCleared) {
-			saveFile >> buf;
+			//saveFile >> buf;
+			iss >> buf;
 			if (buf == "-1" || buf == "-2,-2") {
 				isCleared = false;
 				clearFlag = false;
@@ -78,7 +80,8 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		bool isAchievementAvaliable = false;
 		std::array<bool, MAX_ACHIEVEMENT> isClearAchievement;
 		if (clearFlag || buf == "-2,-2") {
-			saveFile >> buf;
+			//saveFile >> buf;
+			iss >> buf;
 			auto flags = SplitString(buf, ',');
 			for (int i = 0; i < isClearAchievement.size(); ++i) {
 				isClearAchievement[i] = (flags[i] == "f") ? false : true;
@@ -90,7 +93,8 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 		for (auto& a : achievement) {
 			file >> buf;
 			a.first = stringToBox2D(buf);
-			saveFile >> clearFlag;
+			//saveFile >> clearFlag;
+			iss >> buf;
 			if (isAchievementAvaliable) {
 				a.second = isClearAchievement[i];
 			}

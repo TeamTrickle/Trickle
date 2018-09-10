@@ -435,8 +435,10 @@ void Result::RoadData()
 	{
 		this->Kill();
 	}
+	std::string data = OG::Data_Composite(ifs);
+	std::istringstream iss(data);
 	std::string line;
-	std::getline(ifs, line);
+	std::getline(iss, line);
 	std::istringstream* is = new std::istringstream(line);
 	std::string text;
 	for (int i = 0; i < 2; ++i)
@@ -447,7 +449,7 @@ void Result::RoadData()
 		this->timer[i * 2] = t_time / 10;
 		this->timer[i * 2 + 1] = t_time % 10;
 	}
-	std::getline(ifs, line);
+	std::getline(iss, line);
 	delete is;
 	is = new std::istringstream(line);
 	for (int i = 0; i < 3; ++i)

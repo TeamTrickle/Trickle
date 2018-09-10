@@ -105,15 +105,6 @@ void GameManager::UpDate()
 }
 void GameManager::ResetData()
 {
-	/*for (int i = 1; i <= 6; ++i)
-	{
-		std::ofstream ofs("./data/Result/data" + std::to_string(i) + ".bin", std::ios::out | std::ios::binary);
-		ofs << -1 << std::endl;
-		ofs.close();
-		ofs.open("./data/Result/save" + std::to_string(i) + ".bin", std::ios::out | std::ios::binary);
-		ofs << -1 << std::endl;
-		ofs.close();
-	}*/
 	//ステージ増築用
 	for (int i = 1; i <= 15; ++i)
 	{
@@ -123,6 +114,21 @@ void GameManager::ResetData()
 		ofs.open("./data/Result/save" + std::to_string(i) + ".bin", std::ios::out | std::ios::binary);
 		ofs << -1 << std::endl;
 		ofs.close();
+	}
+	GameManager::DataEncryption();
+}
+void GameManager::DataEncryption()
+{
+	for (int i = 1; i <= 15; ++i)
+	{
+		OG::Data_Cipher(
+			"./data/Result/save" + std::to_string(i) + ".bin",
+			"./data/Result/save" + std::to_string(i) + ".bin"
+		);
+		OG::Data_Cipher(
+			"./data/Result/data" + std::to_string(i) + ".bin",
+			"./data/Result/data" + std::to_string(i) + ".bin"
+		);
 	}
 }
 bool GameManager::isMaxTime()
@@ -190,8 +196,11 @@ bool GameManager::OutData()
 				{
 					ofs << "f,";
 				}
+				std::string data = OG::Data_Composite(ifs);
+				std::istringstream iss(data);
+
 				std::string line;
-				std::getline(ifs, line);
+				std::getline(iss, line);
 				std::istringstream* is = new std::istringstream(line);
 				std::string text;
 				int timer;
@@ -306,6 +315,7 @@ bool GameManager::OutData()
 		ofs << -1 << std::endl;
 	}
 	ofs.close();
+	OG::Data_Cipher(path, path);
 	//ステージ増築用
 	switch(*MapNum)
 	{
@@ -324,8 +334,11 @@ bool GameManager::OutData()
 			}
 			else
 			{
+				std::string data = OG::Data_Composite(ifs);
+				std::istringstream iss(data);
+
 				std::string line;
-				std::getline(ifs, line);
+				std::getline(iss, line);
 				std::istringstream* is = new std::istringstream(line);
 				std::string text;
 				int timer;
@@ -346,13 +359,14 @@ bool GameManager::OutData()
 			ifs.close();
 		}
 		ofs.close();
+		OG::Data_Cipher("./data/Result/save4.bin", "./data/Result/save4.bin");
 	}
 	break;
 	case 5:
 	case 6:
 	case 7:
 	{
-		ofs.open("./data/Result/save4.bin", std::ios::out | std::ios::binary);
+		ofs.open("./data/Result/save8.bin", std::ios::out | std::ios::binary);
 		ofs << -2 << "," << -2 << std::endl;
 		for (int i = 5; i <= 7; ++i)
 		{
@@ -363,8 +377,10 @@ bool GameManager::OutData()
 			}
 			else
 			{
+				std::string data = OG::Data_Composite(ifs);
+				std::istringstream iss(data);
 				std::string line;
-				std::getline(ifs, line);
+				std::getline(iss, line);
 				std::istringstream* is = new std::istringstream(line);
 				std::string text;
 				int timer;
@@ -385,13 +401,14 @@ bool GameManager::OutData()
 			ifs.close();
 		}
 		ofs.close();
+		OG::Data_Cipher("./data/Result/save8.bin", "./data/Result/save8.bin");
 	}
 	break;
 	case 9:
 	case 10:
 	case 11:
 	{
-		ofs.open("./data/Result/save4.bin", std::ios::out | std::ios::binary);
+		ofs.open("./data/Result/save12.bin", std::ios::out | std::ios::binary);
 		ofs << -2 << "," << -2 << std::endl;
 		for (int i = 9; i <= 11; ++i)
 		{
@@ -402,8 +419,10 @@ bool GameManager::OutData()
 			}
 			else
 			{
+				std::string data = OG::Data_Composite(ifs);
+				std::istringstream iss(data);
 				std::string line;
-				std::getline(ifs, line);
+				std::getline(iss, line);
 				std::istringstream* is = new std::istringstream(line);
 				std::string text;
 				int timer;
@@ -424,6 +443,7 @@ bool GameManager::OutData()
 			ifs.close();
 		}
 		ofs.close();
+		OG::Data_Cipher("./data/Result/save12.bin", "./data/Result/save12.bin");
 	}
 		break;
 	}
@@ -443,8 +463,11 @@ bool GameManager::ComparisonData()
 		std::ifstream ifs("./data/result/data" + std::to_string(*MapNum) + ".bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			ifs.close();
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -459,7 +482,7 @@ bool GameManager::ComparisonData()
 					return true;
 				}
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -515,6 +538,7 @@ bool GameManager::ComparisonData()
 			ofs << -1 << std::endl;
 		}
 		ofs.close();
+		OG::Data_Cipher("./data/result/data" + std::to_string(*MapNum) + ".bin", "./data/result/data" + std::to_string(*MapNum) + ".bin");
 	}
 		break;
 	}
@@ -526,8 +550,10 @@ bool GameManager::ComparisonData()
 		std::ifstream ifs("./data/Result/save4.bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -535,7 +561,7 @@ bool GameManager::ComparisonData()
 				std::getline(*is, text, ',');
 				(std::stringstream)text >> time[i];
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -558,8 +584,10 @@ bool GameManager::ComparisonData()
 		ifs.open("./data/Result/data4.bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -583,11 +611,12 @@ bool GameManager::ComparisonData()
 					}
 					ifs.close();
 					ofs.close();
+					OG::Data_Cipher("./data/Result/data4.bin", "./data/Result/data4.bin");
 					delete is;
 					return true;
 				}
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -634,7 +663,7 @@ bool GameManager::ComparisonData()
 			}
 		}
 		ofs.close();
-		
+		OG::Data_Cipher("./data/Result/data4.bin", "./data/Result/data4.bin");
 	}
 	else if (*MapNum >= 5 && *MapNum <= 8)
 	{
@@ -642,8 +671,10 @@ bool GameManager::ComparisonData()
 		std::ifstream ifs("./data/Result/save8.bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -651,7 +682,7 @@ bool GameManager::ComparisonData()
 				std::getline(*is, text, ',');
 				(std::stringstream)text >> time[i];
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -674,8 +705,10 @@ bool GameManager::ComparisonData()
 		ifs.open("./data/Result/data8.bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -699,11 +732,12 @@ bool GameManager::ComparisonData()
 					}
 					ifs.close();
 					ofs.close();
+					OG::Data_Cipher("./data/Result/data8.bin", "./data/Result/data8.bin");
 					delete is;
 					return true;
 				}
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -750,6 +784,8 @@ bool GameManager::ComparisonData()
 			}
 		}
 		ofs.close();
+
+		OG::Data_Cipher("./data/Result/data8.bin", "./data/Result/data8.bin");
 	}
 	else if(*MapNum >= 9 && *MapNum <= 12)
 	{
@@ -757,8 +793,10 @@ bool GameManager::ComparisonData()
 		std::ifstream ifs("./data/Result/save12.bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -766,7 +804,7 @@ bool GameManager::ComparisonData()
 				std::getline(*is, text, ',');
 				(std::stringstream)text >> time[i];
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -789,8 +827,10 @@ bool GameManager::ComparisonData()
 		ifs.open("./data/Result/data12.bin", std::ios::in | std::ios::binary);
 		if (ifs)
 		{
+			std::string data = OG::Data_Composite(ifs);
+			std::istringstream iss(data);
 			std::string line;
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			std::istringstream* is = new std::istringstream(line);
 			std::string text;
 			for (int i = 0; i < 2; ++i)
@@ -814,11 +854,12 @@ bool GameManager::ComparisonData()
 					}
 					ifs.close();
 					ofs.close();
+					OG::Data_Cipher("./data/Result/data12.bin", "./data/Result/data12.bin");
 					delete is;
 					return true;
 				}
 			}
-			std::getline(ifs, line);
+			std::getline(iss, line);
 			delete is;
 			is = new std::istringstream(line);
 			for (int i = 0; i < 3; ++i)
@@ -865,6 +906,7 @@ bool GameManager::ComparisonData()
 			}
 		}
 		ofs.close();
+		OG::Data_Cipher("./data/Result/data12.bin", "./data/Result/data12.bin");
 	}
 	return true;
 }
@@ -894,6 +936,7 @@ void GameManager::OutFileData()
 		ofs << -1 << std::endl;
 	}
 	ofs.close();
+	OG::Data_Cipher("./data/Result/data" + std::to_string(*MapNum) + ".bin", "./data/Result/data" + std::to_string(*MapNum) + ".bin");
 }
 GameManager::SP GameManager::Create()
 {
