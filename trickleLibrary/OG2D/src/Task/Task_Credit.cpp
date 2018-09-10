@@ -57,7 +57,7 @@ bool Credit::Initialize()
 	this->nowMode = 0;
 	this->jumpTimeCnt = 0;
 	this->timeCnt = 0;
-	this->WAITTIME = 30;
+	this->WAITTIME = 200;
 	this->effCounter = 0;
 	if (LoadSize())
 	{
