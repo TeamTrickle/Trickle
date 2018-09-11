@@ -1001,19 +1001,20 @@ bool Title::Finalize()
 		default:
 			break;
 		}
+		//次を生成しない場合Soundデータを解放する
+		//9.11 解放ではなく停止にする、解放は~OGTK
+		if (cursorNum != 0) {
+			sound->stop();
+			//if (this->sound)
+			//{
+			//	delete this->sound;
+			//	this->sound = nullptr;
+			//}
+		}
 	}
 	//else
 	//{
-		//次を生成しない場合Soundデータを解放する
-		//9.11 解放ではなく停止にする、解放は~OGTK
-	if (cursorNum != 0) {
-		sound->stop();
-		//if (this->sound)
-		//{
-		//	delete this->sound;
-		//	this->sound = nullptr;
-		//}
-	}
+
 	//}
 	return true;
 }
