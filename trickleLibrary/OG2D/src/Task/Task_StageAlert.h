@@ -78,8 +78,8 @@ private:
 	std::map<std::string, StageInfoRes*>					infoRes;
 	StageInfoRes*											currentRes;
 
-	Texture													background;
-	Texture													clearFlag;
+	Texture*													background;
+	Texture*													clearFlag;
 	Texture*												clearStarTex;
 	Texture*												normalStarTex;
 	MapPreviewer::SP										previewer;

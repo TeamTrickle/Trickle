@@ -4,9 +4,12 @@
 
 Ornament::Ornament()
 {
-	this->pipeTex.Create("pipe.png");
+	/*this->pipeTex.Create("pipe.png");
 	this->gearTex.Create("gear.png");
-	this->pipeBoxTex.Create("pipeornament.png");
+	this->pipeBoxTex.Create("pipeornament.png");*/
+	this->pipeTex = rm->GetTextureData("pipe");
+	this->gearTex = rm->GetTextureData("gear");
+	this->pipeBoxTex = rm->GetTextureData("ornament");
 	this->gearSrc = Box2D(0, 0, 195, 195);
 	this->pipeBoxSrc = Box2D(0, 0, 1024, 768);
 	__super::Init((std::string)"Ornament");
@@ -204,15 +207,15 @@ void Ornament::UpDate() {
 void Ornament::Render2D() {
 	//pipeTex.Draw(pipe.draw, pipeSrc);
 	for (int i = 0; i < gear.size(); ++i) {
-		gearTex.Rotate((float)gear[i].angle);
+		gearTex->Rotate((float)gear[i].angle);
 		//gearTex.Draw(gear[i].draw, gearSrc);
 	}
 	for (int i = 0; i < gear_nomove.size(); ++i) {
-		gearTex.Rotate((float)gear_nomove[i].angle);
+		gearTex->Rotate((float)gear_nomove[i].angle);
 		//gearTex.Draw(gear_nomove[i].draw, gearSrc);
 	}
 	for (int i = 0; i < pipeBox.size(); ++i) {
-		pipeBoxTex.Rotate((float)pipeBox[i].angle);
+		pipeBoxTex->Rotate((float)pipeBox[i].angle);
 		//pipeBoxTex.Draw(pipeBox[i].draw, pipeBoxSrc);
 	}
 }
@@ -220,7 +223,4 @@ void Ornament::Finalize() {
 	gear.clear();
 	gear_nomove.clear();
 	pipeBox.clear();
-	pipeTex.Finalize();
-	gearTex.Finalize();
-	pipeBoxTex.Finalize();
 }

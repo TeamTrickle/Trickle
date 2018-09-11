@@ -1,11 +1,12 @@
 #include "Chara.h"
 #include "Map\Map.h"
 
-Chara::Chara(std::string& path, Vec2& pos)
+Chara::Chara(const std::string& path, Vec2& pos)
 	:MOVE_SPEED(5.f), JUMP_POWER(-5.0f), MAX_FALL(30.f), GRAVITY((9.8f / 60.f / 60.f * 32) * 5), FIN_SPEED(0.5f)
 {							   
 	this->position = pos;	//位置設定
-	this->Image.Create(path);	//画像設定
+	//this->Image.Create(path);	//画像設定
+	this->Image = rm->GetTextureData(path);
 	this->CreateObject(Cube, pos, Vec2(128, 128), 0.0f);	//オブジェクト生成
 	this->taskName = "Chara";	//タスク名決定
 	__super::Init(this->taskName);	//タスク名をオブジェクトにも反映
@@ -29,7 +30,6 @@ Chara::Chara(std::string& path, Vec2& pos)
 Chara::~Chara()
 {
 	//画像の解放
-	this->Image.Finalize();
 	if (player) {
 		this->player->Destroy();
 	}
@@ -163,7 +163,7 @@ void Chara::Render2D()
 		src.x = k;
 	}
 	//描画
-	this->Image.Draw(draw, src);
+	this->Image->Draw(draw, src);
 }
 void Chara::Friction(Vec2& est)
 {
@@ -445,7 +445,7 @@ Chara::Direction Chara::nowDirection() const
 	//向きを返す
 	return this->direction;
 }
-Chara::SP Chara::Create(std::string& path, Vec2& pos, bool flag)
+Chara::SP Chara::Create(const std::string& path, Vec2& pos, bool flag)
 {
 	Chara::SP to = Chara::SP(new Chara(path, pos));
 	if (to)

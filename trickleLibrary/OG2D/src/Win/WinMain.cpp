@@ -156,8 +156,8 @@ int main() {
 	//ゲームエンジンの内容を解放
 	delete timer;
 	delete MapNum;
-	delete ogtk;
 	delete OGge;
+	delete ogtk;
 	delete rm;
 	//GLFWのライブラリを終了する
 	glfwTerminate();

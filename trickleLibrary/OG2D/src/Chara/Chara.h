@@ -26,7 +26,7 @@ public:
 	int happyCnt;			//喜ぶアニメーションカウント
 	bool creditFlag;		//クレジットの時はAutoMove()を使わないようにする変数
 private:
-	Texture Image;		//使用画像
+	Texture* Image;		//使用画像
 	Vec2 move;			//移動値
 	const float MOVE_SPEED;								//移動スピード
 	const float JUMP_POWER;								//ジャンプパワー
@@ -54,10 +54,10 @@ private:
 	int srcX = 586;
 	int srcY = 575;			//プレイヤ画像の元々のサイズ
 public:
-	Chara(std::string&, Vec2&);	//コンストラクタ
+	Chara(const std::string&, Vec2&);	//コンストラクタ
 	virtual ~Chara();			//デストラクタ
 	typedef std::shared_ptr<Chara> SP;
-	static SP Create(std::string&, Vec2&, bool = true);
+	static SP Create(const std::string&, Vec2&, bool = true);
 	void SetReplayEnable();
 	void SetRecordEnable();
 	void UpDate();		//更新処理

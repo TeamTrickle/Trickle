@@ -19,7 +19,8 @@ Switch::~Switch()
 bool Switch::Initialize(Vec2& pos, std::vector<std::shared_ptr<GameObject>> targets, TargetType ttype) {
 	//当たり判定の実装
 	this->CreateObject(Cube, pos, Vec2(64, 64), 0.0f);
-	image.Create((std::string)"switch.png");
+	//image.Create((std::string)"switch.png");
+	this->image = rm->GetTextureData("switch");
 	//サウンド生成
 	sound.create(soundname, false);
 	sound.volume(1.0f);
@@ -65,7 +66,7 @@ void Switch::Render2D() {
 	}
 
 	src.OffsetSize();
-	image.Draw(draw, src);
+	image->Draw(draw, src);
 
 	//看板の設置
 	{
@@ -73,12 +74,12 @@ void Switch::Render2D() {
 		signD.OffsetSize();
 		Box2D signS(256*((int)this->ttype), 256 * 3, 256, 256);
 		signS.OffsetSize();
-		this->image.Draw(signD, signS);
+		this->image->Draw(signD, signS);
 	}
 
 }
 bool Switch::Finalize() {
-	return image.Finalize();
+	return true;
 }
 void Switch::ChangeON_OFF() {
 	//切り替え時サウンドを生成

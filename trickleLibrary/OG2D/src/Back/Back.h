@@ -10,7 +10,7 @@
 */
 class Cloud : public GameObject, public TaskObject {
 	//! 雲のテクスチャ
-	Texture cloudImg;
+	Texture* cloudImg;
 	//! 雲画像の表示位置
 	Vec2 cloudPos[2];
 	//! 移動スピード
@@ -32,7 +32,7 @@ public:
 class Back : public TaskObject
 {
 	//!	背景画像データ
-	Texture backImg;
+	Texture* backImg;
 	//!	描画するサイズ
 	Vec2 size;
 	//!	スクロールを行う背景かどうか

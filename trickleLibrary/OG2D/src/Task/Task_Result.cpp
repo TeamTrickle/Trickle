@@ -17,19 +17,30 @@ Result::~Result() {
 }
 
 bool Result::Initialize() {
-	fontui.Create((std::string)"fontui.png");
-	numberui.Create((std::string)"number.png");
+	//fontui.Create((std::string)"fontui.png");
+	//numberui.Create((std::string)"number.png");
 
-	backTex.Create((std::string)"back.png");
-	this->starTex.Create((std::string)"resultstar.png");
-	this->frameTex.Create((std::string)"resultframe.png");
-	this->stareffectTex.Create((std::string)"stareffect.png");
-	this->petalTex1.Create((std::string)"resultFlower1.PNG");
-	this->petalTex2.Create((std::string)"resultFlower2.PNG");
-	this->petalTex3.Create((std::string)"resultFlower3.PNG");
-	this->petalTex4.Create((std::string)"resultFlower4.PNG");
-	this->petalTex5.Create((std::string)"resultFlower5.PNG");
+	//backTex.Create((std::string)"back.png");
+	//this->starTex.Create((std::string)"resultstar.png");
+	//this->frameTex.Create((std::string)"resultframe.png");
+	//this->stareffectTex.Create((std::string)"stareffect.png");
+	//this->petalTex1.Create((std::string)"resultFlower1.PNG");
+	//this->petalTex2.Create((std::string)"resultFlower2.PNG");
+	//this->petalTex3.Create((std::string)"resultFlower3.PNG");
+	//this->petalTex4.Create((std::string)"resultFlower4.PNG");
+	//this->petalTex5.Create((std::string)"resultFlower5.PNG");
 
+	this->fontui = rm->GetTextureData("fontui");
+	this->numberui = rm->GetTextureData("number");
+	this->backTex = rm->GetTextureData("back");
+	this->starTex = rm->GetTextureData("resultstar");
+	this->frameTex = rm->GetTextureData("resultframe");
+	this->stareffectTex = rm->GetTextureData("stareffect");
+	this->petalTex1 = rm->GetTextureData("Flower1");
+	this->petalTex2 = rm->GetTextureData("Flower2");
+	this->petalTex3 = rm->GetTextureData("Flower3");
+	this->petalTex4 = rm->GetTextureData("Flower4");
+	this->petalTex5 = rm->GetTextureData("Flower5");
 	//this->clearTex
 
 	//ƒTƒEƒ“ƒh‚Ì¶¬
@@ -206,7 +217,7 @@ void Result::UpDate() {
 						{
 							auto effect = Effect::Create(Vec2(310 + i * 200, 370), Vec2(64, 64), Vec2(256, 256), 1, 15);
 							effect->SetMode(Effect::Mode::Down);
-							effect->SetTexture(&stareffectTex);
+							effect->SetTexture(stareffectTex);
 							if (j / 2 == 0)
 							{
 								//ˆÚ“®’l‚ğ“o˜^
@@ -267,19 +278,19 @@ void Result::UpDate() {
 				switch (anim)
 				{
 				case 1:
-					effect->SetTexture(&petalTex1);
+					effect->SetTexture(petalTex1);
 					break;
 				case 2:
-					effect->SetTexture(&petalTex2);
+					effect->SetTexture(petalTex2);
 					break;
 				case 3:
-					effect->SetTexture(&petalTex3);
+					effect->SetTexture(petalTex3);
 					break;
 				case 4:
-					effect->SetTexture(&petalTex4);
+					effect->SetTexture(petalTex4);
 					break;
 				case 5:
-					effect->SetTexture(&petalTex5);
+					effect->SetTexture(petalTex5);
 					break;
 				}
 				//oŒ»‚µ‚½‰Ô‚Ñ‚ç‚Ì“®‚«‚É‚Â‚¢‚Ä
@@ -339,14 +350,14 @@ void Result::UpDate() {
 void Result::Render2D() {
 	//”wŒi
 	{
-		backTex.Draw(Box2D(0, 0, 1280, 720), Box2D(0, 0, 1280, 720));
+		backTex->Draw(Box2D(0, 0, 1280, 720), Box2D(0, 0, 1280, 720));
 	}
 	//ƒ‚ƒjƒ^[˜g
 	{
 		Box2D draw((1280 - 1400) / 2, 720 - 700 - 32, 1400, 700);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1000, 500);
-		frameTex.Draw(draw, src);
+		frameTex->Draw(draw, src);
 	}
 	//Result
 	{
@@ -354,8 +365,8 @@ void Result::Render2D() {
 		draw.OffsetSize();
 		Box2D src = Box2D(0, 64 * 2, 64 * 6, 64);
 		src.OffsetSize();
-		fontui.Rotate(-5);
-		fontui.Draw(draw, src);
+		fontui->Rotate(-5);
+		fontui->Draw(draw, src);
 	}
 	//rm->GetTextureData((std::string)"fontui")->Draw(draw, src);
 	//TIME
@@ -364,7 +375,7 @@ void Result::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 3, 64 * 4, 64);
 		src.OffsetSize();
-		fontui.Draw(draw, src);
+		fontui->Draw(draw, src);
 	}
 	//¯‚Ì˜g
 	{
@@ -372,8 +383,8 @@ void Result::Render2D() {
 			Box2D draw(starFrame[i].pos.x, starFrame[i].pos.y, starFrame[i].nowWH.x, starFrame[i].nowWH.y);
 			draw.OffsetSize();
 			Box2D src(0, 0, 256, 256);
-			starTex.Rotate(-5);
-			starTex.Draw(draw, src);
+			starTex->Rotate(-5);
+			starTex->Draw(draw, src);
 		}
 	}
 	//ƒ^ƒCƒ€
@@ -385,15 +396,15 @@ void Result::Render2D() {
 				draw.OffsetSize();
 				Box2D src(64 * num[i], 0, 64, 64);
 				src.OffsetSize();
-				numberui.Rotate(-5);
-				numberui.Draw(draw, src);
+				numberui->Rotate(-5);
+				numberui->Draw(draw, src);
 			}
 			//F
 			Box2D draw(150 + 96 * 4 + 100 + 40, 260 - 17, 64, 64);
 			draw.OffsetSize();
 			Box2D src(64 * 10, 0, 40, 64);
 			src.OffsetSize();
-			numberui.Draw(draw, src);
+			numberui->Draw(draw, src);
 		}
 	}
 	//¯
@@ -404,20 +415,14 @@ void Result::Render2D() {
 				draw.OffsetSize();
 				Box2D src(256, 0, 256, 256);
 				src.OffsetSize();
-				starTex.Rotate((float)star[i].angle);
-				starTex.Draw(draw, src);
+				starTex->Rotate((float)star[i].angle);
+				starTex->Draw(draw, src);
 			}
 		}
 	}
 }
 bool Result::Finalize() {
 	//‰ğ•úˆ—
-	this->backTex.Finalize();
-	//this->clearTex.Finalize();
-	this->frameTex.Finalize();
-	this->fontui.Finalize();
-	this->numberui.Finalize();
-	this->starTex.Finalize();
 	auto effects = OGge->GetTasks<Effect>("effect");
 	for (auto id = effects->begin(); id != effects->end(); ++id)
 	{

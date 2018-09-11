@@ -97,7 +97,8 @@ bool Map::LoadMap(const std::string& path_, const Format& format)
 	}
 	ifs.close();
 	//画像読み込み
-	this->mapimg.Create(chipimgname);
+	//this->mapimg.Create(chipimgname);
+	this->mapimg = rm->GetTextureData("map");
 	for (int i = 0; i < chip.size(); ++i)
 	{
 		//元画像チップの描画範囲の指定
@@ -296,7 +297,7 @@ void Map::Render2D()
 				{
 					Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 					draw.OffsetSize();
-					this->mapimg.Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
+					this->mapimg->Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
 				}
 			}
 		}
@@ -306,7 +307,6 @@ void Map::Render2D()
 bool Map::Finalize()
 {
 	this->chip.clear();
-	this->mapimg.Finalize();
 	this->hitBase.clear();
 	return true;
 }

@@ -74,5 +74,5 @@ public:
 	GameObject rightBase;
 
 private:
-	Texture tex;
+	Texture* tex;
 };

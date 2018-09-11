@@ -19,10 +19,11 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	animetion.AnimetionReset();
 
 	//画像関連の描画パス
-	std::string filePath = "fan.png";      //扇風機の画像
-	image.Create(filePath);
+	//std::string filePath = "fan.png";      //扇風機の画像
+	//image.Create(filePath);
+	this->image = rm->GetTextureData("fan");
 	//風の画像
-	std::string filePathWind = "wind1.png";
+	/*std::string filePathWind = "wind1.png";
 	windimage.Create(filePathWind);
 	std::string filePathWind2 = "wind2.png";
 	windimage2.Create(filePathWind2);
@@ -31,7 +32,13 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	std::string filePathWind4 = "wind4.PNG";
 	windimage4.Create(filePathWind4);
 	std::string filePathWind5 = "wind5.PNG";
-	windimage5.Create(filePathWind5);
+	windimage5.Create(filePathWind5);*/
+
+	this->windimage = rm->GetTextureData("wind1");
+	this->windimage2 = rm->GetTextureData("wind2");
+	this->windimage3 = rm->GetTextureData("wind3");
+	this->windimage4 = rm->GetTextureData("wind4");
+	this->windimage5 = rm->GetTextureData("wind5");
 
 
 	//サウンドの生成
@@ -81,19 +88,19 @@ void Fan::UpDate() {
 				switch (effectnum)
 				{
 				case 1:
-					effect->SetTexture(&windimage);
+					effect->SetTexture(windimage);
 					break;
 				case 2:
-					effect->SetTexture(&windimage2);
+					effect->SetTexture(windimage2);
 					break;
 				case 3:
-					effect->SetTexture(&windimage3);
+					effect->SetTexture(windimage3);
 					break;
 				case 4:
-					effect->SetTexture(&windimage4);
+					effect->SetTexture(windimage4);
 					break;
 				case 5:
-					effect->SetTexture(&windimage5);
+					effect->SetTexture(windimage5);
 					break;
 				}
 			}
@@ -105,19 +112,19 @@ void Fan::UpDate() {
 				switch (effectnum)
 				{
 				case 1:
-					effect->SetTexture(&windimage);
+					effect->SetTexture(windimage);
 					break;
 				case 2:
-					effect->SetTexture(&windimage2);
+					effect->SetTexture(windimage2);
 					break;
 				case 3:
-					effect->SetTexture(&windimage3);
+					effect->SetTexture(windimage3);
 					break;
 				case 4:
-					effect->SetTexture(&windimage4);
+					effect->SetTexture(windimage4);
 					break;
 				case 5:
-					effect->SetTexture(&windimage5);
+					effect->SetTexture(windimage5);
 					break;
 				}
 			}
@@ -166,13 +173,13 @@ void Fan::Render2D() {
 		src.x = k;
 	}
 
-	this->image.Draw(draw, src);
+	this->image->Draw(draw, src);
 
 	//デバッグ用
 	if (active_) WindHitBase.LineDraw();
 }
 bool Fan::Finalize() {
-	return image.Finalize();
+	return true;
 }
 void Fan::SendWind() {
 	auto water = OGge->GetTasks<Water>("water");

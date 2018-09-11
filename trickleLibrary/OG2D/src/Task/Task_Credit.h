@@ -57,7 +57,7 @@ private:
 	int nowMode;
 
 
-	Texture LadderTex;
+	Texture* LadderTex;
 
 	struct IMAGE {
 		const int DRAW_X = 0;
@@ -68,7 +68,7 @@ private:
 
 		Box2D draw;
 		Box2D src;
-		Texture tex;
+		Texture* tex;
 	};
 
 	int FRAME_NUM = 8;
@@ -81,11 +81,11 @@ private:
 	//エフェクトのカウント
 	int effCounter;
 	//花びらのエフェクト
-	Texture petalTex1;
-	Texture petalTex2;
-	Texture petalTex3;
-	Texture petalTex4;
-	Texture petalTex5;
+	Texture* petalTex1;
+	Texture* petalTex2;
+	Texture* petalTex3;
+	Texture* petalTex4;
+	Texture* petalTex5;
 
 	Sound* sound;
 	VolumeControl volControl;

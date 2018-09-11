@@ -60,7 +60,7 @@ public:
 
 
 private:
-	Texture tex;
+	Texture* tex;
 
 	std::string putsoundname;     //バケツを置く音
 	std::string dropsoundname;    //水をこぼす音
