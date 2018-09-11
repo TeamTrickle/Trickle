@@ -551,12 +551,23 @@ void Title::UpDate()
 				//クレジットに進む
 				case 1:
 				{
-					auto load = Load::Create();
-					if (load)
-					{
-						load->AddDeleteObjectName(this->GetTaskName());
-					}
-					//this->Kill();
+					auto chara = OGge->GetTask<Chara>("Chara");
+					//if (chara->position.x > 740)
+					//{
+					//	chara->ManualMove(Vec2(-10.f, 0.0f));
+					//}
+					//else
+					//{
+					//	chara->ManualMove(Vec2(10.f, 0.0f));
+					//}
+					//chara->Jump();
+					////this->cm.SetObject(&(*chara));
+					//this->mode = from8;
+
+					chara->SetDirection(Chara::Direction::RIGHT);
+					chara->Set(chara->position, Vec2(2000.f, chara->position.y), 15.f);
+					chara->AutoMove();
+					this->mode = from8;
 				}
 				break;
 				//データ消去
@@ -594,9 +605,11 @@ void Title::UpDate()
 	{
 		//降りたらロードを挟みセレクトへ移行する行動
 		auto chara = OGge->GetTask<Chara>("Chara");
-		if (chara->position.y > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
-		{
-			this->mode = Mode::End;
+		if (chara) {
+			if (chara->position.y > OGge->camera->GetPos().y + OGge->camera->GetSize().y || chara->position.x > OGge->camera->GetPos().x + OGge->camera->GetSize().x)
+			{
+				this->mode = Mode::End;
+			}
 		}
 	}
 	break;
@@ -749,7 +762,7 @@ void Title::Render2D()
 	}
 
 	//文字表示
-	if (this->mode == from7)
+	if (this->mode >= from7)
 	{
 		//start
 		{
