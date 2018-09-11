@@ -49,8 +49,7 @@ GameManager::~GameManager()
 		default:
 			break;
 		}
-	}
-	
+	}	
 }
 void GameManager::UpDate()
 {
@@ -85,15 +84,16 @@ void GameManager::UpDate()
 			auto game = OGge->GetTask<Game>("game");
 			if (game)
 			{
+				//Œ»Ý‚Ì‹L˜^‚ð•Û‘¶
+				//ƒGƒ‰[Œ´ˆö
+				this->OutData();
+				//Œ»Ý‚ÌÅ‘å‹L˜^‚Æ‚Ì”äŠr
+				this->ComparisonData();
 				auto load = Load::Create();
 				if (load)
 				{
 					load->AddDeleteObjectName(game->GetTaskName());
 				}
-				//Œ»Ý‚Ì‹L˜^‚ð•Û‘¶
-				this->OutData();
-				//Œ»Ý‚ÌÅ‘å‹L˜^‚Æ‚Ì”äŠr
-				this->ComparisonData();
 			}
 			this->isclear = true;
 		}
@@ -189,7 +189,7 @@ bool GameManager::OutData()
 		case 4:
 		case 8:
 		case 12:
-			for (int i = *MapNum - 3; i <= *MapNum - 1; ++i)
+			for (int i = (*MapNum) - 3; i <= (*MapNum) - 1; ++i)
 			{
 				std::ifstream ifs("./data/Result/save" + std::to_string(i) + ".bin", std::ios::in | std::ios::binary);
 				if (!ifs)
@@ -209,7 +209,7 @@ bool GameManager::OutData()
 				if (timer != -1)
 				{
 					ofs << "t,";
-					this->M_flag[i] = true;
+					this->M_flag[*MapNum - i] = true;
 				}
 				else
 				{
@@ -449,6 +449,7 @@ bool GameManager::OutData()
 	}
 	return true;
 }
+
 bool GameManager::ComparisonData()
 {
 	//‘O‚ÌŒ‹‰Ê‚ð“ü‚ê‚é” 
@@ -540,7 +541,7 @@ bool GameManager::ComparisonData()
 		ofs.close();
 		OG::Data_Cipher("./data/result/data" + std::to_string(*MapNum) + ".bin", "./data/result/data" + std::to_string(*MapNum) + ".bin");
 	}
-		break;
+	break;
 	}
 	
 
