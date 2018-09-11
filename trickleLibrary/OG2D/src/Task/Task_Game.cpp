@@ -472,7 +472,7 @@ bool Game::Initialize()
 	//ƒQ[ƒ€ƒNƒŠƒA”»’è‚ğ¶¬
 	auto gameprocess = GameManager::Create();
 	//‘•ü
-	auto ornament = Ornament::Create();
+	//auto ornament = Ornament::Create();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
