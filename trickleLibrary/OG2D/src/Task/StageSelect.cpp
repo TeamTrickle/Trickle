@@ -216,8 +216,8 @@ bool StageSelect::Finalize()
 	this->LadderTex.Finalize();
 	this->totitleTex.Finalize();
 	//サウンドの解放
-	delete rm->GetSoundData((std::string)"titleBGM");
-	rm->DeleteSound((std::string)"titleBGM");
+	//delete rm->GetSoundData((std::string)"titleBGM");
+	//rm->DeleteSound((std::string)"titleBGM");
 	//このオブジェクト内で生成したものを削除する
 	auto chara = OGge->GetTasks<Chara>("Chara");
 	for (auto id = (*chara).begin(); id != (*chara).end(); ++id)
