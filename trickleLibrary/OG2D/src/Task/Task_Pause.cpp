@@ -31,6 +31,9 @@ bool Pause::Initialize() {
 	texTransparentBack.Create("TransparentBack.png");
 	//テクスチャのα値
 	texColor = { 1.f,1.f,1.f,1.f };
+	for (int i = 0; i < 3; ++i) {
+		alpha[i] = 1.f;
+	}
 	//サウンドの生成
 	//カーソルの移動音
 	cursorsound.create(cursorsoundname, false);
@@ -62,12 +65,7 @@ void Pause::PauseUpDate() {
 	//テクスチャ位置更新
 	setTexPos();
 	//テクスチャのα値
-	if (isCameraMoving) {
-		texColor = { 0.f,0.f,0.f,0.1f };
-	}
-	else {
-		texColor = { 1.f,1.f,1.f,1.f };
-	}
+	setTexAlpha();
 	//カーソル更新
 	moveCursor();
 	//Xキー(Bボタン)押下処理
@@ -112,21 +110,21 @@ void Pause::Render2D() {
 		texCursor.Rotate((float)gearAng);
 		texCursor.Draw(draw, src, texColor);
 	}
-	//Restart
-	{
-		Box2D draw(RestartPos.x, RestartPos.y, 64.f * 7, 64.0f);
-		draw.OffsetSize();
-		Box2D src(0, 64 * 8, 64 * 7, 64);
-		src.OffsetSize();
-		texChoices->Draw(draw, src, texColor);
-	}
 	//Return
 	{
 		Box2D draw(ReturnPos.x, ReturnPos.y, 64.f * 11, 64.0f);
 		draw.OffsetSize();
 		Box2D src(0, 64 * 9, 64 * 11, 64);
 		src.OffsetSize();
-		texChoices->Draw(draw, src, texColor);
+		texChoices->Draw(draw, src, Color(texColor.red, texColor.green, texColor.blue, alpha[0]));
+	}
+	//Restart
+	{
+		Box2D draw(RestartPos.x, RestartPos.y, 64.f * 7, 64.0f);
+		draw.OffsetSize();
+		Box2D src(0, 64 * 8, 64 * 7, 64);
+		src.OffsetSize();
+		texChoices->Draw(draw, src, Color(texColor.red, texColor.green, texColor.blue, alpha[1]));
 	}
 	//stageselect
 	{
@@ -134,7 +132,7 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 7, 64 * 19, 64);
 		src.OffsetSize();
-		texChoices->Draw(draw, src, texColor);
+		texChoices->Draw(draw, src, Color(texColor.red, texColor.green, texColor.blue, alpha[2]));
 	}
 }
 bool Pause::Finalize() {
@@ -169,15 +167,21 @@ void Pause::MoveCamera() {
 		OGge->camera->MovePos(Vec2(stickSlopeX * 5.f, stickSlopeY * 5.f));
 		isCameraMoving = true;
 	}
-	if (stickSlopeX == 0 && stickSlopeY == 0) {
+	if (stickSlopeX >= 0.f && stickSlopeX < 0.1f
+		&&stickSlopeX <= 0 && stickSlopeX>-0.1f
+		&& stickSlopeY<= 0 && stickSlopeY>-0.1f
+		&&stickSlopeY >= 0 && stickSlopeY < 0.1f) {
 		isCameraMoving = false;
 	}
+	//if (stickSlopeX < 0 && stickSlopeY == 0) {
+	//	isCameraMoving = false;
+	//}
 }
 bool Pause::checkCameraHitMap(Vec2 v) {
-	return (v.x > 0
+	return (v.x >= 0
 		&& v.x + OGge->camera->GetSize().x < map->mapSize.x * map->DrawSize.x
-		&& v.y > 0
-		&& v.x + OGge->camera->GetSize().y < map->mapSize.y * map->DrawSize.y);
+		&& v.y >= 0
+		&& v.y + OGge->camera->GetSize().y < map->mapSize.y * map->DrawSize.y);
 }
 void Pause::setTexPos() {
 	Vec2 basePos = OGge->camera->GetSize() + OGge->camera->GetPos();
@@ -197,6 +201,25 @@ void Pause::setTexPos() {
 	default:
 		cursorPos = { 0,0 };
 		break;
+	}
+}
+void Pause::setTexAlpha() {
+	if (isCameraMoving) {
+		texColor = { 0.f,0.f,0.f,0.1f };
+	}
+	else {
+		texColor = { 1.f,1.f,1.f,1.f };
+	}
+	for (int i = 0; i < 3; ++i) {
+		if (stateNum - 1 == i) {
+			alpha[i] = 1.f;
+		}
+		else {
+			alpha[i] = 0.3f;
+		}
+		if (isCameraMoving) {
+			alpha[i] = 0.1f;
+		}
 	}
 }
 void Pause::moveCursor() {

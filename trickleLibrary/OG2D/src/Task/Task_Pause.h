@@ -18,6 +18,7 @@ class Pause : public TaskObject
 	Texture texTransparentBack;
 	//! テクスチャのカラー
 	Color texColor;
+	float alpha[3];
 	//! 位置変数
 	Vec2 RestartPos;
 	Vec2 ReturnPos;
@@ -43,6 +44,7 @@ class Pause : public TaskObject
 	bool checkCameraHitMap(Vec2 v);
 	void setTexPos();
 	void moveCursor();
+	void setTexAlpha();
 public:
 	//サウンド変数
 	Sound cursorsound;
