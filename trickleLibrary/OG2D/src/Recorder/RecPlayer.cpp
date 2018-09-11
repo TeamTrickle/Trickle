@@ -70,6 +70,9 @@ bool RecPlayer::isEventExist(const KeyState& s) {
 void RecPlayer::Reset() {
 	recData = backupData;
 	recStick = backupStick;
+	for (auto it = playerKeyState.begin(); it != playerKeyState.end(); ++it) {
+		it->second = RecDef::KeyState::Idle;
+	}
 	timer.Stop();
 	timer.Start();
 	printLog("RecPlayer --- Repeat!");
@@ -180,6 +183,12 @@ float RecPlayer::GetCurrentStickTilt(const In::AXIS& axis) {
 		}
 	}
 	return 0.f;
+}
+
+void RecPlayer::FlushCurrentQueue() {
+	while (!recData.empty()) {
+		recData.pop();
+	}
 }
 
 void RecPlayer::SetPause() {

@@ -377,6 +377,9 @@ void Chara::MoveReset()
 {
 	//0,0‚É‰Šú‰»
 	this->move = { 0,0 };
+	if (player) {
+		player->FlushCurrentQueue();
+	}
 }
 void Chara::SetDirection(const Direction& set)
 {
@@ -486,7 +489,8 @@ void Chara::SetReplayEnable()
 				return false;
 			}
 		}
-		this->move.x = judgeDirection;
+		this->move.x = 0.f;
+		this->position.x = 790.f;
 		this->direction = (judgeDirection < 0) ? Direction::LEFT : Direction::RIGHT;
 		return true;
 	});

@@ -87,6 +87,8 @@ public:
 	 */
 	float GetCurrentStickTilt(const In::AXIS&);
 
+	void FlushCurrentQueue();
+
 	void SetPause();
 	void SetPlay();
 
