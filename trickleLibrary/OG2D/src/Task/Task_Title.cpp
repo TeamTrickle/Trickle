@@ -671,7 +671,9 @@ void Title::UpDate()
 			trans_a = 0.f;
 			
 			this->demoTimer.Start();
-			this->mode = Mode::from6;
+			//6だと文字出現が不自然に飛ぶのでAnyKeyを飛ばして文字を出現させる
+			//this->mode = Mode::from6;
+			this->mode = Mode::from7;
 		}
 	}
 	break;
