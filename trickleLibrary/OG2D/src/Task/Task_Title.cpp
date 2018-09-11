@@ -552,18 +552,6 @@ void Title::UpDate()
 				case 1:
 				{
 					auto chara = OGge->GetTask<Chara>("Chara");
-					//if (chara->position.x > 740)
-					//{
-					//	chara->ManualMove(Vec2(-10.f, 0.0f));
-					//}
-					//else
-					//{
-					//	chara->ManualMove(Vec2(10.f, 0.0f));
-					//}
-					//chara->Jump();
-					////this->cm.SetObject(&(*chara));
-					//this->mode = from8;
-
 					chara->SetDirection(Chara::Direction::RIGHT);
 					chara->Set(chara->position, Vec2(2000.f, chara->position.y), 15.f);
 					chara->AutoMove();
@@ -649,7 +637,7 @@ void Title::UpDate()
 			}
 		}
 		if (clearedCnt >= 1) { ++clearedCnt; }
-		if (clearedCnt >= 60) { 
+		if (clearedCnt >= 90) { 
 			this->mode = from7;
 			clearedCnt = 0;
 		}
