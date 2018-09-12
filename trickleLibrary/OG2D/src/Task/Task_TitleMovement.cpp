@@ -13,10 +13,11 @@ TitleMovement::~TitleMovement() {
 
 bool TitleMovement::Initialize() {
 	// 背景読み込み
-	auto back = Back::Create((std::string)"back.png", 1440, 810);
+	auto back = Back::Create("back", 1440, 810);
 
 	// ロゴオブジェクト生成
-	logo.Create((std::string)"on_editing.png");
+	//logo.Create((std::string)"on_editing.png");
+	this->logo = rm->GetTextureData("on_editing");
 
 	// カメラ位置の移動、これ以上の説明が必要韓紙？
 	OGge->camera->SetPos(Vec2(0, 200));
@@ -26,7 +27,7 @@ bool TitleMovement::Initialize() {
 	auto map = Map::Create((std::string)"title.csv");
 
 	// 収録用プレイヤー実装
-	auto player = Chara::Create((std::string)"player2.png", Vec2(790.f, 638.f));
+	auto player = Chara::Create("player2", Vec2(790.f, 638.f));
 	player->SetRecordEnable();
 	
 	//　BGM装着
@@ -47,10 +48,10 @@ void TitleMovement::UpDate() {
 void TitleMovement::Render2D() {
 	//ロゴ表示
 	{
-		Box2D draw(Vec2(400, 250), logo.GetTextureSize());
+		Box2D draw(Vec2(400, 250), logo->GetTextureSize());
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, draw.w, draw.h);
-		this->logo.Draw(draw, src);
+		this->logo->Draw(draw, src);
 	}
 }
 
@@ -58,8 +59,6 @@ bool TitleMovement::Finalize() {
 	bgm->stop();
 	rm->DeleteSound((std::string)"editTitleBGM");
 	delete bgm;
-
-	logo.Finalize();
 
 	auto map = OGge->GetTask<Map>("map");
 	if (map)

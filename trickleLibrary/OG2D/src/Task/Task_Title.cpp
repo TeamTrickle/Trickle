@@ -50,7 +50,7 @@ Title::Title()
 	clearedCnt = 0;
 
 	//タグ設定
-	__super::Init((std::string)"title");
+	__super::Init("title");
 	__super::SetDrawOrder(0.98f);
 }
 
@@ -66,7 +66,7 @@ Title::~Title()
 bool Title::Initialize()
 {
 	//背景読み込み
-	auto back = Back::Create((std::string)"back.png", 1440, 810);
+	auto back = Back::Create("back", 1440, 810);
 	//ロゴオブジェクト生成
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
@@ -103,16 +103,25 @@ bool Title::Initialize()
 	//this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y ,64.f*4.f,64.f };
 
 	//画像読み込み
-	texCursor.Create("gear3.png");
-	this->texLogo.Create("logo.png");
-	this->GierLogo.Create("gearofi.png");
-	this->flowerLogo.Create("flower.png");
-	this->texEffect.Create("Effect01.png");
-	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
-	this->forTransform.Create("TransparentBackTitle.png");
-	this->canVolControl = false;     //BGMのフェードインに使用
-	
-	this->effect03.Create("starteffect.png");
+	//texCursor.Create("gear3.png");
+	//this->texLogo.Create("logo.png");
+	//this->GierLogo.Create("gearofi.png");
+	//this->flowerLogo.Create("flower.png");
+	//this->texEffect.Create("Effect01.png");
+	//this->monitorTex.Create("selectframe.png");     //モニターの画像追加
+	//this->forTransform.Create("TransparentBackTitle.png");
+	//this->canVolControl = false;     //BGMのフェードインに使用
+	//
+	//this->effect03.Create("starteffect.png");
+	this->texCursor = rm->GetTextureData("gear3");
+	this->texLogo = rm->GetTextureData("logo");
+	this->GierLogo = rm->GetTextureData("gearofi");
+	this->flowerLogo = rm->GetTextureData("flower");
+	this->texEffect = rm->GetTextureData("effect01");
+	this->monitorTex = rm->GetTextureData("selectframe");
+	this->forTransform = rm->GetTextureData("TransparentBackTitle");
+	this->effect03 = rm->GetTextureData("effect03");
+
 	
 	//サウンドの生成
 	//BGM
@@ -137,15 +146,15 @@ bool Title::Initialize()
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
 	//水読み込みと生成
 	auto water = Water::Create(Vec2(500.f, -64.f));
-	waterTex.Create((std::string)"waterTex.png");
-	water->SetTexture(&this->waterTex);
+	//waterTex.Create((std::string)"waterTex.png");
+	water->SetTexture(rm->GetTextureData("water"));
 	water->SetMaxSize(Vec2(128, 128));
 
 	//マップ生成(地面用)
 	auto map = Map::Create((std::string)"title.csv");
 	//矢印の位置で使用する
 	this->nextTaskCheck = 0;
-	auto chara = Chara::Create((std::string)"player.png", Vec2(1600, 628));
+	auto chara = Chara::Create("player", Vec2(1600, 628));
 	chara->SetPause(true);
 	//ロゴの歯車回転
 	this->gierCnt = 0;
@@ -231,7 +240,7 @@ void Title::UpDate()
 				this->isGierAng = true;
 				this->mode = from2;
 				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 5, 100, "titleEffect");
-				effect->SetTexture(&this->texEffect);
+				effect->SetTexture(this->texEffect);
 				effect->Set(effect->position, Vec2(effect->position.x, effect->position.y - 500), 15);
 				effect->SetMode(Effect::Mode::Flash);
 			}
@@ -261,7 +270,7 @@ void Title::UpDate()
 			{
 				float rand = random::GetRand(this->Logo.position.x, this->Logo.position.x + 182.f);
 				auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 32.f), Vec2(32,32), Vec2(64, 64), 1, 15, 100, "titleEffect");
-				effect_r->SetTexture(&this->texEffect);
+				effect_r->SetTexture(this->texEffect);
 				//effect_r->Set(effect_r->position, Vec2(effect_r->position.x, effect_r->position.y - 500), 15);
 				effect_r->SetMode(Effect::Mode::Down);
 				rand = random::GetRand(-10.f, 10.f);
@@ -583,7 +592,7 @@ void Title::UpDate()
 				30);
 			effect03->SetMode(Effect::Mode::Expansion);
 			effect03->SetAlphaMode(Effect::ModeAlpha::DOWN);
-			effect03->SetTexture(&this->effect03);
+			effect03->SetTexture(this->effect03);
 			effect03->SetMaxSize(Vec2(640, 128));
 		}
 	}
@@ -701,27 +710,27 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 720);
 		src.OffsetSize();
-		this->texLogo.Draw(draw, src, Color(0, 0, 0, 0));
+		this->texLogo->Draw(draw, src, Color(0, 0, 0, 0));
 	}
 	//ロゴ表示
 	{
 		Box2D draw(this->Logo.position, this->Logo.Scale);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 768);
-		this->texLogo.Draw(draw, src);
+		this->texLogo->Draw(draw, src);
 	}
 	{
 		Box2D draw(634, 380, 52, 52);
 		draw.OffsetSize();
 		Box2D src(0, 0, 128, 128);
-		this->GierLogo.Rotate((float)this->gierCnt);
-		this->GierLogo.Draw(draw, src);
+		this->GierLogo->Rotate((float)this->gierCnt);
+		this->GierLogo->Draw(draw, src);
 	}
 	{
 		Box2D draw(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)), this->Logo.Scale.x, (this->Logo.Scale.y * (this->flowerVolume / 1.f)));
 		draw.OffsetSize();
 		Box2D src(0.f, 768 - (768 * (this->flowerVolume / 1.f)), 1280.f, 768.f);
-		this->flowerLogo.Draw(draw, src);
+		this->flowerLogo->Draw(draw, src);
 	}
 
 	//モニターの表示
@@ -733,7 +742,7 @@ void Title::Render2D()
 		draw.OffsetSize();
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
 
-		this->monitorTex.Draw(draw, src);
+		this->monitorTex->Draw(draw, src);
 	}
 
 	//PressAnyButton
@@ -869,18 +878,18 @@ void Title::Render2D()
 			//カーソルの表示
 			Box2D src(0, 0, 195, 195);
 			src.OffsetSize();
-			this->texCursor.Rotate((float)this->gierCnt);
+			this->texCursor->Rotate((float)this->gierCnt);
 			if (del == yes)
 			{
 				Box2D draw(monitorSpos + 390 - 64.f * 2, 850.f, 64.0f, 64.0f);
 				draw.OffsetSize();
-				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+				texCursor->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 			}
 			if (del == no)
 			{
 				Box2D draw(monitorSpos + 390 + 64.f * 3.5f, 850.f, 64.0f, 64.0f);
 				draw.OffsetSize();
-				texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+				texCursor->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
 			}
 		}
 	}
@@ -921,29 +930,19 @@ void Title::Render2D()
 	if (this->trans_a > 0.f) {
 		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
 		Box2D src(0, 0, 1, 1);
-		forTransform.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
+		forTransform->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
 	}
 }
 
 bool Title::Finalize()
 {
-	//使用画像の解放
-	texCursor.Finalize();
-	this->texLogo.Finalize();
-	this->GierLogo.Finalize();
-	this->flowerLogo.Finalize();
-	this->texEffect.Finalize();
-	this->effect03.Finalize();
-	this->forTransform.Finalize();
 	this->canVolControl = false;
-	this->monitorTex.Finalize();
 
 	auto back = OGge->GetTasks<Back>("back");
 	for (auto id = back->begin(); id != back->end(); ++id)
 	{
 		(*id)->Kill();
 	}
-	this->waterTex.Finalize();
 
 	auto water = OGge->GetTasks<Water>("water");
 	for (auto id = (*water).begin(); id != (*water).end(); ++id)
@@ -1297,7 +1296,7 @@ void Title::BackTitleSkip()
 	this->flowerVolume = 1.0f;
 	this->tex_a = 1.0f;
 	this->isGierAng = true;
-	auto npc2 = Chara::Create((std::string)"player.png", Vec2(1600, 628));
+	auto npc2 = Chara::Create("player", Vec2(1600, 628));
 	npc2->SetPause(true);
 	this->sound->play();
 	this->skipInoutFlag = true;
@@ -1328,7 +1327,7 @@ void Title::SkipMove()
 	{
 		npc->Kill();
 	}
-	auto npc2 = Chara::Create((std::string)"player.png", Vec2(790, 639));
+	auto npc2 = Chara::Create("player", Vec2(790, 639));
 	npc2->SetReplayEnable();
 	this->sound->play();
 	this->isSkip = false;

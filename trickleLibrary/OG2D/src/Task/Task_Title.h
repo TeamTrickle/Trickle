@@ -41,19 +41,19 @@ class Title :public TaskObject
 		End,
 	};
 
-	Texture texCursor;
+	Texture* texCursor;
 
-	Texture texEffect;
-	Texture effect03;
+	Texture* texEffect;
+	Texture* effect03;
 
-	Texture GierLogo;
-	Texture flowerLogo;
+	Texture* GierLogo;
+	Texture* flowerLogo;
 
-	Texture texLogo;
+	Texture* texLogo;
 
-	Texture forTransform;
+	Texture* forTransform;
 	//テスト追加
-	Texture monitorTex;
+	Texture* monitorTex;
 	
 
 	std::string soundname;
@@ -104,7 +104,7 @@ class Title :public TaskObject
 	Box2D outtextsrc;     //モニターから出ていくときのsrcの挙動
 	float textspeed;      //選択する文字が動く速さ
 
-	Texture waterTex;
+	Texture* waterTex;
 
 	Animation cameraPos;
 	Animation cameraSize;

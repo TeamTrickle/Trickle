@@ -41,19 +41,21 @@ StageSelect::~StageSelect()
 bool StageSelect::Initialize()
 {
 	//画像の読み込み
-	this->Testdoor.Create((std::string)"door.png");
+	/*this->Testdoor.Create((std::string)"door.png");
 	this->Wall.Create((std::string)"wall2.PNG");
 	this->LadderTex.Create("mapchip2.png");
-	this->totitleTex.Create("totitle.png");
+	this->totitleTex.Create("totitle.png");*/
+	this->Testdoor = rm->GetTextureData("door");
+	this->Wall = rm->GetTextureData("wall");
+	this->LadderTex = rm->GetTextureData("map");
+	this->totitleTex = rm->GetTextureData("totitle");
 	//プレイヤーNPCの生成
-	auto chara = Chara::Create(std::string("player.png"), Vec2(400, -200));
+	auto chara = Chara::Create("player", Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
 	chara->SetAutoFlag(true);
 	//背景の描画
-	auto back = Back::Create(std::string("back.png"), Vec2(1920 * 2 + 200, 1080));
-	//雲
-	Cloud::Create("cloud1.png", 0.5f);
-	Cloud::Create("cloud2.png", 1.5f);
+	auto back = Back::Create("back", Vec2(1920 * 2 + 200, 1080));
+
 	//マップ生成
 	auto map = Map::Create(std::string("select.csv"));
 	map->SetDrawOrder(0.5f);
@@ -94,14 +96,14 @@ bool StageSelect::Initialize()
 	for (int i = 1; i <= this->doorNumber / 2; ++i)
 	{
 		auto gate = Gate::Create((490.f * i) + 100.f, 640.f);      //元データ(490.f*i)+450.f
-		gate->SetTexture(&this->Testdoor);
+		gate->SetTexture(this->Testdoor);
 		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
 	for (int i = 1; i <= this->doorNumber / 2; ++i)
 	{
 		auto gate = Gate::Create((490.f * i) + 100.f + 1920.f, 640.f);      //元データ(490.f*i)+450.f
-		gate->SetTexture(&this->Testdoor);
+		gate->SetTexture(this->Testdoor);
 		this->Entrance.emplace_back(LEFT, gate->position.x - chara->Scale.x);
 		this->Entrance.emplace_back(RIGTH, gate->position.x + gate->Scale.x);
 	}
@@ -186,8 +188,8 @@ void StageSelect::Render2D()
 		{
 			Box2D draw = Box2D(450 + (i * 1920), 600, 1500, 300);
 			draw.OffsetSize();
-			Box2D src = Box2D(0.f, 0.f, Wall.GetTextureSize().x, Wall.GetTextureSize().y);
-			this->Wall.Draw(draw, src);
+			Box2D src = Box2D(0.f, 0.f, Wall->GetTextureSize().x, Wall->GetTextureSize().y);
+			this->Wall->Draw(draw, src);
 		}
 	}
 	//ハシゴ
@@ -197,24 +199,24 @@ void StageSelect::Render2D()
 		draw.OffsetSize();
 		Box2D src(768, 256, 256, 256);
 		src.OffsetSize();
-		this->LadderTex.Draw(draw, src);
+		this->LadderTex->Draw(draw, src);
 	}
 	//totitle看板
 	{
 		Box2D draw(1920 * 2 - 500 + 200+167, 1080 - 250+83, 333, 167);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1000, 500);
-		this->totitleTex.Draw(draw, src);
+		this->totitleTex->Draw(draw, src);
 	}
 }
 
 bool StageSelect::Finalize()
 {
 	//画像の解放
-	this->Testdoor.Finalize();
-	this->Wall.Finalize();
-	this->LadderTex.Finalize();
-	this->totitleTex.Finalize();
+	//this->Testdoor.Finalize();
+	//this->Wall.Finalize();
+	//this->LadderTex.Finalize();
+	//this->totitleTex.Finalize();
 	//サウンドの解放
 	//delete rm->GetSoundData((std::string)"titleBGM");
 	//rm->DeleteSound((std::string)"titleBGM");

@@ -99,15 +99,8 @@ void Bucket::UpDate() {
 			this->capacity = 0.f;
 			//70ƒJƒEƒ“ƒg’†‚ÍŽŸ‚Ì…‚ðˆø‚«Žó‚¯‚È‚¢
 			this->invi = 70;
-			auto tex = rm->GetTextureData((std::string)"waterTex");
-			if (tex)
-			{
-				water->SetTexture(tex);
-			}
-			else
-			{
-				water->Kill();
-			}
+			//auto tex = rm->GetTextureData("water");
+			water->SetTexture(rm->GetTextureData("water"));
 			if (this->color)
 			{
 				water->SetColor(*this->color);

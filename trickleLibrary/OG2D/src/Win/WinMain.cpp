@@ -92,6 +92,7 @@ int main() {
 	Time* timer = new Time();
 	timer->Start();
 	OG::DataClear("./data/debug/time.og");
+	OG::DataClear("./data/debug/TextureErrorPath.txt");
 	//Žg—pOpenGL‚ÌVersionŽw’è
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);

@@ -4,14 +4,13 @@
 UI::UI() {}
 
 UI::~UI() {
-	tex.Finalize();
 }
 
 //座標、ファイルパス、画像分割数
 bool UI::Initialize(Vec2& renderPos, Box2D& coll, std::string& path, int life, int id, std::function<bool()> appear, std::function<bool()> vanish, int num) {
 	this->pos = Vec2(renderPos.x + 128.0f / 2.0f, renderPos.y + 128.0f / 2.0f);
 	endPos = renderPos;
-	tex.Create(path);
+	this->tex = rm->GetTextureData(path);
 	counter = 0;
 	index = 0;
 	this->num = num;
@@ -130,11 +129,10 @@ void UI::Render2D() {
 	if (!active) { return; }
 	draw = Box2D(pos.x, pos.y, nowWH.x, nowWH.y);
 	draw.OffsetSize();
-	tex.Draw(draw, srcTable[index]);
+	tex->Draw(draw, srcTable[index]);
 }
 
 bool UI::Finalize() {
-	tex.Finalize();
 	return true;
 }
 

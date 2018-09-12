@@ -103,8 +103,8 @@ bool Game::Initialize()
 	this->pipeTex = rm->GetTextureData("pipe");
 	
 	//ui¶¬
-	UImng_.reset(new UImanager());
-	UImng_->Initialize(*MapNum);
+	//UImng_.reset(new UImanager());
+	//UImng_->Initialize(*MapNum);
 	//ƒ}ƒbƒv‰Šúˆ—
 	switch (*MapNum)
 	{
@@ -529,7 +529,7 @@ void Game::UpDate()
 
 
 	//UI
-	UImng_->UpDate();
+	//UImng_->UpDate();
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()

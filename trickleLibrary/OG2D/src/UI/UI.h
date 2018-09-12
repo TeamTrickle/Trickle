@@ -7,7 +7,7 @@
 class UImanager;
 
 class UI :public GameObject,public TaskObject {
-	Texture tex;
+	Texture* tex;
 	Vec2 pos;		//À•W
 	int counter;	//ŠÔ‚Í‚©‚éB
 	int index;		//•`‰æ‚·‚ésrc

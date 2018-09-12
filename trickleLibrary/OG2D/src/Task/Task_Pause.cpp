@@ -30,7 +30,7 @@ bool Pause::Initialize() {
 	this->texCursor = rm->GetTextureData("gear2");
 	texChoices = rm->GetTextureData("fontui");
 	//texTransparentBack.Create("TransparentBack.png");
-	this->texChoices = rm->GetTextureData("TransparentBack");
+	this->texTransparentBack = rm->GetTextureData("TransparentBack");
 	//テクスチャのα値
 	texColor = { 1.f,1.f,1.f,1.f };
 	for (int i = 0; i < 3; ++i) {

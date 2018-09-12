@@ -42,7 +42,7 @@ bool Kanetuki::Initialize(Vec2& pos, Vec2 range, Angle ang, bool active) {
 	//サウンドの生成　　消火
 	soundstop.create(stopsoundname, false);
 
-	this->SetTexture(rm->GetTextureData((std::string)"fireIce"));
+	this->SetTexture(rm->GetTextureData((std::string)"fireice"));
 	this->animCnt = 0;
 	this->timeCnt = 0;
 	draw.clear();

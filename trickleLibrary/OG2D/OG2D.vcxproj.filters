@@ -306,9 +306,6 @@
     <ClCompile Include="src\Recorder\RecPlayer.cpp">
       <Filter>ソースファイル\Recorder</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_StageAlert.cpp">
-      <Filter>ソースファイル\Task\StageAlert</Filter>
-    </ClCompile>
     <ClCompile Include="src\Task\MapPreviewer.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
@@ -356,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="src\Event\ResourceLoad\ResourceLoad.cpp">
       <Filter>ソースファイル\Event\ResourceLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_StageAlert.cpp">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
