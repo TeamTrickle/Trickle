@@ -71,9 +71,9 @@ bool Title::Initialize()
 	this->Logo.CreateObject(Cube, Vec2(400, 250), Vec2(640, 384), 0.0f);
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
-	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 30.f);
+	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 15.f);
 	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
-	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 15.f);
 
 	start = non;          //startの文字の現在の状態
 	del = no;             //データを消すかどうかの選択(最初はno)
@@ -89,8 +89,8 @@ bool Title::Initialize()
 	this->creditmax = 64.f * 6;
 	this->datadeletemax = 64.f * 11;
 	//文字の初期位置指定
-	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
+	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 15.f);
+	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 15.f);
 	//文字α値
 	this->press_a = 0;
 	this->press_delta_a = 0.01f;
@@ -384,19 +384,19 @@ void Title::UpDate()
 				//文字を待機位置に移動させる処理(モニター左端へ)
 				if (startsize.x <= 0.0f)
 				{
-					startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+					startPos = Vec2(monitorSpos + 120, 624.f + 129.f + 15.f);
 				}
 				if (closesize.x <= 0.0f)
 				{
-					closePos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+					closePos = Vec2(monitorSpos + 120, 624.f + 129.f + 15.f);
 				}
 				if (dataDeletesize.x <= 0.0f)
 				{
-					dataDeletepos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+					dataDeletepos = Vec2(monitorSpos + 120, 624.f + 129.f + 15.f);
 				}
 				if (creditsize.x <= 0.0f)
 				{
-					creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 30.f);
+					creditpos = Vec2(monitorSpos + 120, 624.f + 129.f + 15.f);
 				}
 			}
 		}
@@ -416,19 +416,19 @@ void Title::UpDate()
 				//文字を待機位置に移動させる処理(モニター右端へ)
 				if (startsize.x <= 0.0f)
 				{
-					startPos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+					startPos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 15.f);
 				}
 				if (closesize.x <= 0.0f)
 				{
-					closePos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+					closePos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 15.f);
 				}
 				if (dataDeletesize.x <= 0.0f)
 				{
-					dataDeletepos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+					dataDeletepos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 15.f);
 				}
 				if (creditsize.x <= 0.0f)
 				{
-					creditpos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 30.f);
+					creditpos = Vec2(monitorEpos - 120.f, 624.f + 129.f + 15.f);
 				}
 			}
 		}
@@ -752,7 +752,7 @@ void Title::Render2D()
 			//this->monitorSpos !!モニターの左端の位置!!
 			//+ (this->monitorsize/2.f) !!モニターのサイズの半分!! ←ここまででモニターの半分の位置を求めた
 			//-835/2.f !!文字の大きさの半分!! ←文字がモニターの中心に来るように修正
-			Box2D draw(this->monitorSpos + (this->monitorsize / 2.f) - 835 / 2.f, this->startPos.y + 60, 835.f, 64.f);
+			Box2D draw(this->monitorSpos + (this->monitorsize / 2.f) - 835 / 2.f, this->startPos.y + 80, 835.f, 64.f);
 			draw.OffsetSize();
 			Box2D src(0.f, 64.f * 16, 835.f, 64.f);
 			src.OffsetSize();
