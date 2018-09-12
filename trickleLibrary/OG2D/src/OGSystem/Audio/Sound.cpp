@@ -71,6 +71,7 @@ float Sound::duration() const
 void Sound::setVolume(float maxVolume_)
 {
 	this->volume_ = maxVolume_;
+	this->volume(maxVolume_);
 }
 float Sound::getVolume() const
 {

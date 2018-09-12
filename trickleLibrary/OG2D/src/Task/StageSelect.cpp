@@ -34,7 +34,7 @@ StageSelect::~StageSelect()
 		{
 			auto nexttask = Game::Create();
 		}
-		
+
 	}
 }
 
@@ -71,15 +71,16 @@ bool StageSelect::Initialize()
 	(*board2) << "./data/monitor5.txt";
 	//サウンドの生成
 	//BGM
-	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
+	sound = rm->GetSoundData("titleBGM");
+	if (sound == nullptr)
 	{
 		sound = new Sound();
 
 		sound->create(soundname, true);
 		rm->SetSoundData((std::string)"titleBGM", sound);
 		//this->canVolControl = true;
-		sound->play();
 	}
+
 	//決定音
 	decisionsound.create(decisionsoundname, false);
 
@@ -119,17 +120,12 @@ bool StageSelect::Initialize()
 
 void StageSelect::UpDate()
 {
-	if (canVolControl)
-	{
-		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
-		{
-			sound->volume(volControl.FadeOut(this->canVolControl));
-		}
-		else
-		{
-			sound = rm->GetSoundData((std::string)"titleBGM");
-			sound->volume(volControl.FadeOut(this->canVolControl));
-		}
+	if (!sound->isplay() && this->mode == Mode::createTask) {
+		canVolControl = true;
+		sound->play();
+	}
+	if (canVolControl) {
+		sound->volume(volControl.FadeIn(true));
 	}
 	switch (this->mode)
 	{
@@ -151,7 +147,12 @@ void StageSelect::UpDate()
 	case Mode::afterMoveTask:	//決定後処理
 	{
 		this->AfterMoveTask();
-		this->canVolControl = true;
+		//this->canVolControl = true;
+		if (state != State::ToTitle) {
+			if (canVolControl) {
+				sound->setVolume(volControl.FadeOut(true));
+			}
+		}
 	}
 	break;
 	case Mode::End:		//次へ
@@ -204,7 +205,7 @@ void StageSelect::Render2D()
 	}
 	//totitle看板
 	{
-		Box2D draw(1920 * 2 - 500 + 200+167, 1080 - 250+83, 333, 167);
+		Box2D draw(1920 * 2 - 500 + 200 + 167, 1080 - 250 + 83, 333, 167);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1000, 500);
 		this->totitleTex->Draw(draw, src);
@@ -226,8 +227,9 @@ bool StageSelect::Finalize()
 	//this->LadderTex.Finalize();
 	//this->totitleTex.Finalize();
 	//サウンドの解放
-	delete sound;
-	sound = nullptr;
+	if (this->state != State::ToTitle) {
+		sound->stop();
+	}
 	//このオブジェクト内で生成したものを削除する
 	auto chara = OGge->GetTasks<Chara>("Chara");
 	for (auto id = (*chara).begin(); id != (*chara).end(); ++id)
@@ -356,7 +358,7 @@ void StageSelect::WaitTask()
 							}
 						}
 						this->nowPos -= 2;
-						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y),10.f);
+						chara->Set(chara->position, Vec2(this->Entrance[this->nowPos].second, chara->position.y), 10.f);
 					}
 				}
 				else
@@ -542,7 +544,7 @@ void StageSelect::WaitTask()
 		}
 		else
 		{
-			if(chara->position.x >= 2016.f && chara->position.x <= 2144.f && this->isPause)
+			if (chara->position.x >= 2016.f && chara->position.x <= 2144.f && this->isPause)
 			{
 				OGge->SetPause(true);
 			}
@@ -552,7 +554,7 @@ void StageSelect::WaitTask()
 void StageSelect::AfterMoveTask()
 {
 	auto chara = OGge->GetTask<Chara>("Chara");
-	
+
 	if (chara)
 	{
 		if (!chara->isAutoPlay())
