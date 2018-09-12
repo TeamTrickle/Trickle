@@ -49,6 +49,7 @@ bool StageSelect::Initialize()
 	this->Wall = rm->GetTextureData("wall");
 	this->LadderTex = rm->GetTextureData("map");
 	this->totitleTex = rm->GetTextureData("totitle");
+	this->moreTex = rm->GetTextureData("more");
 	//ƒvƒŒƒCƒ„[NPC‚Ì¶¬
 	auto chara = Chara::Create("player", Vec2(400, -200));
 	chara->SetDirection(Chara::Direction::RIGHT);
@@ -207,6 +208,13 @@ void StageSelect::Render2D()
 		draw.OffsetSize();
 		Box2D src(0, 0, 1000, 500);
 		this->totitleTex->Draw(draw, src);
+	}
+	//moreŠÅ”Â
+	{
+		Box2D draw(1750, 1080 - 167, 333, 167);
+		draw.OffsetSize();
+		Box2D src(0, 0, 1000, 500);
+		this->moreTex->Draw(draw, src);
 	}
 }
 
