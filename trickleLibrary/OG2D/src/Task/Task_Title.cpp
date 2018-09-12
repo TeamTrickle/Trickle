@@ -39,7 +39,7 @@ Title::Title()
 	this->soundstart = true;
 	this->sound = nullptr;
 	this->skipInoutFlag = false;
-
+	
 	this->pressAnyKey = false;           //Bキーを押したかどうかの判断
 	this->nowmoveL = false;
 	this->nowmoveR = false;
@@ -73,7 +73,7 @@ bool Title::Initialize()
 	//文字位置設定
 	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 30.f);
 	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
-	closePos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
 
 	start = non;          //startの文字の現在の状態
 	del = no;             //データを消すかどうかの選択(最初はno)
@@ -90,7 +90,7 @@ bool Title::Initialize()
 	this->datadeletemax = 64.f * 11;
 	//文字の初期位置指定
 	this->dataDeletepos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
-	this->creditpos = Vec2(1345.f - 135.f, 624.f + 129.f + 30.f);
+	this->creditpos = Vec2(1345.f-135.f, 624.f + 129.f + 30.f);
 	//文字α値
 	this->press_a = 0;
 	this->press_delta_a = 0.01f;
@@ -111,23 +111,17 @@ bool Title::Initialize()
 	this->monitorTex.Create("selectframe.png");     //モニターの画像追加
 	this->forTransform.Create("TransparentBackTitle.png");
 	this->canVolControl = false;     //BGMのフェードインに使用
-
+	
 	this->effect03.Create("starteffect.png");
-
+	
 	//サウンドの生成
 	//BGM
 	//sound = new Sound();
 	//sound->create(soundname, true);
 	//rm->SetSoundData((std::string)"titleBGM", sound);
 	sound = rm->GetSoundData("titleBGM");
-	if (sound == nullptr) {
-		sound = new Sound();
-		sound->create("title.wav", true);
-		sound->volume(0.0f);
-		rm->SetSoundData("titleBGM", sound);
-	}
 	//カーソルの移動音
-	cursorsound.create(soundcursorname, false);
+	cursorsound.create(soundcursorname,false);
 	cursorsound.volume(1.0f);
 	//決定音
 	decisionsound.create(sounddecisionname, false);
@@ -138,7 +132,7 @@ bool Title::Initialize()
 
 	//モニターのサイズ初期化
 	this->monitorsize = 1180.f;
-
+	
 	//カメラ位置の移動
 	OGge->camera->SetPos(Vec2(OGge->window->GetSize().x / 2, 0.f));
 	//水読み込みと生成
@@ -266,7 +260,7 @@ void Title::UpDate()
 			for (int i = 0; i < 7; ++i)
 			{
 				float rand = random::GetRand(this->Logo.position.x, this->Logo.position.x + 182.f);
-				auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 32.f), Vec2(32, 32), Vec2(64, 64), 1, 15, 100, "titleEffect");
+				auto effect_r = Effect::Create(Vec2(rand, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 32.f), Vec2(32,32), Vec2(64, 64), 1, 15, 100, "titleEffect");
 				effect_r->SetTexture(&this->texEffect);
 				//effect_r->Set(effect_r->position, Vec2(effect_r->position.x, effect_r->position.y - 500), 15);
 				effect_r->SetMode(Effect::Mode::Down);
@@ -436,92 +430,92 @@ void Title::UpDate()
 		case 0:          //選択肢がstart
 		{
 			startPos = TextMoveout(startPos);
-			startsize = TextSizeout(startPos, startsize, startmax);
+			startsize = TextSizeout(startPos, startsize,startmax);
 			if (nowmoveL)
 			{
 				start = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos, creditsize, startsize, creditmax);
-				creditsize = TextSizein(creditpos, creditsize, creditmax);
+				creditpos = TextMovein(creditpos,creditsize,startsize,creditmax);
+				creditsize = TextSizein(creditpos, creditsize,creditmax);
 			}
 			if (nowmoveR)
 			{
 				start = out;
 
 				close = in;
-				closePos = TextMovein(closePos, closesize, startsize, closemax);
-				closesize = TextSizein(closePos, closesize, closemax);
+				closePos = TextMovein(closePos,closesize,startsize,closemax);
+				closesize = TextSizein(closePos, closesize,closemax);
 			}
 		}
-		break;
+			break;
 		case 1:           //選択肢がcredit
 		{
 			creditpos = TextMoveout(creditpos);
-			creditsize = TextSizeout(creditpos, creditsize, creditmax);
+			creditsize = TextSizeout(creditpos, creditsize,creditmax);
 			if (nowmoveL)
 			{
 				credit = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos, dataDeletesize, creditsize, datadeletemax);
-				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize, datadeletemax);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,creditsize,datadeletemax);
+				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize,datadeletemax);
 			}
 			if (nowmoveR)
 			{
 				credit = out;
 
 				start = in;
-				startPos = TextMovein(startPos, startsize, creditsize, startmax);
-				startsize = TextSizein(startPos, startsize, startmax);
+				startPos = TextMovein(startPos,startsize,creditsize,startmax);
+				startsize = TextSizein(startPos, startsize,startmax);
 			}
 		}
-		break;
+			break;
 		case 2:            //選択肢がdelete
 		{
 			dataDeletepos = TextMoveout(dataDeletepos);
-			dataDeletesize = TextSizeout(dataDeletepos, dataDeletesize, datadeletemax);
+			dataDeletesize = TextSizeout(dataDeletepos, dataDeletesize,datadeletemax);
 			if (nowmoveL)
 			{
 				dataDelete = out;
 
 				close = in;
-				closePos = TextMovein(closePos, closesize, dataDeletesize, closemax);
-				closesize = TextSizein(closePos, closesize, closemax);
+				closePos = TextMovein(closePos,closesize,dataDeletesize,closemax);
+				closesize = TextSizein(closePos, closesize,closemax);
 			}
 			if (nowmoveR)
 			{
 				dataDelete = out;
 
 				credit = in;
-				creditpos = TextMovein(creditpos, creditsize, dataDeletesize, creditmax);
-				creditsize = TextSizein(creditpos, creditsize, creditmax);
+				creditpos = TextMovein(creditpos,creditsize,dataDeletesize,creditmax);
+				creditsize = TextSizein(creditpos, creditsize,creditmax);
 			}
 		}
-		break;
+			break;
 		case 3:            //選択肢がexit
 		{
 			closePos = TextMoveout(closePos);
-			closesize = TextSizeout(closePos, closesize, closemax);
+			closesize = TextSizeout(closePos, closesize,closemax);
 			if (nowmoveL)
 			{
 				close = out;
 
 				start = in;
-				startPos = TextMovein(startPos, startsize, closesize, startmax);
-				startsize = TextSizein(startPos, startsize, startmax);
+				startPos = TextMovein(startPos,startsize,closesize,startmax);
+				startsize = TextSizein(startPos, startsize,startmax);
 			}
 			if (nowmoveR)
 			{
 				close = out;
 
 				dataDelete = in;
-				dataDeletepos = TextMovein(dataDeletepos, dataDeletesize, closesize, datadeletemax);
-				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize, datadeletemax);
+				dataDeletepos = TextMovein(dataDeletepos,dataDeletesize,closesize,datadeletemax);
+				dataDeletesize = TextSizein(dataDeletepos, dataDeletesize,datadeletemax);
 			}
 		}
-		break;
-		//------------------------------------------------------------------------------------
+			break;
+			//------------------------------------------------------------------------------------
 		}
 		if (demoTimer.GetTime() >= DEMO_LIMIT) {
 			this->mode = Mode::from10;
@@ -643,7 +637,7 @@ void Title::UpDate()
 			}
 		}
 		if (clearedCnt >= 1) { ++clearedCnt; }
-		if (clearedCnt >= 90) {
+		if (clearedCnt >= 90) { 
 			this->mode = from7;
 			clearedCnt = 0;
 		}
@@ -675,7 +669,7 @@ void Title::UpDate()
 		trans_a -= 0.01f;
 		if (trans_a <= 0.0f) {
 			trans_a = 0.f;
-
+			
 			this->demoTimer.Start();
 			//6だと文字出現が不自然に飛ぶのでAnyKeyを飛ばして文字を出現させる
 			//this->mode = Mode::from6;
@@ -732,7 +726,7 @@ void Title::Render2D()
 
 	//モニターの表示
 	{
-
+		
 		Box2D draw(Vec2(((OGge->camera->GetSize().x / 2) + OGge->camera->GetPos().x - 1180 / 2.f), 783.f), Vec2(1180.f, 256.f));
 		//Box2D draw(Vec2(monitorSpos, 783.f), Vec2(1180.f, 256.f));
 
@@ -768,7 +762,7 @@ void Title::Render2D()
 			{
 				Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
 				src.OffsetSize();
-
+				
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			//一番初めは真ん中にstartを表示
@@ -778,7 +772,7 @@ void Title::Render2D()
 				src.OffsetSize();
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
-			if (start == out)
+			if(start == out)
 			{
 				Box2D src = outtextsrc;
 				src.OffsetSize();
@@ -853,7 +847,7 @@ void Title::Render2D()
 	if (mode == from9)
 	{
 		if (clearedCnt >= 1) {
-			if ((clearedCnt / 10) % 3 != 0)
+			if((clearedCnt / 10) % 3 != 0)
 			{
 				Box2D draw{ monitorSpos + 390, 850.f,64.f * 5,64.f };
 				draw.OffsetSize();
@@ -890,6 +884,38 @@ void Title::Render2D()
 			}
 		}
 	}
+
+	////カーソルの表示
+	//{
+	//	//表示位置、大きさは仮ゲームスタート
+	//	Box2D draw(cursorPos[this->cursorNum].x, cursorPos[this->cursorNum].y, 64.0f, 64.0f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 195, 195);
+	//	src.OffsetSize();
+	//	this->texCursor.Rotate((float)this->gierCnt);
+	//	texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+	//	Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + cursorPos[this->cursorNum].w, cursorPos[this->cursorNum].y, 64.f, 64.f);
+	//	draw2.OffsetSize();
+	//	texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
+	//}
+	////終了
+	//{
+	//	Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 64, 64*4, 64);
+	//	src.OffsetSize();
+	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+	//}
+	////スタート
+	//{
+	//	//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
+	//	Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
+	//	draw.OffsetSize();
+	//	Box2D src(0, 0, 64*5, 64);
+	//	src.OffsetSize();
+	//	//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
+	//}
 
 	//画面転換用黒いやつ
 	if (this->trans_a > 0.f) {
@@ -930,7 +956,7 @@ bool Title::Finalize()
 		(*id)->Kill();
 	}
 	auto Npc = OGge->GetTasks<Chara>("Chara");
-	for (auto id = Npc->begin(); id != Npc->end(); ++id)
+	for(auto id = Npc->begin(); id != Npc->end();++id)
 	{
 		(*id)->Kill();
 	}
@@ -967,7 +993,7 @@ bool Title::Finalize()
 		}
 		//次を生成しない場合Soundデータを解放する
 		//9.11 解放ではなく停止にする、解放は~OGTK
-		if (cursorNum != 0 && cursorNum != 1) {
+		if (cursorNum != 0) {
 			sound->stop();
 			//if (this->sound)
 			//{
@@ -1004,7 +1030,7 @@ Vec2 Title::TextMoveout(Vec2 pos)
 {
 	if (this->nowmoveL)
 	{
-		if (pos.x >= this->monitorSpos + 120.f)   //モニターのフレーム分(120)
+		if (pos.x >= this->monitorSpos+120.f)   //モニターのフレーム分(120)
 		{
 			this->textspeed = 16.f;
 			pos.x -= textspeed;
@@ -1012,13 +1038,13 @@ Vec2 Title::TextMoveout(Vec2 pos)
 	}
 	if (this->nowmoveR)
 	{
-		if (pos.x < monitorEpos - 120.f)
+		if (pos.x < monitorEpos-120.f)
 		{
 			this->textspeed = 15.f;
 			pos.x += textspeed;
 		}
 	}
-	if (nowmoveL == false && nowmoveR == false)
+	if(nowmoveL==false && nowmoveR==false)
 	{
 		this->textspeed = 0.f;
 		cursorIsPlay = true;
@@ -1027,7 +1053,7 @@ Vec2 Title::TextMoveout(Vec2 pos)
 }
 
 //textがモニターの内側に入ってくる動き
-Vec2 Title::TextMovein(Vec2 pos, Vec2 size, Vec2 outsize, float maxsize)      //必要止める場所指定用
+Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //必要止める場所指定用
 {
 	if (this->nowmoveL)
 	{
@@ -1058,7 +1084,7 @@ Vec2 Title::TextMovein(Vec2 pos, Vec2 size, Vec2 outsize, float maxsize)      //
 
 	if (this->nowmoveR)
 	{
-		if (pos.x <= monitorSpos + (monitorsize / 2.f) - maxsize / 2)
+		if(pos.x <= monitorSpos + (monitorsize / 2.f) - maxsize / 2)
 		{
 			if (size.x >= maxsize)
 			{
@@ -1072,7 +1098,7 @@ Vec2 Title::TextMovein(Vec2 pos, Vec2 size, Vec2 outsize, float maxsize)      //
 			this->cursorIsPlay = true;
 		}
 
-		if (pos.x >= monitorSpos + (monitorsize / 2.f) - maxsize / 2 && outsize.x <= 0.f)
+		if(pos.x >= monitorSpos + (monitorsize / 2.f) - maxsize / 2 && outsize.x <= 0.f)
 		{
 			if (cursorNum > 0)
 			{
@@ -1089,11 +1115,11 @@ Vec2 Title::TextMovein(Vec2 pos, Vec2 size, Vec2 outsize, float maxsize)      //
 }
 
 //textの出ていくときの横サイズ変更処理
-Vec2 Title::TextSizeout(Vec2 pos, Vec2 size, float maxsize)
+Vec2 Title::TextSizeout(Vec2 pos,Vec2 size ,float maxsize)
 {
 	if (this->nowmoveL)
 	{
-		if (pos.x < this->monitorSpos + 120.f)
+		if(pos.x < this->monitorSpos+120.f)
 		{
 			if (size.x >= 0.0f)
 			{
@@ -1110,11 +1136,11 @@ Vec2 Title::TextSizeout(Vec2 pos, Vec2 size, float maxsize)
 	if (this->nowmoveR)
 	{
 		//この位置より右側に入ってもsizeが0になっていない
-		if (pos.x + size.x > this->monitorEpos - 120.f)       //ここでひっかかってる
+		if (pos.x+size.x > this->monitorEpos-120.f)       //ここでひっかかってる
 		{
 			if (size.x >= 0.0f)
 			{
-				size.x -= 15;
+				size.x -= 15; 
 			}
 			if (size.x < 15)
 			{
@@ -1137,7 +1163,7 @@ Vec2 Title::TextSizein(Vec2 pos, Vec2 size, float maxsize)        //必要最大
 	{
 		if (size.x <= maxsize)
 		{
-			size.x += 15.f;
+			size.x +=15.f;
 		}
 		intextsrc = Box2D(0.f, 0.f, size.x, 64.f);
 	}

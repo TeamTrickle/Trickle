@@ -68,15 +68,14 @@ bool StageSelect::Initialize()
 	(*board2) << "./data/monitor5.txt";
 	//サウンドの生成
 	//BGM
-	sound = rm->GetSoundData("titleBGM");
-	if (sound == nullptr)
+	if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
 	{
 		sound = new Sound();
 
 		sound->create(soundname, true);
 		rm->SetSoundData((std::string)"titleBGM", sound);
-		this->canVolControl = true;
-		//sound->play();
+		//this->canVolControl = true;
+		sound->play();
 	}
 	//決定音
 	decisionsound.create(decisionsoundname, false);
@@ -119,15 +118,20 @@ void StageSelect::UpDate()
 {
 	if (canVolControl)
 	{
-		if (!sound->isplay()) {
-			sound->volume(volControl.FadeIn(true));
+		if (rm->GetSoundData((std::string)"titleBGM") == nullptr)
+		{
+			sound->volume(volControl.FadeOut(this->canVolControl));
+		}
+		else
+		{
+			sound = rm->GetSoundData((std::string)"titleBGM");
+			sound->volume(volControl.FadeOut(this->canVolControl));
 		}
 	}
 	switch (this->mode)
 	{
 	case Mode::createTask:	//生成から落下と硬直
 	{
-		sound->volume(volControl.FadeIn(true));
 		this->CreateTask();
 	}
 	break;
@@ -149,7 +153,6 @@ void StageSelect::UpDate()
 	break;
 	case Mode::End:		//次へ
 	{
-		sound->volume(volControl.FadeOut(true));
 		auto load = Load::Create();
 		if (load)
 		{
@@ -213,8 +216,6 @@ bool StageSelect::Finalize()
 	this->LadderTex.Finalize();
 	this->totitleTex.Finalize();
 	//サウンドの解放
-	delete sound;
-	sound = nullptr;
 	//delete rm->GetSoundData((std::string)"titleBGM");
 	//rm->DeleteSound((std::string)"titleBGM");
 	//このオブジェクト内で生成したものを削除する
