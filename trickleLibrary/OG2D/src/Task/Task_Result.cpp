@@ -31,7 +31,7 @@ bool Result::Initialize() {
 	//this->petalTex5.Create((std::string)"resultFlower5.PNG");
 
 	this->fontui = rm->GetTextureData("fontui");
-	this->numberui = rm->GetTextureData("number");
+	this->numberui = rm->GetTextureData("number.png");
 	this->backTex = rm->GetTextureData("back");
 	this->starTex = rm->GetTextureData("resultstar");
 	this->frameTex = rm->GetTextureData("resultframe");

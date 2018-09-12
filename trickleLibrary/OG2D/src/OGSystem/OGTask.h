@@ -11,4 +11,5 @@ public:
 	void _myGameInitialize();		//GammeEngineの初期化時に設定したい処理を行う初期化関数
 	void StartTaskObject();			//開始時に生成したいタスクを指定する関数
 	virtual ~OGTK();
+	void UpDate();
 };

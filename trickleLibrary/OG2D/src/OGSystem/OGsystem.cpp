@@ -295,5 +295,12 @@ void EngineSystem::ShowNameAddedObject()
 	}
 	std::cout << std::endl;
 }
+void EngineSystem::AllKill()
+{
+	for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
+	{
+		id->second->Kill();
+	}
+}
 EngineSystem* OGge;
 ResourceManager* rm;

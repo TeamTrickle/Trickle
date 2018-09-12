@@ -208,10 +208,6 @@ void Title::UpDate()
 			this->gierCnt = 0;
 		}
 	}
-	if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
-	{
-		GameManager::ResetData();
-	}
 	switch (this->mode)
 	{
 	case from1:	//水出現から水消滅まで

@@ -95,6 +95,10 @@ public:
 	*@brief	:登録されているタスクを表示する
 	*/
 	void ShowNameAddedObject();
+	/**
+	*@brief	:全タスク削除
+	*/
+	void AllKill();
 	//タスク検索(最初の同名のタスクを返す)
 	template <class T> std::shared_ptr<T> GetTask(const std::string& taskName)
 	{
