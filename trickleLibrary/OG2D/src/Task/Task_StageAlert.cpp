@@ -189,7 +189,7 @@ void StageAlert::Render2D() {
 			draw.OffsetSize();
 			Box2D src = srcs[d.first];
 			src.OffsetSize();
-			(d.first)->Rotate(0);
+			(d.first)->Rotate(180);
 			(d.first)->Draw(draw, src);
 		}
 
