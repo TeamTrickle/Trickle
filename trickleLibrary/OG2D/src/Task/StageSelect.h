@@ -35,6 +35,7 @@ class StageSelect : public TaskObject
 	Texture* Wall;           //壁の画像
 	Texture* LadderTex;
 	Texture* totitleTex;		//タイトルに戻る看板
+	Texture* moreTex;
 
 	//サウンドのファイル名格納
 	std::string soundname;     
