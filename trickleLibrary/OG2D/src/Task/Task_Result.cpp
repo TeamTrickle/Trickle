@@ -57,7 +57,7 @@ bool Result::Initialize() {
 	this->effCounter = 0;
 
 	this->nowMode = Mode1;
-	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
+	auto npc = Chara::Create("player", Vec2(-120, 64 * 8));
 	npc->SetDirection(Chara::Direction::RIGHT);
 	npc->Set(Vec2(-120, 64 * 8), Vec2(64 * 2, 64 * 8), 15.f);
 	Map::Create((std::string)"result.csv");

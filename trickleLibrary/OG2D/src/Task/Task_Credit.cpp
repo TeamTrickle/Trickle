@@ -37,7 +37,7 @@ bool Credit::Initialize()
 	this->frame[5].tex.Create((std::string)"credit6.png");
 	this->frame[6].tex.Create((std::string)"credit7.png");
 	this->frame[7].tex.Create((std::string)"credit8.png");*/
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < FRAME_NUM; ++i)
 	{
 		this->frame[i].tex = rm->GetTextureData("credit" + std::to_string(i + 1));
 	}
@@ -292,7 +292,7 @@ void Credit::UpDate()
 void Credit::Render2D()
 {
 	//ƒtƒŒ[ƒ€
-	for (int i = 0; i < FRAME_NUM + 1; ++i)
+	for (int i = 0; i < FRAME_NUM; ++i)
 	{
 		frame[i].tex->Draw(frame[i].draw, frame[i].src);
 	}
@@ -464,7 +464,7 @@ bool Credit::LoadSize()
 	//_is‚É“ü‚Á‚Ä‚¢‚é•¶š—ñ‚©‚ç','‚Ü‚Å‚Ì•¶š‚ğtext‚É‚¢‚ê‚é
 	std::getline(_is, text, '\t');
 
-	for (int i = 0; i < FRAME_NUM+1; ++i) {
+	for (int i = 0; i < FRAME_NUM; ++i) {
 		std::string lineText;
 		std::getline(ifs, lineText);
 		std::istringstream  ss_lt(lineText);
@@ -486,7 +486,7 @@ bool Credit::LoadSize()
 }
 void Credit::SetSize()
 {
-	for (int i = 0; i < FRAME_NUM + 1; ++i) {
+	for (int i = 0; i < FRAME_NUM; ++i) {
 		frame[i].draw.x = (float)frame[i].imageSize[frame->DRAW_X];
 		frame[i].draw.y = (float)frame[i].imageSize[frame->DRAW_Y];
 		frame[i].draw.w = (float)frame[i].imageSize[frame->DRAW_W];
