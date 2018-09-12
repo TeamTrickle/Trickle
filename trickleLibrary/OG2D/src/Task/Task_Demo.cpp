@@ -26,6 +26,7 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 		std::cout << "デモプレイファイルオープンエラー!" << std::endl;
 		return false;
 	}
+	startTime = 0.f;
 	videoFPS = (float)cap.get(CV_CAP_PROP_FPS);
 	delay = 0.3f / videoFPS;
 	Vec2 winSize = OGge->window->GetSize();
