@@ -36,7 +36,6 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 
 	__super::Init((std::string)"demo");
 	__super::SetDrawOrder(1.1f);
-	this->startTime = 0.0f;
 	return true;
 }
 

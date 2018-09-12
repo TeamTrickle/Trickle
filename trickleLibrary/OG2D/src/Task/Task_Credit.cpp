@@ -50,7 +50,7 @@ bool Credit::Initialize()
 	this->LadderTex.Create("mapchip2.png");
 	//チャラタスク生成
 	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
-	npc->SetDirection(Chara::Direction::RIGHT);
+	npc->SetDirection(Chara::Direction::RIGHT); 
 	npc->Set(Vec2(-120, 64 * 8), Vec2(64 * 2, 64 * 8), 15.f);
 	OGge->camera->SetSize(Vec2(1280, 720));
 
@@ -63,18 +63,18 @@ bool Credit::Initialize()
 	{
 		SetSize();
 	}
+	//テスト修正
 	//BGM
 	sound = rm->GetSoundData((std::string)"titleBGM");
-	//sound->play();
 	this->soundIsplay = true;
 
-
+	
 	return true;
 }
 
 void Credit::UpDate()
 {
-	////BGMのフェードイン
+	//BGMのフェードイン
 	//sound->volume(volControl.FadeIn(true));
 	if (soundIsplay)
 	{
@@ -210,7 +210,7 @@ void Credit::UpDate()
 			{
 				int x = random::GetRand(-768, 1800);
 
-				auto effect = Effect::Create(Vec2(x + 7400, -500 + 550), Vec2(256, 256), Vec2(256, 256), 1, 400);
+				auto effect = Effect::Create(Vec2(x+7400, -500 + 550), Vec2(256, 256), Vec2(256, 256), 1, 400);
 				effect->SetMode(Effect::Mode::Down);
 
 				//画像の種類にランダムをかける
@@ -267,7 +267,6 @@ void Credit::UpDate()
 
 	if (nowMode == MODE9) {
 		npc->AutoMoveX();
-		sound->volume(volControl.FadeOut(true));
 		if (!npc->isAutoPlayX()) {
 			auto load = Load::Create();
 			if (load)
@@ -292,15 +291,15 @@ void Credit::Render2D()
 	{
 		Box2D draw(3800.f, i*128.f + 64, 128.f, 128.f);
 		draw.OffsetSize();
-		Box2D src(256 * 3, 256, 256, 256);
+		Box2D src(256*3, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
 	}
 	//梯子の上段
 	{
-		Box2D draw(3800.f, 1 * 128.f + 64, 128.f, 128.f);
+		Box2D draw(3800.f, 1*128.f+64, 128.f, 128.f);
 		draw.OffsetSize();
-		Box2D src(256 * 2, 256, 256, 256);
+		Box2D src(256*2, 256, 256, 256);
 		src.OffsetSize();
 		this->LadderTex.Draw(draw, src);
 	}
@@ -460,7 +459,7 @@ bool Credit::LoadSize()
 	//_isに入っている文字列から','までの文字をtextにいれる
 	std::getline(_is, text, '\t');
 
-	for (int i = 0; i < FRAME_NUM + 1; ++i) {
+	for (int i = 0; i < FRAME_NUM+1; ++i) {
 		std::string lineText;
 		std::getline(ifs, lineText);
 		std::istringstream  ss_lt(lineText);
@@ -502,7 +501,7 @@ void Credit::CreditJump(int start, int time)
 {
 	auto npc = OGge->GetTask<Chara>("Chara");
 	//ジャンプが始まるフレームと終わるフレームを指定
-	if (jumpTimeCnt > start && jumpTimeCnt < start + time) {
+	if (jumpTimeCnt > start && jumpTimeCnt < start+time) {
 		npc->AutoJump();
 	}
 }
