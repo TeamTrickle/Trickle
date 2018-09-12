@@ -71,6 +71,7 @@ class StageSelect : public TaskObject
 	Easing camera_y;
 
 	bool canVolControl;
+	bool canFadeOut;
 
 public:
 	StageSelect();

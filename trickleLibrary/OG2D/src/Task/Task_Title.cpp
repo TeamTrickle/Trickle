@@ -72,7 +72,6 @@ bool Title::Initialize()
 	this->Logo.Radius = { 1.0f,0.5f };
 	//文字位置設定
 	startPos = Vec2(720.f - 155.f, 624.f + 129.f + 15.f);
-	//closePos = Vec2(720.f - 128.f, 624.f + 129.f + 30.f);
 	closePos=Vec2(1345.f - 135.f, 624.f + 129.f + 15.f);
 
 	start = non;          //startの文字の現在の状態
@@ -94,25 +93,7 @@ bool Title::Initialize()
 	//文字α値
 	this->press_a = 0;
 	this->press_delta_a = 0.01f;
-
-	//使わなくなってる
-	//this->textPos[0] = { this->startPos,Vec2(256,64) };
-	//this->textPos[1] = { this->closePos,Vec2(256,64) };
-	////配列管理を行う
-	//this->cursorPos[0] = { this->startPos.x - 30.f - 64.f,this->startPos.y ,320.f,64.f };
-	//this->cursorPos[1] = { this->closePos.x - 30.f - 64.f,this->closePos.y ,64.f*4.f,64.f };
-
-	//画像読み込み
-	//texCursor.Create("gear3.png");
-	//this->texLogo.Create("logo.png");
-	//this->GierLogo.Create("gearofi.png");
-	//this->flowerLogo.Create("flower.png");
-	//this->texEffect.Create("Effect01.png");
-	//this->monitorTex.Create("selectframe.png");     //モニターの画像追加
-	//this->forTransform.Create("TransparentBackTitle.png");
-	//this->canVolControl = false;     //BGMのフェードインに使用
-	//
-	//this->effect03.Create("starteffect.png");
+	//画像
 	this->texCursor = rm->GetTextureData("gear3");
 	this->texLogo = rm->GetTextureData("logo");
 	this->GierLogo = rm->GetTextureData("gearofi");
@@ -124,10 +105,8 @@ bool Title::Initialize()
 
 	
 	//サウンドの生成
+	this->canVolControl = false;
 	//BGM
-	//sound = new Sound();
-	//sound->create(soundname, true);
-	//rm->SetSoundData((std::string)"titleBGM", sound);
 	sound = rm->GetSoundData("titleBGM");
 	//カーソルの移動音
 	cursorsound.create(soundcursorname,false);
@@ -230,10 +209,10 @@ void Title::UpDate()
 			if (this->timeCnt < 81)
 			{
 				OGge->camera->MovePos(Vec2(0, 10));
+				this->isGierAng = true;
 			}
 			else
 			{
-				this->isGierAng = true;
 				this->mode = from2;
 				auto effect = Effect::Create(Vec2(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)) - 96.f), Vec2(128, 128), Vec2(64, 64), 1, 5, 100, "titleEffect");
 				effect->SetTexture(this->texEffect);
@@ -904,38 +883,6 @@ void Title::Render2D()
 		}
 	}
 
-	////カーソルの表示
-	//{
-	//	//表示位置、大きさは仮ゲームスタート
-	//	Box2D draw(cursorPos[this->cursorNum].x, cursorPos[this->cursorNum].y, 64.0f, 64.0f);
-	//	draw.OffsetSize();
-	//	Box2D src(0, 0, 195, 195);
-	//	src.OffsetSize();
-	//	this->texCursor.Rotate((float)this->gierCnt);
-	//	texCursor.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-	//	Box2D draw2(cursorPos[this->cursorNum].x + 64.0f + (30.f * 2.f) + cursorPos[this->cursorNum].w, cursorPos[this->cursorNum].y, 64.f, 64.f);
-	//	draw2.OffsetSize();
-	//	texCursor.Draw(draw2, src, Color(1.0f, 1.0f, 1.0f, this->cursor_a));
-	//}
-	////終了
-	//{
-	//	Box2D draw(closePos.x, closePos.y, 64.f*4, 64.f/* 256.f, 64.f*/);
-	//	draw.OffsetSize();
-	//	Box2D src(0, 64, 64*4, 64);
-	//	src.OffsetSize();
-	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-	//}
-	////スタート
-	//{
-	//	//Box2D draw(startPos.x, startPos.y, 256.f, 128.f);
-	//	Box2D draw(startPos.x, startPos.y, 320.f, 64.f);
-	//	draw.OffsetSize();
-	//	Box2D src(0, 0, 64*5, 64);
-	//	src.OffsetSize();
-	//	//texStart.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-	//	rm->GetTextureData((std::string)"fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
-	//}
-
 	//画面転換用黒いやつ
 	if (this->trans_a > 0.f) {
 		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
@@ -1003,19 +950,10 @@ bool Title::Finalize()
 		}
 		//次を生成しない場合Soundデータを解放する
 		//9.11 解放ではなく停止にする、解放は~OGTK
-		if (cursorNum != 0) {
+		if (cursorNum != 0 && cursorNum != 1) {
 			sound->stop();
-			//if (this->sound)
-			//{
-			//	delete this->sound;
-			//	this->sound = nullptr;
-			//}
 		}
 	}
-	//else
-	//{
-
-	//}
 	return true;
 }
 
@@ -1309,7 +1247,10 @@ void Title::BackTitleSkip()
 	this->isGierAng = true;
 	auto npc2 = Chara::Create("player", Vec2(1600, 628));
 	npc2->SetPause(true);
-	this->sound->play();
+	if (!this->sound->isplay()) {
+		this->sound->play();
+	}
+	this->canVolControl = false;
 	this->skipInoutFlag = true;
 }
 

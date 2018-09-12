@@ -17,6 +17,7 @@ StageSelect::StageSelect()
 	this->soundname = "title.wav";      //サウンドのファイル名格納
 	this->decisionsoundname = "decision.wav";
 	this->canVolControl = false;
+	this->canFadeOut = false;
 	this->isPause = false;
 }
 
@@ -41,10 +42,6 @@ StageSelect::~StageSelect()
 bool StageSelect::Initialize()
 {
 	//画像の読み込み
-	/*this->Testdoor.Create((std::string)"door.png");
-	this->Wall.Create((std::string)"wall2.PNG");
-	this->LadderTex.Create("mapchip2.png");
-	this->totitleTex.Create("totitle.png");*/
 	this->Testdoor = rm->GetTextureData("door");
 	this->Wall = rm->GetTextureData("wall");
 	this->LadderTex = rm->GetTextureData("map");
@@ -72,14 +69,14 @@ bool StageSelect::Initialize()
 	//サウンドの生成
 	//BGM
 	sound = rm->GetSoundData("titleBGM");
-	if (sound == nullptr)
-	{
-		sound = new Sound();
+	//if (sound == nullptr)	//
+	//{
+	//	sound = new Sound();
 
-		sound->create(soundname, true);
-		rm->SetSoundData((std::string)"titleBGM", sound);
-		//this->canVolControl = true;
-	}
+	//	sound->create(soundname, true);
+	//	rm->SetSoundData((std::string)"titleBGM", sound);
+	//	//this->canVolControl = true;
+	//}
 
 	//決定音
 	decisionsound.create(decisionsoundname, false);
@@ -124,8 +121,8 @@ void StageSelect::UpDate()
 		canVolControl = true;
 		sound->play();
 	}
-	if (canVolControl) {
-		sound->volume(volControl.FadeIn(true));
+	if (canVolControl && this->mode != afterMoveTask) {
+		sound->volume(volControl.FadeIn(canVolControl));
 	}
 	switch (this->mode)
 	{
@@ -149,9 +146,11 @@ void StageSelect::UpDate()
 		this->AfterMoveTask();
 		//this->canVolControl = true;
 		if (state != State::ToTitle) {
-			if (canVolControl) {
-				sound->setVolume(volControl.FadeOut(true));
-			}
+			this->canVolControl = false;
+			this->canFadeOut = true;
+		}
+		if (canFadeOut) {
+			sound->volume(volControl.FadeOut(canFadeOut));
 		}
 	}
 	break;
@@ -221,12 +220,7 @@ void StageSelect::Render2D()
 
 bool StageSelect::Finalize()
 {
-	//画像の解放
-	//this->Testdoor.Finalize();
-	//this->Wall.Finalize();
-	//this->LadderTex.Finalize();
-	//this->totitleTex.Finalize();
-	//サウンドの解放
+	//サウンドの停止
 	if (this->state != State::ToTitle) {
 		sound->stop();
 	}
