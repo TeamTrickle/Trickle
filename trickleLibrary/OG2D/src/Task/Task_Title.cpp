@@ -108,6 +108,7 @@ bool Title::Initialize()
 	this->canVolControl = false;
 	//BGM
 	sound = rm->GetSoundData("titleBGM");
+	sound->looping(true);
 	//カーソルの移動音
 	cursorsound.create(soundcursorname,false);
 	cursorsound.volume(1.0f);
