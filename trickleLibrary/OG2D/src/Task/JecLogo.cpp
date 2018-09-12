@@ -3,8 +3,7 @@
 #include "Load\LoadLogo.h"
 LogoTask::LogoTask()
 {
-	this->logo = new Texture();
-	logo->Create("JecLogo.png");
+	this->logo = rm->GetTextureData("jeclogo");
 	this->logo_a = 0.f;
 	this->back = Color(0, 0, 0, 0);
 	this->mode = Mode::back_In;
@@ -12,7 +11,6 @@ LogoTask::LogoTask()
 }
 LogoTask::~LogoTask()
 {
-	delete this->logo;
 	if (this->GetNextTask() && !OGge->GetDeleteEngine())
 	{
 		Title::Create();

@@ -54,12 +54,12 @@ private:
 	bool active_;						//自分が稼働しているならtrue(注：スイッチのboolと同じではない)
 
 	Dir dir;		//向き
-	Texture image;
-	Texture windimage;      //風の画像
-	Texture windimage2;     //風の画像2
-	Texture windimage3;      //風の画像
-	Texture windimage4;      //風の画像
-	Texture windimage5;      //風の画像
+	Texture* image;
+	Texture* windimage;      //風の画像
+	Texture* windimage2;     //風の画像2
+	Texture* windimage3;      //風の画像
+	Texture* windimage4;      //風の画像
+	Texture* windimage5;      //風の画像
 
 	const Box2D Src = { 0,0,768 / 3,256 };
 	float range;

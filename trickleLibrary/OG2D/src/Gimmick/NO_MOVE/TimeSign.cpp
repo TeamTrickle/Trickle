@@ -29,7 +29,7 @@ bool TimeSign::Initialize(const std::string& basePath, const Box2D& pos) {
 		t = Box2D(0.f, 0.f, 0.f, 0.f);
 
 	//base.Create(basePath);
-	base = rm->GetTextureData((std::string)basePath);
+	base = rm->GetTextureData(basePath);
 	originPos = pos;
 
 	__super::Init((std::string)"timesign");
@@ -105,7 +105,7 @@ void TimeSign::setAtlas(const std::string& path,
 						const Box2D& initPos = Box2D(0, 0, 0, 0)) {
 	ClearNumberAtlas();
 	//numberAtlas.Create(path);
-	numberAtlas = rm->GetTextureData((std::string)path);
+	numberAtlas = rm->GetTextureData(path);
 	timerDraws[0] = initPos;
 	timerDraws[0].x = originPos.x + initPos.x;
 	timerDraws[0].y = originPos.y + initPos.y;

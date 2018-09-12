@@ -92,6 +92,7 @@ int main() {
 	Time* timer = new Time();
 	timer->Start();
 	OG::DataClear("./data/debug/time.og");
+	OG::DataClear("./data/debug/TextureErrorPath.txt");
 	//使用OpenGLのVersion指定
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -156,8 +157,8 @@ int main() {
 	//ゲームエンジンの内容を解放
 	delete timer;
 	delete MapNum;
-	delete ogtk;
 	delete OGge;
+	delete ogtk;
 	delete rm;
 	//GLFWのライブラリを終了する
 	glfwTerminate();

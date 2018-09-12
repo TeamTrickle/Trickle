@@ -44,7 +44,8 @@ bool Block::Initialize(Vec2& pos) {
 	GameObject::CreateObject(Objform::Cube, pos, Vec2(160.f, 160.f), 0.f); 
 	GameObject::objectTag = "Block";
 
-	tex.Create((std::string)"block.png");
+	//tex.Create((std::string)"block.png");
+	this->tex = rm->GetTextureData("block");
 	__super::Init((std::string)"block");
 
 	isPushed = false;
@@ -93,11 +94,10 @@ void Block::Render2D() {
 	draw.OffsetSize();
 	Box2D src(0, 0, 256, 256);
 	src.OffsetSize();
-	tex.Draw(draw, src);
+	tex->Draw(draw, src);
 }
 
 bool Block::Finalize() {
-	tex.Finalize();
 	return true;
 }
 

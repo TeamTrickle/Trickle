@@ -97,7 +97,8 @@ bool Map::LoadMap(const std::string& path_, const Format& format)
 	}
 	ifs.close();
 	//画像読み込み
-	this->mapimg.Create(chipimgname);
+	//this->mapimg.Create(chipimgname);
+	this->mapimg = rm->GetTextureData("map");
 	for (int i = 0; i < chip.size(); ++i)
 	{
 		//元画像チップの描画範囲の指定
@@ -200,7 +201,7 @@ void Map::ObjectCreateCheck(const std::string& text, int x_index, int y_index)
 	if (text == "p")
 	{
 		auto player = Player::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
-		player->SetTexture(rm->GetTextureData((std::string)"playerTex"));
+		player->SetTexture(rm->GetTextureData("player"));
 		return;
 	};
 	if (text == "b")
@@ -211,36 +212,36 @@ void Map::ObjectCreateCheck(const std::string& text, int x_index, int y_index)
 	if (text == "g")
 	{
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
-		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetTexture(rm->GetTextureData("goal"));
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
+		goalDirection->SetTextrue(rm->GetTextureData("goalarrow"), rm->GetTextureData("arrowflower"));
 		return;
 	}
 	if (text == "gred")
 	{
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
-		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetTexture(rm->GetTextureData("goal"));
 		goal->SetColor(Paint::PaintColor::Red);
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
+		goalDirection->SetTextrue(rm->GetTextureData("goalarrow"), rm->GetTextureData("arrowflower"));
 		return;
 	}
 	if (text == "gblue")
 	{
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
-		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetTexture(rm->GetTextureData("goal"));
 		goal->SetColor(Paint::PaintColor::Blue);
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
+		goalDirection->SetTextrue(rm->GetTextureData("goalarrow"), rm->GetTextureData("arrowflower"));
 		return;
 	}
 	if (text == "gpurple")
 	{
 		auto goal = Goal::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index));
-		goal->SetTexture(rm->GetTextureData((std::string)"goalTex"));
+		goal->SetTexture(rm->GetTextureData("goal"));
 		goal->SetColor(Paint::PaintColor::Purple);
 		auto goalDirection = GoalDirection::Create(goal);
-		goalDirection->SetTextrue(rm->GetTextureData((std::string)"goalDirectionTex"), rm->GetTextureData((std::string)"arrowflowerTex"));
+		goalDirection->SetTextrue(rm->GetTextureData("goalarrow"), rm->GetTextureData("arrowflower"));
 		return;
 	}
 	if (text == "t") 
@@ -254,19 +255,19 @@ void Map::ObjectCreateCheck(const std::string& text, int x_index, int y_index)
 	if (text == "paintred")
 	{
 		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Red);
-		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		paint->SetTexture(rm->GetTextureData("paint"));
 		return;
 	}
 	if (text == "paintblue")
 	{
 		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Blue);
-		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		paint->SetTexture(rm->GetTextureData("paint"));
 		return;
 	}
 	if (text == "paintpurple")
 	{
 		auto paint = Paint::Create(Vec2(this->DrawSize.x * x_index, this->DrawSize.y * y_index), Vec2(64, 64), Paint::PaintColor::Purple);
-		paint->SetTexture(rm->GetTextureData((std::string)"paintTex"));
+		paint->SetTexture(rm->GetTextureData("paint"));
 		return;
 	}
 	if (text == "w") {
@@ -296,7 +297,7 @@ void Map::Render2D()
 				{
 					Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 					draw.OffsetSize();
-					this->mapimg.Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
+					this->mapimg->Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
 				}
 			}
 		}
@@ -306,7 +307,6 @@ void Map::Render2D()
 bool Map::Finalize()
 {
 	this->chip.clear();
-	this->mapimg.Finalize();
 	this->hitBase.clear();
 	return true;
 }

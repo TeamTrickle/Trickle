@@ -57,26 +57,28 @@ StageAlert::SP StageAlert::Create(bool flag_, const Box2D& winSize)
 #define TEXTURE_SIZE(X) (int)X.GetTextureSize()
 bool StageAlert::Initialize(const Box2D& winSize) {
 	// ƒŠƒ\[ƒX‰Šú‰»
-	background.Create((std::string)"selectframe2.png");
-	background.Rotate(180.f);
-	clearFlag.Create((std::string)"selectflower.png");
-	clearStarTex = rm->GetTextureData((std::string)"Ster.png");
-	if (clearStarTex == nullptr) {
+	//background.Create((std::string)"selectframe2.png");
+	this->background = rm->GetTextureData("selectframe2");
+	background->Rotate(180.f);
+	//clearFlag.Create((std::string)"selectflower.png");
+	this->clearFlag = rm->GetTextureData("selectflower");
+	clearStarTex = rm->GetTextureData("Ster");
+	/*if (clearStarTex == nullptr) {
 		clearStarTex = new Texture();
 		clearStarTex->Create((std::string)"Ster.png");
 		rm->SetTextureData((std::string)"Ster.png", clearStarTex);
-	}
-	normalStarTex = rm->GetTextureData((std::string)"SterB.png");
-	if (normalStarTex == nullptr) {
+	}*/
+	normalStarTex = rm->GetTextureData("SterB");
+	/*if (normalStarTex == nullptr) {
 		normalStarTex = new Texture();
 		normalStarTex->Create((std::string)"SterB.png");
 		rm->SetTextureData((std::string)"SterB.png", normalStarTex);
-	}
+	}*/
 
 	windowSize = winSize;
-	draws.insert({ &background, Box2D(350, 0, 1625, 650) });
-	srcs.insert ({ &background, Box2D(0, 0,	TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y) });
-	Box2D batch = Box2D((int)draws[&background].x + 450, (int)draws[&background].y + 195, 50, 50);
+	draws.insert({ background, Box2D(350, 0, 1625, 650) });
+	srcs.insert ({ background, Box2D(0.f, 0.f,	background->GetTextureSize().x,background->GetTextureSize().y) });
+	Box2D batch = Box2D((int)draws[background].x + 450, (int)draws[background].y + 195, 50, 50);
 	for (int i = 0; i < starFixedDraw.size(); ++i) {
 		starFixedDraw[i] = batch;
 		achievementFixedDraw[i] = batch;
@@ -86,19 +88,19 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 	}
 
 	missionDraw = Box2D(
-		(int)draws[&background].x + 195,
-		(int)draws[&background].y + 220,
+		(int)draws[background].x + 195,
+		(int)draws[background].y + 220,
 		260, 64
 	);
 	missionSrc = Box2D(0, 643, 420, 62);
 
-	titleDraw = draws[&background];
+	titleDraw = draws[background];
 	titleDraw.x += 530;
 	titleDraw.y += 80;
 	titleDraw.w = 600;
 	titleDraw.h = 110;
 
-	clearFlagDraw = draws[&background];
+	clearFlagDraw = draws[background];
 	clearFlagDraw.x += 1200;
 	clearFlagDraw.y += 70;
 	clearFlagDraw.w = 270;
@@ -121,9 +123,9 @@ bool StageAlert::Initialize(const Box2D& winSize) {
 
 void StageAlert::positioning()
 {
-	draws[&background] = Box2D((int)position.x, (int)position.y, 1625, 650);
-	srcs[&background] = Box2D(0, 0, TEXTURE_SIZE(background).x, TEXTURE_SIZE(background).y);
-	Box2D batch = Box2D((int)draws[&background].x + 450, (int)draws[&background].y + 195, 50, 50);
+	draws[background] = Box2D((int)position.x, (int)position.y, 1625, 650);
+	srcs[background] = Box2D(Vec2(0, 0), background->GetTextureSize());
+	Box2D batch = Box2D((int)draws[background].x + 450, (int)draws[background].y + 195, 50, 50);
 	for (int i = 0; i < starFixedDraw.size(); ++i) {
 		starFixedDraw[i] = batch;
 		achievementFixedDraw[i] = batch;
@@ -133,19 +135,19 @@ void StageAlert::positioning()
 	}
 
 	missionDraw = Box2D(
-		(int)draws[&background].x + 195,
-		(int)draws[&background].y + 220,
+		(int)draws[background].x + 195,
+		(int)draws[background].y + 220,
 		260, 64
 	);
 	missionSrc = Box2D(0, 643, 420, 62);
 
-	titleDraw = draws[&background];
+	titleDraw = draws[background];
 	titleDraw.x += 530;
 	titleDraw.y += 80;
 	titleDraw.w = 600;
 	titleDraw.h = 110;
 
-	clearFlagDraw = draws[&background];
+	clearFlagDraw = draws[background];
 	clearFlagDraw.x += 1200;
 	clearFlagDraw.y += 70;
 	clearFlagDraw.w = 270;
@@ -235,27 +237,26 @@ void StageAlert::Render2D() {
 		src = currentRes->clearSrc;
 		draw.OffsetSize();
 		src.OffsetSize();
-		clearFlag.Draw(draw, src);
+		clearFlag->Draw(draw, src);
 	}
 }
 
 void StageAlert::Finalize() {
 	(*previewer).Kill();
 	for (auto& d : draws) {
-		d.first->Finalize();
+		//d.first->Finalize();
 	}
 	for (auto& r : infoRes) {
 		delete r.second;
 	}
-	clearFlag.Finalize();
-	if (rm->GetTextureData((std::string)"Ster.png") != nullptr) {
+	/*if (rm->GetTextureData((std::string)"Ster.png") != nullptr) {
 		rm->DeleteTexture((std::string)"Ster.png");
 		delete clearStarTex;
 	}
 	if (rm->GetTextureData((std::string)"SterB.png") != nullptr) {
 		rm->DeleteTexture((std::string)"SterB.png");
 		delete normalStarTex;
-	}
+	}*/
 }
 
 inline Box2D StageAlert::GetFixedCameraCoord(const Box2D& origin) const {

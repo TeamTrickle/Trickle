@@ -107,7 +107,7 @@ StageInfoRes::StageInfoRes(const std::string& filePath) {
 }
 
 StageInfoRes::~StageInfoRes() {
-	atlas->Finalize();
+	/*atlas->Finalize();
 	if (rm->GetTextureData(atlasFileName) != nullptr) {
 		atlas->Finalize();
 		delete atlas;
@@ -119,7 +119,7 @@ StageInfoRes::~StageInfoRes() {
 			delete mapInfo[i];
 		}
 		rm->DeleteTexture(mapInfoName[i]);
-	}
+	}*/
 }
 
 bool StageInfoRes::isThisAchievementClear(const int& idx) const

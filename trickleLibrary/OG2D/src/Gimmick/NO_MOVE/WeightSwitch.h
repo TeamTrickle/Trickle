@@ -8,8 +8,8 @@ class WeightSwitch :public GameObject, public TaskObject
 {
 	float totalmass;        //スイッチに乗っている物の合計質量を格納
 	float maxmass;          //扉が開く重さ
-	Texture switch1;
-	Texture switch2;
+	Texture* switch1;
+	Texture* switch2;
 	std::string taskName;
 	Box2D draw;
 	Box2D src;

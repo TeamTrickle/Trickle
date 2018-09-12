@@ -13,9 +13,9 @@
 class Pause : public TaskObject
 {
 	//! 画像、あとでResoureManagerに登録する
-	Texture texCursor;
+	Texture* texCursor;
 	Texture* texChoices;
-	Texture texTransparentBack;
+	Texture* texTransparentBack;
 	//! テクスチャのカラー
 	Color texColor;
 	float alpha[3];

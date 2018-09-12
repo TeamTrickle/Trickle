@@ -78,7 +78,7 @@ private:
 	//!	描画マップ配列
 	std::vector<Box2D> chip;
 	//!	使用画像情報
-	Texture mapimg;
+	Texture* mapimg;
 	//!	元画像の縦横サイズ
 	Vec2 chipsize;
 	//!	スマートポインタ

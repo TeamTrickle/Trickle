@@ -51,7 +51,8 @@ bool Bucket::Initialize(Vec2& pos)
 	//サウンド生成　水がバケツにあたった音
 	sound.create(soundname, false);
 
-	tex.Create((std::string)"bucket.png");
+	//tex.Create((std::string)"bucket.png");
+	this->tex = rm->GetTextureData("bucket");
 	__super::Init((std::string)"bucket");
 	__super::SetDrawOrder(0.5f);
 	this->IsOutCheck = false;
@@ -98,15 +99,8 @@ void Bucket::UpDate() {
 			this->capacity = 0.f;
 			//70カウント中は次の水を引き受けない
 			this->invi = 70;
-			auto tex = rm->GetTextureData((std::string)"waterTex");
-			if (tex)
-			{
-				water->SetTexture(tex);
-			}
-			else
-			{
-				water->Kill();
-			}
+			//auto tex = rm->GetTextureData("water");
+			water->SetTexture(rm->GetTextureData("water"));
 			if (this->color)
 			{
 				water->SetColor(*this->color);
@@ -167,13 +161,12 @@ void Bucket::Render2D() {
 		}
 	}
 	src.OffsetSize();
-	tex.Rotate(this->angle);
-	tex.Draw(draw, src);
+	tex->Rotate(this->angle);
+	tex->Draw(draw, src);
 	this->WaterHitObj.LineDraw();
 }
 
 bool Bucket::Finalize() {
-	tex.Finalize();
 	if (this->color)
 	{
 		delete this->color;

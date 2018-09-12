@@ -32,7 +32,7 @@ public:
 		Fan,
 	};
 private:
-	Texture image;
+	Texture* image;
 	std::string soundname;		//サウンドのファイル名格納
 	std::string taskName;		//検索用
 	bool isON_;					//稼働中かどうか

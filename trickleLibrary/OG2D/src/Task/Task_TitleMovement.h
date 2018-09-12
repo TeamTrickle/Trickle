@@ -25,5 +25,5 @@ public:
 private:
 	Sound*				bgm;
 	CameraManager		cm;
-	Texture				logo;
+	Texture				*logo;
 };

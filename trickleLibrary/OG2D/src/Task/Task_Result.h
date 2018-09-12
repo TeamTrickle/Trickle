@@ -38,22 +38,22 @@ private:
 	};
 	Mode nowMode;
 
-	Texture backTex;
+	Texture* backTex;
 	//Texture resultTex;
-	Texture frameTex;
+	Texture* frameTex;
 	//Texture timeTex;
 	//Texture starFrameTex;
-	Texture starTex;
-	Texture clearTex;
-	Texture fontui;			//仮、本番で消す
-	Texture numberui;
-	Texture stareffectTex;
+	Texture* starTex;
+	Texture* clearTex;
+	Texture* fontui;			//仮、本番で消す
+	Texture* numberui;
+	Texture* stareffectTex;
 	//花びらのエフェクト
-	Texture petalTex1;
-	Texture petalTex2;
-	Texture petalTex3;
-	Texture petalTex4;
-	Texture petalTex5;
+	Texture* petalTex1;
+	Texture* petalTex2;
+	Texture* petalTex3;
+	Texture* petalTex4;
+	Texture* petalTex5;
 
 	//サウンドのファイル名格納
 	std::string soundname;

@@ -26,9 +26,11 @@ Pause::~Pause() {
 }
 bool Pause::Initialize() {
 	//画像読み込み
-	texCursor.Create((std::string)"gear2.png");
+	//texCursor.Create((std::string)"gear2.png");
+	this->texCursor = rm->GetTextureData("gear2");
 	texChoices = rm->GetTextureData("fontui");
-	texTransparentBack.Create("TransparentBack.png");
+	//texTransparentBack.Create("TransparentBack.png");
+	this->texTransparentBack = rm->GetTextureData("TransparentBack");
 	//テクスチャのα値
 	texColor = { 1.f,1.f,1.f,1.f };
 	for (int i = 0; i < 3; ++i) {
@@ -99,7 +101,7 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 720);
 		src.OffsetSize();
-		texTransparentBack.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
+		texTransparentBack->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
 	}
 	//カーソルの表示
 	{
@@ -107,8 +109,8 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 0, 200, 200);
 		src.OffsetSize();
-		texCursor.Rotate((float)gearAng);
-		texCursor.Draw(draw, src, texColor);
+		texCursor->Rotate((float)gearAng);
+		texCursor->Draw(draw, src, texColor);
 	}
 	//Return
 	{
@@ -136,10 +138,6 @@ void Pause::Render2D() {
 	}
 }
 bool Pause::Finalize() {
-	//使用画像の解放
-	texCursor.Finalize();
-	texTransparentBack.Finalize();
-
 	return true;
 }
 Pause::SP Pause::Create(bool flag_)

@@ -162,6 +162,12 @@
     <Filter Include="ソースファイル\Task\JecLogo">
       <UniqueIdentifier>{780d195c-7f0b-4d1a-83a4-bd521a4efadf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Event">
+      <UniqueIdentifier>{0a478665-f8be-490f-bdb0-c50c80fd0392}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Event\ResourceLoad">
+      <UniqueIdentifier>{3de754e3-d842-4450-a68c-5d64fd6833ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Object\Object.cpp">
@@ -300,9 +306,6 @@
     <ClCompile Include="src\Recorder\RecPlayer.cpp">
       <Filter>ソースファイル\Recorder</Filter>
     </ClCompile>
-    <ClCompile Include="src\Task\Task_StageAlert.cpp">
-      <Filter>ソースファイル\Task\StageAlert</Filter>
-    </ClCompile>
     <ClCompile Include="src\Task\MapPreviewer.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
@@ -344,6 +347,15 @@
     </ClCompile>
     <ClCompile Include="src\OGSystem\Font\TextureFont.cpp">
       <Filter>ソースファイル\OGSystem\System\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Event\Event.cpp">
+      <Filter>ソースファイル\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Event\ResourceLoad\ResourceLoad.cpp">
+      <Filter>ソースファイル\Event\ResourceLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Task\Task_StageAlert.cpp">
+      <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -506,9 +518,6 @@
     <ClInclude Include="src\Gimmick\NO_MOVE\TimeSign.h">
       <Filter>ソースファイル\GIMMCK\NO_MOVE_GIMMCK</Filter>
     </ClInclude>
-    <ClInclude Include="src\Map\Ornament.h">
-      <Filter>ソースファイル\Map</Filter>
-    </ClInclude>
     <ClInclude Include="src\Task\StageInfoRes.h">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClInclude>
@@ -535,6 +544,15 @@
     </ClInclude>
     <ClInclude Include="src\OGSystem\randmais.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\Event.h">
+      <Filter>ソースファイル\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\ResourceLoad\ResourceLoad.h">
+      <Filter>ソースファイル\Event\ResourceLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Ornament.h">
+      <Filter>ソースファイル\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

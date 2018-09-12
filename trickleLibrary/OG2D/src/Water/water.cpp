@@ -78,6 +78,8 @@ Water::Water(const Vec2& pos)
 	//カウンター初期化
 	this->iceCnt = 0;
 	this->fireCnt = 0;
+
+	this->tex = rm->GetTextureData("water");
 }
 
 Water::~Water()
@@ -177,7 +179,7 @@ void Water::UpDate()
 					float rand = random::GetRand(this->position.x + 12, this->position.x + this->maxSize.x - 12.f);
 					auto water = Water::Create(Vec2(rand, this->position.y + this->maxSize.x / 2));
 					water->SetMaxSize(Vec2(32, 32));
-					water->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+					water->SetTexture(rm->GetTextureData("water"));
 					water->SetWaterVolume(this->volume / 5.f);
 					water->SetColor(this->color);
 				}
@@ -943,16 +945,16 @@ bool Water::SetColor(const Paint::PaintColor& color)
 	switch (this->color)
 	{
 	case Paint::PaintColor::Red:
-		this->SetTexture(rm->GetTextureData((std::string)"waterRed"));
+		this->SetTexture(rm->GetTextureData((std::string)"waterred"));
 		break;
 	case Paint::PaintColor::Blue:
-		this->SetTexture(rm->GetTextureData((std::string)"waterBlue"));
+		this->SetTexture(rm->GetTextureData((std::string)"waterblue"));
 		break;
 	case Paint::PaintColor::Purple:
-		this->SetTexture(rm->GetTextureData((std::string)"waterPurple"));
+		this->SetTexture(rm->GetTextureData((std::string)"waterpurple"));
 		break;
 	default:
-		this->SetTexture(rm->GetTextureData((std::string)"waterTex"));
+		this->SetTexture(rm->GetTextureData((std::string)"water"));
 		break;
 	}
 	return true;

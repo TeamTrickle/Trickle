@@ -21,9 +21,10 @@ Back::Back(const std::string& path, int size_x, int size_y)
 
 void Back::Init(const std::string& path)
 {
-	Cloud::Create("cloud1.png", 0.5f);
-	Cloud::Create("cloud2.png", 1.5f);
-	this->backImg.Create(path);
+	Cloud::Create("cloud1", 0.5f);
+	Cloud::Create("cloud2", 1.5f);
+	//this->backImg.Create(path);
+	this->backImg = rm->GetTextureData(path);
 	__super::Init("back");
 	__super::SetDrawOrder(0.0f);
 	this->isScroll = false;
@@ -36,7 +37,6 @@ void Back::Init(const std::string& path)
 
 Back::~Back()
 {
-	this->backImg.Finalize();
 	if (this->mapSize)
 	{
 		delete this->mapSize;
@@ -75,15 +75,15 @@ void Back::Render2D()
 		}
 		Box2D draw(this->texPos->x, this->texPos->y, this->size.x, this->size.y);
 		draw.OffsetSize();
-		Box2D src(0.f, 0.f, this->backImg.GetTextureSize().x, this->backImg.GetTextureSize().y);
-		this->backImg.Draw(draw, src);
+		Box2D src(0.f, 0.f, this->backImg->GetTextureSize().x, this->backImg->GetTextureSize().y);
+		this->backImg->Draw(draw, src);
 	}
 	else
 	{
 		Box2D draw(OGge->camera->GetPos(), this->size);
 		draw.OffsetSize();
-		Box2D src(0.f, 0.f, this->backImg.GetTextureSize().x, this->backImg.GetTextureSize().y);
-		this->backImg.Draw(draw, src);
+		Box2D src(0.f, 0.f, this->backImg->GetTextureSize().x, this->backImg->GetTextureSize().y);
+		this->backImg->Draw(draw, src);
 	}
 }
 
@@ -239,7 +239,8 @@ std::shared_ptr<Cloud> Cloud::Create(const std::string & path, float speed)
 }
 
 void Cloud::Initialize(const std::string & path, float speed) {
-	cloudImg.Create(path);
+	//cloudImg.Create(path);
+	this->cloudImg = rm->GetTextureData(path);
 	cloudPos[0] = Vec2(0, 0);
 	cloudPos[1] = Vec2(-1920, 0);
 	this->speed = speed;
@@ -261,6 +262,6 @@ void Cloud::Render2D() {
 		Box2D draw(cloudPos[i].x, cloudPos[i].y, 1920.f, 1080.f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 720);
-		cloudImg.Draw(draw, src);
+		cloudImg->Draw(draw, src);
 	}
 }

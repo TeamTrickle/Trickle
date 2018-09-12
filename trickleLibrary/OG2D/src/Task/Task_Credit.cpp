@@ -29,27 +29,37 @@ Credit::~Credit()
 bool Credit::Initialize()
 {
 	//画像生成
-	this->frame[0].tex.Create((std::string)"credit1.png");
+	/*this->frame[0].tex.Create((std::string)"credit1.png");
 	this->frame[1].tex.Create((std::string)"credit2.png");
 	this->frame[2].tex.Create((std::string)"credit3.png");
 	this->frame[3].tex.Create((std::string)"credit4.png");
 	this->frame[4].tex.Create((std::string)"credit5.png");
 	this->frame[5].tex.Create((std::string)"credit6.png");
 	this->frame[6].tex.Create((std::string)"credit7.png");
-	this->frame[7].tex.Create((std::string)"credit8.png");
+	this->frame[7].tex.Create((std::string)"credit8.png");*/
+	for (int i = 0; i < 8; ++i)
+	{
+		this->frame[i].tex = rm->GetTextureData("credit" + std::to_string(i + 1));
+	}
 	//花びらの画像
-	this->petalTex1.Create((std::string)"resultFlower1.PNG");
+	/*this->petalTex1.Create((std::string)"resultFlower1.PNG");
 	this->petalTex2.Create((std::string)"resultFlower2.PNG");
 	this->petalTex3.Create((std::string)"resultFlower3.PNG");
 	this->petalTex4.Create((std::string)"resultFlower4.PNG");
-	this->petalTex5.Create((std::string)"resultFlower5.PNG");
+	this->petalTex5.Create((std::string)"resultFlower5.PNG");*/
+	this->petalTex1 = rm->GetTextureData("Flower1");
+	this->petalTex2 = rm->GetTextureData("Flower2");
+	this->petalTex3 = rm->GetTextureData("Flower3");
+	this->petalTex4 = rm->GetTextureData("Flower4");
+	this->petalTex5 = rm->GetTextureData("Flower5");
 	//背景生成
-	auto backImage = Back::Create(std::string("back.png"), 1920, 1080);
+	auto backImage = Back::Create("back", 1920, 1080);
 	//マップ生成
 	Map::Create((std::string) "credit.csv");
-	this->LadderTex.Create("mapchip2.png");
+	//this->LadderTex.Create("mapchip2.png");
+	this->LadderTex = rm->GetTextureData("map");
 	//チャラタスク生成
-	auto npc = Chara::Create((std::string)"player.png", Vec2(-120, 64 * 8));
+	auto npc = Chara::Create("player", Vec2(-120, 64 * 8));
 	npc->SetDirection(Chara::Direction::RIGHT); 
 	npc->Set(Vec2(-120, 64 * 8), Vec2(64 * 2, 64 * 8), 15.f);
 	OGge->camera->SetSize(Vec2(1280, 720));
@@ -218,19 +228,19 @@ void Credit::UpDate()
 				switch (anim)
 				{
 				case 1:
-					effect->SetTexture(&petalTex1);
+					effect->SetTexture(petalTex1);
 					break;
 				case 2:
-					effect->SetTexture(&petalTex2);
+					effect->SetTexture(petalTex2);
 					break;
 				case 3:
-					effect->SetTexture(&petalTex3);
+					effect->SetTexture(petalTex3);
 					break;
 				case 4:
-					effect->SetTexture(&petalTex4);
+					effect->SetTexture(petalTex4);
 					break;
 				case 5:
-					effect->SetTexture(&petalTex5);
+					effect->SetTexture(petalTex5);
 					break;
 				}
 				//出現した花びらの動きについて
@@ -284,7 +294,7 @@ void Credit::Render2D()
 	//フレーム
 	for (int i = 0; i < FRAME_NUM + 1; ++i)
 	{
-		frame[i].tex.Draw(frame[i].draw, frame[i].src);
+		frame[i].tex->Draw(frame[i].draw, frame[i].src);
 	}
 	//梯子
 	for (int i = 2; i < 10; ++i)
@@ -293,7 +303,7 @@ void Credit::Render2D()
 		draw.OffsetSize();
 		Box2D src(256*3, 256, 256, 256);
 		src.OffsetSize();
-		this->LadderTex.Draw(draw, src);
+		this->LadderTex->Draw(draw, src);
 	}
 	//梯子の上段
 	{
@@ -301,7 +311,7 @@ void Credit::Render2D()
 		draw.OffsetSize();
 		Box2D src(256*2, 256, 256, 256);
 		src.OffsetSize();
-		this->LadderTex.Draw(draw, src);
+		this->LadderTex->Draw(draw, src);
 	}
 }
 
@@ -338,14 +348,9 @@ void Credit::Finalize()
 		(*id)->Kill();
 	}
 
-	this->LadderTex.Finalize();
 	//サウンドの解放
 	//delete rm->GetSoundData((std::string)"titleBGM");
 	//rm->DeleteSound((std::string)"titleBGM");
-
-	for (int i = 0; i < 8; ++i) {
-		this->frame[i].tex.Finalize();
-	}
 }
 
 void Credit::Next()

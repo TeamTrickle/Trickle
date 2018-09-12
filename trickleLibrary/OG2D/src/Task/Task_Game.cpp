@@ -56,7 +56,7 @@ Game::~Game()
 bool Game::Initialize()
 {
 	OGge->camera->SetSize(Vec2(1280, 720));
-	auto backImage = Back::Create(std::string("back1.png"), 1920, 1080);
+	auto backImage = Back::Create("back1", 1920, 1080);
 
 	//Pauseタスクの生成
 	//auto pause = Pause::Create();
@@ -64,32 +64,47 @@ bool Game::Initialize()
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 16,7 };
 	//扇風機画像読み込み
-	this->fanTex.Create((std::string)"fan.png");
-	this->playerTex.Create((std::string)"player.png");
-	rm->SetTextureData((std::string)"playerTex", &this->playerTex);
-	this->fireice.Create((std::string)"fireice.png");
-	rm->SetTextureData((std::string)"fireIce", &this->fireice);
-	this->PaintTex.Create("paintTest.png");
-	rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
-	this->EffectTest.Create("EffectTest.png");
-	rm->SetTextureData((std::string)"Effect", &this->EffectTest);
-	this->Effectsond.Create("sandsmoke.png");
-	rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
-	this->texSteam.Create("steam.png");
-	rm->SetTextureData(std::string("steam"), &this->texSteam);
-	this->goalTex.Create("goal.png");
-	rm->SetTextureData((std::string)"goalTex", &this->goalTex);
-	this->goalDirectionTex.Create((std::string)"goalarrow.png");
-	rm->SetTextureData((std::string)"goalDirectionTex", &this->goalDirectionTex);
-	this->arrowflower.Create((std::string)"arrowflower.png");
-	rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
-	this->doorTex.Create("door.png");
-	rm->SetTextureData((std::string)"WswitchTex", &this->WswitchTex);
-	this->WswitchTex.Create("Collision.png");
-	this->pipeTex.Create("pipe.png");
+	//this->fanTex.Create((std::string)"fan.png");
+	//this->playertex.create((std::string)"player.png");
+	//rm->settexturedata((std::string)"playertex", &this->playertex);
+	//this->fireice.Create((std::string)"fireice.png");
+	//rm->SetTextureData((std::string)"fireIce", &this->fireice);
+	//this->PaintTex.Create("paintTest.png");
+	//rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
+	//this->EffectTest.Create("EffectTest.png");
+	//rm->SetTextureData((std::string)"Effect", &this->EffectTest);
+	//this->Effectsond.Create("sandsmoke.png");
+	//rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
+	//this->texSteam.Create("steam.png");
+	//rm->SetTextureData(std::string("steam"), &this->texSteam);
+	//this->goalTex.Create("goal.png");
+	//rm->SetTextureData((std::string)"goalTex", &this->goalTex);
+	//this->goalDirectionTex.Create((std::string)"goalarrow.png");
+	//rm->SetTextureData((std::string)"goalDirectionTex", &this->goalDirectionTex);
+	//this->arrowflower.Create((std::string)"arrowflower.png");
+	//rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
+	//this->doorTex.Create("door.png");
+	//rm->SetTextureData((std::string)"WswitchTex", &this->WswitchTex);
+	//this->WswitchTex.Create("Collision.png");
+	//this->pipeTex.Create("pipe.png");
+
+	this->fanTex = rm->GetTextureData("fan");
+	this->playerTex = rm->GetTextureData("player");
+	this->fireice = rm->GetTextureData("fireice");
+	this->PaintTex = rm->GetTextureData("paint");
+	this->EffectTest = rm->GetTextureData("effect");
+	this->Effectsond = rm->GetTextureData("sandsmoke");
+	this->texSteam = rm->GetTextureData("steam");
+	this->goalTex = rm->GetTextureData("goal");
+	this->goalDirectionTex = rm->GetTextureData("goalarrow");
+	this->arrowflower = rm->GetTextureData("arrowflower");
+	this->doorTex = rm->GetTextureData("door");
+	this->WswitchTex = rm->GetTextureData("Wswitch");
+	this->pipeTex = rm->GetTextureData("pipe");
+	
 	//ui生成
-	UImng_.reset(new UImanager());
-	UImng_->Initialize(*MapNum);
+	//UImng_.reset(new UImanager());
+	//UImng_->Initialize(*MapNum);
 	//マップ初期処理
 	switch (*MapNum)
 	{
@@ -236,10 +251,10 @@ bool Game::Initialize()
 		Switch::Create(Vec2(64 * 5, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 		//重さドア
 		auto door = Door::Create(Vec2(64 * 13, 64 * 6), Vec2(32, 64 * 2), false, Door::Direction::HEIGHT);
-		door->SetTexture(&doorTex);
+		door->SetTexture(doorTex);
 		//重さスイッチ
 		auto ws = WeightSwitch::Create(Vec2(64 * 2 + 32, 64 * 9 + 34), Vec2(64 * 2, 30), 1, std::vector<std::shared_ptr<GameObject>>{door});
-		ws->SetTexture(&WswitchTex);
+		ws->SetTexture(WswitchTex);
 		break;
 	}
 	case 9:		//蒸気1
@@ -392,13 +407,13 @@ bool Game::Initialize()
 		//横向き扉
 		auto door1 = Door::Create(Vec2(272, 628), Vec2(32, 64 * 3), false, Door::Direction::WIDTH);
 		auto door2 = Door::Create(Vec2(272, 756), Vec2(32, 64 * 3), false, Door::Direction::WIDTH);
-		door1->SetTexture(&doorTex);
-		door2->SetTexture(&doorTex);
+		door1->SetTexture(doorTex);
+		door2->SetTexture(doorTex);
 		//重さスイッチ
 		auto ws1 = WeightSwitch::Create(Vec2(64, 64 * 9 + 30), Vec2(64, 30), 1, std::vector<std::shared_ptr<GameObject>>{door2});
-		ws1->SetTexture(&WswitchTex);
+		ws1->SetTexture(WswitchTex);
 		auto ws2 = WeightSwitch::Create(Vec2(64*22, 64*12+30), Vec2(64, 30), 2, std::vector<std::shared_ptr<GameObject>>{door1});
-		ws2->SetTexture(&WswitchTex);
+		ws2->SetTexture(WswitchTex);
 		break;
 	}
 	case 15:	//ステージ3
@@ -446,17 +461,17 @@ bool Game::Initialize()
 	}	//水初期処理
 	{
 		//水画像の読み込み
-		this->waterTex.Create("waterTex.png");
-		this->waterRed.Create("WaterRed.png");
-		this->waterBlue.Create("WaterBlue.png");
-		this->waterPurple.Create("WaterPurple.png");
-		//リソース管理classへデータを渡す
-		rm->SetTextureData((std::string)"waterTex", &this->waterTex);
-		rm->SetTextureData((std::string)"waterRed", &this->waterRed);
-		rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
-		rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
+		//this->waterTex.Create("waterTex.png");
+		//this->waterRed.Create("WaterRed.png");
+		//this->waterBlue.Create("WaterBlue.png");
+		//this->waterPurple.Create("WaterPurple.png");
+		////リソース管理classへデータを渡す
+		//rm->SetTextureData((std::string)"waterTex", &this->waterTex);
+		//rm->SetTextureData((std::string)"waterRed", &this->waterRed);
+		//rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
+		//rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
-	auto back2Img = Back::Create("back2.png", 1920, 1080);
+	auto back2Img = Back::Create("back2", 1920, 1080);
 	back2Img->SetScroll();
 	back2Img->SetDrawOrder(0.0f);
 	//水が自動で降ってくる時間の初期化
@@ -464,7 +479,7 @@ bool Game::Initialize()
 	//水の生成
 	auto water = Water::Create(_waterpos);
 	//画像を渡す
-	water->SetTexture(&this->waterTex);
+	water->SetTexture(rm->GetTextureData("water"));
 
 	//タスクに名前を登録
 	__super::Init((std::string)"game");
@@ -483,7 +498,7 @@ void Game::UpDate()
 	{
 		timecnt = 0;
 		auto water = Water::Create(_waterpos);
-		water->SetTexture(&this->waterTex);
+		water->SetTexture(rm->GetTextureData("water"));
 	}
 	//カメラ処理
 	Camera_move();
@@ -514,7 +529,7 @@ void Game::UpDate()
 
 
 	//UI
-	UImng_->UpDate();
+	//UImng_->UpDate();
 }
 //-------------------------------------------------------------------------------------------------
 void Game::Render2D()
@@ -524,7 +539,7 @@ void Game::Render2D()
 		Box2D draw(_waterpos.x - 103, _waterpos.y - 65.f, 256.f, 83.3f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 768, 250);
-		pipeTex.Draw(draw, src);
+		pipeTex->Draw(draw, src);
 	}
 }
 //-------------------------------------------------------------------------------------------------
@@ -643,33 +658,6 @@ bool Game::Finalize()
 	for (auto id = clouds->begin(); id != clouds->end(); ++id) {
 		(*id)->Kill();
 	}
-	rm->DeleteTexture((std::string)"playerTex");
-	rm->DeleteTexture((std::string)"waterTex");
-	rm->DeleteTexture((std::string)"Effect");
-	rm->DeleteTexture((std::string)"paintTex");
-	rm->DeleteTexture((std::string)"sandsmoke");
-	rm->DeleteTexture((std::string)"waterRed");
-	rm->DeleteTexture((std::string)"waterBlue");
-	rm->DeleteTexture((std::string)"waterPurple");
-	rm->DeleteTexture((std::string)"steam");
-	rm->DeleteTexture((std::string)"goalTex");
-	rm->DeleteTexture((std::string)"fireIce");
-	rm->DeleteTexture((std::string)"goalDirectionTex");
-	rm->DeleteTexture((std::string)"arrowflowerTex");
-	this->waterTex.Finalize();
-	this->playerTex.Finalize();
-	this->fanTex.Finalize();
-	this->EffectTest.Finalize();
-	this->waterBlue.Finalize();
-	this->waterPurple.Finalize();
-	this->waterRed.Finalize();
-	this->PaintTex.Finalize();
-	this->Effectsond.Finalize();
-	this->texSteam.Finalize();
-	this->goalTex.Finalize();
-	this->goalDirectionTex.Finalize();
-	this->arrowflower.Finalize();
-	this->doorTex.Finalize();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------

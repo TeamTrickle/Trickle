@@ -18,9 +18,9 @@ private:
 	};
 	Info pipe;
 	//Info gear;
-	Texture pipeTex;
-	Texture gearTex;
-	Texture pipeBoxTex;
+	Texture* pipeTex;
+	Texture* gearTex;
+	Texture* pipeBoxTex;
 	std::vector<Info> gear;
 	std::vector<Info> gear_nomove;
 	std::vector<Info> pipeBox;
