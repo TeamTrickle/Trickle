@@ -118,6 +118,7 @@ void WeightSwitch::Render2D()
 		draw.OffsetSize();
 		this->src = Box2D(0, 0, 256, 256);
 		src.OffsetSize();
+		this->switch2->Rotate(0);
 		this->switch2->Draw(draw, src);
 		this->LineDraw();
 	}
@@ -127,6 +128,7 @@ void WeightSwitch::Render2D()
 		draw.OffsetSize();
 		this->src = Box2D(0, 0, 256, 256);
 		src.OffsetSize();
+		this->switch1->Rotate(0);
 		this->switch1->Draw(draw, src);
 	}
 }

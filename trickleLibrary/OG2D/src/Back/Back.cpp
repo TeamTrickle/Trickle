@@ -76,6 +76,7 @@ void Back::Render2D()
 		Box2D draw(this->texPos->x, this->texPos->y, this->size.x, this->size.y);
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, this->backImg->GetTextureSize().x, this->backImg->GetTextureSize().y);
+		this->backImg->Rotate(0);
 		this->backImg->Draw(draw, src);
 	}
 	else
@@ -83,6 +84,7 @@ void Back::Render2D()
 		Box2D draw(OGge->camera->GetPos(), this->size);
 		draw.OffsetSize();
 		Box2D src(0.f, 0.f, this->backImg->GetTextureSize().x, this->backImg->GetTextureSize().y);
+		this->backImg->Rotate(0);
 		this->backImg->Draw(draw, src);
 	}
 }

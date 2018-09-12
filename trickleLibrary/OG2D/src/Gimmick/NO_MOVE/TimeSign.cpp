@@ -65,6 +65,7 @@ void TimeSign::Render2D() {
 			Vec2 srcRange = base->GetTextureSize();
 			Box2D src(0.f, 0.f, srcRange.x, srcRange.y);
 			src.OffsetSize();
+			base->Rotate(0);
 			base->Draw(draw, src);
 		}
 
@@ -81,6 +82,7 @@ void TimeSign::Render2D() {
 			else if (i == 2) continue;
 			draw.OffsetSize();
 			src.OffsetSize();
+			numberAtlas->Rotate(0);
 			numberAtlas->Draw(draw, src);
 		}
 	}

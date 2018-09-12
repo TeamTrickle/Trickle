@@ -163,6 +163,7 @@ void Chara::Render2D()
 		src.x = k;
 	}
 	//•`‰æ
+	this->Image->Rotate(0);
 	this->Image->Draw(draw, src);
 }
 void Chara::Friction(Vec2& est)

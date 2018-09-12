@@ -17,19 +17,6 @@ Result::~Result() {
 }
 
 bool Result::Initialize() {
-	//fontui.Create((std::string)"fontui.png");
-	//numberui.Create((std::string)"number.png");
-
-	//backTex.Create((std::string)"back.png");
-	//this->starTex.Create((std::string)"resultstar.png");
-	//this->frameTex.Create((std::string)"resultframe.png");
-	//this->stareffectTex.Create((std::string)"stareffect.png");
-	//this->petalTex1.Create((std::string)"resultFlower1.PNG");
-	//this->petalTex2.Create((std::string)"resultFlower2.PNG");
-	//this->petalTex3.Create((std::string)"resultFlower3.PNG");
-	//this->petalTex4.Create((std::string)"resultFlower4.PNG");
-	//this->petalTex5.Create((std::string)"resultFlower5.PNG");
-
 	this->fontui = rm->GetTextureData("fontui");
 	this->numberui = rm->GetTextureData("number.png");
 	this->backTex = rm->GetTextureData("back");
@@ -350,6 +337,7 @@ void Result::UpDate() {
 void Result::Render2D() {
 	//”wŒi
 	{
+		backTex->Rotate(0);
 		backTex->Draw(Box2D(0, 0, 1280, 720), Box2D(0, 0, 1280, 720));
 	}
 	//ƒ‚ƒjƒ^[˜g
@@ -357,6 +345,7 @@ void Result::Render2D() {
 		Box2D draw((1280 - 1400) / 2, 720 - 700 - 32, 1400, 700);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1000, 500);
+		frameTex->Rotate(0);
 		frameTex->Draw(draw, src);
 	}
 	//Result
@@ -375,6 +364,7 @@ void Result::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 3, 64 * 4, 64);
 		src.OffsetSize();
+		fontui->Rotate(0);
 		fontui->Draw(draw, src);
 	}
 	//¯‚Ì˜g
@@ -404,6 +394,7 @@ void Result::Render2D() {
 			draw.OffsetSize();
 			Box2D src(64 * 10, 0, 40, 64);
 			src.OffsetSize();
+			numberui->Rotate(0);
 			numberui->Draw(draw, src);
 		}
 	}

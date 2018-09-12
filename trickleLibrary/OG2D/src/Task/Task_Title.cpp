@@ -702,17 +702,19 @@ void Title::Render2D()
 {
 	//背景表示
 	{
-		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
+		/*Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 720);
 		src.OffsetSize();
-		this->texLogo->Draw(draw, src, Color(0, 0, 0, 0));
+		this->texLogo->Rotate(0);
+		this->texLogo->Draw(draw, src, Color(0, 0, 0, 0));*/
 	}
 	//ロゴ表示
 	{
 		Box2D draw(this->Logo.position, this->Logo.Scale);
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 768);
+		this->texLogo->Rotate(0);
 		this->texLogo->Draw(draw, src);
 	}
 	{
@@ -726,6 +728,7 @@ void Title::Render2D()
 		Box2D draw(this->Logo.position.x, (this->Logo.position.y + this->Logo.Scale.y) - (this->Logo.Scale.y * (this->flowerVolume / 1.f)), this->Logo.Scale.x, (this->Logo.Scale.y * (this->flowerVolume / 1.f)));
 		draw.OffsetSize();
 		Box2D src(0.f, 768 - (768 * (this->flowerVolume / 1.f)), 1280.f, 768.f);
+		this->flowerLogo->Rotate(0);
 		this->flowerLogo->Draw(draw, src);
 	}
 
@@ -737,7 +740,7 @@ void Title::Render2D()
 
 		draw.OffsetSize();
 		Box2D src(0.0f, 0.0f, 1000.0f, 500.0f);
-
+		this->monitorTex->Rotate(0);
 		this->monitorTex->Draw(draw, src);
 	}
 
@@ -752,6 +755,7 @@ void Title::Render2D()
 			draw.OffsetSize();
 			Box2D src(0.f, 64.f * 16, 835.f, 64.f);
 			src.OffsetSize();
+			rm->GetTextureData(std::string("fontui"))->Rotate(0);
 			rm->GetTextureData(std::string("fontui"))->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->press_a));
 		}
 	}
@@ -767,7 +771,7 @@ void Title::Render2D()
 			{
 				Box2D src((64.f*5.f - startsize.x), 0.f, startsize.x, 64.f);
 				src.OffsetSize();
-				
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			//一番初めは真ん中にstartを表示
@@ -775,12 +779,14 @@ void Title::Render2D()
 			{
 				Box2D src = intextsrc;
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			if(start == out)
 			{
 				Box2D src = outtextsrc;
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
@@ -793,6 +799,7 @@ void Title::Render2D()
 				Box2D src = intextsrc;
 				src.y = 64.f * 12;
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
@@ -800,6 +807,7 @@ void Title::Render2D()
 				Box2D src = outtextsrc;
 				src.y = 64.f * 12;
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
@@ -815,6 +823,7 @@ void Title::Render2D()
 					Box2D src = intextsrc;
 					src.y = 64.f * 13;
 					src.OffsetSize();
+					rm->GetTextureData("fontui")->Rotate(0);
 					rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 				}
 				else
@@ -822,6 +831,7 @@ void Title::Render2D()
 					Box2D src = outtextsrc;
 					src.y = 64.f * 13;
 					src.OffsetSize();
+					rm->GetTextureData("fontui")->Rotate(0);
 					rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 				}
 			}
@@ -836,6 +846,7 @@ void Title::Render2D()
 				Box2D src = intextsrc;
 				src.y = 64.f;                  //読み込む画像を変える
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			else
@@ -843,6 +854,7 @@ void Title::Render2D()
 				Box2D src = outtextsrc;
 				src.y = 64.f;                  //読み込む画像を変える
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 		}
@@ -858,6 +870,7 @@ void Title::Render2D()
 				draw.OffsetSize();
 				Box2D src{ 0.f,64.f * 11,64.f * 5,64.f };
 				src.OffsetSize();
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src);
 			}
 		}
@@ -869,6 +882,7 @@ void Title::Render2D()
 				Box2D src = Box2D(0, 64 * 14, 64 * 10, 64);
 				src.OffsetSize();
 
+				rm->GetTextureData("fontui")->Rotate(0);
 				rm->GetTextureData("fontui")->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->tex_a));
 			}
 			//カーソルの表示
@@ -926,6 +940,7 @@ void Title::Render2D()
 	if (this->trans_a > 0.f) {
 		Box2D draw(Vec2(0, 0), Vec2(1920 * 2, 1080 * 2));
 		Box2D src(0, 0, 1, 1);
+		forTransform->Rotate(0);
 		forTransform->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, this->trans_a));
 	}
 }

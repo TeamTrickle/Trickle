@@ -77,6 +77,7 @@ void GoalDirection::Render2D()
 					break;
 				}
 				src.OffsetSize();
+				this->flower->Rotate(0);
 				this->flower->Draw(draw, src);
 			}
 		}

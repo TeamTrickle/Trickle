@@ -350,6 +350,7 @@ void Water::Render2D()
 		src.x = (float)((this->nowTime / 6) * 256);
 	}
 	src.OffsetSize();
+	this->tex->Rotate(0);
 	this->tex->Draw(draw, src, color_a);
 	LineDraw();
 }

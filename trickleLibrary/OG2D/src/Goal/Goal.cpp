@@ -285,6 +285,7 @@ void Goal::Render2D()
 		}
 
 		this->src.OffsetSize();
+		this->image->Rotate(0);
 		this->image->Draw(this->draw, this->src);
 
 		//Œõ‚Ì•`‰æ

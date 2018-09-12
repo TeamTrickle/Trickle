@@ -189,6 +189,7 @@ void StageAlert::Render2D() {
 			draw.OffsetSize();
 			Box2D src = srcs[d.first];
 			src.OffsetSize();
+			(d.first)->Rotate(0);
 			(d.first)->Draw(draw, src);
 		}
 
@@ -216,6 +217,7 @@ void StageAlert::Render2D() {
 				src = getSrcOriginal(clearStarTex);
 				draw.OffsetSize();
 				src.OffsetSize();
+				clearStarTex->Rotate(0);
 				clearStarTex->Draw(draw, src);
 			}
 			else {
@@ -223,6 +225,7 @@ void StageAlert::Render2D() {
 				src = getSrcOriginal(normalStarTex);
 				draw.OffsetSize();
 				src.OffsetSize();
+				normalStarTex->Rotate(0);
 				normalStarTex->Draw(draw, src);
 			}
 			draw = achievementFixedDraw[i];
@@ -237,6 +240,7 @@ void StageAlert::Render2D() {
 		src = currentRes->clearSrc;
 		draw.OffsetSize();
 		src.OffsetSize();
+		clearFlag->Rotate(0);
 		clearFlag->Draw(draw, src);
 	}
 }

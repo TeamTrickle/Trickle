@@ -28,25 +28,11 @@ Credit::~Credit()
 
 bool Credit::Initialize()
 {
-	//画像生成
-	/*this->frame[0].tex.Create((std::string)"credit1.png");
-	this->frame[1].tex.Create((std::string)"credit2.png");
-	this->frame[2].tex.Create((std::string)"credit3.png");
-	this->frame[3].tex.Create((std::string)"credit4.png");
-	this->frame[4].tex.Create((std::string)"credit5.png");
-	this->frame[5].tex.Create((std::string)"credit6.png");
-	this->frame[6].tex.Create((std::string)"credit7.png");
-	this->frame[7].tex.Create((std::string)"credit8.png");*/
 	for (int i = 0; i < FRAME_NUM; ++i)
 	{
 		this->frame[i].tex = rm->GetTextureData("credit" + std::to_string(i + 1));
 	}
 	//花びらの画像
-	/*this->petalTex1.Create((std::string)"resultFlower1.PNG");
-	this->petalTex2.Create((std::string)"resultFlower2.PNG");
-	this->petalTex3.Create((std::string)"resultFlower3.PNG");
-	this->petalTex4.Create((std::string)"resultFlower4.PNG");
-	this->petalTex5.Create((std::string)"resultFlower5.PNG");*/
 	this->petalTex1 = rm->GetTextureData("Flower1");
 	this->petalTex2 = rm->GetTextureData("Flower2");
 	this->petalTex3 = rm->GetTextureData("Flower3");
@@ -294,6 +280,7 @@ void Credit::Render2D()
 	//フレーム
 	for (int i = 0; i < FRAME_NUM; ++i)
 	{
+		frame[i].tex->Rotate(0);
 		frame[i].tex->Draw(frame[i].draw, frame[i].src);
 	}
 	//梯子
@@ -303,6 +290,7 @@ void Credit::Render2D()
 		draw.OffsetSize();
 		Box2D src(256*3, 256, 256, 256);
 		src.OffsetSize();
+		this->LadderTex->Rotate(0);
 		this->LadderTex->Draw(draw, src);
 	}
 	//梯子の上段
@@ -311,6 +299,7 @@ void Credit::Render2D()
 		draw.OffsetSize();
 		Box2D src(256*2, 256, 256, 256);
 		src.OffsetSize();
+		this->LadderTex->Rotate(0);
 		this->LadderTex->Draw(draw, src);
 	}
 }

@@ -58,35 +58,9 @@ bool Game::Initialize()
 	OGge->camera->SetSize(Vec2(1280, 720));
 	auto backImage = Back::Create("back1", 1920, 1080);
 
-	//Pauseタスクの生成
-	//auto pause = Pause::Create();
-
 	Vec2 fanpos[2] = { Vec2(64 * 12,64 * 7), Vec2(64 * 20,64 * 10) };
 	float fanrange[2] = { 16,7 };
 	//扇風機画像読み込み
-	//this->fanTex.Create((std::string)"fan.png");
-	//this->playertex.create((std::string)"player.png");
-	//rm->settexturedata((std::string)"playertex", &this->playertex);
-	//this->fireice.Create((std::string)"fireice.png");
-	//rm->SetTextureData((std::string)"fireIce", &this->fireice);
-	//this->PaintTex.Create("paintTest.png");
-	//rm->SetTextureData((std::string)"paintTex", &this->PaintTex);
-	//this->EffectTest.Create("EffectTest.png");
-	//rm->SetTextureData((std::string)"Effect", &this->EffectTest);
-	//this->Effectsond.Create("sandsmoke.png");
-	//rm->SetTextureData((std::string)"sandsmoke", &this->Effectsond);
-	//this->texSteam.Create("steam.png");
-	//rm->SetTextureData(std::string("steam"), &this->texSteam);
-	//this->goalTex.Create("goal.png");
-	//rm->SetTextureData((std::string)"goalTex", &this->goalTex);
-	//this->goalDirectionTex.Create((std::string)"goalarrow.png");
-	//rm->SetTextureData((std::string)"goalDirectionTex", &this->goalDirectionTex);
-	//this->arrowflower.Create((std::string)"arrowflower.png");
-	//rm->SetTextureData((std::string)"arrowflowerTex", &this->arrowflower);
-	//this->doorTex.Create("door.png");
-	//rm->SetTextureData((std::string)"WswitchTex", &this->WswitchTex);
-	//this->WswitchTex.Create("Collision.png");
-	//this->pipeTex.Create("pipe.png");
 
 	this->fanTex = rm->GetTextureData("fan");
 	this->playerTex = rm->GetTextureData("player");
@@ -103,8 +77,6 @@ bool Game::Initialize()
 	this->pipeTex = rm->GetTextureData("pipe");
 	
 	//ui生成
-	//UImng_.reset(new UImanager());
-	//UImng_->Initialize(*MapNum);
 	//マップ初期処理
 	switch (*MapNum)
 	{
@@ -352,8 +324,6 @@ bool Game::Initialize()
 		_waterpos = mapload->getWaterPos();
 
 		//テスト追加重さで反応するswitchのscale.yは30規定でお願いします
-		//auto wswitch = WeightSwitch::Create(Vec2(400, 920), Vec2(200, 30), 1.0f);
-		//wswitch->SetTexture(&WswitchTex);
 
 		//ゲームのサウンドに使用
 		sound.create(gamesoundname, true);
@@ -458,18 +428,6 @@ bool Game::Initialize()
 	default:
 		std::cout << "マップ番号が存在しません" << std::endl;
 		break;
-	}	//水初期処理
-	{
-		//水画像の読み込み
-		//this->waterTex.Create("waterTex.png");
-		//this->waterRed.Create("WaterRed.png");
-		//this->waterBlue.Create("WaterBlue.png");
-		//this->waterPurple.Create("WaterPurple.png");
-		////リソース管理classへデータを渡す
-		//rm->SetTextureData((std::string)"waterTex", &this->waterTex);
-		//rm->SetTextureData((std::string)"waterRed", &this->waterRed);
-		//rm->SetTextureData((std::string)"waterBlue", &this->waterBlue);
-		//rm->SetTextureData((std::string)"waterPurple", &this->waterPurple);
 	}
 	auto back2Img = Back::Create("back2", 1920, 1080);
 	back2Img->SetScroll();
@@ -486,8 +444,6 @@ bool Game::Initialize()
 	__super::SetDrawOrder(0.6f);
 	//ゲームクリア判定を生成
 	auto gameprocess = GameManager::Create();
-	//装飾
-	//auto ornament = Ornament::Create();
 	return true;
 }
 //-------------------------------------------------------------------------------------------------
@@ -539,6 +495,7 @@ void Game::Render2D()
 		Box2D draw(_waterpos.x - 103, _waterpos.y - 65.f, 256.f, 83.3f);
 		draw.OffsetSize();
 		Box2D src(0, 0, 768, 250);
+		pipeTex->Rotate(0);
 		pipeTex->Draw(draw, src);
 	}
 }

@@ -66,6 +66,7 @@ void Switch::Render2D() {
 	}
 
 	src.OffsetSize();
+	image->Rotate(0);
 	image->Draw(draw, src);
 
 	//�Ŕ̐ݒu
@@ -74,6 +75,7 @@ void Switch::Render2D() {
 		signD.OffsetSize();
 		Box2D signS(256*((int)this->ttype), 256 * 3, 256, 256);
 		signS.OffsetSize();
+		image->Rotate(0);
 		this->image->Draw(signD, signS);
 	}
 

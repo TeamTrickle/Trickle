@@ -161,12 +161,14 @@ void Load::Render2D()
 	this->draw.OffsetSize();
 	this->src = { 0.f,0.f,this->backimage->GetTextureSize().x,this->backimage->GetTextureSize().y };
 	this->src.OffsetSize();
+	this->backimage->Rotate(0);
 	this->backimage->Draw(this->draw, this->src, *this->backcolor);
 
 	this->draw = { OGge->camera->GetPos(),OGge->camera->GetSize() };
 	this->draw.OffsetSize();
 	this->src = { 0.f,0.f,this->logoimage->GetTextureSize().x,this->logoimage->GetTextureSize().y };
 	this->src.OffsetSize();
+	this->logoimage->Rotate(0);
 	this->logoimage->Draw(this->draw, this->src, *this->logocolor);
 }
 

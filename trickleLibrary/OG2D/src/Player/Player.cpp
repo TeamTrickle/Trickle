@@ -141,6 +141,7 @@ void Player::Render2D()
 		src.w = src.x;
 		src.x = k;
 	}
+	this->playerimg->Rotate(0);
 	this->playerimg->Draw(draw, src);
 	this->LineDraw();
 }

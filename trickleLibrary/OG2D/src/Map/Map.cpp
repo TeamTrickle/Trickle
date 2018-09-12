@@ -297,6 +297,7 @@ void Map::Render2D()
 				{
 					Box2D draw(this->hitBase[y][x].position, this->DrawSize);
 					draw.OffsetSize();
+					this->mapimg->Rotate(0);
 					this->mapimg->Draw(draw, this->chip[this->hitBase[y][x].Getarr()]);
 				}
 			}

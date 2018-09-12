@@ -24,6 +24,7 @@ void Paint::Render2D()
 	this->Setsrc();
 	if (this->image)
 	{
+		this->image->Rotate(0);
 		this->image->Draw(this->draw, this->src);
 	}
 }

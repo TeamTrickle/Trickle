@@ -94,6 +94,7 @@ void Block::Render2D() {
 	draw.OffsetSize();
 	Box2D src(0, 0, 256, 256);
 	src.OffsetSize();
+	tex->Rotate(0);
 	tex->Draw(draw, src);
 }
 

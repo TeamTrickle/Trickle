@@ -172,7 +172,7 @@ void Fan::Render2D() {
 		src.w = src.x;
 		src.x = k;
 	}
-
+	this->image->Rotate(0);
 	this->image->Draw(draw, src);
 
 	//デバッグ用

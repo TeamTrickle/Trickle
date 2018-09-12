@@ -76,6 +76,7 @@ void LogoTask::Render2D()
 	draw.OffsetSize();
 	Box2D src(Vec2(0, 0), logo->GetTextureSize());
 	src.OffsetSize();
+	this->logo->Rotate(0);
 	this->logo->Draw(draw, src, Color(1.f, 1.f, 1.f, this->logo_a));
 }
 LogoTask::SP LogoTask::Create()

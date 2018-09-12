@@ -101,6 +101,7 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 0, 1280, 720);
 		src.OffsetSize();
+		texTransparentBack->Rotate(0);
 		texTransparentBack->Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
 	}
 	//カーソルの表示
@@ -118,6 +119,7 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 9, 64 * 11, 64);
 		src.OffsetSize();
+		texChoices->Rotate(0);
 		texChoices->Draw(draw, src, Color(texColor.red, texColor.green, texColor.blue, alpha[0]));
 	}
 	//Restart
@@ -126,6 +128,7 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 8, 64 * 7, 64);
 		src.OffsetSize();
+		texChoices->Rotate(0);
 		texChoices->Draw(draw, src, Color(texColor.red, texColor.green, texColor.blue, alpha[1]));
 	}
 	//stageselect
@@ -134,6 +137,7 @@ void Pause::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 7, 64 * 19, 64);
 		src.OffsetSize();
+		texChoices->Rotate(0);
 		texChoices->Draw(draw, src, Color(texColor.red, texColor.green, texColor.blue, alpha[2]));
 	}
 }

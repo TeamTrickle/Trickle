@@ -73,6 +73,7 @@ void Gate::Render2D()
 			this->src = { 460 * (3 - (this->AnimCnt / this->Sense)),0,460,512 };
 			this->src.OffsetSize();
 		}
+		this->image->Rotate(0);
 		this->image->Draw(this->draw, this->src);
 	}
 }
