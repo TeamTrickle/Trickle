@@ -121,7 +121,6 @@ void Door::Render2D()
 		src.OffsetSize();
 		this->image->Rotate(this->rotate);
 		this->image->Draw(this->draw, this->src);
-		this->LineDraw();
 	}
 }
 bool Door::ToOpen()

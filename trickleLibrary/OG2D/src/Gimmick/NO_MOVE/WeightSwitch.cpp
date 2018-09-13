@@ -38,13 +38,11 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 	auto WSwitch = OGge->GetTasks<WeightSwitch>(this->objectTag);
 
 
-	/*switch1.Create((std::string)"switch_p1.png");
-	switch2.Create((std::string)"switch_p2.png");*/
 	this->switch1 = rm->GetTextureData("switch2");
 	this->switch2 = rm->GetTextureData("switch3");
 
 	CreateObject(Cube, pos_, size_);         //オブジェクトを生成
-	head.CreateObject(Cube, Vec2(pos_.x, pos_.y - 1.0f), Vec2(size_.x, 1.0f));     //ほかのオブジェクトとの当たり判定用オブジェクトの生成
+	head.CreateObject(Cube, Vec2(pos_.x + 1.0f, pos_.y - 1.0f), Vec2(size_.x - 2.0f, 1.0f));     //ほかのオブジェクトとの当たり判定用オブジェクトの生成
 	this->maxmass = mass_;                   //扉が開く重さを格納
 	this->totalmass = 0.0f;                  //乗っているものの総合の重さ格納
 	this->nowActive = false;                 //今扉が開けるか
@@ -119,7 +117,6 @@ void WeightSwitch::Render2D()
 		src.OffsetSize();
 		this->switch2->Rotate(0);
 		this->switch2->Draw(draw, src);
-		this->LineDraw();
 	}
 	//スイッチの動かないバーツの描画
 	{

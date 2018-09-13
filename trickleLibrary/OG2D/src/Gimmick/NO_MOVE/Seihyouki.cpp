@@ -60,8 +60,6 @@ void Seihyouki::Render2D() {
 	//デバッグ用
 	//if (active) 
 	{
-		LineDraw();
-		//Box2D drawRL,srcR;
 		if (angle == RIGHT)
 		{
 			coldNum = 1;

@@ -25,7 +25,7 @@ void OGTK::StartTaskObject()
 	//タスクの初期化
 	EventTask ev;
 	ev.Load(Event::RESOURCE_LOAD, "./data/event/loadtex.og");
-	auto TopTask = LogoTask::Create();
+	LogoTask::Create();
 }
 
 OGTK::~OGTK()

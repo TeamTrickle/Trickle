@@ -32,12 +32,14 @@ Input::GamePad::GamePad(const int id) :
 	//GamePadが存在するかどうか、ボタン数スティック数はいくつかの計測とその分の要素の確保
 	glfwGetJoystickButtons(id_, &button_num);
 	glfwGetJoystickAxes(id_, &axis_num);
+#if(_DEBUG)
 	std::cout <<
 		"GamePadID: " << id_ <<
 		" button:" << button_num <<
 		" axis:" << axis_num <<
 		" name:" << name <<
 		std::endl;
+#endif
 	button_on.resize(button_num);
 	std::fill(std::begin(button_on), std::end(button_on), 0);
 	button_down.resize(button_num);

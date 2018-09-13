@@ -143,7 +143,6 @@ void Player::Render2D()
 	}
 	this->playerimg->Rotate(0);
 	this->playerimg->Draw(draw, src);
-	this->LineDraw();
 }
 bool Player::Finalize()
 {
@@ -1372,7 +1371,7 @@ bool Player::PutCheck()
 			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if ((*id)->IsObjectDistanceCheck(right.position, right.Scale))
 			{
-				if ((*id)->CubeHit(right))
+				if ((*id)->hit(right))
 				{
 					return false;
 				}

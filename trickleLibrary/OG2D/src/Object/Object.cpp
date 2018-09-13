@@ -217,10 +217,27 @@ void GameObject::HitCheck(bool flag)
 
 bool GameObject::IsObjectDistanceCheck(const Vec2& pos, const Vec2& size)
 {
-	if (this->position.x - this->Scale.x < pos.x + size.x &&
-		this->position.y - this->Scale.y < pos.y + size.y &&
-		this->position.x + (this->Scale.x * 2) > pos.x &&
-		this->position.y + (this->Scale.y * 2) > pos.y)
+	float maxSize[2];
+	if (this->Scale.x > this->Scale.y)
+	{
+		maxSize[0] = this->Scale.x;
+	}
+	else
+	{
+		maxSize[0] = this->Scale.y;
+	}
+	if (size.x > size.y)
+	{
+		maxSize[1] = size.x;
+	}
+	else
+	{
+		maxSize[1] = size.y;
+	}
+	if (this->position.x - maxSize[0] < pos.x + maxSize[1] &&
+		this->position.y - maxSize[0] < pos.y + maxSize[1] &&
+		this->position.x + maxSize[0] * 2 > pos.x &&
+		this->position.y + maxSize[0] * 2 > pos.y)
 	{
 		return true;
 	}
@@ -229,7 +246,20 @@ bool GameObject::IsObjectDistanceCheck(const Vec2& pos, const Vec2& size)
 
 void GameObject::LineDistanceDraw()
 {
-	Box2D d(this->position.x - this->Scale.x, this->position.y - this->Scale.y, this->position.x + (this->Scale.x * 2), this->position.y + (this->Scale.y * 2));
+	float maxSize;
+	if (this->Scale.x > this->Scale.y)
+	{
+		maxSize = this->Scale.x;
+	}
+	else
+	{
+		maxSize = this->Scale.y;
+	}
+	Box2D d(
+		this->position.x - maxSize,
+		this->position.y - maxSize,
+		this->position.x + maxSize * 2,
+		this->position.y + maxSize * 2);
 	OG::LineHitDraw(&d);
 }
 

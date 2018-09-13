@@ -183,8 +183,6 @@ void Kanetuki::Render2D() {
 			this->hotImg->Draw(draw_, src);
 		}
 	}
-	//デバッグ用
-	if (active) this->LineDraw();
 }
 bool Kanetuki::Finalize() {
 	//画像をこっちで読み込むならTextureのFinalize()を呼ぶこと
@@ -206,23 +204,13 @@ void Kanetuki::toSteam() {
 					//一定の時間が経ったら・・・
 					if ((*id)->GetFireCnt() >= maxChangeTimeSolid)
 					{
-						//液体にする
-						//auto water = Water::Create((*id)->position);
-						//Texture watertex;
-						//auto game = OGge->GetTask<Game>("game");
-						//water->SetTexture(&game->getWaterTex());
-						//(*id)->SetState(Water::State::LIQUID);
-						//(*id)->SetSituation(Water::Situation::Newfrom);
 						(*id)->SolidMelt();
-						//					(*id)->Kill();
-						//changeStateCnt = 0;
 						(*id)->SetFireCnt(0);
 					}
 				}
 				//液体　⇒　水蒸気
 				if ((*id)->GetState() == Water::State::LIQUID)
 				{
-					//changeStateCnt++;
 					(*id)->SetFireCnt((*id)->GetFireCnt() + 1);
 					//一定の時間が経ったら・・・
 					if ((*id)->GetFireCnt() >= maxChangeTimeLiquid)
@@ -237,7 +225,6 @@ void Kanetuki::toSteam() {
 							(*id)->SetState(Water::State::GAS);
 							(*id)->position.y -= 10.f;
 						}
-						//changeStateCnt = 0;
 						(*id)->SetFireCnt(0);
 					}
 				}

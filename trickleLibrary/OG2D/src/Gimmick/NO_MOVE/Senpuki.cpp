@@ -174,9 +174,6 @@ void Fan::Render2D() {
 	}
 	this->image->Rotate(0);
 	this->image->Draw(draw, src);
-
-	//デバッグ用
-	if (active_) WindHitBase.LineDraw();
 }
 bool Fan::Finalize() {
 	return true;

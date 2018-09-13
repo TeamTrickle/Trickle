@@ -163,7 +163,6 @@ void Bucket::Render2D() {
 	src.OffsetSize();
 	tex->Rotate(this->angle);
 	tex->Draw(draw, src);
-	this->WaterHitObj.LineDraw();
 }
 
 bool Bucket::Finalize() {

@@ -63,7 +63,7 @@ Water::Water(const Vec2& pos)
 	this->left = nullptr;
 	this->right = nullptr;
 	//タグの指定
-	__super::Init((std::string)"water");
+	__super::Init("water");
 	//描画優先度の設定
 	__super::SetDrawOrder(0.5f);
 	//重さ設定仮
@@ -351,7 +351,6 @@ void Water::Render2D()
 	src.OffsetSize();
 	this->tex->Rotate(0);
 	this->tex->Draw(draw, src, color_a);
-	LineDraw();
 }
 
 bool Water::Finalize()
@@ -543,7 +542,6 @@ void Water::MoveWATERCheck(Vec2& est)
 		{
 			if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 			{
-				//if (this->hit(*(*id)))
 				if((*id)->hit(*this))
 				{
 					this->position.x = preX;
@@ -588,9 +586,9 @@ void Water::MoveWATERCheck(Vec2& est)
 		}
 	}
 	if ((map && map->HitCheck(*this, 0) || 
-		this->FootCheck((std::string)"Floor") || 
-		this->FootCheck((std::string)"Soil") || 
-		this->FootCheck((std::string)"Ladder") ||
+		this->FootCheck("Floor") || 
+		this->FootCheck("Soil") || 
+		this->FootCheck("Ladder") ||
 		this->FootCheck("door")))
 	{
 		this->nowSituation = Water::Situation::Deleteform;

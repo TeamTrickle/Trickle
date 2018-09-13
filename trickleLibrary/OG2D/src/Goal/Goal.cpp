@@ -291,20 +291,16 @@ void Goal::Render2D()
 		//Œõ‚Ì•`‰æ
 		if (this->lightCreate)
 		{
-			//cˆÚ“®Š®¬”Å Žg—p‚µ‚Ä‚¢‚È‚¢
-			//Box2D draw(Vec2(this->position.x - (this->Scale.x - 30.0f), this->position.y - (this->Scale.y + 245.0f)), Vec2(100.0f, this->lightscale.y * 400));         //src‚ðŠg‘å‚³‚¹‚ÄoŒ»
 			//‰¡ˆÚ“®”Å
 			Box2D draw(Vec2((this->position.x + 15) - (this->lightscale.x / 2.0f), this->position.y - (this->Scale.y + 245.0f)), Vec2(10.0f + this->lightscale.x, 400.0f));
 			draw.OffsetSize();
 			//cˆÚ“®Š®¬”Å Žg—p‚µ‚Ä‚¢‚È‚¢
-			//Box2D src(0.0f, 0.0f, 512.0f, 1024 * this->lightscale.x);
 			//‰¡ˆÚ“®”Å
 			Box2D src(0.0f, 0.0f, 512.0f, 1024.0f);
 			src.OffsetSize();
 			lightTex.Draw(draw, src, Color(1.0f, 1.0f, 1.0f, 0.6f));
 		}
 	}
-	this->foot.LineDraw();
 }
 
 bool Goal::GetClear() const
