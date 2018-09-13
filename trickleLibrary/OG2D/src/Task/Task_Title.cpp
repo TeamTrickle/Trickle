@@ -106,6 +106,9 @@ bool Title::Initialize()
 	//BGM
 	sound = rm->GetSoundData("titleBGM");
 	sound->looping(true);
+	if (!sound->isplay()) {
+		sound->volume(0.f);
+	}
 	//カーソルの移動音
 	cursorsound.create(soundcursorname,false);
 	cursorsound.volume(1.0f);
@@ -1277,7 +1280,10 @@ void Title::SkipMove()
 	}
 	auto npc2 = Chara::Create("player", Vec2(790, 639));
 	npc2->SetReplayEnable();
-	this->sound->play();
+	if (!sound->isplay()) {
+		this->sound->play();
+	}
+	sound->volume(1.f);
 	this->isSkip = false;
 	OGge->in->ResetInputData();
 }

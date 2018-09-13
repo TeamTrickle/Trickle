@@ -287,13 +287,13 @@ bool Game::Initialize()
 		sound.play();
 
 		//加熱器
-		Kanetuki::Create(Vec2(64 * 10, 64 * 10 - 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
+		Kanetuki::Create(Vec2(64 * 11, 64 * 10 - 32), Vec2(64 * 3, 64 + 32), Kanetuki::Angle::UP, true);
 		//製氷機
-		auto seihyouki = Seihyouki::Create(Vec2(64 * 2, 64 * 7), Vec2(64 * 1.5f, 64.f), Seihyouki::Angle::RIGHT, false);
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 2, 64 * 5), Vec2(64 * 1.5f, 64.f), Seihyouki::Angle::RIGHT, false);
 		//扇風機
-		Fan::Create(Vec2(64 * 5, 64 * 2), 8.5f, Fan::Dir::RIGHT, 64, true);
+		Fan::Create(Vec2(64 * 7, 64 * 2), 8.5f, Fan::Dir::RIGHT, 64, true);
 		//製氷機スイッチ
-		Switch::Create(Vec2(64 * 4, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
+		Switch::Create(Vec2(64 * 5, 64 * 9), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 
 		break;
 	}
