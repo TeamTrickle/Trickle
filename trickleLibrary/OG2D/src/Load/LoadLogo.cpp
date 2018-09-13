@@ -23,6 +23,7 @@ Load::~Load()
 	{
 		delete this->backcolor;
 	}
+	OGge->AllStop(false);
 }
 
 void Load::UpDate()
@@ -98,7 +99,18 @@ void Load::FeadBackInUpDate()
 	}
 	else
 	{
-		this->mode = Fead::LogoIn;
+		for (auto id = this->deleteObjectName.begin(); id != this->deleteObjectName.end(); ++id)
+		{
+			auto task = OGge->GetTasks<TaskObject>(*id);
+			for (auto is = task->begin(); is != task->end(); ++is)
+			{
+				(*is)->Kill();
+			}
+		}
+		this->deleteObjectName.clear();
+		OGge->AllStop(false);
+		this->mode = Fead::BackOut;
+		//this->mode = Fead::LogoIn;
 	}
 }
 
@@ -175,14 +187,6 @@ void Load::Render2D()
 void Load::SetFead(const Fead& fead)
 {
 	this->mode = fead;
-	/*if (this->mode == Fead::LogoOut)
-	{
-
-	}
-	else
-	{
-		OGge->AllStop(true);
-	}*/
 	this->Stop(false);
 }
 
