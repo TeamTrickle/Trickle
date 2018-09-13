@@ -175,7 +175,7 @@ bool Game::Initialize()
 		//加熱器
 		Kanetuki::Create(Vec2(64 * 21, 64 * 8), Vec2(64 * 2, 64), Kanetuki::Angle::LEFT, true);
 		//製氷機
-		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 6), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT, false);
+		auto seihyouki = Seihyouki::Create(Vec2(64 * 3, 64 * 5), Vec2(64 * 2, 64), Seihyouki::Angle::RIGHT, false);
 		//製氷機スイッチ
 		Switch::Create(Vec2(64 * 13, 64 * 4), std::vector<std::shared_ptr<GameObject>>{seihyouki}, Switch::TargetType::IceMachine);
 
