@@ -82,7 +82,6 @@ void TimeSign::Render2D() {
 			else if (i == 2) continue;
 			draw.OffsetSize();
 			src.OffsetSize();
-			numberAtlas->Rotate(0);
 			numberAtlas->Draw(draw, src);
 		}
 	}
