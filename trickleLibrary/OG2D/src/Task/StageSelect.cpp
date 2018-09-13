@@ -69,14 +69,6 @@ bool StageSelect::Initialize()
 	//ƒTƒEƒ“ƒh‚Ì¶¬
 	//BGM
 	sound = rm->GetSoundData("titleBGM");
-	//if (sound == nullptr)	//
-	//{
-	//	sound = new Sound();
-
-	//	sound->create(soundname, true);
-	//	rm->SetSoundData((std::string)"titleBGM", sound);
-	//	//this->canVolControl = true;
-	//}
 
 	//Œˆ’è‰¹
 	decisionsound.create(decisionsoundname, false);
@@ -110,7 +102,7 @@ bool StageSelect::Initialize()
 	auto load = OGge->GetTask<Load>("load");
 	if (load)
 	{
-		load->ALLTaskUpDateStop();
+		load->ALLTaskUpDateStop(false);
 	}
 	return true;
 }

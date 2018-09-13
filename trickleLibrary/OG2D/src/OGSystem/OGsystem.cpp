@@ -289,10 +289,7 @@ void EngineSystem::ShowNameAddedObject()
 {
 	for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
 	{
-		if ((*id).second->GetTaskName() != "effect")
-		{
-			std::cout << (*id).second->GetTaskName() << ":";
-		}
+		std::cout << (*id).second->GetTaskName() << ":";
 	}
 	std::cout << std::endl;
 }

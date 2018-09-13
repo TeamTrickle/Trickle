@@ -62,6 +62,7 @@ bool Update() {
 		glfwDestroyWindow(OGge->window->GetWindow());
 		return true;
 	}
+	ogtk->UpDate();
 	return false;
 }
 //------------------
@@ -122,7 +123,6 @@ int main() {
 	Initialize();
 	//ウィンドウが存在する場合ループ
 	while (!glfwWindowShouldClose(OGge->window->GetWindow())) {
-		//OG::OutDebugData("time.og", std::to_string(timer->GetTime()) + "\n");
 		if (OGge->fps->FrameCheck())
 		{
 			//エンジン内の更新処理
