@@ -40,5 +40,6 @@ void OGTK::UpDate()
 		OGge->AllTaskDelete();
 		GameManager::ResetData();
 		Title::Create();
+		OGge->AllStop(false);
 	}
 }
