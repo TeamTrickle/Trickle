@@ -57,9 +57,6 @@ Title::Title()
 Title::~Title()
 {
 	//ロードの生成を行い強制描画を行う
-	if (!OGge->GetDeleteEngine())
-	{
-	}
 	this->Finalize();
 }
 
@@ -140,8 +137,6 @@ bool Title::Initialize()
 	this->gierCnt = 0;
 
 	//描画順の決定
-	//__super::SetDrawOrder(1.f);
-	//__super::SetDrawOrder(0.95f);
 	//カメラの中心のターゲットを登録
 	this->cm.SetObject(&(*water));
 	//カメラのサイズと位置を調整

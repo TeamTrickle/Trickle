@@ -20,11 +20,11 @@ bool RecPlayer::Initialize(const std::string& fName) {
 
 	std::ifstream fileReader(fileName, std::ios::in | std::ios::binary);
 	if (!fileReader.is_open()) {
-		printLog("RecPlayer Error - No such file");
+		//printLog("RecPlayer Error - No such file");
 		return false;
 	}
 
-	printLog("=== File open : " + fileName + " ===");
+	//printLog("=== File open : " + fileName + " ===");
 
 	std::string buf;
 	while (!fileReader.eof()) {
@@ -38,7 +38,7 @@ bool RecPlayer::Initialize(const std::string& fName) {
 			Input::in key = (Input::in)std::stoi(commands[1]);
 			RecDef::KeyState state = (RecDef::KeyState)std::stoi(commands[2]);
 			recData.push(KeyEventTimeline::pair(time, RecDef::WatchKey::pair(key, state)));
-			printLog("Read Successful - " + buf);
+			//printLog("Read Successful - " + buf);
 		}
 
 		// スティック関連イベント
@@ -46,11 +46,11 @@ bool RecPlayer::Initialize(const std::string& fName) {
 			In::AXIS axis = RecDef::getAxisWithString(commands[2]);
 			float tilt = std::stof(commands[3]);
 			recStick.push(StickEventTimeline::pair(time, StickState::pair(axis, tilt)));
-			printLog("Read Successful - " + buf);
+			//printLog("Read Successful - " + buf);
 		}
 	}
 	fileReader.close();
-	printLog("=== File closed ===");
+	//printLog("=== File closed ===");
 
 	backupData = recData;
 	backupStick = recStick;
@@ -75,7 +75,7 @@ void RecPlayer::Reset() {
 	}
 	timer.Stop();
 	timer.Start();
-	printLog("RecPlayer --- Repeat!");
+	//printLog("RecPlayer --- Repeat!");
 }
 
 std::vector<std::string> RecPlayer::Split(const std::string& fullStr, const char& keyword)
@@ -110,10 +110,10 @@ void RecPlayer::Play() {
 		if (!isEnded()) {
 			auto curActivity = recData.front();
 			if (curTime >= curActivity.first) {
-				printLog("Read from file - " +
+				/*printLog("Read from file - " +
 					std::to_string(float(curActivity.first)) + " / " +
 					std::to_string(int(curActivity.second.first)) + " / " +
-					std::to_string(int(curActivity.second.second)));
+					std::to_string(int(curActivity.second.second)));*/
 				if (isEventExist(curActivity.second)) {
 					events[curActivity.second]();
 				}

@@ -11,11 +11,9 @@ VolumeControl::VolumeControl()
 	this->timer = 0;
 	this->fadeinBGM = 0.0f;
 	this->fadeoutBGM = 1.0f;
-	//std::cout << "ボリューム調節クラス生成" << std::endl;
 }
 VolumeControl::~VolumeControl()
 {
-	//std::cout << "ボリューム調節クラス解放" << std::endl;
 	if (this->playerPos)
 	{
 		delete this->playerPos;
@@ -53,9 +51,7 @@ float VolumeControl::GetDistance(Vec2* soundpos)
 	{
 		hypotenuse = soundPos;
 	}
-	//デバック用
-	//std::cout << sqrt(hypotenuse.x*hypotenuse.x + hypotenuse.y*hypotenuse.y) << std::endl;
-
+	
 	distance = sqrt(hypotenuse.x*hypotenuse.x + hypotenuse.y*hypotenuse.y);        //直線距離を求める
 	return distance;
 }

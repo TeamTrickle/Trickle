@@ -78,7 +78,6 @@ Water::Water(const Vec2& pos)
 	//カウンター初期化
 	this->iceCnt = 0;
 	this->fireCnt = 0;
-
 	this->tex = rm->GetTextureData("water");
 }
 

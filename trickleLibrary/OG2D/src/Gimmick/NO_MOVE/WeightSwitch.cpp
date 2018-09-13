@@ -31,7 +31,6 @@ void WeightSwitch::ToClose()
 
 WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass_, std::vector<std::shared_ptr<GameObject>> targets_)     //座標、大きさ、必要な重さ
 {
-	std::cout << "スイッチ生成" << std::endl;
 	this->objectTag = "WeightSwitch";
 	this->taskName = "WeightSwitch";
 	__super::Init(this->objectTag);

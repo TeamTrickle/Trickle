@@ -22,10 +22,10 @@ void Recorder::Destroy() {
 		recThread.join();
 	fileWriter.close();
 	if (fileWriter.is_open()) {
-		printLog(fileName + "ファイル記録に問題がありました");
+		//printLog(fileName + "ファイル記録に問題がありました");
 	}
 	else {
-		printLog(fileName + "ファイルの記録を中止します");
+		//printLog(fileName + "ファイルの記録を中止します");
 	}
 	delete this;
 }
@@ -83,7 +83,7 @@ void Recorder::Recorde() {
 			std::string curTime = std::to_string(localTimer.GetTime());
 			std::string msg = curTime + " / " + act;
 			fileWriter << msg.c_str() << std::endl;
-			printLog(msg);
+			//printLog(msg);
 			inputQueue.pop();
 		}
 		if (isKeyListenable())
@@ -104,7 +104,7 @@ void Recorder::RecordeButton() {
 			std::string status	= std::to_string(k.second);
 			std::string msg = curTime + "/" + button + "/" + status;
 			fileWriter << msg.c_str() << std::endl;
-			printLog(msg);
+			//printLog(msg);
 		}
 	}
 }
@@ -121,7 +121,7 @@ void Recorder::RecordeSticks() {
 			std::string tilt = std::to_string(inputListener->axis(s));
 			std::string msg = curTime + "/" + "StickInput/" + stickName + "/" + tilt;
 			fileWriter << msg.c_str() << std::endl;
-			printLog(msg);
+			//printLog(msg);
 		}
 	}
 }

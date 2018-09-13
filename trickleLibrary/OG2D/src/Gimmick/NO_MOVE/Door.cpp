@@ -53,9 +53,6 @@ Door::~Door()
 void Door::UpDate()
 {
 	//if (this->isOpen != this->preIsOpen)
-	this->originPos.x += OGge->in->axis(In::AXIS_RIGHT_X);
-	this->position.y += OGge->in->axis(In::AXIS_RIGHT_Y) * -1;
-	std::cout << this->position.x << ":" << this->position.y << ":" << (int)this->id << "\n";
 	this->isMove = true;
 	//ŠJ‚¯‚é
 	if (this->isOpen)
