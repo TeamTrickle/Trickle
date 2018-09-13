@@ -209,9 +209,7 @@ void EngineSystem::TaskKillCheck()
 		{
 			if (id->second->GetKillCount() > 0)
 			{
-				this->taskobjects.erase(id);
-				this->TaskApplication();
-				id = this->taskobjects.begin();
+				id = this->taskobjects.erase(id);
 			}
 			else
 			{
@@ -291,15 +289,18 @@ void EngineSystem::ShowNameAddedObject()
 {
 	for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
 	{
-		std::cout << (*id).second->GetTaskName() << ":";
+		if ((*id).second->GetTaskName() != "effect")
+		{
+			std::cout << (*id).second->GetTaskName() << ":";
+		}
 	}
 	std::cout << std::endl;
 }
-void EngineSystem::AllKill()
+void EngineSystem::AllKill(const bool flag)
 {
 	for (auto id = this->taskobjects.begin(); id != this->taskobjects.end(); ++id)
 	{
-		id->second->Kill();
+		id->second->Kill(flag);
 	}
 }
 EngineSystem* OGge;

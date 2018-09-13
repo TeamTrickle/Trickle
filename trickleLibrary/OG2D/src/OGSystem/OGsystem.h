@@ -91,14 +91,16 @@ public:
 	bool GetDeleteEngine();		//エンジン終了を返す
 	void SetDeleteEngine(bool);	//エンジン終了登録
 	void DeleteTasks();			//現状登録されているもので削除処理を実行する
+	void AllTaskDelete();		//登録タスク全削除
 	/**
 	*@brief	:登録されているタスクを表示する
 	*/
 	void ShowNameAddedObject();
 	/**
 	*@brief	:全タスク削除
+	*@param	:bool flag 生成有無
 	*/
-	void AllKill();
+	void AllKill(const bool flag = true);
 	//タスク検索(最初の同名のタスクを返す)
 	template <class T> std::shared_ptr<T> GetTask(const std::string& taskName)
 	{
@@ -157,7 +159,6 @@ private:
 	void Task_UpDate();			//タスク更新処理
 	void Task_Render_AF();		//タスク描画処理
 	void TaskKillCheck();		//削除予定のタスクを削除
-	void AllTaskDelete();		//登録タスク全削除
 	std::vector<std::pair<int, TaskObject::SP>> taskobjects;	//タスクオブジェクト達
 	std::vector<TaskObject::SP> addTaskObjects;	//登録予定タスク達
 };

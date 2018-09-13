@@ -34,5 +34,14 @@ void OGTK::StartTaskObject()
 
 OGTK::~OGTK()
 {
-	
+}
+
+void OGTK::UpDate()
+{
+	if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
+	{
+		OGge->AllKill(false);
+		OGge->AllTaskDelete();
+		Title::Create();
+	}
 }
