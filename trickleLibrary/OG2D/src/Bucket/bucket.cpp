@@ -78,8 +78,15 @@ void Bucket::UpDate() {
 		if (!this->IsOutCheck)
 		{
 			auto player = OGge->GetTask<Player>("Player");
-			player->SetMotion(Player::Motion::Spill);
-			this->IsOutCheck = true;
+			if (player->PutCheck(24.f))
+			{
+				player->SetMotion(Player::Motion::Spill);
+				this->IsOutCheck = true;
+			}
+			else
+			{
+				player->SetMotion(Player::Motion::NoLower);
+			}
 		}
 	}
 	if (this->IsOutCheck)

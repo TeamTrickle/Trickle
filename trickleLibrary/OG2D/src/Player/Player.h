@@ -114,7 +114,7 @@ private:
 	bool MapHitCheck(const std::string& objname_);						//指定したオブジェクトタグのオブジェクトの当たり判定
 	void SwitchCheck();											//スイッチとの当たり判定
 	bool LadderJumpCheck();										//梯子中にジャンプを行う際の当たり判定
-	bool PutCheck();											//置く動作を行えるかの判定
+	
 	bool HeadSolidCheck();										//頭上氷判定
 	void StateUpDate();
 	bool MotionUpDate();
@@ -154,6 +154,7 @@ public:
 	Vec2 GetPos() const;										//プレイヤーの位置を返す
 	void SetInputAuto(bool);
 	bool GetInputAuto() const;
+	bool PutCheck(const float scale_x);											//置く動作を行えるかの判定
 	bool ReleaseHold();
 	bool ReleaseSolid();						//持っている氷の上に氷が当たった時の処理
 	void SetMotion(const Motion& motion_);

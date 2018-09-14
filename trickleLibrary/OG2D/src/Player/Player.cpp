@@ -31,10 +31,6 @@ bool Player::Initialize(Vec2& pos)
 	//オブジェクトの初期化
 	this->CreateObject(Cube, pos, Vec2(64.0f, 80.f), 0.0f);
 	this->objectTag = "Player";
-	//デバッグ用位置調整
-	//this->position = { 841,700 };
-	//this->position = { 19 * 64 + 32,13 * 64 };
-	//テクスチャの読み込み
 	//各変数の初期化
 	this->CheckJump = true;
 	this->CheckGravity = true;
@@ -1200,7 +1196,7 @@ bool Player::ReleaseHold()
 {
 	if (this->hold)
 	{
-		if (this->PutCheck())
+		if (this->PutCheck(this->Scale.x))
 		{
 			//持っている判定を元に戻す
 			auto bucket = OGge->GetTasks<Bucket>("bucket");
@@ -1299,14 +1295,22 @@ bool Player::LadderJumpCheck()
 	}
 	return true;
 }
-bool Player::PutCheck()
+bool Player::PutCheck(const float scale_x)
 {
+	left.CreateObject(
+		Cube,
+		Vec2(this->position.x - scale_x, this->position.y),
+		Vec2(scale_x, this->Scale.y),
+		0.0f);
+	right.CreateObject(Cube,
+		Vec2(this->position.x + this->Scale.x, this->position.y),
+		Vec2(scale_x, this->Scale.y),
+		0.0f);
 	auto map = OGge->GetTask<Map>("map");
 	if (map)
 	{
 		if (this->direction == Direction::LEFT)
-		{
-			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
+		{	
 			if (map->HitCheck(left,1))
 			{
 				return false;
@@ -1314,7 +1318,6 @@ bool Player::PutCheck()
 		}
 		else
 		{
-			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if (map->HitCheck(right,1))
 			{
 				return false;
@@ -1326,7 +1329,6 @@ bool Player::PutCheck()
 	{
 		if (this->direction == Direction::LEFT)
 		{
-			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if ((*id)->IsObjectDistanceCheck(left.position, left.Scale))
 			{
 				if ((*id)->CubeHit(left))
@@ -1337,7 +1339,6 @@ bool Player::PutCheck()
 		}
 		else
 		{
-			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if ((*id)->IsObjectDistanceCheck(right.position, right.Scale))
 			{
 				if ((*id)->CubeHit(right))
@@ -1352,7 +1353,6 @@ bool Player::PutCheck()
 	{
 		if (this->direction == Direction::LEFT)
 		{
-			left.CreateObject(Cube, Vec2(this->position.x - this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if ((*id)->IsObjectDistanceCheck(left.position, left.Scale))
 			{
 				if ((*id)->hit(left))
@@ -1363,7 +1363,6 @@ bool Player::PutCheck()
 		}
 		else
 		{
-			right.CreateObject(Cube, Vec2(this->position.x + this->Scale.x, this->position.y), this->Scale, 0.0f);
 			if ((*id)->IsObjectDistanceCheck(right.position, right.Scale))
 			{
 				if ((*id)->hit(right))
@@ -1436,7 +1435,7 @@ void Player::StateUpDate()
 		//バケツを置く動作
 		if (this->InputB2down() && this->FootCheck() && this->motion != Motion::NoLower)
 		{
-			if (this->PutCheck() && this->motion != Motion::Spill)
+			if (this->PutCheck(this->Scale.x) && this->motion != Motion::Spill)
 			{
 				this->motion = Motion::Lower;
 			}
