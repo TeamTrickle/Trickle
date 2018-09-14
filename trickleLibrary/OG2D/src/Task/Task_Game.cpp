@@ -244,7 +244,7 @@ bool Game::Initialize()
 		//加熱器生成
 		auto kanetuki1 = Kanetuki::Create(Vec2(64 * 12, 64 * 10 - 32), Vec2(64 * 2, 64+32), Kanetuki::Angle::UP, false);
 		//扇風機生成
-		auto fan = Fan::Create(Vec2(64 * 10, 64 * 2), 7, Fan::Dir::RIGHT, 64 * 5, true);
+		auto fan = Fan::Create(Vec2(64 * 10, 64 * 2), 7, Fan::Dir::RIGHT, 64, true);
 		//加熱器用スイッチ生成
 		auto swich = Switch::Create(Vec2(64 * 10, 64 * 9), std::vector<std::shared_ptr<GameObject>>{kanetuki1/*, kanetuki2*/}, Switch::TargetType::Heater);
 		break;

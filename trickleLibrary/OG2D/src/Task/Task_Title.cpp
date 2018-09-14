@@ -589,7 +589,9 @@ void Title::UpDate()
 		if (OGge->in->down(In::CL) || OGge->in->down(In::LL) || OGge->in->down(In::CR) || OGge->in->down(In::LR))
 		{
 			//カーソルの移動音再生
-			cursorsound.play();
+			if (cursorIsPlay) { 
+				cursorsound.play(); 
+			}
 
 			if (del == no)
 			{
@@ -605,7 +607,11 @@ void Title::UpDate()
 		if (OGge->in->down(Input::in::B2))
 		{
 			//決定音の再生
-			decisionsound.play();
+			if (decisionIsPlay) {
+				decisionsound.play();
+			}
+			cursorIsPlay = false;
+			decisionIsPlay = false;
 
 			if (del == no)
 			{
@@ -623,6 +629,8 @@ void Title::UpDate()
 		if (clearedCnt >= 90) { 
 			this->mode = from7;
 			clearedCnt = 0;
+			cursorIsPlay = true;
+			decisionIsPlay = true;
 		}
 		break;
 

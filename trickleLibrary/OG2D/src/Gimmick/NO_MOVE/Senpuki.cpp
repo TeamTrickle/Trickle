@@ -23,17 +23,6 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	//image.Create(filePath);
 	this->image = rm->GetTextureData("fan");
 	//•—‚Ì‰æ‘œ
-	/*std::string filePathWind = "wind1.png";
-	windimage.Create(filePathWind);
-	std::string filePathWind2 = "wind2.png";
-	windimage2.Create(filePathWind2);
-	std::string filePathWind3 = "wind3.png";
-	windimage3.Create(filePathWind3);
-	std::string filePathWind4 = "wind4.PNG";
-	windimage4.Create(filePathWind4);
-	std::string filePathWind5 = "wind5.PNG";
-	windimage5.Create(filePathWind5);*/
-
 	this->windimage = rm->GetTextureData("wind1");
 	this->windimage2 = rm->GetTextureData("wind2");
 	this->windimage3 = rm->GetTextureData("wind3");
@@ -84,7 +73,7 @@ void Fan::UpDate() {
 			if (dir == RIGHT)
 			{
 				auto effect = Effect::Create(Vec2(this->position.x+32,this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200);
-				effect->SetWind(Vec2(64 * 8, 64), effect->position, Vec2(effect->position.x + endpos, effect->position.y), Effect::Mode::WindR);
+				effect->SetWind(Vec2(64 * (endpos >=8?8:endpos), 64.f), effect->position, Vec2(effect->position.x + endpos, effect->position.y), Effect::Mode::WindR);
 				switch (effectnum)
 				{
 				case 1:

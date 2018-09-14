@@ -36,6 +36,7 @@ void OGTK::UpDate()
 {
 	if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
 	{
+		rm->GetSoundData("titleBGM")->stop();
 		OGge->AllKill(false);
 		OGge->AllTaskDelete();
 		//OGge->in->ResetInputData();
