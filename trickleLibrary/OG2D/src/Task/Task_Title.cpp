@@ -46,6 +46,7 @@ Title::Title()
 	this->textspeed = 0.f;          //テキストの動くスピードについて
 	this->decisionIsPlay = true;
 	this->cursorIsPlay = true;
+	this->numflag = true;
 
 	clearedCnt = 0;
 
@@ -312,6 +313,7 @@ void Title::UpDate()
 		else {
 			demoTimer.Stop();
 		}
+		demoTimer.Stop();
 		if (PressAnyKey() == false)
 		{
 			//push any keyの透明度に関した処理
@@ -332,7 +334,6 @@ void Title::UpDate()
 		}
 	}
 	break;
-
 	case from7:	//決定待ち状態
 	{
 		if (!OGge->in->EitherDown()) {
@@ -347,6 +348,7 @@ void Title::UpDate()
 			if (OGge->in->down(In::CL) || OGge->in->down(In::LL))
 			{
 				this->nowmoveR = true;
+				this->numflag = false;
 				if (cursorIsPlay)
 				{
 					//カーソルの移動音再生
@@ -379,6 +381,7 @@ void Title::UpDate()
 		{
 			if (OGge->in->down(In::CR) || OGge->in->down(In::LR))
 			{
+				this->numflag = false;
 				this->nowmoveL = true;
 				if (cursorIsPlay)
 				{
@@ -406,7 +409,6 @@ void Title::UpDate()
 				}
 			}
 		}
-
 		//文字の移動処理--------------------------------------------------------------
 		switch (cursorNum)
 		{
@@ -500,15 +502,15 @@ void Title::UpDate()
 			break;
 			//------------------------------------------------------------------------------------
 		}
-		if (demoTimer.GetTime() >= DEMO_LIMIT) {
-			this->mode = Mode::from10;
-			break;
-		}
+		//if (demoTimer.GetTime() >= DEMO_LIMIT) {
+		//	this->mode = Mode::from10;
+		//	break;
+		//}
 
 		//決定して次へ
 		if (OGge->in->down(Input::in::B2))
 		{
-			if (this->textspeed == 0.f)    //現在文字が移動中でなければ
+			if (this->textspeed == 0.f && this->numflag)    //現在文字が移動中でなければ
 			{
 				//決定音の再生
 				decisionsound.play();
@@ -567,6 +569,7 @@ void Title::UpDate()
 			effect03->SetTexture(this->effect03);
 			effect03->SetMaxSize(Vec2(640, 128));
 		}
+		
 	}
 	break;
 
@@ -1023,6 +1026,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //必
 			{
 				cursorNum = 0;
 			}
+			this->numflag = true;
 			nowmoveL = false;
 		}
 	}
@@ -1053,6 +1057,7 @@ Vec2 Title::TextMovein(Vec2 pos,Vec2 size,Vec2 outsize,float maxsize)      //必
 			{
 				cursorNum = 3;
 			}
+			this->numflag = true;
 			nowmoveR = false;
 		}
 	}

@@ -141,6 +141,9 @@ class Title :public TaskObject
 
 	int clearedCnt;		//! Clearedを表示するためだけのカウンタ
 
+	//! 内部値以降後のフラグ管理
+	bool numflag;
+
 public:
 	Title();
 	virtual ~Title();
