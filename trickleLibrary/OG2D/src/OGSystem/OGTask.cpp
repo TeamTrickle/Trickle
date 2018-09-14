@@ -38,8 +38,10 @@ void OGTK::UpDate()
 	{
 		OGge->AllKill(false);
 		OGge->AllTaskDelete();
+		//OGge->in->ResetInputData();
 		GameManager::ResetData();
 		Title::Create();
+		OGge->SetPause(false);
 		OGge->AllStop(false);
 	}
 }
