@@ -28,13 +28,19 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 	}
 	startTime = 0.f;
 	videoFPS = (float)cap.get(CV_CAP_PROP_FPS);
-	delay = 0.3f / videoFPS;
+	delay = 0.1f / videoFPS;
 	Vec2 winSize = OGge->window->GetSize();
 	draw = Box2D(OGge->camera->GetPos(), OGge->camera->GetSize());
 	draw.OffsetSize();
 	texColor = Color(1.f, 1.f, 1.f, 1.f);
 	timer.Start();
-
+	tex.CreateID(1);
+	//最初に1枚描画をセットしておかないと1frame目で処理が実行の時間を超えなかった時に板ポリがでるのでその対策
+	cap >> frame;
+	if (!frame.empty())
+	{
+		tex.Create(frame);
+	}
 	__super::Init((std::string)"demo");
 	__super::SetDrawOrder(1.1f);
 	return true;
@@ -47,13 +53,13 @@ void Demo::UpDate() {
 	if (deadFlag) {
 		Fadeout();
 	}
-	else if (timer.GetTime() - startTime >= delay) {
+	else if (timer.GetTime() - startTime >= delay) 
+	{
 		cap >> frame;
 		if (frame.empty()) {
 			deadFlag = true;
 			return;
 		}
-		tex.Finalize();
 		tex.Create(frame);
 		startTime = timer.GetTime();
 	}

@@ -51,7 +51,7 @@ bool Texture::Create(const cv::Mat& mat)
 {
 	//GLuint id;
 	//テクスチャを1つだけ生成する
-	glGenTextures(1, &this->_TexId);
+	//glGenTextures(1, &this->_TexId);
 	//テクスチャをバインドする
 	glBindTexture(GL_TEXTURE_2D, this->_TexId);
 	//画像を読み込む
