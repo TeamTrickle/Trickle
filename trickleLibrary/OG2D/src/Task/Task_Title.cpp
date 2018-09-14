@@ -313,7 +313,6 @@ void Title::UpDate()
 		else {
 			demoTimer.Stop();
 		}
-		demoTimer.Stop();
 		if (PressAnyKey() == false)
 		{
 			//push any keyの透明度に関した処理
