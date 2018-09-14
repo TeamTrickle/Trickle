@@ -551,9 +551,7 @@ void Title::UpDate()
 				//終了
 				case 3:
 					//データ削除の処理
-					GameManager::ResetData();
-
-					OGge->GameEnd();
+					//OGge->GameEnd();
 					break;
 				}
 			}

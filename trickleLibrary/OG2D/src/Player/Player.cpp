@@ -1635,34 +1635,6 @@ bool Player::MotionJumpUpDate()
 }
 bool Player::MotionLadderUpDate()
 {
-	if (this->InputLeft() || this->InputRight() || this->AxisLX() > 0.8f || this->AxisLX() < -0.8f)
-	{
-		if (this->LadderJumpCheck())
-		{
-			this->motion = Normal;
-			this->animation.animCnt = 0;
-			this->moveCnt = 0;
-			this->est = { 0,0 };
-			return true;
-		}
-	}
-	if (this->InputUp())
-	{
-		++this->animation.animCnt;
-		Vec2 e = { 0.f,-5.0f };
-		this->LadderMoveCheck(e);
-		if (this->HeadMapCheck("LadderTop", true))
-		{
-			//移動が終わったら梯子モーションをするように設定
-			this->animation.animMo = Motion::Normal;
-			//アニメーション状態に移行
-			this->state = State::ANIMATION;
-			//カウントリセット
-			this->moveCnt = 0;
-			//移動値をすべてリセット
-			this->est = { 0.f,0.f };
-		}
-	}
 	if (this->InputDown() || this->isInputAuto)
 	{
 		++this->animation.animCnt;
@@ -1681,6 +1653,34 @@ bool Player::MotionLadderUpDate()
 		{
 			//重力処理を行わないのでここで終了
 			return false;
+		}
+	}
+	else if (this->InputUp())
+	{
+		++this->animation.animCnt;
+		Vec2 e = { 0.f,-5.0f };
+		this->LadderMoveCheck(e);
+		if (this->HeadMapCheck("LadderTop", true))
+		{
+			//移動が終わったら梯子モーションをするように設定
+			this->animation.animMo = Motion::Normal;
+			//アニメーション状態に移行
+			this->state = State::ANIMATION;
+			//カウントリセット
+			this->moveCnt = 0;
+			//移動値をすべてリセット
+			this->est = { 0.f,0.f };
+		}
+	}
+	else if (this->InputLeft() || this->InputRight() || this->AxisLX() > 0.8f || this->AxisLX() < -0.8f)
+	{
+		if (this->LadderJumpCheck())
+		{
+			this->motion = Normal;
+			this->animation.animCnt = 0;
+			this->moveCnt = 0;
+			this->est = { 0,0 };
+			return true;
 		}
 	}
 	return true;
