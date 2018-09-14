@@ -502,10 +502,10 @@ void Title::UpDate()
 			break;
 			//------------------------------------------------------------------------------------
 		}
-		//if (demoTimer.GetTime() >= DEMO_LIMIT) {
-		//	this->mode = Mode::from10;
-		//	break;
-		//}
+		if (demoTimer.GetTime() >= DEMO_LIMIT) {
+			this->mode = Mode::from10;
+			break;
+		}
 
 		//決定して次へ
 		if (OGge->in->down(Input::in::B2))
