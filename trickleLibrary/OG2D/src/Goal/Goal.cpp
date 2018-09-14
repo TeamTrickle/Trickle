@@ -199,11 +199,11 @@ void Goal::UpDate()
 		{
 			this->cameraLock = true;
 
-			auto game = OGge->GetTask<Game>("game");
+			/*auto game = OGge->GetTask<Game>("game");
 			if (game != nullptr)
 			{
 				game->canvolControl = false;
-			}
+			}*/
 
 			auto player = OGge->GetTasks<Player>("Player");
 			for (auto id = player->begin(); id != player->end(); ++id)

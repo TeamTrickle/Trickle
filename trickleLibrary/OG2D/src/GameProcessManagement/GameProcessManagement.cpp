@@ -77,11 +77,13 @@ void GameManager::UpDate()
 	}
 	else
 	{
+
+		auto game = OGge->GetTask<Game>("game");
+		game->canvolControl = false;
 		if (this->time > 180)
 		{
 			//クリア処理
 			//データの保存
-			auto game = OGge->GetTask<Game>("game");
 			if (game)
 			{
 				//現在の記録を保存
