@@ -47,7 +47,7 @@ bool Demo::Initialize(const std::string& demoVideoPath) {
 }
 
 void Demo::UpDate() {
-	if (OGge->in->down(In::B1)) {
+	if (OGge->in->EitherDown()) {
 		deadFlag = true;
 	}
 	if (deadFlag) {
