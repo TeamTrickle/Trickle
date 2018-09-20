@@ -1248,6 +1248,47 @@ bool Player::ReleaseHold()
 	}
 	return false;
 }
+bool Player::ResetHold()
+{
+
+	if (this->hold)
+	{
+		if (this->PutCheck(this->Scale.x))
+		{
+			//‚Á‚Ä‚¢‚é”»’è‚ğŒ³‚É–ß‚·
+			auto bucket = OGge->GetTasks<Bucket>("bucket");
+			for (auto id = bucket->begin(); id != bucket->end(); ++id)
+			{
+				if ((*id)->GetHold())
+				{
+					(*id)->HoldCheck(false);
+					this->hold = false;
+				}
+			}
+			auto waters = OGge->GetTasks<Water>("water");
+			for (auto id = waters->begin(); id != waters->end(); ++id)
+			{
+				if ((*id)->GetHold())
+				{
+					(*id)->HoldCheck(false);
+					(*id)->ResetMove();
+					this->hold = false;
+				}
+			}
+			this->inv = 10;
+			this->position.y += this->haveAddPos.y;
+			this->Scale.y -= this->haveAddPos.y;
+			this->haveAddPos = { 0,0 };
+			return true;
+		}
+		else
+		{
+			this->animation.animCnt = 0;
+			this->motion = Motion::NoLower;
+		}
+	}
+	return false;
+}
 bool Player::ReleaseSolid()
 {
 	if (this->hold)
@@ -1390,6 +1431,7 @@ void Player::SetInputAuto(bool flag)
 		if (this->state == State::BUCKET)
 		{
 			this->motion = Motion::Lower;
+			this->ResetHold();
 		}
 	}
 }

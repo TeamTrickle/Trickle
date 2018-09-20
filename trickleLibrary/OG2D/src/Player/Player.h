@@ -138,6 +138,11 @@ private:
 	float AxisLY();
 	float AxisRX();
 	float AxisRY();
+	/**
+	*@brief	:©•ª‚Ì‚Á‚Ä‚¢‚é‚à‚Ì‚ğƒŠƒZƒbƒg‚·‚é
+	*@return:bool ¬Œ÷ true
+	*/
+	bool ResetHold();
 public:
 	typedef std::shared_ptr<Player> SP;
 	static SP Create(Vec2&, bool = true);
