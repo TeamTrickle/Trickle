@@ -455,7 +455,7 @@ bool Water::FootCheck(const std::string& objtag, const int n)
 	auto doors = OGge->GetTasks<Door>("Door");
 	for (auto id = doors->begin(); id != doors->end(); ++id)
 	{
-		if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		//if (foot.IsObjectDistanceCheck((*id)->position, (*id)->Scale))
 		{
 			if (foot.hit(*(*id)))
 			{
