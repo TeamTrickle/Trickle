@@ -59,6 +59,8 @@ WeightSwitch::WeightSwitch(const Vec2& pos_, const Vec2& size_, const float mass
 
 	//ターゲット
 	this->targets = targets_;
+
+	this->state = State::Nomal;
 }
 WeightSwitch::~WeightSwitch()
 {
