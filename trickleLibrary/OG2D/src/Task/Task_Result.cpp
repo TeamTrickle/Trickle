@@ -364,8 +364,8 @@ void Result::Render2D() {
 		draw.OffsetSize();
 		Box2D src(0, 64 * 3, 64 * 4, 64);
 		src.OffsetSize();
-		fontui->Rotate(0);
 		fontui->Draw(draw, src);
+		fontui->Rotate(0);
 	}
 	//¯‚Ì˜g
 	{
