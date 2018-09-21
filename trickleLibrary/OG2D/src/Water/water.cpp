@@ -911,6 +911,17 @@ bool Water::HeadSolidCheck()
 			}
 		}
 	}
+	auto blocks = OGge->GetTasks<Block>("block");
+	for (auto id = blocks->begin(); id != blocks->end(); ++id)
+	{
+		if (this->IsObjectDistanceCheck((*id)->position, (*id)->Scale))
+		{
+			if (head.hit(*(*id)))
+			{
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
