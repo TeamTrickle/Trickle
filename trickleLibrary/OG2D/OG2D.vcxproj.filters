@@ -357,6 +357,7 @@
     <ClCompile Include="src\Task\Task_StageAlert.cpp">
       <Filter>ソースファイル\Task\StageAlert</Filter>
     </ClCompile>
+    <ClCompile Include="GimmickBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object\Object.h">
@@ -553,6 +554,9 @@
     </ClInclude>
     <ClInclude Include="src\Map\Ornament.h">
       <Filter>ソースファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GimmickBase.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
