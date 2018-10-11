@@ -10,7 +10,7 @@
 #include "UI\UI.h"
 #include "Gimmick\NO_MOVE\Kanetuki.h"
 #include "Gimmick\NO_MOVE\Seihyouki.h"
-#include "Gimmick\NO_MOVE\Senpuki.h"
+#include "Gimmick\NO_MOVE\Fan.h"
 #include "Gimmick\NO_MOVE\Switch.h"
 #include "Gimmick\NO_MOVE\TimeSign.h"
 #include "GameProcessManagement\Timer.h"

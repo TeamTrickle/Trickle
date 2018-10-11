@@ -8,7 +8,7 @@
 #pragma once
 #include "OGSystem\OGsystem.h"
 #include "Object\Object.h"
-#include "Senpuki.h"
+#include "Fan.h"
 #include "Kanetuki.h"
 #include "Seihyouki.h"
 
@@ -46,7 +46,7 @@ public:
 
 	~Switch();
 };
-};
+
 
 ////______________________________//
 ////|動くギミック  スイッチ      |//

@@ -11,6 +11,16 @@ Switch::Switch()
 	__super::SetDrawOrder(0.5f);
 }
 
+bool Switch::Initialize(Vec2 & pos, std::vector<std::shared_ptr<GameObject>> target)
+{
+	return false;
+}
+
+Switch::SP Switch::Create(Vec2 & pos, std::vector<std::shared_ptr<GameObject>> targets, bool flag)
+{
+	return Switch::SP();
+}
+
 Switch::~Switch()
 {
 	this->Finalize();

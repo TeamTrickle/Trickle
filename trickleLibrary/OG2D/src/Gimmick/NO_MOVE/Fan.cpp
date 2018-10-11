@@ -1,21 +1,26 @@
-#include "Senpuki.h"
+#include "Fan.h"
 using namespace std;
 
 //別タスクや別オブジェクトを生成する場合ここにそのclassの書かれたhをインクルードする
 #include "Water\water.h"
+#include "Fan.h"
 
 
-Fan::Fan() {
+
+Fan::Fan(Vec2 pos, Vec2 range, Dir dir, bool active)
+	:
+	GimmickBase(pos,range, dir, active)
+{
 	this->taskName = "Senpuki";
 	this->soundname = "wind1.wav";
 }
 Fan::~Fan() {}
-bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,*/float effectdis, bool active) {
+bool Fan::Initialize(Vec2 pos, Vec2 r, Dir dir, bool active){
 	this->taskName = "Senpuki";			//検索時に使うための名を登録する
 	__super::Init(taskName);			//TaskObject内の処理を行う
 	SetDrawOrder(0.5f);
 
-										//アニメーションのリセットをする
+	//アニメーションのリセットをする
 	animetion.AnimetionReset();
 
 	//画像関連の描画パス
@@ -35,34 +40,85 @@ bool Fan::Initialize(Vec2 pos, float r, Dir d, /*std::shared_ptr<Switch>& swich,
 	sound.create(soundname, true);
 	//エフェクト関連情報
 	this->effectCnt = 0;
-	this->endpos = effectdis;
+	//this->endpos = effectdis;
 
-	range = r;
-	dir = d;
+	range = r.x;
+	setDirection(dir);
 	//this->swich_ = swich;
-	this->active_ = active;
+	setActive(active);
 	//扇風機の描画座標
 	position = pos;
 
-	if (dir == Fan::Dir::LEFT)
+	if (getDirection() == Fan::Dir::LEFT)
 	{
 		strength = -5;
-		this->WindHitBase.CreateObject(Cube, Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + 64, 64.f), 0.0f);
+		setHitBase(Vec2(position.x - (64.f * r.x), position.y), Vec2(64.f * r.x + 64, 64.f));
 	}
 	else
 	{
 		strength = 5;
-		this->WindHitBase.CreateObject(Cube, pos, Vec2(64 * r, 64.f), 0.0f);
+		setHitBase(pos, Vec2(64 * r.x, 64.f));
 	}
 
 	return true;
-}
-void Fan::SetWindRange(Vec2&) {
 
 }
+void Fan::setEffectDist(float dist) {
+	endpos = dist;
+}
+
+
+
+//bool Fan::Initialize(Vec2 pos, float r, Dir d, float effectdis, bool active) {
+//	this->taskName = "Senpuki";			//検索時に使うための名を登録する
+//	__super::Init(taskName);			//TaskObject内の処理を行う
+//	SetDrawOrder(0.5f);
+//
+//										アニメーションのリセットをする
+//	animetion.AnimetionReset();
+//
+//	画像関連の描画パス
+//	std::string filePath = "fan.png";      //扇風機の画像
+//	image.Create(filePath);
+//	this->image = rm->GetTextureData("fan");
+//	風の画像
+//	this->windimage = rm->GetTextureData("wind1");
+//	this->windimage2 = rm->GetTextureData("wind2");
+//	this->windimage3 = rm->GetTextureData("wind3");
+//	this->windimage4 = rm->GetTextureData("wind4");
+//	this->windimage5 = rm->GetTextureData("wind5");
+//
+//
+//	サウンドの生成
+//	this->startflag = true;
+//	sound.create(soundname, true);
+//	エフェクト関連情報
+//	this->effectCnt = 0;
+//	this->endpos = effectdis;
+//
+//	range = r;
+//	setDirection(d);
+//	this->swich_ = swich;
+//	setActive(active);
+//	扇風機の描画座標
+//	position = pos;
+//
+//	if (getDirection() == Fan::Dir::LEFT)
+//	{
+//		strength = -5;
+//		setHitBase(Vec2(position.x - (64.f * r), position.y), Vec2(64.f * r + 64, 64.f));
+//	}
+//	else
+//	{
+//		strength = 5;
+//		setHitBase(pos, Vec2(64 * r, 64.f));
+//	}
+//
+//	return true;
+//}
 void Fan::UpDate() {
-	if (active_) {
-		SendWind();
+	if (isActive()) {
+		affectWater();
 		//風のエフェクト生成-----------------------------------------------------------------------------------------------
 		this->effectCnt++;
 
@@ -70,7 +126,7 @@ void Fan::UpDate() {
 		{
 			effectnum = rand() % 5 + 1;
 			//扇風機が右向きの時
-			if (dir == RIGHT)
+			if (getDirection() == RIGHT)
 			{
 				auto effect = Effect::Create(Vec2(this->position.x+32,this->position.y), Vec2(0, 64), Vec2(256, 64), 1, 200);
 				effect->SetWind(Vec2(64 * (endpos >=8?8:endpos), 64.f), effect->position, Vec2(effect->position.x + endpos, effect->position.y), Effect::Mode::WindR);
@@ -126,10 +182,10 @@ void Fan::UpDate() {
 	}
 
 	//アニメーションを動かす処理
-	animetion.AnimetionMove(this->active_);
+	animetion.AnimetionMove(isActive());
 
 	//サウンドの再生について
-	if (active_)
+	if (isActive())
 	{
 		volControl.Play(&this->position, 1000.0f, 0.6f, sound);
 		if (startflag)
@@ -138,8 +194,7 @@ void Fan::UpDate() {
 			startflag = false;
 		}
 	}
-	if (!active_)	//スイッチがオフ
-	{
+	else{
 		if (sound.isplay())
 		{
 			sound.stop();
@@ -153,9 +208,9 @@ void Fan::Render2D() {
 	Box2D draw(position, Vec2(64, 64));
 	draw.OffsetSize();
 	Box2D src = this->Src;
-	this->animetion.AnimetionSrc(src, this->active_);
+	this->animetion.AnimetionSrc(src, isActive());
 	src.OffsetSize();
-	if (this->dir == Fan::Dir::LEFT)
+	if (getDirection() == Fan::Dir::LEFT)
 	{
 		float k = src.w;
 		src.w = src.x;
@@ -167,13 +222,13 @@ void Fan::Render2D() {
 bool Fan::Finalize() {
 	return true;
 }
-void Fan::SendWind() {
+void Fan::affectWater() {
 	auto water = OGge->GetTasks<Water>("water");
 	if (water)
 	{
 		for (auto id = (*water).begin(); id != (*water).end(); ++id)
 		{
-			if ((*id)->CubeHit(this->WindHitBase))
+			if ((*id)->CubeHit(getHitBase()))
 			{
 				if ((*id)->GetState() == Water::State::GAS)
 				{
@@ -182,6 +237,7 @@ void Fan::SendWind() {
 			}
 		}
 	}
+
 }
 void Fan::Animetion::AnimetionReset()
 {
@@ -265,28 +321,6 @@ void Fan::Animetion::AnimetionSrc(Box2D& src, bool flag)
 	}
 }
 
-void Fan::changeActive() {
-	this->active_ = !this->active_;
-}
-
-Fan::SP Fan::Create(Vec2 pos, float r, Fan::Dir d, /*std::shared_ptr<Switch>& swich,*/ float effectdis, bool active, bool flag) {
-	Fan::SP to = Fan::SP(new Fan());
-	if (to)
-	{
-		to->me = to;
-		if (flag)
-		{
-			OGge->SetTaskObject(to);
-		}
-		if (!to->Initialize(pos, r, d, /*swich,*/effectdis, active))
-		{
-			to->Kill();
-		}
-		return to;
-	}
-	return nullptr;
-
-}
 
 //void Fan::DataInput()
 //{
