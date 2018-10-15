@@ -13,6 +13,6 @@ Trickleは「うつす」というテーマに基づいて、
     * GLEW
     * GLFW
     * GLU
-* OpenAL （予定）
+* OpenAL
 * Vorbis
 * OGG
