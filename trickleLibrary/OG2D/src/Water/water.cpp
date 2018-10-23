@@ -351,6 +351,14 @@ void Water::Render2D()
 	src.OffsetSize();
 	this->tex->Rotate(0);
 	this->tex->Draw(draw, src, color_a);
+	if (this->left)
+	{
+		left->LineDraw();
+	}
+	if (this->right)
+	{
+		this->right->LineDraw();
+	}
 }
 
 bool Water::Finalize()
@@ -1075,9 +1083,47 @@ void Water::CheckState()
 					}
 				}
 			}
+
 			this->objectTag = "SOLID";
 			this->Radius = { 0.7f,0.7f };
 			this->nowSituation = Situation::Normal;
+
+			float x_ = this->Scale.x - (this->Scale.x * this->Radius.x);
+			float y_ = this->Scale.y - (this->Scale.y * this->Radius.y);
+
+			if (!this->left)
+			{
+				this->left = new GameObject();
+			}
+			left->CreateObject(Cube,
+				Vec2(this->position.x + (x_ / 2.f) - 1.0f, this->position.y + (y_ / 2.f)),
+				Vec2(1.0f, this->Scale.y - y_));
+			if (!this->right)
+			{
+				this->right = new GameObject();
+			}
+			right->CreateObject(Cube,
+				Vec2(this->position.x + (x_ / 2.f) + (this->Scale.x * this->Radius.x), this->position.y + (y_ / 2.f)),
+				Vec2(1.0f, this->Scale.y - y_));
+			auto map = OGge->GetTask<Map>("map");
+			while (map->HitCheck(*left, 1))
+			{
+				this->position.x += 1.0f;
+				left->CreateObject(Cube,
+					Vec2(this->position.x + (x_ / 2.f) - 1.0f, this->position.y + (y_ / 2.f)),
+					Vec2(1.0f, this->Scale.y - y_));
+			}
+			while (map->HitCheck(*right, 1))
+			{
+				this->position.x -= 1.0f;
+				right->CreateObject(Cube,
+					Vec2(this->position.x + (x_ / 2.f) + (this->Scale.x * this->Radius.x), this->position.y + (y_ / 2.f)),
+					Vec2(1.0f, this->Scale.y - y_));
+			}
+			delete this->left;
+			this->left = nullptr;
+			delete this->right;
+			this->right = nullptr;
 			this->finSpeed = 0.05f;
 			break;
 		}
