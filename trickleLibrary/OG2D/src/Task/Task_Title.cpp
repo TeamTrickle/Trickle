@@ -552,7 +552,7 @@ void Title::UpDate()
 				//終了
 				case 3:
 					//データ削除の処理
-					//OGge->GameEnd();
+					OGge->GameEnd();
 					break;
 				}
 			}

@@ -25,7 +25,7 @@ void OGTK::StartTaskObject()
 	//タスクの初期化
 	EventTask ev;
 	ev.Load(Event::RESOURCE_LOAD, "./data/event/loadtex.og");
-	LogoTask::Create();
+	Title::Create();
 }
 
 OGTK::~OGTK()
@@ -34,15 +34,16 @@ OGTK::~OGTK()
 
 void OGTK::UpDate()
 {
-	if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
-	{
-		rm->GetSoundData("titleBGM")->stop();
-		OGge->AllKill(false);
-		OGge->AllTaskDelete();
-		//OGge->in->ResetInputData();
-		GameManager::ResetData();
-		Title::Create();
-		OGge->SetPause(false);
-		OGge->AllStop(false);
-	}
+	//ゲームショウ向けタイトル強制戻りコマンド
+	//if (OGge->in->on(In::D1) && OGge->in->on(In::D2) && OGge->in->on(In::L1) && OGge->in->on(In::R1))
+	//{
+	//	rm->GetSoundData("titleBGM")->stop();
+	//	OGge->AllKill(false);
+	//	OGge->AllTaskDelete();
+	//	//OGge->in->ResetInputData();
+	//	GameManager::ResetData();
+	//	Title::Create();
+	//	OGge->SetPause(false);
+	//	OGge->AllStop(false);
+	//}
 }
