@@ -1,5 +1,5 @@
 teamTrickle
-Project Tricke
+Project Trickle
 ===================
 ![default](https://user-images.githubusercontent.com/33146148/47335162-d9c06980-d6c4-11e8-823d-7fdf3924dc51.png)
 ### 概要
